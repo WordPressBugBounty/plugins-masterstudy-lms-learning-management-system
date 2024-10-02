@@ -20,6 +20,8 @@ use StmLmsElementor\Widgets\MsLmsInstructorsCarousel;
 use StmLmsElementor\Widgets\MsLmsAuthorization;
 use StmLmsElementor\Widgets\MsLmsCourses;
 use StmLmsElementor\Widgets\MsLmsSlider;
+use StmLmsElementor\Widgets\MsLmsBlog;
+use StmLmsElementor\Widgets\MsLmsMailchimp;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -153,6 +155,8 @@ final class Plugin {
 		require STM_LMS_PATH . '/includes/elementor/widgets/ms_lms_authorization.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/courses/ms_lms_courses.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/slider/ms_lms_slider.php';
+		require STM_LMS_PATH . '/includes/elementor/widgets/ms_lms_blog.php';
+		require STM_LMS_PATH . '/includes/elementor/widgets/ms_lms_mailchimp.php';
 		// Pro widgets
 		require STM_LMS_PATH . '/includes/elementor/widgets/deprecated/stm_lms_certificate_checker.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/deprecated/stm_lms_course_bundles.php';
@@ -177,6 +181,10 @@ final class Plugin {
 		$widgets_manager->register( new MsLmsAuthorization() );
 		$widgets_manager->register( new MsLmsCourses() );
 		$widgets_manager->register( new MsLmsSlider() );
+		$widgets_manager->register( new \MsLmsBlog() );
+		if ( defined( 'MC4WP_VERSION' ) ) {
+			$widgets_manager->register( new \MsLmsMailchimp() );
+		}
 		if ( defined( 'STM_LMS_PRO_PATH' ) ) {
 			$widgets_manager->register( new StmLmsCertificateChecker() );
 		}

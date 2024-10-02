@@ -45,6 +45,7 @@ class StmLmsCoursesCarousel extends Widget_Base {
 		parent::__construct( $data, $args );
 		wp_register_style( 'courses_carousel', STM_LMS_URL . 'assets/css/vc_modules/courses_carousel/style_1.css', array(), MS_LMS_VERSION, false );
 		wp_register_style( 'courses', STM_LMS_URL . 'assets/css/parts/courses.css', array(), MS_LMS_VERSION, false );
+		wp_enqueue_style( 'linear' );
 	}
 
 	public function get_style_depends() {

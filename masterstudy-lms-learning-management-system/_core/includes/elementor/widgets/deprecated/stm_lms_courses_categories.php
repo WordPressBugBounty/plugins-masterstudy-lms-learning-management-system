@@ -196,8 +196,8 @@ class StmLmsCoursesCategories extends Widget_Base {
 				'types'          => array( 'classic', 'gradient' ),
 				'exclude'        => array( 'image' ),
 				'selector'       => '
-                    {{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a
-                ',
+					{{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a
+				',
 				'condition'      => array(
 					'style' => array( 'style_3' ),
 				),
@@ -218,8 +218,8 @@ class StmLmsCoursesCategories extends Widget_Base {
 			array(
 				'name'      => 'border',
 				'selector'  => '
-                    {{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a
-                 ',
+					{{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a
+				',
 				'condition' => array(
 					'style' => array( 'style_3' ),
 				),
@@ -245,8 +245,8 @@ class StmLmsCoursesCategories extends Widget_Base {
 			array(
 				'name'      => 'button_box_shadow',
 				'selector'  => '
-                    {{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a
-                ',
+					{{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a
+				',
 				'condition' => array(
 					'style' => array( 'style_3' ),
 				),
@@ -301,8 +301,8 @@ class StmLmsCoursesCategories extends Widget_Base {
 				'types'          => array( 'classic', 'gradient' ),
 				'exclude'        => array( 'image' ),
 				'selector'       => '
-                    {{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a:hover
-                ',
+					{{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a:hover
+				',
 				'condition'      => array(
 					'style' => array( 'style_3' ),
 				),
@@ -323,8 +323,8 @@ class StmLmsCoursesCategories extends Widget_Base {
 			array(
 				'name'      => 'border_hover',
 				'selector'  => '
-                    {{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a:hover
-                 ',
+					{{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a:hover
+				',
 				'condition' => array(
 					'style' => array( 'style_3' ),
 				),
@@ -350,8 +350,8 @@ class StmLmsCoursesCategories extends Widget_Base {
 			array(
 				'name'      => 'button_box_shadow_hover',
 				'selector'  => '
-                    {{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a:hover
-                ',
+					{{WRAPPER}} .stm_lms_courses_categories .stm_lms_courses_category > a:hover
+				',
 				'condition' => array(
 					'style' => array( 'style_3' ),
 				),
@@ -373,6 +373,31 @@ class StmLmsCoursesCategories extends Widget_Base {
 			)
 		);
 		$this->end_controls_tab();
+		$this->add_responsive_control(
+			'category_overlay',
+			array(
+				'label'      => esc_html__( 'Overlay', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( '%' ),
+				'range'      => array(
+					'%' => array(
+						'min' => 0,
+						'max' => 100,
+						'step' => 1,
+					),
+				),
+				'default'    => array(
+					'unit' => '%',
+					'size' => 100,
+				),
+				'selectors'  => array(
+					'body {{WRAPPER}} .stm_lms_courses_category > a:after' => 'opacity: {{SIZE}}{{UNIT}};',
+				),
+				'condition'  => array(
+					'style' => array( 'style_2' ),
+				),
+			)
+		);
 		$this->end_controls_section();
 
 	}

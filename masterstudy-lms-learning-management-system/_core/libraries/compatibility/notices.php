@@ -28,7 +28,7 @@ if ( ! $theme_exists && empty( $start_theme_notice ) ) {
 		'notice_type'            => 'starter-theme-notice',
 		'notice_logo'            => 'ms_starter.svg',
 		'notice_title'           => '',
-		'notice_desc'            => '<h4>' . esc_html__( 'What\'s next? Install the', 'masterstudy-lms-learning-management-system' ) . ' <span style="font-weight: 700">free</span> <a href="https://stylemixthemes.com/wordpress-lms-plugin/starter/" style="text-decoration: none" target="_blank">MasterStudy Starter Theme!</a></h4>',
+		'notice_desc'            => '<h4>' . esc_html__( 'What\'s next? Install the', 'masterstudy-lms-learning-management-system' ) . ' <span style="font-weight: 700">free</span> <a href="https://stylemixthemes.com/wordpress-lms-plugin/starter/" style="text-decoration: none" target="_blank">MasterStudy Templates!</a></h4>',
 		'notice_btn_one_title'   => esc_html__( 'Install', 'masterstudy-lms-learning-management-system' ),
 		'notice_btn_one_class'   => 'ms_start_theme_install',
 		'notice_btn_one'         => esc_url( $install_url ),

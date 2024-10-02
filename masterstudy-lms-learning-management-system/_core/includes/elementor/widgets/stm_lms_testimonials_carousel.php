@@ -7,6 +7,9 @@ use Elementor\Repeater;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Plugin;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Background;
+use Elementor\Group_Control_Border;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -44,10 +47,14 @@ class StmLmsProTestimonials extends Widget_Base {
 	/** Register General Controls */
 	protected function register_controls() {
 		$this->register_general_content_controls();
+		$this->register_item_typo_content_controls();
 		$this->register_heading_typo_content_controls();
 		$this->register_heading_review_content_controls();
 		$this->register_description_content_controls();
 		$this->register_author_content_controls();
+		$this->register_style_controls_nav_arrows();
+		$this->register_style_controls_nav_pagination();
+		$this->register_item_typo_avatar_controls();
 	}
 
 	protected function register_general_content_controls() {
@@ -65,13 +72,57 @@ class StmLmsProTestimonials extends Widget_Base {
 			)
 		);
 		$this->add_control(
+			'testimonials_style',
+			array(
+				'label'   => esc_html__( 'Style', 'masterstudy-lms-learning-management-system' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'style_1',
+				'options' => array(
+					'style_1' => esc_html__( 'Centered', 'masterstudy-lms-learning-management-system' ),
+					'style_2' => esc_html__( 'Outlined', 'masterstudy-lms-learning-management-system' ),
+					'style_3' => esc_html__( 'Classic', 'masterstudy-lms-learning-management-system' ),
+				),
+			)
+		);
+		$this->add_control(
+			'carousel_heading',
+			array(
+				'label'     => esc_html__( 'Carousel', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			)
+		);
+		$this->add_responsive_control(
+			'per_view',
+			array(
+				'label'              => esc_html__( 'Per view', 'masterstudy-lms-learning-management-system' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => '1',
+				'options'            => array(
+					'1' => '1',
+					'2' => '2',
+					'3' => '3',
+					'4' => '4',
+				),
+				'devices'            => array( 'desktop', 'tablet', 'mobile' ),
+				'desktop_default'    => '1',
+				'tablet_default'     => '1',
+				'mobile_default'     => '1',
+				'frontend_available' => true,
+				'condition'          => array(
+					'testimonials_style' => array( 'style_1', 'style_3' ),
+				),
+			)
+		);
+		$this->add_control(
 			'autoplay',
 			array(
 				'label'              => esc_html__( 'Autoplay', 'masterstudy-lms-learning-management-system' ),
 				'type'               => Controls_Manager::SWITCHER,
 				'label_on'           => esc_html__( 'On', 'masterstudy-lms-learning-management-system' ),
 				'label_off'          => esc_html__( 'Off', 'masterstudy-lms-learning-management-system' ),
-				'return_value'       => true,
+				'return_value'       => 'true',
+				'default'            => false,
 				'frontend_available' => true,
 			)
 		);
@@ -85,6 +136,33 @@ class StmLmsProTestimonials extends Widget_Base {
 				'return_value'       => 'true',
 				'default'            => 'true',
 				'frontend_available' => true,
+			)
+		);
+		$this->add_responsive_control(
+			'arrows',
+			array(
+				'label'              => esc_html__( 'Arrows', 'masterstudy-lms-learning-management-system' ),
+				'type'               => Controls_Manager::SWITCHER,
+				'label_on'           => esc_html__( 'On', 'masterstudy-lms-learning-management-system' ),
+				'label_off'          => esc_html__( 'Off', 'masterstudy-lms-learning-management-system' ),
+				'return_value'       => 'yes',
+				'default'            => false,
+				'frontend_available' => true,
+			)
+		);
+		$this->add_control(
+			'pagination',
+			array(
+				'label'              => esc_html__( 'Pagination', 'masterstudy-lms-learning-management-system' ),
+				'type'               => Controls_Manager::SWITCHER,
+				'label_on'           => esc_html__( 'On', 'masterstudy-lms-learning-management-system' ),
+				'label_off'          => esc_html__( 'Off', 'masterstudy-lms-learning-management-system' ),
+				'return_value'       => 'yes',
+				'default'            => false,
+				'frontend_available' => true,
+				'condition'          => array(
+					'testimonials_style' => array( 'style_3' ),
+				),
 			)
 		);
 		$repeater = new Repeater();
@@ -146,6 +224,136 @@ class StmLmsProTestimonials extends Widget_Base {
 	}
 
 	/** Register Typography Controls */
+	protected function register_item_typo_content_controls() {
+		$this->start_controls_section(
+			'section_item_typography',
+			array(
+				'label'     => esc_html__( 'Item', 'masterstudy-lms-learning-management-system' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => array(
+					'testimonials_style' => array( 'style_2', 'style_3' ),
+				),
+			)
+		);
+		$this->add_control(
+			'section_item_first_frame_color',
+			array(
+				'label'     => esc_html__( 'Frame One Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .stm-testimonials-carousel-shapes:before' => 'color: {{VALUE}};',
+				),
+				'condition' => array(
+					'testimonials_style' => 'style_2',
+				),
+			)
+		);
+		$this->add_control(
+			'section_item_second_frame_color',
+			array(
+				'label'     => esc_html__( 'Frame Two Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .stm-testimonials-carousel-shapes:after' => 'color: {{VALUE}};',
+				),
+				'condition' => array(
+					'testimonials_style' => 'style_2',
+				),
+			)
+		);
+		$this->add_control(
+			'section_item_first_quote_color',
+			array(
+				'label'     => esc_html__( 'Quote One Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .stm-testimonials-carousel-shapes .ms-lms-testimonial-data::before' => 'color: {{VALUE}};',
+				),
+				'condition' => array(
+					'testimonials_style' => 'style_2',
+				),
+			)
+		);
+		$this->add_control(
+			'section_item_second_quote_color',
+			array(
+				'label'     => esc_html__( 'Quote Two Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .stm-testimonials-carousel-shapes .ms-lms-testimonial-data::after' => 'color: {{VALUE}};',
+				),
+				'condition' => array(
+					'testimonials_style' => 'style_2',
+				),
+			)
+		);
+		$this->start_controls_tabs(
+			'items_style_tabs'
+		);
+		$this->start_controls_tab(
+			'item_box_shadow_normal',
+			array(
+				'label'     => esc_html__( 'Normal', 'companion-elementor' ),
+				'condition' => array(
+					'testimonials_style' => 'style_3',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'      => 'item_box_border',
+				'selector'  => '{{WRAPPER}} .ms-lms-testimonial-data-item',
+				'condition' => array(
+					'testimonials_style' => 'style_3',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			array(
+				'name'      => 'item_box_shadow',
+				'selector'  => '{{WRAPPER}} .ms-lms-testimonial-data-item',
+				'condition' => array(
+					'testimonials_style' => 'style_3',
+				),
+			)
+		);
+		$this->end_controls_tab();
+		$this->start_controls_tab(
+			'item_box_shadow_hover',
+			array(
+				'label'     => esc_html__( 'Hover', 'companion-elementor' ),
+				'condition' => array(
+					'testimonials_style' => 'style_3',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'      => 'item_box_border_hover',
+				'selector'  => '{{WRAPPER}} .ms-lms-testimonial-data-item:hover',
+				'condition' => array(
+					'testimonials_style' => 'style_3',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			array(
+				'name'      => 'item_box_shadow_hover',
+				'selector'  => '{{WRAPPER}} .ms-lms-testimonial-data-item:hover',
+				'condition' => array(
+					'testimonials_style' => 'style_3',
+				),
+			)
+		);
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
+		$this->end_controls_section();
+	}
+
 	protected function register_heading_typo_content_controls() {
 		$this->start_controls_section(
 			'section_heading_typography',
@@ -392,6 +600,373 @@ class StmLmsProTestimonials extends Widget_Base {
 		$this->end_controls_section();
 	}
 
+	protected function register_style_controls_nav_arrows() {
+
+		$this->start_controls_section(
+			'section_navigation_arrows',
+			array(
+				'label'     => esc_html__( 'Nav Arrows', 'masterstudy-lms-learning-management-system' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => array(
+					'arrows' => 'yes',
+				),
+			)
+		);
+		$this->start_controls_tabs(
+			'navigation_arrows_tab'
+		);
+		$this->start_controls_tab(
+			'navigation_arrows_normal_tab',
+			array(
+				'label' => esc_html__( 'Normal', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'navigation_arrows_typography',
+				'selector' => '{{WRAPPER}} .swiper-button-prev:after, {{WRAPPER}} .swiper-button-next:after',
+			)
+		);
+		$this->add_control(
+			'navigation_arrows_color',
+			array(
+				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .swiper-button-prev:after' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .swiper-button-next:after' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			array(
+				'name'     => 'navigation_arrows_background',
+				'types'    => array( 'classic', 'gradient' ),
+				'selector' => '{{WRAPPER}} .swiper-button-prev, {{WRAPPER}} .swiper-button-next',
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'     => 'navigation_arrows_border',
+				'selector' => '{{WRAPPER}} .swiper-button-prev, {{WRAPPER}} .swiper-button-next',
+			)
+		);
+		$this->add_control(
+			'navigation_arrows_border_radius',
+			array(
+				'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .swiper-button-prev, {{WRAPPER}} .swiper-button-next' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			array(
+				'name'     => 'navigation_arrows_shadow',
+				'selector' => '{{WRAPPER}} .swiper-button-prev, {{WRAPPER}} .swiper-button-next',
+			)
+		);
+		$this->add_responsive_control(
+			'navigation_arrows_width',
+			array(
+				'label'      => esc_html__( 'Width', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( '%', 'px' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .swiper-button-prev' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .swiper-button-next' => 'width: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'navigation_arrows_height',
+			array(
+				'label'      => esc_html__( 'Height', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( '%', 'px' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .swiper-button-prev' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .swiper-button-next' => 'height: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_tab();
+		$this->start_controls_tab(
+			'navigation_arrows_hover_tab',
+			array(
+				'label' => esc_html__( 'Hover', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+		$this->add_control(
+			'navigation_arrows_color_hover',
+			array(
+				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .swiper-button-prev:hover:after' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .swiper-button-next:hover:after' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			array(
+				'name'     => 'navigation_arrows_background_hover',
+				'types'    => array( 'classic', 'gradient' ),
+				'selector' => '{{WRAPPER}} .swiper-button-prev:hover, {{WRAPPER}} .swiper-button-next:hover',
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'     => 'navigation_arrows_border_hover',
+				'selector' => '{{WRAPPER}} .swiper-button-prev:hover, {{WRAPPER}} .swiper-button-next:hover',
+			)
+		);
+		$this->add_control(
+			'navigation_arrows_border_radius_hover',
+			array(
+				'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .swiper-button-prev:hover, {{WRAPPER}} .swiper-button-next:hover' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			array(
+				'name'     => 'navigation_arrows_shadow_hover',
+				'selector' => '{{WRAPPER}} .swiper-button-prev:hover, {{WRAPPER}} .swiper-button-next:hover',
+			)
+		);
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
+		$this->add_responsive_control(
+			'navigation_arrows_margin',
+			array(
+				'label'      => esc_html__( 'Margin', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .swiper-button-prev, {{WRAPPER}} .swiper-button-next' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_section();
+	}
+
+	protected function register_style_controls_nav_pagination() {
+
+		$this->start_controls_section(
+			'section_navigation_pagination',
+			array(
+				'label'     => esc_html__( 'Pagination', 'masterstudy-lms-learning-management-system' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => array(
+					'pagination'         => 'yes',
+					'testimonials_style' => array( 'style_1', 'style_3' ),
+				),
+			)
+		);
+		$this->start_controls_tabs(
+			'navigation_pagination_tab'
+		);
+		$this->start_controls_tab(
+			'navigation_pagination_normal_tab',
+			array(
+				'label' => esc_html__( 'Normal', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			array(
+				'name'     => 'navigation_pagination_background',
+				'types'    => array( 'classic', 'gradient' ),
+				'selector' => '{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet',
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			array(
+				'name'           => 'navigation_pagination_active_background',
+				'types'          => array( 'classic', 'gradient' ),
+				'selector'       => '{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active',
+				'fields_options' => array(
+					'background' => array(
+						'label' => esc_html__( 'Active Background Type', 'masterstudy-lms-learning-management-system' ),
+					),
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'     => 'navigation_pagination_border',
+				'selector' => '{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet',
+			)
+		);
+		$this->add_control(
+			'navigation_pagination_border_radius',
+			array(
+				'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			array(
+				'name'     => 'navigation_pagination_shadow',
+				'selector' => '{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet',
+			)
+		);
+		$this->add_responsive_control(
+			'navigation_pagination_width',
+			array(
+				'label'      => esc_html__( 'Width', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( '%', 'px' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet' => 'width: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'navigation_pagination_height',
+			array(
+				'label'      => esc_html__( 'Height', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( '%', 'px' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet' => 'height: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_tab();
+		$this->start_controls_tab(
+			'navigation_pagination_hover_tab',
+			array(
+				'label' => esc_html__( 'Hover', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			array(
+				'name'     => 'navigation_pagination_background_hover',
+				'types'    => array( 'classic', 'gradient' ),
+				'selector' => '{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet:hover',
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			array(
+				'name'           => 'navigation_pagination_active_background_hover',
+				'types'          => array( 'classic', 'gradient' ),
+				'selector'       => '{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active:hover',
+				'fields_options' => array(
+					'background' => array(
+						'label' => esc_html__( 'Active Background Type', 'masterstudy-lms-learning-management-system' ),
+					),
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'     => 'navigation_pagination_border_hover',
+				'selector' => '{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet:hover',
+			)
+		);
+		$this->add_control(
+			'navigation_pagination_border_radius_hover',
+			array(
+				'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet:hover' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			array(
+				'name'     => 'navigation_pagination_shadow_hover',
+				'selector' => '{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet:hover',
+			)
+		);
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
+		$this->add_responsive_control(
+			'navigation_pagination_margin',
+			array(
+				'label'      => esc_html__( 'Margin', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .ms-lms-elementor-testimonials-swiper-pagination .swiper-pagination-bullet' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_section();
+	}
+
+	protected function register_item_typo_avatar_controls() {
+		$this->start_controls_section(
+			'section_avatar',
+			array(
+				'label'     => esc_html__( 'Avatar', 'masterstudy-lms-learning-management-system' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => array(
+					'testimonials_style' => array( 'style_2' ),
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'      => 'section_avatar_border',
+				'selector'  => '{{WRAPPER}} .stm-testimonials-carousel-shapes .ms-lms-testimonial-data .ms-lms-testimonial-media',
+				'condition' => array(
+					'testimonials_style' => 'style_2',
+				),
+			)
+		);
+		$this->add_control(
+			'section_avatar_border_radius',
+			array(
+				'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .stm-testimonials-carousel-shapes .ms-lms-testimonial-data .ms-lms-testimonial-media' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			array(
+				'name'      => 'section_avatar_shadow',
+				'selector'  => '{{WRAPPER}} .stm-testimonials-carousel-shapes .ms-lms-testimonial-data .ms-lms-testimonial-media',
+				'condition' => array(
+					'testimonials_style' => 'style_2',
+				),
+			)
+		);
+		$this->end_controls_section();
+	}
+
 	/** Render the widget output on the frontend */
 	protected function render() {
 		if ( ! Plugin::$instance->editor->is_edit_mode() ) {
@@ -409,37 +984,7 @@ class StmLmsProTestimonials extends Widget_Base {
 		}
 		extract( $settings );
 		if ( ! empty( $testimonials ) ) {
-			?>
-			<div class="stm-testimonials-carousel-wrapper swiper-container" id="<?php echo esc_attr( $unique_id ); ?>">
-				<div class="ms-lms-testimonials-header">
-					<i class="ms-lms-testimonials-icon"></i>
-					<p><?php echo esc_html( $testimonials_title ); ?></p>
-				</div>
-				<div class="elementor-testimonials-carousel swiper-wrapper">
-					<?php
-					foreach ( $testimonials as $testimonial ) {
-						$thumbnail_img = '';
-						if ( ! empty( $testimonial['image'] ) && ! empty( $testimonial['image']['id'] ) ) {
-							$thumbnail_img = wp_get_attachment_image_src( $testimonial['image']['id'], 'thumbnail' );
-						}
-						?>
-						<div class="ms-lms-testimonial-data swiper-slide"
-							data-thumbnail="<?php echo isset( $thumbnail_img[0] ) ? esc_attr( $thumbnail_img[0] ) : ''; ?>">
-							<div class="ms-lms-testimonial-review-rating">
-								<?php for ( $i = 0; $i < $testimonial['review_rating']; $i ++ ) { ?>
-									<i class="fa fa-star"></i>
-								<?php } ?>
-							</div>
-							<div class="author-name"><?php echo esc_html( $testimonial['author_name'] ); ?></div>
-							<div class="content">
-								<?php echo wp_kses_post( $testimonial['content'] ); ?>
-							</div>
-						</div>
-					<?php } ?>
-				</div>
-				<div class="ms-lms-elementor-testimonials-swiper-pagination"></div>
-			</div>
-			<?php
+			require_once MS_LMS_PATH . '/_core/includes/elementor/widgets/testimonials/styles/' . sanitize_file_name( $testimonials_style ) . '.php';
 		}
 	}
 

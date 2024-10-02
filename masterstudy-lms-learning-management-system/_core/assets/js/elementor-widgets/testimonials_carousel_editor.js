@@ -37,8 +37,11 @@ var StmLmsProTestimonials = /*#__PURE__*/function (_elementorModules$fro) {
       return {
         $sliderContainer: this.$element.find(selectors.carousel),
         $sliderData: {
-          'autoplay': elementSettings['autoplay'],
-          'loop': elementSettings['loop']
+          autoplay: elementSettings["autoplay"],
+          loop: elementSettings["loop"],
+          per_view: elementSettings["per_view"],
+          per_view_tablet: elementSettings["per_view_tablet"],
+          per_view_mobile: elementSettings["per_view_mobile"]
         }
       };
     }
@@ -50,12 +53,15 @@ var StmLmsProTestimonials = /*#__PURE__*/function (_elementorModules$fro) {
   }, {
     key: "sliderInit",
     value: function sliderInit() {
+      var elementSettings = this.getElementSettings();
       var _this = this,
         autoplayData = false,
         widgetID = _this.elements.$sliderContainer.closest('.elementor-widget-stm_lms_pro_testimonials').data('id'),
         sliderContainer = document.querySelector("[data-id=\"".concat(widgetID, "\"] .stm-testimonials-carousel-wrapper")),
         bullets = document.querySelector("[data-id=\"".concat(widgetID, "\"] .ms-lms-elementor-testimonials-swiper-pagination")),
         sliderWrapper = document.querySelector("[data-id=\"".concat(widgetID, "\"] .elementor-testimonials-carousel"));
+      var nextButton = sliderContainer.querySelector(".swiper-button-next");
+      var prevButton = sliderContainer.querySelector(".swiper-button-prev");
       if (_this.elements.$sliderData['autoplay']) {
         autoplayData = {
           delay: 2000
@@ -63,23 +69,39 @@ var StmLmsProTestimonials = /*#__PURE__*/function (_elementorModules$fro) {
       }
       if (_this.elements.$sliderContainer.length !== 0) {
         var mySwiper = new Swiper(sliderContainer, {
-          slidesPerView: 1,
+          slidesPerView: _this.elements.$sliderData["per_view"] ? _this.elements.$sliderData["per_view"] : 1,
           allowTouchMove: true,
-          loop: _this.elements.$sliderData['loop'],
+          loop: _this.elements.$sliderData["loop"],
           autoplay: autoplayData,
           pagination: {
             el: bullets,
             clickable: true,
             renderBullet: function renderBullet(index, className) {
-              var userThumbnail = '',
+              var userThumbnail = "",
                 testimonialItem = sliderWrapper.children[index];
-              if (testimonialItem !== null && _typeof(testimonialItem) === 'object') {
-                userThumbnail = testimonialItem.getAttribute('data-thumbnail');
+              if (testimonialItem !== null && _typeof(testimonialItem) === "object") {
+                userThumbnail = testimonialItem.getAttribute("data-thumbnail");
               }
-              var span = jQuery('<span></span>');
+              var span = jQuery("<span></span>");
               span.addClass(className);
               span.css("background-image", "url(" + userThumbnail + ")");
-              return span.prop('outerHTML');
+              return span.prop("outerHTML");
+            }
+          },
+          navigation: {
+            nextEl: nextButton,
+            prevEl: prevButton,
+            disabledClass: "swiper-button-disabled"
+          },
+          breakpoints: {
+            320: {
+              slidesPerView: elementSettings.per_view_mobile
+            },
+            768: {
+              slidesPerView: elementSettings.per_view_tablet
+            },
+            1024: {
+              slidesPerView: elementSettings.per_view
             }
           }
         });

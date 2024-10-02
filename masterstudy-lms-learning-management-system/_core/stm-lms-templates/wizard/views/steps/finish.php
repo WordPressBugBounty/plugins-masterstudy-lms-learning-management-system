@@ -77,7 +77,7 @@
 			<p>
 			<?php
 			// translators: This is a translatable string with placeholders.
-			$description = esc_html__( 'Download our Masterstudy Starter theme for free and get an intuitive and easy-to-navigate look for your website.', 'masterstudy-lms-learning-management-system' );
+			$description = esc_html__( 'Download our MasterStudy Templates for free and get an intuitive and easy-to-navigate look for your website.', 'masterstudy-lms-learning-management-system' );
 			echo wp_kses_post( sprintf( $description, '<strong>', '</strong>' ) );
 			?>
 			</p>

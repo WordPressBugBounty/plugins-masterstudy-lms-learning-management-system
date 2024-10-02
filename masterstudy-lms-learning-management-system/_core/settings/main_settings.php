@@ -96,6 +96,16 @@ add_action(
 			);
 		}
 
+		if ( function_exists( 'masterstudy_starter_fs_verify' ) && ! masterstudy_starter_fs_verify() ) {
+			add_submenu_page(
+				'stm-lms-settings',
+				'Premium templates',
+				'Premium templates',
+				'manage_options',
+				'admin.php?page=masterstudy-starter-demo-import',
+			);
+		}
+
 		add_submenu_page(
 			'stm-lms-settings',
 			'MasterStudy',
@@ -105,7 +115,7 @@ add_action(
 		);
 
 	},
-	- 1,
+	-1,
 	10
 );
 

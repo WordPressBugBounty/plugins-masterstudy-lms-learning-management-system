@@ -34,7 +34,11 @@ if ( ! empty( $taxonomy ) ) :
 
 			<?php
 			foreach ( $terms as $key => $term ) :
-				$term = get_term_by( 'id', $term, 'stm_lms_course_taxonomy' );
+				if ( is_numeric( $term ) ) {
+					$term = get_term_by( 'id', $term, 'stm_lms_course_taxonomy' );
+				} else {
+					$term = get_term_by( 'slug', $term, 'stm_lms_course_taxonomy' );
+				}
 				if ( empty( $term ) || is_wp_error( $term ) ) {
 					continue;
 				}

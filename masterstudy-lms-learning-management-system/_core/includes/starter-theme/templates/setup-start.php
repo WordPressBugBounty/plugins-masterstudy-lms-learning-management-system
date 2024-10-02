@@ -13,7 +13,7 @@
 			</div>
 			<div class="stm-lms-theme-pre-install-info">
 				<ul>
-						<?php esc_html_e( 'A free ready-to-use starter theme for MasterStudy LMS. View how it works in life or install it for free. Get started now!', 'masterstudy-lms-learning-management-system' ); ?>
+						<?php esc_html_e( 'Ready-to-use MasterStudy templates with unique designs. Try out a free template or choose from the premium ones. Get started now!', 'masterstudy-lms-learning-management-system' ); ?>
 				</ul>
 				<div class="stm-lms-attention">
 					<div class="stm-lms-attention-info">

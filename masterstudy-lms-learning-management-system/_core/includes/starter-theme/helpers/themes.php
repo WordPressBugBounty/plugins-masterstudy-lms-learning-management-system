@@ -13,7 +13,7 @@ class Themes {
 		return array(
 			array(
 				'slug' => 'ms-lms-starter-theme',
-				'name' => __( 'MasterStudy Starter Theme', 'masterstudy-lms-learning-management-system' ),
+				'name' => __( 'MasterStudy Templates', 'masterstudy-lms-learning-management-system' ),
 				'type' => 'theme',
 				'src'  => 'https://stylemixthemes-public.s3.us-west-2.amazonaws.com/ms-lms-starter-theme.zip',
 			),

@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,7 @@ MasterStudy is the best free Learning Management System  WordPress plugin for on
 ⭐ [MasterStudy Free version](https://masterstudy.stylemixthemes.com/lms-plugin/)
 ⭐ [MasterStudy PRO version](https://stylemixthemes.com/wordpress-lms-plugin/?utm_source=wporg-lms&utm_medium=en&utm_campaign=2021)
 ⭐ [Documentation](https://docs.stylemixthemes.com/masterstudy-lms/)
+⭐ [MasterStudy Templates](https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/)
 ⭐ [Join Facebook Community](https://www.facebook.com/groups/masterstudylms)
 
 [youtube https://youtu.be/fCD__iEbxwI]
@@ -303,6 +304,11 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.4.2 - 2024-10-02 =
+- **New:** Added 2 new styles for Testimonials Widget.
+- **New:** Added Mailchimp widget.
+- **New:** Added new Blog widget with news cards and two styles.
+
 = 3.4.1 - 2024-09-11 =
 - **Fix:** Small bug fixes.
 
@@ -319,9 +325,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.3.35 - 2024-08-09 =
 - **Fix:** Small bug fixes.
-
-= 3.3.34 - 2024-08-08 =
-- **Enhancement:** Added a new view for LMS Orders on the front end.
-- **Fix:** Combination of special characters that could misdisplay a correctly answered question.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

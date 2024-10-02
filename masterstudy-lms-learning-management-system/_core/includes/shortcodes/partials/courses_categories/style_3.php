@@ -27,22 +27,27 @@ if ( ! empty( $taxonomy ) ) :
 
 			<?php
 			foreach ( $terms as $key => $term ) :
-				$term = get_term_by( 'id', $term, 'stm_lms_course_taxonomy' );
+				if ( is_numeric( $term ) ) {
+					$term = get_term_by( 'id', $term, 'stm_lms_course_taxonomy' );
+				} else {
+					$term = get_term_by( 'slug', $term, 'stm_lms_course_taxonomy' );
+				}
+
 				if ( empty( $term ) || is_wp_error( $term ) ) {
 					continue;
 				}
+
 				$term_icon = get_term_meta( $term->term_id, 'course_icon', true );
 				$term_icon = ( ! empty( $term_icon ) ) ? $term_icon : 'no-icon';
 				?>
 				<div class="stm_lms_courses_category">
 					<a href="<?php echo esc_url( STM_LMS_Course::courses_page_url() . '?terms[]=' . $term->term_id . '&category[]=' . $term->term_id ); ?>"
-						title="<?php echo esc_attr( $term->name ); ?>"
-						class="no_deco sbc_h">
-						<i class="<?php echo esc_attr( $term_icon ); ?>"></i>
-						<h4><?php echo esc_attr( $term->name ); ?></h4>
+					title="<?php echo esc_attr( $term->name ); ?>"
+					class="no_deco sbc_h">
+					<i class="<?php echo esc_attr( $term_icon ); ?>"></i>
+					<h4><?php echo esc_attr( $term->name ); ?></h4>
 					</a>
 				</div>
-
 			<?php endforeach; ?>
 		</div>
 	<?php endif; ?>

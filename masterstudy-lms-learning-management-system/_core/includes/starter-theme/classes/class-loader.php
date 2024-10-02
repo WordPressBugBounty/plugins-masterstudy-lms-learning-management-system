@@ -58,7 +58,7 @@ class Loader {
 	}
 
 	public function add_starter_install__admin_menu() {
-		$page_title = esc_html__( 'MasterStudy Starter Theme', 'masterstudy-lms-learning-management-system' );
+		$page_title = esc_html__( 'MasterStudy Templates', 'masterstudy-lms-learning-management-system' );
 		add_submenu_page( 'themes.php', $page_title, $page_title, 'manage_options', $this->starter_theme_slug, array( $this, 'theme_starter' ) );
 	}
 

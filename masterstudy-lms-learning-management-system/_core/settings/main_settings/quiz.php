@@ -36,7 +36,7 @@ function stm_lms_settings_quiz_section() {
 		'fields' => array(
 			'quiz_attempts'   => array(
 				'type'        => 'select',
-				'label'       => esc_html__( 'Attempts to retake courses', 'masterstudy-lms-learning-management-system' ),
+				'label'       => esc_html__( 'Attempts to retake quizzes', 'masterstudy-lms-learning-management-system' ),
 				'description' => esc_html__( 'You can choose limited or unlimited attempts for students to retake quizzes.', 'masterstudy-lms-learning-management-system' ),
 				'options'     => array(
 					'unlimited' => esc_html__( 'Unlimited attempts', 'masterstudy-lms-learning-management-system' ),

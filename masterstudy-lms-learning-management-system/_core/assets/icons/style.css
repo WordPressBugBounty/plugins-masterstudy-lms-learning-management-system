@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'stmlms';
-  src:  url('fonts/stmlms.eot?p6cf10');
-  src:  url('fonts/stmlms.eot?p6cf10#iefix') format('embedded-opentype'),
-    url('fonts/stmlms.ttf?p6cf10') format('truetype'),
-    url('fonts/stmlms.woff?p6cf10') format('woff'),
-    url('fonts/stmlms.svg?p6cf10#stmlms') format('svg');
+  src:  url('fonts/stmlms.eot?6nb4xj');
+  src:  url('fonts/stmlms.eot?6nb4xj#iefix') format('embedded-opentype'),
+    url('fonts/stmlms.ttf?6nb4xj') format('truetype'),
+    url('fonts/stmlms.woff?6nb4xj') format('woff'),
+    url('fonts/stmlms.svg?6nb4xj#stmlms') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.stmlms-mailchimp:before {
+  content: "\e9f1";
+}
+.stmlms-posts:before {
+  content: "\e9f2";
+}
+.stmlms-quotes:before {
+  content: "\e9ef";
+}
+.stmlms-ellipse-square:before {
+  content: "\e9f0";
+}
+.stmlms-testimonial:before {
+  content: "\e9ee";
+}
 .stmlms-lesson:before {
   content: "\e9ec";
 }

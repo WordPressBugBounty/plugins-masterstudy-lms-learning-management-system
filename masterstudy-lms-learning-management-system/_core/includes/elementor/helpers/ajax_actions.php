@@ -258,3 +258,64 @@ function ms_lms_courses_carousel_sorting() {
 }
 add_action( 'wp_ajax_ms_lms_courses_carousel_sorting', 'ms_lms_courses_carousel_sorting' );
 add_action( 'wp_ajax_nopriv_ms_lms_courses_carousel_sorting', 'ms_lms_courses_carousel_sorting' );
+
+function ms_lms_blog_pagination() {
+	check_ajax_referer( 'blog', 'nonce' );
+
+	$posts_per_page = ( isset( $_POST['posts_per_page'] ) ) ? intval( $_POST['posts_per_page'] ) : 10;
+	$current_page   = ( isset( $_POST['current_page'] ) ) ? intval( $_POST['current_page'] ) : ( isset( $_GET['current-page'] ) ? intval( $_GET['current-page'] ) : 1 );
+	$offset         = ( $current_page - 1 ) * $posts_per_page;
+
+	$args = array(
+		'post_type'      => 'post',
+		'posts_per_page' => $posts_per_page,
+		'paged'          => $current_page,
+		'offset'         => $offset,
+	);
+
+	$posts = new WP_Query( $args );
+
+	if ( $posts->have_posts() ) {
+		ob_start();
+
+		while ( $posts->have_posts() ) {
+			$posts->the_post();
+			\STM_LMS_Templates::show_lms_template( 'elementor-widgets/blog/styles/cards', array() );
+		}
+		$posts_html = ob_get_clean();
+
+		ob_start();
+		\STM_LMS_Templates::show_lms_template(
+			'elementor-widgets/blog/pagination',
+			array(
+				'pagination_data' => array(
+					'current_page'   => $current_page,
+					'total_pages'    => $posts->max_num_pages,
+					'total_posts'    => $posts->found_posts,
+					'posts_per_page' => $posts_per_page,
+					'offset'         => $offset,
+				),
+			)
+		);
+		$pagination_html = ob_get_clean();
+
+		wp_send_json_success(
+			array(
+				'posts'      => $posts_html,
+				'pagination' => $pagination_html,
+			)
+		);
+	} else {
+		wp_send_json_error(
+			array(
+				'message' => __( 'No posts found', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+	}
+
+	wp_die();
+}
+
+
+add_action( 'wp_ajax_ms_lms_blog_pagination', 'ms_lms_blog_pagination' );
+add_action( 'wp_ajax_nopriv_ms_lms_blog_pagination', 'ms_lms_blog_pagination' );
