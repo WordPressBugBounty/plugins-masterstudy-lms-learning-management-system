@@ -29,7 +29,7 @@
                         $('.starter_install_theme_btn span').html('Successfully Installed');
                         setTimeout(
                             function () {
-                                location.replace(location.origin + '/wp-admin/admin.php?page=starter_lms_demo_installer');
+                                location.replace(location.origin + '/wp-admin/admin.php?page=masterstudy-starter-options');
                             }, 2000
                         )
                     }

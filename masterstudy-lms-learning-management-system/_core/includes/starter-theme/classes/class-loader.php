@@ -14,7 +14,7 @@ class Loader {
 
 	public $plugin_slug              = 'masterstudy-lms-learning-management-system';
 	public $starter_theme_version    = '1.0.0';
-	public $starter_theme_slug       = 'starter_lms_demo_installer';
+	public $starter_theme_slug       = 'masterstudy-starter-options';
 	public $child_starter_theme_slug = 'ms-lms-starter-theme-child';
 	private $ms_lms_themes           = array( 'smarty', 'masterstudy', 'globalstudy', 'betop', 'starter-text-domain' );
 

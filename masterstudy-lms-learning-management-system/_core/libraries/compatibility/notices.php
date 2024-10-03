@@ -20,7 +20,7 @@ $start_theme_notice = get_transient( 'stm_starter_theme_notice_setting' );
 if ( ! $theme_exists && empty( $start_theme_notice ) ) {
 
 	$install_url = add_query_arg(
-		array( 'page' => 'starter_lms_demo_installer' ),
+		array( 'page' => 'masterstudy-starter-options' ),
 		admin_url( 'themes.php' ),
 	);
 
