@@ -94,4 +94,14 @@
 			?>
 		</div>
 	</div>
+	<?php
+	if ( ! STM_LMS_Helpers::is_theme_activated() ) {
+		STM_LMS_Templates::show_lms_template(
+			'premium-templates/banners/banner-templates',
+			array(
+				'custom_class' => 'masterstudy-templates-banner-small',
+			)
+		);
+	}
+	?>
 </div>

@@ -62,35 +62,6 @@
 			</div>
 		</div>
 	</div>
-	<div class="wizard-starter">
-		<div class="wizard-starter__screen">
-			<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/wizard/starter-theme.png' ); ?>" width="432" height="262" alt="<?php esc_html_e( 'Free WordPress LMS Theme', 'masterstudy-lms-learning-management-system' ); ?>">
-		</div>
-		<div class="wizard-starter__content">
-			<h3>
-			<?php
-				// translators: This is a translatable string with placeholders.
-				$description = esc_html__( 'Free %1$sStarter Theme%2$s', 'masterstudy-lms-learning-management-system' );
-				echo wp_kses_post( sprintf( $description, '<span style="font-weight: normal">', '</span>' ) );
-			?>
-			</h3>
-			<p>
-			<?php
-			// translators: This is a translatable string with placeholders.
-			$description = esc_html__( 'Download our MasterStudy Templates for free and get an intuitive and easy-to-navigate look for your website.', 'masterstudy-lms-learning-management-system' );
-			echo wp_kses_post( sprintf( $description, '<strong>', '</strong>' ) );
-			?>
-			</p>
-			<div class="wizard-starter__buttons">
-				<a href="https://masterstudy.stylemixthemes.com/lms-plugin/" class="wizard-finish__column_block_button" target="_blank">
-					<?php esc_html_e( 'View Demo', 'masterstudy-lms-learning-management-system' ); ?>
-				</a>
-				<a href="https://stylemixthemes-public.s3.us-west-2.amazonaws.com/ms-lms-starter-theme.zip" class="wizard-finish__column_block_button" target="_blank">
-					<?php esc_html_e( 'Download', 'masterstudy-lms-learning-management-system' ); ?>
-				</a>
-			</div>
-		</div>
-	</div>
 	<div class="wizard-finish__links">
 		<a href="https://docs.stylemixthemes.com/masterstudy-lms/" class="wizard-finish__links_block" target="_blank">
 			<div class="wizard-finish__links_block_wrapper">
@@ -120,6 +91,16 @@
 			</div>
 		</a>
 	</div>
+	<?php
+	if ( ! STM_LMS_Helpers::is_theme_activated() ) {
+		STM_LMS_Templates::show_lms_template(
+			'premium-templates/banners/banner-templates',
+			array(
+				'custom_class' => 'masterstudy-templates-banner',
+			)
+		);
+	}
+	?>
 	<div class="wizard-finish__bottom_banner">
 		<h3><?php esc_html_e( 'Upgrade for the best LMS features', 'masterstudy-lms-learning-management-system' ); ?></h3>
 		<p><?php esc_html_e( 'Get MasterStudy Pro Plus to access extra features your users will love: Certificate Builder, Email Editor and Branding Manager, Assignments, Drip Content and Prerequisites, Zoom Conference, Co-Instructors, Course Bundles, Live Streaming, and much more!', 'masterstudy-lms-learning-management-system' ); ?></p>

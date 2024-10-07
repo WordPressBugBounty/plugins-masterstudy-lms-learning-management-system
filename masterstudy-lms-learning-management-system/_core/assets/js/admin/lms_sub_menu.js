@@ -5,10 +5,20 @@
     var classes = ['post-type-stm-courses', 'post-type-stm-lessons', 'post-type-stm-quizzes', 'post-type-stm-questions', 'post-type-stm-assignments', 'post-type-stm-google-meets', 'post-type-stm-user-assignment', 'post-type-stm-reviews', 'post-type-stm-orders', 'post-type-stm-ent-groups', 'post-type-stm-payout', 'taxonomy-stm_lms_course_taxonomy', 'taxonomy-stm_lms_question_taxonomy', 'stm-lms_page_stm-lms-online-testing', 'admin_page_stm_lms_scorm_settings', 'toplevel_page_stm-lms-dashboard'];
     var $settings_parent = $('.stm-lms-settings-menu-title').closest('li');
     $settings_parent.nextAll('li').addClass('stm-lms-pro-addons-menu');
-    $settings_parent.addClass('stm-lms-settings-menu');
-    $settings_parent.next('li').addClass('stm-lms-addons-page-menu');
+    if ($(".stm-lms-templates-menu-title").length === 0) {
+      $settings_parent.addClass("stm-lms-settings-menu");
+    }
+    var $templates_parent = $(".stm-lms-templates-menu-title").closest("li");
+    $templates_parent.nextAll("li").addClass("stm-lms-pro-addons-menu");
+    $templates_parent.addClass("stm-lms-templates-menu");
+    $templates_parent.next("li").addClass("stm-lms-addons-page-menu");
     if ($('li.stm-lms-pro-addons-menu:last').find('span.stm-lms-unlock-pro-btn').length > 0) {
       $('li.stm-lms-pro-addons-menu:last').addClass('upgrade');
+    }
+    var menuLink = document.querySelector('a[href="admin.php?page=masterstudy-starter-demo-import"]');
+    if (menuLink) {
+      menuLink.setAttribute("target", "_blank");
+      menuLink.href = "https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/";
     }
     if ($('body').is("." + classes.join(', .'))) {
       $('#adminmenu > li').removeClass('wp-has-current-submenu wp-menu-open').find('wp-sumenu').css({

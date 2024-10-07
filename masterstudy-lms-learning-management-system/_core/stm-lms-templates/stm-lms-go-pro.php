@@ -186,13 +186,13 @@ function get_freemius_info() {
 
 $freemius_info = get_freemius_info();
 
-$deadline      = new DateTime( '20th September 2024' );
-$is_promotion  = time() < $deadline->format( 'U' );
+$deadline     = new DateTime( '20th September 2024' );
+$is_promotion = time() < $deadline->format( 'U' );
 
 if ( $is_promotion ) {
-	$freemius_info['plan']['licenses_5000']->annual_price   = 399;
-	$freemius_info['plan']['licenses_5']->annual_price      = 229;
-	$freemius_info['plan']['licenses_1']->annual_price      = 89;
+	$freemius_info['plan']['licenses_5000']->annual_price = 399;
+	$freemius_info['plan']['licenses_5']->annual_price    = 229;
+	$freemius_info['plan']['licenses_1']->annual_price    = 89;
 
 	$freemius_info['plan']['licenses_5000']->lifetime_price = 999;
 	$freemius_info['plan']['licenses_5']->lifetime_price    = 599;
@@ -222,11 +222,6 @@ if ( $is_promotion ) {
 					<?php endif; ?>
 				</p>
 			</div>
-			<?php if ( false ) { ?>
-				<div class="stm-discount">
-					<a href="https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=newyear&utm_campaign=masterstudy" target="_blank"></a>
-				</div>
-			<?php } ?>
 			<?php if ( isset( $freemius_info['plan'] ) ) : ?>
 				<h2><?php esc_html_e( 'Pricing', 'masterstudy-lms-learning-management-system' ); ?></h2>
 				<div class="stm-type-pricing">
@@ -388,7 +383,17 @@ if ( $is_promotion ) {
 						</span>
 					</li>
 				</ul>
-			<?php endif; ?>
+				<?php
+			endif;
+			if ( ! \STM_LMS_Helpers::is_theme_activated() ) {
+				STM_LMS_Templates::show_lms_template(
+					'premium-templates/banners/banner-templates',
+					array(
+						'custom_class' => 'masterstudy-templates-banner masterstudy-templates-banner_finish',
+					)
+				);
+			}
+			?>
 		</div>
 	</section>
 </div>

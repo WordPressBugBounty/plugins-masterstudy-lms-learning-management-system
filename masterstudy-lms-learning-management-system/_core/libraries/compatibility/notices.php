@@ -6,18 +6,17 @@ $init_data = array(
 	'old-course-builder',
 );
 
-$themes       = array( 'ms-lms-starter-theme', 'masterstudy', 'globalstudy', 'smarty' );
-$theme_exists = array_reduce(
-	$themes,
-	function ( $carry, $theme ) {
-		return $carry || wp_get_theme( $theme )->exists();
-	},
-	false
+$active_theme = wp_get_theme()->get( 'TextDomain' );
+$theme_exists = array(
+	'starter-text-domain',
+	'masterstudy',
+	'globalstudy',
+	'smarty',
 );
 
 $start_theme_notice = get_transient( 'stm_starter_theme_notice_setting' );
 
-if ( ! $theme_exists && empty( $start_theme_notice ) ) {
+if ( ! in_array( $active_theme, $theme_exists, true ) && empty( $start_theme_notice ) ) {
 
 	$install_url = add_query_arg(
 		array( 'page' => 'masterstudy-starter-options' ),
@@ -28,13 +27,13 @@ if ( ! $theme_exists && empty( $start_theme_notice ) ) {
 		'notice_type'            => 'starter-theme-notice',
 		'notice_logo'            => 'ms_starter.svg',
 		'notice_title'           => '',
-		'notice_desc'            => '<h4>' . esc_html__( 'What\'s next? Install the', 'masterstudy-lms-learning-management-system' ) . ' <span style="font-weight: 700">free</span> <a href="https://stylemixthemes.com/wordpress-lms-plugin/starter/" style="text-decoration: none" target="_blank">MasterStudy Templates!</a></h4>',
+		'notice_desc'            => '<h4>' . esc_html__( 'What\'s next? Install the', 'masterstudy-lms-learning-management-system' ) . ' <span style="font-weight: 700">free</span> <a href="https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/" style="text-decoration: none" target="_blank">MasterStudy Templates!</a></h4>',
 		'notice_btn_one_title'   => esc_html__( 'Install', 'masterstudy-lms-learning-management-system' ),
 		'notice_btn_one_class'   => 'ms_start_theme_install',
 		'notice_btn_one'         => esc_url( $install_url ),
 		'notice_btn_two_title'   => esc_html__( 'Live Demo', 'masterstudy-lms-learning-management-system' ),
 		'notice_btn_two_class'   => 'ms_start_theme_live_demo light-bg',
-		'notice_btn_two'         => esc_url( 'https://masterstudy.stylemixthemes.com/lms-plugin/' ),
+		'notice_btn_two'         => esc_url( 'https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/' ),
 		'notice_btn_two_attrs'   => 'target=_blank',
 		'notice_btn_three_title' => esc_html__( 'No Thanks', 'masterstudy-lms-learning-management-system' ),
 		'notice_btn_three_class' => 'no-bg',

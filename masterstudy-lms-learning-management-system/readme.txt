@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 3.4.3
+Stable tag: 3.4.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,9 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.4.4 - 2024-10-07 =
+- **Fix:** Small bug fixes.
+
 = 3.4.3 - 2024-10-03 =
 - **Fix:** Small bug fixes.
 
@@ -321,9 +324,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.3.37 - 2024-08-14 =
 - **Fix:** Small bug fixes.
-
-= 3.3.36 - 2024-08-13 =
-- **Fix:** Elementor archive displays "No Courses" when courses were found.
-- **Fix:** When purchasing a course, Stripe payment fails.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

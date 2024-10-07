@@ -661,4 +661,17 @@ class STM_LMS_Helpers {
 
 		return $page_styles;
 	}
+
+	public static function is_theme_activated() {
+		$active_theme = wp_get_theme()->get( 'TextDomain' );
+
+		$themes = array(
+			'starter-text-domain',
+			'masterstudy',
+			'globalstudy',
+			'smarty',
+		);
+
+		return in_array( $active_theme, $themes, true );
+	}
 }

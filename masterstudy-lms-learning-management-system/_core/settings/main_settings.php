@@ -96,24 +96,23 @@ add_action(
 			);
 		}
 
-		if ( function_exists( 'masterstudy_starter_fs_verify' ) && ! masterstudy_starter_fs_verify() ) {
-			add_submenu_page(
-				'stm-lms-settings',
-				'Premium templates',
-				'Premium templates',
-				'manage_options',
-				'admin.php?page=masterstudy-starter-demo-import',
-			);
-		}
-
 		add_submenu_page(
 			'stm-lms-settings',
 			'MasterStudy',
 			'<span class="stm-lms-settings-menu-title">Settings</span>',
 			'manage_options',
-			'stm-lms-settings'
+			'stm-lms-settings',
 		);
 
+		if ( ! STM_LMS_Helpers::is_theme_activated() ) {
+			add_submenu_page(
+				'stm-lms-settings',
+				'MasterStudy templates',
+				'<span class="stm-lms-templates-menu-title">MasterStudy <strong>Templates</strong></span>',
+				'manage_options',
+				'admin.php?page=masterstudy-starter-demo-import',
+			);
+		}
 	},
 	-1,
 	10
@@ -168,6 +167,17 @@ if ( ! STM_LMS_Helpers::is_pro() && ! STM_LMS_Helpers::is_pro_plus() ) {
 		require_once STM_LMS_PATH . '/stm-lms-templates/journey/free-journey-addons-sidebars.php';
 	}
 }
+
+add_action(
+	'admin_menu',
+	function () {
+		if ( isset( $_GET['page'] ) && 'masterstudy-starter-demo-import' === $_GET['page'] ) {
+			wp_safe_redirect( 'https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/' );
+			exit;
+		}
+	},
+	100003
+);
 
 add_filter(
 	'admin_body_class',
