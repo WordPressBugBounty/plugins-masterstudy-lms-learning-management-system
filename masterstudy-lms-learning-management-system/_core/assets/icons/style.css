@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'stmlms';
-  src:  url('fonts/stmlms.eot?6nb4xj');
-  src:  url('fonts/stmlms.eot?6nb4xj#iefix') format('embedded-opentype'),
-    url('fonts/stmlms.ttf?6nb4xj') format('truetype'),
-    url('fonts/stmlms.woff?6nb4xj') format('woff'),
-    url('fonts/stmlms.svg?6nb4xj#stmlms') format('svg');
+  src:  url('fonts/stmlms.eot?hjylog');
+  src:  url('fonts/stmlms.eot?hjylog#iefix') format('embedded-opentype'),
+    url('fonts/stmlms.ttf?hjylog') format('truetype'),
+    url('fonts/stmlms.woff?hjylog') format('woff'),
+    url('fonts/stmlms.svg?hjylog#stmlms') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.stmlms-list-check:before {
+  content: "\e9f3";
+  color: #195ec8;
+}
+.stmlms-progress-wheel:before {
+  content: "\e9f4";
+  color: #ffa800;
+}
+.stmlms-done:before {
+  content: "\e9f5";
+  color: #227aff;
+}
+.stmlms-pause:before {
+  content: "\e9f6";
+  color: #4d5e6f;
+}
+.stmlms-edit:before {
+  content: "\e9f7";
+  color: #4d5e6f;
+}
+.stmlms-chart:before {
+  content: "\e9f8";
+  color: #4d5e6f;
+}
 .stmlms-mailchimp:before {
   content: "\e9f1";
 }

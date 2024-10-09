@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 3.4.4
+Stable tag: 3.4.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -303,6 +303,11 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+
+= 3.4.5 - 2024-10-09 =
+- **Enhancement:** Updated some icons for course actions and assignments in Reports and Analytics.
+- **Fix:** Time Limit in Coming Soon courses shows more days than needed on the page.
+- **Fix:** Default Pricing settings for a course are not applied until the course author manually saves them.
 
 = 3.4.4 - 2024-10-07 =
 - **Fix:** Small bug fixes.

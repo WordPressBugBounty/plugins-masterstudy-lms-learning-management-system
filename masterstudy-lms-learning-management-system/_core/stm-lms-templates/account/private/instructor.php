@@ -19,4 +19,7 @@ STM_LMS_Templates::show_lms_template(
 );
 
 STM_LMS_Templates::show_lms_template( 'account/private/instructor_parts/info', array( 'current_user' => $current_user ) );
+if ( STM_LMS_Options::get_option( 'instructors_reports', true ) ) {
+	do_action( 'masterstudy_show_analytics_templates', $current_user );
+}
 STM_LMS_Templates::show_lms_template( 'account/private/instructor_parts/courses', array( 'current_user' => $current_user ) );

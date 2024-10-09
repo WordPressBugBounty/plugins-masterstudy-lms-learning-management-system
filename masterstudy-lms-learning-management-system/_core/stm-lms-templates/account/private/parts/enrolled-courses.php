@@ -218,7 +218,7 @@ $options['student_reports'] = $options['student_reports'] ?? true;
 								<a v-bind:href="course.current_lesson_id" class="btn btn-default"
 									v-bind:class="{
 									'continue': course.progress !== '0',
-									'disabled': course.availability === '1'
+									'disabled coming-soon-not-allowed': course.availability === '1'
 								}"
 									v-else>
 									<span v-if="course.progress === '0' && course.availability === ''"><?php esc_html_e( 'Start Course', 'masterstudy-lms-learning-management-system' ); ?></span>

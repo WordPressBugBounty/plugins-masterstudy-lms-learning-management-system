@@ -19,16 +19,28 @@ function stm_lms_settings_analytics_section() {
 	);
 
 	if ( $is_pro_plus ) {
-		$student_reports = array(
-			'student_reports' => array(
+		$analytics_reports = array(
+			'instructors_reports' => array(
 				'type'        => 'checkbox',
-				'label'       => esc_html__( 'Stats for students', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'It lets students see their courses, check their progress, and look at their achievements on the dashboard.', 'masterstudy-lms-learning-management-system' ),
+				'label'       => esc_html__( 'Reports for instructors', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Show detailed course reports to instructors.', 'masterstudy-lms-learning-management-system' ),
+				'value'       => true,
+			),
+			'instructors_payouts' => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( "Display information about the instructor's profit on the course", 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Show only if the admin enabled the “Show Payouts statistics to instructor” option in the settings.', 'masterstudy-lms-learning-management-system' ),
+				'value'       => true,
+			),
+			'student_reports'     => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Reports for students', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Allow students to see reports on enrolled courses.', 'masterstudy-lms-learning-management-system' ),
 				'value'       => true,
 			),
 		);
 
-		$main_fields['fields'] = array_merge( $student_reports, $main_fields['fields'] );
+		$main_fields['fields'] = array_merge( $analytics_reports, $main_fields['fields'] );
 	}
 
 	return $main_fields;

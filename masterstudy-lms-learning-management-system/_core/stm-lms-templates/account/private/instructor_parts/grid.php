@@ -69,29 +69,34 @@
 							<div class="stm_lms_instructor_courses__single--choice publish"
 								@click="changeStatus(course, 'publish')"
 								v-bind:class="{'chosen' : (course.status === 'publish' || course.status === 'pending')}">
-								<i class="fa fa-check-circle"></i>
+								<div class="stm_lms_instructor_courses__single--choice-icon"></div>
 								<span><?php esc_html_e( 'Published', 'masterstudy-lms-learning-management-system' ); ?></span>
 							</div>
 
 							<div class="stm_lms_instructor_courses__single--choice draft"
 								@click="changeStatus(course, 'draft')"
 								v-bind:class="{'chosen' : course.status === 'draft'}">
-								<i class="fa fa-pause"></i>
+								<div class="stm_lms_instructor_courses__single--choice-icon"></div>
 								<span><?php esc_html_e( 'Drafted', 'masterstudy-lms-learning-management-system' ); ?></span>
 							</div>
 
 							<a v-bind:href="course.edit_link" target="_blank"
 								class="stm_lms_instructor_courses__single--choice edit">
-								<i class="fa fa-edit"></i>
+								<div class="stm_lms_instructor_courses__single--choice-icon"></div>
 								<span><?php esc_html_e( 'Edit', 'masterstudy-lms-learning-management-system' ); ?></span>
 							</a>
 
 							<a v-bind:href="course.manage_students_link" target="_blank" v-if="course.can_instructor_add_students"
 								class="stm_lms_instructor_courses__single--choice manage-students">
-								<i class="fa fa-user-group"></i>
+								<div class="stm_lms_instructor_courses__single--choice-icon"></div>
 								<span><?php esc_html_e( 'Manage Students', 'masterstudy-lms-learning-management-system' ); ?></span>
 							</a>
 
+							<a v-bind:href="course.analytics_link" target="_blank" v-if="course.analytics_link"
+								class="stm_lms_instructor_courses__single--choice chart">
+								<div class="stm_lms_instructor_courses__single--choice-icon"></div>
+								<span><?php esc_html_e( 'Analytics', 'masterstudy-lms-learning-management-system' ); ?></span>
+							</a>
 						</div>
 
 

@@ -449,6 +449,9 @@ class STM_LMS_User_Menu {
 					case 'my_points':
 						$add_element = class_exists( 'STM_LMS_Point_System_Interface' ) && $full_menu;
 						break;
+					case 'analytics':
+						$add_element = STM_LMS_Helpers::is_pro_plus() && $instructor_menu;
+						break;
 				}
 
 				if ( $add_element ) {
@@ -513,6 +516,7 @@ class STM_LMS_User_Menu {
 			'google_meets',
 			'payout',
 			'announcement',
+			'analytics',
 		);
 
 		return array_values(

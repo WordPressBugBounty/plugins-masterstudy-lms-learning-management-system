@@ -291,6 +291,10 @@ final class CourseRepository {
 
 		update_post_meta( $post_id, 'featured', '' );
 
+		if ( \STM_LMS_Subscriptions::subscription_enabled() && \STM_LMS_Course::course_in_plan( $post_id ) ) {
+			update_post_meta( $post_id, 'single_sale', '' );
+		}
+
 		do_action( 'masterstudy_lms_course_saved', $post_id, $data );
 
 		return $post_id;

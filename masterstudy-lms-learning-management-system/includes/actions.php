@@ -156,13 +156,13 @@ add_action( 'admin_menu', 'masterstudy_analytics_main_page' );
 
 function masterstudy_analytics_revenue_page() {
 	if ( STM_LMS_Helpers::is_pro_plus() ) {
-		if ( isset( $_GET['course'] ) && ! empty( $_GET['course'] ) ) {
+		if ( ! empty( $_GET['course_id'] ) ) {
 			STM_LMS_Templates::show_lms_template( 'analytics/course' );
 
 			return;
 		}
 
-		if ( isset( $_GET['user'] ) && ! empty( $_GET['user'] ) ) {
+		if ( ! empty( $_GET['user_id'] ) ) {
 			STM_LMS_Templates::show_lms_template( 'analytics/student' );
 
 			return;

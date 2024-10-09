@@ -152,6 +152,15 @@ class STM_LMS_Course {
 			return 0;
 		}
 
+		if ( STM_LMS_Helpers::masterstudy_lms_is_course_coming_soon( $course_id ) && function_exists( 'masterstudy_lms_coming_soon_start_time' ) ) {
+			$course_start_time = masterstudy_lms_coming_soon_start_time( $course_id );
+			$time_difference   = strtotime( $course_start_time ) - time();
+
+			if ( $time_difference > 0 ) {
+				$expiration_days = $expiration_days + $time_difference;
+			}
+		}
+
 		return intval( $expiration_days ) * DAY_IN_SECONDS;
 	}
 

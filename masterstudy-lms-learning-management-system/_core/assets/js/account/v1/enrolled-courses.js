@@ -78,6 +78,9 @@
             vm.loading = false;
             vm.loadingButton = false;
             Vue.nextTick(function () {
+              $('a.coming-soon-not-allowed').each(function () {
+                $(this).removeAttr('href');
+              });
               stmLmsStartTimers();
             });
           });

@@ -461,6 +461,10 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					'can_instructor_add_students' => self::instructor_can_add_students(),
 				);
 
+				if ( STM_LMS_Helpers::is_pro_plus() && STM_LMS_Options::get_option( 'instructors_reports', true ) ) {
+					$post = apply_filters( 'masterstudy_add_analytics_link', $post, $id );
+				}
+
 				$post['sale_price'] = ( ! empty( $sale_price ) ) ? STM_LMS_Helpers::display_price( $sale_price ) : '';
 				$result['posts'][]  = $post;
 			}

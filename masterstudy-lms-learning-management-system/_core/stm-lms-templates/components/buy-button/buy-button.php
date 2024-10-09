@@ -23,7 +23,7 @@ wp_localize_script(
 );
 
 $course_price          = STM_LMS_Course::get_course_price( $post_id );
-$only_membership       = get_post_meta( $post_id, 'not_single_sale', true );
+$single_sale           = get_post_meta( $post_id, 'single_sale', true );
 $has_access            = isset( $has_access ) ? $has_access : STM_LMS_User::has_course_access( $post_id, '', false );
 $prerequisite_passed   = true;
 $is_course_coming_soon = false;
@@ -55,7 +55,7 @@ if ( class_exists( 'STM_LMS_Courses_Pro' ) && method_exists( 'STM_LMS_Courses_Pr
 }
 
 if ( ! $is_affiliate ) {
-	if ( ( $has_access || ( empty( $course_price ) && ! $only_membership ) ) && $prerequisite_passed ) :
+	if ( ( $has_access || ( empty( $course_price ) && $single_sale ) ) && $prerequisite_passed ) :
 		/* Including the button template for free courses */
 		STM_LMS_Templates::show_lms_template(
 			'components/buy-button/free-courses/free-courses',
@@ -74,7 +74,7 @@ if ( ! $is_affiliate ) {
 				'post_id'              => $post_id,
 				'button_classes'       => $button_classes,
 				'prerequisite_preview' => $prerequisite_preview,
-				'only_membership'      => $only_membership,
+				'only_membership'      => ! $single_sale,
 			)
 		);
 	endif;
