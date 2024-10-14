@@ -666,6 +666,9 @@ class STM_LMS_Helpers {
 		$active_theme = wp_get_theme()->get( 'TextDomain' );
 
 		$themes = array(
+			'ms-lms-starter-theme',
+			'masterstudy-child',
+			'ms-lms-starter-theme-child',
 			'starter-text-domain',
 			'masterstudy',
 			'globalstudy',

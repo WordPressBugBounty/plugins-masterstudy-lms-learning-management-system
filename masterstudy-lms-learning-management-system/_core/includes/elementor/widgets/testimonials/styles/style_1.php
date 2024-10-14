@@ -25,9 +25,11 @@
 			?>
 			<div class="ms-lms-testimonial-data swiper-slide"
 				data-thumbnail="<?php echo isset( $thumbnail_img[0] ) ? esc_attr( $thumbnail_img[0] ) : ''; ?>">
+				<?php if ( $testimonial['review_rating'] > 0 ) : ?>
 				<div class="ms-lms-testimonial-review-rating">
 					<?php echo wp_kses_post( str_repeat( '<i class="fa fa-star"></i>', intval( $testimonial['review_rating'] ) ) ); ?>
 				</div>
+				<?php endif; ?>
 				<div class="author-name"><?php echo esc_html( $testimonial['author_name'] ); ?></div>
 				<div class="content">
 					<?php echo wp_kses_post( $testimonial['content'] ); ?>

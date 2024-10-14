@@ -8,6 +8,9 @@ $init_data = array(
 
 $active_theme = wp_get_theme()->get( 'TextDomain' );
 $theme_exists = array(
+	'ms-lms-starter-theme',
+	'masterstudy-child',
+	'ms-lms-starter-theme-child',
 	'starter-text-domain',
 	'masterstudy',
 	'globalstudy',

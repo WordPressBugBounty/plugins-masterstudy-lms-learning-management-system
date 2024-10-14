@@ -78,14 +78,16 @@ var StmLmsProTestimonials = /*#__PURE__*/function (_elementorModules$fro) {
             clickable: true,
             renderBullet: function renderBullet(index, className) {
               var userThumbnail = "",
-                testimonialItem = sliderWrapper.children[index];
-              if (testimonialItem !== null && _typeof(testimonialItem) === "object") {
+                slidesArray = Array.from(sliderWrapper.children);
+              slidesArray.push(slidesArray.shift());
+              var testimonialItem = slidesArray[index];
+              if (testimonialItem && _typeof(testimonialItem) === "object") {
                 userThumbnail = testimonialItem.getAttribute("data-thumbnail");
               }
-              var span = jQuery("<span></span>");
-              span.addClass(className);
-              span.css("background-image", "url(" + userThumbnail + ")");
-              return span.prop("outerHTML");
+              var span = document.createElement("span");
+              span.classList.add(className);
+              span.style.backgroundImage = "url(" + userThumbnail + ")";
+              return span.outerHTML;
             }
           },
           navigation: {

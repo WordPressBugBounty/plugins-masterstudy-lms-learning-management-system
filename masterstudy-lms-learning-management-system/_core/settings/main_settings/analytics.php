@@ -23,13 +23,13 @@ function stm_lms_settings_analytics_section() {
 			'instructors_reports' => array(
 				'type'        => 'checkbox',
 				'label'       => esc_html__( 'Reports for instructors', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'Show detailed course reports to instructors.', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Enable to show advanced analytics and reports to instructors.', 'masterstudy-lms-learning-management-system' ),
 				'value'       => true,
 			),
 			'instructors_payouts' => array(
 				'type'        => 'checkbox',
-				'label'       => esc_html__( "Display information about the instructor's profit on the course", 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'Show only if the admin enabled the “Show Payouts statistics to instructor” option in the settings.', 'masterstudy-lms-learning-management-system' ),
+				'label'       => esc_html__( 'Show payout statistics to instructors', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Enable to display payout statistics for instructors in the Revenue tab.', 'masterstudy-lms-learning-management-system' ),
 				'value'       => true,
 			),
 			'student_reports'     => array(

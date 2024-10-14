@@ -42,6 +42,7 @@ class MsLmsMailchimp extends Widget_Base {
 		$this->register_style_controls_label_styles();
 		$this->register_style_controls_field_styles();
 		$this->register_style_controls_button_styles();
+		$this->register_style_controls_message_styles();
 	}
 
 	/** Register Typography Controls */
@@ -293,6 +294,138 @@ class MsLmsMailchimp extends Widget_Base {
 				'size_units' => array( 'px', '%' ),
 				'selectors'  => array(
 					'{{WRAPPER}} .mc4wp-form-fields input[type=submit]' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_section();
+	}
+
+	protected function register_style_controls_message_styles() {
+
+		$this->start_controls_section(
+			'section_message',
+			array(
+				'label' => esc_html__( 'Message', 'masterstudy-lms-learning-management-system' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			array(
+				'name'           => 'section_message_typography',
+				'selector'       => '{{WRAPPER}} .mc4wp-response .mc4wp-alert p',
+				'fields_options' => array(
+					'typography' => array(
+						'label' => esc_html__( 'Typography', 'masterstudy-lms-learning-management-system' ),
+					),
+				),
+			)
+		);
+		$this->start_controls_tabs(
+			'section_message_tab'
+		);
+		$this->start_controls_tab(
+			'section_message_success',
+			array(
+				'label' => esc_html__( 'Success', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+		$this->add_control(
+			'section_message_color',
+			array(
+				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .mc4wp-response .mc4wp-alert.mc4wp-success p, {{WRAPPER}} .mc4wp-response .mc4wp-alert.mc4wp-success p a' => 'color: {{VALUE}};',
+				),
+			)
+		);
+		$this->add_control(
+			'section_message_background',
+			array(
+				'label'     => esc_html__( 'Background', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .mc4wp-response .mc4wp-alert.mc4wp-success p' => 'background-color: {{VALUE}};',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'     => 'section_message_border',
+				'selector' => '{{WRAPPER}} .mc4wp-response .mc4wp-alert.mc4wp-success p',
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			array(
+				'name'     => 'section_message_shadow',
+				'selector' => '{{WRAPPER}} .mc4wp-response .mc4wp-alert.mc4wp-success p',
+			)
+		);
+		$this->end_controls_tab();
+		$this->start_controls_tab(
+			'section_message_alert_tab',
+			array(
+				'label' => esc_html__( 'Alert', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+		$this->add_control(
+			'section_message_alert_color',
+			array(
+				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .mc4wp-response .mc4wp-alert.mc4wp-error p, {{WRAPPER}} .mc4wp-response .mc4wp-alert.mc4wp-error p a' => 'color: {{VALUE}};',
+				),
+			)
+		);
+		$this->add_control(
+			'section_message_alert_background',
+			array(
+				'label'     => esc_html__( 'Background', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .mc4wp-response .mc4wp-alert.mc4wp-error p' => 'background-color: {{VALUE}};',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'     => 'section_message_alert_border',
+				'selector' => '{{WRAPPER}} .mc4wp-response .mc4wp-alert.mc4wp-error p',
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			array(
+				'name'     => 'section_message_alert_shadow',
+				'selector' => '{{WRAPPER}} .mc4wp-response .mc4wp-alert.mc4wp-error p',
+			)
+		);
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
+		$this->add_responsive_control(
+			'section_message_padding',
+			array(
+				'label'      => esc_html__( 'Padding', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .mc4wp-response .mc4wp-alert p' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'section_message_margin',
+			array(
+				'label'      => esc_html__( 'Margin', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .mc4wp-response .mc4wp-alert p' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);

@@ -20,13 +20,16 @@ document.addEventListener('DOMContentLoaded', function() {
           clickable: true,
           renderBullet: function (index, className) {
             let userThumbnail = "",
-              testimonialItem = sliderWrapper.children[index];
-            if (
-              testimonialItem !== null &&
-              typeof testimonialItem === "object"
-            ) {
-              userThumbnail = testimonialItem.getAttribute("data-thumbnail");
+                slidesArray = Array.from(sliderWrapper.children);
+
+            slidesArray.push(slidesArray.shift());
+
+            let testimonialItem = slidesArray[index];
+
+            if (testimonialItem && typeof testimonialItem === "object") {
+                userThumbnail = testimonialItem.getAttribute("data-thumbnail");
             }
+
             let span = document.createElement("span");
             span.classList.add(className);
             span.style.backgroundImage = "url(" + userThumbnail + ")";

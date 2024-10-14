@@ -30,9 +30,11 @@
 					<div class="content">
 						<?php echo wp_kses_post( $testimonial['content'] ); ?>
 					</div>
+					<?php if ( $testimonial['review_rating'] > 0 ) : ?>
 					<div class="ms-lms-testimonial-review-rating">
 						<?php echo wp_kses_post( str_repeat( '<i class="fa fa-star"></i>', intval( $testimonial['review_rating'] ) ) ); ?>
 					</div>
+					<?php endif; ?>
 					<div class="author-name"><?php echo esc_html( $testimonial['author_name'] ); ?></div>
 				</div>
 			</div>

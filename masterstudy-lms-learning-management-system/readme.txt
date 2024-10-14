@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 3.4.5
+Stable tag: 3.4.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,13 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.4.6 - 2024-10-14 =
+- **Enhancement:** Added option to customize text of the message in Mailchimp widget.
+- **Enhancement:** Added option to remove stars in Testimonials widget.
+- **Fix:** Fill The Gap question type is not working correctly with some Portuguese characters.
+- **Fix:** Navigation in the first Testimonials style where the pagination shows content from the wrong tab.
+- **Fix:** Small bug fixes.
+
 = 3.4.5 - 2024-10-09 =
 - **Enhancement:** Updated some icons for course actions and assignments in Reports and Analytics.
 - **Fix:** Time Limit in Coming Soon courses shows more days than needed on the page.
@@ -326,8 +333,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 = 3.4.0 - 2024-08-29 =
 - **Enhancement:** Added option to select a course page style for each course and course category in the Course Builder.
 - **Enhancement:** Added Advanced Analytics feature for course reports on Revenue, Engagement, Users, and Reviews (Pro).
-
-= 3.3.37 - 2024-08-14 =
-- **Fix:** Small bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
