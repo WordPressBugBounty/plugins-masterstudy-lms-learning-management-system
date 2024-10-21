@@ -23,7 +23,7 @@
 
 /* TODO This is New Label before Upcoming Course Status in email manager
 	 such kind of possibility need to add in Nuxy submodule*/
-.stm_metaboxes_grid .wpcfto-tab-nav--inner .wpcfto-nav [data-section="upcoming-course-status"]:after {
+.stm_metaboxes_grid .wpcfto-tab-nav--inner .wpcfto-nav [data-section="reports"]:after {
 	content: "NEW";
 	position: absolute;
 	top: 10px;

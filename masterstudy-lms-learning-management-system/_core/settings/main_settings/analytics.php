@@ -40,6 +40,17 @@ function stm_lms_settings_analytics_section() {
 			),
 		);
 
+		if ( STM_LMS_Helpers::is_pro_plus() && is_ms_lms_addon_enabled( 'email_manager' ) ) {
+			$email_links = array(
+				'email_manage_links' => array(
+					'type'  => 'emails-links',
+					'value' => is_ms_lms_addon_enabled( 'email_manager' ) && STM_LMS_Helpers::is_pro_plus(),
+				),
+			);
+
+			$analytics_reports = array_merge( $analytics_reports, $email_links );
+		}
+
 		$main_fields['fields'] = array_merge( $analytics_reports, $main_fields['fields'] );
 	}
 

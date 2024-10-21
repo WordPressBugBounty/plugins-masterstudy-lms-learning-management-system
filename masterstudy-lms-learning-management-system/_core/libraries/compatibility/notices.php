@@ -49,8 +49,8 @@ if ( ! stm_lms_has_generated_pages( stm_lms_generate_pages_list() ) ) {
 	$init_data['lms-pages'] = array(
 		'notice_type'          => 'cog-notice',
 		'notice_logo'          => 'cog.svg',
-		'notice_title'         => esc_html__( 'There are not any LMS pages!', 'masterstudy-lms-learning-management-system' ),
-		'notice_desc'          => esc_html__( 'Please create pages and indicate them on LMS Settings>>>LMS Pages or generate them with the page generator', 'masterstudy-lms-learning-management-system' ),
+		'notice_title'         => esc_html__( 'No LMS pages found!', 'masterstudy-lms-learning-management-system' ),
+		'notice_desc'          => esc_html__( 'Some or all LMS pages are missing. Please create and assign them in LMS Settings > LMS Pages, or generate them using the Page Generator.', 'masterstudy-lms-learning-management-system' ),
 		'notice_btn_one_title' => esc_html__( 'Open settings', 'masterstudy-lms-learning-management-system' ),
 		'notice_btn_one_class' => 'ms_settings_open',
 		'notice_btn_one'       => admin_url( 'admin.php?page=stm-lms-settings#section_routes' ),

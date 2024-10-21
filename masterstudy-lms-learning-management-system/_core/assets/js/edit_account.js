@@ -168,6 +168,7 @@
               'twitter': 'href',
               'google-plus': 'href',
               'position': '',
+              'disable_report_email_notifications': true,
               'first_name': '',
               'instagram': 'href'
             };

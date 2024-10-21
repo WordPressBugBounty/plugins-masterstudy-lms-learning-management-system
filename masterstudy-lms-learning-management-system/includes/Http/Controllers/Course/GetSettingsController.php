@@ -11,6 +11,7 @@ use MasterStudy\Lms\Plugin\Taxonomy;
 use MasterStudy\Lms\Repositories\CertificateRepository;
 use MasterStudy\Lms\Repositories\ComingSoonRepository;
 use MasterStudy\Lms\Repositories\CourseRepository;
+use STM_LMS_Options;
 use WP_REST_Request;
 
 class GetSettingsController {
@@ -27,14 +28,15 @@ class GetSettingsController {
 
 		return new \WP_REST_Response(
 			array(
-				'categories'     => ( new CourseCategorySerializer() )->collectionToArray( Taxonomy::all_categories() ),
-				'certificates'   => ( new CertificateSerializer() )->collectionToArray( $this->certificate_repository->get_all() ),
-				'course'         => ( new CourseSerializer() )->toArray( $course ),
-				'levels'         => ( new CourseLevelSerializer() )->collectionToArray( \STM_LMS_Helpers::get_course_levels() ),
-				'featured_quota' => \STM_LMS_Subscriptions::get_featured_quota(),
-				'coming_soon'    => ( new ComingSoonRepository() )->find_by_course( $course_id ),
-				'course_style'   => ms_plugin_get_course_page_style( $course_id ),
-				'custom_fields'  => ( new CustomFieldsSerializer() )->collectionToArray(
+				'categories'       => ( new CourseCategorySerializer() )->collectionToArray( Taxonomy::all_categories() ),
+				'certificates'     => ( new CertificateSerializer() )->collectionToArray( $this->certificate_repository->get_all() ),
+				'is_enabled_crtfs' => STM_LMS_Options::get_option( 'instructors_certificates', false ),
+				'course'           => ( new CourseSerializer() )->toArray( $course ),
+				'levels'           => ( new CourseLevelSerializer() )->collectionToArray( \STM_LMS_Helpers::get_course_levels() ),
+				'featured_quota'   => \STM_LMS_Subscriptions::get_featured_quota(),
+				'coming_soon'      => ( new ComingSoonRepository() )->find_by_course( $course_id ),
+				'course_style'     => ms_plugin_get_course_page_style( $course_id ),
+				'custom_fields'    => ( new CustomFieldsSerializer() )->collectionToArray(
 					$course_id,
 					apply_filters( 'masterstudy_lms_course_custom_fields', array() )
 				),

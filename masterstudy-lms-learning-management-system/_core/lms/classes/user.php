@@ -1083,24 +1083,27 @@ class STM_LMS_User {
 
 	public static function extra_fields() {
 		$extra_fields = array(
-			'facebook'  => array(
+			'facebook'                           => array(
 				'label' => esc_html__( 'Facebook', 'masterstudy-lms-learning-management-system' ),
 				'icon'  => 'facebook-f',
 			),
-			'twitter'   => array(
+			'twitter'                            => array(
 				'label' => esc_html__( 'Twitter', 'masterstudy-lms-learning-management-system' ),
 				'icon'  => 'twitter',
 			),
-			'instagram' => array(
+			'instagram'                          => array(
 				'label' => esc_html__( 'Instagram', 'masterstudy-lms-learning-management-system' ),
 				'icon'  => 'instagram',
 			),
-			'linkedin'  => array(
+			'linkedin'                           => array(
 				'label' => esc_html__( 'LinkedIn', 'masterstudy-lms-learning-management-system' ),
 				'icon'  => 'linkedin-in',
 			),
-			'position'  => array(
+			'position'                           => array(
 				'label' => esc_html__( 'Position', 'masterstudy-lms-learning-management-system' ),
+			),
+			'disable_report_email_notifications' => array(
+				'label' => esc_html__( 'Email Notifications', 'masterstudy-lms-learning-management-system' ),
 			),
 		);
 
@@ -1383,6 +1386,11 @@ class STM_LMS_User {
 				}
 				$new_value = wp_kses_post( $user_data[ $field_name ] );
 				update_user_meta( $user_id, $field_name, $new_value );
+
+				if ( 'disable_report_email_notifications' === $field_name && $new_value ) {
+					delete_user_meta( $user_id, $field_name );
+				}
+
 				$data[ $field_name ] = $new_value;
 			}
 		}

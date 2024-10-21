@@ -6,6 +6,11 @@
 stm_lms_register_style( 'edit_account' );
 stm_lms_register_script( 'edit_account', array( 'vue.js', 'vue-resource.js' ) );
 stm_lms_register_style( 'user_info_top' );
+
+if ( ! metadata_exists( 'user', $current_user['id'], 'disable_report_email_notifications' ) ) {
+	$current_user['meta']['disable_report_email_notifications'] = true;
+}
+
 $data = wp_json_encode( $current_user );
 wp_add_inline_script(
 	'stm-lms-edit_account',
@@ -33,8 +38,33 @@ wp_add_inline_script(
 	</div>
 
 	<?php
+	$email_settings    = get_option( 'stm_lms_email_manager_settings' );
+	$student_digest    = $email_settings['stm_lms_reports_student_checked_enable'] ?? false;
+	$instructor_digest = $email_settings['stm_lms_reports_instructor_checked_enable'] ?? false;
+	$admin_digest      = $email_settings['stm_lms_reports_admin_checked_enable'] ?? true;
+
+	if ( is_ms_lms_addon_enabled( 'email_manager' ) && STM_LMS_Helpers::is_pro_plus() ) {
+		$current_user = \STM_LMS_User::get_current_user( null, true, true );
+
+		if ( isset( $current_user['roles'] ) && is_array( $current_user['roles'] ) && ! empty( $current_user['roles'][0] ) ) {
+			$user_role = $current_user['roles'][0] ?? '';
+
+			if ( in_array( $user_role, array( 'administrator', 'stm_lms_instructor', 'subscriber' ), true ) ) {
+
+				if (
+					( 'administrator' === $user_role && $admin_digest ) ||
+					( 'stm_lms_instructor' === $user_role && $instructor_digest ) ||
+					( 'subscriber' === $user_role && $student_digest )
+				) {
+					STM_LMS_Templates::show_lms_template( 'account/private/edit_account/email_notifications' );
+				}
+			}
+		}
+	}
+
 	if ( STM_LMS_Instructor::is_instructor() ) {
-		STM_LMS_Templates::show_lms_template( 'account/private/edit_account/socials' );}
+		STM_LMS_Templates::show_lms_template( 'account/private/edit_account/socials' );
+	}
 	?>
 
 	<?php STM_LMS_Templates::show_lms_template( 'account/private/edit_account/change_password' ); ?>
