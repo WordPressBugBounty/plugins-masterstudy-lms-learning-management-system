@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 3.4.7
+Stable tag: 3.4.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,9 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.4.8 - 2024-10-28 =
+- **Fix:** Small bug fixes.
+
 = 3.4.7 - 2024-10-21 =
 - **Enhancement:**  Added a new view for selecting certificates and a preview option in the course builder for a more intuitive user experience. (Pro)
 
@@ -329,8 +332,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **New:** Added 2 new styles for Testimonials Widget.
 - **New:** Added Mailchimp widget.
 - **New:** Added new Blog widget with news cards and two styles.
-
-= 3.4.1 - 2024-09-11 =
-- **Fix:** Small bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

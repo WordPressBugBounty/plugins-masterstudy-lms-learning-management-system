@@ -186,7 +186,7 @@ function get_freemius_info() {
 
 $freemius_info = get_freemius_info();
 
-$deadline     = new DateTime( '20th September 2024' );
+$deadline     = new DateTime( '05th November 2024' );
 $is_promotion = time() < $deadline->format( 'U' );
 
 if ( $is_promotion ) {
@@ -221,6 +221,9 @@ if ( $is_promotion ) {
 						<?php endif; ?>
 					<?php endif; ?>
 				</p>
+				<?php if ( $is_promotion ) : ?>
+				<div class="stm-discount"><a href="https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=gopro&utm_campaign=2024" target="_blank"></a></div>
+				<?php endif; ?>
 			</div>
 			<?php if ( isset( $freemius_info['plan'] ) ) : ?>
 				<h2><?php esc_html_e( 'Pricing', 'masterstudy-lms-learning-management-system' ); ?></h2>
