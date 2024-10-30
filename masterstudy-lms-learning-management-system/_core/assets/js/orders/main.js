@@ -29,7 +29,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) switch (_context.prev = _context.next) {
           case 0:
             currentPage = _args.length > 1 && _args[1] !== undefined ? _args[1] : 1;
-            apiUrl = "".concat(ms_lms_resturl, "/orders");
+            apiUrl = typeof masterstudy_woocommerce_orders !== "undefined" ? "".concat(ms_lms_resturl, "/orders/woocommerce-orders") : "".concat(ms_lms_resturl, "/orders");
             queryParams = [];
             if (perPage !== undefined) {
               queryParams.push("per_page=".concat(perPage));
@@ -80,7 +80,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   var template = document.getElementById("masterstudy-order-template");
                   var clone = template.content.cloneNode(true);
                   $(clone).find("[data-order-id]").text("#".concat(order.id));
-                  $(clone).find("[data-order-status]").text("".concat(order.status)).addClass("".concat(order.status));
+                  $(clone).find("[data-order-status]").text(order.status_name || order.status).addClass("".concat(order.status));
                   $(clone).find("[data-order-date]").text("".concat(order.date_formatted));
                   $(clone).find("[data-order-payment]").text(order.payment_code === 'wire_transfer' ? 'Wire transfer' : order.payment_code);
                   var _loop = function _loop(key) {
@@ -91,9 +91,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                       });
                       var additionalInfo = "";
                       if (matchingItem) {
-                        if (matchingItem.enterprise && matchingItem.enterprise !== "0") {
+                        if (matchingItem.enterprise && matchingItem.enterprise !== "0" || matchingItem.enterprise_id && matchingItem.enterprise_id !== "0") {
                           additionalInfo = "<span class=\"order-status\">enterprise</span>";
-                        } else if (matchingItem.bundle && matchingItem.bundle !== "0") {
+                        } else if (matchingItem.bundle && matchingItem.bundle !== "0" || item.bundle_courses_count > 0 && matchingItem.bundle_id && matchingItem.bundle_id !== "0") {
                           additionalInfo = "<span class=\"order-status\">bundle</span>";
                         }
                       }
@@ -105,11 +105,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     _loop(key);
                   }
                   $(clone).find("[data-order-total]").text("".concat(order.total));
+                  var detailsContainer = $(clone).find(".masterstudy-orders-course-info__details");
+                  var button = detailsContainer.find(".masterstudy-button");
+                  if (button.length > 0) {
+                    button.attr("href", "/woocommerce-order-details/".concat(order.id));
+                  }
                   $(".masterstudy-orders-container").append(clone);
                 });
               }
             } else {
-              orderHtml = "\n              <div class=\"masterstudy-orders-no-found__info\">\n                <div class=\"masterstudy-orders-no-found__info-icon\"><span class=\"stmlms-order\"></span></div>\n                <div class=\"masterstudy-orders-no-found__info-title\">".concat(data.i18n.no_order_title, "</div>\n                <div class=\"masterstudy-orders-no-found__info-description\">").concat(data.i18n.no_order_description, "</div>\n            </div>");
+              orderHtml = "\n              <div class=\"masterstudy-orders-no-found__info\">\n                <div class=\"masterstudy-orders-no-found__info-icon\"><span class=\"stmlms-order\"></span></div>\n                <div class=\"masterstudy-orders-no-found__info-title\">".concat(masterstudy_orders.no_order_title, "</div>\n                <div class=\"masterstudy-orders-no-found__info-description\">").concat(masterstudy_orders.no_order_description, "</div>\n            </div>");
               $(".masterstudy-orders").append("".concat(orderHtml)).addClass("masterstudy-orders-no-found");
             }
             _context.next = 28;
@@ -137,14 +142,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
   //Function to update API data for pagination
   function updatePagination(totalPages, currentPage) {
+    var prefix = typeof masterstudy_woocommerce_orders !== "undefined" ? masterstudy_woocommerce_orders : masterstudy_orders;
     $.ajax({
-      url: masterstudy_orders.ajaxurl,
+      url: prefix.ajaxurl,
       method: "POST",
       data: {
         action: "get_pagination",
         total_pages: totalPages,
         current_page: currentPage,
-        _ajax_nonce: masterstudy_orders.nonce
+        _ajax_nonce: prefix.nonce
       },
       success: function success(response) {
         if (response.success) {

@@ -55,14 +55,6 @@ final class OrderRepository {
 			'current_page' => (int) $page,
 			'total_orders' => (int) $total,
 			'total'        => ( $total <= $offset + $per_page ),
-			'i18n'         => self::translates(),
-		);
-	}
-
-	public function translates() {
-		return array(
-			'no_order_title'       => esc_html__( 'No orders yet', 'masterstudy-lms-learning-management-system' ),
-			'no_order_description' => esc_html__( 'All information about your orders will be displayed here', 'masterstudy-lms-learning-management-system' ),
 		);
 	}
 }

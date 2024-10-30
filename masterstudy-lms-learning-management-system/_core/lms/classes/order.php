@@ -65,6 +65,8 @@ class STM_LMS_Order {
 		$total      = 0;
 
 		foreach ( $order_meta['items'] as $course ) {
+			$terms = stm_lms_get_terms_array( $course['item_id'], 'stm_lms_course_taxonomy', 'name' );
+
 			$cart_items[ $course['item_id'] ] = array(
 				'thumbnail_id'    => get_post_thumbnail_id( $course['item_id'] ),
 				'title'           => get_the_title( $course['item_id'] ),
@@ -73,12 +75,14 @@ class STM_LMS_Order {
 				'image_full'      => get_the_post_thumbnail( $course['item_id'], 'full' ),
 				'placeholder'     => STM_LMS_URL . '/assets/img/image_not_found.png',
 				'price'           => $course['price'],
-				'terms'           => stm_lms_get_terms_array( $course['item_id'], 'stm_lms_course_taxonomy', 'name' ),
+				'terms'           => ! empty( $terms ) ? $terms : wp_list_pluck( get_the_terms( $course['item_id'], 'product_cat' ), 'name' ),
 				'price_formatted' => STM_LMS_Helpers::display_price( $course['price'] ),
 			);
 			$total                           += $course['price'];
 
-			$cart_items[ $course['item_id'] ]['bundle_courses_count'] = ( ! empty( $course['bundle'] ) && '0' !== $course['bundle'] && get_post( (int) $course['bundle'] ) ) ? count( get_post_meta( (int) $course['bundle'], 'stm_lms_bundle_ids', true ) ) : 0;
+			$bundle = $course['bundle'] ?? null;
+
+			$cart_items[ $course['item_id'] ]['bundle_courses_count'] = ! empty( $bundle ) && '0' !== $bundle && get_post( (int) $bundle ) ? self::get_bundle_courses_count( $bundle ) : self::get_bundle_courses_count( $course['item_id'] );
 			$cart_items[ $course['item_id'] ]['enterprise_name']      = ( ! empty( $course['enterprise'] ) && '0' !== $course['enterprise'] && get_post( (int) $course['enterprise'] ) ) ? get_the_title( (int) $course['enterprise'] ) : '';
 		}
 
@@ -102,6 +106,7 @@ class STM_LMS_Order {
 		);
 	}
 
+	//Get pagination for orders
 	public static function get_pagination() {
 		if ( ! isset( $_POST['total_pages'] ) || ! isset( $_POST['current_page'] ) ) {
 			wp_send_json_error( 'Invalid data', 400 );
@@ -131,6 +136,12 @@ class STM_LMS_Order {
 				'pagination' => $pagination_html,
 			)
 		);
+	}
+
+	//Get bundle for orders
+	public static function get_bundle_courses_count( $bundle ) {
+		$bundle_ids = get_post_meta( (int) $bundle, 'stm_lms_bundle_ids', true );
+		return ! empty( $bundle_ids ) ? ( is_array( $bundle_ids ) ? count( $bundle_ids ) : count( explode( ',', $bundle_ids ) ) ) : 0;
 	}
 
 	/**

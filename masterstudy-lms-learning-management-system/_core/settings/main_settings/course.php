@@ -1,4 +1,7 @@
 <?php
+
+use MasterStudy\Lms\Plugin\Addons;
+
 function stm_lms_settings_course_section() {
 	$passed_emojis = array(
 		''          => esc_html__( 'Select emoji', 'masterstudy-lms-learning-management-system' ),
@@ -231,7 +234,9 @@ function stm_lms_settings_course_section() {
 			'img'         => STM_LMS_URL . 'assets/img/pro-features/audio-lesson-free-banner.png',
 			'hint'        => esc_html__( 'Unlock', 'masterstudy-lms-learning-management-system' ),
 			'is_pro_plus' => ! is_ms_lms_addon_enabled( 'audio_lesson' ) && ! ( function_exists( 'mslms_plus_verify' ) && mslms_plus_verify() ),
+			'is_enable'   => ! is_ms_lms_addon_enabled( Addons::AUDIO_LESSON ) && STM_LMS_Helpers::is_pro_plus(),
 			'desc'        => esc_html__( 'Now you can share audio lessons. Upload audio files or add from Spotify or SoundCloud. Mix them with text, video and quizzes in your courses.', 'masterstudy-lms-learning-management-system' ),
+			'utm_url'     => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=mswpadmin&utm_medium=audio-lesson-type&utm_campaign=masterstudy-plugin',
 		),
 	);
 

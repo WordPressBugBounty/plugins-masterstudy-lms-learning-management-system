@@ -24,9 +24,19 @@ $utm_url       = $field_data['utm_url'] ?? '';
 $slug          = str_replace( ' ', '-', mb_strtolower( $label ) );
 $redirect_link = admin_url( 'admin.php?page=' . ( $is_enable ? "stm-addons&search={$search_addon}" : "stm-lms-go-pro&source=button-{$slug}-settings" ) );
 $redirect_link = ! $is_enable && $is_pro_plus && $utm_url && $is_pro ? $utm_url : $redirect_link;
-$link_text     = $is_enable ? esc_html__( 'Enable addon', 'masterstudy-lms-learning-management-system' ) : esc_html__( 'Upgrade to PRO', 'masterstudy-lms-learning-management-system' );
+
+$pro_plus_icon_url = STM_LMS_URL . 'assets/img/pro-features/unlock-pro-logo.svg';
+$text              = esc_html__( 'Upgrade to PRO', 'masterstudy-lms-learning-management-system' );
+if ( STM_LMS_Helpers::is_pro() && ! STM_LMS_Helpers::is_pro_plus() ) {
+	$pro_plus_icon_url = STM_LMS_URL . 'assets/img/pro-features/pro_plus.svg';
+	$text              = esc_html__( 'Upgrade to PRO PLUS', 'masterstudy-lms-learning-management-system' );
+	$redirect_link     = $utm_url;
+}
+
+$link_text = $is_enable ? esc_html__( 'Enable addon', 'masterstudy-lms-learning-management-system' ) : $text;
 ?>
-<div class="stm-lms-unlock-pro-banner<?php echo esc_attr( $is_enable || ! $is_enable && $is_pro_plus ? ' addon_disabled' : '' ); ?>">
+<div
+	class="stm-lms-unlock-pro-banner<?php echo esc_attr( $is_enable || ! $is_enable && $is_pro_plus ? ' addon_disabled' : '' ); ?>">
 	<div class="stm-lms-unlock-banner-wrapper">
 		<?php
 		if ( ! empty( $field_data['hint'] ) && 'slider' === $field_data['hint'] ) {
@@ -87,8 +97,9 @@ $link_text     = $is_enable ? esc_html__( 'Enable addon', 'masterstudy-lms-learn
 				echo esc_html__( 'with', 'masterstudy-lms-learning-management-system' );
 				?>
 				<div class="unlock-pro-logo-wrapper">
-					<span class="unlock-pro-logo"><?php echo esc_html__( 'MasterStudy', 'masterstudy-lms-learning-management-system' ); ?></span>
-					<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pro-features/unlock-pro-logo.svg' ); ?>">
+					<span
+						class="unlock-pro-logo"><?php echo esc_html__( 'MasterStudy', 'masterstudy-lms-learning-management-system' ); ?></span>
+					<img src="<?php echo esc_url( $pro_plus_icon_url ); ?>">
 				</div>
 			</h2>
 			<p><?php echo esc_html( $description ); ?> </p>

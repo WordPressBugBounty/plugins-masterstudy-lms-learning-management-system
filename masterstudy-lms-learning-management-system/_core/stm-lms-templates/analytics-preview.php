@@ -2,6 +2,14 @@
 wp_enqueue_style( 'masterstudy-analytics-preview-page' );
 wp_enqueue_script( 'masterstudy-analytics-preview-page' );
 
+$text              = esc_html__( 'Upgrade to PRO', 'masterstudy-lms-learning-management-system' );
+$pro_plus_icon_url = STM_LMS_URL . 'assets/img/pro-features/unlock-pro-logo.svg';
+
+if ( STM_LMS_Helpers::is_pro() && ! STM_LMS_Helpers::is_pro_plus() ) {
+	$text              = esc_html__( 'Upgrade to PRO PLUS', 'masterstudy-lms-learning-management-system' );
+	$pro_plus_icon_url = STM_LMS_URL . 'assets/img/pro-features/pro_plus.svg';
+}
+
 $purchase_link = STM_LMS_Helpers::is_pro() && ! STM_LMS_Helpers::is_pro_plus() ? 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=msadmin&utm_medium=reportsanalytics' : admin_url( 'admin.php?page=stm-lms-go-pro&source=button-analytics-settings' );
 ?>
 
@@ -24,7 +32,7 @@ $purchase_link = STM_LMS_Helpers::is_pro() && ! STM_LMS_Helpers::is_pro_plus() ?
 					<span class="masterstudy-analytics-preview-page__logo-title">
 						<?php echo esc_html__( 'MasterStudy', 'masterstudy-lms-learning-management-system' ); ?>
 					</span>
-					<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pro-features/unlock-pro-logo.svg' ); ?>">
+					<img src="<?php echo esc_url( $pro_plus_icon_url ); ?>">
 				</div>
 			</h2>
 			<p><?php echo esc_html__( 'Track your success with Reports and Statistics! See your earnings, courses, students, and certificates in one place. Students can also see their progress, course bundles, group courses, reviews, certificates and points.', 'masterstudy-lms-learning-management-system' ); ?> </p>
@@ -33,7 +41,7 @@ $purchase_link = STM_LMS_Helpers::is_pro() && ! STM_LMS_Helpers::is_pro_plus() ?
 				STM_LMS_Templates::show_lms_template(
 					'components/button',
 					array(
-						'title'  => esc_html__( 'Upgrade to PRO', 'masterstudy-lms-learning-management-system' ),
+						'title'  => $text,
 						'link'   => $purchase_link,
 						'style'  => 'primary',
 						'size'   => 'sm',
