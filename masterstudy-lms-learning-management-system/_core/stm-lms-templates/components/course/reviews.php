@@ -10,10 +10,11 @@ wp_localize_script(
 	'masterstudy-single-course-components',
 	'reviews_data',
 	array(
-		'course_id'    => $course->id,
-		'author_label' => esc_html__( 'by', 'masterstudy-lms-learning-management-system' ),
-		'editor_id'    => 'editor_add_review',
-		'status'       => 'pending for review',
+		'course_id'              => $course->id,
+		'author_label'           => esc_html__( 'by', 'masterstudy-lms-learning-management-system' ),
+		'editor_id'              => 'editor_add_review',
+		'status'                 => 'pending for review',
+		'student_public_profile' => STM_LMS_Options::get_option( 'student_public_profile', true ),
 	)
 );
 

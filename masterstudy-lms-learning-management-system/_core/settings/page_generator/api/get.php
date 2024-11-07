@@ -1,34 +1,51 @@
 <?php
 
 function stm_lms_generate_pages_list() {
-	return array(
-		'user_url'         => esc_html__( 'User Account', 'masterstudy-lms-learning-management-system' ),
-		'user_url_profile' => esc_html__( 'User Public Account', 'masterstudy-lms-learning-management-system' ),
-		'wishlist_url'     => esc_html__( 'Wishlist', 'masterstudy-lms-learning-management-system' ),
-		'checkout_url'     => esc_html__( 'Checkout', 'masterstudy-lms-learning-management-system' ),
+	$list = array(
+		'user_url'     => esc_html__( 'User Account', 'masterstudy-lms-learning-management-system' ),
+		'wishlist_url' => esc_html__( 'Wishlist', 'masterstudy-lms-learning-management-system' ),
+		'checkout_url' => esc_html__( 'Checkout', 'masterstudy-lms-learning-management-system' ),
 	);
+
+	if ( STM_LMS_Options::get_option( 'instructor_public_profile', true ) ) {
+		$list['instructor_url_profile'] = esc_html__( 'Instructor Public Account', 'masterstudy-lms-learning-management-system' );
+	}
+
+	if ( STM_LMS_Options::get_option( 'student_public_profile', true ) ) {
+		$list['student_url_profile'] = esc_html__( 'Student Public Account', 'masterstudy-lms-learning-management-system' );
+	}
+
+	$enabled_addons = get_option( 'stm_lms_addons' );
+
+	if ( defined( 'STM_LMS_PRO_PATH' ) && isset( $enabled_addons['certificate_builder'] ) && 'on' === $enabled_addons['certificate_builder'] ) {
+		$list['certificate_page_url'] = esc_html__( 'Certificate Page', 'masterstudy-lms-learning-management-system' );
+	}
+
+	return $list;
 }
 
 function stm_lms_archive_page_list() {
 	return array(
 		'courses_page_elementor' => array(
 			'title' => esc_html__( 'Courses page (for Elementor)', 'masterstudy-lms-learning-management-system' ),
-			'slug' => 'courses-archive',
+			'slug'  => 'courses-archive',
 		),
 		'courses_page_gutenberg' => array(
 			'title' => esc_html__( 'Courses page (for Gutenberg)', 'masterstudy-lms-learning-management-system' ),
-			'slug' => 'courses-archive-gutenberg',
+			'slug'  => 'courses-archive-gutenberg',
 		),
 	);
 }
 
 function stm_lms_display_post_states( $states, $post ) {
 	$pages = array(
-		'user_url'         => esc_html__( 'MasterStudy Private Account', 'masterstudy-lms-learning-management-system' ),
-		'user_url_profile' => esc_html__( 'MasterStudy Public Account', 'masterstudy-lms-learning-management-system' ),
-		'wishlist_url'     => esc_html__( 'MasterStudy Wishlist', 'masterstudy-lms-learning-management-system' ),
-		'checkout_url'     => esc_html__( 'MasterStudy Checkout', 'masterstudy-lms-learning-management-system' ),
-		'courses_page'     => esc_html__( 'MasterStudy Courses', 'masterstudy-lms-learning-management-system' ),
+		'user_url'               => esc_html__( 'MasterStudy Private Account', 'masterstudy-lms-learning-management-system' ),
+		'instructor_url_profile' => esc_html__( 'MasterStudy Instructor Profile Public Page', 'masterstudy-lms-learning-management-system' ),
+		'student_url_profile'    => esc_html__( 'MasterStudy Student Profile Public Page', 'masterstudy-lms-learning-management-system' ),
+		'wishlist_url'           => esc_html__( 'MasterStudy Wishlist', 'masterstudy-lms-learning-management-system' ),
+		'checkout_url'           => esc_html__( 'MasterStudy Checkout', 'masterstudy-lms-learning-management-system' ),
+		'courses_page'           => esc_html__( 'MasterStudy Courses', 'masterstudy-lms-learning-management-system' ),
+		'certificate_page_url'   => esc_html__( 'MasterStudy Certificate', 'masterstudy-lms-learning-management-system' ),
 	);
 
 	foreach ( $pages as $page_option => $page_state ) {

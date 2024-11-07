@@ -1,15 +1,30 @@
+<?php
+$instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
+?>
+
 <div class="ms_lms_courses_teacher">
 	<div class="ms_lms_courses_teacher_wrapper">
-		<?php if ( ! empty( $instructor ) ) {
+		<?php
+		if ( ! empty( $instructor ) ) {
 			if ( $show_instructor_label && ! empty( $label ) ) {
 				?>
-				<a href="<?php echo esc_url( $instructor['url'] ); ?>" class="ms_lms_courses_teacher_label">
+				<a
+					<?php if ( $instructor_public ) { ?>
+						href="<?php echo esc_url( $instructor['url'] ); ?>"
+					<?php } ?>
+					class="ms_lms_courses_teacher_label <?php echo ! $instructor_public ? 'ms_lms_courses_teacher_label_disabled' : ''; ?>"
+				>
 					<?php echo esc_html( $label ); ?>
 				</a>
 				<?php
 			} if ( ! empty( $instructor['login'] ) ) {
 				?>
-				<a href="<?php echo esc_url( $instructor['url'] ); ?>" class="ms_lms_courses_teacher_name">
+				<a
+					<?php if ( $instructor_public ) { ?>
+						href="<?php echo esc_url( $instructor['url'] ); ?>"
+					<?php } ?>
+					class="ms_lms_courses_teacher_name <?php echo ! $instructor_public ? 'ms_lms_courses_teacher_name_disabled' : ''; ?>"
+				>
 					<?php echo esc_html( $instructor['login'] ); ?>
 				</a>
 				<?php

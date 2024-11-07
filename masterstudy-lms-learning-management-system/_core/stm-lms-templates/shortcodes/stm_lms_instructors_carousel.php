@@ -41,8 +41,9 @@ if ( ! empty( $sort ) && 'rating' === $sort ) {
 	$user_args = array_merge( $user_args, $sort_args );
 }
 
-$user_query = new WP_User_Query( $user_args );
-$results    = $user_query->get_results();
+$instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
+$user_query        = new WP_User_Query( $user_args );
+$results           = $user_query->get_results();
 ?>
 <div class="stm_lms_instructors_carousel_wrapper <?php // phpcs:ignore Squiz.PHP.EmbeddedPhp
 echo esc_attr( $uniq . ' ' . $style );
@@ -86,7 +87,7 @@ if ( isset( $prev_next ) && 'disable' === $prev_next ) {
 			<div class="stm_lms_instructors__grid">
 				<?php
 				foreach ( $user_query->get_results() as $user ) :
-					$user_profile_url = STM_LMS_User::user_public_page_url( $user->ID );
+					$user_profile_url = STM_LMS_User::instructor_public_page_url( $user->ID );
 					$user             = STM_LMS_User::get_current_user( $user->ID, false, true );
 					$rating           = STM_LMS_Instructor::my_rating_v2( $user );
 					?>
@@ -95,7 +96,11 @@ if ( isset( $prev_next ) && 'disable' === $prev_next ) {
 
 							<?php if ( ! empty( $user['avatar'] ) ) : ?>
 								<div class="stm-lms-user_avatar">
-									<a href="<?php echo esc_url( $user_profile_url ); ?>">
+									<a
+										<?php if ( $instructor_public ) { ?>
+											href="<?php echo esc_url( $user_profile_url ); ?>"
+										<?php } ?>
+									>
 										<?php echo wp_kses_post( $user['avatar'] ); ?>
 									</a>
 									<?php if ( 'style_2' === $style ) : ?>
@@ -120,7 +125,9 @@ if ( isset( $prev_next ) && 'disable' === $prev_next ) {
 								</div>
 							<?php endif; ?>
 
-							<a href="<?php echo esc_url( $user_profile_url ); ?>" class="user-name">
+							<a <?php if ( $instructor_public ) { ?>
+								href="<?php echo esc_url( $user_profile_url ); ?>"
+							<?php } ?> class="user-name">
 								<h3><?php echo esc_attr( $user['login'] ); ?></h3>
 							</a>
 

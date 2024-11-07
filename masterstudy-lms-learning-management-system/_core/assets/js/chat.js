@@ -12,7 +12,9 @@
           myMessage: '',
           myResponse: '',
           loading: false,
-          updating: false
+          updating: false,
+          instructorPublic: chat_data.instructor_public,
+          studentPublic: chat_data.student_public
         };
       },
       mounted: function mounted() {

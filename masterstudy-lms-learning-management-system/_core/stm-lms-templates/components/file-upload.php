@@ -7,9 +7,15 @@
  * @var array $allowed_extensions
  * @var int $allowed_filesize
  * @var string $allowed_filesize_label
+ * @var string $file_dimensions
+ * @var string $upload_nonce
+ * @var string $delete_nonce
+ * @var string $file_upload_action
+ * @var string $file_delete_action
  * @var boolean $readonly
  * @var boolean $multiple
  * @var boolean $dark_mode
+ * @var boolean $full_image_view
  *
  * masterstudy-file-upload_dark-mode - for dark mode
  * masterstudy-file-upload__field_loading - for show loading progress in file upload field
@@ -17,7 +23,27 @@
  * add style "width: ...%" to masterstudy-file-upload__field-progress-bar-filled to show progress
  */
 
+$full_image_view = isset( $full_image_view ) ? $full_image_view : false;
+
 wp_enqueue_style( 'masterstudy-file-upload' );
+wp_enqueue_script( 'masterstudy-file-upload' );
+wp_localize_script(
+	'masterstudy-file-upload',
+	'masterstudy_file_upload_data',
+	array(
+		'ajax_url'           => admin_url( 'admin-ajax.php' ),
+		'file_upload_nonce'  => wp_create_nonce( $upload_nonce ),
+		'file_delete_nonce'  => wp_create_nonce( $delete_nonce ),
+		'file_upload_action' => $file_upload_action,
+		'file_delete_action' => $file_delete_action,
+		'full_image_view'    => $full_image_view,
+		'icon_url'           => STM_LMS_URL . '/assets/icons/files/new/',
+		'only_one_file'      => __( 'Only one file allowed', 'masterstudy-lms-learning-management-system' ),
+	)
+);
+
+$files_limit     = isset( $files_limit ) ? $files_limit : '';
+$file_dimensions = isset( $file_dimensions ) ? $file_dimensions : '';
 ?>
 
 <div class="masterstudy-file-upload <?php echo esc_attr( $dark_mode ? 'masterstudy-file-upload_dark-mode' : '' ); ?>">
@@ -27,8 +53,8 @@ wp_enqueue_style( 'masterstudy-file-upload' );
 			foreach ( $attachments as $attachment ) {
 				$file = ms_plugin_attachment_data( $attachment );
 				?>
-				<div class="masterstudy-file-upload__item">
-					<img src="<?php echo esc_url( STM_LMS_URL . "/assets/icons/files/new/{$file['current_format']}.svg" ); ?>" class="masterstudy-file-upload__image">
+				<div class="masterstudy-file-upload__item <?php echo $full_image_view ? 'masterstudy-file-upload__item_full-image' : ''; ?>">
+					<img src="<?php echo esc_url( $full_image_view ? $file['url'] : STM_LMS_URL . "/assets/icons/files/new/{$file['current_format']}.svg" ); ?>" class="masterstudy-file-upload__image">
 					<div class="masterstudy-file-upload__wrapper">
 						<span class="masterstudy-file-upload__title"><?php echo esc_html( $file['file_title'] ); ?></span>
 						<span class="masterstudy-file-upload__size"><?php echo esc_html( $file['filesize'] . ' ' . $file['filesize_label'] ); ?></span>
@@ -44,6 +70,9 @@ wp_enqueue_style( 'masterstudy-file-upload' );
 							<a class="masterstudy-file-upload__link" href="#" data-id="<?php echo esc_attr( $file['file_id'] ); ?>"></a>
 						<?php } ?>
 					</div>
+					<?php if ( $full_image_view ) { ?>
+						<span class="masterstudy-file-upload__item-cover"></span>
+					<?php } ?>
 				</div>
 				<?php
 			}
@@ -53,7 +82,7 @@ wp_enqueue_style( 'masterstudy-file-upload' );
 	<?php
 	if ( ! $readonly ) {
 		?>
-		<div id="<?php echo esc_attr( $id ); ?>" class="masterstudy-file-upload__field">
+		<div id="<?php echo esc_attr( $id ); ?>" class="masterstudy-file-upload__field <?php echo $full_image_view && ! empty( $attachments ) ? 'masterstudy-file-upload__field_disabled' : ''; ?>">
 			<span class="masterstudy-file-upload__field-button">
 				<?php echo esc_html__( 'Upload file', 'masterstudy-lms-learning-management-system' ); ?>
 			</span>
@@ -106,7 +135,19 @@ wp_enqueue_style( 'masterstudy-file-upload' );
 						echo esc_html( $files_limit );
 						?>
 					</p>
-				<?php } ?>
+					<?php
+				}
+				if ( ! empty( $file_dimensions ) ) {
+					?>
+					<p>
+						<?php
+						echo esc_html__( 'File dimensions: ', 'masterstudy-lms-learning-management-system' );
+						echo esc_html( $file_dimensions );
+						?>
+					</p>
+					<?php
+				}
+				?>
 			</div>
 			</span>
 			<div class="masterstudy-file-upload__field-error"></div>

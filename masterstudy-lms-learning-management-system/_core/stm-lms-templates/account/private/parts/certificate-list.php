@@ -3,24 +3,30 @@
  * @var $current_user
  */
 
+use MasterStudy\Lms\Pro\addons\certificate_builder\CertificateRepository;
+
 stm_lms_register_style( 'user-quizzes' );
 stm_lms_register_style( 'user-certificates' );
 $completed = stm_lms_get_user_completed_courses( $current_user['id'], array( 'user_course_id', 'course_id' ), -1 );
 stm_lms_register_script( 'affiliate_points' );
-
 stm_lms_register_style( 'affiliate_points' );
 
 if ( ! empty( $completed ) ) { ?>
 	<?php
 	if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
-		wp_register_script( 'jspdf', STM_LMS_PRO_URL . '/assets/js/certificate-builder/jspdf.umd.js', array(), stm_lms_custom_styles_v(), false );
-		wp_enqueue_script( 'masterstudy_generate_certificate', STM_LMS_URL . '/assets/js/course-player/generate-certificate.js', array( 'jspdf', 'masterstudy_certificate_fonts' ), stm_lms_custom_styles_v(), true );
+		wp_register_script( 'jspdf', STM_LMS_PRO_URL . '/assets/js/certificate-builder/jspdf.umd.js', array(), MS_LMS_VERSION, false );
+		wp_register_script( 'qrcode', STM_LMS_PRO_URL . '/assets/js/certificate-builder/qrcode.min.js', array(), MS_LMS_VERSION, false );
+		wp_enqueue_script( 'masterstudy_generate_certificate', STM_LMS_URL . '/assets/js/course-player/generate-certificate.js', array( 'jspdf', 'qrcode', 'masterstudy_certificate_fonts' ), MS_LMS_VERSION, true );
+
+		$shapes = method_exists( CertificateRepository::class, 'get_shapes' ) ? ( new CertificateRepository() )->get_shapes() : array();
+
 		wp_localize_script(
 			'masterstudy_generate_certificate',
 			'course_certificate',
 			array(
 				'nonce'    => wp_create_nonce( 'stm_get_certificate' ),
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'shapes'   => $shapes,
 			)
 		);
 	}

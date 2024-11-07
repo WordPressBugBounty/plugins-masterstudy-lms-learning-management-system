@@ -125,6 +125,7 @@ class STM_LMS_Reviews {
 					$time = ( 'pending' === $post->post_status ) ? get_the_date( 'U', $id ) : get_post_time( 'U', true, $id );
 
 					$response['posts'][] = array(
+						'user_url'   => STM_LMS_User::student_public_page_url( $user ),
 						'user'       => $user_name,
 						'avatar_url' => $avatar,
 						'time'       => stm_lms_time_elapsed_string( '@' . $time ),

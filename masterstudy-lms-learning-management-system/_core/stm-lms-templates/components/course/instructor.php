@@ -9,6 +9,7 @@ $without_title     = isset( $without_title ) ? $without_title : false;
 $co_instructor     = ! empty( $course->co_instructor ) ? STM_LMS_User::get_current_user( $course->co_instructor->ID ) : false;
 $instructor_class  = $without_title ? ' masterstudy-single-course-instructor_no-title' : '';
 $instructor_class .= $co_instructor ? ' masterstudy-single-course-instructor_co-instructor' : '';
+$instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
 ?>
 
 <div class="masterstudy-single-course-instructor <?php echo esc_attr( $instructor_class ); ?>">
@@ -38,7 +39,12 @@ $instructor_class .= $co_instructor ? ' masterstudy-single-course-instructor_co-
 				?>
 			</div>
 		<?php } ?>
-		<a class="masterstudy-single-course-instructor__name" href="<?php echo $course->is_udemy_course ? esc_url( "https://www.udemy.com{$course->udemy_instructor['url']}" ) : esc_url( STM_LMS_User::user_public_page_url( $instructor['id'] ) ); ?>" target="_blank">
+		<a class="masterstudy-single-course-instructor__name <?php echo ! $instructor_public ? 'masterstudy-single-course-instructor__name_disabled' : ''; ?>"
+			<?php if ( $instructor_public ) { ?>
+				href="<?php echo $course->is_udemy_course ? esc_url( "https://www.udemy.com{$course->udemy_instructor['url']}" ) : esc_url( STM_LMS_User::instructor_public_page_url( $instructor['id'] ) ); ?>"
+			<?php } ?>
+			target="_blank"
+		>
 			<?php
 			if ( $course->is_udemy_course ) {
 				echo esc_html( $course->udemy_instructor['display_name'] );
@@ -48,7 +54,12 @@ $instructor_class .= $co_instructor ? ' masterstudy-single-course-instructor_co-
 			?>
 		</a>
 		<?php if ( ! $course->is_udemy_course && $co_instructor ) { ?>
-			<a class="masterstudy-single-course-instructor__co-instructor" href="<?php echo esc_url( STM_LMS_User::user_public_page_url( $co_instructor['id'] ) ); ?>" target="_blank">
+			<a class="masterstudy-single-course-instructor__co-instructor <?php echo ! $instructor_public ? 'masterstudy-single-course-instructor__co-instructor_disabled' : ''; ?>"
+				<?php if ( $instructor_public ) { ?>
+					href="<?php echo esc_url( STM_LMS_User::instructor_public_page_url( $co_instructor['id'] ) ); ?>"
+				<?php } ?>
+				target="_blank"
+			>
 				<?php echo esc_html( $co_instructor['login'] ); ?>
 			</a>
 		<?php } ?>

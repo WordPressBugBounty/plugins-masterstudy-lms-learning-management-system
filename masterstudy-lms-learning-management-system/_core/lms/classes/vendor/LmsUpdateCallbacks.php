@@ -443,4 +443,14 @@ abstract class LmsUpdateCallbacks {
 			}
 		}
 	}
+
+	public static function lms_rewrite_profile_url_option() {
+		$settings = get_option( 'stm_lms_settings' );
+
+		if ( ! empty( $settings['user_url_profile'] ) ) {
+			$settings['instructor_url_profile'] = $settings['user_url_profile'];
+		}
+
+		update_option( 'stm_lms_settings', $settings );
+	}
 }

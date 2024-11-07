@@ -25,11 +25,30 @@ function stm_lms_settings_route_section() {
 				'options'     => $pages,
 			),
 
-			'user_url_profile'       => array(
-				'type'        => 'select',
-				'label'       => esc_html__( 'User public account', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( "Select the page where users' profiles will be displayed", 'masterstudy-lms-learning-management-system' ),
-				'options'     => $pages,
+			'instructor_url_profile' => array(
+				'type'            => 'select',
+				'label'           => esc_html__( 'Instructor public profile', 'masterstudy-lms-learning-management-system' ),
+				'description'     => esc_html__( 'Select the page where an instructor profile will be displayed', 'masterstudy-lms-learning-management-system' ),
+				'options'         => $pages,
+				'dependency'      => array(
+					'key'     => 'instructor_public_profile',
+					'value'   => 'empty',
+					'section' => 'section_4',
+				),
+				'dependency_mode' => 'disabled',
+			),
+
+			'student_url_profile'    => array(
+				'type'            => 'select',
+				'label'           => esc_html__( 'Student public profile', 'masterstudy-lms-learning-management-system' ),
+				'description'     => esc_html__( 'Select the page where a student profile will be displayed', 'masterstudy-lms-learning-management-system' ),
+				'options'         => $pages,
+				'dependency'      => array(
+					'key'     => 'student_public_profile',
+					'value'   => 'empty',
+					'section' => 'section_4',
+				),
+				'dependency_mode' => 'disabled',
 			),
 
 			'wishlist_url'           => array(
@@ -67,6 +86,15 @@ function stm_lms_settings_route_section() {
 			),
 		),
 	);
+
+	if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
+		$data['fields']['certificate_page_url'] = array(
+			'type'        => 'select',
+			'options'     => $pages,
+			'label'       => esc_html__( 'Certificate Page', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Choose the certificate verification page for QR code redirection.', 'masterstudy-lms-learning-management-system' ),
+		);
+	}
 
 	if ( ! stm_lms_has_generated_pages( $page_list ) || ! stm_lms_has_generated_archive_pages( $archive_page_list ) ) {
 		$data['fields']['lms_pages'] = array(

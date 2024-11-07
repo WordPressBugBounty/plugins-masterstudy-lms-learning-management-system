@@ -45,7 +45,8 @@ add_filter(
 );
 
 function masterstudy_lms_rest_api_user( $data, $user, $request ) {
-	$user_meta = get_user_meta( $user->ID );
+	$user_meta         = get_user_meta( $user->ID );
+	$instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
 
 	$data->data['avatar']        = ! empty( $user_meta['stm_lms_user_avatar'] ) ? $user_meta['stm_lms_user_avatar'][0] : get_avatar_url( $user->ID );
 	$data->data['position']      = $user_meta['position'][0] ?? '';
@@ -56,7 +57,7 @@ function masterstudy_lms_rest_api_user( $data, $user, $request ) {
 	$data->data['sum_rating']    = ! empty( $user_meta['sum_rating'][0] ) ? $user_meta['sum_rating'][0] : '0';
 	$data->data['total_reviews'] = ! empty( $user_meta['total_reviews'][0] ) ? $user_meta['total_reviews'][0] : '0';
 	$data->data['courses']       = \STM_LMS_Instructor::get_course_quantity( $user->ID );
-	$data->data['page_url']      = \STM_LMS_User::user_public_page_url( $user->ID );
+	$data->data['page_url']      = $instructor_public ? \STM_LMS_User::instructor_public_page_url( $user->ID ) : '';
 
 	return $data;
 }

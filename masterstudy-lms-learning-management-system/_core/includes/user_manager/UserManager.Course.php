@@ -113,7 +113,7 @@ class STM_LMS_User_Manager_Course {
 
 		$student_course['ago'] = stm_lms_time_elapsed_string( gmdate( 'Y-m-d\TH:i:s\Z', $student_course['start_time'] ) );
 
-		$student_course['student'] = STM_LMS_User::get_current_user( $user_id );
+		$student_course['student'] = STM_LMS_User::get_current_user( $user_id, false, false, false, 215, true );
 
 		if ( empty( $student_course['student']['login'] ) ) {
 			$student_course['student']['login'] = esc_html__( 'Deleted user', 'masterstudy-lms-learning-management-system' );

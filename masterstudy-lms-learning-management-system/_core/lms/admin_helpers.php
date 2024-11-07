@@ -275,7 +275,7 @@ add_action(
 function stm_lms_route_trash_page_handler( $post_id ) {
 	if ( get_post_type( $post_id ) === 'page' ) {
 		$settings = get_option( 'stm_lms_settings', array() );
-		$pages    = array( 'user_url', 'user_url_profile', 'wishlist_url', 'checkout_url' );
+		$pages    = array( 'user_url', 'instructor_url_profile', 'student_url_profile', 'wishlist_url', 'checkout_url' );
 
 		foreach ( $pages as $page ) {
 			if ( isset( $settings[ $page ] ) && intval( $settings[ $page ] ) === $post_id ) {

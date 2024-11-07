@@ -1,11 +1,48 @@
 <?php
 function stm_lms_settings_profiles_section() {
-	$pages                = WPCFTO_Settings::stm_get_post_type_array( 'page' );
-	$submenu_general      = esc_html__( 'General', 'masterstudy-lms-learning-management-system' );
-	$submenu_auth         = esc_html__( 'Authorization', 'masterstudy-lms-learning-management-system' );
-	$submenu_social_login = esc_html__( 'Social Login', 'masterstudy-lms-learning-management-system' );
-	$is_pro               = STM_LMS_Helpers::is_pro();
-	$is_pro_plus          = STM_LMS_Helpers::is_pro_plus();
+	$pages                    = WPCFTO_Settings::stm_get_post_type_array( 'page' );
+	$submenu_general          = esc_html__( 'General', 'masterstudy-lms-learning-management-system' );
+	$submenu_auth             = esc_html__( 'Authorization', 'masterstudy-lms-learning-management-system' );
+	$submenu_social_login     = esc_html__( 'Social Login', 'masterstudy-lms-learning-management-system' );
+	$is_pro                   = STM_LMS_Helpers::is_pro();
+	$is_pro_plus              = STM_LMS_Helpers::is_pro_plus();
+	$layout_preview_label     = esc_html__( 'Demo preview', 'masterstudy-lms-learning-management-system' );
+	$instructor_public_layout = array(
+		array(
+			'value'         => 'compact',
+			'alt'           => esc_html__( 'Compact', 'masterstudy-lms-learning-management-system' ),
+			'img'           => STM_LMS_URL . '/assets/img/instructor-compact.png',
+			'preview_url'   => 'https://masterstudy.stylemixthemes.com/lms-plugin/instructor-public-account/3139/?public=compact',
+			'preview_label' => $layout_preview_label,
+			'disabled'      => false,
+		),
+		array(
+			'value'         => 'extended',
+			'alt'           => esc_html__( 'Extended', 'masterstudy-lms-learning-management-system' ),
+			'img'           => STM_LMS_URL . '/assets/img/instructor-expanded.png',
+			'preview_url'   => 'https://masterstudy.stylemixthemes.com/lms-plugin/instructor-public-account/3139/?public=extended',
+			'preview_label' => $layout_preview_label,
+			'disabled'      => false,
+		),
+	);
+	$student_public_layout    = array(
+		array(
+			'value'         => 'compact',
+			'alt'           => esc_html__( 'Compact', 'masterstudy-lms-learning-management-system' ),
+			'img'           => STM_LMS_URL . '/assets/img/student-compact.png',
+			'preview_url'   => 'https://masterstudy.stylemixthemes.com/lms-plugin/student-public-account/3394/?public=compact',
+			'preview_label' => $layout_preview_label,
+			'disabled'      => false,
+		),
+		array(
+			'value'         => 'extended',
+			'alt'           => esc_html__( 'Extended', 'masterstudy-lms-learning-management-system' ),
+			'img'           => STM_LMS_URL . '/assets/img/student-expanded.png',
+			'preview_url'   => 'https://masterstudy.stylemixthemes.com/lms-plugin/student-public-account/3394/?public=extended',
+			'preview_label' => $layout_preview_label,
+			'disabled'      => false,
+		),
+	);
 
 	$general_fields = array(
 		'pro_banner'                        => array(
@@ -15,6 +52,63 @@ function stm_lms_settings_profiles_section() {
 			'desc'    => esc_html__( 'This will help you maintain quality control and student confidence. Courses from instructors will need admin approval before their publication.', 'masterstudy-lms-learning-management-system' ),
 			'submenu' => $submenu_general,
 			'hint'    => esc_html__( 'Enable', 'masterstudy-lms-learning-management-system' ),
+		),
+		'instructor_public_profile'         => array(
+			'type'        => 'checkbox',
+			'label'       => esc_html__( 'Instructor public profile', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( "Display the instructor's public profile with bio, courses, and achievements", 'masterstudy-lms-learning-management-system' ),
+			'value'       => true,
+			'submenu'     => $submenu_general,
+		),
+		'instructor_reviews_public_profile' => array(
+			'type'        => 'checkbox',
+			'label'       => esc_html__( "Show reviews on the instructor's page", 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Enable to display student reviews for courses', 'masterstudy-lms-learning-management-system' ),
+			'submenu'     => $submenu_general,
+			'value'       => true,
+			'dependency'  => array(
+				'key'   => 'instructor_public_profile',
+				'value' => 'not_empty',
+			),
+		),
+		'instructor_public_profile_style'   => array(
+			'type'       => 'data_select',
+			'label'      => esc_html__( 'Choose a layout for the instructor profile', 'masterstudy-lms-learning-management-system' ),
+			'options'    => $instructor_public_layout,
+			'value'      => 'compact',
+			'submenu'    => $submenu_general,
+			'dependency' => array(
+				'key'   => 'instructor_public_profile',
+				'value' => 'not_empty',
+			),
+		),
+		'student_public_profile'            => array(
+			'type'        => 'checkbox',
+			'label'       => esc_html__( 'Student public profile', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Show courses, certificates, quizzes, and other data', 'masterstudy-lms-learning-management-system' ),
+			'value'       => true,
+			'submenu'     => $submenu_general,
+		),
+		'student_stats_public_profile'      => array(
+			'type'        => 'checkbox',
+			'label'       => esc_html__( "Show progress on the student's page", 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Display information on learning progress', 'masterstudy-lms-learning-management-system' ),
+			'submenu'     => $submenu_general,
+			'dependency'  => array(
+				'key'   => 'student_public_profile',
+				'value' => 'not_empty',
+			),
+		),
+		'student_public_profile_style'      => array(
+			'type'       => 'data_select',
+			'label'      => esc_html__( 'Choose a layout for the student profile', 'masterstudy-lms-learning-management-system' ),
+			'options'    => $student_public_layout,
+			'value'      => 'compact',
+			'submenu'    => $submenu_general,
+			'dependency' => array(
+				'key'   => 'student_public_profile',
+				'value' => 'not_empty',
+			),
 		),
 		'instructor_can_add_students'       => array(
 			'type'    => 'checkbox',

@@ -6,9 +6,10 @@
 
 use MasterStudy\Lms\Repositories\CourseRepository;
 
-$courses_per_page = isset( $courses_per_page ) ? $courses_per_page : 3;
-$related_option   = STM_LMS_Options::get_option( 'related_option', 'by_category' );
-$args             = array(
+$courses_per_page  = isset( $courses_per_page ) ? $courses_per_page : 3;
+$related_option    = STM_LMS_Options::get_option( 'related_option', 'by_category' );
+$instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
+$args              = array(
 	'posts_per_page' => $courses_per_page,
 	'exclude'        => array( $course->id ),
 	'post_status'    => 'publish',
@@ -128,7 +129,13 @@ if ( ! empty( $course_ids ) ) { ?>
 									</div>
 								<?php } ?>
 							</div>
-							<a class="masterstudy-related-courses__instructor" href="<?php echo esc_url( $related_course->is_udemy_course ? $course_url : STM_LMS_User::user_public_page_url( $related_course->owner->ID ) ); ?>" target="_blank">
+							<a
+								class="masterstudy-related-courses__instructor <?php echo ! $instructor_public ? 'masterstudy-related-courses__instructor_disabled' : ''; ?>"
+								<?php if ( $instructor_public ) { ?>
+									href="<?php echo esc_url( $related_course->is_udemy_course ? $course_url : STM_LMS_User::instructor_public_page_url( $related_course->owner->ID ) ); ?>"
+								<?php } ?>
+									target="_blank"
+								>
 								<?php
 								printf(
 									/* translators: %s Instructor */

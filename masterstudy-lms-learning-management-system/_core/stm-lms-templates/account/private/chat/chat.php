@@ -7,8 +7,11 @@
 
 <div class="stm_lms_chat_companion" v-if="conversations[conversation]">
 	<div class="stm_lms_chat_companion__image" v-html="conversations[conversation]['companion']['avatar']"></div>
-	<div class="stm_lms_chat_companion__title" v-html="conversations[conversation]['companion']['login']"></div>
-
+	<a
+		:href="(instructorPublic && conversations[conversation]['companion']['is_instructor']) || (studentPublic && !conversations[conversation]['companion']['is_instructor']) ? conversations[conversation]['companion']['url'] : null"
+		:class="['stm_lms_chat_companion__title', { 'stm_lms_chat_companion__title_disabled': !( (instructorPublic && conversations[conversation]['companion']['is_instructor']) || (studentPublic && !conversations[conversation]['companion']['is_instructor']) ) }]"
+		v-html="conversations[conversation]['companion']['login']">
+	</a>
 	<i class="stmlms-sync" @click="updateConversation()" v-bind:class="{'active' : updating}"></i>
 </div>
 
@@ -35,7 +38,13 @@
 
 <div class="stm_lms_chat_messages__send" v-if="conversations[conversation]">
 	<h4><?php esc_html_e( 'Reply to', 'masterstudy-lms-learning-management-system' ); ?>
-		<span>{{conversations[conversation]['companion']['login']}}</span></h4>
+		<a
+			:href="(instructorPublic && conversations[conversation]['companion']['is_instructor']) || (studentPublic && !conversations[conversation]['companion']['is_instructor']) ? conversations[conversation]['companion']['url'] : null"
+			:class="['stm_lms_chat_messages__send-link', { 'stm_lms_chat_messages__send-link_disabled': !( (instructorPublic && conversations[conversation]['companion']['is_instructor']) || (studentPublic && !conversations[conversation]['companion']['is_instructor']) ) }]"
+			>
+			{{conversations[conversation]['companion']['login']}}
+		</a>
+	</h4>
 	<textarea v-model="myMessage"
 		placeholder="<?php esc_html_e( 'Your message', 'masterstudy-lms-learning-management-system' ); ?>"></textarea>
 	<a href="#"

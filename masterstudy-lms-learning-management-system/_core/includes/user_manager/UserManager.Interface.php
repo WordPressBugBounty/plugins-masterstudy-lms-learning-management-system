@@ -44,6 +44,14 @@ class STM_LMS_User_Manager_Interface {
 				stm_lms_register_script( "dashboard/components/{$component}" );
 			}
 
+			wp_localize_script(
+				'stm-lms-dashboard/components/course',
+				'course_data',
+				array(
+					'student_public' => STM_LMS_Options::get_option( 'student_public_profile', true ),
+				)
+			);
+
 			stm_lms_register_script(
 				'dashboard/dashboard',
 				array(

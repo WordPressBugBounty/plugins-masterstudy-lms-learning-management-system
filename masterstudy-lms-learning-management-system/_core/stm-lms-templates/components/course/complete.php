@@ -8,6 +8,8 @@
  * @var boolean $dark_mode
  */
 
+use MasterStudy\Lms\Pro\addons\certificate_builder\CertificateRepository;
+
 $total_progress   = STM_LMS_Lesson::get_total_progress( $user_id ?? null, $course_id );
 $course_passed    = false;
 $dark_mode        = isset( $dark_mode ) ? $dark_mode : false;
@@ -34,13 +36,18 @@ wp_localize_script(
 );
 if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
 	wp_register_script( 'jspdf', STM_LMS_PRO_URL . '/assets/js/certificate-builder/jspdf.umd.js', array(), STM_LMS_PRO_VERSION, false );
-	wp_enqueue_script( 'masterstudy_generate_certificate', STM_LMS_URL . '/assets/js/course-player/generate-certificate.js', array( 'jspdf', 'masterstudy_certificate_fonts' ), MS_LMS_VERSION, true );
+	wp_register_script( 'qrcode', STM_LMS_PRO_URL . '/assets/js/certificate-builder/qrcode.min.js', array(), STM_LMS_PRO_VERSION, false );
+	wp_enqueue_script( 'masterstudy_generate_certificate', STM_LMS_URL . '/assets/js/course-player/generate-certificate.js', array( 'jspdf', 'qrcode', 'masterstudy_certificate_fonts' ), MS_LMS_VERSION, true );
+
+	$shapes = method_exists( CertificateRepository::class, 'get_shapes' ) ? ( new CertificateRepository() )->get_shapes() : array();
+
 	wp_localize_script(
 		'masterstudy_generate_certificate',
 		'course_certificate',
 		array(
 			'nonce'    => wp_create_nonce( 'stm_get_certificate' ),
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'shapes'   => $shapes,
 		)
 	);
 }

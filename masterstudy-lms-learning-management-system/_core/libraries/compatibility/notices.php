@@ -36,7 +36,7 @@ if ( ! in_array( $active_theme, $theme_exists, true ) && empty( $start_theme_not
 		'notice_btn_one'         => esc_url( $install_url ),
 		'notice_btn_two_title'   => esc_html__( 'Live Demo', 'masterstudy-lms-learning-management-system' ),
 		'notice_btn_two_class'   => 'ms_start_theme_live_demo light-bg',
-		'notice_btn_two'         => esc_url( 'https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/' ),
+		'notice_btn_two'         => esc_url( 'https://masterstudy.stylemixthemes.com/lms-plugin/' ),
 		'notice_btn_two_attrs'   => 'target=_blank',
 		'notice_btn_three_title' => esc_html__( 'No Thanks', 'masterstudy-lms-learning-management-system' ),
 		'notice_btn_three_class' => 'no-bg',

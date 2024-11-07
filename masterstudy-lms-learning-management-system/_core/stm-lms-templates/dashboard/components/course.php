@@ -86,9 +86,12 @@
 
 							<div class="author">
 								<div class="img" v-html="list.student.avatar"></div>
-								<div class="author__info">
+								<a
+									:href="studentPublic ? list.student.url : null"
+									:class="['author__info', { 'author__info_disabled': !studentPublic }]"
+								>
 									<h5 v-html="list.student.login"></h5>
-								</div>
+								</a>
 							</div>
 						</td>
 

@@ -25,7 +25,8 @@ stm_lms_components['course'] = {
       search: '',
       sort: '',
       sortDirection: 'DESC',
-      page: 1
+      page: 1,
+      studentPublic: course_data.student_public
     };
   },
   mounted: function mounted() {

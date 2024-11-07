@@ -6,6 +6,8 @@ STM_LMS_User::init();
 class STM_LMS_User {
 
 	public static function init() {
+		$instance = new self();
+
 		add_action( 'wp_ajax_stm_lms_login', 'STM_LMS_User::stm_lms_login' );
 		add_action( 'wp_ajax_nopriv_stm_lms_login', 'STM_LMS_User::stm_lms_login' );
 		add_action( 'wp_ajax_stm_lms_logout', 'STM_LMS_User::stm_lms_logout' );
@@ -42,6 +44,9 @@ class STM_LMS_User {
 
 		add_action( 'wp_ajax_stm_lms_change_avatar', 'STM_LMS_User::stm_lms_change_avatar' );
 		add_action( 'wp_ajax_stm_lms_delete_avatar', 'STM_LMS_User::stm_lms_delete_avatar' );
+
+		add_action( 'wp_ajax_stm_lms_change_cover', array( $instance, 'stm_lms_change_cover' ) );
+		add_action( 'wp_ajax_stm_lms_delete_cover', array( $instance, 'stm_lms_delete_cover' ) );
 
 		add_action( 'wp_ajax_stm_lms_hide_become_instructor_notice', 'STM_LMS_User::hide_become_instructor_notice' );
 
@@ -120,14 +125,24 @@ class STM_LMS_User {
 		return ( empty( $settings['user_url'] ) ) ? home_url( '/' ) : get_the_permalink( $settings['user_url'] );
 	}
 
-	public static function user_public_page_url( $user_id ) {
+	public static function instructor_public_page_url( $user_id ) {
 		$settings = get_option( 'stm_lms_settings', array() );
 
-		if ( empty( $settings['user_url_profile'] ) || ! did_action( 'init' ) ) {
+		if ( empty( $settings['instructor_url_profile'] ) || ! did_action( 'init' ) ) {
 			return home_url( '/' );
 		}
 
-		return get_the_permalink( $settings['user_url_profile'] ) . $user_id;
+		return get_the_permalink( $settings['instructor_url_profile'] ) . $user_id;
+	}
+
+	public static function student_public_page_url( $user_id ) {
+		$settings = get_option( 'stm_lms_settings', array() );
+
+		if ( empty( $settings['student_url_profile'] ) || ! did_action( 'init' ) ) {
+			return home_url( '/' );
+		}
+
+		return get_the_permalink( $settings['student_url_profile'] ) . $user_id;
 	}
 
 	public static function stm_lms_login() {
@@ -589,7 +604,7 @@ class STM_LMS_User {
 		}
 	}
 
-	public static function get_current_user( $id = '', $get_role = false, $get_meta = false, $no_avatar = false, $avatar_size = 215 ) {
+	public static function get_current_user( $id = '', $get_role = false, $get_meta = false, $no_avatar = false, $avatar_size = 215, $for_student = false ) {
 		$user = array(
 			'id' => 0,
 		);
@@ -619,14 +634,23 @@ class STM_LMS_User {
 				$avatar = '';
 			}
 
+			$is_instructor = in_array( 'administrator', $current_user->roles, true ) || in_array( 'stm_lms_instructor', $current_user->roles, true );
+
 			$user = array(
-				'id'         => $current_user->ID,
-				'login'      => self::display_name( $current_user ),
-				'avatar'     => $avatar,
-				'avatar_url' => $avatar_url,
-				'email'      => $current_user->data->user_email,
-				'url'        => self::user_public_page_url( $current_user->ID ),
+				'id'            => $current_user->ID,
+				'login'         => self::display_name( $current_user ),
+				'avatar'        => $avatar,
+				'avatar_url'    => $avatar_url,
+				'email'         => $current_user->data->user_email,
+				'url'           => $for_student ? self::student_public_page_url( $current_user->ID ) : ( $is_instructor ? self::instructor_public_page_url( $current_user->ID ) : self::student_public_page_url( $current_user->ID ) ),
+				'is_instructor' => $is_instructor,
 			);
+
+			$stm_lms_user_cover = get_user_meta( $current_user->ID, 'stm_lms_user_cover', true );
+
+			if ( $stm_lms_user_cover ) {
+				$user['cover'] = wp_get_attachment_url( $stm_lms_user_cover );
+			}
 
 			if ( $get_role ) {
 				$user_meta     = get_userdata( $current_user->ID );
@@ -1794,6 +1818,103 @@ class STM_LMS_User {
 				'file' => $avatar = get_avatar( $user['id'], '215' ),
 			)
 		);
+	}
+
+	public function stm_lms_change_cover() {
+		check_ajax_referer( 'stm_lms_change_cover', 'nonce' );
+		$extensions = 'png;jpg;jpeg;mp4;pdf';
+
+		$user = self::get_current_user();
+
+		if ( empty( $user['id'] ) ) {
+			return;
+		}
+
+		if ( ! empty( $_POST['extensions'] ) ) {
+			$extensions = sanitize_text_field( $_POST['extensions'] );
+			$extensions = preg_replace( '/\s+/', '', $extensions );
+			$extensions = str_replace( '.', '', $extensions );
+			$extensions = str_replace( ',', ';', $extensions );
+		}
+
+		$is_valid_image = Validation::is_valid(
+			$_FILES,
+			array(
+				'file' => 'required_file|extension,' . $extensions,
+			)
+		);
+
+		if ( true !== $is_valid_image ) {
+			return wp_send_json(
+				array(
+					'error'   => true,
+					'message' => sprintf(
+						/* translators: %s string */
+						__( 'Field can only have one of the following extensions: %s', 'masterstudy-lms-learning-management-system-pro' ),
+						esc_html( $extensions )
+					),
+				)
+			);
+		}
+
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+
+		if ( apply_filters( 'stm_lms_update_user_cover', true ) ) {
+			$attachment_id = media_handle_upload( 'file', 0 );
+
+			if ( is_wp_error( $attachment_id ) ) {
+				return wp_send_json(
+					array(
+						'error'   => true,
+						'message' => $attachment_id->get_error_message(),
+					)
+				);
+			}
+
+			update_user_meta( $user['id'], 'stm_lms_user_cover', $attachment_id );
+
+			return wp_send_json(
+				array(
+					'files' => $_FILES,
+					'id'    => $attachment_id,
+					'url'   => wp_get_attachment_url( $attachment_id ),
+					'error' => false,
+				)
+			);
+		}
+
+		return wp_send_json(
+			apply_filters(
+				'stm_lms_update_user_cover_error',
+				array(
+					'error'   => true,
+					'message' => esc_html__( 'Something went wrong', 'masterstudy-lms-learning-management-system' ),
+				)
+			)
+		);
+	}
+
+	public function stm_lms_delete_cover() {
+		check_ajax_referer( 'stm_lms_delete_cover', 'nonce' );
+
+		if ( empty( $_POST['file_id'] ) ) {
+			return;
+		}
+
+		$user = self::get_current_user();
+
+		if ( empty( $user['id'] ) ) {
+			return;
+		}
+
+		if ( apply_filters( 'stm_lms_update_user_cover', true ) ) {
+			wp_delete_attachment( intval( $_POST['file_id'] ), true );
+			update_user_meta( $user['id'], 'stm_lms_user_cover', '' );
+		}
+
+		return wp_send_json( 'OK' );
 	}
 
 	public static function check_restore_token( $token ) {

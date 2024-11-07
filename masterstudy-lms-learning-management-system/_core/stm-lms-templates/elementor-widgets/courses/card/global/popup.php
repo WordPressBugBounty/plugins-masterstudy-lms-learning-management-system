@@ -59,7 +59,7 @@
 	<div class="ms_lms_courses_card_item_popup_button_wrapper">
 		<a href="<?php echo esc_url( $course['url'] ); ?>" class="ms_lms_courses_card_item_popup_button">
 			<span><?php esc_html_e( 'Preview this course', 'masterstudy-lms-learning-management-system' ); ?></span>
-			<?php if ( $course['is_trial'] ) : ?>
+			<?php if ( 'on' === $course['is_trial'] ) : ?>
 			<small><?php esc_html_e( 'Free Lesson(s) Offer', 'masterstudy-lms-learning-management-system' ); ?></small>
 			<?php endif; ?>
 		</a>

@@ -20,7 +20,8 @@ new Vue({
     business_type: stm_lms_splash_wizard['business_type'],
     system_pages: {
       user_url: false,
-      user_url_profile: false,
+      instructor_url_profile: false,
+      student_url_profile: false,
       wishlist_url: false,
       checkout_url: false,
       courses_page: false,
@@ -57,7 +58,11 @@ new Vue({
       register_as_instructor: false,
       instructor_premoderation: false,
       separate_instructor_registration: false,
-      profile_style: 'default'
+      instructor_public_profile: true,
+      student_public_profile: true,
+      profile_style: 'default',
+      instructor_public_profile_style: 'compact',
+      student_public_profile_style: 'compact'
     },
     loading_system_pages: false
   },

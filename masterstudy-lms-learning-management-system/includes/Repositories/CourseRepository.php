@@ -380,6 +380,75 @@ final class CourseRepository {
 		update_post_meta( $course_id, 'announcement', Sanitizer::html( $announcement ) );
 	}
 
+	public function instructor_courses( array $args ) {
+		$courses  = \STM_LMS_Courses::get_all_courses( $args );
+		$response = array();
+
+		if ( ! empty( $courses ) ) {
+			foreach ( $courses['posts'] as $course ) {
+				$response['courses'][] = \STM_LMS_Templates::load_lms_template(
+					'components/course/card/default',
+					array(
+						'course' => $course,
+						'public' => true,
+					)
+				);
+			}
+
+			$response['pagination']  = \STM_LMS_Templates::load_lms_template(
+				'components/pagination',
+				array(
+					'max_visible_pages' => 5,
+					'total_pages'       => $courses['total_pages'],
+					'current_page'      => $args['page'],
+					'dark_mode'         => false,
+					'is_queryable'      => false,
+					'done_indicator'    => false,
+					'is_api'            => true,
+				)
+			);
+			$response['total_pages'] = $courses['total_pages'];
+			$response['total_posts'] = $courses['total_posts'];
+		}
+
+		return $response;
+	}
+
+	public function student_courses( array $params ) {
+		$courses  = \STM_LMS_Courses::get_student_courses( $params );
+		$response = array();
+
+		if ( ! empty( $courses ) ) {
+			foreach ( $courses['posts'] as $course ) {
+				$response['courses'][] = \STM_LMS_Templates::load_lms_template(
+					'components/course/student-card',
+					array(
+						'course'  => $course,
+						'user_id' => $params['user'],
+					)
+				);
+			}
+
+			$response['pagination'] = \STM_LMS_Templates::load_lms_template(
+				'components/pagination',
+				array(
+					'max_visible_pages' => 5,
+					'total_pages'       => $courses['total_pages'],
+					'current_page'      => $params['page'],
+					'dark_mode'         => false,
+					'is_queryable'      => false,
+					'done_indicator'    => false,
+					'is_api'            => true,
+				)
+			);
+
+			$response['total_pages'] = $courses['total_pages'];
+			$response['total_posts'] = $courses['total_posts'];
+		}
+
+		return $response;
+	}
+
 	private function get_course_image( \WP_Post $post, $size = 'full' ): ?array {
 		$attachment_id = get_post_thumbnail_id( $post );
 
@@ -576,6 +645,7 @@ final class CourseRepository {
 		$course->attachments          = ( new FileMaterialRepository() )->get_files( $meta['course_files'][0] ?? null );
 		$course->is_udemy_course      = $meta['udemy_course_id'][0] ?? false;
 		$course->price_info           = $meta['price_info'][0] ?? '';
+		$course->url                  = get_post_permalink( $post->ID );
 
 		if ( $course->is_udemy_course ) {
 			$course->udemy_video               = $meta['udemy_content_length_video'][0] ?? '';

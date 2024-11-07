@@ -8,6 +8,7 @@
  * @var string $style
  * @var string $size
  * @var string $target
+ * @var string $download
  * @var bool $login
  *
  * masterstudy-button_icon-prev|next - for icon direction
@@ -22,7 +23,8 @@ wp_enqueue_style( 'masterstudy-button' );
 $data        = isset( $id ) ? ' data-id=' . $id : '';
 $icon_class  = isset( $icon_position ) ? ' masterstudy-button_icon-' . $icon_position : '';
 $icon_class .= isset( $icon_name ) ? ' masterstudy-button_icon-' . $icon_name : '';
-$target      = isset( $target ) ? 'target=' . $target : '';
+$target      = isset( $target ) && ! empty( $target ) ? 'target=' . $target : '';
+$download    = isset( $download ) && ! empty( $download ) ? 'download=' . $download : '';
 $login       = isset( $login ) ? 'register' === $login ? 'data-authorization-modal=register' : 'data-authorization-modal=login' : '';
 if ( ! empty( $login ) ) {
 	wp_enqueue_script( 'vue-resource.js' );
@@ -36,6 +38,7 @@ if ( ! empty( $login ) ) {
 <a
 	href="<?php echo esc_url( $link ); ?>"
 	<?php echo esc_attr( $target ); ?>
+	<?php echo esc_attr( $download ); ?>
 	class="masterstudy-button <?php echo esc_attr( 'masterstudy-button_style-' . $style . ' masterstudy-button_size-' . $size . $icon_class ); ?>"
 	<?php echo esc_attr( $login . $data ); ?>
 >

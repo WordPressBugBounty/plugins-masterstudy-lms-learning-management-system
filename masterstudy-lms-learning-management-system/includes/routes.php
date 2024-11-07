@@ -502,19 +502,21 @@ $router->group(
 			\MasterStudy\Lms\Http\Controllers\Order\GetOrdersController::class,
 			\MasterStudy\Lms\Routing\Swagger\Routes\Order\GetOrders::class
 		);
-	}
-);
-
-/**
- * Student routes
- */
-$router->group(
-	array(
-		'middleware' => array(
-			\MasterStudy\Lms\Routing\Middleware\Authentication::class,
-		),
-	),
-	function ( Router $router ) {
+		$router->get(
+			'/instructor-public-courses',
+			\MasterStudy\Lms\Http\Controllers\Course\GetInstructorPublicCoursesController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Course\GetInstructorPublicCourses::class
+		);
+		$router->get(
+			'/instructor-reviews',
+			\MasterStudy\Lms\Http\Controllers\Review\GetInstructorReviewsController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Review\GetInstructorReviews::class
+		);
+		$router->get(
+			'/student-courses',
+			\MasterStudy\Lms\Http\Controllers\Course\GetStudentCoursesController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Course\GetStudentCourses::class
+		);
 		$router->get(
 			'/student/stats/{student_id}',
 			\MasterStudy\Lms\Http\Controllers\Student\GetStudentStatsController::class,

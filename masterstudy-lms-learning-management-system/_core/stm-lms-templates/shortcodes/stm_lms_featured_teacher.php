@@ -2,9 +2,10 @@
 stm_lms_module_styles( 'featured_teacher', 'style_1' );
 stm_lms_module_scripts( 'image_container', 'card_image' );
 
-$posts_per_page = ( ! empty( $posts_per_page ) ) ? $posts_per_page : 4;
-$posts_per_row  = ( ! empty( $posts_per_row ) ) ? $posts_per_row : 4;
-$css_class      = ( ! empty( $css_class ) ) ? $css_class : '';
+$instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
+$posts_per_page    = ( ! empty( $posts_per_page ) ) ? $posts_per_page : 4;
+$posts_per_row     = ( ! empty( $posts_per_row ) ) ? $posts_per_row : 4;
+$css_class         = ( ! empty( $css_class ) ) ? $css_class : '';
 
 if ( empty( $instructor ) ) {
 	$super_admins = get_super_admins();
@@ -49,11 +50,16 @@ if ( ! empty( $instructor ) ) :
 	"
 			style="background-image: url('<?php echo esc_url( apply_filters( "stm_lms_featured_teacher_image_{$instructor}", $image ) ); ?>')">
 
-		<div class="stm_lms_featured_teacher_content">
+		<div class="stm_lms_featured_teacher_content <?php echo ! $instructor_public ? 'stm_lms_featured_teacher_content_disabled' : ''; ?>">
 
 			<div class="stm_lms_featured_teacher_content__text">
 
-				<a href="<?php echo esc_url( STM_LMS_User::user_public_page_url( $instructor ) ); ?>" class="btn btn-default">
+				<a
+					<?php if ( $instructor_public ) { ?>
+						href="<?php echo esc_url( STM_LMS_User::instructor_public_page_url( $instructor ) ); ?>"
+					<?php } ?>
+					class="btn btn-default"
+				>
 					<?php esc_html_e( 'Teacher of month', 'masterstudy-lms-learning-management-system' ); ?>
 				</a>
 
@@ -82,7 +88,7 @@ if ( ! empty( $instructor ) ) :
 
 		<?php if ( ! empty( $instructor_btn_text ) ) : ?>
 			<div class="featured-teacher-all">
-				<a href="<?php echo esc_url( STM_LMS_Instructor::user_public_page_url( $instructor ) ); ?>" class="btn btn-default">
+				<a href="<?php echo esc_url( STM_LMS_Instructor::instructor_public_page_url( $instructor ) ); ?>" class="btn btn-default">
 					<?php echo wp_kses_post( $instructor_btn_text ); ?>
 				</a>
 			</div>

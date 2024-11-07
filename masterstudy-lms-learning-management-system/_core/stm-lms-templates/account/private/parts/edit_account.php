@@ -3,6 +3,8 @@
  * @var $current_user
  */
 
+$is_instructor = STM_LMS_Instructor::is_instructor();
+
 stm_lms_register_style( 'edit_account' );
 stm_lms_register_script( 'edit_account', array( 'vue.js', 'vue-resource.js' ) );
 stm_lms_register_style( 'user_info_top' );
@@ -24,10 +26,15 @@ wp_add_inline_script(
 
 	<div class="stm_lms_edit_socials stm_lms_edit_name">
 		<div class="stm_lms_edit_socials_list">
+			<?php
+			if ( $is_instructor ) {
+				STM_LMS_Templates::show_lms_template( 'account/private/edit_account/profile-cover' );
+			}
+			?>
 			<?php STM_LMS_Templates::show_lms_template( 'account/private/edit_account/name' ); ?>
 
 			<?php
-			if ( STM_LMS_Instructor::is_instructor() ) {
+			if ( $is_instructor ) {
 				STM_LMS_Templates::show_lms_template( 'account/private/edit_account/position' );
 				STM_LMS_Templates::show_lms_template( 'account/private/edit_account/bio' );
 			}
@@ -36,7 +43,6 @@ wp_add_inline_script(
 			<?php STM_LMS_Templates::show_lms_template( 'account/private/edit_account/custom_fields' ); ?>
 		</div>
 	</div>
-
 	<?php
 	$email_settings    = get_option( 'stm_lms_email_manager_settings' );
 	$student_digest    = $email_settings['stm_lms_reports_student_checked_enable'] ?? false;
@@ -61,13 +67,11 @@ wp_add_inline_script(
 			}
 		}
 	}
-
-	if ( STM_LMS_Instructor::is_instructor() ) {
+	if ( $is_instructor ) {
 		STM_LMS_Templates::show_lms_template( 'account/private/edit_account/socials' );
 	}
+	STM_LMS_Templates::show_lms_template( 'account/private/edit_account/change_password' );
 	?>
-
-	<?php STM_LMS_Templates::show_lms_template( 'account/private/edit_account/change_password' ); ?>
 
 	<div class="row">
 

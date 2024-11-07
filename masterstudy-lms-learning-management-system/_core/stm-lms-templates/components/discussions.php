@@ -4,6 +4,7 @@
  * @var int $course_id
  * @var int $lesson_id
  * @var boolean $dark_mode
+ * @var array $settings
  *
  * .masterstudy-discussions_dark-mode - for dark mode
  */
@@ -14,16 +15,19 @@ wp_localize_script(
 	'masterstudy-discussions',
 	'discussions_data',
 	array(
-		'get_nonce'            => wp_create_nonce( 'stm_lms_get_comments' ),
-		'add_nonce'            => wp_create_nonce( 'stm_lms_add_comment' ),
-		'ajax_url'             => admin_url( 'admin-ajax.php' ),
-		'course_id'            => $course_id,
-		'lesson_id'            => $lesson_id,
-		'textarea_placeholder' => __( 'Enter message', 'masterstudy-lms-learning-management-system' ),
-		'cancel_title'         => __( 'Cancel', 'masterstudy-lms-learning-management-system' ),
-		'reply_title'          => __( 'Reply', 'masterstudy-lms-learning-management-system' ),
-		'not_items_title'      => __( 'No discussions yet...', 'masterstudy-lms-learning-management-system' ),
-		'not_items_subtitle'   => __( 'Here you can ask a question or discuss a topic', 'masterstudy-lms-learning-management-system' ),
+		'get_nonce'                 => wp_create_nonce( 'stm_lms_get_comments' ),
+		'add_nonce'                 => wp_create_nonce( 'stm_lms_add_comment' ),
+		'ajax_url'                  => admin_url( 'admin-ajax.php' ),
+		'course_id'                 => $course_id,
+		'lesson_id'                 => $lesson_id,
+		'textarea_placeholder'      => __( 'Enter message', 'masterstudy-lms-learning-management-system' ),
+		'cancel_title'              => __( 'Cancel', 'masterstudy-lms-learning-management-system' ),
+		'reply_title'               => __( 'Reply', 'masterstudy-lms-learning-management-system' ),
+		'not_items_title'           => __( 'No discussions yet...', 'masterstudy-lms-learning-management-system' ),
+		'not_items_subtitle'        => __( 'Here you can ask a question or discuss a topic', 'masterstudy-lms-learning-management-system' ),
+		'instructor_public_profile' => $settings['instructor_public_profile'] ?? true,
+		'student_public_profile'    => $settings['student_public_profile'] ?? true,
+
 	)
 );
 ?>

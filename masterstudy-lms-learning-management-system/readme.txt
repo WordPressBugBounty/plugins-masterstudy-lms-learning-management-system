@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 3.4.9
+Stable tag: 3.4.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -303,6 +303,14 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+
+= 3.4.10 - 2024-11-07 =
+- **Enhancement:** Added public account for students with several display style options.
+- **Enhancement:** Updated and improved the default style for instructor public account.
+- **Enhancement:** Added new visual styles for instructor public account.
+- **Enhancement:** The "Send Message" button in the public account is now visible to guest users, clicking it opens the authorization popup.
+- **Enhancement:** Instructors can now upload a cover image for their public account in Profile settings.
+- **Enhancement:** Added the option to disable both Instructor and Student public accounts.
 
 = 3.4.9 - 2024-10-30 =
 - **Enhancement:** Added visual improvements for the My Orders section. (Pro)

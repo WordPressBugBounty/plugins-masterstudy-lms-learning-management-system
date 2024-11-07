@@ -103,6 +103,81 @@ class STM_LMS_Courses {
 		return array();
 	}
 
+	public static function get_student_courses( array $params ) {
+		global $wpdb;
+
+		$table_name     = stm_lms_user_courses_name( $wpdb );
+		$postmeta_table = $wpdb->prefix . 'postmeta';
+		$threshold      = intval( STM_LMS_Options::get_option( 'certificate_threshold', 70 ) );
+
+		$total_courses = $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT COUNT(*) FROM {$table_name} WHERE user_id = %d",
+				$params['user']
+			)
+		);
+
+		$completed_courses = $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT COUNT(*) FROM {$table_name} WHERE user_id = %d AND progress_percent >= %d",
+				$params['user'],
+				$threshold
+			)
+		);
+
+		$offset      = ( $params['page'] - 1 ) * $params['pp'];
+		$total_pages = ceil( ( 'completed' === $params['status'] ? $completed_courses : $total_courses ) / $params['pp'] );
+		$query       = "
+			SELECT
+			uc.*,
+			(
+			SELECT meta_value
+			FROM {$postmeta_table}
+			WHERE post_id = uc.course_id
+			AND meta_key = 'duration_info'
+			LIMIT 1
+			) AS duration_info
+			FROM {$table_name} uc
+			WHERE uc.user_id = %d
+		";
+
+		if ( 'completed' === $params['status'] ) {
+			$query .= " AND progress_percent >={$threshold}";
+		}
+
+		$query  .= ' LIMIT %d OFFSET %d';
+		$courses = $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$query,
+				$params['user'],
+				$params['pp'],
+				$offset
+			)
+		);
+
+		if ( ! empty( $courses ) ) {
+			$courses = json_decode( wp_json_encode( $courses ), true );
+
+			foreach ( $courses as &$course ) {
+				$course['lectures'] = STM_LMS_Course::curriculum_info( $course['course_id'] );
+				$course['image']    = get_the_post_thumbnail_url( $course['course_id'], 'img-300-225' );
+				$course['url']      = get_permalink( $course['course_id'] );
+				$course['title']    = get_the_title( $course['course_id'] );
+			}
+
+			return array(
+				'posts'       => $courses,
+				'total_pages' => $total_pages,
+				'total_posts' => $total_courses,
+			);
+		}
+
+		return array();
+	}
+
 	public function sorting_options( $value ) {
 		$sorting_options = array(
 			'date_low'   => array(

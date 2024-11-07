@@ -177,7 +177,7 @@ class STM_LMS_Page_Router {
 			: STM_LMS_Options::courses_page_slug();
 
 		$page_routes = array(
-			'user_url'         => array(
+			'user_url'               => array(
 				'title'     => esc_html__( 'Private account', 'masterstudy-lms-learning-management-system' ),
 				'logged_in' => 'stm-lms-user',
 				'template'  => 'stm-lms-login',
@@ -295,7 +295,7 @@ class STM_LMS_Page_Router {
 					),
 				),
 			),
-			'courses_url'      => array(
+			'courses_url'            => array(
 				'title'     => esc_html__( 'Course', 'masterstudy-lms-learning-management-system' ),
 				'post_type' => 'stm-courses',
 				'url'       => "$courses_page_slug/" . self::$regex,
@@ -307,22 +307,29 @@ class STM_LMS_Page_Router {
 					),
 				),
 			),
-			'user_url_profile' => array(
-				'title'     => esc_html__( 'Account', 'masterstudy-lms-learning-management-system' ),
-				'logged_in' => 'account/public/main',
-				'template'  => 'stm-lms-login',
+			'instructor_url_profile' => array(
+				'title'     => esc_html__( 'Instructor account', 'masterstudy-lms-learning-management-system' ),
 				'sub_pages' => array(
-					'user_url_profile_single' => array(
-						'template' => 'stm-lms-user-public',
-						'var'      => 'lms_user_id',
+					'instructor_url_profile_single' => array(
+						'template' => 'stm-lms-instructor-public',
+						'var'      => 'user_id',
 					),
 				),
 			),
-			'wishlist_url'     => array(
+			'student_url_profile'    => array(
+				'title'     => esc_html__( 'Student account', 'masterstudy-lms-learning-management-system' ),
+				'sub_pages' => array(
+					'student_url_profile_single' => array(
+						'template' => 'stm-lms-student-public',
+						'var'      => 'user_id',
+					),
+				),
+			),
+			'wishlist_url'           => array(
 				'title'    => esc_html__( 'Wishlist', 'masterstudy-lms-learning-management-system' ),
 				'template' => 'stm-lms-wishlist',
 			),
-			'checkout_url'     => array(
+			'checkout_url'           => array(
 				'title'    => esc_html__( 'Checkout', 'masterstudy-lms-learning-management-system' ),
 				'template' => 'stm-lms-checkout',
 			),
@@ -376,7 +383,7 @@ class STM_LMS_Page_Router {
 			if ( ! empty( $page_settings['page_id'] ) && is_page( $page_settings['page_id'] ) ) {
 				remove_filter( 'the_content', array( $this, 'change_page_content' ), 100 );
 
-				$template = ( ! empty( $page_settings['logged_in'] ) && is_user_logged_in() ) ? $page_settings['logged_in'] : $page_settings['template'];
+				$template = ( ! empty( $page_settings['logged_in'] ) && is_user_logged_in() ) ? $page_settings['logged_in'] : ( $page_settings['template'] ?? '' );
 
 				$page_content = STM_LMS_Templates::load_lms_template( 'body_class' );
 

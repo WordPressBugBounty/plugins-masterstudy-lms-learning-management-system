@@ -230,6 +230,7 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 					'quiz_data'           => 'quiz' === $data['content_type'] ? $quiz_data : array(),
 					'dark_mode'           => $data['dark_mode'],
 					'discussions_sidebar' => $data['discussions_sidebar'],
+					'settings'            => $data['settings'],
 				)
 			);
 		}

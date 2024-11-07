@@ -36,6 +36,7 @@ abstract class LmsUpdates {
 		'3.3.14' => array( 'lms_reset_page_routes' ), // Reset Page Routes for new Manage Students
 		'3.3.16' => array( 'lms_replaced_single_course_style' ), // Find course style option and rename it
 		'3.3.35' => array( 'lms_flush_rewrite_rules' ), // Update permalinks for thank you page endpoints
+		'3.4.10' => array( 'lms_rewrite_profile_url_option', 'lms_reset_page_routes' ),
 	);
 
 	/**

@@ -37,6 +37,7 @@ $theads = array(
 );
 
 $total_students = ( new StudentsRepository() )->get_course_students_count( $course_id );
+$student_public = STM_LMS_Options::get_option( 'student_public_profile', true );
 ?>
 <div id="masterstudy-manage-students" class="masterstudy-manage-students">
 	<div class="masterstudy-manage-students__top">
@@ -141,7 +142,14 @@ $total_students = ( new StudentsRepository() )->get_course_students_count( $cour
 				<div class="masterstudy-table__item masterstudy-table__item--hidden">
 					<div class="masterstudy-tcell masterstudy-tcell_is-start masterstudy-tcell_is-sm-space-between masterstudy-tcell_is-sm-border-bottom" data-th="<?php echo esc_html( $theads['username']['title'] ?? '' ); ?>:" data-th-inlined="true">
 						<span class="masterstudy-tcell__label"><?php echo esc_html( $theads['username']['title'] ?? '' ); ?></span>
-						<span class="masterstudy-tcell__data" data-key="login" data-value=""></span>
+						<a
+							<?php if ( $student_public ) { ?>
+								href="#"
+							<?php } ?>
+							class="masterstudy-tcell__login-link <?php echo ! $student_public ? 'masterstudy-tcell__login-link_disabled' : ''; ?>"
+						>
+							<span class="masterstudy-tcell__data" data-key="login" data-value=""></span>
+						</a>
 					</div>
 					<div class="masterstudy-tcell masterstudy-tcell_is-start masterstudy-tcell_is-sm-space-between masterstudy-tcell_is-sm-border-bottom" data-th="<?php echo esc_html( $theads['email']['title'] ?? '' ); ?>:" data-th-inlined="true">
 						<span class="masterstudy-tcell__label">

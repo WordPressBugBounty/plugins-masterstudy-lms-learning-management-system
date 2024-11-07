@@ -414,4 +414,42 @@ final class StudentsRepository {
 
 		return (int) $total_points;
 	}
+
+	public function student_total_quizzes( $student_id ) {
+		global $wpdb;
+
+		$table         = $wpdb->prefix . 'stm_lms_user_quizzes';
+		$total_quizzes = $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT COUNT(*) FROM {$table} WHERE `user_id` = %d",
+				$student_id
+			)
+		);
+
+		return (int) $total_quizzes;
+	}
+
+	public function student_total_assignments( $student_id ) {
+		if ( ! \STM_LMS_Helpers::is_pro() || ! is_ms_lms_addon_enabled( 'assignments' ) ) {
+			return array();
+		}
+
+		global $wpdb;
+
+		$total_assignments = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*)
+				FROM {$wpdb->posts} p
+				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+				WHERE p.post_author = %d
+				AND p.post_type = 'stm-user-assignment'
+				AND pm.meta_key = 'status'
+				AND pm.meta_value = 'passed'",
+				$student_id
+			)
+		);
+
+		return (int) $total_assignments;
+	}
 }

@@ -1336,11 +1336,13 @@ function ms_plugin_authorization() {
 		$current_id                               = apply_filters( 'wpml_object_id', $page_id, 'post' );
 		$wpml_pages                               = array(
 			apply_filters( 'wpml_object_id', intval( $settings['user_url'] ), 'post' ),
-			apply_filters( 'wpml_object_id', intval( $settings['user_url_profile'] ), 'post' ),
+			apply_filters( 'wpml_object_id', intval( $settings['instructor_url_profile'] ), 'post' ),
+			apply_filters( 'wpml_object_id', intval( $settings['student_url_profile'] ), 'post' ),
 		);
 		$pages                                    = array(
 			intval( $settings['user_url'] ),
-			intval( $settings['user_url_profile'] ),
+			intval( $settings['instructor_url_profile'] ),
+			intval( $settings['student_url_profile'] ),
 		);
 		if ( $settings['instructor_registration_page'] ) {
 			$wpml_pages[] = apply_filters( 'wpml_object_id', intval( $settings['instructor_registration_page'] ), 'post' );

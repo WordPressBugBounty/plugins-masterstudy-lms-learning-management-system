@@ -7,6 +7,7 @@
  * @var array $quiz_data
  * @var boolean $dark_mode
  * @var boolean $discussions_sidebar
+ * @var array $settings
  */
 wp_enqueue_style( 'masterstudy-course-player-discussions' );
 wp_enqueue_script( 'masterstudy-course-player-discussions' );
@@ -46,6 +47,7 @@ wp_enqueue_script( 'masterstudy-course-player-discussions' );
 						'course_id' => $post_id,
 						'lesson_id' => $item_id,
 						'dark_mode' => $dark_mode,
+						'settings'  => $settings,
 					)
 				);
 				?>

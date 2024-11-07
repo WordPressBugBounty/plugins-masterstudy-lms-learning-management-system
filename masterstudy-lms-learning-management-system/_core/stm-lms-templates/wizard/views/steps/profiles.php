@@ -94,6 +94,120 @@
 			?>
 		</div>
 	</div>
+	<hr/>
+	<div class="stm_lms_splash_wizard__field stm_lms_splash_wizard__field_switch"
+		v-bind:class="{'active' : wizard.instructor_public_profile}">
+		<?php
+		STM_LMS_Templates::show_lms_template(
+			'wizard/views/field_data',
+			array(
+				'title' => esc_html__( 'Instructor public profile', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+		?>
+		<div class="stm_lms_splash_wizard__field_input">
+			<?php
+			STM_LMS_Templates::show_lms_template(
+				'wizard/fields/switcher',
+				array(
+					'model' => 'wizard.instructor_public_profile',
+					'desc'  => esc_html__( "Display the instructor's public profile with bio, courses, and achievements", 'masterstudy-lms-learning-management-system' ),
+				)
+			);
+			?>
+		</div>
+	</div>
+	<hr/>
+	<div class="stm_lms_splash_wizard__field stm_lms_splash_wizard__field_switch"
+		v-bind:class="{'active' : wizard.student_public_profile}">
+		<?php
+		STM_LMS_Templates::show_lms_template(
+			'wizard/views/field_data',
+			array(
+				'title' => esc_html__( 'Student public profile', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+		?>
+		<div class="stm_lms_splash_wizard__field_input">
+			<?php
+			STM_LMS_Templates::show_lms_template(
+				'wizard/fields/switcher',
+				array(
+					'model' => 'wizard.student_public_profile',
+					'desc'  => esc_html__( 'Show courses, certificates, quizzes, and other data', 'masterstudy-lms-learning-management-system' ),
+				)
+			);
+			?>
+		</div>
+	</div>
+	<hr v-if="wizard.instructor_public_profile"/>
+	<div v-if="wizard.instructor_public_profile" class="stm_lms_splash_wizard__field stm_lms_splash_wizard__field_image_radio instructor_public_profile_style">
+		<?php
+		STM_LMS_Templates::show_lms_template(
+			'wizard/views/field_data',
+			array(
+				'title' => esc_html__( 'Instructor profile public page layout', 'masterstudy-lms-learning-management-system' ),
+				'desc'  => esc_html__( 'Choose a layout for the instructor profile', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+		?>
+		<div class="stm_lms_splash_wizard__field_input">
+			<?php
+			STM_LMS_Templates::show_lms_template(
+				'wizard/fields/radio_image',
+				array(
+					'model' => 'wizard.instructor_public_profile_style',
+					'value' => 'compact',
+					'image' => 'assets/img/instructor-compact.png',
+					'label' => esc_html__( 'Compact', 'masterstudy-lms-learning-management-system' ),
+				)
+			);
+			STM_LMS_Templates::show_lms_template(
+				'wizard/fields/radio_image',
+				array(
+					'model' => 'wizard.instructor_public_profile_style',
+					'value' => 'extended',
+					'image' => 'assets/img/instructor-expanded.png',
+					'label' => esc_html__( 'Extended', 'masterstudy-lms-learning-management-system' ),
+				)
+			);
+			?>
+		</div>
+	</div>
+	<hr v-if="wizard.student_public_profile"/>
+	<div v-if="wizard.student_public_profile" class="stm_lms_splash_wizard__field stm_lms_splash_wizard__field_image_radio student_public_profile_style">
+		<?php
+		STM_LMS_Templates::show_lms_template(
+			'wizard/views/field_data',
+			array(
+				'title' => esc_html__( 'Student profile public page layout', 'masterstudy-lms-learning-management-system' ),
+				'desc'  => esc_html__( 'Choose a layout for the student profile', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+		?>
+		<div class="stm_lms_splash_wizard__field_input">
+			<?php
+			STM_LMS_Templates::show_lms_template(
+				'wizard/fields/radio_image',
+				array(
+					'model' => 'wizard.student_public_profile_style',
+					'value' => 'compact',
+					'image' => 'assets/img/student-compact.png',
+					'label' => esc_html__( 'Compact', 'masterstudy-lms-learning-management-system' ),
+				)
+			);
+			STM_LMS_Templates::show_lms_template(
+				'wizard/fields/radio_image',
+				array(
+					'model' => 'wizard.student_public_profile_style',
+					'value' => 'extended',
+					'image' => 'assets/img/student-expanded.png',
+					'label' => esc_html__( 'Extended', 'masterstudy-lms-learning-management-system' ),
+				)
+			);
+			?>
+		</div>
+	</div>
 	<?php
 	if ( ! STM_LMS_Helpers::is_theme_activated() ) {
 		STM_LMS_Templates::show_lms_template(

@@ -161,7 +161,10 @@
         var value = data[key] || data[key] === 0 ? data[key] : '';
         switch (key) {
           case 'login':
-            $(cell).before((_data$student$avatar = data['student']['avatar']) !== null && _data$student$avatar !== void 0 ? _data$student$avatar : '');
+            if ($(cell).parent().attr('href') !== undefined) {
+              $(cell).parent().attr('href', data['student']['url']);
+            }
+            $(cell).parent().before((_data$student$avatar = data['student']['avatar']) !== null && _data$student$avatar !== void 0 ? _data$student$avatar : '');
             $(cell).text((_data$student$key = data['student'][key]) !== null && _data$student$key !== void 0 ? _data$student$key : '');
             break;
           case 'email':

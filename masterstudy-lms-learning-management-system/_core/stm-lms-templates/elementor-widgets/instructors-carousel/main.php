@@ -1,3 +1,7 @@
+<?php
+$instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
+?>
+
 <div class="ms_lms_instructors_carousel <?php echo ( ! empty( $rtl ) ) ? 'rtl' : ''; ?>">
 	<div class="ms_lms_instructors_carousel_wrapper">
 		<div dir="<?php echo ( ! empty( $rtl ) ) ? 'rtl' : 'ltr'; ?>" class="ms_lms_instructors_carousel__header <?php echo ( ! empty( $widget_header_presets ) ) ? esc_attr( $widget_header_presets ) : 'style_1'; ?> <?php echo ( ! empty( $show_navigation ) && 'arrows' === $navigation_type && 'side' === $navigation_arrows_position ) ? 'side_navigation' : ''; ?>">
@@ -63,13 +67,19 @@
 					<div class="swiper-wrapper">
 						<?php
 						foreach ( $instructors as $instructor ) {
-							$user_profile_url = STM_LMS_User::user_public_page_url( $instructor->ID );
+							$user_profile_url = STM_LMS_User::instructor_public_page_url( $instructor->ID );
 							$user             = STM_LMS_User::get_current_user( $instructor->ID, false, true );
 							$rating           = STM_LMS_Instructor::my_rating_v2( $user );
 							?>
 							<div class="ms_lms_instructors_carousel__item swiper-slide <?php echo ( ! empty( $instructor_card_presets ) ) ? esc_attr( $instructor_card_presets ) : 'style_1'; ?>">
 								<div class="ms_lms_instructors_carousel__item_wrapper">
-									<a href="<?php echo esc_url( $user_profile_url ); ?>" class="ms_lms_instructors_carousel__item_link"></a>
+									<a
+									<?php if ( $instructor_public ) { ?>
+										href="<?php echo esc_url( $user_profile_url ); ?>"
+									<?php } ?>
+										class="ms_lms_instructors_carousel__item_link"
+									>
+									</a>
 									<?php if ( ! empty( $show_avatars ) && ! empty( $user['avatar_url'] ) ) { ?>
 										<div class="ms_lms_instructors_carousel__item_avatar">
 											<?php
@@ -98,7 +108,7 @@
 												'elementor-widgets/instructors-carousel/instructor/position',
 												array(
 													'show_instructor_position' => $show_instructor_position,
-													'user'                     => $user,
+													'user' => $user,
 												)
 											);
 										}
@@ -128,10 +138,10 @@
 										STM_LMS_Templates::show_lms_template(
 											'elementor-widgets/instructors-carousel/instructor/socials',
 											array(
-												'show_socials'            => $show_socials,
+												'show_socials' => $show_socials,
 												'instructor_card_presets' => $instructor_card_presets,
-												'socials_presets'         => $socials_presets,
-												'user'                    => $user,
+												'socials_presets' => $socials_presets,
+												'user' => $user,
 											)
 										);
 									}

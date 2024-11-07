@@ -16,8 +16,9 @@ $query_args = array(
 	'fields'         => 'ids',
 );
 
-$course_ids = get_posts( $query_args );
-$stars      = range( 1, 5 );
+$course_ids        = get_posts( $query_args );
+$stars             = range( 1, 5 );
+$instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
 ?>
 
 <?php if ( ! empty( $course_ids ) ) { ?>
@@ -101,7 +102,13 @@ $stars      = range( 1, 5 );
 									</div>
 								<?php } ?>
 							</div>
-							<a href="<?php echo esc_url( $popular_course->is_udemy_course ? $course_url : STM_LMS_User::user_public_page_url( $popular_course->owner->ID ) ); ?>" target="_blank" class="masterstudy-popular-courses__instructor">
+							<a
+								<?php if ( $instructor_public ) { ?>
+									href="<?php echo esc_url( $popular_course->is_udemy_course ? $course_url : STM_LMS_User::instructor_public_page_url( $popular_course->owner->ID ) ); ?>"
+								<?php } ?>
+								target="_blank"
+								class="masterstudy-popular-courses__instructor <?php echo ! $instructor_public ? 'masterstudy-popular-courses__instructor_disabled' : ''; ?>"
+							>
 								<?php
 								printf(
 									/* translators: %s Instructor */
