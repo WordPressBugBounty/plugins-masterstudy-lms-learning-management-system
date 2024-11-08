@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 3.4.10
+Stable tag: 3.4.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -303,6 +303,9 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+
+= 3.4.11 - 2024-11-08 =
+- **Fix:** Corrected style 4 for Courses Categories widget.
 
 = 3.4.10 - 2024-11-07 =
 - **Enhancement:** Added public account for students with several display style options.

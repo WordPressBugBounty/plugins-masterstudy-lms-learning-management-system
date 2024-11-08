@@ -27,11 +27,15 @@ if ( ! empty( $taxonomy ) ) :
 
 	if ( ! empty( $terms ) && is_array( $terms ) ) :
 		?>
-		<div class="stm_lms_courses_categories <?php echo esc_attr( $style . $css_class ); ?>">
+		<div class="stm_lms_courses_categories <?php echo esc_attr( $style . $css_class ); ?> stm_lms_courses_categories_<?php echo esc_attr( $columns ); ?>">
 
 			<?php
 			foreach ( $terms as $key => $term ) :
-				$term = get_term_by( 'id', $term, 'stm_lms_course_taxonomy' );
+				if ( is_numeric( $term ) ) {
+					$term = get_term_by( 'id', $term, 'stm_lms_course_taxonomy' );
+				} else {
+					$term = get_term_by( 'slug', $term, 'stm_lms_course_taxonomy' );
+				}
 				if ( empty( $term ) || is_wp_error( $term ) ) {
 					continue;
 				}

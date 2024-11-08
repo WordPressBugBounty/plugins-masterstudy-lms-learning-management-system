@@ -144,6 +144,27 @@ class StmLmsCoursesCategories extends Widget_Base {
 				'default'     => 'style_1',
 			)
 		);
+		$this->add_control(
+			'columns',
+			array(
+				'name'        => 'columns',
+				'label'       => __( 'Columns', 'masterstudy-lms-learning-management-system' ),
+				'type'        => \Elementor\Controls_Manager::SELECT,
+				'label_block' => true,
+				'options'     => array(
+					'1' => 1,
+					'2' => 2,
+					'3' => 3,
+					'4' => 4,
+					'5' => 5,
+					'6' => 6,
+				),
+				'default'     => '6',
+				'condition' => array(
+					'style' => array( 'style_4' ),
+				),
+			)
+		);
 
 		$this->end_controls_section();
 
@@ -415,6 +436,7 @@ class StmLmsCoursesCategories extends Widget_Base {
 		$settings = $this->get_settings_for_display();
 		$atts     = array(
 			'css'      => '',
+			'columns'  => ! empty( $settings['columns'] ) ? $settings['columns'] : 6,
 			'number'   => ! empty( $settings['number'] ) ? $settings['number'] : 6,
 			'style'    => ! empty( $settings['style'] ) ? $settings['style'] : 'style_1',
 			'taxonomy' => ! empty( $settings['taxonomy'] ) && is_array( $settings['taxonomy'] ) ? implode( ',', $settings['taxonomy'] ) : array(),
