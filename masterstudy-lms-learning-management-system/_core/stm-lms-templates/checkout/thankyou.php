@@ -3,8 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-$order_id  = get_query_var( 'masterstudy-orders-received' );
-$order_key = isset( $_GET['key'] ) ? sanitize_text_field( $_GET['key'] ) : '';
+$order_id        = get_query_var( 'masterstudy-orders-received' );
+$payment_methods = STM_LMS_Options::get_option( 'payment_methods' );
 
 stm_lms_register_style( 'user-orders' );
 
@@ -29,6 +29,35 @@ $order_info = \STM_LMS_Order::get_order_info( $order_id );
 					<div class="masterstudy-orders-box__info-value"><?php echo esc_attr( $order_info['date_formatted'] ); ?></div>
 				</div>
 			</div>
+			<?php
+			if ( ! empty( $payment_methods['wire_transfer'] ) && $payment_methods['wire_transfer']['enabled'] && 'wire_transfer' === $order_info['payment_code'] ) :
+				$wire_transfer = $payment_methods['wire_transfer']['fields'];
+				?>
+			<div class="masterstudy-payment-methods">
+				<div class="masterstudy-payment-methods__title">
+					<?php echo esc_html__( 'Bank Details', 'masterstudy-lms-learning-management-system' ); ?>
+				</div>
+
+				<div class="masterstudy-payment-methods__table">
+					<div class="masterstudy-payment-methods__table-column">
+						<div class="masterstudy-payment-methods__name"><?php echo esc_html__( 'Bank', 'masterstudy-lms-learning-management-system' ); ?></div>
+						<div class="masterstudy-payment-methods__value"><?php echo esc_html( $wire_transfer['bank_name'] ); ?></div>
+					</div>
+					<div class="masterstudy-payment-methods__table-column">
+						<div class="masterstudy-payment-methods__name"><?php echo esc_html__( 'Recipient', 'masterstudy-lms-learning-management-system' ); ?></div>
+						<div class="masterstudy-payment-methods__value"><?php echo esc_html( $wire_transfer['holder_name'] ); ?></div>
+					</div>
+					<div class="masterstudy-payment-methods__table-column">
+						<div class="masterstudy-payment-methods__name"><?php echo esc_html__( 'Account Number', 'masterstudy-lms-learning-management-system' ); ?></div>
+						<div class="masterstudy-payment-methods__value"><?php echo esc_html( $wire_transfer['account_number'] ); ?></div>
+					</div>
+					<div class="masterstudy-payment-methods__table-column">
+						<div class="masterstudy-payment-methods__name"><?php echo esc_html__( 'Amount to be paid', 'masterstudy-lms-learning-management-system' ); ?></div>
+						<div class="masterstudy-payment-methods__value"><?php echo esc_attr( $order_info['total'] ); ?></div>
+					</div>
+				</div>
+			</div>
+			<?php endif; ?>
 			<div class="masterstudy-orders-container">
 				<div class="masterstudy-orders-table">
 					<div class="masterstudy-orders-table__header">

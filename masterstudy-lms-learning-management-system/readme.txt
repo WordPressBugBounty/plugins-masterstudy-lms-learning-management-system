@@ -3,9 +3,9 @@ Contributors: Stylemix
 Donate link: https://stylemixthemes.com/
 Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.4.11
+Stable tag: 3.4.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,9 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.4.12 - 2024-11-14 =
+- **Fix:** Small bug fixes.
+
 = 3.4.11 - 2024-11-08 =
 - **Fix:** Corrected style 4 for Courses Categories widget.
 
@@ -330,14 +333,6 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Enhancement:** Added option to remove stars in Testimonials widget.
 - **Fix:** Fill The Gap question type is not working correctly with some Portuguese characters.
 - **Fix:** Navigation in the first Testimonials style where the pagination shows content from the wrong tab.
-- **Fix:** Small bug fixes.
-
-= 3.4.5 - 2024-10-09 =
-- **Enhancement:** Updated some icons for course actions and assignments in Reports and Analytics.
-- **Fix:** Time Limit in Coming Soon courses shows more days than needed on the page.
-- **Fix:** Default Pricing settings for a course are not applied until the course author manually saves them.
-
-= 3.4.4 - 2024-10-07 =
 - **Fix:** Small bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

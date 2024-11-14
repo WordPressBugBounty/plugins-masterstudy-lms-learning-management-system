@@ -186,17 +186,19 @@ function get_freemius_info() {
 
 $freemius_info = get_freemius_info();
 
-$deadline     = new DateTime( '05th November 2024' );
-$is_promotion = time() < $deadline->format( 'U' );
+$start_date   = new DateTime( '14th November 2024' );
+$deadline     = new DateTime( '10th December 2024' );
+$current_time = time();
+$is_promotion = $current_time >= $start_date->format( 'U' ) && $current_time < $deadline->format( 'U' );
 
 if ( $is_promotion ) {
-	$freemius_info['plan']['licenses_5000']->annual_price = 399;
-	$freemius_info['plan']['licenses_5']->annual_price    = 229;
-	$freemius_info['plan']['licenses_1']->annual_price    = 89;
+	$freemius_info['plan']['licenses_5000']->annual_price = 419;
+	$freemius_info['plan']['licenses_5']->annual_price    = 239;
+	$freemius_info['plan']['licenses_1']->annual_price    = 99;
 
 	$freemius_info['plan']['licenses_5000']->lifetime_price = 999;
-	$freemius_info['plan']['licenses_5']->lifetime_price    = 599;
-	$freemius_info['plan']['licenses_1']->lifetime_price    = 299;
+	$freemius_info['plan']['licenses_5']->lifetime_price    = 629;
+	$freemius_info['plan']['licenses_1']->lifetime_price    = 319;
 }
 
 ?>
@@ -222,7 +224,7 @@ if ( $is_promotion ) {
 					<?php endif; ?>
 				</p>
 				<?php if ( $is_promotion ) : ?>
-				<div class="stm-discount"><a href="https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=gopro&utm_campaign=2024" target="_blank"></a></div>
+				<div class="stm-discount"><a href="https://stylemixthemes.com/deal/?utm_source=wpadmin&utm_medium=gopro&utm_campaign=bfcampaign24" target="_blank"></a></div>
 				<?php endif; ?>
 			</div>
 			<?php if ( isset( $freemius_info['plan'] ) ) : ?>
@@ -250,10 +252,10 @@ if ( $is_promotion ) {
 										?>
 										<sup>$</sup>
 										<span class="stm_price__value"
-											data-price-annual="<?php echo esc_attr( number_format( $plan->annual_price * 0.70, 0, '.', '' ) ); ?>"
-											data-price-lifetime="<?php echo esc_attr( number_format( $plan->lifetime_price * 0.70, 0, '.', '' ) ); ?>"
+											data-price-annual="<?php echo esc_attr( number_format( $plan->annual_price * 0.50, 0, '.', '' ) ); ?>"
+											data-price-lifetime="<?php echo esc_attr( number_format( $plan->lifetime_price * 0.50, 0, '.', '' ) ); ?>"
 											data-price-old-annual="<?php echo esc_attr( number_format( $plan->annual_price, 2, '.', '' ) ); ?>">
-											<?php echo esc_html( number_format( $plan->annual_price * 0.70, 0, '.', '' ) ); ?>
+											<?php echo esc_html( number_format( $plan->annual_price * 0.50, 0, '.', '' ) ); ?>
 										</span>
 										<div class="discount">
 											<sup>$</sup>
