@@ -452,6 +452,9 @@ class STM_LMS_User_Menu {
 					case 'analytics':
 						$add_element = STM_LMS_Helpers::is_pro_plus() && $instructor_menu;
 						break;
+					case 'sales':
+						$add_element = STM_LMS_Helpers::is_pro_plus() && $instructor_menu;
+						break;
 				}
 
 				if ( $add_element ) {
@@ -517,6 +520,7 @@ class STM_LMS_User_Menu {
 			'payout',
 			'announcement',
 			'analytics',
+			'sales',
 		);
 
 		return array_values(
