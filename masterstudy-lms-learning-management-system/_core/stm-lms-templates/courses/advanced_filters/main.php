@@ -20,9 +20,14 @@ $filters = array(
 	<form id="stm_filter_form" action="<?php echo get_permalink( STM_LMS_Options::courses_page() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" method="get">
 
 		<div class="stm_lms_courses__archive_filters">
-
 			<?php
+			$reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+
 			foreach ( $filters as $filter ) :
+
+				if ( 'rating' === $filter && ! $reviews ) {
+					continue;
+				}
 
 				if ( ! STM_LMS_Options::get_option( "enable_courses_filter_{$filter}", '' ) ) {
 					continue;

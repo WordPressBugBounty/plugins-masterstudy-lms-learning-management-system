@@ -29,6 +29,7 @@ wp_localize_script(
 	'student_data',
 	array(
 		'user'             => $user_id,
+		'user_login'       => $student['login'],
 		'show_stats'       => $show_stats,
 		'courses_per_page' => 9,
 	)

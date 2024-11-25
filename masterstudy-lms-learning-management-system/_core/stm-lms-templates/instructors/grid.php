@@ -17,6 +17,7 @@ if ( ! empty( $user_query->get_results() ) ) : ?>
 		foreach ( $user_query->get_results() as $user ) :
 			$user_profile_url = STM_LMS_User::instructor_public_page_url( $user->ID );
 			$user             = STM_LMS_User::get_current_user( $user->ID, false, true );
+			$reviews          = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 			$rating           = STM_LMS_Instructor::my_rating_v2( $user );
 			?>
 			<a
@@ -39,7 +40,7 @@ if ( ! empty( $user_query->get_results() ) ) : ?>
 						<h5><?php echo esc_html( sanitize_text_field( $user['meta']['position'] ) ); ?></h5>
 					<?php endif; ?>
 
-					<?php if ( ! empty( $rating['total'] ) ) : ?>
+					<?php if ( ! empty( $rating['total'] ) && $reviews ) : ?>
 						<div class="stm-lms-user_rating ">
 							<div class="star-rating star-rating__big">
 								<span style="width: <?php echo floatval( $rating['percent'] ); ?>%;"></span>

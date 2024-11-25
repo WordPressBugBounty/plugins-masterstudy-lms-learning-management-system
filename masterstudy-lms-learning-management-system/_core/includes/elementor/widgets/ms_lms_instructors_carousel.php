@@ -42,6 +42,10 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 		return array( 'stm_lms' );
 	}
 
+	public static function show_reviews() {
+		return \STM_LMS_Options::get_option( 'course_tab_reviews', true );
+	}
+
 	protected function register_controls() {
 		$this->register_content_controls_presets();
 		$this->register_content_controls_header();
@@ -55,8 +59,10 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 		$this->register_style_controls_instructor_position();
 		$this->register_style_controls_instructor_courses();
 		$this->register_style_controls_instructor_picture();
-		$this->register_style_controls_instructor_reviews();
-		$this->register_style_controls_instructor_reviews_count();
+		if ( self::show_reviews() ) {
+			$this->register_style_controls_instructor_reviews();
+			$this->register_style_controls_instructor_reviews_count();
+		}
 		$this->register_style_controls_instructor_social();
 		$this->register_style_controls_view_all_button();
 		$this->register_style_controls_nav_arrows();
@@ -128,7 +134,6 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 	}
 
 	protected function register_content_controls_header() {
-
 		$this->start_controls_section(
 			'header_section',
 			array(
@@ -168,6 +173,8 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 	}
 
 	protected function register_content_controls_card() {
+		$show_reviews = self::show_reviews();
+
 		$this->start_controls_section(
 			'instructor_section',
 			array(
@@ -175,17 +182,23 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			)
 		);
+
+		$sort_options = array(
+			'date'            => esc_html__( 'Registered Date', 'masterstudy-lms-learning-management-system' ),
+			'course_quantity' => esc_html__( 'Quantity of Courses', 'masterstudy-lms-learning-management-system' ),
+		);
+
+		if ( $show_reviews ) {
+			$sort_options['sum_rating'] = esc_html__( 'Rating', 'masterstudy-lms-learning-management-system' );
+		}
+
 		$this->add_control(
 			'instructors_sort_by',
 			array(
 				'label'   => esc_html__( 'Sort By', 'masterstudy-lms-learning-management-system' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'date',
-				'options' => array(
-					'date'            => esc_html__( 'Registered Date', 'masterstudy-lms-learning-management-system' ),
-					'course_quantity' => esc_html__( 'Quantity of Courses', 'masterstudy-lms-learning-management-system' ),
-					'sum_rating'      => esc_html__( 'Rating', 'masterstudy-lms-learning-management-system' ),
-				),
+				'options' => $sort_options,
 			)
 		);
 		$this->add_control(
@@ -221,31 +234,33 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 				'default'      => '',
 			)
 		);
-		$this->add_control(
-			'show_reviews',
-			array(
-				'label'        => esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
-				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			)
-		);
-		$this->add_control(
-			'show_reviews_count',
-			array(
-				'label'        => esc_html__( 'Reviews Count', 'masterstudy-lms-learning-management-system' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
-				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
-				'return_value' => 'yes',
-				'default'      => '',
-				'condition'    => array(
-					'show_reviews' => 'yes',
-				),
-			)
-		);
+		if ( $show_reviews ) {
+			$this->add_control(
+				'show_reviews',
+				array(
+					'label'        => esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' ),
+					'type'         => Controls_Manager::SWITCHER,
+					'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
+					'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+				)
+			);
+			$this->add_control(
+				'show_reviews_count',
+				array(
+					'label'        => esc_html__( 'Reviews Count', 'masterstudy-lms-learning-management-system' ),
+					'type'         => Controls_Manager::SWITCHER,
+					'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
+					'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
+					'return_value' => 'yes',
+					'default'      => '',
+					'condition'    => array(
+						'show_reviews' => 'yes',
+					),
+				)
+			);
+		}
 		$this->add_control(
 			'show_socials',
 			array(
@@ -1738,8 +1753,8 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 			'show_avatars'                    => $settings['show_avatars'],
 			'show_instructor_position'        => $settings['show_instructor_position'],
 			'show_instructor_course_quantity' => $settings['show_instructor_course_quantity'],
-			'show_reviews'                    => $settings['show_reviews'],
-			'show_reviews_count'              => $settings['show_reviews_count'],
+			'show_reviews'                    => $settings['show_reviews'] ?? false,
+			'show_reviews_count'              => $settings['show_reviews_count'] ?? false,
 			'show_socials'                    => $settings['show_socials'],
 			'show_navigation'                 => $settings['show_navigation'],
 			'navigation_type'                 => $settings['navigation_type'],

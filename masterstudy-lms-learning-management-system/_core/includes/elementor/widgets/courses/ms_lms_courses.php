@@ -47,6 +47,10 @@ class MsLmsCourses extends Widget_Base {
 		return array( 'stm_lms' );
 	}
 
+	public static function show_reviews() {
+		return \STM_LMS_Options::get_option( 'course_tab_reviews', true );
+	}
+
 	protected function register_controls() {
 		require STM_LMS_ELEMENTOR_WIDGETS . '/courses/content/type.php';
 		require STM_LMS_ELEMENTOR_WIDGETS . '/courses/content/header.php';
@@ -72,8 +76,10 @@ class MsLmsCourses extends Widget_Base {
 		require STM_LMS_ELEMENTOR_WIDGETS . '/courses/styles/card-category.php';
 		require STM_LMS_ELEMENTOR_WIDGETS . '/courses/styles/card-title.php';
 		require STM_LMS_ELEMENTOR_WIDGETS . '/courses/styles/card-progress.php';
+		if ( self::show_reviews() ) {
+			require STM_LMS_ELEMENTOR_WIDGETS . '/courses/styles/card-rating.php';
+		}
 		require STM_LMS_ELEMENTOR_WIDGETS . '/courses/styles/card-slots.php';
-		require STM_LMS_ELEMENTOR_WIDGETS . '/courses/styles/card-rating.php';
 		require STM_LMS_ELEMENTOR_WIDGETS . '/courses/styles/card-price.php';
 		require STM_LMS_ELEMENTOR_WIDGETS . '/courses/styles/card-preview-button.php';
 		require STM_LMS_ELEMENTOR_WIDGETS . '/courses/styles/card-status.php';
@@ -107,9 +113,11 @@ class MsLmsCourses extends Widget_Base {
 			'date_low'   => esc_html__( 'Oldest', 'masterstudy-lms-learning-management-system' ),
 			'price_high' => esc_html__( 'Price high', 'masterstudy-lms-learning-management-system' ),
 			'price_low'  => esc_html__( 'Price low', 'masterstudy-lms-learning-management-system' ),
-			'rating'     => esc_html__( 'Overall Rating', 'masterstudy-lms-learning-management-system' ),
 			'popular'    => esc_html__( 'Most Viewed', 'masterstudy-lms-learning-management-system' ),
 		);
+		if ( self::show_reviews() ) {
+			$sorting_options['rating'] = esc_html__( 'Overall Rating', 'masterstudy-lms-learning-management-system' );
+		}
 		if ( ! empty( $value ) ) {
 			$array = array_filter(
 				$sorting_options,
@@ -150,11 +158,6 @@ class MsLmsCourses extends Widget_Base {
 				'template' => 'level',
 				'levels'   => \STM_LMS_Helpers::get_course_levels(),
 			),
-			'rating'      => array(
-				'label'    => esc_html__( 'Rating', 'masterstudy-lms-learning-management-system' ),
-				'template' => 'rating',
-				'ratings'  => $this->rating_options(),
-			),
 			'instructors' => array(
 				'label'       => esc_html__( 'Instructors', 'masterstudy-lms-learning-management-system' ),
 				'template'    => 'instructors',
@@ -175,6 +178,14 @@ class MsLmsCourses extends Widget_Base {
 				),
 			),
 		);
+
+		if ( self::show_reviews() ) {
+			$filter_options['rating'] = array(
+				'label'    => esc_html__( 'Rating', 'masterstudy-lms-learning-management-system' ),
+				'template' => 'rating',
+				'ratings'  => $this->rating_options(),
+			);
+		}
 
 		if ( is_ms_lms_addon_enabled( 'coming_soon' ) ) {
 			$filter_options['availability'] = array(
@@ -615,7 +626,7 @@ class MsLmsCourses extends Widget_Base {
 				'show_progress'     => $settings['show_progress'],
 				'show_excerpt'      => $settings['show_excerpt'],
 				'show_divider'      => $settings['show_divider'],
-				'show_rating'       => $settings['show_rating'],
+				'show_rating'       => $settings['show_rating'] ?? false,
 				'show_price'        => $settings['show_price'],
 				'show_slots'        => $settings['show_slots'],
 				'show_wishlist'     => $settings['show_wishlist'],

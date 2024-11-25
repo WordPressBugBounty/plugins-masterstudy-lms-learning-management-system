@@ -12,6 +12,7 @@ $settings['enable_sticky_teacher']  = $settings['enable_sticky_teacher'] ?? fals
 $settings['enable_sticky_category'] = $settings['enable_sticky_category'] ?? false;
 $settings['enable_sticky_rating']   = $settings['enable_sticky_rating'] ?? false;
 $settings['enable_sticky_button']   = $settings['enable_sticky_button'] ?? false;
+$settings['course_tab_reviews']     = $settings['course_tab_reviews'] ?? true;
 ?>
 
 <div class="masterstudy-single-course-stickybar">
@@ -49,7 +50,7 @@ $settings['enable_sticky_button']   = $settings['enable_sticky_button'] ?? false
 		</div>
 		<div class="masterstudy-single-course-stickybar__row">
 			<?php
-			if ( $settings['enable_sticky_rating'] && ( ! empty( $course->marks ) || ! empty( $course->udemy_marks ) ) ) {
+			if ( $settings['course_tab_reviews'] && $settings['enable_sticky_rating'] && ( ! empty( $course->marks ) || ! empty( $course->udemy_marks ) ) ) {
 				STM_LMS_Templates::show_lms_template( 'components/course/rating', array( 'course' => $course ) );
 			}
 			if ( $settings['enable_sticky_button'] ) {

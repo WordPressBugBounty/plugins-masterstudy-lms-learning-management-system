@@ -8,6 +8,7 @@
   }
   $(document).ready(function () {
     isDomReady = true;
+    document.title = student_data.user_login;
     $('.masterstudy-student-public__list-pagination').on('click', '.masterstudy-pagination__item-block', function () {
       var pageId = $(this).data('id');
       fetchCoursesData(pageId);

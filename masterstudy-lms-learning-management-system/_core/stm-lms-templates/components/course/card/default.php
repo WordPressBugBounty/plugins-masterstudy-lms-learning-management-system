@@ -2,6 +2,7 @@
 /**
  * @var array $course
  * @var boolean $public
+ * @var boolean $reviews
  */
 
 wp_enqueue_style( 'masterstudy-course-card' );
@@ -64,7 +65,9 @@ $public = isset( $public ) ?? false;
 				?>
 				<div class="masterstudy-course-card__bottom">
 					<?php
-					STM_LMS_Templates::show_lms_template( 'components/course/card/global/rating', array( 'course' => $course ) );
+					if ( $reviews ) {
+						STM_LMS_Templates::show_lms_template( 'components/course/card/global/rating', array( 'course' => $course ) );
+					}
 					STM_LMS_Templates::show_lms_template( 'components/course/card/global/price', array( 'course' => $course ) );
 					?>
 				</div>

@@ -61,15 +61,23 @@ function stm_lms_settings_profiles_section() {
 			'submenu'     => $submenu_general,
 		),
 		'instructor_reviews_public_profile' => array(
-			'type'        => 'checkbox',
-			'label'       => esc_html__( "Show reviews on the instructor's page", 'masterstudy-lms-learning-management-system' ),
-			'description' => esc_html__( 'Enable to display student reviews for courses', 'masterstudy-lms-learning-management-system' ),
-			'submenu'     => $submenu_general,
-			'value'       => true,
-			'dependency'  => array(
-				'key'   => 'instructor_public_profile',
-				'value' => 'not_empty',
+			'type'         => 'checkbox',
+			'label'        => esc_html__( "Show reviews on the instructor's page", 'masterstudy-lms-learning-management-system' ),
+			'description'  => esc_html__( 'Enable to display student reviews for courses', 'masterstudy-lms-learning-management-system' ),
+			'submenu'      => $submenu_general,
+			'value'        => true,
+			'dependency'   => array(
+				array(
+					'key'   => 'instructor_public_profile',
+					'value' => 'not_empty',
+				),
+				array(
+					'key'     => 'course_tab_reviews',
+					'value'   => 'not_empty',
+					'section' => 'section_course',
+				),
 			),
+			'dependencies' => '&&',
 		),
 		'instructor_public_profile_style'   => array(
 			'type'       => 'data_select',

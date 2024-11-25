@@ -19,6 +19,7 @@ $author_info = STM_LMS_User::get_current_user( $author_id );
 $level       = get_post_meta( $post_id, 'level', true );
 $duration    = get_post_meta( $post_id, 'duration_info', true );
 $lectures    = STM_LMS_Course::curriculum_info( $post_id );
+$reviews     = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 
 $rating = get_post_meta( $post_id, 'course_marks', true );
 
@@ -50,7 +51,7 @@ if ( ! empty( $rating ) ) {
 
 	<div class="stm_lms_courses__single--info_rate">
 
-		<?php if ( ! empty( $average ) ) : ?>
+		<?php if ( ! empty( $average ) && $reviews ) : ?>
 			<div class="star-rating star-rating__big">
 				<span style="width: <?php echo esc_attr( $percent ); ?>%">
 					<strong class="rating"><?php echo esc_html( $average ); ?></strong>

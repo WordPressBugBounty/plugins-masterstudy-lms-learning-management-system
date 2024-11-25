@@ -69,6 +69,7 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 						foreach ( $instructors as $instructor ) {
 							$user_profile_url = STM_LMS_User::instructor_public_page_url( $instructor->ID );
 							$user             = STM_LMS_User::get_current_user( $instructor->ID, false, true );
+							$reviews          = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 							$rating           = STM_LMS_Instructor::my_rating_v2( $user );
 							?>
 							<div class="ms_lms_instructors_carousel__item swiper-slide <?php echo ( ! empty( $instructor_card_presets ) ) ? esc_attr( $instructor_card_presets ) : 'style_1'; ?>">
@@ -121,7 +122,7 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 												)
 											);
 										}
-										if ( ! empty( $show_reviews ) && ! empty( $rating['total'] ) ) {
+										if ( ! empty( $show_reviews ) && ! empty( $rating['total'] ) && $reviews ) {
 											STM_LMS_Templates::show_lms_template(
 												'elementor-widgets/instructors-carousel/instructor/reviews',
 												array(

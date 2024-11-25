@@ -89,6 +89,7 @@ if ( isset( $prev_next ) && 'disable' === $prev_next ) {
 				foreach ( $user_query->get_results() as $user ) :
 					$user_profile_url = STM_LMS_User::instructor_public_page_url( $user->ID );
 					$user             = STM_LMS_User::get_current_user( $user->ID, false, true );
+					$reviews          = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 					$rating           = STM_LMS_Instructor::my_rating_v2( $user );
 					?>
 					<div class="stm_lms_instructors__single stm_carousel_glitch">
@@ -142,7 +143,7 @@ if ( isset( $prev_next ) && 'disable' === $prev_next ) {
 								</h5>
 							<?php endif; ?>
 
-							<?php if ( ! empty( $rating['total'] ) && 'style_2' !== $style ) : ?>
+							<?php if ( ! empty( $rating['total'] ) && $reviews && 'style_2' !== $style ) : ?>
 								<div class="stm-lms-user_rating">
 									<div class="star-rating star-rating__big" style="background-image: url('<?php echo esc_attr( STM_LMS_URL ); ?>/assets/img/staremptyl.svg');">
 										<span style="width: <?php echo floatval( $rating['percent'] ); ?>%; background-image: url('<?php echo esc_attr( STM_LMS_URL ); ?>/assets/img/starfull.svg');"></span>

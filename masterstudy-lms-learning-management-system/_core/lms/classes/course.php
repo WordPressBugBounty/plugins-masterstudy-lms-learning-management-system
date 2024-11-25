@@ -595,6 +595,7 @@ class STM_LMS_Course {
 		$settings['course_allow_intended_audience'] = $settings['course_allow_intended_audience'] ?? false;
 		$settings['enable_sticky']                  = $settings['enable_sticky'] ?? false;
 		$settings['course_sticky_sidebar']          = $settings['course_sticky_sidebar'] ?? true;
+		$settings['course_tab_reviews']             = $settings['course_tab_reviews'] ?? true;
 		$show_panel                                 = ( empty( $current_user_id ) || ! STM_LMS_User::has_course_access( $course->id, '', false ) ) && ! $is_coming_soon;
 
 		do_action( 'stm_lms_single_course_start', $course->id );

@@ -55,4 +55,33 @@
     }
     var autoPlaySlideInter = setInterval(autoPlaySlide, 4000);
   });
+  $(window).on("load", function () {
+    // TODO needs to remove after integration Single Question Editor Page on Course Builder!!
+    if ($('body').hasClass('post-type-stm-questions')) {
+      var originalPostTitle = $('#titlediv input').val();
+      var targetNode = document.body;
+      var config = {
+        childList: true,
+        subtree: true
+      };
+      var observer = new MutationObserver(function (mutationsList, observer) {
+        var explanationField = $('#editorquestion_title .ql-editor');
+        if (explanationField.length) {
+          explanationField.html(originalPostTitle); // Set the value
+          observer.disconnect(); // Stop observing after the field is set
+        }
+
+        $('#section_question_settings .ql-toolbar').each(function () {
+          $('.ql-color').each(function () {
+            $(this).parent().remove(); // Remove the parent element
+          });
+          $('.ql-blockquote').each(function () {
+            $(this).parent().remove(); // Remove the parent element
+          });
+        });
+      });
+
+      observer.observe(targetNode, config);
+    }
+  });
 })(jQuery);

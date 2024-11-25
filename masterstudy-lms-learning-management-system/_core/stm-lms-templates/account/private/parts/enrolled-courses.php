@@ -7,6 +7,12 @@ wp_enqueue_script( 'masterstudy-enrolled-courses' );
 $is_pro_plus                = STM_LMS_Helpers::is_pro_plus();
 $options                    = get_option( 'stm_lms_settings' );
 $options['student_reports'] = $options['student_reports'] ?? true;
+$course_bundle              = is_ms_lms_addon_enabled( 'course_bundle' );
+$enterprise                 = is_ms_lms_addon_enabled( 'enterprise_courses' );
+$certificate                = is_ms_lms_addon_enabled( 'certificate_builder' );
+$point                      = is_ms_lms_addon_enabled( 'point_system' );
+$reviews                    = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+$not_empty_stats            = $reviews || $point || $certificate || $enterprise || $course_bundle;
 ?>
 
 <div id="enrolled-courses">
@@ -26,75 +32,83 @@ $options['student_reports'] = $options['student_reports'] ?? true;
 				<span class="masterstudy-enrolled-courses-separator__short"></span>
 				<span class="masterstudy-enrolled-courses-separator__long"></span>
 			</span>
-			<?php if ( $is_pro_plus && $options['student_reports'] ) { ?>
-				<div v-show="statsVisible" class="masterstudy-enrolled-courses-sorting">
-					<?php if ( is_ms_lms_addon_enabled( 'course_bundle' ) ) { ?>
-						<div class="masterstudy-enrolled-courses-sorting__block">
-							<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_bundles"></div>
-							<div class="masterstudy-enrolled-courses-sorting__block-content">
-								<span class="masterstudy-enrolled-courses-sorting__block-title">
-									<?php echo esc_html__( 'Bundles', 'masterstudy-lms-learning-management-system' ); ?>
-								</span>
-								<span v-if="stats.courses_types" class="masterstudy-enrolled-courses-sorting__block-value">
-									{{ stats.courses_types.bundle_count }}
-								</span>
+			<?php
+			if ( $is_pro_plus && $options['student_reports'] ) {
+				if ( $not_empty_stats ) {
+					?>
+					<div v-show="statsVisible" class="masterstudy-enrolled-courses-sorting">
+						<?php if ( $course_bundle ) { ?>
+							<div class="masterstudy-enrolled-courses-sorting__block">
+								<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_bundles"></div>
+								<div class="masterstudy-enrolled-courses-sorting__block-content">
+									<span class="masterstudy-enrolled-courses-sorting__block-title">
+										<?php echo esc_html__( 'Bundles', 'masterstudy-lms-learning-management-system' ); ?>
+									</span>
+									<span v-if="stats.courses_types" class="masterstudy-enrolled-courses-sorting__block-value">
+										{{ stats.courses_types.bundle_count }}
+									</span>
+								</div>
 							</div>
-						</div>
-						<?php
-					} if ( is_ms_lms_addon_enabled( 'enterprise_courses' ) ) {
-						?>
-						<div class="masterstudy-enrolled-courses-sorting__block">
-							<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_groups"></div>
-							<div class="masterstudy-enrolled-courses-sorting__block-content">
-								<span class="masterstudy-enrolled-courses-sorting__block-title">
-									<?php echo esc_html__( 'Groups', 'masterstudy-lms-learning-management-system' ); ?>
-								</span>
-								<span v-if="stats.courses_types" class="masterstudy-enrolled-courses-sorting__block-value">
-									{{ stats.courses_types.enterprise_count }}
-								</span>
+							<?php
+						} if ( $enterprise ) {
+							?>
+							<div class="masterstudy-enrolled-courses-sorting__block">
+								<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_groups"></div>
+								<div class="masterstudy-enrolled-courses-sorting__block-content">
+									<span class="masterstudy-enrolled-courses-sorting__block-title">
+										<?php echo esc_html__( 'Groups', 'masterstudy-lms-learning-management-system' ); ?>
+									</span>
+									<span v-if="stats.courses_types" class="masterstudy-enrolled-courses-sorting__block-value">
+										{{ stats.courses_types.enterprise_count }}
+									</span>
+								</div>
 							</div>
-						</div>
-					<?php } ?>
-					<div class="masterstudy-enrolled-courses-sorting__block">
-						<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_reviews"></div>
-						<div class="masterstudy-enrolled-courses-sorting__block-content">
-							<span class="masterstudy-enrolled-courses-sorting__block-title">
-								<?php echo esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' ); ?>
-							</span>
-							<span class="masterstudy-enrolled-courses-sorting__block-value">
-								{{ stats.reviews }}
-							</span>
-						</div>
+							<?php
+						} if ( $reviews ) {
+							?>
+							<div class="masterstudy-enrolled-courses-sorting__block">
+								<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_reviews"></div>
+								<div class="masterstudy-enrolled-courses-sorting__block-content">
+									<span class="masterstudy-enrolled-courses-sorting__block-title">
+										<?php echo esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' ); ?>
+									</span>
+									<span class="masterstudy-enrolled-courses-sorting__block-value">
+										{{ stats.reviews }}
+									</span>
+								</div>
+							</div>
+							<?php
+						} if ( $certificate ) {
+							?>
+							<div class="masterstudy-enrolled-courses-sorting__block">
+								<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_certificates"></div>
+								<div class="masterstudy-enrolled-courses-sorting__block-content">
+									<span class="masterstudy-enrolled-courses-sorting__block-title">
+										<?php echo esc_html__( 'Certificates', 'masterstudy-lms-learning-management-system' ); ?>
+									</span>
+									<span class="masterstudy-enrolled-courses-sorting__block-value">
+										{{ stats.certificates }}
+									</span>
+								</div>
+							</div>
+							<?php
+						}
+						if ( $point ) {
+							?>
+							<div class="masterstudy-enrolled-courses-sorting__block">
+								<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_points"></div>
+								<div class="masterstudy-enrolled-courses-sorting__block-content">
+									<span class="masterstudy-enrolled-courses-sorting__block-title">
+										<?php echo esc_html__( 'Points', 'masterstudy-lms-learning-management-system' ); ?>
+									</span>
+									<span class="masterstudy-enrolled-courses-sorting__block-value">
+										{{ stats.total_points }}
+									</span>
+								</div>
+							</div>
+						<?php } ?>
 					</div>
-					<?php if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) { ?>
-						<div class="masterstudy-enrolled-courses-sorting__block">
-							<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_certificates"></div>
-							<div class="masterstudy-enrolled-courses-sorting__block-content">
-								<span class="masterstudy-enrolled-courses-sorting__block-title">
-									<?php echo esc_html__( 'Certificates', 'masterstudy-lms-learning-management-system' ); ?>
-								</span>
-								<span class="masterstudy-enrolled-courses-sorting__block-value">
-									{{ stats.certificates }}
-								</span>
-							</div>
-						</div>
-						<?php
-					}
-					if ( is_ms_lms_addon_enabled( 'point_system' ) ) {
-						?>
-						<div class="masterstudy-enrolled-courses-sorting__block">
-							<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_points"></div>
-							<div class="masterstudy-enrolled-courses-sorting__block-content">
-								<span class="masterstudy-enrolled-courses-sorting__block-title">
-									<?php echo esc_html__( 'Points', 'masterstudy-lms-learning-management-system' ); ?>
-								</span>
-								<span class="masterstudy-enrolled-courses-sorting__block-value">
-									{{ stats.total_points }}
-								</span>
-							</div>
-						</div>
-					<?php } ?>
-				</div>
+				<?php } ?>
 				<div class="masterstudy-enrolled-courses-tabs">
 					<div
 						@click="getCourses('all')"

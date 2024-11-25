@@ -48,16 +48,17 @@ function masterstudy_lms_rest_api_user( $data, $user, $request ) {
 	$user_meta         = get_user_meta( $user->ID );
 	$instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
 
-	$data->data['avatar']        = ! empty( $user_meta['stm_lms_user_avatar'] ) ? $user_meta['stm_lms_user_avatar'][0] : get_avatar_url( $user->ID );
-	$data->data['position']      = $user_meta['position'][0] ?? '';
-	$data->data['facebook']      = $user_meta['facebook'][0] ?? '';
-	$data->data['twitter']       = $user_meta['twitter'][0] ?? '';
-	$data->data['instagram']     = $user_meta['instagram'][0] ?? '';
-	$data->data['linkedin']      = $user_meta['linkedin'][0] ?? '';
-	$data->data['sum_rating']    = ! empty( $user_meta['sum_rating'][0] ) ? $user_meta['sum_rating'][0] : '0';
-	$data->data['total_reviews'] = ! empty( $user_meta['total_reviews'][0] ) ? $user_meta['total_reviews'][0] : '0';
-	$data->data['courses']       = \STM_LMS_Instructor::get_course_quantity( $user->ID );
-	$data->data['page_url']      = $instructor_public ? \STM_LMS_User::instructor_public_page_url( $user->ID ) : '';
+	$data->data['avatar']            = ! empty( $user_meta['stm_lms_user_avatar'] ) ? $user_meta['stm_lms_user_avatar'][0] : get_avatar_url( $user->ID );
+	$data->data['position']          = $user_meta['position'][0] ?? '';
+	$data->data['facebook']          = $user_meta['facebook'][0] ?? '';
+	$data->data['twitter']           = $user_meta['twitter'][0] ?? '';
+	$data->data['instagram']         = $user_meta['instagram'][0] ?? '';
+	$data->data['linkedin']          = $user_meta['linkedin'][0] ?? '';
+	$data->data['rating_visibility'] = \STM_LMS_Options::get_option( 'course_tab_reviews', true );
+	$data->data['sum_rating']        = ! empty( $user_meta['sum_rating'][0] ) ? $user_meta['sum_rating'][0] : '0';
+	$data->data['total_reviews']     = ! empty( $user_meta['total_reviews'][0] ) ? $user_meta['total_reviews'][0] : '0';
+	$data->data['courses']           = \STM_LMS_Instructor::get_course_quantity( $user->ID );
+	$data->data['page_url']          = $instructor_public ? \STM_LMS_User::instructor_public_page_url( $user->ID ) : '';
 
 	return $data;
 }

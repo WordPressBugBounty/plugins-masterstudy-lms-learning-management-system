@@ -60,9 +60,18 @@ if ( ! empty( $data['answers'] ) ) {
 		data-number-question="<?php echo esc_attr( 'question_bank' !== $data['type'] ? $ms_question_number : '' ); ?>">
 		<?php if ( 'question_bank' !== $data['type'] ) { ?>
 			<div class="masterstudy-course-player-question__header">
-				<h3 class="masterstudy-course-player-question__title">
-					<?php echo esc_html( $ms_question_number . '. ' . $data['title'] ); ?>
-				</h3>
+				<div class="masterstudy-course-player-question__title">
+					<div class="masterstudy-course-player-question-render-title">
+						<?php
+						echo esc_html( $ms_question_number . '. ' );
+						?>
+					</div>
+					<div class="masterstudy-course-player-question-render-content">
+						<?php
+						echo wp_kses_post( $data['title'] );
+						?>
+					</div>
+				</div>
 				<?php
 				if ( is_ms_lms_addon_enabled( Addons::QUESTION_MEDIA ) && ! empty( $data['video_type'] ) && isset( $data['image']['type'] ) && 'video' === $data['image']['type'] ) {
 					STM_LMS_Templates::show_lms_template(

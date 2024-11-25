@@ -87,6 +87,10 @@ class StmLmsInstructorsCarousel extends Widget_Base {
 		return array( 'stm_lms_old' );
 	}
 
+	public static function show_reviews() {
+		return \STM_LMS_Options::get_option( 'course_tab_reviews', true );
+	}
+
 	protected function register_controls() {
 		$this->start_controls_section(
 			'section_content',
@@ -185,6 +189,14 @@ class StmLmsInstructorsCarousel extends Widget_Base {
 			)
 		);
 
+		$sort_options = array(
+			'default' => __( 'Default', 'masterstudy-lms-learning-management-system' ),
+		);
+
+		if ( self::show_reviews() ) {
+			$sort_options['rating'] = __( 'Rating', 'masterstudy-lms-learning-management-system' );
+		}
+
 		$this->add_control(
 			'sort',
 			array(
@@ -192,10 +204,8 @@ class StmLmsInstructorsCarousel extends Widget_Base {
 				'label'       => __( 'Sort By', 'masterstudy-lms-learning-management-system' ),
 				'type'        => \Elementor\Controls_Manager::SELECT,
 				'label_block' => true,
-				'options'     => array(
-					'default' => __( 'Default', 'masterstudy-lms-learning-management-system' ),
-					'rating'  => __( 'Rating', 'masterstudy-lms-learning-management-system' ),
-				),
+				'options'     => $sort_options,
+				'default'     => 'default',
 			)
 		);
 

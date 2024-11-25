@@ -194,15 +194,23 @@ function stm_lms_settings_courses_section() {
 				),
 			),
 			'enable_courses_filter_rating'      => array(
-				'type'        => 'checkbox',
-				'label'       => esc_html__( 'Enable filter - Rating', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'Let users filter courses by rating', 'masterstudy-lms-learning-management-system' ),
-				'toggle'      => false,
-				'columns'     => '33',
-				'dependency'  => array(
-					'key'   => 'enable_courses_filter',
-					'value' => 'not_empty',
+				'type'         => 'checkbox',
+				'label'        => esc_html__( 'Enable filter - Rating', 'masterstudy-lms-learning-management-system' ),
+				'description'  => esc_html__( 'Let users filter courses by rating', 'masterstudy-lms-learning-management-system' ),
+				'toggle'       => false,
+				'columns'      => '33',
+				'dependency'   => array(
+					array(
+						'key'   => 'enable_courses_filter',
+						'value' => 'not_empty',
+					),
+					array(
+						'key'     => 'course_tab_reviews',
+						'value'   => 'not_empty',
+						'section' => 'section_course',
+					),
 				),
+				'dependencies' => '&&',
 			),
 			'enable_courses_filter_status'      => array(
 				'type'        => 'checkbox',

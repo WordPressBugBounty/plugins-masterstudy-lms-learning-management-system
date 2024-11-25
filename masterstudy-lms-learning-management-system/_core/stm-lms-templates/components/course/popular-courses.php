@@ -18,6 +18,7 @@ $query_args = array(
 
 $course_ids        = get_posts( $query_args );
 $stars             = range( 1, 5 );
+$course_reviews    = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
 ?>
 
@@ -87,14 +88,14 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 										<?php
 									}
 								}
-								if ( ! empty( $popular_course->rate ) && ! $popular_course->is_udemy_course ) {
+								if ( ! empty( $popular_course->rate ) && ! $popular_course->is_udemy_course && $course_reviews ) {
 									?>
 									<div class="masterstudy-popular-courses__rating">
 										<?php foreach ( $stars as $star ) { ?>
 											<span class="masterstudy-popular-courses__rating-star <?php echo esc_attr( ( $star <= floor( $popular_course->rate['average'] ) ) ? 'masterstudy-popular-courses__rating-star_filled' : '' ); ?>"></span>
 										<?php } ?>
 									</div>
-								<?php } elseif ( ! empty( $popular_course->rate ) && $popular_course->is_udemy_course ) { ?>
+								<?php } elseif ( ! empty( $popular_course->rate ) && $popular_course->is_udemy_course && $course_reviews ) { ?>
 									<div class="masterstudy-popular-courses__rating">
 										<?php foreach ( $stars as $star ) { ?>
 											<span class="masterstudy-popular-courses__rating-star <?php echo esc_attr( ( $star <= floor( $popular_course->udemy_rate ) ) ? 'masterstudy-popular-courses__rating-star_filled' : '' ); ?>"></span>

@@ -19,7 +19,9 @@
 					<option value="date_low"><?php esc_html_e( 'Release date (oldest first)', 'masterstudy-lms-learning-management-system' ); ?></option>
 					<option value="price_high"><?php esc_html_e( 'Price high', 'masterstudy-lms-learning-management-system' ); ?></option>
 					<option value="price_low"><?php esc_html_e( 'Price low', 'masterstudy-lms-learning-management-system' ); ?></option>
-					<option value="rating"><?php esc_html_e( 'Overall Rating', 'masterstudy-lms-learning-management-system' ); ?></option>
+					<?php if ( STM_LMS_Options::get_option( 'course_tab_reviews', true ) ) { ?>
+						<option value="rating"><?php esc_html_e( 'Overall Rating', 'masterstudy-lms-learning-management-system' ); ?></option>
+					<?php } ?>
 					<option value="popular"><?php esc_html_e( 'Popular (most viewed)', 'masterstudy-lms-learning-management-system' ); ?></option>
 				</select>
 			</div>

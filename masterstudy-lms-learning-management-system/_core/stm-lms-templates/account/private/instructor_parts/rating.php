@@ -1,8 +1,9 @@
 <?php
 
-$rating = STM_LMS_Instructor::my_rating( $current_user );
+$rating         = STM_LMS_Instructor::my_rating( $current_user );
+$course_reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 
-if ( ! empty( $rating['total_marks'] ) ) : ?>
+if ( ! empty( $rating['total_marks'] ) && $course_reviews ) { ?>
 	<div class="stm-lms-user_rating">
 		<div class="star-rating star-rating__big">
 			<span style="width: <?php echo floatval( $rating['percent'] ); ?>%;"></span>
@@ -12,4 +13,4 @@ if ( ! empty( $rating['total_marks'] ) ) : ?>
 			<?php echo esc_html( $rating['total_marks'] ); ?>
 		</div>
 	</div>
-<?php endif; ?>
+<?php } ?>

@@ -57,11 +57,11 @@ foreach ( $courses as $course ) {
 						</div>
 						<?php
 					}
-					if ( ! empty( $card_data['show_rating'] ) || ! empty( $card_data['show_wishlist'] ) ) {
+					if ( ( ! empty( $card_data['show_rating'] ) && $course['reviews_show'] ) || ! empty( $card_data['show_wishlist'] ) ) {
 						?>
 						<div class="ms_lms_courses_card_item_info_rating_wrapper">
 							<?php
-							if ( ! empty( $card_data['show_rating'] ) ) {
+							if ( ! empty( $card_data['show_rating'] ) && $course['reviews_show'] ) {
 								STM_LMS_Templates::show_lms_template(
 									'elementor-widgets/courses/card/global/rating',
 									array(

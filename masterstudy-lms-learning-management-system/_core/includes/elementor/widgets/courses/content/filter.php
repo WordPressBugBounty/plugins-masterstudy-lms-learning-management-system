@@ -1,6 +1,8 @@
 <?php
 use Elementor\Controls_Manager;
 
+$reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+
 $this->start_controls_section(
 	'filter_section',
 	array(
@@ -29,18 +31,25 @@ $this->add_control(
 	)
 );
 
-$options = array(
+$options         = array(
 	'category'    => esc_html__( 'Category', 'masterstudy-lms-learning-management-system' ),
 	'subcategory' => esc_html__( 'Subcategory', 'masterstudy-lms-learning-management-system' ),
 	'status'      => esc_html__( 'Status', 'masterstudy-lms-learning-management-system' ),
 	'level'       => esc_html__( 'Level', 'masterstudy-lms-learning-management-system' ),
-	'rating'      => esc_html__( 'Rating', 'masterstudy-lms-learning-management-system' ),
 	'instructors' => esc_html__( 'Instructors', 'masterstudy-lms-learning-management-system' ),
 	'price'       => esc_html__( 'Price', 'masterstudy-lms-learning-management-system' ),
 );
+$default_options = array( 'category', 'status', 'level', 'price' );
+
+if ( $reviews ) {
+	$options['rating'] = esc_html__( 'Rating', 'masterstudy-lms-learning-management-system' );
+	$default_options[] = 'rating';
+}
+
 if ( is_ms_lms_addon_enabled( 'coming_soon' ) ) {
 	$options['availability'] = esc_html__( 'Availability', 'masterstudy-lms-learning-management-system' );
 }
+
 $this->add_control(
 	'filter_options',
 	array(
@@ -49,7 +58,7 @@ $this->add_control(
 		'label_block' => true,
 		'multiple'    => true,
 		'options'     => $options,
-		'default'     => array( 'category', 'status', 'level', 'rating', 'price' ),
+		'default'     => $default_options,
 		'conditions'  => $this->add_visible_conditions( 'show_filter' ),
 	)
 );

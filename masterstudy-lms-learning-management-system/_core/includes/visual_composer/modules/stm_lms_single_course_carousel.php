@@ -3,7 +3,17 @@
 add_action( 'vc_after_init', 'stm_lms_ms_single_course_carousel_vc' );
 
 function stm_lms_ms_single_course_carousel_vc() {
-	$terms = stm_lms_autocomplete_terms( 'stm_lms_course_taxonomy' );
+	$terms        = stm_lms_autocomplete_terms( 'stm_lms_course_taxonomy' );
+	$reviews      = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+	$sort_options = array(
+		'None'    => 'none',
+		'Popular' => 'popular',
+		'Free'    => 'free',
+	);
+
+	if ( $reviews ) {
+		$sort_options['Rating'] = 'rating';
+	}
 
 	vc_map(
 		array(
@@ -21,12 +31,7 @@ function stm_lms_ms_single_course_carousel_vc() {
 					'type'       => 'dropdown',
 					'heading'    => __( 'Sort', 'masterstudy-lms-learning-management-system' ),
 					'param_name' => 'query',
-					'value'      => array(
-						'None'    => 'none',
-						'Popular' => 'popular',
-						'Free'    => 'free',
-						'Rating'  => 'rating',
-					),
+					'value'      => $sort_options,
 				),
 				array(
 					'type'       => 'dropdown',

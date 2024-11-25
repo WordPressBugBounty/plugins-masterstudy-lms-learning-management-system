@@ -37,6 +37,10 @@ add_filter(
 				'section_question_settings' => array(
 					'name'   => esc_html__( 'Question Settings', 'masterstudy-lms-learning-management-system' ),
 					'fields' => array(
+						'question_title'       => array(
+							'type'  => 'editor',
+							'label' => esc_html__( 'Question Title', 'masterstudy-lms-learning-management-system' ),
+						),
 						'type'                 => array(
 							'type'    => 'select',
 							'label'   => esc_html__( 'Question type', 'masterstudy-lms-learning-management-system' ),

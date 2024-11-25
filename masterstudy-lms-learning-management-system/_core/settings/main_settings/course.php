@@ -19,18 +19,29 @@ function stm_lms_settings_course_section() {
 		'&#128549;' => '😥 ' . esc_html__( 'Disappointed face', 'masterstudy-lms-learning-management-system' ),
 	);
 
+	$tab_options = array(
+		'description'  => esc_html__( 'Description', 'masterstudy-lms-learning-management-system' ),
+		'curriculum'   => esc_html__( 'Curriculum', 'masterstudy-lms-learning-management-system' ),
+		'faq'          => esc_html__( 'Faq', 'masterstudy-lms-learning-management-system' ),
+		'announcement' => esc_html__( 'Announcement', 'masterstudy-lms-learning-management-system' ),
+	);
+
+	if ( STM_LMS_Options::get_option( 'course_tab_reviews', true ) ) {
+		$tab_options['reviews'] = esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' );
+	}
+
 	$course_settings_primary_fields = array(
+		'course_tab_reviews'                   => array(
+			'type'        => 'checkbox',
+			'label'       => esc_html__( 'Course Reviews', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Show course reviews on all course pages, bundles, and widgets. Disabling will hide reviews across the site', 'masterstudy-lms-learning-management-system' ),
+			'value'       => true,
+		),
 		'course_page_tab'                      => array(
 			'type'        => 'select',
 			'label'       => esc_html__( 'Default Tab', 'masterstudy-lms-learning-management-system' ),
 			'description' => esc_html__( 'Choose the default tab to be shown when opening on the course page', 'masterstudy-lms-learning-management-system' ),
-			'options'     => array(
-				'description'  => esc_html__( 'Description', 'masterstudy-lms-learning-management-system' ),
-				'curriculum'   => esc_html__( 'Curriculum', 'masterstudy-lms-learning-management-system' ),
-				'faq'          => esc_html__( 'Faq', 'masterstudy-lms-learning-management-system' ),
-				'announcement' => esc_html__( 'Announcement', 'masterstudy-lms-learning-management-system' ),
-				'reviews'      => esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' ),
-			),
+			'options'     => $tab_options,
 			'value'       => 'description',
 		),
 		'assignments_quiz_result_emoji_show'   => array(
@@ -93,16 +104,10 @@ function stm_lms_settings_course_section() {
 			'value'       => true,
 		),
 		'course_tab_announcement'              => array(
+			'group'       => 'ended',
 			'type'        => 'checkbox',
 			'label'       => esc_html__( 'Announcement tab', 'masterstudy-lms-learning-management-system' ),
 			'description' => esc_html__( 'Show a tab with course announcements', 'masterstudy-lms-learning-management-system' ),
-			'value'       => true,
-		),
-		'course_tab_reviews'                   => array(
-			'group'       => 'ended',
-			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Reviews tab', 'masterstudy-lms-learning-management-system' ),
-			'description' => esc_html__( 'Show a tab with course reviews', 'masterstudy-lms-learning-management-system' ),
 			'value'       => true,
 		),
 
@@ -260,14 +265,21 @@ function stm_lms_settings_course_section() {
 			'columns'     => '50',
 		),
 		'enable_sticky_rating'       => array(
-			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Rating in bottom sticky panel', 'masterstudy-lms-learning-management-system' ),
-			'description' => esc_html__( 'Show the course rating in the sticky panel', 'masterstudy-lms-learning-management-system' ),
-			'dependency'  => array(
-				'key'   => 'enable_sticky',
-				'value' => 'not_empty',
+			'type'         => 'checkbox',
+			'label'        => esc_html__( 'Rating in bottom sticky panel', 'masterstudy-lms-learning-management-system' ),
+			'description'  => esc_html__( 'Show the course rating in the sticky panel', 'masterstudy-lms-learning-management-system' ),
+			'dependency'   => array(
+				array(
+					'key'   => 'enable_sticky',
+					'value' => 'not_empty',
+				),
+				array(
+					'key'   => 'course_tab_reviews',
+					'value' => 'not_empty',
+				),
 			),
-			'columns'     => '50',
+			'dependencies' => '&&',
+			'columns'      => '50',
 		),
 		'enable_sticky_teacher'      => array(
 			'type'        => 'checkbox',

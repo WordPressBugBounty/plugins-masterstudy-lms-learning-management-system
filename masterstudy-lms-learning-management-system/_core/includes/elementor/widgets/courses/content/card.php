@@ -1,6 +1,8 @@
 <?php
 use Elementor\Controls_Manager;
 
+$reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+
 $this->start_controls_section(
 	'card_section',
 	array(
@@ -120,6 +122,19 @@ $this->add_control(
 		'conditions' => $this->add_widget_type_conditions( array( 'courses-archive', 'courses-grid' ) ),
 	)
 );
+
+$sort_options = array(
+	'date_high'  => esc_html__( 'Newest', 'masterstudy-lms-learning-management-system' ),
+	'date_low'   => esc_html__( 'Oldest', 'masterstudy-lms-learning-management-system' ),
+	'price_high' => esc_html__( 'Price High', 'masterstudy-lms-learning-management-system' ),
+	'price_low'  => esc_html__( 'Price Low', 'masterstudy-lms-learning-management-system' ),
+	'popular'    => esc_html__( 'Most Viewed', 'masterstudy-lms-learning-management-system' ),
+);
+
+if ( $reviews ) {
+	$sort_options['rating'] = esc_html__( 'Overall Rating', 'masterstudy-lms-learning-management-system' );
+}
+
 $this->add_control(
 	'sort_by',
 	array(
@@ -127,14 +142,7 @@ $this->add_control(
 		'type'               => Controls_Manager::SELECT,
 		'default'            => 'date_high',
 		'frontend_available' => true,
-		'options'            => array(
-			'date_high'  => esc_html__( 'Newest', 'masterstudy-lms-learning-management-system' ),
-			'date_low'   => esc_html__( 'Oldest', 'masterstudy-lms-learning-management-system' ),
-			'price_high' => esc_html__( 'Price High', 'masterstudy-lms-learning-management-system' ),
-			'price_low'  => esc_html__( 'Price Low', 'masterstudy-lms-learning-management-system' ),
-			'rating'     => esc_html__( 'Overall Rating', 'masterstudy-lms-learning-management-system' ),
-			'popular'    => esc_html__( 'Most Viewed', 'masterstudy-lms-learning-management-system' ),
-		),
+		'options'            => $sort_options,
 	)
 );
 $this->add_responsive_control(
@@ -192,12 +200,16 @@ $this->add_switcher_control(
 		),
 	)
 );
-$this->add_switcher_control(
-	'show_rating',
-	array(
-		'label' => esc_html__( 'Rating', 'masterstudy-lms-learning-management-system' ),
-	)
-);
+
+if ( $reviews ) {
+	$this->add_switcher_control(
+		'show_rating',
+		array(
+			'label' => esc_html__( 'Rating', 'masterstudy-lms-learning-management-system' ),
+		)
+	);
+}
+
 $this->add_switcher_control(
 	'show_price',
 	array(

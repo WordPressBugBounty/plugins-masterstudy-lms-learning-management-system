@@ -2,6 +2,7 @@
 
 (function ($) {
   $(document).ready(function () {
+    document.title = instructor_data.user_login;
     $('.masterstudy-tabs__item').click(function () {
       var tabName = $(this).data('id');
       $(this).addClass('masterstudy-tabs__item_active');

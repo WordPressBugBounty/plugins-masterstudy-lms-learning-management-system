@@ -382,6 +382,7 @@ final class CourseRepository {
 
 	public function instructor_courses( array $args ) {
 		$courses  = \STM_LMS_Courses::get_all_courses( $args );
+		$reviews  = \STM_LMS_Options::get_option( 'course_tab_reviews', true );
 		$response = array();
 
 		if ( ! empty( $courses ) ) {
@@ -389,8 +390,9 @@ final class CourseRepository {
 				$response['courses'][] = \STM_LMS_Templates::load_lms_template(
 					'components/course/card/default',
 					array(
-						'course' => $course,
-						'public' => true,
+						'course'  => $course,
+						'public'  => true,
+						'reviews' => $reviews,
 					)
 				);
 			}
@@ -565,6 +567,7 @@ final class CourseRepository {
 				'price'                  => $meta['price'][0] ?? '',
 				'sale_price'             => \STM_LMS_Course::get_sale_price( $post->ID ),
 				'symbol'                 => \STM_LMS_Options::get_option( 'currency_symbol', '$' ),
+				'rating_visibility'      => \STM_LMS_Options::get_option( 'course_tab_reviews', true ),
 				'rating'                 => $meta['course_mark_average'][0] ?? 0,
 				'categories'             => wp_get_post_terms( $post->ID, Taxonomy::COURSE_CATEGORY ),
 				'image'                  => $this->get_course_image( $post ),

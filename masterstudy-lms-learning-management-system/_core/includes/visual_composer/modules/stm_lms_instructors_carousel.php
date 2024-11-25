@@ -3,6 +3,13 @@
 add_action( 'vc_after_init', 'stm_lms_ms_instructors_carousel_vc' );
 
 function stm_lms_ms_instructors_carousel_vc() {
+	$reviews      = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+	$sort_options = array( 'Default' => '' );
+
+	if ( $reviews ) {
+		$sort_options['Rating'] = 'rating';
+	}
+
 	vc_map(
 		array(
 			'name'           => esc_html__( 'STM LMS Instructors Carousel', 'masterstudy-lms-learning-management-system' ),
@@ -69,10 +76,7 @@ function stm_lms_ms_instructors_carousel_vc() {
 					'type'       => 'dropdown',
 					'heading'    => __( 'Sort By', 'masterstudy-lms-learning-management-system' ),
 					'param_name' => 'sort',
-					'value'      => array(
-						'Default' => '',
-						'Rating'  => 'rating',
-					),
+					'value'      => $sort_options,
 				),
 				array(
 					'type'       => 'dropdown',

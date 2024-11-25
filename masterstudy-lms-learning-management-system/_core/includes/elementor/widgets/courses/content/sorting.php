@@ -1,6 +1,8 @@
 <?php
 use Elementor\Controls_Manager;
 
+$reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+
 $this->start_controls_section(
 	'sorting_section',
 	array(
@@ -30,6 +32,21 @@ $this->add_control(
 		'conditions' => $this->add_visible_conditions( 'show_sorting' ),
 	)
 );
+
+$sort_options    = array(
+	'date_high'  => esc_html__( 'Newest', 'masterstudy-lms-learning-management-system' ),
+	'date_low'   => esc_html__( 'Oldest', 'masterstudy-lms-learning-management-system' ),
+	'price_high' => esc_html__( 'Price High', 'masterstudy-lms-learning-management-system' ),
+	'price_low'  => esc_html__( 'Price Low', 'masterstudy-lms-learning-management-system' ),
+	'popular'    => esc_html__( 'Most Viewed', 'masterstudy-lms-learning-management-system' ),
+);
+$default_options = array( 'date_high', 'date_low', 'price_high', 'price_low', 'popular' );
+
+if ( $reviews ) {
+	$sort_options['rating'] = esc_html__( 'Overall Rating', 'masterstudy-lms-learning-management-system' );
+	$default_options[]      = 'rating';
+}
+
 $this->add_control(
 	'sort_options',
 	array(
@@ -37,15 +54,8 @@ $this->add_control(
 		'type'        => Controls_Manager::SELECT2,
 		'label_block' => true,
 		'multiple'    => true,
-		'options'     => array(
-			'date_high'  => esc_html__( 'Newest', 'masterstudy-lms-learning-management-system' ),
-			'date_low'   => esc_html__( 'Oldest', 'masterstudy-lms-learning-management-system' ),
-			'price_high' => esc_html__( 'Price High', 'masterstudy-lms-learning-management-system' ),
-			'price_low'  => esc_html__( 'Price Low', 'masterstudy-lms-learning-management-system' ),
-			'rating'     => esc_html__( 'Overall Rating', 'masterstudy-lms-learning-management-system' ),
-			'popular'    => esc_html__( 'Most Viewed', 'masterstudy-lms-learning-management-system' ),
-		),
-		'default'     => array( 'date_high', 'date_low', 'price_high', 'price_low', 'rating', 'popular' ),
+		'options'     => $sort_options,
+		'default'     => $default_options,
 		'conditions'  => $this->add_visible_conditions( 'show_sorting' ),
 	),
 );

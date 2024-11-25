@@ -19,6 +19,10 @@
       "type": "boolean",
       "default": false
     },
+    "rating_visibility": {
+      "type": "boolean",
+      "default": false
+    },
     "padding": {
       "type": "object",
       "default": {

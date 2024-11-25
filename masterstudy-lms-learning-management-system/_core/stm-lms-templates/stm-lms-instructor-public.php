@@ -14,10 +14,11 @@ if ( empty( $instructor['id'] ) ) {
 
 get_header();
 
-$settings       = get_option( 'stm_lms_settings' );
-$profile_active = $settings['instructor_public_profile'] ?? true;
-$profile_style  = $_GET['public'] ?? $settings['instructor_public_profile_style'] ?? 'compact';
-$show_reviews   = $settings['instructor_reviews_public_profile'] ?? true;
+$settings                       = get_option( 'stm_lms_settings' );
+$settings['course_tab_reviews'] = $settings['course_tab_reviews'] ?? true;
+$profile_active                 = $settings['instructor_public_profile'] ?? true;
+$profile_style                  = $_GET['public'] ?? $settings['instructor_public_profile_style'] ?? 'compact';
+$show_reviews                   = $settings['instructor_reviews_public_profile'] ?? true;
 
 if ( ! STM_LMS_Instructor::is_instructor( $instructor['id'] ) || ! $profile_active ) {
 	echo esc_html__( 'This page does not exist.', 'masterstudy-lms-learning-management-system' );
@@ -34,6 +35,7 @@ wp_localize_script(
 	'instructor_data',
 	array(
 		'user'              => $user_id,
+		'user_login'        => $instructor['login'],
 		'courses_per_page'  => 12,
 		'bundles_per_page'  => 6,
 		'reviews_per_page'  => 5,
@@ -74,7 +76,7 @@ $instructor_tabs        = array(
 	array(
 		'id'         => 'reviews',
 		'title'      => esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' ),
-		'is_visible' => $show_reviews,
+		'is_visible' => $show_reviews && $settings['course_tab_reviews'],
 	),
 );
 
@@ -127,6 +129,7 @@ STM_LMS_Templates::show_lms_template(
 						</div>
 					</div>
 				</div>
+				<?php if ( $settings['course_tab_reviews'] ) { ?>
 				<div class="masterstudy-instructor-public__rating">
 					<?php foreach ( $stars as $star ) { ?>
 						<span class="masterstudy-instructor-public__rating-star <?php echo esc_attr( $star <= floor( $rating['average'] ) ? 'masterstudy-instructor-public__rating-star_filled ' : '' ); ?>"></span>
@@ -135,6 +138,7 @@ STM_LMS_Templates::show_lms_template(
 						<?php echo (float) $rating['average'] === (int) $rating['average'] ? number_format( (int) $rating['average'], 1 ) : esc_html( round( $rating['average'], 1 ) ); ?>
 					</div>
 				</div>
+				<?php } ?>
 				<div class="masterstudy-instructor-public__actions">
 					<?php
 					$button_args = array(
@@ -246,8 +250,9 @@ STM_LMS_Templates::show_lms_template(
 					STM_LMS_Templates::show_lms_template(
 						'components/course/card/default',
 						array(
-							'course' => $course,
-							'public' => true,
+							'course'  => $course,
+							'public'  => true,
+							'reviews' => $settings['course_tab_reviews'],
 						)
 					);
 				}

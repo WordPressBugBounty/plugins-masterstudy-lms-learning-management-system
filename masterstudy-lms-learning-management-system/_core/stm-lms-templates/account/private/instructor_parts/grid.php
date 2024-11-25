@@ -1,3 +1,7 @@
+<?php
+$reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+?>
+
 <div class="stm_lms_instructor_courses__grid">
 
 	<div class="stm_lms_instructor_courses__single" v-for="course in courses"  v-bind:class="'course-' + course.status">
@@ -39,16 +43,18 @@
 				</div>
 
 				<div class="stm_lms_instructor_courses__single--meta">
-					<div class="average-rating-stars__top">
-						<div class="star-rating">
-								<span v-bind:style="{'width' : course.percent + '%'}">
-									<strong class="rating">{{ course.average }}</strong>
-								</span>
+					<?php if ( $reviews ) { ?>
+						<div class="average-rating-stars__top">
+							<div class="star-rating">
+									<span v-bind:style="{'width' : course.percent + '%'}">
+										<strong class="rating">{{ course.average }}</strong>
+									</span>
+							</div>
+							<div class="average-rating-stars__av heading_font">
+								{{ course.average }}<span v-if="course.total != ''"> ({{course.total}})</span>
+							</div>
 						</div>
-						<div class="average-rating-stars__av heading_font">
-							{{ course.average }}<span v-if="course.total != ''"> ({{course.total}})</span>
-						</div>
-					</div>
+					<?php } ?>
 					<div class="views">
 						<i class="stmlms-eye"></i>
 						{{ course.views }}

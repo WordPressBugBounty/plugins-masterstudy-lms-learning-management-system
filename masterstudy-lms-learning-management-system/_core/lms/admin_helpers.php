@@ -1,5 +1,7 @@
 <?php
 
+use MasterStudy\Lms\Plugin\PostType;
+
 add_action(
 	'admin_enqueue_scripts',
 	function () {
@@ -287,3 +289,43 @@ function stm_lms_route_trash_page_handler( $post_id ) {
 	}
 }
 add_action( 'trashed_post', 'stm_lms_route_trash_page_handler' );
+
+function masterstudy_plugin_escape_question_title( $title, $post_id ) {
+	if ( is_admin() && PostType::QUESTION === get_post_type( $post_id ) ) {
+		return strip_tags( $title );
+	}
+
+	return $title;
+}
+add_filter( 'the_title', 'masterstudy_plugin_escape_question_title', 10, 2 );
+
+// TODO need to remove after integration Single Question Editor On Course Builder !!!
+function masterstudy_plugin_save_questions_custom_title( $post_id, $post, $update ) {
+	global $wpdb;
+
+	if (
+		PostType::QUESTION !== $post->post_type ||
+		( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ||
+		! current_user_can( 'edit_post', $post_id )
+	) {
+		return;
+	}
+
+	if ( isset( $_POST['question_title'] ) ) {
+		$editor_question_title = ( $_POST['question_title'] );
+
+		if ( $post->post_title !== $editor_question_title ) {
+			$wpdb->update(
+				$wpdb->posts,
+				array( 'post_title' => $editor_question_title ),
+				array( 'ID' => $post_id ),
+				array( '%s' ),
+				array( '%d' )
+			);
+
+			clean_post_cache( $post_id );
+		}
+	}
+}
+add_action( 'save_post', 'masterstudy_plugin_save_questions_custom_title', 10, 3 );
+

@@ -40,7 +40,7 @@ foreach ( $courses as $course ) {
 						)
 					);
 				}
-				if ( ! empty( $card_data['show_rating'] ) ) {
+				if ( ! empty( $card_data['show_rating'] ) && $course['reviews_show'] ) {
 					STM_LMS_Templates::show_lms_template(
 						'elementor-widgets/courses/card/global/rating',
 						array(

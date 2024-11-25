@@ -58,6 +58,7 @@ class STM_LMS_Courses {
 		$course['is_sale_active'] = STM_LMS_Helpers::is_sale_price_active( $course['id'] );
 		$course['is_trial']       = get_post_meta( $course['id'], 'shareware', true );
 		$course['availability']   = get_post_meta( $course['id'], 'coming_soon_status', true );
+		$course['reviews_show']   = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 		$progress                 = 0;
 		if ( ! empty( $course_image_size['width'] ) || ! empty( $course_image_size['height'] ) ) {
 			$course_image_size['width']  = ! empty( $course_image_size['width'] ) ? $course_image_size['width'] : 0;

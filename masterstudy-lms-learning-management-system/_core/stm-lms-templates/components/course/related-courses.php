@@ -9,6 +9,7 @@ use MasterStudy\Lms\Repositories\CourseRepository;
 $courses_per_page  = isset( $courses_per_page ) ? $courses_per_page : 3;
 $related_option    = STM_LMS_Options::get_option( 'related_option', 'by_category' );
 $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
+$course_reviews    = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 $args              = array(
 	'posts_per_page' => $courses_per_page,
 	'exclude'        => array( $course->id ),
@@ -114,14 +115,14 @@ if ( ! empty( $course_ids ) ) { ?>
 										<?php
 									}
 								}
-								if ( ! empty( $related_course->rate ) && ! $related_course->is_udemy_course ) {
+								if ( ! empty( $related_course->rate ) && ! $related_course->is_udemy_course && $course_reviews ) {
 									?>
 									<div class="masterstudy-related-courses__rating">
 										<?php foreach ( $stars as $star ) { ?>
 											<span class="masterstudy-related-courses__rating-star <?php echo esc_attr( ( $star <= floor( $related_course->rate['average'] ) ) ? 'masterstudy-related-courses__rating-star_filled' : '' ); ?>"></span>
 										<?php } ?>
 									</div>
-								<?php } elseif ( ! empty( $related_course->rate ) && $related_course->is_udemy_course ) { ?>
+								<?php } elseif ( ! empty( $related_course->rate ) && $related_course->is_udemy_course && $course_reviews ) { ?>
 									<div class="masterstudy-related-courses__rating">
 										<?php foreach ( $stars as $star ) { ?>
 											<span class="masterstudy-related-courses__rating-star <?php echo esc_attr( ( $star <= floor( $related_course->udemy_rate ) ) ? 'masterstudy-related-courses__rating-star_filled' : '' ); ?>"></span>
