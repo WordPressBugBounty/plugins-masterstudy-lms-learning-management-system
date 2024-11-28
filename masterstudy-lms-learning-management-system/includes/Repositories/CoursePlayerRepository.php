@@ -251,7 +251,7 @@ final class CoursePlayerRepository {
 								$bank_args['orderby'] = 'rand';
 							}
 
-							if ( ! empty( $sequence ) && is_array( $sequence ) ) {
+							if ( ! empty( $sequence ) && is_array( $sequence ) && isset( $sequence[ $question['id'] ] ) ) {
 								$bank_args = array(
 									'post_type'      => 'stm-questions',
 									'post__in'       => $sequence[ $question['id'] ],

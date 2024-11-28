@@ -57,7 +57,7 @@ class StmStatisticsListTable extends WP_List_Table {
 					$total += floatval( $order_total );
 				}
 			}
-			if ( ! empty( $woo_order ) && 'completed' === wc_get_order( $order )->get_status() ) {
+			if ( ! empty( $woo_order ) && class_exists( 'WooCommerce' ) && 'completed' === wc_get_order( $order )->get_status() ) {
 				$order_total = 0;
 				if ( is_array( $woo_order ) ) {
 					foreach ( $woo_order as $item ) {
@@ -407,8 +407,12 @@ class StmStatisticsListTable extends WP_List_Table {
 			$user  = get_userdata( $item->post_author );
 			$items = $this->removeDuplicates( $items, 'order_id' );
 
-			if ( ! empty( $item->meta_value[0] ) && ! empty( $item->meta_value[0]['price'] ) && ! empty( $item->meta_value[0]['quantity'] ) ) {
-				$price = ( $item->meta_value[0]['price'] * $item->meta_value[0]['quantity'] ) . ' ' . get_woocommerce_currency_symbol();
+			if ( class_exists( 'WooCommerce' ) ) {
+				if ( ! empty( $item->meta_value[0] ) && ! empty( $item->meta_value[0]['price'] ) && ! empty( $item->meta_value[0]['quantity'] ) ) {
+					$price = ( $item->meta_value[0]['price'] * $item->meta_value[0]['quantity'] ) . ' ' . get_woocommerce_currency_symbol();
+				}
+			} else {
+				$price = esc_html__( 'Activate WooCommerce to see the price', 'masterstudy-lms-learning-management-system' );
 			}
 
 			if ( ! empty( $item->meta_value[0]['price'] ) && empty( $items ) ) {

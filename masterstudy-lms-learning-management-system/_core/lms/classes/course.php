@@ -270,6 +270,15 @@ class STM_LMS_Course {
 		return ( empty( $settings['courses_page'] ) ) ? home_url( '/' ) : get_the_permalink( $settings['courses_page'] );
 	}
 
+	public static function is_course_complete( $user_id, $course_id ) {
+		$total_progress = STM_LMS_Lesson::get_total_progress( $user_id ?? null, $course_id );
+		if ( ! empty( $total_progress['course']['progress_percent'] ) ) {
+			return $total_progress['course']['progress_percent'] >= STM_LMS_Options::get_option( 'certificate_threshold', 70 );
+		}
+
+		return false;
+	}
+
 	public static function certificates_page_url( $course_id = '' ) {
 		$pages_config = STM_LMS_Page_Router::pages_config();
 

@@ -177,7 +177,10 @@ var jsPDF = window.jspdf.jsPDF;
           doc.setTextColor(field.styles.color.hex);
           doc.setFontSize(fontSize * 1.4);
           doc.setFont(field.styles.fontFamily, fontStyle);
-          doc.text(field.content, x, y, options);
+          var lines = field.content.split('\n');
+          lines.forEach(function (line, index) {
+            doc.text(line, x, y + index * fontSize * options.lineHeightFactor, options);
+          });
         };
       }
       return Promise.resolve(null);
