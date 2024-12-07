@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.4.15
+Stable tag: 3.4.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,9 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.4.16 - 2024-12-07 =
+- **Fix:** Small bug fixes.
+
 = 3.4.15 - 2024-11-28 =
 - **Fix:** Fixed image versions of Single and Multi Choice questions not displaying in the Question Bank for quizzes.
 - **Fix:** Fixed an error appearing below the title bar in quiz lessons for Image Match questions in the Question Bank.
@@ -329,9 +332,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Enhancement:** The "Send Message" button in the public account is now visible to guest users, clicking it opens the authorization popup.
 - **Enhancement:** Instructors can now upload a cover image for their public account in Profile settings.
 - **Enhancement:** Added the option to disable both Instructor and Student public accounts.
-
-= 3.4.9 - 2024-10-30 =
-- **Enhancement:** Added visual improvements for the My Orders section. (Pro)
-- **Fix:** Small bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
