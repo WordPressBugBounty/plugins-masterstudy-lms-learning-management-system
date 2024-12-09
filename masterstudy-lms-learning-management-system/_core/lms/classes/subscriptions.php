@@ -347,7 +347,7 @@ class STM_LMS_Subscriptions {
 
 	public static function get_course_number( $level_id ) {
 		$course_limit = get_option( 'stm_lms_course_number_' . $level_id, 0 );
-		if ( 'unlim' === $course_limit ) {
+		if ( 'unlim' === $course_limit || 'unlimited' === $course_limit ) {
 			$course_limit = 1000001;
 		}
 		return $course_limit;

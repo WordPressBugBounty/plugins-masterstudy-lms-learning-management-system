@@ -108,7 +108,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   var detailsContainer = $(clone).find(".masterstudy-orders-course-info__details");
                   var button = detailsContainer.find(".masterstudy-button");
                   if (button.length > 0) {
-                    button.attr("href", "/woocommerce-order-details/".concat(order.id));
+                    var baseUrl = "".concat(window.location.origin).concat(window.location.pathname.split('/').slice(0, 2).join('/'));
+                    button.attr("href", "".concat(baseUrl, "/woocommerce-order-details/").concat(order.id));
                   }
                   $(".masterstudy-orders-container").append(clone);
                 });

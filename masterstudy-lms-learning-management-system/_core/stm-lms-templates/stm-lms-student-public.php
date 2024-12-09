@@ -42,6 +42,7 @@ $args        = array(
 	'status' => 'completed',
 );
 $courses     = STM_LMS_Courses::get_student_courses( $args );
+$logged_in   = is_user_logged_in();
 $user_info   = get_userdata( $student['id'] );
 $stats_types = array(
 	array(
@@ -76,6 +77,15 @@ $stats_types = array_filter(
 		return $type['is_visible'];
 	}
 );
+
+STM_LMS_Templates::show_lms_template(
+	'components/modals/message',
+	array(
+		'username'  => $student['login'],
+		'user_id'   => $user_id,
+		'logged_in' => $logged_in,
+	)
+);
 ?>
 
 <div class="masterstudy-student-public <?php echo esc_attr( 'masterstudy-student-public_' . $profile_style ); ?>">
@@ -100,16 +110,33 @@ $stats_types = array_filter(
 						?>
 					</div>
 				</div>
-				<?php if ( 'extended' === $profile_style ) { ?>
-					<div class="masterstudy-student-public__details">
-						<span class="masterstudy-student-public__details-show">
-							<?php echo esc_html__( 'Show Details', 'masterstudy-lms-learning-management-system' ); ?>
-						</span>
-						<span class="masterstudy-student-public__details-hide">
-							<?php echo esc_html__( 'Hide Details', 'masterstudy-lms-learning-management-system' ); ?>
-						</span>
-					</div>
-				<?php } ?>
+				<div class="masterstudy-student-public__actions">
+					<?php
+					$button_args = array(
+						'title' => esc_html__( 'Send message', 'masterstudy-lms-learning-management-system' ),
+						'link'  => '#',
+						'style' => 'primary',
+						'size'  => 'sm',
+						'id'    => 'masterstudy-student-message-send',
+					);
+
+					if ( ! $logged_in ) {
+						$button_args['login'] = 'login';
+					}
+
+					STM_LMS_Templates::show_lms_template( 'components/button', $button_args );
+					if ( 'extended' === $profile_style ) {
+						?>
+						<div class="masterstudy-student-public__details">
+							<span class="masterstudy-student-public__details-show">
+								<?php echo esc_html__( 'Show Details', 'masterstudy-lms-learning-management-system' ); ?>
+							</span>
+							<span class="masterstudy-student-public__details-hide">
+								<?php echo esc_html__( 'Hide Details', 'masterstudy-lms-learning-management-system' ); ?>
+							</span>
+						</div>
+					<?php } ?>
+				</div>
 			</div>
 			<?php if ( $show_stats ) { ?>
 				<div class="masterstudy-student-public__stats">

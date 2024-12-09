@@ -15,12 +15,42 @@ class Taxonomy {
 	public const COURSE_CATEGORY_DEFAULT_SLUG = 'stm_lms_course_category';
 
 	public static function add_fields( $taxonomy ) {
-		add_action( "{$taxonomy}_add_form_fields", array( __CLASS__, "add_{$taxonomy}_fields" ), 10, 2 );
-		add_action( "{$taxonomy}_edit_form_fields", array( __CLASS__, "edit_{$taxonomy}_fields" ), 10, 2 );
-		add_action( "create_{$taxonomy}", array( __CLASS__, "save_{$taxonomy}_fields" ), 10, 2 );
-		add_action( "edited_{$taxonomy}", array( __CLASS__, "save_{$taxonomy}_fields" ), 10, 2 );
-		add_action( "manage_edit-{$taxonomy}_columns", array( __CLASS__, "add_{$taxonomy}_columns" ), 10, 2 );
-		add_action( "manage_{$taxonomy}_custom_column", array( __CLASS__, "fill_{$taxonomy}_columns" ), 10, 3 );
+		add_action( 'stm_lms_course_taxonomy_add_form_fields', array( __CLASS__, 'add_stm_lms_course_taxonomy_fields' ), 10, 2 );
+		add_action( 'stm_lms_course_taxonomy_edit_form_fields', array( __CLASS__, 'edit_stm_lms_course_taxonomy_fields' ), 10, 2 );
+		add_action( 'create_stm_lms_course_taxonomy', array( __CLASS__, 'save_stm_lms_course_taxonomy_fields' ), 10, 2 );
+		add_action( 'edited_stm_lms_course_taxonomy', array( __CLASS__, 'save_stm_lms_course_taxonomy_fields' ), 10, 2 );
+		add_filter(
+			"manage_edit-{$taxonomy}_columns",
+			function ( $columns ) use ( $taxonomy ) {
+				return self::add_columns( $columns, $taxonomy );
+			},
+			10,
+			2
+		);
+		add_action(
+			"manage_{$taxonomy}_custom_column",
+			function ( $content, $column_name, $term_id ) use ( $taxonomy ) {
+				return self::fill_columns( $content, $column_name, $term_id, $taxonomy );
+			},
+			10,
+			4
+		);
+		add_action(
+			'pre_get_terms',
+			function ( $query ) use ( $taxonomy ) {
+				self::query_columns( $query, $taxonomy );
+			},
+			10,
+			2
+		);
+		add_filter(
+			"manage_edit-{$taxonomy}_sortable_columns",
+			function ( $columns ) use ( $taxonomy ) {
+				return self::sort_columns( $columns, $taxonomy );
+			},
+			10,
+			2
+		);
 	}
 
 	/**
@@ -200,28 +230,72 @@ class Taxonomy {
 		}
 	}
 
-	public static function add_stm_lms_course_taxonomy_columns( $columns ) {
-		$new_columns = array();
-		foreach ( $columns as $key => $value ) {
-			if ( 'posts' === $key ) {
-				$new_columns['course_page_style'] = __( 'Course page style', 'masterstudy-lms-learning-management-system' );
-			}
-			$new_columns[ $key ] = $value;
+	public static function add_columns( $columns, $taxonomy ) {
+		unset( $columns['posts'] );
+
+		if ( 'stm_lms_course_taxonomy' === $taxonomy ) {
+			$columns['course_page_style']         = __( 'Course page style', 'masterstudy-lms-learning-management-system' );
+			$columns['masterstudy_courses_count'] = __( 'Count', 'masterstudy-lms-learning-management-system' );
+		} elseif ( 'stm_lms_question_taxonomy' === $taxonomy ) {
+			$columns['masterstudy_questions_count'] = __( 'Count', 'masterstudy-lms-learning-management-system' );
 		}
 
-		return $new_columns;
+		return $columns;
 	}
 
-	public static function fill_stm_lms_course_taxonomy_columns( $content, $column_name, $term_id ) {
-		if ( 'course_page_style' === $column_name ) {
+	public static function fill_columns( $content, $column_name, $term_id, $taxonomy ) {
+		if ( 'course_page_style' === $column_name && 'stm_lms_course_taxonomy' === $taxonomy ) {
 			$page_styles   = \STM_LMS_Helpers::get_course_page_styles();
 			$current_style = get_term_meta( $term_id, 'course_page_style', true );
-			if ( ! $current_style ) {
-				$current_style = '—';
+			$content       = isset( $page_styles[ $current_style ] ) ? esc_html( $page_styles[ $current_style ] ) : '—';
+		}
+
+		if ( in_array( $column_name, array( 'masterstudy_courses_count', 'masterstudy_questions_count' ), true ) ) {
+			$post_type     = 'stm-courses';
+			$taxonomy_slug = 'stm_lms_course_taxonomy';
+
+			if ( 'masterstudy_questions_count' === $column_name ) {
+				$post_type     = 'stm-questions';
+				$taxonomy_slug = 'stm_lms_question_taxonomy';
 			}
-			$content = isset( $page_styles[ $current_style ] ) ? esc_html( $page_styles[ $current_style ] ) : '-';
+
+			$term    = get_term_by( 'id', $term_id, $taxonomy_slug );
+			$new_url = add_query_arg(
+				array(
+					'post_type'    => $post_type,
+					$taxonomy_slug => $term->slug,
+				),
+				admin_url( 'edit.php' )
+			);
+
+			$content = sprintf( '<a href="%s">%d</a>', esc_url( $new_url ), $term->count );
 		}
 
 		return $content;
+	}
+
+	public static function sort_columns( $columns, $taxonomy ) {
+		if ( 'stm_lms_course_taxonomy' === $taxonomy ) {
+			$columns['masterstudy_courses_count'] = 'masterstudy_courses_count';
+		} elseif ( 'stm_lms_question_taxonomy' === $taxonomy ) {
+			$columns['masterstudy_questions_count'] = 'masterstudy_questions_count';
+		}
+
+		return $columns;
+	}
+
+	public static function query_columns( $query, $taxonomy ) {
+		if ( ! isset( $query->query_vars['taxonomy'] ) || ! in_array( $taxonomy, $query->query_vars['taxonomy'] ) ) {
+			return;
+		}
+
+		$order_by_key = 'stm_lms_course_taxonomy' === $taxonomy ? 'masterstudy_courses_count' : 'masterstudy_questions_count';
+
+		if ( isset( $query->query_vars['orderby'] ) && $order_by_key === $query->query_vars['orderby'] ) {
+			$order = isset( $query->query_vars['order'] ) && 'desc' === $query->query_vars['order'] ? 'desc' : 'asc';
+
+			$query->query_vars['orderby'] = 'count';
+			$query->query_vars['order']   = $order;
+		}
 	}
 }

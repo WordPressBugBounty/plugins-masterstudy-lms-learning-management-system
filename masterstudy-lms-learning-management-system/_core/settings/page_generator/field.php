@@ -16,7 +16,7 @@ $has_archive_pages = stm_lms_has_generated_archive_pages( stm_lms_archive_page_l
 if ( ! $has_pages || ! $has_archive_pages ) { ?>
 	<stm_lms_page_generator v-bind:field_data="<?php echo esc_attr( $field ); ?>['options']" inline-template>
 		<div class="stm_lms_page_generator">
-			<p><?php esc_html_e( 'Create LMS system pages automatically. Dont forget to re-save permalinks after operation.' ); ?></p>
+			<p><?php esc_html_e( 'Create LMS system pages automatically. Dont forget to re-save permalinks after operation.', 'masterstudy-lms-learning-management-system' ); ?></p>
 			<a href="#" class="button" @click.prevent="generatePages" v-bind:class="{'loading' : loading}">
 				<span><?php esc_html_e( 'Generate pages', 'masterstudy-lms-learning-management-system' ); ?></span>
 				<i class="stmlms-sync"></i>

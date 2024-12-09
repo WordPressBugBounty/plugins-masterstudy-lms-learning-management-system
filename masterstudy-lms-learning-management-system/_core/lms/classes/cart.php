@@ -4,7 +4,6 @@ STM_LMS_Cart::init();
 
 class STM_LMS_Cart {
 
-
 	public static function init() {
 		add_action( 'wp_ajax_stm_lms_add_to_cart', 'STM_LMS_Cart::add_to_cart' );
 		add_action( 'wp_ajax_nopriv_stm_lms_add_to_cart', 'STM_LMS_Cart::add_to_cart' );
@@ -278,6 +277,10 @@ class STM_LMS_Cart {
 				$r['url']     = $checkout_url . "/masterstudy-orders-received/{$order_id}/?key={$order_key}";
 			}
 		}
+
+		do_action( 'stm_lms_purchase_action_done', $user_id );
+
+		do_action( 'masterstudy_lms_order_completed', $user_id, $cart_items, $payment_code, $invoice );
 
 		wp_send_json( apply_filters( 'stm_lms_purchase_done', $r ) );
 		die;

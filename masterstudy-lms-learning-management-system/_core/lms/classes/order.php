@@ -75,6 +75,7 @@ class STM_LMS_Order {
 					'title'           => get_the_title( $course['item_id'] ),
 					'link'            => get_the_permalink( $course['item_id'] ),
 					'image'           => get_the_post_thumbnail( $course['item_id'], 'img-300-225' ),
+					'image_url'       => get_the_post_thumbnail_url( $course['item_id'] ),
 					'image_full'      => get_the_post_thumbnail( $course['item_id'], 'full' ),
 					'placeholder'     => STM_LMS_URL . '/assets/img/image_not_found.png',
 					'price'           => $course['price'],
@@ -460,7 +461,8 @@ class STM_LMS_Order {
 				echo wp_kses_post( $title );
 				break;
 			case 'order_status':
-				echo wp_kses_post( "<span class='stm_lms_status stm_lms_status_{$order_meta['status']}'>{$order_meta['status']}</span>" );
+				$status = isset( $order_meta['status'] ) ? $order_meta['status'] : '';
+				echo wp_kses_post( "<span class='stm_lms_status stm_lms_status_{$status}'>{$status}</span>" );
 				break;
 		}
 	}

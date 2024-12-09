@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.4.16
+Stable tag: 3.4.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,19 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.4.17 - 2024-12-09 =
+- **New feature:** Added a new email order template in the Orders section for instructors.
+- **New feature:** Redesigned Email Order templates for students and admins.
+- **Enhancement:** Enabled sending messages to a student’s public account for direct communication.
+- **Enhancement:** Added ability to translate hardcoded text in the plugin.
+- **Fix:** Resolved a potential math calculation issue in PMPro when writing 'unlimited' instead of 'unlim.'
+- **Fix:** Fixed an issue where student email addresses were exposed when uploading comments.
+- **Fix:** Resolved an issue where the number of Course categories in admin panel redirected to the Posts page.
+- **Fix:** Fixed missing Advanced Tab in Gutenberg editor when plugins are active.
+- **Fix:** Fixed multiple issues in the Cart functionality.
+- **Fix:** Fixed audio playback issues in audio lessons when lesson materials were present.
+- **Fix:** Corrected display issues for single and multi-image choice questions in quiz attempts in Manage Students section.
+
 = 3.4.16 - 2024-12-07 =
 - **Fix:** Small bug fixes.
 
@@ -318,19 +331,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.4.13 - 2024-11-20 =
 - **New feature:** Introduced new Sales page for instructors to manage course sales. (Pro)
-
-= 3.4.12 - 2024-11-14 =
-- **Fix:** Small bug fixes.
-
-= 3.4.11 - 2024-11-08 =
-- **Fix:** Corrected style 4 for Courses Categories widget.
-
-= 3.4.10 - 2024-11-07 =
-- **Enhancement:** Added public account for students with several display style options.
-- **Enhancement:** Updated and improved the default style for instructor public account.
-- **Enhancement:** Added new visual styles for instructor public account.
-- **Enhancement:** The "Send Message" button in the public account is now visible to guest users, clicking it opens the authorization popup.
-- **Enhancement:** Instructors can now upload a cover image for their public account in Profile settings.
-- **Enhancement:** Added the option to disable both Instructor and Student public accounts.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

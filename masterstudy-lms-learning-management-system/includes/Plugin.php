@@ -89,5 +89,6 @@ final class Plugin {
 		}
 
 		Taxonomy::add_fields( Taxonomy::COURSE_CATEGORY );
+		Taxonomy::add_fields( Taxonomy::QUESTION_CATEGORY );
 	}
 }

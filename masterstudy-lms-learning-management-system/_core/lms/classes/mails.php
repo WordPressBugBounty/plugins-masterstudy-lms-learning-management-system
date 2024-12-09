@@ -4,7 +4,7 @@ STM_LMS_Mails::init();
 class STM_LMS_Mails {
 
 	public static function init() {
-		add_action( 'order_created', array( self::class, 'order_created' ), 10, 3 );
+		add_action( 'masterstudy_lms_order_completed', array( self::class, 'masterstudy_lms_order_completed' ), 10, 4 );
 		add_action( 'add_user_course', array( self::class, 'add_user_course' ), 10, 2 );
 		add_action( 'masterstudy_lms_course_saved', array( self::class, 'course_saved' ), 10, 2 );
 	}
@@ -13,21 +13,138 @@ class STM_LMS_Mails {
 		return 'text/html';
 	}
 
-	public static function order_created( $user, $cart_items, $payment_code ) {
-		$user = STM_LMS_User::get_current_user( $user );
+	public static function send_email_to_instructor( $cart_items, $user_login, $order_id, $settings, $template_name ) {
+		$instructor_items  = array();
+		$instructor_emails = array();
 
-		$user_login = $user['login'];
-		$message    = sprintf(
-			/* translators: %s User Login */
-			esc_html__( 'New Order from the user %s.', 'masterstudy-lms-learning-management-system' ),
-			$user_login
+		if ( ! empty( $cart_items ) ) {
+			foreach ( $cart_items as $item ) {
+				$item_id = $item['item_id'];
+				$post    = get_post( $item_id );
+
+				if ( $post ) {
+					$author_id = $post->post_author;
+					$author    = get_userdata( $author_id );
+
+					if ( in_array( 'stm_lms_instructor', $author->roles ) ) {
+						$instructor_email = $author->user_email;
+						if ( ! in_array( $instructor_email, $instructor_emails ) ) {
+							$instructor_emails[] = $instructor_email;
+						}
+						$instructor_items[ $instructor_email ][] = $item;
+					}
+				}
+			}
+		}
+		foreach ( $instructor_emails as $email ) {
+			if ( ! empty( $instructor_items[ $email ] ) ) {
+				self::process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_items[ $email ], $email, $settings );
+			}
+		}
+	}
+
+	public static function process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_emails, $email, $settings ) {
+		$message = str_replace(
+			array( '{{user_login}}', '{{site_url}}' ),
+			array( $user_login, '<a href="' . site_url() . '" target="_blank">' . get_bloginfo( 'name' ) . '</a>' ),
+			$settings['stm_lms_new_order_instructor'] ?? 'You made a Sale'
 		);
 
-		self::send_email( 'New Order', $message, '', array(), 'stm_lms_new_order', compact( 'user_login' ) );
+		$context = \STM_LMS_Templates::load_lms_template(
+			$template_name,
+			array(
+				'order_id'         => $order_id,
+				'message'          => $message,
+				'is_instructor'    => true,
+				'settings'         => $settings,
+				'instructor_items' => $instructor_emails, // Items specific to the instructor
+				'title'            => $settings['stm_lms_new_order_instructor_title'] ?? '',
+				'customer_section' => true,
+			)
+		);
 
-		$message = esc_html__( 'Your Order has been Accepted.', 'masterstudy-lms-learning-management-system' );
+		add_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
+		wp_mail( $email, $settings['stm_lms_new_order_instructor_subject'] ?? 'You made a Sale!', $context );
+		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
+	}
 
-		self::send_email( 'New Order', $message, $user['email'], array(), 'stm_lms_new_order_accepted' );
+	public static function send_email_to_admin( $user_login, $order_id, $settings, $template_name ) {
+		$message = str_replace(
+			array( '{{user_login}}', '{{site_url}}' ),
+			array( $user_login, '<a href="' . site_url() . '" target="_blank">' . get_bloginfo( 'name' ) . '</a>' ),
+			$settings['stm_lms_new_order'] ?? 'New Order'
+		);
+		$context = \STM_LMS_Templates::load_lms_template(
+			$template_name,
+			array(
+				'order_id'         => $order_id,
+				'message'          => $message,
+				'instructor_items' => array(),
+				'settings'         => $settings,
+				'is_instructor'    => false,
+				'title'            => $settings['stm_lms_new_order_title'] ?? '',
+				'customer_section' => true,
+			)
+		);
+
+		// Assume admin email is set in settings
+		$admin_email = $settings['admin_email'] ?? get_option( 'admin_email' );
+		add_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
+		wp_mail( $admin_email, $settings['stm_lms_new_order_subject'] ?? 'New Order Received', $context );
+		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
+	}
+
+	public static function send_email_to_student( $user, $order_id, $settings, $template_name ) {
+		$message = str_replace(
+			array( '{{user_login}}', '{{site_url}}' ),
+			array( $user['login'], '<a href="' . site_url() . '" target="_blank">' . get_bloginfo( 'name' ) . '</a>' ),
+			$settings['stm_lms_new_order_accepted'] ?? 'Your Order has been Accepted.'
+		);
+		$context = \STM_LMS_Templates::load_lms_template(
+			$template_name,
+			array(
+				'order_id'         => $order_id,
+				'instructor_items' => array(),
+				'is_instructor'    => false,
+				'settings'         => $settings,
+				'message'          => $message,
+				'title'            => $settings['stm_lms_new_order_accepted_title'] ?? 'Order Confirmation',
+				'customer_section' => false,
+			)
+		);
+
+		add_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
+		wp_mail( $user['email'], $settings['stm_lms_new_order_accepted_subject'] ?? 'Order Accepted', $context );
+		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
+	}
+
+	public static function masterstudy_lms_order_completed( $user, $cart_items, $payment_code, $order_id ) {
+		$settings      = class_exists( 'STM_LMS_Email_Manager' ) ? STM_LMS_Email_Manager::stm_lms_get_settings() : array();
+		$template_name = 'emails/order-template';
+
+		if ( STM_LMS_Helpers::is_pro_plus() && is_ms_lms_addon_enabled( 'email_manager' ) ) {
+			$template_name = 'emails/order-template-plus';
+		}
+
+		$user       = STM_LMS_User::get_current_user( $user );
+		$user_login = $user['login'];
+
+		$send_admin      = $settings['stm_lms_new_order_enable'] ?? true;
+		$send_instructor = $settings['stm_lms_new_order_instructor_enable'] ?? true;
+		$send_student    = $settings['stm_lms_new_order_accepted_enable'] ?? true;
+
+		if ( $send_instructor ) {
+			self::send_email_to_instructor( $cart_items, $user_login, $order_id, $settings, $template_name );
+		}
+
+		if ( $send_admin ) {
+			self::send_email_to_admin( $user_login, $order_id, $settings, $template_name );
+		}
+
+		if ( $send_student ) {
+			self::send_email_to_student( $user, $order_id, $settings, $template_name );
+		}
+
 	}
 
 	public static function add_user_course( $user_id, $course_id ) {

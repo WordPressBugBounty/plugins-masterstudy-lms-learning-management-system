@@ -12,7 +12,7 @@
         $('body').removeClass('masterstudy-message-modal-body-hidden');
       }
     });
-    $('.masterstudy-instructor-public__actions .masterstudy-button').on('click', function (e) {
+    $('.masterstudy-instructor-public__actions .masterstudy-button, .masterstudy-student-public__actions .masterstudy-button').on('click', function (e) {
       e.preventDefault();
       if (message_modal_data.logged_in) {
         messageModal.addClass('masterstudy-message-modal_open');

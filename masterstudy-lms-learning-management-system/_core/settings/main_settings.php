@@ -13,7 +13,7 @@ add_filter(
 			'sub_title'   => esc_html__( 'by StylemixThemes', 'masterstudy-lms-learning-management-system' ),
 			'logo'        => STM_LMS_URL . 'assets/admin/icon.svg',
 			'page'        => array(
-				'page_title' => 'Settings',
+				'page_title' => esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ),
 				'menu_title' => 'MS LMS',
 				'menu_slug'  => 'stm-lms-settings',
 				'icon'       => STM_LMS_URL . 'assets/admin/icon.png',
@@ -99,7 +99,7 @@ add_action(
 		add_submenu_page(
 			'stm-lms-settings',
 			'MasterStudy',
-			'<span class="stm-lms-settings-menu-title">Settings</span>',
+			'<span class="stm-lms-settings-menu-title">' . esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ) . '</span>',
 			'manage_options',
 			'stm-lms-settings',
 		);
@@ -107,8 +107,8 @@ add_action(
 		if ( ! STM_LMS_Helpers::is_theme_activated() ) {
 			add_submenu_page(
 				'stm-lms-settings',
-				'MasterStudy templates',
-				'<span class="stm-lms-templates-menu-title">MasterStudy <strong>Templates</strong></span>',
+				esc_html__( 'MasterStudy templates', 'masterstudy-lms-learning-management-system' ),
+				'<span class="stm-lms-templates-menu-title">' . esc_html__( 'MasterStudy', 'masterstudy-lms-learning-management-system' ) . ' <strong>' . esc_html__( 'Templates', 'masterstudy-lms-learning-management-system' ) . '</strong></span>',
 				'manage_options',
 				'admin.php?page=masterstudy-starter-demo-import',
 			);
@@ -203,6 +203,6 @@ add_action( 'admin_footer', 'stm_lms_render_feature_request' );
 function stm_lms_render_feature_request() {
 	echo '<a id="feature-request" href="https://stylemixthemes.cnflx.io/boards/masterstudy-lms" target="_blank" style="display: none;">
 		<img src=' . esc_url( STM_LMS_URL . 'assets/svg/feature-request.svg' ) . '>
-		<span>Create a roadmap with us:<br>Vote for next feature</span>
+		<span>' . esc_html__( 'Create a roadmap with us:<br>Vote for next feature', 'masterstudy-lms-learning-management-system' ) . '</span>
 	</a>';
 }

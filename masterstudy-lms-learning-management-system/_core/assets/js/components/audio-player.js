@@ -16,6 +16,13 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
   function MasterstudyAudioPlayer(player, options) {
     _classCallCheck(this, MasterstudyAudioPlayer);
     this.audioPlayer = typeof player === 'string' ? document.querySelector(player) : player;
+
+    // Prevent duplicate initialization
+    if (this.audioPlayer.dataset.initialized) {
+      console.warn('Player already initialized.');
+      return;
+    }
+    this.audioPlayer.dataset.initialized = true;
     var opts = options || {};
     this.audioPlayer.classList.add('masterstudy-audio-player');
     this.isDevice = /ipad|iphone|ipod|android/i.test(window.navigator.userAgent.toLowerCase()) && !window.MSStream;
@@ -42,7 +49,6 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
     this.showTooltips = opts.showTooltips || false;
     this.showDeleteButton = opts.showDeleteButton || false;
     this.playbackSpeedSelect = document.getElementById('playback-speed');
-    // Attach event listener to playback speed select element
     if (this.playbackSpeedSelect) {
       this.playbackSpeedSelect.addEventListener('change', this.changePlaybackSpeed.bind(this));
     }
@@ -98,7 +104,6 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
           self.playPauseBtn.setAttribute('aria-label', self.labels.pause);
           self.hasSetAttribute(self.playPauseBtn, 'title', self.labels.pause);
         })["catch"](function () {
-          // eslint-disable-next-line no-console
           console.error('MasterStudy Audio Player Error: Autoplay has been prevented, because it is not allowed by this browser.');
         });
       }

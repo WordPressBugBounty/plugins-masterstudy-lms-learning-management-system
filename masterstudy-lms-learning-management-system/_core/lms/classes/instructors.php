@@ -406,14 +406,15 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					continue;
 				}
 
-				$rating       = get_post_meta( $id, 'course_marks', true );
-				$rates        = STM_LMS_Course::course_average_rate( $rating );
-				$average      = $rates['average'];
-				$percent      = $rates['percent'];
-				$status       = get_post_status( $id );
-				$price        = get_post_meta( $id, 'price', true );
-				$availability = get_post_meta( $id, 'coming_soon_status', true );
-				$sale_price   = get_post_meta( $id, 'sale_price', true );
+				$rating            = get_post_meta( $id, 'course_marks', true );
+				$rates             = STM_LMS_Course::course_average_rate( $rating );
+				$average           = $rates['average'];
+				$percent           = $rates['percent'];
+				$status            = get_post_status( $id );
+				$price             = get_post_meta( $id, 'price', true );
+				$availability      = get_post_meta( $id, 'coming_soon_status', true );
+				$sale_price        = get_post_meta( $id, 'sale_price', true );
+				$sale_price_active = STM_LMS_Helpers::is_sale_price_active( $id );
 
 				switch ( $status ) {
 					case 'publish':
@@ -452,7 +453,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					'total'                       => $rating_count,
 					'views'                       => STM_LMS_Course::get_course_views( $id ),
 					'price'                       => STM_LMS_Helpers::display_price( $price ),
-					'simple_price'                => $sale_price ? $sale_price : $price,
+					'simple_price'                => $sale_price_active && $sale_price ? $sale_price : $price,
 					'sale_price'                  => $sale_price ? STM_LMS_Helpers::display_price( $sale_price ) : 0,
 					'edit_link'                   => ms_plugin_manage_course_url() . "/$id",
 					'coming_soon_link'            => ms_plugin_manage_course_url() . "/$id/settings/access",
@@ -465,7 +466,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					$post = apply_filters( 'masterstudy_add_analytics_link', $post, $id );
 				}
 
-				$post['sale_price'] = ( ! empty( $sale_price ) ) ? STM_LMS_Helpers::display_price( $sale_price ) : '';
+				$post['sale_price'] = ( $sale_price_active && ! empty( $sale_price ) ) ? STM_LMS_Helpers::display_price( $sale_price ) : '';
 				$result['posts'][]  = $post;
 			}
 		}

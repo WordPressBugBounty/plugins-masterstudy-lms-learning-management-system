@@ -297,6 +297,10 @@ class STM_LMS_Comments {
 			'replies'       => array(),
 		);
 
+		if ( isset( $post['author']['email'] ) ) {
+			unset( $post['author']['email'] );
+		}
+
 		$post['author']['is_instructor'] = ( get_post_field( 'post_author', $lesson_id ) === $comment->user_id ) ? __( 'Instructor', 'masterstudy-lms-learning-management-system' ) : '';
 
 		if ( empty( $search ) && ! empty( $replies ) ) {
