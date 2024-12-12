@@ -29,3 +29,8 @@ if ( is_admin() ) {
 	require_once STM_LMS_LIBRARY . '/db/tables/curriculum_materials.table.php';
 	require_once STM_LMS_LIBRARY . '/db/tables/order_items.table.php';
 }
+
+// Load LMS Pro tables
+if ( defined( 'STM_LMS_PRO_PATH' ) ) {
+	require_once STM_LMS_LIBRARY . '/db/tables/user_assignments.table.php';
+}

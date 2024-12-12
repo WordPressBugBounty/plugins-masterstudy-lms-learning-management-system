@@ -1,5 +1,6 @@
 <?php
 
+use MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository;
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Repositories\CurriculumRepository;
 
@@ -193,18 +194,27 @@ class STM_LMS_User_Manager_Course_User {
 			'post_title'  => "{$user['login']} on \"{$assignment_name}\"",
 		);
 
-		$assignment_id = wp_insert_post( $new_assignment );
-
-		update_post_meta( $assignment_id, 'try_num', $assignment_try );
-		update_post_meta( $assignment_id, 'start_time', time() * 1000 );
-		update_post_meta( $assignment_id, 'status', '' );
-		update_post_meta( $assignment_id, 'assignment_id', $lesson_id );
-		update_post_meta( $assignment_id, 'student_id', $user_id );
-		update_post_meta( $assignment_id, 'course_id', $course_id );
+		$assignment_id  = wp_insert_post( $new_assignment );
 		$status         = $completed ? 'passed' : 'not_passed';
 		$editor_comment = ( $completed ) ? esc_html__( 'Approved by admin', 'masterstudy-lms-learning-management-system' ) : esc_html__( 'Declined by admin', 'masterstudy-lms-learning-management-system' );
 
+		( new AssignmentStudentRepository() )->add_assignment(
+			$user_id,
+			$course_id,
+			$lesson_id,
+			$assignment_id,
+			$status,
+			100
+		);
+
+		STM_LMS_Course::update_course_progress( $user_id, $course_id );
+
+		update_post_meta( $assignment_id, 'try_num', $assignment_try );
+		update_post_meta( $assignment_id, 'start_time', time() * 1000 );
 		update_post_meta( $assignment_id, 'status', $status );
+		update_post_meta( $assignment_id, 'assignment_id', $lesson_id );
+		update_post_meta( $assignment_id, 'student_id', $user_id );
+		update_post_meta( $assignment_id, 'course_id', $course_id );
 		update_post_meta( $assignment_id, 'editor_comment', $editor_comment );
 	}
 
@@ -263,7 +273,9 @@ class STM_LMS_User_Manager_Course_User {
 
 		} elseif ( 'stm-assignments' === $material['post_type'] ) {
 			$type      = 'assignment';
-			$completed = class_exists( 'STM_LMS_Assignments' ) && STM_LMS_Assignments::has_passed_assignment( $material['post_id'], $student_id );
+			$completed = class_exists( '\MasterStudy\Lms\Pro\addons\assignments\Assignments' )
+				&& method_exists( '\MasterStudy\Lms\Pro\addons\assignments\Assignments', 'has_passed_assignment' )
+				&& ( new AssignmentStudentRepository() )->has_passed_assignment( $material['post_id'], $student_id, $course_id );
 		} else {
 			$completed = STM_LMS_Lesson::is_lesson_completed( $user_id, $course_id, $material['post_id'] );
 			$type      = get_post_meta( $material['post_id'], 'type', true );

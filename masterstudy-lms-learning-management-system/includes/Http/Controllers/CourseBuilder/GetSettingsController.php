@@ -22,6 +22,7 @@ final class GetSettingsController {
 				'course_page_urls'               => STM_LMS_URL . '/assets/img/course/',
 				'currency_symbol'                => \STM_LMS_Options::get_option( 'currency_symbol', '$' ),
 				'quiz_attempts'                  => \STM_LMS_Options::get_option( 'quiz_attempts', false ),
+				'grades_table'                   => \STM_LMS_Options::get_option( 'grades_table', stm_lms_settings_grades_default_values() ),
 				'presto_player_allowed'          => apply_filters( 'ms_plugin_presto_player_allowed', false ),
 			)
 		);
@@ -47,6 +48,7 @@ final class GetSettingsController {
 						? admin_url( 'admin.php?page=stm-addons' )
 						: admin_url( 'admin.php?page=stm-lms-go-pro' ),
 					'plugins'         => admin_url( 'plugins.php' ),
+					'settings'        => admin_url( 'admin.php?page=stm-lms-settings' ),
 				),
 				'lesson_types'        => $lesson_types,
 				'video_sources'       => apply_filters( 'masterstudy_lms_lesson_video_sources', array() ),

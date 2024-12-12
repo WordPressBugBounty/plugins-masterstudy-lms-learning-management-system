@@ -1,7 +1,7 @@
 <?php
 
 add_action(
-	'plugins_loaded',
+	'admin_init',
 	function() {
 		if ( class_exists( 'STMBulkNotices' ) ) {
 			$bulk_data = array(

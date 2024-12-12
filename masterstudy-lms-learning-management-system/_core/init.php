@@ -3,20 +3,12 @@ define( 'STM_LMS_FILE', __FILE__ );
 define( 'STM_LMS_DIR', __DIR__ );
 define( 'STM_LMS_PATH', dirname( STM_LMS_FILE ) );
 define( 'STM_LMS_URL', plugin_dir_url( STM_LMS_FILE ) );
-define( 'STM_LMS_VERSION', '3.4.17' );
-define( 'STM_LMS_DB_VERSION', '3.4.10' );
+define( 'STM_LMS_VERSION', '3.5.0' );
+define( 'STM_LMS_DB_VERSION', '3.5.0' );
 define( 'STM_LMS_BASE_API_URL', '/wp-json/lms' );
 define( 'STM_LMS_LIBRARY', STM_LMS_PATH . '/libraries' );
 define( 'STM_LMS_LIBRARY_URL', STM_LMS_URL . 'libraries/' );
 define( 'STM_LMS_ELEMENTOR_WIDGETS', STM_LMS_PATH . '/includes/elementor/widgets' );
-
-if ( ! is_textdomain_loaded( 'masterstudy-lms-learning-management-system' ) ) {
-	load_plugin_textdomain(
-		'masterstudy-lms-learning-management-system',
-		false,
-		'masterstudy-lms-learning-management-system/languages'
-	);
-}
 
 require_once STM_LMS_PATH . '/lms/classes/vendor/autoload.php';
 require_once STM_LMS_PATH . '/lms/classes/abstract/autoload.php';
@@ -45,6 +37,7 @@ if ( did_action( 'elementor/loaded' ) ) {
 require_once STM_LMS_PATH . '/settings/answers/main.php';
 require_once STM_LMS_PATH . '/settings/order/main.php';
 require_once STM_LMS_PATH . '/settings/custom_fields/send_email/main.php';
+require_once STM_LMS_PATH . '/settings/custom_fields/grades_table/main.php';
 require_once STM_LMS_PATH . '/settings/lms_wpcfto_helpers.php';
 require_once STM_LMS_PATH . '/settings/page_generator/main.php';
 require_once STM_LMS_PATH . '/settings/main_settings.php';

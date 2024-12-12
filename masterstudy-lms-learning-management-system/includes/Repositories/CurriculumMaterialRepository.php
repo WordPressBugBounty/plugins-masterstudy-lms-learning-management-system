@@ -77,6 +77,8 @@ final class CurriculumMaterialRepository extends CurriculumRepository {
 		$material->order      = $data['order'] ?? $this->count_by_section( $data['section_id'] ) + 1;
 		$material->save();
 
+		do_action( 'masterstudy_lms_curriculum_material_created', $material );
+
 		return $material;
 	}
 
@@ -100,6 +102,8 @@ final class CurriculumMaterialRepository extends CurriculumRepository {
 
 			$material->save();
 
+			do_action( 'masterstudy_lms_curriculum_material_updated', $material );
+
 			return $material;
 		}
 
@@ -111,6 +115,8 @@ final class CurriculumMaterialRepository extends CurriculumRepository {
 
 		if ( ! empty( $material ) ) {
 			$this->reorder( new CurriculumMaterial(), $material );
+
+			do_action( 'masterstudy_lms_curriculum_material_before_delete', $material );
 
 			return $material->delete();
 		}

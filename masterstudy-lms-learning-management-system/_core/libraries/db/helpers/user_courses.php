@@ -38,6 +38,19 @@ function stm_lms_get_user_course( $user_id, $course_id, $fields = array(), $ente
 	);
 }
 
+function stm_lms_get_course_id_by_user_course_id( $user_course_id ) {
+	global $wpdb;
+	$table = stm_lms_user_courses_name( $wpdb );
+
+	return $wpdb->get_var(
+		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT course_id FROM {$table} WHERE user_course_id = %d",
+			$user_course_id
+		)
+	);
+}
+
 function stm_lms_update_start_time_in_user_course( $user_id, $course_id ) {
 	global $wpdb;
 

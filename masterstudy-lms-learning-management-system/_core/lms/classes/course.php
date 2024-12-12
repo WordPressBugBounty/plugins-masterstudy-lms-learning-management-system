@@ -1,4 +1,6 @@
 <?php
+
+use MasterStudy\Lms\Pro\AddonsPlus\Grades\Repositories\GradesRepository;
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Repositories\CurriculumSectionRepository;
 use MasterStudy\Lms\Repositories\CourseRepository;
@@ -125,6 +127,10 @@ class STM_LMS_Course {
 			$course['bundle_id']     = $bundle;
 			$course['for_points']    = $for_points;
 
+			if ( is_ms_lms_addon_enabled( 'grades' ) && masterstudy_lms_is_course_gradable( $course_id ) ) {
+				$course['is_gradable'] = 1;
+			}
+
 			stm_lms_add_user_course( $course );
 
 			if ( ! $is_translate ) {
@@ -219,6 +225,7 @@ class STM_LMS_Course {
 				$passed_items[] = $lesson_id;
 			}
 		}
+
 		foreach ( $passed_quizzes as $quiz_id ) {
 			$quiz_data = STM_LMS_Helpers::simplify_meta_array( stm_lms_get_user_last_quiz( $user_id, $quiz_id, array( 'status' ) ), 'status' );
 			if ( ! empty( $quiz_data[0] ) && 'failed' === $quiz_data[0] ) {
@@ -604,6 +611,8 @@ class STM_LMS_Course {
 		$settings['course_allow_intended_audience'] = $settings['course_allow_intended_audience'] ?? false;
 		$settings['enable_sticky']                  = $settings['enable_sticky'] ?? false;
 		$settings['course_sticky_sidebar']          = $settings['course_sticky_sidebar'] ?? true;
+		$settings['grades_page_display']            = $settings['grades_page_display'] ?? 'tab';
+		$grades_enabled                             = is_ms_lms_addon_enabled( 'grades' ) && masterstudy_lms_is_course_gradable( $course->id );
 		$settings['course_tab_reviews']             = $settings['course_tab_reviews'] ?? true;
 		$show_panel                                 = ( empty( $current_user_id ) || ! STM_LMS_User::has_course_access( $course->id, '', false ) ) && ! $is_coming_soon;
 
@@ -630,6 +639,7 @@ class STM_LMS_Course {
 			'is_coming_soon'  => $is_coming_soon,
 			'instructor'      => $instructor,
 			'settings'        => $settings,
+			'grades_enabled'  => $grades_enabled,
 			'show_panel'      => $show_panel,
 			'current_user_id' => $current_user_id,
 		);
@@ -650,13 +660,18 @@ class STM_LMS_Course {
 		}
 
 		if ( 'sleek-sidebar' === $template ) {
-			$course_tabs             = array(
+			$course_tabs = array(
 				'description'  => esc_html__( 'Description', 'masterstudy-lms-learning-management-system' ),
 				'curriculum'   => esc_html__( 'Curriculum', 'masterstudy-lms-learning-management-system' ),
 				'faq'          => esc_html__( 'FAQ', 'masterstudy-lms-learning-management-system' ),
 				'announcement' => esc_html__( 'Announcement', 'masterstudy-lms-learning-management-system' ),
 				'reviews'      => esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' ),
 			);
+
+			if ( $grades_enabled && 'off' !== $settings['grades_page_display'] ) {
+				$course_tabs['grades'] = esc_html__( 'Grade', 'masterstudy-lms-learning-management-system' );
+			}
+
 			$response['course_tabs'] = apply_filters( 'stm_lms_course_tabs', $course_tabs, $course->id );
 			$response['tabs_length'] = count( $course_tabs );
 		}

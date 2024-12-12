@@ -42,10 +42,12 @@
               this.$http.get(url).then(function (response) {
                 response = response.body;
                 vm.$set(vm, 'loading', false);
-                if (response.length > 0) {
+                if (response) {
                   vm.$set(vm, 'assignments', response);
-                  vm.$set(vm, 'pages', response[0].pages);
-                  this.pages = response[0].pages;
+                  if (response.length > 0) {
+                    vm.$set(vm, 'pages', response[0].pages);
+                    this.pages = response[0].pages;
+                  }
                 }
               });
             },

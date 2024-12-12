@@ -12,6 +12,14 @@ add_action( 'rest_api_init', array( $plugin, 'register_api' ) );
 add_action(
 	'plugins_loaded',
 	function () use ( $plugin ) {
+		if ( ! is_textdomain_loaded( 'masterstudy-lms-learning-management-system' ) ) {
+			load_plugin_textdomain(
+				'masterstudy-lms-learning-management-system',
+				false,
+				'masterstudy-lms-learning-management-system/languages'
+			);
+		}
+
 		$plugin->register_addons( apply_filters( 'masterstudy_lms_plugin_addons', array() ) );
 
 		do_action( 'masterstudy_lms_plugin_loaded', $plugin );
@@ -181,6 +189,7 @@ function masterstudy_remove_admin_notices() {
 		'analytics_page_engagement',
 		'analytics_page_users',
 		'analytics_page_reviews',
+		'toplevel_page_grades',
 	);
 
 	if ( in_array( $screen->id, $pages, true ) ) {

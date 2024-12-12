@@ -15,7 +15,12 @@ class STM_LMS_Options {
 			return false;
 		}
 
-		return ( ! empty( $options[ $option_name ] ) ) ? $options[ $option_name ] : $default;
+		// Return even an empty array
+		if ( is_array( $options[ $option_name ] ) ) {
+			return $options[ $option_name ];
+		}
+
+		return ! empty( $options[ $option_name ] ) ? $options[ $option_name ] : $default;
 	}
 
 	public static function courses_page() {

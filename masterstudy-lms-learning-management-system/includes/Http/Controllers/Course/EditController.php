@@ -35,6 +35,7 @@ class EditController {
 				'course_style'                   => \STM_LMS_Options::get_option( 'course_style', false ),
 				'currency_symbol'                => \STM_LMS_Options::get_option( 'currency_symbol', '$' ),
 				'quiz_attempts'                  => \STM_LMS_Options::get_option( 'quiz_attempts', false ),
+				'grades_table'                   => \STM_LMS_Options::get_option( 'grades_table', stm_lms_settings_grades_default_values() ),
 				'presto_player_allowed'          => apply_filters( 'ms_plugin_presto_player_allowed', false ),
 			)
 		);
@@ -59,6 +60,7 @@ class EditController {
 						? admin_url( 'admin.php?page=stm-addons' )
 						: admin_url( 'admin.php?page=stm-lms-go-pro' ),
 					'plugins'           => admin_url( 'plugins.php' ),
+					'settings'          => admin_url( 'admin.php?page=stm-lms-settings' ),
 				),
 				'lesson_types'        => apply_filters( 'masterstudy_lms_lesson_types', array_map( 'strval', LessonType::cases() ) ),
 				'video_sources'       => apply_filters( 'masterstudy_lms_lesson_video_sources', array() ),

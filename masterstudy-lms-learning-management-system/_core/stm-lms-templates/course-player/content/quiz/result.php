@@ -9,13 +9,24 @@
  * @var string $emoji_name
  * @var int $attempts_left
  */
+
+use MasterStudy\Lms\Pro\AddonsPlus\Grades\Services\GradeCalculator;
+use MasterStudy\Lms\Pro\AddonsPlus\Grades\Services\GradeDisplay;
+
+$display_grade = is_ms_lms_addon_enabled( 'grades' );
 ?>
 <div class="masterstudy-course-player-quiz__result-container">
 	<div class="masterstudy-course-player-quiz__result <?php echo esc_attr( $progress < $passing_grade ? 'masterstudy-course-player-quiz__result_failed' : '' ); ?>">
 		<h2 class="masterstudy-course-player-quiz__result-title"><?php esc_html_e( 'Result', 'masterstudy-lms-learning-management-system' ); ?></h2>
 		<div class="masterstudy-course-player-quiz__result-wrapper">
 			<span class="masterstudy-course-player-quiz__result-progress">
-				<?php echo esc_html( round( $progress, 1 ) . '%' ); ?>
+				<?php
+				if ( $display_grade ) {
+					echo esc_html( GradeDisplay::get_instance()->simple_render( $progress, true ) );
+				} else {
+					echo esc_html( round( $progress, 1 ) . '%' );
+				}
+				?>
 			</span>
 			<?php if ( $show_emoji && ! empty( $emoji_name ) ) { ?>
 				<p class="masterstudy-course-player-quiz__emoji"><?php echo esc_html( $emoji_name ); ?></p>
@@ -29,17 +40,30 @@
 					}
 					?>
 				</span>
-				<?php if ( $attempts_left >= 0 && 'limited' === $quiz_attempts && $progress < $passing_grade ) { ?>
-					<span class="masterstudy-course-player-quiz__result-attempts-left">
+				<div>
+					<?php if ( $display_grade && ! empty( $passing_grade ) ) { ?>
+						<span class="masterstudy-course-player-quiz__result-minimum-passing-grade">
 						<?php
 						printf(
 							/* translators: %d: number */
+							wp_kses_post( __( 'Passing grade <strong>%s</strong>', 'masterstudy-lms-learning-management-system' ) ),
+							esc_html( GradeCalculator::get_instance()->get_passing_grade( $passing_grade ) )
+						);
+						?>
+					</span>
+					<?php } ?>
+					<?php if ( $attempts_left >= 0 && 'limited' === $quiz_attempts && $progress < $passing_grade ) { ?>
+						<span class="masterstudy-course-player-quiz__result-attempts-left">
+						<?php
+						printf(
+						/* translators: %d: number */
 							wp_kses_post( _n( '<strong>%d</strong> attempt left', '<strong>%d</strong> attempts left', $attempts_left, 'masterstudy-lms-learning-management-system' ) ),
 							esc_html( $attempts_left )
 						);
 						?>
 					</span>
-				<?php } ?>
+					<?php } ?>
+				</div>
 			</div>
 			<?php
 			if ( $is_retakable && $progress < $passing_grade ) {

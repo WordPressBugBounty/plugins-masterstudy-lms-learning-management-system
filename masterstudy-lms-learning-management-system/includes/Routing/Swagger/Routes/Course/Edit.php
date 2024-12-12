@@ -128,6 +128,11 @@ class Edit extends Route implements ResponseInterface {
 							'format'      => 'uri',
 							'description' => 'Dashboard > Plugins page URL.',
 						),
+						'settings'          => array(
+							'type'        => 'string',
+							'format'      => 'uri',
+							'description' => 'Dashboard > LMS Settings page URL.',
+						),
 					),
 				),
 			),

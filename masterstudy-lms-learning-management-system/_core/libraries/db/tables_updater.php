@@ -29,14 +29,22 @@ function stm_lms_tables_update() {
 	if ( function_exists( 'stm_lms_user_subscriptions' ) ) {
 		stm_lms_user_subscriptions();
 	}
+
 	if ( function_exists( 'stm_lms_point_system_table' ) ) {
 		stm_lms_point_system_table();
 	}
+
 	if ( function_exists( 'stm_lms_scorm_table' ) ) {
 		stm_lms_scorm_table();
 	}
 
+	// Update LMS Pro tables from Free version
+	if ( defined( 'STM_LMS_PRO_PATH' ) && is_ms_lms_addon_enabled( 'assignments' ) ) {
+		stm_lms_user_assignments_table();
+	}
+
 	update_option( 'stm_lms_db_version', STM_LMS_DB_VERSION );
+
 	wp_send_json( 'updated' );
 }
 add_action( 'wp_ajax_stm_lms_tables_update', 'stm_lms_tables_update' );

@@ -12,6 +12,8 @@ function stm_lms_add_user_quiz( $user_quiz ) {
 		$table_name,
 		$user_quiz
 	);
+
+	do_action( 'masterstudy_lms_user_quiz_added', $user_quiz );
 }
 
 function stm_lms_get_user_quizzes( $user_id, $quiz_id, $fields = array() ) {
@@ -172,4 +174,6 @@ function stm_lms_delete_user_quiz( $user_id, $course_id, $quiz_id ) {
 			'quiz_id'   => $quiz_id,
 		)
 	);
+
+	do_action( 'masterstudy_lms_user_quiz_deleted', $user_id, $course_id, $quiz_id );
 }

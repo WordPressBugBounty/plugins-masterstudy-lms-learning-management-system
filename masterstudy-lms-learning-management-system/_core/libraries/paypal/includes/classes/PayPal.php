@@ -20,11 +20,11 @@ class PayPal extends StmPaymentGateway {
 
 	public function __construct() {
 		$this->id                 = self::ID;
-		$this->title              = __( 'PayPal', 'masterstudy-lms-learning-management-system' );
-		$this->description        = __( 'PayPal payment method allows you to accept payments for Subscription Pricing Plans', 'masterstudy-lms-learning-management-system' );
+		$this->title              = 'PayPal';
+		$this->description        = 'PayPal payment method allows you to accept payments for Subscription Pricing Plans';
 		$this->icon               = STM_LMS_URL . '/assets/img/paypal.jpg';
-		$this->method_title       = __( 'PayPal', 'masterstudy-lms-learning-management-system' );
-		$this->method_description = __( 'PayPal payment method allows you to accept payments for Subscription Pricing Plans', 'masterstudy-lms-learning-management-system' );
+		$this->method_title       = 'PayPal';
+		$this->method_description = 'PayPal payment method allows you to accept payments for Subscription Pricing Plans';
 		$this->supports           = apply_filters( 'stm_lms_paypal_supports', array( 'one_time_payment' ) );
 		$this->enabled            = apply_filters( 'stm_lms_paypal_enabled', $this->get_option( 'enabled', 'no' ) );
 		$this->mode               = apply_filters( 'stm_lms_paypal_sandbox', $this->get_option( 'mode' ) );

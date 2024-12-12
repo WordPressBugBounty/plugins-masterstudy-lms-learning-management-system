@@ -103,6 +103,12 @@ $reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 								<div class="stm_lms_instructor_courses__single--choice-icon"></div>
 								<span><?php esc_html_e( 'Analytics', 'masterstudy-lms-learning-management-system' ); ?></span>
 							</a>
+
+							<a v-bind:href="course.grades_link" target="_blank" v-if="course.grades_link"
+								class="stm_lms_instructor_courses__single--choice grades">
+								<div class="stm_lms_instructor_courses__single--choice-icon"></div>
+								<span><?php esc_html_e( 'Grades', 'masterstudy-lms-learning-management-system' ); ?></span>
+							</a>
 						</div>
 
 

@@ -5,7 +5,7 @@ if ( ! STM_LMS_Helpers::is_pro() || ! is_ms_lms_addon_enabled( 'assignments' ) )
 	return;
 }
 
-$assignments = AssignmentStudentRepository::get_assignments(
+$assignments = ( new AssignmentStudentRepository() )->get_assignments(
 	array(
 		'student_id'    => $student_id,
 		'assignment_id' => $material['post_id'],

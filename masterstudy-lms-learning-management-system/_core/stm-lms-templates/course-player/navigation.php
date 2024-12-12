@@ -12,6 +12,8 @@
  * @var boolean $dark_mode
  */
 
+use MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository;
+
 wp_enqueue_style( 'masterstudy-course-player-navigation' );
 wp_enqueue_script( 'masterstudy-course-player-navigation' );
 
@@ -22,7 +24,9 @@ $prev_lesson_preview = false;
 $next_lesson         = $material_ids[ $current_lesson_id + 1 ] ?? null;
 $next_lesson_url     = '';
 $next_lesson_preview = false;
-$is_draft_assignment = 'assignments' === $lesson_type && class_exists( 'STM_LMS_Assignments' ) && STM_LMS_Assignments::is_draft_assignment( $item_id, $user_id );
+$is_draft_assignment = 'assignments' === $lesson_type
+	&& method_exists( 'MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository', 'is_assignment_draft' )
+	&& ( new AssignmentStudentRepository() )->is_assignment_draft( $item_id, $user_id );
 
 if ( ! empty( $prev_lesson ) ) {
 	$prev_lesson_url     = esc_url( STM_LMS_Lesson::get_lesson_url( $post_id, $prev_lesson ) );

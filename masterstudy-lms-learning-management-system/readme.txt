@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.4.17
+Stable tag: 3.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,10 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.5.0 - 2024-12-12 =
+- **New feature**: Added a new Grades addon. (Pro)
+- **Fix:** _load_textdomain_just_in_time issue fixed.
+
 = 3.4.17 - 2024-12-09 =
 - **New feature:** Added a new email order template in the Orders section for instructors.
 - **New feature:** Redesigned Email Order templates for students and admins.
@@ -328,8 +332,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Enhancement:** Integrated HTML editor for the question title bar in Course Builder for more flexibility.
 - **Enhancement:** Added option to disable course rating globally on the site.
 - **Fix:** Fixed an issue where page titles were not displaying correctly on public accounts for students and instructors.
-
-= 3.4.13 - 2024-11-20 =
-- **New feature:** Introduced new Sales page for instructors to manage course sales. (Pro)
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

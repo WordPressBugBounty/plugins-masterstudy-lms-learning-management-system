@@ -408,7 +408,7 @@ class STM_LMS_User_Menu {
 						$add_element = STM_LMS_Instructor::instructor_can_add_students() && $is_instructor && $instructor_menu;
 						break;
 					case 'assignments':
-						$add_element = class_exists( 'STM_LMS_Assignments' ) && $is_instructor && $instructor_menu;
+						$add_element = class_exists( '\MasterStudy\Lms\Pro\addons\assignments\Assignments' ) && $is_instructor && $instructor_menu;
 						break;
 					case 'add_course':
 						$add_element = $is_instructor && $instructor_menu;
@@ -426,7 +426,7 @@ class STM_LMS_User_Menu {
 						}
 						break;
 					case 'gradebook':
-						$add_element = class_exists( 'STM_LMS_The_Gradebook' ) && $instructor_menu;
+						$add_element = class_exists( '\MasterStudy\Lms\Pro\addons\gradebook\Gradebook' ) && $instructor_menu;
 						break;
 					case 'payout':
 						$add_element = class_exists( 'Stm_Lms_Statistics' ) && ! current_user_can( 'administrator' ) && $instructor_menu;
@@ -435,7 +435,7 @@ class STM_LMS_User_Menu {
 						$add_element = STM_LMS_Subscriptions::subscription_enabled() && $full_menu;
 						break;
 					case 'my_assignments':
-						$add_element = class_exists( 'STM_LMS_Assignments' ) && $full_menu;
+						$add_element = class_exists( '\MasterStudy\Lms\Pro\addons\assignments\Assignments' ) && $full_menu;
 						break;
 					case 'certificates':
 						$add_element = is_ms_lms_addon_enabled( 'certificate_builder' ) && $full_menu;
@@ -454,6 +454,12 @@ class STM_LMS_User_Menu {
 						break;
 					case 'sales':
 						$add_element = STM_LMS_Helpers::is_pro_plus() && $instructor_menu;
+						break;
+					case 'grades':
+						$add_element = STM_LMS_Helpers::is_pro_plus() && $instructor_menu;
+						break;
+					case 'my-grades':
+						$add_element = STM_LMS_Helpers::is_pro_plus() && $full_menu;
 						break;
 				}
 
@@ -521,6 +527,7 @@ class STM_LMS_User_Menu {
 			'announcement',
 			'analytics',
 			'sales',
+			'grades',
 		);
 
 		return array_values(

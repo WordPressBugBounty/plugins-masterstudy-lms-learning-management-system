@@ -211,6 +211,13 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					</a>
 					<?php
 				}
+				if ( STM_LMS_Helpers::is_pro_plus() && is_ms_lms_addon_enabled( 'grades' ) ) {
+					?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=grades&course=' . $post_id ) ); ?>" class="button action">
+						<?php echo esc_html__( 'Grades', 'masterstudy-lms-learning-management-system' ); ?>
+					</a>
+					<?php
+				}
 				break;
 		}
 	}
@@ -464,6 +471,10 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 				if ( STM_LMS_Helpers::is_pro_plus() && STM_LMS_Options::get_option( 'instructors_reports', true ) ) {
 					$post = apply_filters( 'masterstudy_add_analytics_link', $post, $id );
+				}
+
+				if ( STM_LMS_Helpers::is_pro_plus() && is_ms_lms_addon_enabled( 'grades' ) ) {
+					$post = apply_filters( 'masterstudy_add_grades_link', $post, $id );
 				}
 
 				$post['sale_price'] = ( $sale_price_active && ! empty( $sale_price ) ) ? STM_LMS_Helpers::display_price( $sale_price ) : '';

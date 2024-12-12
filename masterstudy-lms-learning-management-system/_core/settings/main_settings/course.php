@@ -30,6 +30,13 @@ function stm_lms_settings_course_section() {
 		$tab_options['reviews'] = esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' );
 	}
 
+	$grades_addon = is_ms_lms_addon_enabled( 'grades' );
+	$show_on_tab  = STM_LMS_Options::get_option( 'grades_page_display', 'tab' );
+
+	if ( $grades_addon && 'tab' === $show_on_tab ) {
+		$tab_options['grades'] = esc_html__( 'Grade', 'masterstudy-lms-learning-management-system' );
+	}
+
 	$course_settings_primary_fields = array(
 		'course_tab_reviews'                   => array(
 			'type'        => 'checkbox',
@@ -110,7 +117,6 @@ function stm_lms_settings_course_section() {
 			'description' => esc_html__( 'Show a tab with course announcements', 'masterstudy-lms-learning-management-system' ),
 			'value'       => true,
 		),
-
 		'course_levels_config'                 => array(
 			'type'        => 'repeater',
 			'label'       => esc_html__( 'Course levels', 'masterstudy-lms-learning-management-system' ),

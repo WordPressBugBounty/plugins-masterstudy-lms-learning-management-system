@@ -1,5 +1,7 @@
 <?php
 
+use MasterStudy\Lms\Plugin\PostType;
+use MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository;
 use \MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use \MasterStudy\Lms\Repositories\CurriculumSectionRepository;
 
@@ -37,15 +39,17 @@ class STM_LMS_Lesson {
 			$user_id = $user['id'];
 		}
 
-		if ( get_post_type( $lesson_id ) === 'stm-lessons' || get_post_type( $lesson_id ) === 'stm-google-meets' ) {
+		if ( get_post_type( $lesson_id ) === PostType::LESSON || get_post_type( $lesson_id ) === PostType::GOOGLE_MEET ) {
 			$already_completed = stm_lms_get_user_lesson( $user_id, $course_id, $lesson_id, array( 'lesson_id' ) );
-		} elseif ( get_post_type( $lesson_id ) === 'stm-assignments' ) {
+		} elseif ( get_post_type( $lesson_id ) === PostType::ASSIGNMENT ) {
 			/*If addon is disabled we can skip it*/
-			if ( ! class_exists( 'STM_LMS_Assignments' ) ) {
+			if ( ! class_exists( '\MasterStudy\Lms\Pro\addons\assignments\Assignments' ) ) {
 				return true;
 			}
 
-			return STM_LMS_Assignments::has_passed_assignment( $lesson_id, $user_id );
+			// TODO: Remove method_exists check after few releases
+			return method_exists( '\MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository', 'has_passed_assignment' )
+				&& ( new AssignmentStudentRepository() )->has_passed_assignment( $lesson_id, $user_id, $course_id );
 		} else {
 			$already_completed = stm_lms_check_quiz( $user_id, $lesson_id );
 		}

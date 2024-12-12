@@ -162,8 +162,15 @@ class STM_LMS_Subscriptions {
 				$subscription_id           = $sub->subscription_id;
 				$user_course               = compact( 'user_id', 'course_id', 'current_lesson_id', 'status', 'progress_percent', 'subscription_id' );
 				$user_course['start_time'] = time();
+
+				if ( is_ms_lms_addon_enabled( 'grades' ) && masterstudy_lms_is_course_gradable( $course_id ) ) {
+					$user_course['is_gradable'] = 1;
+				}
+
 				stm_lms_add_user_course( $user_course );
+
 				STM_LMS_Course::add_student( $course_id );
+
 				$r['url'] = get_the_permalink( $course_id );
 			}
 

@@ -322,18 +322,6 @@ $router->delete(
 );
 
 $router->get(
-	'/assignments',
-	\MasterStudy\Lms\Http\Controllers\Assignment\GetAssignmentsController::class,
-	\MasterStudy\Lms\Routing\Swagger\Routes\Assignment\GetAssignments::class
-);
-
-$router->get(
-	'/student-assignments',
-	\MasterStudy\Lms\Http\Controllers\Assignment\GetStudentAssignmentsController::class,
-	\MasterStudy\Lms\Routing\Swagger\Routes\Assignment\GetStudentAssignments::class
-);
-
-$router->get(
 	'/certificates',
 	\MasterStudy\Lms\Http\Controllers\Certificates\GetCertificatesController::class,
 	\MasterStudy\Lms\Routing\Swagger\Routes\Certificates\GetCertificates::class

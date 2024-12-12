@@ -69,6 +69,8 @@
 				'user_id'        => $course_data['current_user_id'],
 				'style'          => 'underline',
 				'with_image'     => true,
+				'grades_enabled' => $course_data['grades_enabled'],
+				'grades_display' => $course_data['settings']['grades_page_display'],
 			)
 		);
 		if ( $course_data['settings']['enable_related_courses'] ) {
@@ -128,6 +130,16 @@
 				'is_coming_soon' => $course_data['is_coming_soon'],
 			)
 		);
+		if ( $course_data['grades_enabled'] && 'sidebar' === $course_data['settings']['grades_page_display'] ) {
+			STM_LMS_Templates::show_lms_template(
+				'components/course/grades',
+				array(
+					'course'     => $course_data['course'],
+					'user_id'    => $course_data['current_user_id'],
+					'in_sidebar' => true,
+				)
+			);
+		}
 		STM_LMS_Templates::show_lms_template( 'components/course/details', array( 'course' => $course_data['course'] ) );
 		if ( $course_data['settings']['course_allow_basic_info'] ) {
 			STM_LMS_Templates::show_lms_template(

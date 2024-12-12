@@ -207,8 +207,9 @@ class STM_LMS_Quiz {
 		/*REMOVE TIMER*/
 		stm_lms_get_delete_user_quiz_time( $user_id, $quiz_id );
 
+		STM_LMS_Course::update_course_progress( $user_id, $course_id );
+
 		if ( 'passed' === $status ) {
-			STM_LMS_Course::update_course_progress( $user_id, $course_id );
 			$user_login   = $user['login'];
 			$course_title = get_the_title( $course_id );
 			$quiz_name    = get_the_title( $quiz_id );

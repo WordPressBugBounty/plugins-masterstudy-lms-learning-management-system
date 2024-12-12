@@ -7,6 +7,7 @@ use MasterStudy\Lms\Database\CurriculumSection;
 use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Repositories\CurriculumSectionRepository;
+use MasterStudy\Lms\Utility\CourseGrade;
 
 abstract class LmsUpdateCallbacks {
 
@@ -430,6 +431,8 @@ abstract class LmsUpdateCallbacks {
 	}
 
 	public static function lms_update_db_tables() {
+		require_once STM_LMS_LIBRARY . '/db/tables.php';
+
 		if ( function_exists( 'stm_lms_tables_update' ) ) {
 			stm_lms_user_answers();
 			stm_lms_user_cart();
@@ -440,6 +443,129 @@ abstract class LmsUpdateCallbacks {
 
 			if ( function_exists( 'stm_lms_scorm_table' ) ) {
 				stm_lms_scorm_table();
+			}
+
+			// Update DB Version
+			update_option( 'stm_lms_db_version', STM_LMS_DB_VERSION );
+		}
+	}
+
+	public static function lms_update_grades() {
+		require_once STM_LMS_LIBRARY . '/db/tables.php';
+
+		if ( ! function_exists( 'stm_lms_tables_update' ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		// Database Tables
+		$course_sections_table  = stm_lms_curriculum_sections_name( $wpdb );
+		$course_materials_table = stm_lms_curriculum_materials_name( $wpdb );
+		$user_courses_table     = stm_lms_user_courses_name( $wpdb );
+
+		// Patch DB Tables
+		stm_lms_user_courses();
+
+		if ( \STM_LMS_Helpers::is_pro() && is_ms_lms_addon_enabled( 'assignments' ) ) {
+			stm_lms_user_assignments_table();
+
+			// Patch Assignments
+			$user_assignments_table = stm_lms_user_assignments_name( $wpdb );
+			$student_assignments    = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT ID FROM {$wpdb->posts} WHERE post_type = %s AND post_status != 'trash' ORDER BY post_modified ASC",
+					PostType::USER_ASSIGNMENT
+				)
+			);
+
+			if ( ! empty( $student_assignments ) ) {
+				foreach ( $student_assignments as $student_assignment_id ) {
+					$post_meta   = get_post_meta( $student_assignment_id );
+					$post_status = get_post_status( $student_assignment_id );
+					$status      = in_array( $post_status, array( 'pending', 'draft' ), true )
+						? $post_status
+						: $post_meta['status'][0] ?? '';
+					$status      = empty( $status ) ? 'pending' : $status;
+					$grade       = null;
+
+					if ( 'pending' !== $status ) {
+						$grade = 'passed' === $status ? 100 : 0;
+					}
+
+					// Update Assignment Status Post Meta for faster queries
+					update_post_meta( $student_assignment_id, 'status', $status );
+
+					// Check if the record already exists
+					$student_id    = $post_meta['student_id'][0] ?? 0;
+					$course_id     = $post_meta['course_id'][0] ?? 0;
+					$assignment_id = $post_meta['assignment_id'][0] ?? 0;
+					$record_exists = $wpdb->get_var(
+						$wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+							"SELECT COUNT(*) FROM $user_assignments_table WHERE user_id = %d AND user_assignment_id = %d",
+							$student_id,
+							$student_assignment_id
+						)
+					);
+
+					if ( 0 === (int) $record_exists ) {
+						$wpdb->insert(
+							$user_assignments_table,
+							array(
+								'user_id'            => $student_id,
+								'course_id'          => $course_id,
+								'assignment_id'      => $assignment_id,
+								'user_assignment_id' => $student_assignment_id,
+								'grade'              => $grade,
+								'status'             => $status,
+								'updated_at'         => strtotime( get_post_datetime( $student_assignment_id )->format( 'Y-m-d H:i:s' ) ),
+							),
+							array( '%d', '%d', '%d', '%d', is_null( $grade ) ? null : '%d', '%s' )
+						);
+					}
+				}
+			}
+		}
+
+		// Update DB Version
+		update_option( 'stm_lms_db_version', STM_LMS_DB_VERSION );
+
+		// Patch is_gradable column
+		$course_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT DISTINCT cs.course_id FROM $course_sections_table AS cs JOIN $course_materials_table AS cm ON cs.id = cm.section_id WHERE cm.post_type IN(%s, %s)",
+				PostType::QUIZ,
+				PostType::ASSIGNMENT
+			)
+		);
+
+		if ( ! empty( $course_ids ) ) {
+			$placeholders = implode( ',', array_fill( 0, count( $course_ids ), '%d' ) );
+
+			$wpdb->query(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+					"UPDATE $user_courses_table SET is_gradable = 1 WHERE course_id IN ($placeholders)",
+					...$course_ids
+				)
+			);
+		}
+
+		if ( \STM_LMS_Helpers::is_pro_plus() ) {
+			$user_courses = $wpdb->get_results(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT user_id, course_id, MAX(user_course_id) AS latest_id FROM $user_courses_table WHERE is_gradable = 1 GROUP BY user_id, course_id",
+				ARRAY_A
+			);
+
+			foreach ( $user_courses as $user_course ) {
+				CourseGrade::update_user_course_grade(
+					(int) $user_course['user_id'],
+					(int) $user_course['course_id'],
+					(int) $user_course['latest_id']
+				);
 			}
 		}
 	}
