@@ -51,11 +51,15 @@ final class CourseGrade {
 		if ( ! empty( $quiz_ids ) ) {
 			$quiz_ids_placeholder = implode( ',', array_fill( 0, count( $quiz_ids ), '%d' ) );
 			$quiz_progress        = $wpdb->get_results(
-				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
 				$wpdb->prepare(
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT progress FROM $user_quizzes_table AS quizzes WHERE user_id = %d AND quiz_id IN ($quiz_ids_placeholder)
-					AND user_quiz_id = ( SELECT MAX(user_quiz_id) FROM $user_quizzes_table AS sub_quizzes WHERE sub_quizzes.quiz_id = quizzes.quiz_id ) GROUP BY course_id, quiz_id", // phpcs:ignore
+					// phpcs:disable
+					"SELECT progress FROM $user_quizzes_table AS quizzes
+					WHERE user_id = %d AND quiz_id IN ($quiz_ids_placeholder)
+					AND user_quiz_id = (
+						SELECT MAX(user_quiz_id) FROM $user_quizzes_table AS sub_quizzes
+						WHERE sub_quizzes.user_id = quizzes.user_id AND sub_quizzes.quiz_id = quizzes.quiz_id
+					) ORDER BY user_quiz_id DESC",
+					// phpcs:enable
 					array_merge(
 						array( $user_id ),
 						$quiz_ids

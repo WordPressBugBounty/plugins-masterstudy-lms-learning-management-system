@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.0
+Stable tag: 3.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,10 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.5.1 - 2024-12-13 =
+- **Enhancement:** Introduced 'All Time' filter for Grades in the table view. (Pro)
+- **Fix:** Small bug fixes.
+
 = 3.5.0 - 2024-12-12 =
 - **New feature**: Added a new Grades addon. (Pro)
 - **Fix:** _load_textdomain_just_in_time issue fixed.
@@ -327,10 +331,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 = 3.4.15 - 2024-11-28 =
 - **Fix:** Fixed image versions of Single and Multi Choice questions not displaying in the Question Bank for quizzes.
 - **Fix:** Fixed an error appearing below the title bar in quiz lessons for Image Match questions in the Question Bank.
-
-= 3.4.14 - 2024-11-25 =
-- **Enhancement:** Integrated HTML editor for the question title bar in Course Builder for more flexibility.
-- **Enhancement:** Added option to disable course rating globally on the site.
-- **Fix:** Fixed an issue where page titles were not displaying correctly on public accounts for students and instructors.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
