@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.1
+Stable tag: 3.5.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -199,6 +199,7 @@ For more details, please visit [our website](https://stylemixthemes.com/wordpres
 - **File Upload Manager**: Manage various file types in courses and lessons.
 - **Upcoming Course Status**: Promote courses that are not yet open for enrollment.
 - **Reports and Analytics**: Track your course performance, monitor student progress and manage earnings—all in one place.
+- **Grades**: Assign, manage, and review grades for courses, quizzes, and assignments seamlessly.
 
 [youtube https://youtu.be/98LKgphFSCY]
 
@@ -303,6 +304,13 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+
+= 3.5.2 - 2024-12-18 =
+- **Enhancement:** Added option to change logo when printing detailed order view in My Sales for LMS payments. 
+- **Moved:** the Logo Upload option to the plugin’s settings.
+- **Fix:** Corrected an issue where deleted reviews were still applied to the overall course grade.
+- **Fix:** Resolved date and time translation issues in the course player’s countdown feature.
+- **Fix:** Fixed a fatal error occurring when using widgets after an Elementor update.
 
 = 3.5.1 - 2024-12-13 =
 - **Enhancement:** Introduced 'All Time' filter for Grades in the table view. (Pro)

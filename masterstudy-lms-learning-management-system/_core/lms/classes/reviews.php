@@ -1,4 +1,5 @@
 <?php
+use MasterStudy\Lms\Plugin\PostType;
 
 STM_LMS_Reviews::reviews_init();
 
@@ -9,6 +10,7 @@ class STM_LMS_Reviews {
 
 	public static function reviews_init() {
 		add_action( 'save_post', 'STM_LMS_Reviews::save_post', 100, 1 );
+		add_action( 'before_delete_post', 'STM_LMS_Reviews::delete_post', 100, 1 );
 
 		add_action( 'wp_ajax_stm_lms_get_reviews', 'STM_LMS_Reviews::get_reviews', 100 );
 		add_action( 'wp_ajax_nopriv_stm_lms_get_reviews', 'STM_LMS_Reviews::get_reviews', 100 );
@@ -18,11 +20,9 @@ class STM_LMS_Reviews {
 	}
 
 	public static function save_post( $post_id ) {
-		global $post;
-		if ( empty( $post ) ) {
-			return;
-		}
-		if ( 'stm-reviews' !== $post->post_type ) {
+		$post = get_post( $post_id );
+
+		if ( empty( $post ) || PostType::REVIEW !== $post->post_type ) {
 			return;
 		}
 
@@ -50,6 +50,36 @@ class STM_LMS_Reviews {
 			/*Update Instructor Rating*/
 			STM_LMS_Instructor::update_rating( get_post_field( 'post_author', $course ), $mark );
 
+		}
+	}
+
+	public static function delete_post( $post_id ) {
+		$post = get_post( $post_id );
+
+		if ( empty( $post ) || PostType::REVIEW !== $post->post_type ) {
+			return;
+		}
+
+		$course = get_post_meta( $post_id, 'review_course', true );
+		$mark   = get_post_meta( $post_id, 'review_mark', true );
+		$user   = get_post_meta( $post_id, 'review_user', true );
+
+		$transient_name = STM_LMS_Instructor::transient_name( get_post_field( 'post_author', $course ), 'rating' );
+		delete_transient( $transient_name );
+
+		if ( ! empty( $mark ) && ! empty( $course ) && ! empty( $user ) ) {
+			$marks = get_post_meta( $course, 'course_marks', true );
+
+			if ( ! empty( $marks ) && isset( $marks[ $user ] ) ) {
+				unset( $marks[ $user ] );
+
+				$rates = STM_LMS_Course::course_average_rate( $marks );
+
+				update_post_meta( $course, 'course_mark_average', $rates['average'] );
+				update_post_meta( $course, 'course_marks', $marks );
+
+				STM_LMS_Instructor::update_rating( get_post_field( 'post_author', $course ), null );
+			}
 		}
 	}
 

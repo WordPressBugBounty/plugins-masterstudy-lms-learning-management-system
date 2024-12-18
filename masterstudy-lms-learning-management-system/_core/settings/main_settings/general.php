@@ -104,23 +104,19 @@ function stm_lms_settings_general_section() {
 				'description' => esc_html__( 'Define how many numbers can be after the decimal point, like 2 in 7.49', 'masterstudy-lms-learning-management-system' ),
 			),
 			/*GROUP ENDED*/
+			'print_page_logo'  => array(
+				'type'       => 'image',
+				'label'      => esc_html__( 'Logo Upload', 'masterstudy-lms-learning-management-system' ),
+				'hint'       => esc_html__( 'Upload your brand\'s logo image for the print page', 'masterstudy-lms-learning-management-system' ),
+				'pro'        => true,
+				'pro_url'    => admin_url( 'admin.php?page=stm-lms-go-pro&source=print-logo' ),
+			),
 			'wocommerce_checkout'            => array(
-				'group'   => 'started',
 				'type'    => 'checkbox',
 				'label'   => esc_html__( 'WooCommerce Checkout', 'masterstudy-lms-learning-management-system' ),
 				'hint'    => esc_html__( 'Turn this on to use WooCommerce to buy courses. You need to have WooCommerce, Cart and Checkout Pages set up first', 'masterstudy-lms-learning-management-system' ),
 				'pro'     => true,
 				'pro_url' => admin_url( 'admin.php?page=stm-lms-go-pro&source=wocommerce-checkout-settings' ),
-			),
-			'print_page_logo'  => array(
-				'group'      => 'ended',
-				'type'       => 'image',
-				'label'      => esc_html__( 'Logo Upload', 'masterstudy-lms-learning-management-system' ),
-				'hint'       => esc_html__( 'Upload your brand\'s logo image for the print page', 'masterstudy-lms-learning-management-system' ),
-				'dependency' => array(
-					'key'   => 'wocommerce_checkout',
-					'value' => 'not_empty',
-				),
 			),
 			'guest_checkout'                 => array(
 				'type'        => 'checkbox',

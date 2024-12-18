@@ -180,7 +180,6 @@ class StmLmsCoursesCategories extends Widget_Base {
 			array(
 				'name'     => 'button_typography',
 				'label'    => esc_html__( 'Typography', 'masterstudy-lms-learning-management-system' ),
-				'scheme'   => Typography::TYPOGRAPHY_3,
 				'selector' => '{{WRAPPER}} .stm_lms_courses_category a',
 			)
 		);

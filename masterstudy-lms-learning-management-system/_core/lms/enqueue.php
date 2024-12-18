@@ -69,6 +69,16 @@ function stm_lms_enqueue_ss() {
 	wp_register_script( 'stm-lms-countdown', $assets . '/js/countdown.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'jquery.countdown', $assets . '/vendors/jquery.countdown.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'js.countdown', $assets . '/vendors/js.countdown.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_localize_script(
+		'jquery.countdown',
+		'stm_lms_jquery_countdown_vars',
+		array(
+			'days' => __( 'Days', 'masterstudy-lms-learning-management-system' ),
+			'hours' => __( 'Hours', 'masterstudy-lms-learning-management-system' ),
+			'minutes' => __( 'Minutes', 'masterstudy-lms-learning-management-system' ),
+			'seconds' => __( 'Seconds', 'masterstudy-lms-learning-management-system' ),
+		)
+	);
 	wp_register_script( 'stm-lms-wishlist', $assets . '/js/wishlist.js', array( 'jquery' ), MS_LMS_VERSION, true );
 
 	if ( stm_lms_has_custom_colors() ) {

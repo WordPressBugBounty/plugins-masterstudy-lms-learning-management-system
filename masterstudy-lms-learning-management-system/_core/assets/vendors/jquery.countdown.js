@@ -70,10 +70,10 @@
 
     $.each(
       {
-        Days: "Days",
-        Hours: "Hours",
-        Minutes: "Minutes",
-        Seconds: "Seconds",
+        Days: stm_lms_jquery_countdown_vars['days'] ?? "Days",
+        Hours: stm_lms_jquery_countdown_vars['hours'] ?? "Hours",
+        Minutes: stm_lms_jquery_countdown_vars['minutes'] ?? "Minutes",
+        Seconds: stm_lms_jquery_countdown_vars['seconds'] ?? "Seconds",
       },
       function (key, label) {
         const currentDate = new Date();
