@@ -224,7 +224,7 @@ if ( $is_promotion ) {
 					<?php endif; ?>
 				</p>
 				<?php if ( $is_promotion ) : ?>
-				<div class="stm-discount"><a href="https://stylemixthemes.com/deal/?utm_source=ms-go-pro&utm_medium=wpadmin&utm_campaign=WRAPUP24" target="_blank"></a></div>
+				<div class="stm-discount"><a href="https://stylemixthemes.com/2024-year-in-review/?utm_source=ms-go-pro&utm_medium=wpadmin&utm_campaign=WRAPUP24" target="_blank"></a></div>
 				<?php endif; ?>
 			</div>
 			<?php if ( isset( $freemius_info['plan'] ) ) : ?>

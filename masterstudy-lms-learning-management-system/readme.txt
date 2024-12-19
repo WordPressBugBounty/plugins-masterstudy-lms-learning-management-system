@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.2
+Stable tag: 3.5.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -305,6 +305,9 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.5.3 - 2024-12-19 =
+- **Fix:** Small bug fixes.
+
 = 3.5.2 - 2024-12-18 =
 - **Enhancement:** Added option to change logo when printing detailed order view in My Sales for LMS payments. 
 - **Moved:** the Logo Upload option to the plugin’s settings.
@@ -332,12 +335,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fix:** Fixed multiple issues in the Cart functionality.
 - **Fix:** Fixed audio playback issues in audio lessons when lesson materials were present.
 - **Fix:** Corrected display issues for single and multi-image choice questions in quiz attempts in Manage Students section.
-
-= 3.4.16 - 2024-12-07 =
-- **Fix:** Small bug fixes.
-
-= 3.4.15 - 2024-11-28 =
-- **Fix:** Fixed image versions of Single and Multi Choice questions not displaying in the Question Bank for quizzes.
-- **Fix:** Fixed an error appearing below the title bar in quiz lessons for Image Match questions in the Question Bank.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
