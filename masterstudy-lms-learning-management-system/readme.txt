@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.3
+Stable tag: 3.5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,7 +23,9 @@ MasterStudy is the best free Learning Management System  WordPress plugin for on
 ⭐ [MasterStudy Templates](https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/)
 ⭐ [Join Facebook Community](https://www.facebook.com/groups/masterstudylms)
 
-[youtube https://youtu.be/fCD__iEbxwI]
+## 2024 Year In Review
+
+[youtube https://youtu.be/X2OkqfDmvF8]
 
 ## Who is it for?
 
@@ -305,11 +307,14 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.5.4 - 2024-12-19 =
+- **Fix:** Small bug fixes.
+
 = 3.5.3 - 2024-12-19 =
 - **Fix:** Small bug fixes.
 
 = 3.5.2 - 2024-12-18 =
-- **Enhancement:** Added option to change logo when printing detailed order view in My Sales for LMS payments. 
+- **Enhancement:** Added option to change logo when printing detailed order view in My Sales for LMS payments.
 - **Moved:** the Logo Upload option to the plugin’s settings.
 - **Fix:** Corrected an issue where deleted reviews were still applied to the overall course grade.
 - **Fix:** Resolved date and time translation issues in the course player’s countdown feature.
@@ -322,18 +327,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 = 3.5.0 - 2024-12-12 =
 - **New feature**: Added a new Grades addon. (Pro)
 - **Fix:** _load_textdomain_just_in_time issue fixed.
-
-= 3.4.17 - 2024-12-09 =
-- **New feature:** Added a new email order template in the Orders section for instructors.
-- **New feature:** Redesigned Email Order templates for students and admins.
-- **Enhancement:** Enabled sending messages to a student’s public account for direct communication.
-- **Enhancement:** Added ability to translate hardcoded text in the plugin.
-- **Fix:** Resolved a potential math calculation issue in PMPro when writing 'unlimited' instead of 'unlim.'
-- **Fix:** Fixed an issue where student email addresses were exposed when uploading comments.
-- **Fix:** Resolved an issue where the number of Course categories in admin panel redirected to the Posts page.
-- **Fix:** Fixed missing Advanced Tab in Gutenberg editor when plugins are active.
-- **Fix:** Fixed multiple issues in the Cart functionality.
-- **Fix:** Fixed audio playback issues in audio lessons when lesson materials were present.
-- **Fix:** Corrected display issues for single and multi-image choice questions in quiz attempts in Manage Students section.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
