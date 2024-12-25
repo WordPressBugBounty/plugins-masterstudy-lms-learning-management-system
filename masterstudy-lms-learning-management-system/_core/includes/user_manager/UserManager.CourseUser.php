@@ -274,7 +274,7 @@ class STM_LMS_User_Manager_Course_User {
 		} elseif ( 'stm-assignments' === $material['post_type'] ) {
 			$type      = 'assignment';
 			$completed = class_exists( '\MasterStudy\Lms\Pro\addons\assignments\Assignments' )
-				&& method_exists( '\MasterStudy\Lms\Pro\addons\assignments\Assignments', 'has_passed_assignment' )
+				&& method_exists( '\MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository', 'has_passed_assignment' )
 				&& ( new AssignmentStudentRepository() )->has_passed_assignment( $material['post_id'], $student_id, $course_id );
 		} else {
 			$completed = STM_LMS_Lesson::is_lesson_completed( $user_id, $course_id, $material['post_id'] );

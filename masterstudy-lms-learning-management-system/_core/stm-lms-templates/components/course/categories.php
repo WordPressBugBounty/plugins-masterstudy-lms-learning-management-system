@@ -9,6 +9,7 @@ use MasterStudy\Lms\Plugin\Taxonomy;
 
 $only_one      = isset( $only_one ) ? $only_one : false;
 $inline        = isset( $inline ) ? $inline : false;
+$separator     = is_rtl() ? '⸲' : ',';
 $terms_content = '';
 
 if ( ! empty( $term_ids ) ) {
@@ -48,7 +49,7 @@ if ( ! empty( $term_ids ) ) {
 									}
 
 									$course_term    = get_term_by( 'id', $term_id, Taxonomy::COURSE_CATEGORY );
-									$terms_content .= '<a class="masterstudy-single-course-categories__link" href="' . esc_url( STM_LMS_Course::courses_page_url() . '?terms[]=' . $term_id . '&category[]=' . $term_id ) . '" target="_blank">' . esc_html( $course_term->name ) . ( array_key_last( $term_ids ) !== $index ? ', ' : '' ) . '</a>';
+									$terms_content .= '<a class="masterstudy-single-course-categories__link" href="' . esc_url( STM_LMS_Course::courses_page_url() . '?terms[]=' . $term_id . '&category[]=' . $term_id ) . '" target="_blank">' . esc_html( $course_term->name ) . ( array_key_last( $term_ids ) !== $index ? $separator . ' ' : '' ) . '</a>';
 								}
 								STM_LMS_Templates::show_lms_template(
 									'components/hint',
@@ -74,7 +75,7 @@ if ( ! empty( $term_ids ) ) {
 								<?php
 								echo esc_html( $course_term->name );
 								if ( array_key_last( $term_ids ) !== $index ) {
-									echo ',';
+									echo esc_html( $separator );
 								}
 								?>
 							</a>

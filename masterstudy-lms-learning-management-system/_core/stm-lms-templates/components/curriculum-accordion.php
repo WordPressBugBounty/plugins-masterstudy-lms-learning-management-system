@@ -78,7 +78,7 @@ wp_enqueue_script( 'masterstudy-curriculum-accordion' );
 										'components/hint',
 										array(
 											'content'   => $material['lesson_lock_message'],
-											'side'      => 'right',
+											'side'      => is_rtl() ? 'left' : 'right',
 											'dark_mode' => $dark_mode,
 										)
 									);

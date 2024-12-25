@@ -40,6 +40,7 @@ abstract class LmsUpdates {
 		'3.4.13' => array( 'lms_flush_rewrite_rules', 'lms_reset_page_routes' ), // Update permalinks for thank you page endpoints
 		'3.5.0'  => array( 'lms_update_grades' ), // Update Grades tables and data
 		'3.5.1'  => array( 'lms_reset_page_routes' ),
+		'3.5.5'  => array( 'lms_flush_rewrite_rules', 'lms_reset_page_routes' ), // Refresh Page Routes for Public Profile pages
 	);
 
 	/**

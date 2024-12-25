@@ -1066,6 +1066,10 @@ function ms_plugin_video_sources() {
 		}
 	}
 
+	if ( defined( 'VDOCIPHER_PLUGIN_VERSION' ) && current_user_can( 'administrator' ) ) {
+		$options['vdocipher'] = esc_html__( 'VdoCipher', 'masterstudy-lms-learning-management-system' );
+	}
+
 	return $options;
 }
 

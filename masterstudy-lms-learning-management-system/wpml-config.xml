@@ -34,6 +34,7 @@
         <custom-field action="copy">type</custom-field>
         <custom-field action="copy">video_type</custom-field>
         <custom-field action="translate">presto_player_idx</custom-field>
+        <custom-field action="translate">vdocipher_id</custom-field>
         <custom-field action="translate">lesson_video</custom-field>
         <custom-field action="translate">lesson_video_poster</custom-field>
         <custom-field action="translate">lesson_video_width</custom-field>

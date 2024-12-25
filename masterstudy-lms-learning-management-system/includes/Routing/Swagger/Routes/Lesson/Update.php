@@ -53,6 +53,10 @@ class Update extends Route implements RequestInterface, ResponseInterface {
 				'type'        => 'integer',
 				'description' => 'For video type presto',
 			),
+			'vdocipher_id'                       => array(
+				'type'        => 'string',
+				'description' => 'For video type VdoCipher',
+			),
 			'shortcode'                          => array(
 				'type'        => 'string',
 				'description' => 'For video type shortcode',

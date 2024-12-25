@@ -21,6 +21,9 @@ trait VideoTrait {
 		LessonVideoType::PRESTO_PLAYER => array(
 			'presto_player_idx' => 'presto_player_idx',
 		),
+		LessonVideoType::VDOCIPHER     => array(
+			'vdocipher_id' => 'vdocipher_id',
+		),
 		LessonVideoType::SHORTCODE     => array(
 			'shortcode' => 'lesson_shortcode',
 		),

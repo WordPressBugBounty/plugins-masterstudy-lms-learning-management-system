@@ -40,7 +40,11 @@
     function course_completed_success() {
       $('.masterstudy-single-course-complete__loading').hide();
       $('.masterstudy-single-course-complete__success').show();
-      $('.masterstudy-single-course-complete__opportunities-percent').html(stats.course.progress_percent + '%');
+      if ($('body').hasClass('rtl')) {
+        $('.masterstudy-single-course-complete__opportunities-percent').html('%' + stats.course.progress_percent);
+      } else {
+        $('.masterstudy-single-course-complete__opportunities-percent').html(stats.course.progress_percent + '%');
+      }
       if (stats.title) {
         $statsContainer.find('h2').show();
         $statsContainer.find('h2').html(stats.title);

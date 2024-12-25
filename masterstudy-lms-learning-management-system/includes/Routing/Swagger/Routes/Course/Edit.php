@@ -26,6 +26,10 @@ class Edit extends Route implements ResponseInterface {
 							'type'        => 'boolean',
 							'description' => 'Presto Player plugin.',
 						),
+						'vdocipher'     => array(
+							'type'        => 'boolean',
+							'description' => 'VdoCipher plugin.',
+						),
 						'pmpro'         => array(
 							'type'        => 'boolean',
 							'description' => 'Paid Membership Pro plugin.',

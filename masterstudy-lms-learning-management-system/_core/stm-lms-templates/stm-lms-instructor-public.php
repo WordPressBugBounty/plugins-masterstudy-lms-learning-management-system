@@ -1,16 +1,15 @@
 <?php
 /**
- * @var $user_id
+ * @var $instructor_id
  */
 
 use MasterStudy\Lms\Plugin\Addons;
-use MasterStudy\Lms\Pro\addons\CourseBundle\Repository\CourseBundleRepository;
 
-$instructor = STM_LMS_User::get_current_user( $user_id, false, true );
+$instructor = STM_LMS_User::get_current_user( $instructor_id, false, true );
 
 if ( empty( $instructor['id'] ) ) {
 	return;
-};
+}
 
 get_header();
 
@@ -34,7 +33,7 @@ wp_localize_script(
 	'masterstudy-instructor-public-account',
 	'instructor_data',
 	array(
-		'user'              => $user_id,
+		'user'              => $instructor_id,
 		'user_login'        => $instructor['login'],
 		'courses_per_page'  => 12,
 		'bundles_per_page'  => 6,
@@ -45,7 +44,7 @@ wp_localize_script(
 
 $args                   = array(
 	'posts_per_page' => 12,
-	'author__in'     => array( $user_id ),
+	'author__in'     => array( $instructor_id ),
 	'paged'          => 1,
 );
 $logged_in              = is_user_logged_in();
@@ -91,7 +90,7 @@ STM_LMS_Templates::show_lms_template(
 	'components/modals/message',
 	array(
 		'username'  => $instructor['login'],
-		'user_id'   => $user_id,
+		'user_id'   => $instructor_id,
 		'logged_in' => $logged_in,
 	)
 );
@@ -172,7 +171,7 @@ STM_LMS_Templates::show_lms_template(
 					</div>
 					<?php
 				}
-				STM_LMS_Templates::show_lms_template( 'components/form-builder-fields/public-fields', array( 'user_id' => $user_id ) );
+				STM_LMS_Templates::show_lms_template( 'components/form-builder-fields/public-fields', array( 'user_id' => $instructor_id ) );
 				?>
 				<div class="masterstudy-instructor-public__socials">
 					<?php

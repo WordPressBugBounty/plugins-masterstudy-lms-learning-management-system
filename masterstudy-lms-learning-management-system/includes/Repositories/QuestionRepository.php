@@ -26,6 +26,7 @@ final class QuestionRepository extends AbstractRepository {
 		'video'             => 'question_video',
 		'video_type'        => 'video_type',
 		'presto_player_idx' => 'presto_player_idx',
+		'vdocipher_id'      => 'vdocipher_id',
 		'shortcode'         => 'question_shortcode',
 		'vimeo_url'         => 'question_vimeo_url',
 		'youtube_url'       => 'question_youtube_url',

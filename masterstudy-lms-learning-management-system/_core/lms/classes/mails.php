@@ -238,6 +238,17 @@ class STM_LMS_Mails {
 			)
 		);
 
+		if ( class_exists( 'STM_LMS_Email_Manager' ) ) {
+			$email_manager = STM_LMS_Email_Manager::stm_lms_get_settings();
+
+			add_filter(
+				'wp_mail_from',
+				function ( $from_email ) use ( $email_manager ) {
+					return $email_manager['stm_lms_email_template_header_email'] ?? $from_email;
+				}
+			);
+		}
+
 		if ( ! isset( $data['enabled'] ) || ( isset( $data['enabled'] ) && $data['enabled'] ) ) {
 			wp_mail( $receivers, $data['subject'], $data['message'] );
 		}

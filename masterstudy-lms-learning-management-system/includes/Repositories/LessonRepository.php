@@ -3,7 +3,6 @@
 namespace MasterStudy\Lms\Repositories;
 
 use MasterStudy\Lms\Enums\LessonType;
-use MasterStudy\Lms\Enums\LessonVideoType;
 use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Utility\Traits\VideoTrait;
 use RuntimeException;

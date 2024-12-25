@@ -279,7 +279,9 @@ class STM_LMS_User {
 					'text'  => 'privacy_policy' === $field_key ? __( 'You must agree to our Privacy Policy', 'masterstudy-lms-learning-management-system' ) : __( 'Field is required', 'masterstudy-lms-learning-management-system' ),
 				);
 			} else {
-				$data[ $field_key ] = STM_LMS_Helpers::sanitize_fields( $data[ $field_key ], $field['type'] );
+				if ( 'register_user_password' !== $field_key && 'register_user_password_re' !== $field_key ) {
+					$data[ $field_key ] = STM_LMS_Helpers::sanitize_fields( $data[ $field_key ], $field['type'] );
+				}
 				if ( empty( $data[ $field_key ] ) ) {
 					$response['errors'][] = array(
 						'id'    => 'valid',

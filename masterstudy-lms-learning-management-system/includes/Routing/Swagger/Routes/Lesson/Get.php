@@ -49,6 +49,10 @@ class Get extends Route implements RequestInterface, ResponseInterface {
 						'type'        => 'integer',
 						'description' => 'Available for video type presto',
 					),
+					'vdocipher_id'                       => array(
+						'type'        => 'string',
+						'description' => 'For video type VdoCipher',
+					),
 					'shortcode'                          => array(
 						'type'        => 'string',
 						'description' => 'Available for video type shortcode',

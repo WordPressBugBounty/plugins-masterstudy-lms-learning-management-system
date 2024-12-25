@@ -28,7 +28,7 @@ class UpdateSettingsController {
 
 		$levels      = array_keys( \STM_LMS_Helpers::get_course_levels() );
 		$video_types = apply_filters( 'masterstudy_lms_lesson_video_types', array_map( 'strval', LessonVideoType::cases() ) );
-		$validator = new Validator(
+		$validator   = new Validator(
 			$request->get_json_params(),
 			array(
 				'category'          => 'required|array',
@@ -42,6 +42,7 @@ class UpdateSettingsController {
 				'video_type'        => 'required_if,type;' . LessonType::VIDEO . '|contains_list,' . implode( ';', $video_types ),
 				'embed_ctx'         => 'nullable|string',
 				'external_url'      => 'nullable|string',
+				'vdocipher_id'      => 'nullable|string',
 				'shortcode'         => 'nullable|string',
 				'youtube_url'       => 'nullable|string',
 				'video'             => 'nullable|integer',

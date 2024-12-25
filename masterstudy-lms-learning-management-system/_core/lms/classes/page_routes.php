@@ -312,7 +312,7 @@ class STM_LMS_Page_Router {
 				'sub_pages' => array(
 					'instructor_url_profile_single' => array(
 						'template' => 'stm-lms-instructor-public',
-						'var'      => 'user_id',
+						'var'      => 'instructor_id',
 					),
 				),
 			),
@@ -321,7 +321,7 @@ class STM_LMS_Page_Router {
 				'sub_pages' => array(
 					'student_url_profile_single' => array(
 						'template' => 'stm-lms-student-public',
-						'var'      => 'user_id',
+						'var'      => 'student_id',
 					),
 				),
 			),

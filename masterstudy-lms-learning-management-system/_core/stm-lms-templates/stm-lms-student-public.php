@@ -1,9 +1,9 @@
 <?php
 /**
- * @var $user_id
+ * @var $student_id
  */
 
-$student = STM_LMS_User::get_current_user( $user_id, false, true );
+$student = STM_LMS_User::get_current_user( $student_id, false, true );
 
 if ( empty( $student['id'] ) ) {
 	return;
@@ -28,7 +28,7 @@ wp_localize_script(
 	'masterstudy-student-public-account',
 	'student_data',
 	array(
-		'user'             => $user_id,
+		'user'             => $student_id,
 		'user_login'       => $student['login'],
 		'show_stats'       => $show_stats,
 		'courses_per_page' => 9,
@@ -36,7 +36,7 @@ wp_localize_script(
 );
 
 $args        = array(
-	'user'   => $user_id,
+	'user'   => $student_id,
 	'pp'     => 9,
 	'page'   => 1,
 	'status' => 'completed',
@@ -82,7 +82,7 @@ STM_LMS_Templates::show_lms_template(
 	'components/modals/message',
 	array(
 		'username'  => $student['login'],
-		'user_id'   => $user_id,
+		'user_id'   => $student_id,
 		'logged_in' => $logged_in,
 	)
 );
@@ -153,7 +153,7 @@ STM_LMS_Templates::show_lms_template(
 				</div>
 				<?php
 			}
-			STM_LMS_Templates::show_lms_template( 'components/form-builder-fields/public-fields', array( 'user_id' => $user_id ) );
+			STM_LMS_Templates::show_lms_template( 'components/form-builder-fields/public-fields', array( 'user_id' => $student_id ) );
 			?>
 		</div>
 	</div>
@@ -171,7 +171,7 @@ STM_LMS_Templates::show_lms_template(
 						'components/course/student-card',
 						array(
 							'course'  => $course,
-							'user_id' => $user_id,
+							'user_id' => $student_id,
 						)
 					);
 				}

@@ -52,6 +52,10 @@ if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
 	);
 }
 
+if ( ! empty( $total_progress ) ) {
+	$percent = is_rtl() ? "%{$total_progress['course']['progress_percent']}" : "{$total_progress['course']['progress_percent']}%";
+}
+
 if ( ! empty( $total_progress ) && $total_progress['course_completed'] && $block_enabled && $course_passed ) {
 	?>
 	<div class="masterstudy-single-course-complete-block">
@@ -61,13 +65,10 @@ if ( ! empty( $total_progress ) && $total_progress['course_completed'] && $block
 				<?php echo esc_html__( 'Course complete', 'masterstudy-lms-learning-management-system' ); ?>
 			</span>
 			<span class="masterstudy-single-course-complete-block__score">
-				<?php
-				printf(
-					/* translators: %s will be replaced with a string. */
-					esc_html__( 'Score: %s', 'masterstudy-lms-learning-management-system' ),
-					'<strong>' . esc_html( "{$total_progress['course']['progress_percent']}%" ) . '</strong>'
-				);
-				?>
+				<span class="masterstudy-single-course-complete-block__score-value">
+					<?php echo esc_html__( 'Score:', 'masterstudy-lms-learning-management-system' ); ?>
+				</span>
+				<strong><?php echo esc_html( $percent ); ?></strong>
 			</span>
 		</div>
 		<span class="masterstudy-single-course-complete-block__details">
@@ -80,13 +81,10 @@ if ( ! empty( $total_progress ) && $total_progress['course_completed'] && $block
 	<div class="masterstudy-single-course-complete-block masterstudy-single-course-complete-block_in-progress">
 		<div class="masterstudy-single-course-complete-block__content">
 			<span class="masterstudy-single-course-complete-block__score">
-				<?php
-				printf(
-					/* translators: %s will be replaced with a string. */
-					esc_html__( 'Your progress: %s', 'masterstudy-lms-learning-management-system' ),
-					'<strong>' . esc_html( "{$total_progress['course']['progress_percent']}%" ) . '</strong>'
-				);
-				?>
+				<span class="masterstudy-single-course-complete-block__score-value">
+					<?php echo esc_html__( 'Score:', 'masterstudy-lms-learning-management-system' ); ?>
+				</span>
+				<strong><?php echo esc_html( $percent ); ?></strong>
 			</span>
 			<div class="masterstudy-single-course-complete__bars">
 				<span class="masterstudy-single-course-complete__bar-empty"></span>

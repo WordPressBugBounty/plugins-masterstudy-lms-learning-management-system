@@ -11,6 +11,15 @@ class LessonVideoType extends Field {
 	public static array $properties = array(
 		'type'        => 'string',
 		'description' => 'Lesson video type',
-		'enum'        => array( 'embed', 'ext_link', 'html', 'presto_player', 'shortcode', 'vimeo', 'youtube' ),
+		'enum'        => array(
+			'embed',
+			'ext_link',
+			'html',
+			'presto_player',
+			'shortcode',
+			'vimeo',
+			'youtube',
+			'vdocipher',
+		),
 	);
 }

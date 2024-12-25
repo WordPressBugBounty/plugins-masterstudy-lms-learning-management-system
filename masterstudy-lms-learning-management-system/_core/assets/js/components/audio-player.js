@@ -220,7 +220,12 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
         });
         // iOS does not let "volume" property to be set programmatically
         this.audioPlayer.querySelector('.masterstudy-audio-player__volume').style.display = 'none';
-        this.audioPlayer.querySelector('.masterstudy-audio-player__controls').style.marginRight = '0';
+        var controls = this.audioPlayer.querySelector('.masterstudy-audio-player__controls');
+        if (document.body.classList.contains('rtl')) {
+          controls.style.marginLeft = '0';
+        } else {
+          controls.style.marginRight = '0';
+        }
       }
     }
   }, {

@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.4
+Stable tag: 3.5.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -307,6 +307,15 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.5.5 - 2024-12-25 =
+- **Enhancement:** Added integration with VdoCipher for Video Lessons.
+- **Enhancement:** Introduced Right-to-Left (RTL) support for Course Player components.
+- **Enhancement:** Added Right-to-Left (RTL) support for Course Page Styles.
+- **Enhancement:** Removed the Overall Rating button in Gutenberg widgets when Course Reviews are disabled in plugin settings.
+- **Enhancement:** Added an option to sanitize the Reset Password email.
+- **Fix:** Fixed conflict with the RankMath SEO plugin appearing on Public Profile pages.
+- **Fix:** Small bug fixes.
+
 = 3.5.4 - 2024-12-19 =
 - **Fix:** Small bug fixes.
 
@@ -323,9 +332,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 = 3.5.1 - 2024-12-13 =
 - **Enhancement:** Introduced 'All Time' filter for Grades in the table view. (Pro)
 - **Fix:** Small bug fixes.
-
-= 3.5.0 - 2024-12-12 =
-- **New feature**: Added a new Grades addon. (Pro)
-- **Fix:** _load_textdomain_just_in_time issue fixed.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

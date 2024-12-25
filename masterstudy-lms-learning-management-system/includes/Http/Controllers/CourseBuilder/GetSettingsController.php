@@ -36,6 +36,7 @@ final class GetSettingsController {
 					'lms_pro'       => \STM_LMS_Helpers::is_pro(),
 					'lms_pro_plus'  => \STM_LMS_Helpers::is_pro_plus(),
 					'presto_player' => defined( 'PRESTO_PLAYER_PLUGIN_FILE' ),
+					'vdocipher'     => defined( 'VDOCIPHER_PLUGIN_VERSION' ),
 					'pmpro'         => defined( 'PMPRO_VERSION' ),
 					'eroom'         => defined( 'STM_ZOOM_VERSION' ),
 				),

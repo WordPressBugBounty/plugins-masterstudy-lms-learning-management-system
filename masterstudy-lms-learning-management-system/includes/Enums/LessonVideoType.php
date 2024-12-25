@@ -7,6 +7,7 @@ final class LessonVideoType extends Enum {
 	public const EXT_LINK      = 'ext_link';
 	public const HTML          = 'html';
 	public const PRESTO_PLAYER = 'presto_player';
+	public const VDOCIPHER     = 'vdocipher';
 	public const SHORTCODE     = 'shortcode';
 	public const VIMEO         = 'vimeo';
 	public const YOUTUBE       = 'youtube';

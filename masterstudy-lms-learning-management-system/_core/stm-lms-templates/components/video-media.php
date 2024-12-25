@@ -8,7 +8,11 @@
  * @package masterstudy
  */
 
-if ( empty( $lesson['video_type'] ) ) return;
+use MasterStudy\Lms\Enums\LessonVideoType;
+
+if ( empty( $lesson['video_type'] ) ) {
+	return;
+}
 
 $settings                = get_option( 'stm_lms_settings' );
 $is_vimeo_video_player   = $settings['course_player_vimeo_video_player'] ?? false;
@@ -25,17 +29,17 @@ wp_enqueue_script( 'masterstudy-course-player-lesson-video' );
 
 <div class="masterstudy-course-player-lesson-video">
 	<?php
-	if ( 'embed' === $lesson['video_type'] && ! empty( $lesson['embed_ctx'] ) ) {
+	if ( LessonVideoType::EMBED === $lesson['video_type'] && ! empty( $lesson['embed_ctx'] ) ) {
 		?>
 		<div class="masterstudy-course-player-lesson-video__embed-wrapper">
 			<?php echo wp_kses( htmlspecialchars_decode( $lesson['embed_ctx'] ), stm_lms_allowed_html() ); ?>
 		</div>
 		<?php
-	} elseif ( in_array( $lesson['video_type'], array( 'html', 'ext_link', 'external_url' ), true ) ) {
+	} elseif ( in_array( $lesson['video_type'], array( LessonVideoType::HTML, LessonVideoType::EXT_LINK, 'external_url' ), true ) ) {
 		$uploaded_video = $lesson['external_url'] ?? '';
 		$video_format   = 'mp4';
 
-		if ( 'html' === $lesson['video_type'] ) {
+		if ( LessonVideoType::HTML === $lesson['video_type'] ) {
 			$uploaded_video = $lesson['video']['url'] ?? '';
 			$video_format   = explode( '.', $uploaded_video );
 			$video_format   = strtolower( end( $video_format ) );
@@ -59,10 +63,10 @@ wp_enqueue_script( 'masterstudy-course-player-lesson-video' );
 			</div>
 			<?php
 		}
-	} elseif ( in_array( $lesson['video_type'], array( 'youtube', 'vimeo' ), true ) ) {
-		$video_id = 'youtube' === $lesson['video_type'] ? ms_plugin_get_youtube_id( $lesson['youtube_url'] ) : ms_plugin_get_vimeo_id( $lesson['vimeo_url'] );
+	} elseif ( in_array( $lesson['video_type'], array( LessonVideoType::YOUTUBE, LessonVideoType::VIMEO ), true ) ) {
+		$video_id = LessonVideoType::YOUTUBE === $lesson['video_type'] ? ms_plugin_get_youtube_id( $lesson['youtube_url'] ) : ms_plugin_get_vimeo_id( $lesson['vimeo_url'] );
 
-		if ( $is_vimeo_video_player && 'vimeo' === $lesson['video_type'] || $is_youtube_video_player && 'youtube' === $lesson['video_type'] ) :
+		if ( $is_vimeo_video_player && LessonVideoType::VIMEO === $lesson['video_type'] || $is_youtube_video_player && LessonVideoType::YOUTUBE === $lesson['video_type'] ) :
 			?>
 		<div class="masterstudy-plyr-video-player" class="plyr__video-embed">
 		<?php endif; ?>
@@ -73,12 +77,16 @@ wp_enqueue_script( 'masterstudy-course-player-lesson-video' );
 				: "https://player.vimeo.com/video/{$video_id}?loop=false&amp;byline=false&amp;portrait=false&amp;title=false&amp;speed=true&amp;transparent=0&amp;gesture=media"
 		);
 		?>" frameborder="0" allowfullscreen allowtransparency allow="autoplay"></iframe>
-		<?php if ( $is_vimeo_video_player && 'vimeo' === $lesson['video_type'] || $is_youtube_video_player && 'youtube' === $lesson['video_type'] ) : ?>
+		<?php if ( $is_vimeo_video_player && LessonVideoType::VIMEO === $lesson['video_type'] || $is_youtube_video_player && LessonVideoType::YOUTUBE === $lesson['video_type'] ) : ?>
 		</div>
 		<?php
 		endif; // phpcs:enable
-	} elseif ( in_array( $lesson['video_type'], array( 'presto_player', 'shortcode' ), true ) ) {
+	} elseif ( in_array( $lesson['video_type'], array( LessonVideoType::PRESTO_PLAYER, LessonVideoType::SHORTCODE ), true ) ) {
 		echo 'presto_player' === $lesson['video_type'] && ! empty( $lesson['presto_player_idx'] ) ? do_shortcode( '[presto_player id="' . esc_attr( $lesson['presto_player_idx'] ) . '"]' ) : do_shortcode( $lesson['shortcode'] );
+	} elseif ( LessonVideoType::VDOCIPHER === $lesson['video_type'] && ! empty( $lesson['vdocipher_id'] ) ) {
+		$vdocipher_id = preg_replace( '/\[vdo id="([^"]*)"\]/', '$1', $lesson['vdocipher_id'] );
+
+		echo do_shortcode( '[vdo id="' . esc_attr( $vdocipher_id ) . '"]' );
 	}
 	?>
 </div>

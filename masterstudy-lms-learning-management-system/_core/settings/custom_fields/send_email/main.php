@@ -20,6 +20,13 @@ function stm_lms_send_test_email_ajax() {
 
 			add_filter( 'wp_mail_content_type', array( STM_LMS_Helpers::class, 'set_html_content_type' ) );
 
+			add_filter(
+				'wp_mail_from',
+				function ( $from_email ) use ( $email_manager ) {
+					return $email_manager['stm_lms_email_template_header_email'] ?? $from_email;
+				}
+			);
+
 			$response = wp_mail( $current_user->user_email, $data['subject'], $data['message'] );
 
 			remove_filter( 'wp_mail_content_type', array( STM_LMS_Helpers::class, 'set_html_content_type' ) );

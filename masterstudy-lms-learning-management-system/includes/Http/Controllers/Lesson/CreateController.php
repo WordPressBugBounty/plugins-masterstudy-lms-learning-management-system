@@ -28,6 +28,7 @@ class CreateController {
 			'embed_ctx'         => 'nullable|string',
 			'external_url'      => 'nullable|string',
 			'presto_player_idx' => 'nullable|integer',
+			'vdocipher_id'      => 'nullable|string',
 			'shortcode'         => 'nullable|string',
 			'youtube_url'       => 'nullable|string',
 			'video'             => 'nullable|integer',

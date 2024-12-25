@@ -35,8 +35,13 @@ $display_grade = is_ms_lms_addon_enabled( 'grades' );
 				<span class="masterstudy-course-player-quiz__result-answers">
 					<?php
 					if ( $questions_quantity > 0 ) {
-						/* translators: %d: number */
-						printf( wp_kses_post( __( '<strong>%1$d</strong> out of <strong>%2$d</strong> questions answered correctly', 'masterstudy-lms-learning-management-system' ) ), esc_html( $answered_quantity ), esc_html( $questions_quantity ) );
+						if ( is_rtl() ) {
+							/* translators: %d: number */
+							printf( wp_kses_post( __( '<strong>%2$d</strong> out of <strong>%1$d</strong> questions answered correctly', 'masterstudy-lms-learning-management-system' ) ), esc_html( $questions_quantity ), esc_html( $answered_quantity ) );
+						} else {
+							/* translators: %d: number */
+							printf( wp_kses_post( __( '<strong>%1$d</strong> out of <strong>%2$d</strong> questions answered correctly', 'masterstudy-lms-learning-management-system' ) ), esc_html( $answered_quantity ), esc_html( $questions_quantity ) );
+						}
 					}
 					?>
 				</span>
