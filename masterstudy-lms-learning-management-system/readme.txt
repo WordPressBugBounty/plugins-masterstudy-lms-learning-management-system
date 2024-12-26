@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.5
+Stable tag: 3.5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -306,6 +306,8 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.6 - 2024-12-26 =
+- **Fix:** Small bug fixes.
 
 = 3.5.5 - 2024-12-25 =
 - **Enhancement:** Added integration with VdoCipher for Video Lessons.
@@ -328,9 +330,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fix:** Corrected an issue where deleted reviews were still applied to the overall course grade.
 - **Fix:** Resolved date and time translation issues in the course player’s countdown feature.
 - **Fix:** Fixed a fatal error occurring when using widgets after an Elementor update.
-
-= 3.5.1 - 2024-12-13 =
-- **Enhancement:** Introduced 'All Time' filter for Grades in the table view. (Pro)
-- **Fix:** Small bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
