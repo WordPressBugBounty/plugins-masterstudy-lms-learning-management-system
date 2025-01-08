@@ -7,8 +7,13 @@
 
 wp_enqueue_style( 'masterstudy-course-card' );
 
-$course = STM_LMS_Courses::get_course_submetas( $course, null );
 $public = isset( $public ) ?? false;
+$course = STM_LMS_Courses::get_course_submetas( $course );
+
+if ( $course['lazyload'] ) {
+	wp_enqueue_script( 'masterstudy_lazysizes' );
+	wp_enqueue_style( 'masterstudy_lazysizes' );
+}
 ?>
 
 <div class="masterstudy-course-card">
@@ -26,7 +31,7 @@ $public = isset( $public ) ?? false;
 			</div>
 		<?php } ?>
 		<a href="<?php echo esc_url( $course['url'] ); ?>" class="masterstudy-course-card__image-link">
-			<img src="<?php echo esc_url( $course['image'] ); ?>" class="masterstudy-course-card__image">
+			<?php echo wp_kses_post( masterstudy_get_image( $course['id'], $course['lazyload'], 'masterstudy-course-card__image', $course['img_width'], $course['img_height'] ) ); ?>
 		</a>
 		<div class="masterstudy-course-card__info">
 			<?php if ( ! empty( $course['terms'] ) ) { ?>

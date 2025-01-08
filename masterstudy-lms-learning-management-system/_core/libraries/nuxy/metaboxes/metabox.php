@@ -97,6 +97,12 @@ class STM_Metaboxes {
 
 						$field_modified = call_user_func( array( $this, $sanitize ), $field_modified, $field_name );
 					}
+					$field_modified_array = json_decode( wp_unslash( $field_modified ), true );
+					if ( ! empty( $field_modified_array ) && ! empty( $field_modified_array['font-data']['family'] ) ) {
+						$font = new WPCFTO_WebFont_Loader( $field_modified_array, $field_name . '_' . $post_id );
+						$field_modified_array['font-data']['local_url'] = $font->get_url();
+						$field_modified                                 = json_encode( wp_slash( $field_modified_array ) );
+					}
 
 					$fields[ $field_name ] = $field_modified;
 				}
@@ -234,32 +240,38 @@ class STM_Metaboxes {
 
 	public static function translations() {
 		return array(
-			'font_size'               => esc_html__( 'Font size', 'nuxy' ),
-			'line_height'             => esc_html__( 'Line height', 'nuxy' ),
-			'word_spacing'            => esc_html__( 'Word spacing', 'nuxy' ),
-			'letter_spacing'          => esc_html__( 'Letter spacing', 'nuxy' ),
-			'font_family'             => esc_html__( 'Font Family', 'nuxy' ),
-			'backup_font_family'      => esc_html__( 'Backup Font Family', 'nuxy' ),
-			'font_weight'             => esc_html__( 'Font Weignt & Style', 'nuxy' ),
-			'font_subset'             => esc_html__( 'Font Subsets', 'nuxy' ),
-			'text_align'              => esc_html__( 'Text Align', 'nuxy' ),
-			'font_color'              => esc_html__( 'Font Color', 'nuxy' ),
-			'text-transform'          => esc_html__( 'Text transform', 'nuxy' ),
-			'export'                  => esc_html__( 'Copy settings', 'nuxy' ),
-			'import'                  => esc_html__( 'Import settings', 'nuxy' ),
-			'import_notice'           => esc_html__( 'WARNING! This will overwrite all existing option values, please proceed with caution!', 'nuxy' ),
-			'exported_data'           => esc_html__( 'Settings copied to buffer', 'nuxy' ),
-			'exported_data_error'     => esc_html__( 'Couldn\'t copy settings', 'nuxy' ),
-			'export_data_label'       => esc_html__( 'Export options', 'nuxy' ),
-			'import_data_label'       => esc_html__( 'Import options', 'nuxy' ),
-			'vue_select_notice'       => esc_html__( 'Sorry, no matching options.', 'nuxy' ),
-			'regenerate_fonts_btn'    => esc_html__( 'Generate', 'nuxy' ),
-			'regenerate_fonts_title'  => esc_html__( 'Generate fonts', 'nuxy' ),
-			'regenerate_fonts_notice' => esc_html__( 'This setting will automatically update font files in server', 'nuxy' ),
+			'font_size'                          => esc_html__( 'Font size', 'nuxy' ),
+			'line_height'                        => esc_html__( 'Line height', 'nuxy' ),
+			'word_spacing'                       => esc_html__( 'Word spacing', 'nuxy' ),
+			'letter_spacing'                     => esc_html__( 'Letter spacing', 'nuxy' ),
+			'font_family'                        => esc_html__( 'Font Family', 'nuxy' ),
+			'backup_font_family'                 => esc_html__( 'Backup Font Family', 'nuxy' ),
+			'font_weight'                        => esc_html__( 'Font Weignt & Style', 'nuxy' ),
+			'font_subset'                        => esc_html__( 'Font Subsets', 'nuxy' ),
+			'text_align'                         => esc_html__( 'Text Align', 'nuxy' ),
+			'font_color'                         => esc_html__( 'Font Color', 'nuxy' ),
+			'text-transform'                     => esc_html__( 'Text transform', 'nuxy' ),
+			'export'                             => esc_html__( 'Copy settings', 'nuxy' ),
+			'import'                             => esc_html__( 'Import settings', 'nuxy' ),
+			'import_notice'                      => esc_html__( 'WARNING! This will overwrite all existing option values, please proceed with caution!', 'nuxy' ),
+			'exported_data'                      => esc_html__( 'Settings copied to buffer', 'nuxy' ),
+			'exported_data_error'                => esc_html__( 'Couldn\'t copy settings', 'nuxy' ),
+			'export_data_label'                  => esc_html__( 'Export options', 'nuxy' ),
+			'import_data_label'                  => esc_html__( 'Import options', 'nuxy' ),
+			'vue_select_notice'                  => esc_html__( 'Sorry, no matching options.', 'nuxy' ),
+			'regenerate_fonts_btn'               => esc_html__( 'Synchronize', 'nuxy' ),
+			'regenerate_fonts_title'             => esc_html__( 'Font Synchronize', 'nuxy' ),
+			'regenerate_fonts_notice'            => esc_html__( 'Sync and update your fonts if they are displayed incorrectly on your website.', 'nuxy' ),
+			'fonts_download_setting_label'       => esc_html__( 'Download Google Fonts', 'nuxy' ),
+			'fonts_download_setting_description' => esc_html__( 'Download and store Google Fonts locally. Set the fonts in the typography.', 'nuxy' ),
 		);
 	}
 
 	public static function wpcfto_scripts() {
+		if ( is_customize_preview() ) {
+			return;
+		}
+
 		$v      = STM_WPCFTO_VERSION;
 		$base   = STM_WPCFTO_URL . 'metaboxes/assets/';
 		$assets = STM_WPCFTO_URL . 'metaboxes/assets/';
@@ -289,6 +301,10 @@ class STM_Metaboxes {
 				'translations' => self::translations(),
 				'transform'    => WPCFTO_Gfonts::transform(),
 				'nonce'        => wp_create_nonce( 'stm_wpcfto_get_settings_nonce' ),
+				'translations' => array(
+					'delete'  => esc_html__( 'Delete', 'nuxy' ),
+					'preview' => esc_html__( 'Preview', 'nuxy' ),
+				),
 			)
 		);
 
@@ -340,7 +356,6 @@ class STM_Metaboxes {
 			'typography',
 			'multiselect',
 			'import_export',
-			'regenerate_fonts',
 			'trumbowyg',
 		);
 
@@ -569,6 +584,10 @@ function wpcfto_metaboxes_deps( $field, $section_name ) {
 		$dependency = "v-bind:class=\"{'wpcfto-field-disabled' : true}\"";
 	}
 
+	if ( ! empty( $field['dependency_mode'] ) && 'sorted' === $field['dependency_mode'] ) {
+		return '';
+	}
+
 	if ( empty( $field['dependency'] ) ) {
 		return $dependency;
 	}
@@ -629,7 +648,7 @@ function wpcfto_metaboxes_generate_deps( $section_name, $dep ) {
 	return $dependency;
 }
 
-function wpcfto_metaboxes_display_single_field( $section, $section_name, $field, $field_name ) {
+function wpcfto_metaboxes_display_single_field( $section, $section_name, $field, $field_name, $metabox_id = null ) {
 	$dependency  = wpcfto_metaboxes_deps( $field, $section_name );
 	$width       = 'column-1';
 	$is_pro      = ( ! empty( $field['pro'] ) ) ? 'is_pro' : 'not_pro';
@@ -700,6 +719,7 @@ function wpcfto_metaboxes_display_single_field( $section, $section_name, $field,
 			$field_label    = "{$field}['label']";
 			$field_id       = $section_name . '-' . $field_name;
 			$field_readonly = isset( $field_data['readonly'] ) ? 'true' : 'false';
+			$option_id      = $metabox_id;
 
 			$file = apply_filters( "wpcfto_field_{$field_type}", STM_WPCFTO_PATH . '/metaboxes/fields/' . $field_type . '.php' );
 
@@ -715,18 +735,25 @@ function wpcfto_metaboxes_display_single_field( $section, $section_name, $field,
 
 function wpcfto_metaboxes_display_group_field( $section, $section_name, $field, $field_name ) {
 	if ( 'started' === $field['group'] ) :
+
+		$group_data = '';
+
+		if ( ! empty( $field['dependency_mode'] ) && 'sorted' === $field['dependency_mode'] ) {
+			$group_data = 'data-dependency=' . json_encode( $field['dependency'] );
+		}
+
 		$group_classes = array( 'wpcfto-box wpcfto_group_started column-1' );
 		if ( ! empty( $field['submenu'] ) ) {
 			$group_classes[] = sanitize_title( "{$section_name}_{$field['submenu']}" );
 		}
 		?>
-		<div class="<?php echo esc_attr( implode( ' ', $group_classes ) ); ?>">
+		<div class="<?php echo esc_attr( implode( ' ', $group_classes ) ); ?>" <?php echo esc_attr( $group_data ); ?> >
 		<div class="container">
 		<div class="row">
 		<?php if ( isset( $field['group_title'] ) && ! empty( $field['group_title'] ) ) { ?>
 		<div class="wpcfto_group_title"><?php echo esc_html( $field['group_title'] ); ?></div>
 	<?php } ?>
-	<?php
+		<?php
 	endif;
 
 	wpcfto_metaboxes_display_single_field( $section, $section_name, $field, $field_name );
@@ -734,7 +761,7 @@ function wpcfto_metaboxes_display_group_field( $section, $section_name, $field, 
 	if ( 'ended' === $field['group'] ) :
 		?>
 		</div></div></div>
-	<?php
+		<?php
 	endif;
 }
 

@@ -182,7 +182,14 @@ if ( ! class_exists( 'WPCFTO_WebFont_Loader' ) ) {
 		 */
 		public function get_local_stylesheet_url() {
 			if ( ! $this->local_stylesheet_url ) {
-				$this->local_stylesheet_url = '/wp-content/uploads/' . $this->get_subfolder_name() . '/' . $this->key . '/' . $this->get_local_stylesheet_filename() . '.css';
+				$base_path = '/wp-content/uploads/';
+				if ( is_multisite() ) {
+					$current_site_id = get_current_blog_id();
+					if ( 1 !== $current_site_id ) {
+						$base_path = '/wp-content/uploads/sites/' . $current_site_id . '/';
+					}
+				}
+				$this->local_stylesheet_url = $base_path . $this->get_subfolder_name() . '/' . $this->key . '/' . $this->get_local_stylesheet_filename() . '.css';
 			}
 
 			return $this->local_stylesheet_url;
@@ -597,8 +604,17 @@ if ( ! class_exists( 'WPCFTO_WebFont_Loader' ) ) {
 		 * @since 1.1.0
 		 */
 		public function get_base_url() {
-			if ( ! $this->base_url ) {
-				$this->base_url = apply_filters( 'wpcfto_get_local_fonts_base_url', content_url( '/uploads/' ) );
+			if ( ! isset( $this->base_url ) ) {
+				$base_url = content_url( '/uploads/' );
+
+				if ( is_multisite() ) {
+					$current_site_id = get_current_blog_id();
+					if ( 1 !== $current_site_id ) {
+						$base_url .= 'sites/' . $current_site_id;
+					}
+				}
+
+				$this->base_url = apply_filters( 'wpcfto_get_local_fonts_base_url', $base_url );
 			}
 
 			return $this->base_url;
@@ -722,6 +738,13 @@ if ( ! class_exists( 'WPCFTO_WebFont_Loader' ) ) {
 				}
 			}
 			$wp_filesystem->rmdir( $dir );
+		}
+
+		/**
+		 * Delete folder with files
+		 */
+		public function deleteDirFiles( $dir ) {
+			return $this->get_filesystem()->delete( $dir, true );
 		}
 
 	}

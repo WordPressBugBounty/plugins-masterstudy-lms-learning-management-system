@@ -104,9 +104,10 @@ function stm_lms_settings_courses_section() {
 			'courses_image_size'                => array(
 				'type'        => 'text',
 				'label'       => esc_html__( 'Course image size', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'Set the size for course images, like 200x100', 'masterstudy-lms-learning-management-system' ),
-				'value'       => '480x380',
+				'description' => esc_html__( 'Set the size for course images, like 330x185', 'masterstudy-lms-learning-management-system' ),
+				'value'       => '330x185',
 				'columns'     => '50',
+				'hint'        => __( 'Set custom image size. The size will be taken from the nearest standard size in WordPress gallery, but it will not be smaller than the dimensions specified in this setting, provided that the uploaded image has larger dimensions.', 'masterstudy-lms-learning-management-system' ),
 			),
 			'course_card_display_info'          => array(
 				'group'       => 'ended',
@@ -121,7 +122,7 @@ function stm_lms_settings_courses_section() {
 
 			/*GROUP ENDED*/
 
-			'disable_lazyload'                  => array(
+			'enable_lazyload'                   => array(
 				'type'        => 'checkbox',
 				'toggle'      => true,
 				'label'       => esc_html__( 'Lazy loading', 'masterstudy-lms-learning-management-system' ),

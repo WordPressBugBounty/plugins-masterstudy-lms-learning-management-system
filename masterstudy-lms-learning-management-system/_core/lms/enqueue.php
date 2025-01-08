@@ -36,6 +36,7 @@ function stm_lms_enqueue_ss() {
 	wp_enqueue_style( 'stm_lms_icons', $assets . '/icons/style.css', null, MS_LMS_VERSION );
 	wp_enqueue_style( 'video.js', $assets . '/vendors/video-js.min.css', null, MS_LMS_VERSION, 'all' );
 	wp_register_style( 'owl.carousel', $assets . '/vendors/owl.carousel.min.css', null, MS_LMS_VERSION, 'all' );
+	wp_register_style( 'masterstudy_lazysizes', $assets . '/css/lazysizes.css', null, MS_LMS_VERSION );
 
 	wp_enqueue_script( 'jquery' );
 
@@ -67,14 +68,16 @@ function stm_lms_enqueue_ss() {
 	wp_register_script( 'owl.carousel', $assets . '/vendors/owl.carousel.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'vue2-autocomplete', $assets . '/vendors/vue2-autocomplete.js', array( 'vue.js' ), MS_LMS_VERSION, true );
 	wp_register_script( 'stm-lms-countdown', $assets . '/js/countdown.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'lazysizes', $assets . '/vendors/lazysizes.min.js', array(), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy_lazysizes', $assets . '/js/lazyload.js', array( 'jquery', 'lazysizes' ), MS_LMS_VERSION, true );
 	wp_register_script( 'jquery.countdown', $assets . '/vendors/jquery.countdown.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'js.countdown', $assets . '/vendors/js.countdown.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_localize_script(
 		'jquery.countdown',
 		'stm_lms_jquery_countdown_vars',
 		array(
-			'days' => __( 'Days', 'masterstudy-lms-learning-management-system' ),
-			'hours' => __( 'Hours', 'masterstudy-lms-learning-management-system' ),
+			'days'    => __( 'Days', 'masterstudy-lms-learning-management-system' ),
+			'hours'   => __( 'Hours', 'masterstudy-lms-learning-management-system' ),
 			'minutes' => __( 'Minutes', 'masterstudy-lms-learning-management-system' ),
 			'seconds' => __( 'Seconds', 'masterstudy-lms-learning-management-system' ),
 		)
@@ -299,6 +302,7 @@ function stm_lms_nonces() {
 		'stm_lms_send_message',
 		'stm_lms_get_user_conversations',
 		'stm_lms_get_user_messages',
+		'stm_lms_clear_new_messages',
 		'wpcfto_save_settings',
 		'stm_lms_tables_update',
 		'stm_lms_get_enterprise_groups',

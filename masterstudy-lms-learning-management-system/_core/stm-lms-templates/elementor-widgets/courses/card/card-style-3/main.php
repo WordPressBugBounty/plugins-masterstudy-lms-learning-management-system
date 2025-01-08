@@ -17,7 +17,7 @@ foreach ( $courses as $course ) {
 				</div>
 			<?php } ?>
 			<a href="<?php echo esc_url( $course['url'] ); ?>" class="ms_lms_courses_card_item_image_link">
-				<img src="<?php echo esc_url( $course['image'] ); ?>" class="ms_lms_courses_card_item_image">
+				<?php echo wp_kses_post( masterstudy_get_image( $course['id'], $course['lazyload'], 'ms_lms_courses_card_item_image', $course['img_width'], $course['img_height'] ) ); ?>
 			</a>
 			<div class="ms_lms_courses_card_item_info">
 				<?php if ( ! empty( $card_data['show_category'] ) && ! empty( $course['terms'] ) ) { ?>

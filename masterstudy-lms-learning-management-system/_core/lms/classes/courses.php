@@ -47,7 +47,7 @@ class STM_LMS_Courses {
 		return $result ?? array();
 	}
 
-	public static function get_course_submetas( $course, $course_image_size ) {
+	public static function get_course_submetas( $course, $course_image_size = null ) {
 		$course['current_status'] = STM_LMS_Course::get_post_status( $course['id'] );
 		$course['rating']         = STM_LMS_Course::course_average_rate( maybe_unserialize( $course['course_marks'] ) );
 		$course['lectures']       = STM_LMS_Course::curriculum_info( $course['id'] );
@@ -59,15 +59,18 @@ class STM_LMS_Courses {
 		$course['is_trial']       = get_post_meta( $course['id'], 'shareware', true );
 		$course['availability']   = get_post_meta( $course['id'], 'coming_soon_status', true );
 		$course['reviews_show']   = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+		$course['lazyload']       = STM_LMS_Options::get_option( 'enable_lazyload', false );
 		$progress                 = 0;
-		if ( ! empty( $course_image_size['width'] ) || ! empty( $course_image_size['height'] ) ) {
-			$course_image_size['width']  = ! empty( $course_image_size['width'] ) ? $course_image_size['width'] : 0;
-			$course_image_size['height'] = ! empty( $course_image_size['height'] ) ? $course_image_size['height'] : 0;
-			$course['image']             = wp_get_attachment_image_src( get_post_thumbnail_id( $course['id'] ), array( $course_image_size['width'], $course_image_size['height'] ) );
-			$course['image']             = ( ! empty( $course['image'] ) ) ? $course['image'][0] : '';
+
+		if ( $course_image_size ) {
+			$course['img_width']  = ! empty( $course_image_size['width'] ) ? $course_image_size['width'] : null;
+			$course['img_height'] = ! empty( $course_image_size['height'] ) ? $course_image_size['height'] : null;
 		} else {
-			$course['image'] = get_the_post_thumbnail_url( $course['id'], 'img-300-225' );
+			$img_size             = masterstudy_get_image_size( STM_LMS_Options::get_option( 'courses_image_size', '330x185' ) );
+			$course['img_width']  = $img_size[0] ?? 330;
+			$course['img_height'] = $img_size[1] ?? 185;
 		}
+
 		if ( is_user_logged_in() ) {
 			$my_progress = STM_LMS_Helpers::simplify_db_array( stm_lms_get_user_course( get_current_user_id(), $course['id'], array( 'progress_percent' ) ) );
 			if ( ! empty( $my_progress['progress_percent'] ) ) {

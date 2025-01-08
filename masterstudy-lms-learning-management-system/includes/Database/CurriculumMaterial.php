@@ -8,6 +8,8 @@ class CurriculumMaterial extends AbstractQuery {
 	public string $post_type;
 	public int $section_id;
 	public int $order;
+	public ?string $post_title;
+	public ?string $lesson_type;
 
 	protected string $sort_by = 'order';
 

@@ -34,9 +34,17 @@
       var message = $('#masterstudy-message-modal-text').val();
       if (message.length > 0) {
         _this.addClass('masterstudy-button_loading');
-        var endpoint = stm_lms_ajaxurl + '?action=stm_lms_send_message&nonce=' + stm_lms_nonces['stm_lms_send_message'] + '&to=' + message_modal_data.user_id + '&message=' + message;
+        var data = {
+          to: message_modal_data.user_id,
+          message: message
+        };
+        var endpoint = stm_lms_ajaxurl + '?action=stm_lms_send_message&nonce=' + stm_lms_nonces['stm_lms_send_message'];
         fetch(endpoint, {
-          method: 'GET'
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+          },
+          body: JSON.stringify(data)
         }).then(function (response) {
           if (!response.ok) {
             throw new Error('There was a problem with the fetch operation');

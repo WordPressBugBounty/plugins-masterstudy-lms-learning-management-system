@@ -98,7 +98,7 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 	}
 } else {
 	if ( $data['has_access'] && ! $data['has_trial_access'] ) {
-		do_action( 'stm_lms_lesson_started', $data['post_id'], $data['item_id'], $data['user_id'] );
+		do_action( 'stm_lms_lesson_started', $data['item_id'], $data['post_id'], $data['user_id'] );
 	}
 
 	if ( $data['has_access'] && intval( $data['user_course']['start_time'] ?? 0 ) === 0 ) {

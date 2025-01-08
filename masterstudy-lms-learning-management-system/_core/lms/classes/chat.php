@@ -2,156 +2,180 @@
 
 STM_LMS_Chat::init();
 
-class STM_LMS_Chat
-{
+class STM_LMS_Chat {
 
-    public static function init()
-    {
-        add_action('wp_ajax_stm_lms_send_message', 'STM_LMS_Chat::add_message');
+	public static function init() {
+		add_action( 'wp_ajax_stm_lms_send_message', 'STM_LMS_Chat::add_message' );
+		add_action( 'wp_ajax_stm_lms_get_user_conversations', 'STM_LMS_Chat::get_user_conversations' );
+		add_action( 'wp_ajax_stm_lms_get_user_messages', 'STM_LMS_Chat::get_user_messages' );
+		add_action( 'wp_ajax_stm_lms_clear_new_messages', 'STM_LMS_Chat::stm_lms_handle_clear_new_messages' );
+		add_action( 'wp_ajax_nopriv_stm_lms_clear_new_messages', 'STM_LMS_Chat::stm_lms_handle_clear_new_messages' );
+	}
 
-        add_action('wp_ajax_stm_lms_get_user_conversations', 'STM_LMS_Chat::get_user_conversations');
+	public static function add_message() {
+		check_ajax_referer( 'stm_lms_send_message', 'nonce' );
 
-        add_action('wp_ajax_stm_lms_get_user_messages', 'STM_LMS_Chat::get_user_messages');
-    }
+		$request_body = file_get_contents( 'php://input' );
+		$data         = json_decode( $request_body, true );
+		$response     = array(
+			'status'  => 'error',
+			'message' => esc_html__( 'An unexpected error occurred, please try again later', 'masterstudy-lms-learning-management-system' ),
+		);
 
-    public static function add_message()
-    {
+		if ( empty( $data['to'] ) ) {
+			wp_send_json( $response );
+		}
+		$user_to = intval( $data['to'] );
 
-        check_ajax_referer('stm_lms_send_message', 'nonce');
+		$user = STM_LMS_User::get_current_user();
+		if ( empty( $user['id'] ) ) {
+			wp_send_json( $response );
+		}
+		$user_from = $user['id'];
 
-        if (empty($_GET['to'])) die;
-        $user_to = intval($_GET['to']);
+		$transient_name = self::transient_name( $user_to, 'chat' );
+		delete_transient( $transient_name );
 
-        $user = STM_LMS_User::get_current_user();
-        if (empty($user['id'])) die;
-        $user_from = $user['id'];
+		if ( empty( $data['message'] ) ) {
+			$response['message'] = esc_html__( 'Empty message sent', 'masterstudy-lms-learning-management-system' );
 
-        $transient_name = STM_LMS_Chat::transient_name($user_to, 'chat');
-        delete_transient($transient_name);
+			wp_send_json( $response );
+		}
+		$message   = sanitize_textarea_field( $data['message'] );
+		$timestamp = time();
+		$status    = 'pending';
 
-        if (empty($_GET['message'])) die;
-        $message = sanitize_text_field($_GET['message']);
+		do_action( 'stm_lms_before_send_chat_message' );
+		stm_lms_add_user_chat( compact( 'user_to', 'user_from', 'message', 'timestamp', 'status' ) );
 
-        $timestamp = time();
-        $status = 'pending';
+		wp_send_json(
+			array(
+				'response' => esc_html__( 'Message Sent', 'masterstudy-lms-learning-management-system' ),
+				'status'   => 'success',
+			)
+		);
+	}
 
-        do_action('stm_lms_before_send_chat_message');
-        stm_lms_add_user_chat(compact('user_to', 'user_from', 'message', 'timestamp', 'status'));
+	public static function get_user_conversations() {
+		check_ajax_referer( 'stm_lms_get_user_conversations', 'nonce' );
 
-        $r = array(
-            'response' => esc_html__('Message Sent', 'masterstudy-lms-learning-management-system'),
-            'status' => 'success',
-        );
+		$response = array(
+			'status'  => 'error',
+			'message' => esc_html__( 'An unexpected error occurred, please try again later', 'masterstudy-lms-learning-management-system' ),
+		);
+		$user     = STM_LMS_User::get_current_user();
+		if ( empty( $user['id'] ) ) {
+			wp_send_json( $response );
+		}
+		$user_id = $user['id'];
 
-        wp_send_json($r);
-    }
+		$transient_name = self::transient_name( $user_id, 'chat' );
+		delete_transient( $transient_name );
 
-    public static function get_user_conversations()
-    {
+		$response = array();
 
-        check_ajax_referer('stm_lms_get_user_conversations', 'nonce');
+		$conversations = stm_lms_get_user_conversations( $user['id'] );
+		if ( ! empty( $conversations ) ) {
+			foreach ( $conversations as $conversation ) {
+				$companion_id = ( absint( $user_id ) === absint( $conversation['user_from'] ) ) ? $conversation['user_to'] : $conversation['user_from'];
 
-        $user = STM_LMS_User::get_current_user();
-        if (empty($user['id'])) die;
-        $user_id = $user['id'];
+				$conversation['ago'] = stm_lms_time_elapsed_string( wp_date( 'Y-m-d H:i:s', $conversation['timestamp'] ) );
 
-        $transient_name = STM_LMS_Chat::transient_name($user_id, 'chat');
-        delete_transient($transient_name);
+				$response[] = array(
+					'conversation_info' => $conversation,
+					'me'                => $user,
+					'companion'         => STM_LMS_User::get_current_user( $companion_id ),
+				);
 
-        $r = array();
+			}
+		}
 
-        $conversations = stm_lms_get_user_conversations($user['id']);
-        if (!empty($conversations)) {
-            foreach ($conversations as $conversation) {
-                $companion_id = ($user_id == $conversation['user_from']) ? $conversation['user_to'] : $conversation['user_from'];
+		wp_send_json( $response );
+	}
 
-                $conversation['ago'] = stm_lms_time_elapsed_string(date('Y-m-d H:i:s', $conversation['timestamp']));
+	public static function get_user_messages() {
+		check_ajax_referer( 'stm_lms_get_user_messages', 'nonce' );
 
-                $r[] = array(
-                    'conversation_info' => $conversation,
-                    'me' => $user,
-                    'companion' => STM_LMS_User::get_current_user($companion_id),
-                );
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-            }
-        }
+		$response = array(
+			'status'  => 'error',
+			'message' => esc_html__( 'An unexpected error occurred, please try again later', 'masterstudy-lms-learning-management-system' ),
+		);
+		$user     = STM_LMS_User::get_current_user();
+		if ( empty( $user['id'] ) ) {
+			wp_send_json( $response );
+		}
+		$user_id = $user['id'];
 
+		if ( empty( $_GET['id'] ) ) {
+			wp_send_json( $response );
+		}
+		$conversation_id = intval( $_GET['id'] );
 
-        wp_send_json($r);
-    }
+		$just_send = ( ! empty( $_GET['just_send'] ) && 'true' === $_GET['just_send'] );
 
-    public static function get_user_messages()
-    {
+		$messages = stm_lms_get_user_messages( $conversation_id, $user_id, array(), $just_send );
 
-        check_ajax_referer('stm_lms_get_user_messages', 'nonce');
+		if ( ! empty( $messages ) ) {
+			foreach ( $messages as $message_key => $message ) {
+				$messages[ $message_key ]['message']   = STM_LMS_Quiz::deslash( nl2br( $message['message'] ) );
+				$messages[ $message_key ]['isOwner']   = ( absint( $user_id ) === absint( $message['user_from'] ) );
+				$messages[ $message_key ]['companion'] = STM_LMS_User::get_current_user( $message['user_from'] );
+				$messages[ $message_key ]['ago']       = stm_lms_time_elapsed_string( wp_date( 'Y-m-d H:i:s', $message['timestamp'] ) );
+			}
+		}
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		$messages = array_reverse( $messages );
 
-        $user = STM_LMS_User::get_current_user();
-        if (empty($user['id'])) die;
-        $user_id = $user['id'];
+		wp_send_json(
+			array(
+				'messages' => $messages,
+			)
+		);
+	}
 
-        if (empty($_GET['id'])) die;
-        $conversation_id = intval($_GET['id']);
+	public static function transient_name( $user_id, $name = '' ) {
+		return "stm_lms_chat_{$user_id}_{$name}";
+	}
 
-        $just_send = (!empty($_GET['just_send']) and $_GET['just_send'] == 'true') ? true : false;
+	public static function user_new_messages( $user_id ) {
+		$transient_name = self::transient_name( $user_id, 'chat' );
+		$messages_num   = get_transient( $transient_name );
 
-        $messages = stm_lms_get_user_messages($conversation_id, $user_id, array(), $just_send);
+		if ( false === $messages_num ) {
 
-        if (!empty($messages)) {
-            foreach ($messages as $message_key => $message) {
-                $messages[$message_key]['message'] = STM_LMS_Quiz::deslash($messages[$message_key]['message']);
-                $messages[$message_key]['isOwner'] = ($user_id == $message['user_from']);
-                $messages[$message_key]['companion'] = STM_LMS_User::get_current_user($message['user_from']);
-                $messages[$message_key]['ago'] = stm_lms_time_elapsed_string(date('Y-m-d H:i:s', $message['timestamp']));
-            }
-        }
+			$conversations = stm_lms_get_user_conversations( $user_id );
+			$messages_num  = 0;
 
-        $messages = array_reverse($messages);
+			if ( ! empty( $conversations ) ) {
+				foreach ( $conversations as $conversation ) {
+					if ( (int) $user_id === (int) $conversation['user_from'] ) {
+						$messages_num += $conversation['uf_new_messages'];
+					} else if ( (int) $user_id === (int) $conversation['user_to'] ) {
+						$messages_num += $conversation['ut_new_messages'];
+					}
+				}
+			}
 
+			set_transient( $transient_name, $messages_num, 30 * 24 * 60 * 60 );
+		}
 
-        $r = array(
-            'messages' => $messages
-        );
+		return $messages_num;
+	}
 
+	public static function chat_url() {
+		$pages_config = STM_LMS_Page_Router::pages_config();
 
-        wp_send_json($r);
-    }
+		return STM_LMS_User::login_page_url() . $pages_config['user_url']['sub_pages']['chat_url']['url'];
+	}
 
-    public static function transient_name($user_id, $name = '')
-    {
-        return "stm_lms_chat_{$user_id}_{$name}";
-    }
+	public static function stm_lms_handle_clear_new_messages() {
+		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'], 'stm_lms_clear_new_messages' ) || ! isset( $_GET['conversation_id'] ) ) {
+			wp_die();
+		}
 
-    public static function user_new_messages($user_id)
-    {
-
-        $transient_name = STM_LMS_Chat::transient_name($user_id, 'chat');
-
-        if (false === ($messages_num = get_transient($transient_name))) {
-            
-            $conversations = stm_lms_get_user_conversations($user_id);
-            $messages_num = 0;
-            if (!empty($conversations)) {
-                foreach ($conversations as $conversation) {
-                    if($user_id == $conversation['user_from']) {
-                        $messages_num += $conversation['uf_new_messages'];
-                    } else if ($user_id == $conversation['user_to']) {
-                        $messages_num += $conversation['ut_new_messages'];
-                    }
-                }
-            }
-            set_transient($transient_name, $messages_num, 30 * 24 * 60 * 60);
-        }
-        return $messages_num;
-    }
-
-    public static function chat_url()
-    {
-
-        $pages_config = STM_LMS_Page_Router::pages_config();
-
-        return STM_LMS_User::login_page_url() . $pages_config['user_url']['sub_pages']['chat_url']['url'];
-    }
+		stm_lms_clear_new_messages( intval( $_GET['conversation_id'] ) );
+	}
 
 }

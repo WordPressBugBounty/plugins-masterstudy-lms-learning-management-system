@@ -9,6 +9,8 @@ $modules = array(
 	'stm_lms_recent_courses',
 	'stm_lms_single_course_carousel',
 	'stm_lms_membership_levels',
+	'masterstudy_authorization_form',
+	'masterstudy_instructor_registration',
 );
 
 foreach ( $modules as $module ) {

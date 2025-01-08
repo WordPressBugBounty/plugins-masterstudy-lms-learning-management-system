@@ -453,15 +453,25 @@ class STM_LMS_Course {
 		return apply_filters( 'stm_lms_get_sale_price', get_post_meta( $post_id, 'sale_price', true ), $post_id );
 	}
 
-	public static function lesson_started( $post_id, $course_id, $user_id ) {
-		$option_name = "stm_lms_course_started_{$post_id}_{$course_id}";
-		$started     = get_user_meta( $user_id, $option_name, true );
+	public static function lesson_started( $lesson_id, $course_id, $user_id ) {
+
+		$option_name_new = "stm_lms_course_started_{$lesson_id}_{$course_id}";
+		$option_name_old = "stm_lms_course_started_{$course_id}_{$lesson_id}";
+
+		$started = get_user_meta( $user_id, $option_name_new, true );
 
 		if ( empty( $started ) ) {
-			update_user_meta( $user_id, $option_name, time() );
+			$started = get_user_meta( $user_id, $option_name_old, true );
+			/* TODO: Remove in later versions of the plugin */
+			if ( ! empty( $started ) ) {
+				update_user_meta( $user_id, $option_name_new, $started );
+				delete_user_meta( $user_id, $option_name_old );
+			} else {
+				update_user_meta( $user_id, $option_name_new, time() );
+			}
 		}
 
-		stm_lms_update_user_current_lesson( $course_id, $post_id, $user_id );
+		stm_lms_update_user_current_lesson( $course_id, $lesson_id, $user_id );
 	}
 
 	public static function course_in_plan( $course_id ) {

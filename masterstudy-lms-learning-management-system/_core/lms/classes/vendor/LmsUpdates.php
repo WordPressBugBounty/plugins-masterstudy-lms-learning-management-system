@@ -41,6 +41,7 @@ abstract class LmsUpdates {
 		'3.5.0'  => array( 'lms_update_grades' ), // Update Grades tables and data
 		'3.5.1'  => array( 'lms_reset_page_routes' ),
 		'3.5.5'  => array( 'lms_flush_rewrite_rules', 'lms_reset_page_routes' ), // Refresh Page Routes for Public Profile pages
+		'3.5.7'  => array( 'lms_rename_lazyload_settings' ),
 	);
 
 	/**

@@ -123,6 +123,7 @@ function stm_lms_settings_profiles_section() {
 			'label'   => esc_html__( 'Allow instructors to add students to their own course', 'masterstudy-lms-learning-management-system' ),
 			'hint'    => esc_html__( 'Decide if instructors can add students to their own courses', 'masterstudy-lms-learning-management-system' ),
 			'submenu' => $submenu_general,
+			'pro'     => true,
 		),
 		'instructors_page'                  => array(
 			'type'        => 'select',

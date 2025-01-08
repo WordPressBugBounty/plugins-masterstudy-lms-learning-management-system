@@ -85,4 +85,9 @@ class Course {
 	public ?float $price;
 	public ?float $sale_price;
 	public ?string $coming_soon_date;
+	public ?bool $coming_soon_details;
+	public ?bool $coming_soon_price;
+	public ?bool $is_sale_active;
+	public ?array $thumbnail;
+	public ?array $full_image;
 }

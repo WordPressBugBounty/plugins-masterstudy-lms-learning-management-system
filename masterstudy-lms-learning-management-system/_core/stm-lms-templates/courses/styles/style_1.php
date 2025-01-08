@@ -25,7 +25,6 @@ if ( ! empty( $image_size ) ) {
 if ( ! empty( $img_container_height ) ) {
 	$image_params['img_container_height'] = $img_container_height;
 }
-
 ?>
 
 <div class="stm_lms_courses__single stm_lms_courses__single_animation <?php echo esc_attr( implode( ' ', $classes ) ); ?>">

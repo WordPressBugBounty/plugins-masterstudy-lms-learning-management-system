@@ -602,6 +602,10 @@ class MsLmsCourses extends Widget_Base {
 					'ajax_url' => admin_url( 'admin-ajax.php' ),
 				)
 			);
+			if ( \STM_LMS_Options::get_option( 'enable_lazyload', false ) ) {
+				wp_enqueue_script( 'masterstudy_lazysizes' );
+				wp_enqueue_style( 'masterstudy_lazysizes' );
+			}
 		}
 
 		/* card's & popup's slots */

@@ -122,6 +122,11 @@ final class Plugin {
 			wp_enqueue_script( 'masterstudy-countdown' );
 		}
 
+		if ( \STM_LMS_Options::get_option( 'enable_lazyload', false ) ) {
+			wp_enqueue_script( 'masterstudy_lazysizes' );
+			wp_enqueue_style( 'masterstudy_lazysizes' );
+		}
+
 		/* testimonials carousel widget scripts */
 		wp_enqueue_script( 'lms-testimonials-carousel-editor', STM_LMS_URL . '/assets/js/elementor-widgets/testimonials_carousel_editor.js', array( 'elementor-frontend' ), MS_LMS_VERSION, true );
 	}

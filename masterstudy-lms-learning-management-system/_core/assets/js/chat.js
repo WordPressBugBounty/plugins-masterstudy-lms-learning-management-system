@@ -54,6 +54,17 @@
         },
         changeChat: function changeChat(index) {
           this.conversation = index;
+          var vm = this;
+          var messageKeys = ["uf_new_messages", "ut_new_messages"];
+          messageKeys.forEach(function (key) {
+            if (vm.conversations[index]['conversation_info'][key] > 0) {
+              vm.conversations[index]['conversation_info'][key] = 0;
+            }
+          });
+          var url = stm_lms_ajaxurl + '?action=stm_lms_clear_new_messages&nonce=' + stm_lms_nonces['stm_lms_clear_new_messages'] + '&conversation_id=' + vm.conversations[vm.conversation]['conversation_info']['conversation_id'];
+          vm.$http.get(url).then(function (response) {})["catch"](function (error) {
+            vm.scrollMessagesBottom();
+          });
         },
         scrollMessagesBottom: function scrollMessagesBottom() {
           var _this = this;
@@ -68,11 +79,15 @@
           vm.loading = true;
           var user_to = vm.conversations[vm.conversation]['companion']['id'];
           if (vm.myMessage) {
-            var url = stm_lms_ajaxurl + '?action=stm_lms_send_message&nonce=' + stm_lms_nonces['stm_lms_send_message'] + '&to=' + user_to + '&message=' + vm.myMessage;
+            var data = {
+              to: user_to,
+              message: vm.myMessage
+            };
+            var endpoint = stm_lms_ajaxurl + '?action=stm_lms_send_message&nonce=' + stm_lms_nonces['stm_lms_send_message'];
             vm.loading = true;
-            this.$http.get(url).then(function (response) {
+            this.$http.post(endpoint, data).then(function (response) {
               vm.getMessages(vm.conversations[vm.conversation]['conversation_info']['conversation_id'], true, true);
-              if (response.body.response && response.body.status === 'error') {
+              if (response.body.response && 'error' === response.body.status) {
                 vm['myResponse'] = response.body.response;
               }
               vm['myMessage'] = '';

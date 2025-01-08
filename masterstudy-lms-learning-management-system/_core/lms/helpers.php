@@ -41,8 +41,8 @@ function stm_lms_time_elapsed_string( $datetime, $full = false ) {
 	$ago  = new DateTime( $datetime );
 	$diff = $now->diff( $ago );
 
-	$diff->w  = floor( $diff->d / 7 );
-	$diff->d -= $diff->w * 7;
+	$weeks    = floor( $diff->d / 7 );
+	$diff->d -= $weeks * 7;
 
 	$string = array(
 		'y' => esc_html__( 'year', 'masterstudy-lms-learning-management-system' ),
@@ -55,8 +55,10 @@ function stm_lms_time_elapsed_string( $datetime, $full = false ) {
 	);
 
 	foreach ( $string as $k => &$v ) {
-		if ( $diff->$k ) {
-			$v = masterstudy_lms_time_elapsed_string_e( $diff->$k, $k );
+		$value = ( 'w' === $k ) ? $weeks : $diff->$k;
+
+		if ( $value ) {
+			$v = masterstudy_lms_time_elapsed_string_e( $value, $k );
 		} else {
 			unset( $string[ $k ] );
 		}
@@ -359,12 +361,41 @@ function rand_color( $opacity = 1 ) {
 	return 'rgba(' . wp_rand( 0, 255 ) . ', ' . wp_rand( 50, 255 ) . ', ' . wp_rand( 10, 255 ) . ', ' . $opacity . ')';
 }
 
+/* TODO: This can be deleted once deprecated widgets are removed from the theme */
 function stm_lms_lazyload_image( $image ) {
 	if ( ! function_exists( 'stm_conf_layload_image' ) ) {
 		return $image;
 	}
 
 	return stm_conf_layload_image( $image );
+}
+
+function masterstudy_get_image( $post_id, $lazyload = false, $class = null, $width = null, $height = null ) {
+	$width     = ! empty( $width ) ? $width : 330;
+	$height    = ! empty( $height ) ? $height : 185;
+	$image_url = wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), array( $width, $height ) );
+	$image_url = ( ! empty( $image_url ) ) ? $image_url[0] : '';
+	$image     = '<img src="' . esc_url( $image_url ?? '' ) . '" class="' . esc_attr( $class ?? '' ) . '">';
+
+	if ( $lazyload ) {
+		$image_wrapper  = '<div class="masterstudy-lazyload-image">';
+		$image_wrapper .= str_replace(
+			array( 'sizes="', 'srcset="', 'src="', 'class="' ),
+			array( 'data-sizes="', 'data-srcset="', 'data-src="', 'class="lazyload ' ),
+			$image
+		);
+		$image_wrapper .= '</div>';
+
+		return $image_wrapper;
+	}
+
+	return $image;
+}
+
+function masterstudy_get_image_size( $option ) {
+	return preg_match( '/^(\d+)[xх](\d+)$/ui', $option, $matches )
+		? array( (int) $matches[1], (int) $matches[2] )
+		: array( null, null );
 }
 
 function stm_lms_get_string_between( $str, $start_delimiter, $end_delimiter ) {
@@ -1491,13 +1522,13 @@ function masterstudy_course_header_meta_data() {
 		<!-- Open Graph meta tags for Facebook and LinkedIn -->
 		<meta property="og:title" content="<?php echo esc_attr( $course->title ); ?>" />
 		<meta property="og:description" content="<?php echo esc_attr( $course->excerpt ); ?>" />
-		<meta property="og:image" content="<?php echo esc_url( $course->thumbnail['url'] ); ?>" />
+		<meta property="og:image" content="<?php echo esc_url( $course->thumbnail['url'] ?? '' ); ?>" />
 		<meta property="og:url" content="<?php echo esc_url( $course_url ); ?>" />
 		<!-- Twitter Card meta tags -->
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="<?php echo esc_attr( $course->title ); ?>" />
 		<meta name="twitter:description" content="<?php echo esc_attr( $course->excerpt ); ?>" />
-		<meta name="twitter:image" content="<?php echo esc_url( $course->thumbnail['url'] ); ?>" />
+		<meta name="twitter:image" content="<?php echo esc_url( $course->thumbnail['url'] ?? '' ); ?>" />
 		<meta name="twitter:url" content="<?php echo esc_url( $course_url ); ?>" />
 		<?php
 	}

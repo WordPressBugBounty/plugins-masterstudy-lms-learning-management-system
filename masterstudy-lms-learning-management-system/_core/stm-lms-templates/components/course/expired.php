@@ -61,6 +61,8 @@ if ( empty( $user_course ) && ! empty( $course_expiration_days ) ) { ?>
 	?>
 	<div class="masterstudy-single-course-expired">
 		<?php
+		wp_enqueue_script( 'stm-lms-countdown' );
+
 		if ( $days_left < 1 ) {
 			printf(
 				/* translators: %s Time Left */

@@ -147,7 +147,7 @@ if ( $payment_method === 'wire_transfer' ) {
 				<tr>
 					<td width="20%" style="padding: 10px;">
 						<!-- Display Item Image -->
-						<img src="<?php echo esc_url($item['image_url']); ?>" alt="Product Image" style="width: 80px; height: auto; border-radius: 4px;">
+						<img src="<?php echo esc_url($item['image_url']); ?>" alt="Product Image" style="width: 110px; height: auto; border-radius: 4px;">
 					</td>
 					<td width="80%" style="padding: 10px; vertical-align: top;">
 						<!-- Display Item Title -->

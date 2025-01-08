@@ -28,7 +28,7 @@ function stm_lms_archive_page_list() {
 	return array(
 		'courses_page_elementor' => array(
 			'title' => esc_html__( 'Courses page (for Elementor)', 'masterstudy-lms-learning-management-system' ),
-			'slug'  => 'courses-archive',
+			'slug'  => 'courses-archive-elementor',
 		),
 		'courses_page_gutenberg' => array(
 			'title' => esc_html__( 'Courses page (for Gutenberg)', 'masterstudy-lms-learning-management-system' ),

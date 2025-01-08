@@ -540,7 +540,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			$q = new WP_Query( $args );
 
 			$ratings = array(
-				'total_marks' => '',
+				'total_marks' => 0,
 				'total'       => 0,
 				'average'     => 0,
 				'percent'     => 0,

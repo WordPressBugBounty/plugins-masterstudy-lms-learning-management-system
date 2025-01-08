@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.6
+Stable tag: 3.5.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -306,6 +306,22 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.7 - 2025-01-08 =
+- **Update:** Added compatibility of MasterStudy LMS Free plugin with PHP 8.3.
+- **Enhancement:** Added support for translating strings within JS files.
+- **Fix:** Added option to download e-books via WooCommerce checkout on Thank You and Order Details pages.
+- **Fix:** Resolved issue where message text was mixed and sent in one line.
+- **Fix:** Fixed issue with moving to a new line in LMS payment descriptions and on the page when selecting payment method.
+- **Fix:** Notifications from private messages are now working correctly.
+- **Fix:** Addressed issues in LMS settings where Course Card image sizes were not changing and Lazy Load didn't work without the theme and Post Type plugin.
+- **Fix:** Fixed border issues and mobile video rendering in the Single Course video preview.
+- **Fix:** Sorting functionality in Manage Students section now works correctly.
+- **Fix:** Resolved issues with authorization shortcodes and registration for instructors when WPBakery is enabled.
+- **Fix:** "Continue" button in Single Course now redirects students to the last viewed lesson.
+- **Fix:** Fixed incorrect IDs of lessons and courses in the stm_lms_lesson_started action in the Course Player.
+- **Fix:** Resolved issue where the Courses page for Elementor was not generated.
+- **Fix:** Fixed duplication of "No Courses Found" when clicking "Show Result" multiple times.
+
 = 3.5.6 - 2024-12-26 =
 - **Fix:** Small bug fixes.
 
@@ -323,12 +339,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.5.3 - 2024-12-19 =
 - **Fix:** Small bug fixes.
-
-= 3.5.2 - 2024-12-18 =
-- **Enhancement:** Added option to change logo when printing detailed order view in My Sales for LMS payments.
-- **Moved:** the Logo Upload option to the plugin’s settings.
-- **Fix:** Corrected an issue where deleted reviews were still applied to the overall course grade.
-- **Fix:** Resolved date and time translation issues in the course player’s countdown feature.
-- **Fix:** Fixed a fatal error occurring when using widgets after an Elementor update.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

@@ -37,7 +37,7 @@ function stm_lms_update_user_conversation( $conversation, $message ) {
 
 	$user = STM_LMS_User::get_current_user();
 
-	if ( $user['id'] === $conversation['user_from'] ) {
+	if ( (int) trim( $user['id'] ) === (int) trim( $conversation['user_from'] ) ) {
 		$wpdb->update(
 			$table_name,
 			array(
@@ -123,6 +123,8 @@ function stm_lms_get_user_messages( $conversation_id, $user_id, $fields = '', $j
 
 	if ( ! $just_send ) {
 		stm_lms_conversation_messages_read( $conversation_id );
+		$transient_name = STM_LMS_Chat::transient_name( $user_id, 'chat' );
+		delete_transient( $transient_name );
 	}
 
 	$fields = ( empty( $fields ) ) ? '*' : implode( ',', $fields );
@@ -151,4 +153,51 @@ function stm_lms_conversation_messages_read( $conversation_id ) {
 		),
 		array( 'conversation_id' => $conversation_id )
 	);
+}
+
+function stm_lms_clear_new_messages( $conversation_id ) {
+	global $wpdb;
+	$table_name = stm_lms_user_conversation_name( $wpdb );
+
+	$current_user = STM_LMS_User::get_current_user();
+
+	if ( empty( $current_user['id'] ) ) {
+		return;
+	}
+
+	$conversation = $wpdb->get_row(
+		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT * FROM {$table_name} WHERE conversation_id = %d",
+			$conversation_id
+		),
+		ARRAY_A
+	);
+
+	if ( ! $conversation ) {
+		return;
+	}
+
+	$field_to_update = null;
+
+	if ( (int) $current_user['id'] === (int) $conversation['user_from'] ) {
+		$field_to_update = 'uf_new_messages';
+	} elseif ( (int) $current_user['id'] === (int) $conversation['user_to'] ) {
+		$field_to_update = 'ut_new_messages';
+	}
+
+	if ( null !== $field_to_update ) {
+		$wpdb->update(
+			$table_name,
+			array(
+				$field_to_update => 0,
+			),
+			array(
+				'conversation_id' => $conversation_id,
+			)
+		);
+	}
+
+	$transient_name = STM_LMS_Chat::transient_name( $current_user['id'], 'chat' );
+	delete_transient( $transient_name );
 }

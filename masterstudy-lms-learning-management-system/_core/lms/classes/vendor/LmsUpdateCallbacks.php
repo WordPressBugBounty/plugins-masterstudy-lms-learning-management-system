@@ -579,4 +579,14 @@ abstract class LmsUpdateCallbacks {
 
 		update_option( 'stm_lms_settings', $settings );
 	}
+
+	public static function lms_rename_lazyload_settings() {
+		$settings = get_option( 'stm_lms_settings' );
+
+		if ( ! empty( $settings['disable_lazyload'] ) ) {
+			$settings['enable_lazyload'] = $settings['disable_lazyload'];
+		}
+
+		update_option( 'stm_lms_settings', $settings );
+	}
 }

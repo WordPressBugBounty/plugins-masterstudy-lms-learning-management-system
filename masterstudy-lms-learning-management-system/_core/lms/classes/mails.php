@@ -13,9 +13,14 @@ class STM_LMS_Mails {
 		return 'text/html';
 	}
 
-	public static function send_email_to_instructor( $cart_items, $user_login, $order_id, $settings, $template_name ) {
+	public static function send_email_to_instructor( $cart_items, $user_login, $order_id, $settings, $template_name, $send_test_mode = false ) {
 		$instructor_items  = array();
 		$instructor_emails = array();
+
+		if ( $send_test_mode ) {
+			self::process_instructor_order_mail( $template_name, $user_login, $order_id, array(), get_option( 'admin_email' ), $settings, $send_test_mode );
+			die;
+		}
 
 		if ( ! empty( $cart_items ) ) {
 			foreach ( $cart_items as $item ) {
@@ -38,12 +43,12 @@ class STM_LMS_Mails {
 		}
 		foreach ( $instructor_emails as $email ) {
 			if ( ! empty( $instructor_items[ $email ] ) ) {
-				self::process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_items[ $email ], $email, $settings );
+				self::process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_items[ $email ], $email, $settings, $send_test_mode );
 			}
 		}
 	}
 
-	public static function process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_emails, $email, $settings ) {
+	public static function process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_emails, $email, $settings, $send_test_mode ) {
 		$message = str_replace(
 			array( '{{user_login}}', '{{site_url}}' ),
 			array( $user_login, '<a href="' . site_url() . '" target="_blank">' . get_bloginfo( 'name' ) . '</a>' ),
@@ -53,6 +58,7 @@ class STM_LMS_Mails {
 		$context = \STM_LMS_Templates::load_lms_template(
 			$template_name,
 			array(
+				'send_test_mode'   => $send_test_mode,
 				'order_id'         => $order_id,
 				'message'          => $message,
 				'is_instructor'    => true,
@@ -68,7 +74,7 @@ class STM_LMS_Mails {
 		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
 	}
 
-	public static function send_email_to_admin( $user_login, $order_id, $settings, $template_name ) {
+	public static function send_email_to_admin( $user_login, $order_id, $settings, $template_name, $send_test_mode = false ) {
 		$message = str_replace(
 			array( '{{user_login}}', '{{site_url}}' ),
 			array( $user_login, '<a href="' . site_url() . '" target="_blank">' . get_bloginfo( 'name' ) . '</a>' ),
@@ -77,6 +83,7 @@ class STM_LMS_Mails {
 		$context = \STM_LMS_Templates::load_lms_template(
 			$template_name,
 			array(
+				'send_test_mode'   => $send_test_mode,
 				'order_id'         => $order_id,
 				'message'          => $message,
 				'instructor_items' => array(),
@@ -94,15 +101,22 @@ class STM_LMS_Mails {
 		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
 	}
 
-	public static function send_email_to_student( $user, $order_id, $settings, $template_name ) {
-		$message = str_replace(
+	public static function send_email_to_student( $user, $order_id, $settings, $template_name, $send_test_mode = false ) {
+		$user_value = $send_test_mode ? $user : $user['login'];
+		$user_email = $send_test_mode ? $user : $user['email'];
+		$message    = str_replace(
 			array( '{{user_login}}', '{{site_url}}' ),
-			array( $user['login'], '<a href="' . site_url() . '" target="_blank">' . get_bloginfo( 'name' ) . '</a>' ),
+			array(
+				$user_value,
+				'<a href="' . site_url() . '" target="_blank">' . get_bloginfo( 'name' ) . '</a>',
+			),
 			$settings['stm_lms_new_order_accepted'] ?? 'Your Order has been Accepted.'
 		);
+
 		$context = \STM_LMS_Templates::load_lms_template(
 			$template_name,
 			array(
+				'send_test_mode'   => $send_test_mode,
 				'order_id'         => $order_id,
 				'instructor_items' => array(),
 				'is_instructor'    => false,
@@ -114,7 +128,7 @@ class STM_LMS_Mails {
 		);
 
 		add_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
-		wp_mail( $user['email'], $settings['stm_lms_new_order_accepted_subject'] ?? 'Order Accepted', $context );
+		wp_mail( $user_email, $settings['stm_lms_new_order_accepted_subject'] ?? 'Order Accepted', $context );
 		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
 	}
 

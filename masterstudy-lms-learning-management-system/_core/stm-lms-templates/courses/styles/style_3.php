@@ -8,12 +8,11 @@
  * @var $style
  */
 
-$classes = array( $has_sale_price, $style );
-
+$classes  = array( $has_sale_price, $style );
 $level    = get_post_meta( $id, 'level', true );
 $duration = get_post_meta( $id, 'duration_info', true );
 $lectures = STM_LMS_Course::curriculum_info( $id );
-
+$img_size = STM_LMS_Options::get_option( 'courses_image_size', '285x160' );
 ?>
 
 <div class="stm_lms_courses__single stm_lms_courses__single_animation <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
@@ -27,7 +26,7 @@ $lectures = STM_LMS_Course::curriculum_info( $id );
 				'courses/parts/image',
 				array(
 					'id'                   => $id,
-					'img_size'             => $image_size ?? '370x200',
+					'img_size'             => $img_size,
 					'img_container_height' => $img_container_height ?? '',
 				)
 			);

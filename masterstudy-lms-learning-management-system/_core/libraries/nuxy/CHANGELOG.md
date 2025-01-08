@@ -1,3 +1,11 @@
+## 4.4.29
+- **Fix:** Added a fallback to handle missing "position" values.
+## 4.4.28
+- **Fix:** Fixed script error in WordPress Customizer.
+## 4.4.27
+- **Fix:** Add string translate for options.
+## 4.4.26
+- **Fix:** Fixed minor bug.
 ## 4.4.25
 - **Fix:** Fixed minor bug.
 ## 4.4.24

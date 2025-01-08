@@ -487,7 +487,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             pagination_container.append(data.pagination);
           }
         } else if (data.no_found) {
-          courses_container.append(data.no_found);
+          if (!courses_container.find('.ms_lms_courses_archive__no-result').length) {
+            courses_container.append(data.no_found);
+          }
         }
         courses_container.removeClass('loading');
         if (filter_button.length) {

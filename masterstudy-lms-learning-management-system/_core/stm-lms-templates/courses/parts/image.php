@@ -4,9 +4,14 @@
  * @var $img_size
  */
 
-$post_status        = STM_LMS_Course::get_post_status( $id );
-$default_image_size = STM_LMS_Options::get_option( 'courses_image_size', '272x161' );
-$img_size           = ( ! empty( $img_size ) ) ? $img_size : $default_image_size;
+$lazyload    = STM_LMS_Options::get_option( 'enable_lazyload', false );
+$img_size    = masterstudy_get_image_size( ! empty( $img_size ) ? $img_size : '330x185' );
+$post_status = STM_LMS_Course::get_post_status( $id );
+
+if ( $lazyload ) {
+	wp_enqueue_script( 'masterstudy_lazysizes' );
+	wp_enqueue_style( 'masterstudy_lazysizes' );
+}
 
 if ( ! empty( $img_container_height ) ) {
 	$container_height     = preg_replace( '/[^0-9]/', '', $img_container_height );
@@ -54,13 +59,7 @@ if ( is_user_logged_in() ) {
 	class="heading_font"
 	data-preview="<?php esc_attr_e( 'Preview this course', 'masterstudy-lms-learning-management-system' ); ?>">
 		<div class="stm_lms_courses__single--image__container" <?php echo esc_attr( $img_container_height ); ?>>
-			<?php
-			if ( function_exists( 'stm_get_VC_img' ) ) {
-				echo ( stm_lms_lazyload_image( stm_get_VC_img( get_post_thumbnail_id(), $img_size ) ) ); //phpcs:ignore
-			} else {
-				the_post_thumbnail( $img_size );
-			}
-			?>
+			<?php echo wp_kses_post( masterstudy_get_image( $id, $lazyload, null, $img_size[0], $img_size[1] ) ); ?>
 		</div>
 	</a>
 

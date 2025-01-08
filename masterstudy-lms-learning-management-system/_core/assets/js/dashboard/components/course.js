@@ -71,6 +71,14 @@ stm_lms_components['course'] = {
         sortA = parseInt(a['start_time']);
         sortB = parseInt(b['start_time']);
       }
+      if (this.sort === "name") {
+        sortA = sortA.toLowerCase();
+        sortB = sortB.toLowerCase();
+      }
+      if (this.sort === "email") {
+        sortA = a["student"]["email"].toLowerCase();
+        sortB = b["student"]["email"].toLowerCase();
+      }
       if (sortA < sortB) return -direction;
       if (sortA > sortB) return direction;
       return 0;
