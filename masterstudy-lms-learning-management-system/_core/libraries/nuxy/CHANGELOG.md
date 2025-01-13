@@ -1,3 +1,7 @@
+## 4.4.31
+- **Fix:** Fixed type string.
+## 4.4.30
+- **Enhancement:** Introduced the ability to add new features directly to the Multiselect Control.
 ## 4.4.29
 - **Fix:** Added a fallback to handle missing "position" values.
 ## 4.4.28

@@ -55,7 +55,7 @@ if ( ! empty( $payment_methods ) ) :
 									if ( 'stripe_public_api_key' === $payment_field_key ) :
 										?>
 										<script type="text/javascript">
-											var stripe_id = '<?php esc_html( $payment_field ); ?>';
+											var stripe_id = '<?php echo esc_js( $payment_field ); ?>';
 										</script>
 									<?php else : ?>
 										<div class="stm-lms-payment-method__field">
@@ -63,7 +63,7 @@ if ( ! empty( $payment_methods ) ) :
 												<?php echo esc_html( $payment_method_names[ $payment_field_key ] ); ?>
 											</div>
 											<div class="stm-lms-payment-method__field_value">
-												<?php echo esc_html( $payment_field ); ?>
+												<?php echo nl2br( esc_html( $payment_field ) ); ?>
 											</div>
 										</div>
 										<div id="stm-lms-stripe"></div>

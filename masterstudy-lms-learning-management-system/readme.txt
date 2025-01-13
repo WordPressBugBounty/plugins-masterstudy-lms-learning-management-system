@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.8
+Stable tag: 3.5.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,10 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.9 - 2025-01-13 =
+- **Fix:** Fixed a fatal error that occurred when adding a new question to a quiz without the Course Builder.
+- **Fix:** Resolved an issue where purchasing a course with Stripe payment method wasn't working correctly.
+
 = 3.5.8 - 2025-01-10 =
 - **Fix:** Small bug fixes.
 
@@ -333,9 +337,6 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Enhancement:** Removed the Overall Rating button in Gutenberg widgets when Course Reviews are disabled in plugin settings.
 - **Enhancement:** Added an option to sanitize the Reset Password email.
 - **Fix:** Fixed conflict with the RankMath SEO plugin appearing on Public Profile pages.
-- **Fix:** Small bug fixes.
-
-= 3.5.4 - 2024-12-19 =
 - **Fix:** Small bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
