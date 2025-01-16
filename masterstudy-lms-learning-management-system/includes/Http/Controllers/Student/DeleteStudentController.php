@@ -2,14 +2,16 @@
 
 namespace MasterStudy\Lms\Http\Controllers\Student;
 
+use WP_REST_Request;
 use MasterStudy\Lms\Http\WpResponseFactory;
 use MasterStudy\Lms\Repositories\CourseRepository;
 use MasterStudy\Lms\Repositories\StudentsRepository;
 
 final class DeleteStudentController {
 
-	public function __invoke( $course_id, $student_id ) {
-		$repo = new CourseRepository();
+	public function __invoke( WP_REST_Request $request, $course_id, $student_id ) {
+		$repo             = new CourseRepository();
+		$subscribed_email = $request->get_param( 'subscribed_email' ) ?? null;
 
 		if ( ! $repo->exists( $course_id ) ) {
 			return WpResponseFactory::not_found();
@@ -19,7 +21,7 @@ final class DeleteStudentController {
 			return WpResponseFactory::forbidden();
 		}
 
-		( new StudentsRepository() )->delete_student( $course_id, $student_id );
+		( new StudentsRepository() )->delete_student( $course_id, $student_id, $subscribed_email );
 
 		return WpResponseFactory::ok();
 	}

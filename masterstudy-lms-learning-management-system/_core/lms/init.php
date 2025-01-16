@@ -4,7 +4,7 @@
 \stmLms\Classes\Models\StmCron::init();
 
 add_action(
-	'init',
+	'admin_init',
 	function () {
 		\stmLms\Classes\Vendor\LmsUpdates::init();
 	}

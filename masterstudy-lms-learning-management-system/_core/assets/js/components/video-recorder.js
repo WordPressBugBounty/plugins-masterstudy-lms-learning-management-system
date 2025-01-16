@@ -60,7 +60,7 @@ var MasterstudyVideoRecoder = /*#__PURE__*/function () {
     this.isMuted = false;
     this.stopTimer = false;
     this.startTime = Date.now();
-    this.videoType = "video/mp4";
+    this.videoType = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';
     this.isHidden = this.options.isHidden || false;
     this.clearSource = this.options.clearSource || false;
     this.recorderActions = [];
@@ -211,7 +211,7 @@ var MasterstudyVideoRecoder = /*#__PURE__*/function () {
         event.target.play();
       };
       var mediaRecorder = new MediaRecorder(mediaStream, {
-        type: self.videoType
+        mimeType: self.videoType
       });
       mediaRecorder.ondataavailable = function (event) {
         if (event.data.size > 0) {

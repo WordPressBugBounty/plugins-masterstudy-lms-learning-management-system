@@ -9,19 +9,19 @@ final class StudentsRepository {
 
 	public function get_course_students( array $params = array() ) {
 		global $wpdb;
+
 		$course_table = stm_lms_user_courses_name( $wpdb );
 		$user_table   = $wpdb->users;
-
-		$fields = "{$course_table}.user_id, {$course_table}.course_id, {$course_table}.start_time, {$course_table}.progress_percent, {$user_table}.display_name";
-
-		$per_page  = $params['per_page'] ?? 10;
-		$page      = $params['page'] ?? 1;
-		$course_id = $params['course_id'] ?? 0;
-		$offset    = ( $page - 1 ) * $per_page;
-		$filtering = '';
+		$fields       = "{$course_table}.user_id, {$course_table}.course_id, {$course_table}.start_time, {$course_table}.progress_percent, {$user_table}.display_name";
+		$per_page     = $params['per_page'] ?? 10;
+		$page         = $params['page'] ?? 1;
+		$course_id    = $params['course_id'] ?? 0;
+		$offset       = ( $page - 1 ) * $per_page;
+		$filtering    = '';
 
 		if ( ! empty( $params['order'] ) && ! empty( $params['orderby'] ) ) {
 			$order = strtoupper( $params['order'] );
+
 			if ( in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
 				switch ( $params['orderby'] ) {
 					case 'username':
@@ -40,20 +40,28 @@ final class StudentsRepository {
 			}
 		}
 
+		$total_query = "SELECT COUNT(*) FROM {$course_table}
+			INNER JOIN $user_table 
+			ON {$course_table}.user_id = {$user_table}.ID 
+			WHERE {$course_table}.course_id = %d";
+
 		if ( ! empty( $params['s'] ) ) {
-			$filtering = $wpdb->prepare(
-				' AND LOWER(display_name) LIKE %s',
-				'%' . strtolower( $params['s'] ) . '%'
-			);
+			$search_term   = '%' . strtolower( $params['s'] ) . '%';
+			$search_string = $wpdb->prepare( ' AND LOWER(display_name) LIKE %s', $search_term );
+			$filtering    .= $search_string;
+			$total_query  .= $search_string;
 		}
+
+		$base_query = "SELECT {$fields} FROM {$course_table}
+			INNER JOIN $user_table 
+			ON {$course_table}.user_id = {$user_table}.ID 
+			WHERE {$course_table}.course_id = %d {$filtering}";
 
 		$students = $wpdb->get_results(
 			$wpdb->prepare(
-				//phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT {$fields} FROM {$course_table} INNER JOIN $user_table ON {$course_table}.user_id = {$user_table}.ID WHERE {$course_table}.course_id = %d {$filtering} LIMIT %d OFFSET %d",
-				$course_id,
-				$per_page,
-				$offset
+				// phpCS:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$base_query,
+				$course_id
 			),
 			ARRAY_A
 		);
@@ -64,23 +72,137 @@ final class StudentsRepository {
 			$data['progress_link'] = \STM_LMS_Instructor::instructor_manage_students_url() . "/?course_id=$course_id&student_id=$student_id";
 		}
 
-		$total_rows = $wpdb->get_var(
+		$total = $wpdb->get_var(
 			$wpdb->prepare(
-				//phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT COUNT(*) FROM {$course_table} INNER JOIN {$user_table} ON {$course_table}.user_id = {$user_table}.ID WHERE {$course_table}.course_id = %d {$filtering}",
+				// phpCS:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$total_query,
 				$course_id
 			)
 		);
 
-		$output = array(
+		if ( ! empty( $params['subscribed'] ) ) {
+			$subscribed = self::get_subscribed_users( $students, $total, $params );
+			$students   = $subscribed['students'];
+			$total      = $subscribed['total'];
+		}
+
+		if ( ! empty( $params['orderby'] ) ) {
+			$order    = strtoupper( $params['order'] ?? 'ASC' );
+			$students = $this->sort_students( $students, $params, $order );
+		}
+
+		$students = array_slice( $students, $offset, $per_page );
+		$output   = array(
 			'students'  => $students,
 			'page'      => $page,
-			'total'     => $this->get_course_students_count( $course_id ),
+			'total'     => $total,
 			'per_page'  => $per_page,
-			'max_pages' => ceil( $total_rows / $per_page ),
+			'max_pages' => ceil( $total / $per_page ),
 		);
 
 		return $output;
+	}
+
+	public function get_subscribed_users( $students, $total, $params ) {
+		$per_page           = $params['per_page'] ?? 10;
+		$page               = $params['page'] ?? 1;
+		$course_id          = $params['course_id'] ?? 0;
+		$coming_soon_emails = get_post_meta( $course_id, 'coming_soon_student_emails', true );
+
+		if ( is_ms_lms_addon_enabled( 'coming_soon' ) && ! empty( $coming_soon_emails ) && empty( $params['s'] ) ) {
+			$subscribed_user_emails  = array_column( $coming_soon_emails, 'email' );
+			$course_enrolled_emails  = array_column( array_column( $students, 'student' ), 'email' );
+			$subscribed_guest_emails = array_diff( $subscribed_user_emails, $course_enrolled_emails );
+
+			foreach ( $subscribed_guest_emails as $guest_email ) {
+				$total++;
+
+				$user       = get_user_by( 'email', $guest_email );
+				$avatar_url = get_avatar_url( 'guest@example.com' );
+
+				if ( $user ) {
+					$avatar_url = get_avatar_url( $user->ID );
+				}
+
+				$avatar_img = "<img src='" . esc_url( $avatar_url ) . "' class='avatar' alt='User Avatar'>";
+
+				if ( $user ) {
+					$students[] = array(
+						'course_id'     => $course_id,
+						'progress_link' => esc_url( \STM_LMS_Instructor::instructor_manage_students_url() . "/?course_id=$course_id&student_id=$user->ID" ),
+						'student'       => array(
+							'id'     => $user->ID,
+							'login'  => $user->user_login,
+							'email'  => $guest_email,
+							'avatar' => $avatar_img,
+							'url'    => esc_url( \STM_LMS_User::student_public_page_url( $user->ID ) ),
+						),
+					);
+				} else {
+					$students[] = array(
+						'course_id'     => $course_id,
+						'progress_link' => '#',
+						'student'       => array(
+							'id'     => 0,
+							'login'  => esc_html__( 'Guest', 'masterstudy-lms-learning-management-system' ),
+							'email'  => $guest_email,
+							'avatar' => $avatar_img,
+							'url'    => '',
+						),
+					);
+				}
+			}
+
+			if ( $coming_soon_emails && is_array( $coming_soon_emails ) ) {
+				$coming_soon_emails_indexed = array_column( $coming_soon_emails, null, 'email' );
+				$students                   = array_map(
+					function ( $item ) use ( $coming_soon_emails_indexed ) {
+						$email = $item['student']['email'] ?? '';
+						if ( isset( $coming_soon_emails_indexed[ $email ] ) ) {
+							$item['subscribed']      = 'subscribed';
+							$item['subscribed_time'] = $coming_soon_emails_indexed[ $email ]['time']->format( 'Y-m-d H:i:s' );
+						}
+						return $item;
+					},
+					$students
+				);
+			}
+		}
+
+		return array(
+			'students' => $students,
+			'total'    => $total,
+		);
+	}
+
+	private function sort_students( $students, $params, $order ) {
+		usort(
+			$students,
+			function( $a, $b ) use ( $params, $order ) {
+				switch ( $params['orderby'] ) {
+					case 'username':
+						$value_a = strtolower( $a['student']['login'] ?? '' );
+						$value_b = strtolower( $b['student']['login'] ?? '' );
+						break;
+					case 'email':
+						$value_a = strtolower( $a['student']['email'] ?? '' );
+						$value_b = strtolower( $b['student']['email'] ?? '' );
+						break;
+					default:
+						return 0;
+				}
+
+				if ( $value_a === $value_b ) {
+					return 0;
+				}
+
+				return ( 'ASC' === $order )
+					? ( $value_a < $value_b ? -1 : 1 )
+					: ( $value_a > $value_b ? -1 : 1 );
+			}
+		);
+
+		return $students;
 	}
 
 	public function get_course_students_count( $course_id ) {
@@ -135,7 +257,7 @@ final class StudentsRepository {
 		);
 	}
 
-	public function delete_student( $course_id, $student_id ) {
+	public function delete_student( $course_id, $student_id, $subscribed_email = null ) {
 		$userdata = get_userdata( $student_id );
 
 		if ( $userdata ) {
@@ -145,6 +267,14 @@ final class StudentsRepository {
 			if ( ! empty( $meta['current_students'] ) && $meta['current_students'] > 0 ) {
 				update_post_meta( $course_id, 'current_students', --$meta['current_students'] );
 			}
+		}
+
+		if ( ! empty( $subscribed_email ) && is_ms_lms_addon_enabled( 'coming_soon' ) ) {
+			$coming_soon_emails      = get_post_meta( $course_id, 'coming_soon_student_emails', true ) ?? array();
+			$unsubscribe_email_index = array_search( $subscribed_email, array_column( $coming_soon_emails, 'email' ), true );
+
+			unset( $coming_soon_emails[ $unsubscribe_email_index ] );
+			update_post_meta( $course_id, 'coming_soon_student_emails', array_values( $coming_soon_emails ) );
 		}
 	}
 

@@ -679,11 +679,16 @@ class STM_LMS_User {
 		if ( ! empty( $first_name ) && ! empty( $last_name ) ) {
 			$first_name .= ' ' . $last_name;
 		}
+
 		if ( empty( $first_name ) && ! empty( $user->data->display_name ) ) {
 			$first_name = $user->data->display_name;
 		}
-		$login = ( ! empty( $first_name ) ) ? $first_name : $user->data->user_login;
-		return $login;
+
+		if ( ! empty( $user->data->display_name ) ) {
+			return $user->data->display_name;
+		}
+
+		return ( ! empty( $first_name ) ) ? $first_name : $user->data->user_login;
 	}
 
 	public static function js_redirect( $page ) {
@@ -1429,11 +1434,15 @@ class STM_LMS_User {
 		if ( ! empty( $user_data['last_name'] ) ) {
 			$nicename = ( ! empty( $nicename ) ) ? $nicename . ' ' . sanitize_text_field( $user_data['last_name'] ) : sanitize_text_field( $user_data['last_name'] );
 		}
-		if ( ! empty( $nicename ) ) {
+		$display_name = '';
+		if ( ! empty( $user_data['display_name'] ) ) {
+			$display_name = sanitize_text_field( $user_data['display_name'] );
+		}
+		if ( ! empty( $nicename ) || ! empty( $display_name ) ) {
 			wp_update_user(
 				array(
 					'ID'           => $user_id,
-					'display_name' => $nicename,
+					'display_name' => $display_name,
 				)
 			);
 		}

@@ -38,6 +38,8 @@ wp_add_inline_script(
 				STM_LMS_Templates::show_lms_template( 'account/private/edit_account/position' );
 				STM_LMS_Templates::show_lms_template( 'account/private/edit_account/bio' );
 			}
+
+			STM_LMS_Templates::show_lms_template( 'account/private/edit_account/display_name' );
 			?>
 
 			<?php STM_LMS_Templates::show_lms_template( 'account/private/edit_account/custom_fields' ); ?>

@@ -65,7 +65,7 @@
 					'wizard/fields/checkbox',
 					array(
 						'model' => 'wizard.course_tab_announcement',
-						'label' => esc_html__( 'Announcement', 'masterstudy-lms-learning-management-system' ),
+						'label' => esc_html__( 'Notice', 'masterstudy-lms-learning-management-system' ),
 					)
 				);
 				STM_LMS_Templates::show_lms_template(
@@ -86,39 +86,73 @@
 		STM_LMS_Templates::show_lms_template(
 			'wizard/views/field_data',
 			array(
-				'title' => esc_html__( 'Course style', 'masterstudy-lms-learning-management-system' ),
+				'title' => esc_html__( 'Choose a style for your Course page', 'masterstudy-lms-learning-management-system' ),
 			)
 		);
 		?>
-		<div class="stm_lms_splash_wizard__field_input">
+		<div class="masterstudy-wizard-single-course-styles">
 			<?php
-			STM_LMS_Templates::show_lms_template(
-				'wizard/fields/radio_image',
+			$course_styles = array(
 				array(
-					'model' => 'wizard.course_style',
 					'value' => 'default',
-					'image' => 'assets/img/wizard/courses/default.png?v=1',
 					'label' => esc_html__( 'Default', 'masterstudy-lms-learning-management-system' ),
-				)
-			);
-			STM_LMS_Templates::show_lms_template(
-				'wizard/fields/radio_image',
+				),
 				array(
-					'model' => 'wizard.course_style',
 					'value' => 'classic',
-					'image' => 'assets/img/wizard/courses/classic.png?v=1',
 					'label' => esc_html__( 'Classic', 'masterstudy-lms-learning-management-system' ),
-				)
-			);
-			STM_LMS_Templates::show_lms_template(
-				'wizard/fields/radio_image',
+				),
 				array(
-					'model' => 'wizard.course_style',
 					'value' => 'modern',
-					'image' => 'assets/img/wizard/courses/udemy@2x_2.png',
-					'label' => esc_html__( 'Modern', 'masterstudy-lms-learning-management-system' ),
-				)
+					'label' => esc_html__( 'Industrial', 'masterstudy-lms-learning-management-system' ),
+				),
 			);
+
+			if ( STM_LMS_Helpers::is_pro_plus() ) {
+				$course_styles = array_merge(
+					$course_styles,
+					array(
+						array(
+							'value' => 'timeless',
+							'label' => esc_html__( 'Timeless', 'masterstudy-lms-learning-management-system' ),
+						),
+						array(
+							'value' => 'sleek-sidebar',
+							'label' => esc_html__( 'Sleek with Sidebar', 'masterstudy-lms-learning-management-system' ),
+						),
+						array(
+							'value' => 'minimalistic',
+							'label' => esc_html__( 'Minimalistic', 'masterstudy-lms-learning-management-system' ),
+						),
+						array(
+							'value' => 'dynamic',
+							'label' => esc_html__( 'Dynamic', 'masterstudy-lms-learning-management-system' ),
+						),
+						array(
+							'value' => 'modern-curriculum',
+							'label' => esc_html__( 'Modern with Curriculum', 'masterstudy-lms-learning-management-system' ),
+						),
+						array(
+							'value' => 'dynamic-sidebar',
+							'label' => esc_html__( 'Dynamic with Short Sidebar', 'masterstudy-lms-learning-management-system' ),
+						),
+						array(
+							'value' => 'full-width',
+							'label' => esc_html__( 'Bold with Full Width Cover', 'masterstudy-lms-learning-management-system' ),
+						),
+					)
+				);
+			}
+
+			foreach ( $course_styles as $item ) {
+				STM_LMS_Templates::show_lms_template(
+					'wizard/fields/course-radio-image',
+					array(
+						'model' => 'wizard.course_style',
+						'value' => $item['value'],
+						'label' => $item['label'],
+					)
+				);
+			}
 			?>
 		</div>
 	</div>

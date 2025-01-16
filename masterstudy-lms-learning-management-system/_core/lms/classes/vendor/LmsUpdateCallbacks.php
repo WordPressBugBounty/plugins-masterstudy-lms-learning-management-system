@@ -311,8 +311,7 @@ abstract class LmsUpdateCallbacks {
 	}
 
 	public static function lms_udemy_course_additional_info() {
-		$course_styling = \STM_LMS_Options::get_option( 'course_style', false );
-		$courses        = get_posts(
+		$courses = get_posts(
 			array(
 				'fields'         => 'ids',
 				'post_type'      => 'stm-courses',
@@ -321,7 +320,6 @@ abstract class LmsUpdateCallbacks {
 		);
 
 		foreach ( $courses as $course_id ) {
-
 			if ( get_post_meta( $course_id, 'udemy_course_id', true ) ) {
 				/* Needs translations from Pro version */
 				update_post_meta( $course_id, 'price_info', esc_html__( '30-Day Money-Back Guarantee', 'masterstudy-lms-learning-management-system-pro' ) );

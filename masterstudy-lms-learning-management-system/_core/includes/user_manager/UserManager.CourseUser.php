@@ -182,40 +182,59 @@ class STM_LMS_User_Manager_Course_User {
 	}
 
 	public static function complete_assignment( $user_id, $course_id, $lesson_id, $completed ) {
-		$user = STM_LMS_User::get_current_user( $user_id );
+		$user                  = STM_LMS_User::get_current_user( $user_id );
+		$assignment_repository = new AssignmentStudentRepository();
+		$last_attempt          = $assignment_repository->get_last_attempt( $course_id, $lesson_id, $user_id );
+		$status                = $completed ? 'passed' : 'not_passed';
 
-		$assignment_name = get_the_title( $lesson_id );
+		// Add or Update Student Assignment
+		if ( ! empty( $last_attempt ) ) {
+			$user_assignment_id = $last_attempt['user_assignment_id'];
 
-		$assignment_try = STM_LMS_Assignments::number_of_assignments( $lesson_id ) + 1;
+			$assignment_repository->update_grade( $user_assignment_id, $completed ? 100 : 0 );
+			$assignment_repository->update_status( $user_assignment_id, $status );
 
-		$new_assignment = array(
-			'post_type'   => 'stm-user-assignment',
-			'post_status' => 'publish',
-			'post_title'  => "{$user['login']} on \"{$assignment_name}\"",
-		);
+			// Update Post Status
+			wp_update_post(
+				array(
+					'ID'          => $user_assignment_id,
+					'post_status' => $completed ? 'publish' : 'draft',
+				)
+			);
+		} else {
+			$assignment_name    = get_the_title( $lesson_id );
+			$new_assignment     = array(
+				'post_type'   => 'stm-user-assignment',
+				'post_status' => 'publish',
+				'post_title'  => "{$user['login']} on \"{$assignment_name}\"",
+			);
+			$user_assignment_id = wp_insert_post( $new_assignment );
+			$assignment_try     = STM_LMS_Assignments::number_of_assignments( $lesson_id ) + 1;
 
-		$assignment_id  = wp_insert_post( $new_assignment );
-		$status         = $completed ? 'passed' : 'not_passed';
-		$editor_comment = ( $completed ) ? esc_html__( 'Approved by admin', 'masterstudy-lms-learning-management-system' ) : esc_html__( 'Declined by admin', 'masterstudy-lms-learning-management-system' );
+			$assignment_repository->add_assignment(
+				$user_id,
+				$course_id,
+				$lesson_id,
+				$user_assignment_id,
+				$status,
+				100
+			);
 
-		( new AssignmentStudentRepository() )->add_assignment(
-			$user_id,
-			$course_id,
-			$lesson_id,
-			$assignment_id,
-			$status,
-			100
-		);
+			update_post_meta( $user_assignment_id, 'try_num', $assignment_try );
+			update_post_meta( $user_assignment_id, 'start_time', time() * 1000 );
+			update_post_meta( $user_assignment_id, 'assignment_id', $lesson_id );
+			update_post_meta( $user_assignment_id, 'student_id', $user_id );
+			update_post_meta( $user_assignment_id, 'course_id', $course_id );
+		}
+
+		$editor_comment = $completed
+			? esc_html__( 'Approved by admin', 'masterstudy-lms-learning-management-system' )
+			: esc_html__( 'Declined by admin', 'masterstudy-lms-learning-management-system' );
+
+		update_post_meta( $user_assignment_id, 'editor_comment', $editor_comment );
+		update_post_meta( $user_assignment_id, 'status', $status );
 
 		STM_LMS_Course::update_course_progress( $user_id, $course_id );
-
-		update_post_meta( $assignment_id, 'try_num', $assignment_try );
-		update_post_meta( $assignment_id, 'start_time', time() * 1000 );
-		update_post_meta( $assignment_id, 'status', $status );
-		update_post_meta( $assignment_id, 'assignment_id', $lesson_id );
-		update_post_meta( $assignment_id, 'student_id', $user_id );
-		update_post_meta( $assignment_id, 'course_id', $course_id );
-		update_post_meta( $assignment_id, 'editor_comment', $editor_comment );
 	}
 
 	public static function complete_quiz( $user_id, $course_id, $quiz_id, $completed ) {

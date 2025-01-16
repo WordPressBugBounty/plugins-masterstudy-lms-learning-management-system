@@ -5173,11 +5173,13 @@
   "editorStyle": "file:./index.css",
   "style": [
     "file:./style-index.css",
-    "masterstudy-countdown"
+    "masterstudy-countdown",
+    "masterstudy_lazysizes"
   ],
   "viewScript": [
     "file:./view.js",
     "stm-lms-wishlist",
-    "masterstudy-countdown"
+    "masterstudy-countdown",
+    "masterstudy_lazysizes"
   ]
 }

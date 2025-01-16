@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.9
+Stable tag: 3.5.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,19 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.10 - 2025-01-16 =
+- **New Feature:** Added an option in User Account Settings to set a public Display Name.
+- **Enhancement:** Redesigned the Course Page Style selection in the Wizard for easier customization.
+- **Enhancement:** Centered the Show More button in Course Reviews for better alignment.
+- **Enhancement:** Renamed the Announcement tab to Notice in the Single Course view.
+- **Fix:** Removed the maximum width of the Submit Quiz button in Online Testing.
+- **Fix:** Fixed pagination issues in Manage Students when student numbers exceed 10,000.
+- **Fix:** Resolved an issue where students signed up for Coming Soon courses didn’t appear in Manage Students.
+- **Fix:** Fixed a conflict with the GDPR Cookie Consent plugin from WebToffee.
+- **Fix:** Corrected True/False quiz questions in the course player not translating.
+- **Fix:** Added lazy loading for course images in Gutenberg blocks.
+- **Fix:** Corrected an Italian translation issue in the Grades settings.
+
 = 3.5.9 - 2025-01-13 =
 - **Fix:** Fixed a fatal error that occurred when adding a new question to a quiz without the Course Builder.
 - **Fix:** Resolved an issue where purchasing a course with Stripe payment method wasn't working correctly.
@@ -328,15 +341,6 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fix:** Fixed duplication of "No Courses Found" when clicking "Show Result" multiple times.
 
 = 3.5.6 - 2024-12-26 =
-- **Fix:** Small bug fixes.
-
-= 3.5.5 - 2024-12-25 =
-- **Enhancement:** Added integration with VdoCipher for Video Lessons.
-- **Enhancement:** Introduced Right-to-Left (RTL) support for Course Player components.
-- **Enhancement:** Added Right-to-Left (RTL) support for Course Page Styles.
-- **Enhancement:** Removed the Overall Rating button in Gutenberg widgets when Course Reviews are disabled in plugin settings.
-- **Enhancement:** Added an option to sanitize the Reset Password email.
-- **Fix:** Fixed conflict with the RankMath SEO plugin appearing on Public Profile pages.
 - **Fix:** Small bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

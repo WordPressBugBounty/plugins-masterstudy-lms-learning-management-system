@@ -91,10 +91,6 @@ function masterstudy_lms_double_slash_api_data( $value, $key ) {
 add_filter( 'masterstudy_lms_map_api_data', 'masterstudy_lms_double_slash_api_data', 10, 2 );
 
 function masterstudy_lms_allow_iframe_to_instructor( $allowed_tags ) {
-	if ( ! current_user_can( 'stm_lms_instructor' ) ) {
-		return $allowed_tags;
-	}
-
 	$allowed_tags['iframe'] = array(
 		'src'             => true,
 		'width'           => true,

@@ -5,7 +5,8 @@ stm_lms_register_style( 'manage_students/main' );
 stm_lms_register_script( 'manage_students/export-students' );
 stm_lms_register_script( 'manage_students/main', array( 'masterstudy-ajax-pagination' ) );
 
-$theads = array(
+$coming_soon = is_ms_lms_addon_enabled( 'coming_soon' );
+$theads      = array(
 	'username'         => array(
 		'title'    => __( 'Student name', 'masterstudy-lms-learning-management-system' ),
 		'position' => 'start',
@@ -17,6 +18,11 @@ $theads = array(
 		'position' => 'start',
 		'sort'     => 'email',
 		'hidden'   => false,
+	),
+	'subscribed'       => array(
+		'title'    => __( 'Subscribed', 'masterstudy-lms-learning-management-system' ),
+		'position' => 'start',
+		'hidden'   => ! $coming_soon,
 	),
 	'ago'              => array(
 		'title'    => __( 'Started', 'masterstudy-lms-learning-management-system' ),
@@ -55,15 +61,9 @@ $student_public = STM_LMS_Options::get_option( 'student_public_profile', true );
 				<?php echo esc_html( get_the_title( $course_id ) ); ?>
 			</div>
 			<div class="masterstudy-manage-students__count">
-				<span class="masterstudy-manage-students__count-number"><?php echo esc_html( $total_students ); ?></span>
+				<span class="masterstudy-manage-students__count-number"></span>
 				<span class="masterstudy-manage-students__count-label">
-					<?php
-					if ( 1 === $total_students ) {
-						echo esc_html__( 'student', 'masterstudy-lms-learning-management-system' );
-					} else {
-						echo esc_html__( 'students', 'masterstudy-lms-learning-management-system' );
-					}
-					?>
+					<?php echo esc_html__( 'students', 'masterstudy-lms-learning-management-system' ); ?>
 				</span>
 			</div>
 		</div>
@@ -157,6 +157,12 @@ $student_public = STM_LMS_Options::get_option( 'student_public_profile', true );
 						</span>
 						<span class="masterstudy-tcell__data" data-key="email" data-value=""></span>
 					</div>
+					<?php if ( $coming_soon ) { ?>
+						<div class="masterstudy-tcell masterstudy-tcell_is-start masterstudy-tcell_is-sm-space-between masterstudy-tcell_is-sm-border-bottom" data-th="<?php echo esc_html( $theads['subscribed']['title'] ?? '' ); ?>:" data-th-inlined="true">
+							<span class="masterstudy-tcell__label"><?php echo esc_html( $theads['subscribed']['title'] ?? '' ); ?></span>
+							<span class="masterstudy-tcell__data" data-key="subscribed_time" data-value=""></span>
+						</div>
+					<?php } ?>
 					<div class="masterstudy-tcell masterstudy-tcell_is-start masterstudy-tcell_is-sm-space-between masterstudy-tcell_is-sm-border-bottom" data-th="<?php echo esc_html( $theads['ago']['title'] ?? '' ); ?>:" data-th-inlined="true">
 						<span class="masterstudy-tcell__label"><?php echo esc_html( $theads['ago']['title'] ?? '' ); ?></span>
 						<span class="masterstudy-tcell__data" data-key="ago" data-value=""></span>
@@ -225,6 +231,7 @@ $student_public = STM_LMS_Options::get_option( 'student_public_profile', true );
 									'is_queryable'      => false,
 									'done_indicator'    => false,
 									'is_hidden'         => false,
+									'is_ajax'           => true,
 								)
 							);
 							?>

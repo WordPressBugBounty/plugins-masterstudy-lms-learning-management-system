@@ -9,7 +9,8 @@
       search = '',
       order = '',
       orderby = '',
-      page = 1;
+      page = 1,
+      subscribed = true;
     var pagination = new MasterstudyPagination({
       visibleNumber: 3,
       perPageLimit: per_page,
@@ -27,7 +28,8 @@
             s: search,
             page: page,
             orderby: orderby,
-            order: order
+            order: order,
+            subscribed: subscribed
           }, false);
         }
       }
@@ -36,14 +38,16 @@
     fetchData({
       per_page: per_page,
       s: search,
-      page: page
+      page: page,
+      subscribed: subscribed
     });
     document.addEventListener('msAddStudentEvent', function (event) {
       if (event.detail.progress === 100) {
         fetchData({
           per_page: per_page,
           s: search,
-          page: 1
+          page: 1,
+          subscribed: subscribed
         }, true);
       }
     });
@@ -57,7 +61,8 @@
         s: search,
         page: page,
         orderby: orderby,
-        order: order
+        order: order,
+        subscribed: subscribed
       }, true);
     });
     document.addEventListener('msfieldEvent', function (event) {
@@ -76,7 +81,8 @@
       fetchData({
         per_page: per_page,
         s: search,
-        page: 1
+        page: 1,
+        subscribed: subscribed
       }, true);
     });
     function fetchData() {
@@ -156,7 +162,7 @@
       var tableItem = tableBody.find('.masterstudy-table__item:first').clone();
       tableItem.removeClass('masterstudy-table__item--hidden');
       tableItem.find('.masterstudy-tcell__data').each(function (i, cell) {
-        var _data$student$avatar, _data$student$key, _data$student$key2, _data$start_time;
+        var _data$student$avatar, _data$student$key, _data$student$key2, _data$subscribed_time, _data$start_time;
         var key = $(cell).data('key');
         var value = data[key] || data[key] === 0 ? data[key] : '';
         switch (key) {
@@ -170,20 +176,37 @@
           case 'email':
             $(cell).text((_data$student$key2 = data['student'][key]) !== null && _data$student$key2 !== void 0 ? _data$student$key2 : '');
             break;
+          case 'subscribed':
+            $(cell).text(value);
+            $(cell).attr('data-value', (_data$subscribed_time = data['subscribed_time']) !== null && _data$subscribed_time !== void 0 ? _data$subscribed_time : 0);
+            break;
           case 'ago':
             $(cell).text(value);
             $(cell).attr('data-value', (_data$start_time = data['start_time']) !== null && _data$start_time !== void 0 ? _data$start_time : 0);
             break;
           case 'progress_percent':
-            $(cell).find('.masterstudy-progress__bar-filled').css({
-              width: "".concat(value, "%")
-            });
+            if (data['subscribed_time']) {
+              $(cell).find('.masterstudy-progress').hide();
+            } else {
+              $(cell).find('.masterstudy-progress__bar-filled').css({
+                width: "".concat(value, "%")
+              });
+            }
           case 'progress_link':
-            $(cell).find('[data-id="manage-students-view-progress"]').attr('href', value);
+            var progressLink = $(cell).find('[data-id="manage-students-view-progress"]');
+            if (data['subscribed_time']) {
+              progressLink.hide();
+            } else {
+              progressLink.attr('href', value);
+            }
             break;
           case 'course_id':
             $(cell).find('[data-id="manage-students-delete"]').attr('data-course-id', value);
             $(cell).find('[data-id="manage-students-delete"]').attr('data-student-id', data['user_id'] || 0);
+            if (data['subscribed_time']) {
+              var _data$student$email;
+              $(cell).find('[data-id="manage-students-delete"]').attr('data-subscribed-email', (_data$student$email = data['student']['email']) !== null && _data$student$email !== void 0 ? _data$student$email : '');
+            }
             break;
           default:
             $(cell).text(value);
@@ -209,25 +232,32 @@
       }
     }
     var alertPopup = $("[data-id='masterstudy-manage-students-delete-student']");
-    var student_id = '';
+    var student_id = '',
+      subscribed_email = '';
     alertPopup.css('display', 'none');
     $('body').on('click', '[data-id="manage-students-delete"]', function (e) {
+      var _$$data;
       e.preventDefault();
       alertPopup.css('display', 'flex');
       alertPopup.addClass('masterstudy-alert_open');
       student_id = $(this).data('student-id');
+      subscribed_email = (_$$data = $(this).data('subscribed-email')) !== null && _$$data !== void 0 ? _$$data : '';
     });
     alertPopup.find("[data-id='submit']").click(function (e) {
       e.preventDefault();
       var urlParams = new URLSearchParams(window.location.search);
       var course_id = urlParams.get('course_id');
       var apiUrl = "".concat(ms_lms_resturl, "/student/").concat(course_id, "/").concat(student_id);
+      var requestBody = subscribed_email.length > 0 ? JSON.stringify({
+        subscribed_email: subscribed_email
+      }) : undefined;
       fetch(apiUrl, {
         method: 'DELETE',
         headers: {
           'X-WP-Nonce': ms_lms_nonce,
           'Content-Type': 'application/json'
-        }
+        },
+        body: requestBody
       }).then(function (response) {
         if (response.ok) {
           return response.json();
@@ -238,7 +268,8 @@
           fetchData({
             per_page: per_page,
             s: search,
-            page: page
+            page: page,
+            subscribed: subscribed
           }, true);
         }
       })["catch"](function (error) {

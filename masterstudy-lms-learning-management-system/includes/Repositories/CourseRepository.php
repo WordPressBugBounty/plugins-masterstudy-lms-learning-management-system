@@ -571,6 +571,7 @@ final class CourseRepository {
 				'rating'                 => $meta['course_mark_average'][0] ?? 0,
 				'categories'             => wp_get_post_terms( $post->ID, Taxonomy::COURSE_CATEGORY ),
 				'image'                  => $this->get_course_image( $post ),
+				'lazy_load'              => \STM_LMS_Options::get_option( 'enable_lazyload', false ) ?? '',
 				'duration_info'          => $meta['duration_info'][0] ?? '',
 				'members'                => $meta['current_students'][0] ?? '',
 				'end_time'               => intval( $meta['end_time'][0] ?? 0 ),

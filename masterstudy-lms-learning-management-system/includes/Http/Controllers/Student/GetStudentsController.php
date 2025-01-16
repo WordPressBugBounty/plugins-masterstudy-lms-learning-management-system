@@ -15,12 +15,13 @@ final class GetStudentsController {
 		$validator = new Validator(
 			$request->get_params(),
 			array(
-				's'         => 'nullable|string',
-				'page'      => 'nullable|integer',
-				'per_page'  => 'nullable|integer',
-				'order'     => 'nullable|string',
-				'orderby'   => 'nullable|string',
-				'course_id' => 'nullable|integer',
+				's'          => 'nullable|string',
+				'page'       => 'nullable|integer',
+				'per_page'   => 'nullable|integer',
+				'order'      => 'nullable|string',
+				'orderby'    => 'nullable|string',
+				'course_id'  => 'nullable|integer',
+				'subscribed' => 'nullable|boolean',
 			)
 		);
 

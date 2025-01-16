@@ -23,7 +23,7 @@ function stm_lms_settings_course_section() {
 		'description'  => esc_html__( 'Description', 'masterstudy-lms-learning-management-system' ),
 		'curriculum'   => esc_html__( 'Curriculum', 'masterstudy-lms-learning-management-system' ),
 		'faq'          => esc_html__( 'Faq', 'masterstudy-lms-learning-management-system' ),
-		'announcement' => esc_html__( 'Announcement', 'masterstudy-lms-learning-management-system' ),
+		'announcement' => esc_html__( 'Notice', 'masterstudy-lms-learning-management-system' ),
 	);
 
 	if ( STM_LMS_Options::get_option( 'course_tab_reviews', true ) ) {
@@ -113,8 +113,8 @@ function stm_lms_settings_course_section() {
 		'course_tab_announcement'              => array(
 			'group'       => 'ended',
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Announcement tab', 'masterstudy-lms-learning-management-system' ),
-			'description' => esc_html__( 'Show a tab with course announcements', 'masterstudy-lms-learning-management-system' ),
+			'label'       => esc_html__( 'Notice tab', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Show a tab with course notices', 'masterstudy-lms-learning-management-system' ),
 			'value'       => true,
 		),
 		'course_levels_config'                 => array(
@@ -425,7 +425,7 @@ function stm_lms_settings_course_section() {
 	if ( STM_LMS_Helpers::is_pro() ) {
 		$hint_text      = esc_html__( 'Available in Pro Plus', 'masterstudy-lms-learning-management-system' );
 		$preview_label  = esc_html__( 'Demo preview', 'masterstudy-lms-learning-management-system' );
-		$preview_url    = 'https://masterstudy.stylemixthemes.com/lms-plugin/courses-page/basics-of-masterstudy/ ';
+		$preview_url    = 'https://masterstudy.stylemixthemes.com/lms-plugin/courses-page/basics-of-masterstudy/';
 		$layout_options = array(
 			array(
 				'value'         => 'default',

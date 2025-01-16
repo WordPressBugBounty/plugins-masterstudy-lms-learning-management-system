@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @var array $data
  * @var boolean $show_answers
@@ -38,7 +37,13 @@ foreach ( $data['answers'] as $answer ) {
 		<div class="masterstudy-course-player-answer__wrapper">
 			<?php if ( ! empty( $answer['text'] ) ) { ?>
 				<div class="masterstudy-course-player-answer__text">
-					<?php echo esc_html( $answer['text'] ); ?>
+					<?php
+					if ( 'True' === $answer['text'] ) {
+						esc_html_e( 'True', 'masterstudy-lms-learning-management-system' );
+					} else {
+						esc_html_e( 'False', 'masterstudy-lms-learning-management-system' );
+					}
+					?>
 				</div>
 				<?php
 			}

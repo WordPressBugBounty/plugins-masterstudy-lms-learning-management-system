@@ -5,7 +5,8 @@ if ( ! STM_LMS_Helpers::is_pro() || ! is_ms_lms_addon_enabled( 'assignments' ) )
 	return;
 }
 
-$assignments = ( new AssignmentStudentRepository() )->get_assignments(
+$assignments_repo = new AssignmentStudentRepository();
+$assignments      = $assignments_repo->get_assignments(
 	array(
 		'student_id'    => $student_id,
 		'assignment_id' => $material['post_id'],
@@ -19,12 +20,14 @@ $assignments = ( new AssignmentStudentRepository() )->get_assignments(
 		if ( $assignments->have_posts() ) :
 			while ( $assignments->have_posts() ) :
 				$assignments->the_post();
-				$review_status = get_post_meta( get_the_ID(), 'status', true );
-				$attempt       = get_post_meta( get_the_ID(), 'try_num', true );
-				$review        = get_post_meta( get_the_ID(), 'editor_comment', true );
-				$post_status   = get_post_status( get_the_ID() );
+
+				$assignment_id = get_the_ID();
+				$review_status = $assignments_repo->get_status( $assignment_id );
+				$attempt       = get_post_meta( $assignment_id, 'try_num', true );
+				$review        = get_post_meta( $assignment_id, 'editor_comment', true );
+				$post_status   = get_post_status( $assignment_id );
 				$status_class  = 'passed' === $review_status ? 'correct' : 'wrong';
-				$status_class  = 'pending' === $post_status ? 'pending' : $status_class;
+				$status_class  = 'pending' === $review_status ? 'pending' : $status_class;
 				?>
 				<div class="masterstudy-student-progress-assignment__attempt masterstudy-student-progress-assignment__attempt_<?php echo esc_attr( $status_class ); ?> masterstudy-student-progress-assignment__attempt_full">
 					<div class="masterstudy-student-progress-assignment__attempt-wrapper">
@@ -36,7 +39,7 @@ $assignments = ( new AssignmentStudentRepository() )->get_assignments(
 							<?php the_content(); ?>
 							<div class="masterstudy-student-progress-assignment__attempt-media">
 								<?php
-								$attachments = STM_LMS_Assignments::get_draft_attachments( get_the_ID(), 'student_attachments' );
+								$attachments = STM_LMS_Assignments::get_draft_attachments( $assignment_id, 'student_attachments' );
 								if ( ! empty( $attachments ) ) {
 									STM_LMS_Templates::show_lms_template(
 										'components/file-attachment',
@@ -63,9 +66,9 @@ $assignments = ( new AssignmentStudentRepository() )->get_assignments(
 										</div>
 										<div class="masterstudy-student-progress-assignment__answer-item-media">
 										<?php
-											$attachment_ids     = get_post_meta( get_the_ID(), 'instructor_attachments', true );
+											$attachment_ids     = get_post_meta( $assignment_id, 'instructor_attachments', true );
 											$attachment_ids     = ! empty( $attachment_ids ) ? $attachment_ids : array();
-											$review_attachments = STM_LMS_Assignments::get_draft_attachments( get_the_ID(), 'instructor_attachments' );
+											$review_attachments = STM_LMS_Assignments::get_draft_attachments( $assignment_id, 'instructor_attachments' );
 											STM_LMS_Templates::show_lms_template(
 												'components/file-attachment',
 												array(

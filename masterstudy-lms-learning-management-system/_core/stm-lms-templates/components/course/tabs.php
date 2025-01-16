@@ -19,7 +19,7 @@ $course_tabs    = array(
 	'description'  => esc_html__( 'Description', 'masterstudy-lms-learning-management-system' ),
 	'curriculum'   => esc_html__( 'Curriculum', 'masterstudy-lms-learning-management-system' ),
 	'faq'          => esc_html__( 'FAQ', 'masterstudy-lms-learning-management-system' ),
-	'announcement' => esc_html__( 'Announcement', 'masterstudy-lms-learning-management-system' ),
+	'announcement' => esc_html__( 'Notice', 'masterstudy-lms-learning-management-system' ),
 	'reviews'      => esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' ),
 );
 
