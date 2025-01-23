@@ -83,13 +83,13 @@ class STM_LMS_Lesson {
 		}
 
 		$end_time   = time();
-		$start_time = get_user_meta( $user_id, "stm_lms_course_started_{$course_id}_{$lesson_id}", true );
+		$start_time = get_user_meta( $user_id, "stm_lms_course_started_{$lesson_id}_{$course_id}", true );
 		stm_lms_add_user_lesson( compact( 'user_id', 'course_id', 'lesson_id', 'start_time', 'end_time' ) );
 		STM_LMS_Course::update_course_progress( $user_id, $course_id );
 
 		do_action( 'stm_lms_lesson_passed', $user_id, $lesson_id, $course_id );
 
-		delete_user_meta( $user_id, "stm_lms_course_started_{$course_id}_{$lesson_id}" );
+		delete_user_meta( $user_id, "stm_lms_course_started_{$lesson_id}_{$course_id}" );
 
 		wp_send_json( compact( 'user_id', 'course_id', 'lesson_id' ) );
 	}

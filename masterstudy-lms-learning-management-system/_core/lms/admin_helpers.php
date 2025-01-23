@@ -26,7 +26,7 @@ add_action(
 		stm_lms_register_script( 'admin/admin', array( 'jquery' ), true );
 		stm_lms_register_script( 'admin/sortable_menu', array( 'jquery' ), true );
 
-		$disabled_pages = apply_filters( 'masterstudy_lms_vuejs_disabled_pages', array( 'cost_calculator_builder' ) );
+		$disabled_pages = apply_filters( 'masterstudy_lms_vuejs_disabled_pages', array( 'cost_calculator_builder', 'cookie-consent', 'cookie-law-info' ) );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! in_array( sanitize_text_field( $_GET['page'] ?? '' ), $disabled_pages, true ) ) {

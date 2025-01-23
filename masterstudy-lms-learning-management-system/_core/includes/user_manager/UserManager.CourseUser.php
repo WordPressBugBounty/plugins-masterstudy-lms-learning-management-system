@@ -173,7 +173,7 @@ class STM_LMS_User_Manager_Course_User {
 			stm_lms_delete_user_lesson( $user_id, $course_id, $lesson_id );
 		} else {
 			$end_time   = time();
-			$start_time = get_user_meta( $user_id, "stm_lms_course_started_{$course_id}_{$lesson_id}", true );
+			$start_time = get_user_meta( $user_id, "stm_lms_course_started_{$lesson_id}_{$course_id}", true );
 			if ( empty( $start_time ) ) {
 				$start_time = time();
 			}
