@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.11
+Stable tag: 3.5.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,12 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.12 - 2025-01-30 =
+- **Enhancement:** Redesigned the LMS Checkout page for improved user experience.
+- **Enhancement:** Improved the design of the Profile Menu for better navigation.
+- **Fix:** Fixed minor bugs in the Profile Menu Elementor widget.
+- **Fix:** Resolved an issue where True & False quiz questions appeared as False & False in Spanish.
+
 = 3.5.11 - 2025-01-23 =
 - **Fix:** Fixed a conflict with the GDPR plugin from WebToffee.
 - **Fix:** Fixed a conflict with the CookieYes plugin.
@@ -324,8 +330,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 = 3.5.9 - 2025-01-13 =
 - **Fix:** Fixed a fatal error that occurred when adding a new question to a quiz without the Course Builder.
 - **Fix:** Resolved an issue where purchasing a course with Stripe payment method wasn't working correctly.
-
-= 3.5.8 - 2025-01-10 =
-- **Fix:** Small bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

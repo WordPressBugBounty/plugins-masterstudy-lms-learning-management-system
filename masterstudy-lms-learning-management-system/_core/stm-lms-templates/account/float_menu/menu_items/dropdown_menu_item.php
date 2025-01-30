@@ -24,11 +24,13 @@ if ( empty( $badge_count ) ) {
 }
 ?>
 
-<a href="<?php echo esc_url( $menu_url ); ?>" class="dropdown_menu_item <?php echo esc_attr( $active ); ?>">
-	<span class="dropdown_menu_item__title">
-		<?php echo wp_kses_post( $menu_title ); ?>
-	</span>
-	<?php if ( ! empty( $badge_count ) ) : ?>
-		<abbr><?php echo intval( $badge_count ); ?></abbr>
-	<?php endif; ?>
-</a>
+<li>
+	<a href="<?php echo esc_url( $menu_url ); ?>" class="dropdown_menu_item <?php echo esc_attr( $active ); ?>">
+		<span class="dropdown_menu_item__title">
+			<?php echo wp_kses_post( $menu_title ); ?>
+		</span>
+		<?php if ( ! empty( $badge_count ) ) : ?>
+			<abbr><?php echo intval( $badge_count ); ?></abbr>
+		<?php endif; ?>
+	</a>
+</li>

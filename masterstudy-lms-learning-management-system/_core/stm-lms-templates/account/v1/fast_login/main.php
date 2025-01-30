@@ -25,6 +25,32 @@ wp_enqueue_style( 'masterstudy-button' );
 		<div class="stm_lms_fast_login__head">
 			<h3 v-html="translations.sign_up" v-if="!login && !restrict_registration"></h3>
 			<h3 v-html="translations.sign_in" v-else></h3>
+			<div class="stm_lms_fast_login__switch">
+				<div class="stm_lms_fast_login__switch-account" v-if="!login && !restrict_registration">
+					<span class="stm_lms_fast_login__switch-account-title">
+						<?php echo esc_html__( 'or', 'masterstudy-lms-learning-management-system' ); ?>
+					</span>
+					<a
+						href="#"
+						v-html="translations.sign_in"
+						class="stm_lms_fast_login__switch-account-link"
+						@click.prevent="changeForm(true)"
+					>
+					</a>
+				</div>
+				<div class="stm_lms_fast_login__switch-account" v-else-if="!restrict_registration">
+					<span class="stm_lms_fast_login__switch-account-title">
+						<?php esc_html_e( 'or', 'masterstudy-lms-learning-management-system' ); ?>
+					</span>
+					<a
+						href="#"
+						v-html="translations.sign_up"
+						class="stm_lms_fast_login__switch-account-link"
+						@click.prevent="changeForm(false)"
+					>
+					</a>
+				</div>
+			</div>
 		</div>
 		<div class="stm_lms_fast_login__body">
 			<div class="stm_lms_fast_login__field" :class="{'stm_lms_fast_login__field_has-error': hasError('email')}">
@@ -72,32 +98,6 @@ wp_enqueue_style( 'masterstudy-button' );
 					<span class="masterstudy-button__title">
 						<?php echo esc_html__( 'Sign in', 'masterstudy-lms-learning-management-system' ); ?>
 					</span>
-				</a>
-			</div>
-		</div>
-		<div class="stm_lms_fast_login__switch">
-			<div class="stm_lms_fast_login__switch-account" v-if="!login && !restrict_registration">
-				<span class="stm_lms_fast_login__switch-account-title">
-					<?php echo esc_html__( 'Have account?', 'masterstudy-lms-learning-management-system' ); ?>
-				</span>
-				<a
-					href="#"
-					v-html="translations.sign_in"
-					class="stm_lms_fast_login__switch-account-link"
-					@click.prevent="changeForm(true)"
-				>
-				</a>
-			</div>
-			<div class="stm_lms_fast_login__switch-account" v-else-if="!restrict_registration">
-				<span class="stm_lms_fast_login__switch-account-title">
-					<?php esc_html_e( 'No account?', 'masterstudy-lms-learning-management-system' ); ?>
-				</span>
-				<a
-					href="#"
-					v-html="translations.sign_up"
-					class="stm_lms_fast_login__switch-account-link"
-					@click.prevent="changeForm(false)"
-				>
 				</a>
 			</div>
 		</div>

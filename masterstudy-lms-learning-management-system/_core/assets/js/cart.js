@@ -21,42 +21,36 @@
           if (this.loading) return false;
           var vm = this;
           vm.loading = true;
+          function handleResponse(response) {
+            vm.status = response.body.status;
+            vm.message = response.body.message;
+            var data = {
+              event_type: "order_created",
+              payment_code: vm.payment_code,
+              url: response.body.url || ""
+            };
+            stm_lms_print_message(data);
+            if (response.body.url) {
+              window.location = response.body.url;
+            } else {
+              vm.loading = false;
+            }
+          }
+          function handleError(error) {
+            vm.loading = false;
+            vm.message = error.message || 'An error occurred';
+            vm.status = 'error';
+          }
           if (vm.payment_code === 'stripe') {
             vm.stripe.createToken(vm.stripe_card).then(function (result) {
               if (result.error) {
-                vm.message = result.error.message;
-                vm.status = result.error;
-                vm.loading = false;
+                handleError(result.error);
               } else {
-                vm.$http.get(stm_lms_ajaxurl + '?action=stm_lms_purchase&nonce=' + stm_lms_nonces['stm_lms_purchase'] + '&payment_code=' + vm.payment_code + '&token_id=' + result.token.id).then(function (response) {
-                  vm.loading = false;
-                  vm.status = response.body.status;
-                  vm.message = response.body.message;
-                  var data = {
-                    event_type: 'order_created',
-                    payment_code: vm.payment_code,
-                    url: ''
-                  };
-                  if (typeof response.body.url !== 'undefined' && response.body.url) data['url'] = response.body.url;
-                  stm_lms_print_message(data);
-                  if (typeof response.body.url !== 'undefined' && response.body.url) window.location = response.body.url;
-                });
+                vm.$http.get(stm_lms_ajaxurl + '?action=stm_lms_purchase&nonce=' + stm_lms_nonces['stm_lms_purchase'] + '&payment_code=' + vm.payment_code + '&token_id=' + result.token.id).then(handleResponse)["catch"](handleError);
               }
             });
           } else {
-            vm.$http.get(stm_lms_ajaxurl + '?action=stm_lms_purchase&nonce=' + stm_lms_nonces['stm_lms_purchase'] + '&payment_code=' + vm.payment_code).then(function (response) {
-              vm.loading = false;
-              vm.status = response.body.status;
-              vm.message = response.body.message;
-              var data = {
-                event_type: 'order_created',
-                payment_code: vm.payment_code,
-                url: ''
-              };
-              if (typeof response.body.url !== 'undefined' && response.body.url) data['url'] = response.body.url;
-              stm_lms_print_message(data);
-              if (typeof response.body.url !== 'undefined' && response.body.url) window.location = response.body.url;
-            });
+            vm.$http.get(stm_lms_ajaxurl + '?action=stm_lms_purchase&nonce=' + stm_lms_nonces['stm_lms_purchase'] + '&payment_code=' + vm.payment_code).then(handleResponse)["catch"](handleError);
           }
         },
         generateStripe: function generateStripe() {

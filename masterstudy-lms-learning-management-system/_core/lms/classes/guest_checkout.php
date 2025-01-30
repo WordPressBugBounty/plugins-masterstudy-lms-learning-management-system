@@ -88,6 +88,11 @@ class STM_LMS_Guest_Checkout {
 				$cart_item['price'] = STM_LMS_Course::get_course_price( $item_id );
 			}
 
+			$bundle_ids = get_post_meta( $item_id, 'stm_lms_bundle_ids', true );
+			if ( ! empty( $bundle_ids ) ) {
+				$cart_item['bundle'] = $item_id;
+			}
+
 			$cart_items[] = $cart_item;
 		}
 

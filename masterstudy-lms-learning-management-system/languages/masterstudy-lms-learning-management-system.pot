@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MasterStudy LMS WordPress Plugin – for Online Courses and Education plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.5.10\n"
+"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.5.11\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/masterstudy-lms-learning-management-system\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-01-16T06:19:52+00:00\n"
+"POT-Creation-Date: 2025-01-30T09:35:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 
@@ -1562,8 +1562,6 @@ msgstr ""
 #: _core/lms/classes/models/admin/StmStatisticsListTable.php:159
 #: _core/lms/classes/models/admin/StmStatisticsListTable.php:445
 #: _core/lms/views/payout/meta-box-payout-data.php:146
-#: _core/stm-lms-templates/checkout/guest-checkout.php:92
-#: _core/stm-lms-templates/checkout/items.php:82
 #: _core/stm-lms-templates/courses/advanced_filters/filters/price.php:16
 #: _core/stm-lms-templates/dashboard/components/courses.php:25
 #: assets/course-builder/js/main.js:1
@@ -2493,6 +2491,9 @@ msgstr ""
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:509
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:586
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:836
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:191
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:349
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:382
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:400
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:417
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:505
@@ -2577,6 +2578,10 @@ msgstr ""
 #: _core/includes/elementor/widgets/slider/content/slide.php:944
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:349
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:470
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:126
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:407
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:600
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:654
 #: assets/gutenberg/blocks/adaptive-box/index.js:1
 #: assets/gutenberg/blocks/advanced-text/index.js:1
 #: assets/gutenberg/blocks/course-carousel/index.js:1
@@ -2656,7 +2661,11 @@ msgstr ""
 #: _core/includes/elementor/widgets/slider/content/slide.php:956
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:178
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:338
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:148
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:138
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:305
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:419
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:579
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:613
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:380
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:451
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:485
@@ -2706,8 +2715,13 @@ msgstr ""
 #: _core/includes/elementor/widgets/deprecated/stm_lms_courses_categories.php:304
 #: _core/includes/elementor/widgets/ms_lms_courses_searchbox.php:188
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:675
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:278
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:311
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:487
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:520
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:696
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:716
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:783
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:803
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:848
 msgid "Text Color"
 msgstr ""
 
@@ -2758,6 +2772,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/slider/content/slide.php:26
 #: _core/includes/elementor/widgets/slider/content/slide.php:541
 #: _core/includes/elementor/widgets/slider/content/slide.php:932
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:249
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:691
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:849
 #: assets/gutenberg/blocks/course-search/container/index.js:1
@@ -2850,7 +2865,8 @@ msgstr ""
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:726
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:786
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:916
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:136
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:293
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:633
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:661
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:736
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:820
@@ -2879,6 +2895,8 @@ msgstr ""
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:525
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:150
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:892
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:337
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:370
 #: assets/gutenberg/blocks/course-carousel/index.js:1
 #: assets/gutenberg/blocks/course-categories/container/index.js:1
 #: assets/gutenberg/blocks/course-search/container/index.js:1
@@ -2941,8 +2959,11 @@ msgstr ""
 #: _core/includes/elementor/widgets/slider/content/slide.php:971
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:314
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:669
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:271
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:374
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:163
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:330
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:480
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:689
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:776
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:297
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:394
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:499
@@ -3071,8 +3092,11 @@ msgstr ""
 #: _core/includes/elementor/widgets/slider/content/slide.php:1069
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:380
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:745
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:304
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:394
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:184
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:363
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:513
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:710
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:797
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:327
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:411
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:516
@@ -3199,7 +3223,6 @@ msgstr ""
 #: _core/includes/elementor/widgets/slider/content/slide.php:725
 #: _core/includes/elementor/widgets/slider/content/slide.php:1018
 #: _core/includes/elementor/widgets/slider/content/slide.php:1116
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:358
 #: assets/gutenberg/blocks/course-categories/container/index.js:1
 #: assets/gutenberg/blocks/course-search/container/index.js:1
 msgid "Icon Color"
@@ -3329,8 +3352,11 @@ msgstr ""
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:481
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:558
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:808
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:193
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:245
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:151
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:318
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:468
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:571
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:667
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:369
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:474
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:546
@@ -3536,6 +3562,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/slider/content/slide.php:529
 #: _core/includes/elementor/widgets/slider/content/slide.php:920
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:433
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:214
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:679
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:838
 #: assets/gutenberg/blocks/course-carousel/index.js:1
@@ -3563,7 +3590,6 @@ msgstr ""
 #: _core/includes/elementor/widgets/slider/content/slide.php:741
 #: _core/includes/elementor/widgets/slider/content/slide.php:1034
 #: _core/includes/elementor/widgets/slider/content/slide.php:1132
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:346
 msgid "Icon Background"
 msgstr ""
 
@@ -4294,8 +4320,10 @@ msgid "For Instructors Only"
 msgstr ""
 
 #: _core/includes/elementor/widgets/ms_lms_authorization.php:63
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:38
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:254
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:45
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:95
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:113
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:399
 #: _core/includes/visual_composer/modules/masterstudy_authorization_form.php:23
 #: _core/stm-lms-templates/account/float_menu/logged_out.php:23
 #: _core/stm-lms-templates/course-player/header.php:141
@@ -4303,7 +4331,7 @@ msgid "Login"
 msgstr ""
 
 #: _core/includes/elementor/widgets/ms_lms_authorization.php:65
-#: _core/stm-lms-templates/account/v1/fast_login/main.php:62
+#: _core/stm-lms-templates/account/v1/fast_login/main.php:88
 #: _core/stm-lms-templates/components/authorization/main.php:275
 msgid "Sign up"
 msgstr ""
@@ -4665,7 +4693,7 @@ msgid "\"View all\" Button"
 msgstr ""
 
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:362
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:177
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:79
 #: assets/course-builder/js/main.js:1
 msgid "Button Link"
 msgstr ""
@@ -4907,7 +4935,8 @@ msgstr ""
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:138
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:145
 #: _core/includes/elementor/widgets/stm_lms_call_to_action.php:426
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:50
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:58
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:103
 msgid "Icon"
 msgstr ""
 
@@ -5089,57 +5118,80 @@ msgstr ""
 msgid "Plan container"
 msgstr ""
 
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:13
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:19
 msgid "Site Authorization links"
 msgstr ""
 
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:38
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:254
-msgid "Login/Sign Up"
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:45
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:113
+msgid "Account"
 msgstr ""
 
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:57
-msgid "Profile Width"
-msgstr ""
-
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:92
-msgid "Profile Height"
-msgstr ""
-
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:165
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:67
 #: assets/course-builder/js/main.js:1
 msgid "Button Text"
 msgstr ""
 
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:202
-#: _core/stm-lms-templates/account/v1/fast_login/main.php:13
-#: _core/stm-lms-templates/components/authorization/main.php:19
-#: _core/stm-lms-templates/components/authorization/main.php:213
-#: _core/stm-lms-templates/components/authorization/main.php:268
-msgid "Sign In"
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:72
+msgid "Login/Sign Up"
 msgstr ""
 
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:208
-msgid "Profile icon size"
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:170
+msgid " Color"
 msgstr ""
 
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:259
-#: _core/stm-lms-templates/account/float_menu/logged_out.php:45
-#: _core/stm-lms-templates/account/v1/fast_login/main.php:73
-msgid "Sign in"
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:206
+msgid "Icon Options"
 msgstr ""
 
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:291
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:324
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:431
+#: assets/gutenberg/blocks/course-categories/container/index.js:1
+#: assets/gutenberg/blocks/course-search/container/index.js:1
+msgid "Icon Size"
+msgstr ""
+
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:499
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:533
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:675
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:762
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:837
 #: assets/gutenberg/blocks/courses/bundles/container/index.js:1
 #: assets/gutenberg/blocks/courses/filter/container/index.js:1
 #: assets/gutenberg/blocks/courses/preset/index.js:1
 msgid "Background Color"
 msgstr ""
 
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:381
-#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:401
-msgid "Button Color"
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:553
+msgid "Quick Menu"
+msgstr ""
+
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:561
+msgid "Title Options"
+msgstr ""
+
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:591
+msgid "Block Options"
+msgstr ""
+
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:645
+msgid "Item Options"
+msgstr ""
+
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:729
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:815
+msgid "Item background"
+msgstr ""
+
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:742
+msgid "Separator line"
+msgstr ""
+
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:754
+msgid "Instructor area"
+msgstr ""
+
+#: _core/includes/elementor/widgets/stm_lms_profile_auth_links.php:828
+msgid "Counter"
 msgstr ""
 
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:32
@@ -5218,8 +5270,6 @@ msgstr ""
 #: _core/settings/main_settings/course.php:419
 #: _core/stm-lms-templates/account/private/parts/certificate-list.php:44
 #: _core/stm-lms-templates/account/private/parts/enrolled-quizzes.php:26
-#: _core/stm-lms-templates/checkout/guest-checkout.php:27
-#: _core/stm-lms-templates/checkout/items.php:27
 #: _core/stm-lms-templates/course-player/header.php:98
 #: _core/stm-lms-templates/elementor-widgets/instructors-carousel/instructor/courses.php:5
 #: assets/course-builder/js/main.js:1
@@ -5368,7 +5418,7 @@ msgid "Install Now"
 msgstr ""
 
 #: _core/includes/user_manager/UserManager.AddUser.php:29
-#: _core/lms/classes/guest_checkout.php:118
+#: _core/lms/classes/guest_checkout.php:123
 msgid "Enter valid email"
 msgstr ""
 
@@ -6187,10 +6237,10 @@ msgstr ""
 msgid "Grade"
 msgstr ""
 
-#: _core/lms/classes/guest_checkout.php:111
-#: _core/lms/classes/guest_checkout.php:168
-#: _core/lms/classes/guest_checkout.php:214
-#: _core/lms/classes/guest_checkout.php:222
+#: _core/lms/classes/guest_checkout.php:116
+#: _core/lms/classes/guest_checkout.php:173
+#: _core/lms/classes/guest_checkout.php:219
+#: _core/lms/classes/guest_checkout.php:227
 #: _core/lms/classes/user.php:178
 #: _core/lms/classes/user.php:279
 #: _core/lms/classes/user.php:301
@@ -6202,41 +6252,41 @@ msgstr ""
 msgid "Field is required"
 msgstr ""
 
-#: _core/lms/classes/guest_checkout.php:126
+#: _core/lms/classes/guest_checkout.php:131
 #: _core/lms/classes/user.php:354
 msgid "User with this email address already exists"
 msgstr ""
 
-#: _core/lms/classes/guest_checkout.php:137
+#: _core/lms/classes/guest_checkout.php:142
 #: _core/lms/classes/user.php:364
 #: _core/lms/classes/user.php:1350
 #: _core/lms/classes/user.php:1972
 msgid "Password must have at least 8 characters"
 msgstr ""
 
-#: _core/lms/classes/guest_checkout.php:145
+#: _core/lms/classes/guest_checkout.php:150
 #: _core/lms/classes/user.php:372
 #: _core/lms/classes/user.php:1357
 #: _core/lms/classes/user.php:1980
 msgid "Password must include at least one lowercase letter!"
 msgstr ""
 
-#: _core/lms/classes/guest_checkout.php:153
+#: _core/lms/classes/guest_checkout.php:158
 #: _core/lms/classes/user.php:380
 #: _core/lms/classes/user.php:1366
 #: _core/lms/classes/user.php:1988
 msgid "Password must include at least one number!"
 msgstr ""
 
-#: _core/lms/classes/guest_checkout.php:161
+#: _core/lms/classes/guest_checkout.php:166
 msgid "Password must include at least one capital letter! one number!"
 msgstr ""
 
-#: _core/lms/classes/guest_checkout.php:236
+#: _core/lms/classes/guest_checkout.php:241
 msgid "Wrong email"
 msgstr ""
 
-#: _core/lms/classes/guest_checkout.php:248
+#: _core/lms/classes/guest_checkout.php:253
 #: _core/lms/classes/user.php:207
 msgid "Wrong password"
 msgstr ""
@@ -6670,6 +6720,8 @@ msgid "Cancelled"
 msgstr ""
 
 #: _core/lms/classes/order.php:311
+#: _core/stm-lms-templates/checkout/guest-checkout.php:34
+#: _core/stm-lms-templates/checkout/items.php:34
 msgid "Order items"
 msgstr ""
 
@@ -6679,8 +6731,6 @@ msgid "Course name"
 msgstr ""
 
 #: _core/lms/classes/order.php:313
-#: _core/stm-lms-templates/checkout/guest-checkout.php:31
-#: _core/stm-lms-templates/checkout/items.php:31
 msgid "Course price"
 msgstr ""
 
@@ -6695,6 +6745,8 @@ msgid "Courses in bundle"
 msgstr ""
 
 #: _core/lms/classes/order.php:316
+#: _core/stm-lms-templates/checkout/guest-checkout.php:82
+#: _core/stm-lms-templates/checkout/items.php:82
 #: _core/stm-lms-templates/checkout/thankyou.php:109
 #: _core/stm-lms-templates/emails/order-template.php:169
 msgid "for group"
@@ -6733,8 +6785,8 @@ msgstr ""
 #: _core/lms/classes/page_routes.php:333
 #: _core/settings/main_settings/routes.php:64
 #: _core/settings/page_generator/api/get.php:7
-#: _core/stm-lms-templates/checkout/guest-checkout.php:20
-#: _core/stm-lms-templates/checkout/items.php:20
+#: _core/stm-lms-templates/checkout/guest-checkout.php:18
+#: _core/stm-lms-templates/checkout/items.php:18
 msgid "Checkout"
 msgstr ""
 
@@ -7251,11 +7303,15 @@ msgstr ""
 msgid "Seconds"
 msgstr ""
 
-#: _core/lms/enqueue.php:135
+#: _core/lms/enqueue.php:111
+msgid "Are you sure you want to delete this course from cart?"
+msgstr ""
+
+#: _core/lms/enqueue.php:138
 msgid "Hide Statistics"
 msgstr ""
 
-#: _core/lms/enqueue.php:136
+#: _core/lms/enqueue.php:139
 msgid "Show Statistics"
 msgstr ""
 
@@ -7708,6 +7764,7 @@ msgstr ""
 #: _core/settings/answers/components_js/answers.php:211
 #: _core/settings/answers/components_js/answers.php:220
 #: _core/settings/answers/components_js/answers.php:221
+#: _core/stm-lms-templates/course-player/content/quiz/questions/true_false.php:41
 #: _core/stm-lms-templates/course-player/content/quiz/questions/true_false.php:42
 #: _core/stm-lms-templates/questions/answers/true_false.php:44
 #: _core/stm-lms-templates/questions/answers/true_false.php:45
@@ -7755,8 +7812,6 @@ msgstr ""
 #: _core/stm-lms-templates/account/private/edit_account/custom_fields.php:67
 #: _core/stm-lms-templates/account/private/edit_account/profile-cover.php:35
 #: _core/stm-lms-templates/account/private/manage_students/main.php:279
-#: _core/stm-lms-templates/checkout/guest-checkout.php:47
-#: _core/stm-lms-templates/checkout/items.php:46
 #: _core/stm-lms-templates/components/attachment-media.php:138
 #: _core/stm-lms-templates/components/authorization/register-form.php:160
 #: _core/stm-lms-templates/components/modals/become-instructor.php:100
@@ -10325,6 +10380,11 @@ msgstr ""
 msgid "Hey, Please Login"
 msgstr ""
 
+#: _core/stm-lms-templates/account/float_menu/logged_out.php:45
+#: _core/stm-lms-templates/account/v1/fast_login/main.php:99
+msgid "Sign in"
+msgstr ""
+
 #: _core/stm-lms-templates/account/float_menu/logged_out.php:56
 msgid "Register"
 msgstr ""
@@ -10977,6 +11037,7 @@ msgid "No orders yet"
 msgstr ""
 
 #: _core/stm-lms-templates/account/private/parts/my-orders.php:12
+#: _core/stm-lms-templates/checkout/empty-cart.php:5
 msgid "All information about your orders will be displayed here"
 msgstr ""
 
@@ -11012,24 +11073,26 @@ msgstr ""
 msgid "Sign Up"
 msgstr ""
 
-#: _core/stm-lms-templates/account/v1/fast_login/main.php:35
+#: _core/stm-lms-templates/account/v1/fast_login/main.php:13
+#: _core/stm-lms-templates/components/authorization/main.php:19
+#: _core/stm-lms-templates/components/authorization/main.php:213
+#: _core/stm-lms-templates/components/authorization/main.php:268
+msgid "Sign In"
+msgstr ""
+
+#: _core/stm-lms-templates/account/v1/fast_login/main.php:31
+#: _core/stm-lms-templates/account/v1/fast_login/main.php:43
+msgid "or"
+msgstr ""
+
+#: _core/stm-lms-templates/account/v1/fast_login/main.php:61
 #: _core/stm-lms-templates/components/authorization/register-form.php:18
 #: _core/stm-lms-templates/components/authorization/restore-password.php:11
 msgid "Enter your email"
 msgstr ""
 
-#: _core/stm-lms-templates/account/v1/fast_login/main.php:46
+#: _core/stm-lms-templates/account/v1/fast_login/main.php:72
 msgid "Enter your password"
-msgstr ""
-
-#: _core/stm-lms-templates/account/v1/fast_login/main.php:81
-#: _core/stm-lms-templates/components/authorization/main.php:24
-msgid "Have account?"
-msgstr ""
-
-#: _core/stm-lms-templates/account/v1/fast_login/main.php:93
-#: _core/stm-lms-templates/components/authorization/main.php:20
-msgid "No account?"
 msgstr ""
 
 #. translators: %s: membership name
@@ -11084,8 +11147,44 @@ msgstr ""
 msgid "Upgrade to PRO PLUS"
 msgstr ""
 
-#: _core/stm-lms-templates/checkout/empty-cart.php:2
-msgid "Cart is empty<span>,</span> <a href=\"%s\">add Courses</a>"
+#: _core/stm-lms-templates/checkout/empty-cart.php:4
+msgid "Cart is empty"
+msgstr ""
+
+#: _core/stm-lms-templates/checkout/empty-cart.php:10
+msgid "Add Courses"
+msgstr ""
+
+#: _core/stm-lms-templates/checkout/guest-checkout.php:73
+#: _core/stm-lms-templates/checkout/items.php:73
+msgid "bundle"
+msgstr ""
+
+#: _core/stm-lms-templates/checkout/guest-checkout.php:98
+#: _core/stm-lms-templates/checkout/items.php:98
+#: _core/stm-lms-templates/checkout/thankyou.php:115
+#: _core/stm-lms-templates/emails/order-template.php:171
+msgid "courses in bundle"
+msgstr ""
+
+#: _core/stm-lms-templates/checkout/guest-checkout.php:129
+#: _core/stm-lms-templates/checkout/items.php:122
+#: _core/stm-lms-templates/checkout/thankyou.php:180
+#: _core/stm-lms-templates/emails/order-template.php:236
+#: _core/stm-lms-templates/emails/sandbox-order-template.php:127
+msgid "Total:"
+msgstr ""
+
+#: _core/stm-lms-templates/checkout/items.php:133
+msgid "Payment method"
+msgstr ""
+
+#: _core/stm-lms-templates/checkout/items.php:157
+msgid "Pay "
+msgstr ""
+
+#: _core/stm-lms-templates/checkout/items.php:164
+msgid "Please configure payment methods"
 msgstr ""
 
 #: _core/stm-lms-templates/checkout/not-logged-in.php:2
@@ -11100,7 +11199,7 @@ msgstr ""
 msgid "Purchase"
 msgstr ""
 
-#: _core/stm-lms-templates/checkout/payment_methods.php:82
+#: _core/stm-lms-templates/checkout/payment_methods.php:94
 msgid "No available Payment methods"
 msgstr ""
 
@@ -11138,11 +11237,6 @@ msgstr ""
 msgid "Order details"
 msgstr ""
 
-#: _core/stm-lms-templates/checkout/thankyou.php:115
-#: _core/stm-lms-templates/emails/order-template.php:171
-msgid "courses in bundle"
-msgstr ""
-
 #: _core/stm-lms-templates/checkout/thankyou.php:125
 msgid "Go to course"
 msgstr ""
@@ -11169,12 +11263,6 @@ msgstr ""
 
 #: _core/stm-lms-templates/checkout/thankyou.php:175
 msgid "wire transfer"
-msgstr ""
-
-#: _core/stm-lms-templates/checkout/thankyou.php:180
-#: _core/stm-lms-templates/emails/order-template.php:236
-#: _core/stm-lms-templates/emails/sandbox-order-template.php:127
-msgid "Total:"
 msgstr ""
 
 #: _core/stm-lms-templates/checkout/thankyou.php:186
@@ -11309,6 +11397,14 @@ msgstr ""
 #: _core/stm-lms-templates/components/authorization/register-form.php:24
 #: assets/course-builder/js/main.js:1
 msgid "Enter password"
+msgstr ""
+
+#: _core/stm-lms-templates/components/authorization/main.php:20
+msgid "No account?"
+msgstr ""
+
+#: _core/stm-lms-templates/components/authorization/main.php:24
+msgid "Have account?"
 msgstr ""
 
 #: _core/stm-lms-templates/components/authorization/main.php:29
@@ -12211,16 +12307,20 @@ msgstr ""
 msgid "View Order"
 msgstr ""
 
-#: _core/stm-lms-templates/global/account-dropdown.php:21
+#: _core/stm-lms-templates/global/account-dropdown.php:29
 msgid "Hey, %s"
 msgstr ""
 
-#: _core/stm-lms-templates/global/account-dropdown.php:31
-msgid "Instructor area"
+#: _core/stm-lms-templates/global/account-dropdown.php:41
+msgid "Learning Area"
 msgstr ""
 
-#: _core/stm-lms-templates/global/account-dropdown.php:43
+#: _core/stm-lms-templates/global/account-dropdown.php:51
 msgid "Logout"
+msgstr ""
+
+#: _core/stm-lms-templates/global/account-dropdown.php:56
+msgid "Instructor Area"
 msgstr ""
 
 #: _core/stm-lms-templates/global/all_courses_link.php:4
@@ -16370,11 +16470,6 @@ msgstr ""
 #: assets/gutenberg/blocks/course-search/container/index.js:1
 #: assets/gutenberg/blocks/courses/bundles/container/index.js:1
 msgid "Content Max Width"
-msgstr ""
-
-#: assets/gutenberg/blocks/course-categories/container/index.js:1
-#: assets/gutenberg/blocks/course-search/container/index.js:1
-msgid "Icon Size"
 msgstr ""
 
 #: assets/gutenberg/blocks/course-categories/container/index.js:1

@@ -256,7 +256,7 @@ class STM_LMS_User_Menu {
 				'menu_title'   => esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ),
 				'menu_icon'    => 'fa-cog',
 				'menu_url'     => STM_LMS_User::settings_url(),
-				'menu_place'   => 'main',
+				'menu_place'   => 'learning',
 			);
 		}
 

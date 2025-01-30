@@ -107,6 +107,9 @@ function stm_lms_enqueue_ss() {
 			'position'           => STM_LMS_Options::get_option( 'currency_position', 'left' ),
 			'currency_thousands' => STM_LMS_Options::get_option( 'currency_thousands', ',' ),
 			'wp_rest_nonce'      => wp_create_nonce( 'wp_rest' ),
+			'translate'          => array(
+				'delete' => esc_html__( 'Are you sure you want to delete this course from cart?', 'masterstudy-lms-learning-management-system' ),
+			),
 		)
 	);
 

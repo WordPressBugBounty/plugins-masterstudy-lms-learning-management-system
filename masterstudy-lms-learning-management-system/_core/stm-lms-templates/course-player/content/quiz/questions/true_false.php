@@ -38,7 +38,7 @@ foreach ( $data['answers'] as $answer ) {
 			<?php if ( ! empty( $answer['text'] ) ) { ?>
 				<div class="masterstudy-course-player-answer__text">
 					<?php
-					if ( 'True' === $answer['text'] ) {
+					if ( esc_html__( 'True', 'masterstudy-lms-learning-management-system' ) === $answer['text'] || 'True' === $answer['text'] ) {
 						esc_html_e( 'True', 'masterstudy-lms-learning-management-system' );
 					} else {
 						esc_html_e( 'False', 'masterstudy-lms-learning-management-system' );

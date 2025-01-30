@@ -87,33 +87,36 @@
     $('[data-delete-course]').on('click', function (e) {
       e.preventDefault();
       var item_id = $(this).data('delete-course');
-      var group_id = $(this).data('delete-enterprise');
-      var guest = $(this).data('delete-guest');
-      $.ajax({
-        url: stm_lms_ajaxurl,
-        dataType: 'json',
-        context: this,
-        data: {
-          action: 'stm_lms_delete_from_cart',
-          nonce: stm_lms_nonces['stm_lms_delete_from_cart'],
-          item_id: item_id,
-          group_id: group_id,
-          guest: guest
-        },
-        beforeSend: function beforeSend() {
-          $(this).addClass('loading');
-        },
-        complete: function complete(data) {
-          $(this).removeClass('loading');
-          $(this).closest('.item_can_hide').slideUp();
-          if (guest) {
-            $.removeCookie('stm_lms_notauth_cart', {
-              path: '/'
-            });
+      var group_id = $(this).data("delete-enterprise");
+      var guest = $(this).data("delete-guest");
+      var $this = $(this);
+      if (confirm(stm_lms_vars.translate["delete"])) {
+        $.ajax({
+          url: stm_lms_ajaxurl,
+          dataType: 'json',
+          context: $this,
+          data: {
+            action: 'stm_lms_delete_from_cart',
+            nonce: stm_lms_nonces['stm_lms_delete_from_cart'],
+            item_id: item_id,
+            group_id: group_id,
+            guest: guest
+          },
+          beforeSend: function beforeSend() {
+            $this.addClass('loading');
+          },
+          complete: function complete(data) {
+            $this.removeClass('loading');
+            $this.closest('.item_can_hide').slideUp();
+            if (guest) {
+              $.removeCookie('stm_lms_notauth_cart', {
+                path: '/'
+              });
+            }
+            location.reload();
           }
-          location.reload();
-        }
-      });
+        });
+      }
     });
     $('.stm_lms_logout').on('click', function (e) {
       e.preventDefault();
@@ -163,21 +166,38 @@
       $btn.click();
     }
   }
-  $(document).on('click', '.stm_lms_account_dropdown .dropdown-menu > li > a', function (e) {
-    e.preventDefault();
+  $(document).on('click', '.stm_lms_account_dropdown', function (e) {
     e.stopPropagation();
-    window.location.href = $(this).attr('href');
   });
-  $(document).on('click', '.stm_lms_account_dropdown button', function () {
-    $('.caret').toggleClass('rotate');
-  });
-  $(document).on('click', '.dropdown-backdrop', function () {
-    $('.caret').removeClass('rotate');
+  $(document).on('click', '.stm_lms_account_dropdown .dropdown-menu > li > a', function (e) {
+    e.stopPropagation();
+    window.location.href = $(this).attr("href");
   });
   $(document).mouseup(function (e) {
-    var container = $('.stm_lms_account_dropdown');
+    var container = $(e.target).closest(".stm_lms_account_dropdown");
     if (container.has(e.target).length === 0) {
       $('.caret').removeClass('rotate');
+    }
+    var dropdownHeight = container.outerHeight();
+    var innerMenu = container.find(".masterstudy-dropdown-menu");
+    if (innerMenu.length > 0) {
+      innerMenu.css("top", dropdownHeight + 5 + "px");
+      var parentOffset = container.offset();
+      var parentWidth = container.outerWidth();
+      var viewportWidth = $(window).width();
+      var parentLeft = parentOffset.left;
+      var parentRight = viewportWidth - (parentLeft + parentWidth);
+      if (parentLeft <= parentRight) {
+        innerMenu.css({
+          left: "0",
+          right: "auto"
+        });
+      } else {
+        innerMenu.css({
+          left: "auto",
+          right: "0"
+        });
+      }
     }
   });
 })(jQuery);
