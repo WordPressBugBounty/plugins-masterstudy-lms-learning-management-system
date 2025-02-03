@@ -25,7 +25,7 @@ if ( class_exists( 'STM_LMS_Shareware' ) ) {
 }
 
 foreach ( $curriculum as $section ) {
-	$section['materials'] = ( new CoursePlayerRepository() )->hydrate_materials( $section['materials'] );
+	$section['materials'] = ( new CoursePlayerRepository() )->hydrate_materials( $section['materials'], $course_id, get_current_user_id() );
 	?>
 	<div class="masterstudy-curriculum-list__wrapper masterstudy-curriculum-list__wrapper_opened">
 		<div class="masterstudy-curriculum-list__section">
@@ -101,9 +101,15 @@ foreach ( $curriculum as $section ) {
 											echo esc_html( $question_count ? sprintf( __( '%d questions', 'masterstudy-lms-learning-management-system' ), $question_count ) : '' );
 											echo esc_html( ! $question_count ? $material['label'] : '' );
 										} else {
+											if ( ! empty( $material['progress'] ) ) {
+												?>
+												<div class="masterstudy-curriculum-list__meta-value">
+													<?php echo esc_html( $material['progress'] ); ?>
+												</div>
+												<?php
+											}
 											echo esc_html( $material['duration'] ?? '' );
-											echo esc_html( $material['meta'] ?? '' );
-											echo esc_html( empty( $material['meta'] ) && empty( $material['duration'] ) ? $material['label'] : '' );
+											echo esc_html( empty( $material['progress'] ) && empty( $material['duration'] ) ? $material['label'] : '' );
 										}
 										?>
 									</span>

@@ -587,4 +587,12 @@ abstract class LmsUpdateCallbacks {
 
 		update_option( 'stm_lms_settings', $settings );
 	}
+
+	public static function lms_update_user_lesson_table() {
+		require_once STM_LMS_LIBRARY . '/db/tables.php';
+
+		if ( function_exists( 'stm_lms_tables_update' ) ) {
+			stm_lms_user_lessons();
+		}
+	}
 }

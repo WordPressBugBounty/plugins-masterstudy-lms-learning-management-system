@@ -16,33 +16,34 @@ class CreateController {
 		$lesson_types = apply_filters( 'masterstudy_lms_lesson_types', array_map( 'strval', LessonType::cases() ) );
 		$video_types  = apply_filters( 'masterstudy_lms_lesson_video_types', array_map( 'strval', LessonVideoType::cases() ) );
 		$audio_types  = apply_filters( 'masterstudy_lms_lesson_audio_types', array_map( 'strval', LessonAudioType::cases() ) );
-		$rules        = array(
-			'type'              => 'required|contains_list,' . implode( ';', $lesson_types ),
-			'title'             => 'required|string',
-			'excerpt'           => 'nullable|string',
-			'duration'          => 'nullable|string',
-			'preview'           => 'boolean',
-			'content'           => 'required_if,type;' . LessonType::TEXT . '|string',
-			'video_type'        => 'required_if,type;' . LessonType::VIDEO . '|contains_list,' . implode( ';', $video_types ),
-			'audio_type'        => 'required_if,type;audio|contains_list,' . implode( ';', $audio_types ),
-			'embed_ctx'         => 'nullable|string',
-			'external_url'      => 'nullable|string',
-			'presto_player_idx' => 'nullable|integer',
-			'vdocipher_id'      => 'nullable|string',
-			'shortcode'         => 'nullable|string',
-			'youtube_url'       => 'nullable|string',
-			'video'             => 'nullable|integer',
-			'video_poster'      => 'nullable|integer',
-			'video_width'       => 'nullable|integer|min,1',
-			'vimeo_url'         => 'nullable|string',
-			'file'              => 'nullable|integer',
-			'files'             => 'array',
-
-			// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-			// todo: uncomment when validation will support array of objects
-			// 'files.*.id'        => 'required|integer',
-			// 'files.*.label'     => 'required|string',
-			'custom_fields'     => 'array',
+		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+		// todo: uncomment when validation will support array of objects
+		// 'files.*.id'        => 'required|integer'
+		//* 'files.*.label'     => 'required|string'
+		$rules = array(
+			'type'                    => 'required|contains_list,' . implode( ';', $lesson_types ),
+			'title'                   => 'required|string',
+			'excerpt'                 => 'nullable|string',
+			'duration'                => 'nullable|string',
+			'preview'                 => 'boolean',
+			'content'                 => 'required_if,type;' . LessonType::TEXT . '|string',
+			'video_type'              => 'required_if,type;' . LessonType::VIDEO . '|contains_list,' . implode( ';', $video_types ),
+			'audio_type'              => 'required_if,type;audio|contains_list,' . implode( ';', $audio_types ),
+			'audio_required_progress' => 'nullable|integer|min,0|max,100',
+			'embed_ctx'               => 'nullable|string',
+			'external_url'            => 'nullable|string',
+			'presto_player_idx'       => 'nullable|integer',
+			'vdocipher_id'            => 'nullable|string',
+			'shortcode'               => 'nullable|string',
+			'youtube_url'             => 'nullable|string',
+			'video'                   => 'nullable|integer',
+			'video_poster'            => 'nullable|integer',
+			'video_width'             => 'nullable|integer|min,1',
+			'video_required_progress' => 'nullable|integer|min,0|max,100',
+			'vimeo_url'               => 'nullable|string',
+			'file'                    => 'nullable|integer',
+			'files'                   => 'array',
+			'custom_fields'           => 'array',
 		);
 
 		$rules = apply_filters( 'masterstudy_lms_lesson_validation_rules', $rules );

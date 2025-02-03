@@ -216,16 +216,17 @@ class STM_LMS_Comments {
 			die;
 		}
 
-		$lesson_id  = intval( $_GET['post_id'] );
-		$user_id    = $current_user['id'];
-		$offset     = intval( $_GET['offset'] ?? 0 );
-		$search     = sanitize_text_field( $_GET['search'] ?? '' );
-		$author__in = ! empty( $_GET['user_comments'] ) ? $user_id : '';
+		$lesson_id   = intval( $_GET['post_id'] );
+		$lesson_type = sanitize_text_field( $_GET['lesson_type'] ?? '' );
+		$user_id     = $current_user['id'];
+		$offset      = intval( $_GET['offset'] ?? 0 );
+		$search      = sanitize_text_field( $_GET['search'] ?? '' );
+		$author__in  = ! empty( $_GET['user_comments'] ) ? $user_id : '';
 
-		wp_send_json( self::get_user_comments( $user_id, $lesson_id, $offset, $search, $author__in ) );
+		wp_send_json( self::get_user_comments( $user_id, $lesson_id, $lesson_type, $offset, $search, $author__in ) );
 	}
 
-	public static function get_user_comments( $user_id, $lesson_id, $offset, $search, $author__in ) {
+	public static function get_user_comments( $user_id, $lesson_id, $lesson_type, $offset, $search, $author__in ) {
 		$response = array(
 			'posts'      => array(),
 			'navigation' => false,
@@ -257,7 +258,7 @@ class STM_LMS_Comments {
 		if ( ! empty( $comments ) ) {
 			$response['navigation'] = $comments_query->found_comments > $offset + count( $comments );
 			foreach ( $comments as $comment ) {
-				$response['posts'][] = self::get_comment_with_replies( $comment, $lesson_id, $search );
+				$response['posts'][] = self::get_comment_with_replies( $comment, $lesson_id, $lesson_type, $search );
 			}
 		} else {
 			if ( empty( $search ) ) {
@@ -270,7 +271,7 @@ class STM_LMS_Comments {
 		return $response;
 	}
 
-	public static function get_comment_with_replies( $comment, $lesson_id, $search ) {
+	public static function get_comment_with_replies( $comment, $lesson_id, $lesson_type, $search ) {
 		$args = array(
 			'post_id' => $lesson_id,
 			'number'  => 5,
@@ -297,6 +298,10 @@ class STM_LMS_Comments {
 			'replies'       => array(),
 		);
 
+		if ( STM_LMS_Helpers::is_pro_plus() && ( 'video' === $lesson_type || 'audio' === $lesson_type ) ) {
+			$post['content'] = masterstudy_lms_wrap_timecode( $post['content'] );
+		}
+
 		if ( isset( $post['author']['email'] ) ) {
 			unset( $post['author']['email'] );
 		}
@@ -305,7 +310,7 @@ class STM_LMS_Comments {
 
 		if ( empty( $search ) && ! empty( $replies ) ) {
 			foreach ( $replies as $reply ) {
-				$post['replies'][] = self::get_comment_with_replies( $reply, $lesson_id, $search );
+				$post['replies'][] = self::get_comment_with_replies( $reply, $lesson_id, $lesson_type, $search );
 			}
 		}
 

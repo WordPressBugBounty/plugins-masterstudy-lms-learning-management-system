@@ -18,6 +18,7 @@ function stm_lms_user_lessons() {
 		user_id bigint NOT NULL,
 		course_id int(11) NOT NULL,
 		lesson_id int(11) NOT NULL,
+		progress tinyint(4) DEFAULT NULL,
 		start_time INT,
 		end_time INT,
 		PRIMARY KEY  (user_lesson_id),

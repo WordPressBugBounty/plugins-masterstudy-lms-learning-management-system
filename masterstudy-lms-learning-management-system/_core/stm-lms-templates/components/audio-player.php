@@ -6,6 +6,8 @@
  * @var string $title
  * @var string $link
  * @var string $icon
+ * @var bool $preload
+ * @var bool $show_progress
  * @var string $style
  * @var string $size
  * @var bool $target
@@ -23,6 +25,7 @@
 
 $data_id       = ! empty( $id ) ? $id : '';
 $preload       = ! empty( $preload ) ? '' : 'none';
+$show_progress = isset( $show_progress ) ? $show_progress : false;
 $src           = ! empty( $src ) ? $src : '';
 $player_class  = ! empty( $dark_mode ) ? ' masterstudy-audio-player_dark-mode' : '';
 $player_class .= ! empty( $hidden ) ? ' masterstudy-audio-player_hidden' : '';
@@ -30,7 +33,15 @@ $player_class .= ! empty( $size ) ? ' masterstudy-audio-player_size-' . $size : 
 
 wp_enqueue_style( 'masterstudy-audio-player' );
 wp_enqueue_script( 'masterstudy-audio-player' );
+wp_localize_script(
+	'masterstudy-audio-player',
+	'audio_player_data',
+	array(
+		'audio_progress' => $show_progress,
+	)
+);
 ?>
+
 <div class="masterstudy-audio-player <?php echo esc_attr( $player_class ); ?>" data-id="<?php echo esc_attr( $data_id ); ?>">
 	<audio preload="<?php echo esc_attr( $preload ); ?>" src="<?php echo esc_url( $src ); ?>">
 		<source src="<?php echo esc_url( $src ); ?>" type="audio/mpeg">

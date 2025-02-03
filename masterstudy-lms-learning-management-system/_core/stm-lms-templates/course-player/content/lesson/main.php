@@ -2,7 +2,9 @@
 /**
  * @var int $post_id
  * @var int $item_id
+ * @var int $user_id
  * @var string $lesson_type
+ * @var boolean $lesson_completed
  * @var boolean $dark_mode
  */
 
@@ -26,14 +28,25 @@ if ( $post instanceof \WP_Post && PostType::LESSON === $post->post_type ) {
 	<div class="masterstudy-course-player-lesson">
 		<?php
 		if ( 'video' === $lesson_type ) {
-			STM_LMS_Templates::show_lms_template( 'course-player/content/lesson/video', array( 'id' => $item_id ) );
+			STM_LMS_Templates::show_lms_template(
+				'course-player/content/lesson/video',
+				array(
+					'id'               => $item_id,
+					'user_id'          => $user_id,
+					'course_id'        => $post_id,
+					'lesson_completed' => $lesson_completed,
+				),
+			);
 		}
 		if ( 'audio' === $lesson_type ) {
 			STM_LMS_Templates::show_lms_template(
 				'course-player/content/lesson/audio',
 				array(
-					'item_id'   => $item_id,
-					'dark_mode' => $dark_mode,
+					'item_id'          => $item_id,
+					'user_id'          => $user_id,
+					'course_id'        => $post_id,
+					'lesson_completed' => $lesson_completed,
+					'dark_mode'        => $dark_mode,
 				)
 			);
 		}
@@ -46,6 +59,9 @@ if ( $post instanceof \WP_Post && PostType::LESSON === $post->post_type ) {
 		$content = ob_get_clean();
 		$content = str_replace( '../../', site_url() . '/', $content );
 
+		if ( STM_LMS_Helpers::is_pro_plus() && ( 'video' === $lesson_type || 'audio' === $lesson_type ) ) {
+			$content = masterstudy_lms_wrap_timecode( $content );
+		}
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo stm_lms_filtered_output( $content );
 		?>

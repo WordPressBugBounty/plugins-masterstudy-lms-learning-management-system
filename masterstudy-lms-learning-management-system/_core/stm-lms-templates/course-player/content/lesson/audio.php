@@ -1,29 +1,48 @@
 <?php
 /**
-* @var int $item_id
-* @var boolean $dark_mode
-*/
+ * @var int $item_id
+ * @var int $user_id
+ * @var int $course_id
+ * @var boolean $lesson_completed
+ * @var boolean $dark_mode
+.*/
 
 use MasterStudy\Lms\Repositories\LessonRepository;
 
 wp_enqueue_style( 'masterstudy-course-player-lesson-type-audio' );
 wp_enqueue_script( 'masterstudy-course-player-audio-lesson-type' );
 
-$lesson_data = ( new LessonRepository() )->get( $item_id );
-$audio_type  = $lesson_data['audio_type'] ?? '';
+$lesson_data    = ( new LessonRepository() )->get( $item_id );
+$audio_progress = ! empty( $lesson_data['audio_required_progress'] );
+$user_progress  = masterstudy_lms_get_user_lesson_progress( $user_id, $course_id, $item_id ) ?? 0;
+
+if ( empty( $lesson_data['audio_type'] ) ) {
+	return;
+}
+
+wp_localize_script(
+	'masterstudy-course-player-audio-lesson-type',
+	'audio_data',
+	array(
+		'audio_type'     => $lesson_data['audio_type'],
+		'audio_progress' => $audio_progress,
+	)
+);
 ?>
+
 <div class="masterstudy-course-player-audio-lesson-type">
 	<?php
-	switch ( $audio_type ) {
+	switch ( $lesson_data['audio_type'] ) {
 		case 'file':
 			$file_data = $lesson_data['file'] ?? '';
 			if ( ! empty( $file_data['url'] ) ) {
 				STM_LMS_Templates::show_lms_template(
 					'components/audio-player',
 					array(
-						'preloader' => false,
-						'src'       => $file_data['url'],
-						'dark_mode' => $dark_mode,
+						'preload'       => true,
+						'show_progress' => $audio_progress,
+						'src'           => $file_data['url'],
+						'dark_mode'     => $dark_mode,
 					)
 				);
 			}
@@ -33,7 +52,7 @@ $audio_type  = $lesson_data['audio_type'] ?? '';
 			$lesson_embed_ctx = $lesson_data['embed_ctx'] ?? '';
 			if ( ! empty( $lesson_embed_ctx ) ) {
 				?>
-				<div class="masterstudy-course-player-lesson-video__embed-wrapper">
+				<div class="masterstudy-course-player-audio-lesson-type__embed-wrapper">
 					<?php echo wp_kses( htmlspecialchars_decode( $lesson_embed_ctx ), stm_lms_allowed_html() ); ?>
 				</div>
 				<?php
@@ -60,6 +79,24 @@ $audio_type  = $lesson_data['audio_type'] ?? '';
 			}
 			break;
 	}
-	?>
+	if ( $audio_progress && STM_LMS_Helpers::is_pro_plus() && ! ( 0 === $user_progress && $lesson_completed ) ) {
+		?>
+		<div class="masterstudy-course-player-audio-lesson-type__progress">
+			<div class="masterstudy-course-player-audio-lesson-type__progress-container">
+				<span class="masterstudy-course-player-audio-lesson-type__progress-label">
+					<?php echo esc_html__( 'Required audio progress', 'masterstudy-lms-learning-management-system' ); ?>:
+				</span>
+				<span data-required-progress="<?php echo esc_attr( $lesson_data['audio_required_progress'] ); ?>" id="required-audio-progress" class="masterstudy-course-player-audio-lesson-type__progress-value">
+					<?php echo esc_html( $lesson_data['audio_required_progress'] ); ?>%
+				</span>
+			</div>
+			<div class="masterstudy-course-player-audio-lesson-type__progress-container">
+				<span class="masterstudy-course-player-audio-lesson-type__progress-label">
+					<?php echo esc_html__( 'Current audio progress', 'masterstudy-lms-learning-management-system' ); ?>:
+				</span>
+				<span class="masterstudy-course-player-audio-lesson-type__progress-value" data-progress="<?php echo esc_attr( $user_progress ); ?>" id="current-audio-progress"><?php echo esc_html( $user_progress ); ?>%</span>
+			</div>
+		</div>
+	<?php } ?>
 </div>
 <?php

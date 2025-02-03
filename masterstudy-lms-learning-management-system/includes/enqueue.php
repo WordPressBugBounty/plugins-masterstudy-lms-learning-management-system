@@ -19,6 +19,8 @@ function masterstudy_lms_course_player_register_assets() {
 	wp_register_style( 'masterstudy-course-player-locked', STM_LMS_URL . 'assets/css/course-player/locked.css', null, MS_LMS_VERSION );
 
 	wp_register_script( 'plyr', STM_LMS_URL . '/assets/vendors/plyr/plyr.js', array(), MS_LMS_VERSION, false );
+	wp_register_script( 'youtube-iframe-api', 'https://www.youtube.com/iframe_api', array(), MS_LMS_VERSION, false );
+	wp_register_script( 'vimeo-player-api', 'https://player.vimeo.com/api/player.js', array(), MS_LMS_VERSION, false );
 	wp_register_script( 'masterstudy-course-player-header', STM_LMS_URL . '/assets/js/course-player/header.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-course-player-navigation', STM_LMS_URL . '/assets/js/course-player/navigation.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-course-player-lesson', STM_LMS_URL . '/assets/js/course-player/content/lesson/lesson.js', array( 'jquery' ), MS_LMS_VERSION, true );
@@ -26,7 +28,7 @@ function masterstudy_lms_course_player_register_assets() {
 	wp_register_script( 'masterstudy-course-player-audio-lesson-type', STM_LMS_URL . '/assets/js/course-player/content/lesson/lesson-audio.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-course-player-curriculum', STM_LMS_URL . '/assets/js/course-player/curriculum.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-course-player-discussions', STM_LMS_URL . '/assets/js/course-player/discussions.js', array( 'jquery' ), MS_LMS_VERSION, true );
-	wp_register_script( 'masterstudy-course-player-lesson-video', STM_LMS_URL . '/assets/js/course-player/content/lesson/lesson-video.js', array( 'jquery', 'plyr' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-course-player-lesson-video', STM_LMS_URL . '/assets/js/course-player/content/lesson/lesson-video.js', array( 'jquery', 'plyr', 'youtube-iframe-api', 'vimeo-player-api' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-course-player-quiz-touch', STM_LMS_URL . '/assets/js/jquery.ui.touch-punch.min.js', array( 'jquery-ui-sortable' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-course-player-quiz', STM_LMS_URL . '/assets/js/course-player/content/quiz.js', array( 'jquery', 'jquery-ui-sortable' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-course-player-question', STM_LMS_URL . '/assets/js/course-player/content/questions.js', array( 'jquery' ), MS_LMS_VERSION, true );

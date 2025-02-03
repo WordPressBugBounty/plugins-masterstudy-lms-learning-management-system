@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.12
+Stable tag: 3.5.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,12 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.13 - 2025-02-03 =
+- **New Feature:** Added video and audio progression tracking to monitor watched time for video and audio lessons. (Pro)
+- **New Feature:** Added Strict Mode for video lessons, ensuring the 'Complete' button unlocks only after the video is fully watched. (Pro)
+- **New Feature:** Introduced the option to add timecodes to audio and video lessons for easy navigation. (Pro)
+- **Fix:** Fixed an issue where recorded audio in Assignments could not be played until a reply was sent. (Pro)
+
 = 3.5.12 - 2025-01-30 =
 - **Enhancement:** Redesigned the LMS Checkout page for improved user experience.
 - **Enhancement:** Improved the design of the Profile Menu for better navigation.
@@ -326,9 +332,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fix:** Corrected True/False quiz questions in the course player not translating.
 - **Fix:** Added lazy loading for course images in Gutenberg blocks.
 - **Fix:** Corrected an Italian translation issue in the Grades settings.
-
-= 3.5.9 - 2025-01-13 =
-- **Fix:** Fixed a fatal error that occurred when adding a new question to a quiz without the Course Builder.
-- **Fix:** Resolved an issue where purchasing a course with Stripe payment method wasn't working correctly.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

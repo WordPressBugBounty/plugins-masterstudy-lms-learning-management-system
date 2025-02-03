@@ -398,6 +398,32 @@ function masterstudy_get_image_size( $option ) {
 		: array( null, null );
 }
 
+function masterstudy_lms_wrap_timecode( $content ) {
+	$pattern = '/\{(.*?)((?:\d{1,2}:\d{1,2}(?::\d{1,2})?))(.*?)\}/u';
+	$content = preg_replace_callback(
+		$pattern,
+		function( $matches ) {
+			$pre_text      = wp_kses_post( trim( $matches[1] ) );
+			$timecode      = $matches[2];
+			$post_text     = wp_kses_post( trim( $matches[3] ) );
+			$time_parts    = explode( ':', $timecode );
+			$hours         = count( $time_parts ) === 3 ? (int) $time_parts[0] : 0;
+			$minutes       = count( $time_parts ) === 3 ? (int) $time_parts[1] : (int) $time_parts[0];
+			$seconds       = count( $time_parts ) === 3 ? (int) $time_parts[2] : (int) $time_parts[1];
+			$total_seconds = $hours * 3600 + $minutes * 60 + $seconds;
+
+			$timecode_span  = '<span class="masterstudy-timecode" data-timecode="' . $total_seconds . '">';
+			$timecode_span .= $pre_text . ' <span class="masterstudy-timecode__value">' . $timecode . '</span> ' . $post_text;
+			$timecode_span .= '</span>';
+
+			return $timecode_span;
+		},
+		$content
+	);
+
+	return $content;
+}
+
 function stm_lms_get_string_between( $str, $start_delimiter, $end_delimiter ) {
 	$contents               = array();
 	$start_delimiter_length = strlen( $start_delimiter );

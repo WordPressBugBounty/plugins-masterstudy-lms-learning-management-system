@@ -151,12 +151,14 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 					STM_LMS_Templates::show_lms_template(
 						'course-player/content/' . $data['content_type'] . '/main',
 						array(
-							'post_id'     => $data['post_id'],
-							'item_id'     => $data['item_id'],
-							'lesson_type' => $data['lesson_type'],
-							'data'        => 'quiz' === $data['content_type'] ? $quiz_data : array(),
-							'last_lesson' => $data['last_lesson'],
-							'dark_mode'   => $data['dark_mode'],
+							'post_id'          => $data['post_id'],
+							'item_id'          => $data['item_id'],
+							'user_id'          => $data['user_id'],
+							'lesson_type'      => $data['lesson_type'],
+							'lesson_completed' => $data['lesson_completed'],
+							'data'             => 'quiz' === $data['content_type'] ? $quiz_data : array(),
+							'last_lesson'      => $data['last_lesson'],
+							'dark_mode'        => $data['dark_mode'],
 						)
 					);
 				}
@@ -207,6 +209,10 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 						'item_id'                  => $data['item_id'],
 						'user_id'                  => $data['user_id'],
 						'lesson_type'              => $data['lesson_type'],
+						'video_type'               => $data['video_type'] ?? null,
+						'audio_type'               => $data['audio_type'] ?? null,
+						'video_required_progress'  => $data['video_required_progress'] ?? null,
+						'audio_required_progress'  => $data['audio_required_progress'] ?? null,
 						'material_ids'             => $data['material_ids'],
 						'lesson_completed'         => $data['lesson_completed'],
 						'has_access'               => $data['has_access'],

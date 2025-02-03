@@ -107,6 +107,10 @@ class Get extends Route implements RequestInterface, ResponseInterface {
 						'type'        => 'integer',
 						'description' => 'Available for video type html',
 					),
+					'video_required_progress'            => array(
+						'type'        => 'integer',
+						'description' => 'Applicable to all video types, excluding "embed" and "shortcode"',
+					),
 					'vimeo_url'                          => array(
 						'type'        => 'string',
 						'description' => 'Available for video type vimeo',

@@ -562,6 +562,12 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       }
       $(".masterstudy-attachment-media__materials").append(attachmentTemplate.prop("outerHTML"));
       if (fileType === "audio") {
+        document.querySelectorAll('.masterstudy-audio-player').forEach(function (player) {
+          if (player.audioInstance) {
+            player.audioInstance.destroy();
+          }
+          player.removeAttribute('data-initialized');
+        });
         MasterstudyAudioPlayer.init({
           selector: "[data-id=\"masterstudy-audio-player-".concat(attachment.id, "\"]"),
           showDeleteButton: false

@@ -4,6 +4,10 @@
  * @var int $item_id
  * @var int $user_id
  * @var string $lesson_type
+ * @var string $video_type
+ * @var string $audio_type
+ * @var string $video_required_progress
+ * @var string $audio_required_progress
  * @var array $material_ids
  * @var boolean $lesson_completed
  * @var boolean $has_access
@@ -17,6 +21,7 @@ use MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentReposit
 wp_enqueue_style( 'masterstudy-course-player-navigation' );
 wp_enqueue_script( 'masterstudy-course-player-navigation' );
 
+$is_pro_plus         = STM_LMS_Helpers::is_pro_plus();
 $current_lesson_id   = array_search( $item_id, $material_ids, true );
 $prev_lesson         = $material_ids[ $current_lesson_id - 1 ] ?? null;
 $prev_lesson_url     = '';
@@ -24,6 +29,19 @@ $prev_lesson_preview = false;
 $next_lesson         = $material_ids[ $current_lesson_id + 1 ] ?? null;
 $next_lesson_url     = '';
 $next_lesson_preview = false;
+$progress_video_type = ! empty( $video_type ) && ! in_array( $video_type, array( 'embed', 'shortcode' ), true );
+$progress_audio_type = ! empty( $audio_type ) && ! in_array( $audio_type, array( 'embed', 'shortcode' ), true );
+$progress_hint_text  = 'video' === $lesson_type
+	? sprintf(
+		/* translators: %s: video required progress */
+		esc_html__( 'You must watch at least %s%% of the video to move on to the next lesson', 'masterstudy-lms-learning-management-system' ),
+		$video_required_progress
+	)
+	: sprintf(
+		/* translators: %s: video required progress */
+		esc_html__( 'You must listen at least %s%% of the audio to move on to the next lesson', 'masterstudy-lms-learning-management-system' ),
+		$audio_required_progress
+	);
 $is_draft_assignment = 'assignments' === $lesson_type
 	&& method_exists( 'MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository', 'is_assignment_draft' )
 	&& ( new AssignmentStudentRepository() )->is_assignment_draft( $item_id, $user_id );
@@ -142,6 +160,19 @@ if ( ! empty( $next_lesson ) ) {
 					?>
 					<div class="masterstudy-course-player-navigation__next">
 						<?php
+						if ( $is_pro_plus && 'masterstudy-course-player-lesson-submit' === $button_id &&
+						( $progress_video_type || $progress_audio_type ) &&
+						( $video_required_progress || $audio_required_progress ) ) {
+							STM_LMS_Templates::show_lms_template(
+								'components/hint',
+								array(
+									'content'   => $progress_hint_text,
+									'side'      => is_rtl() ? 'left' : 'right',
+									'dark_mode' => $dark_mode,
+								)
+							);
+						}
+
 						STM_LMS_Templates::show_lms_template(
 							'components/nav-button',
 							array(
@@ -163,6 +194,17 @@ if ( ! empty( $next_lesson ) ) {
 				?>
 				<div class="masterstudy-course-player-navigation__next">
 					<?php
+					if ( $is_pro_plus && ( $progress_video_type || $progress_audio_type ) &&
+					( $video_required_progress || $audio_required_progress ) ) {
+						STM_LMS_Templates::show_lms_template(
+							'components/hint',
+							array(
+								'content'   => $progress_hint_text,
+								'side'      => is_rtl() ? 'left' : 'right',
+								'dark_mode' => $dark_mode,
+							)
+						);
+					}
 					STM_LMS_Templates::show_lms_template(
 						'components/nav-button',
 						array(

@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MasterStudy LMS WordPress Plugin – for Online Courses and Education plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.5.11\n"
+"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.5.13\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/masterstudy-lms-learning-management-system\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-01-30T09:35:50+00:00\n"
+"POT-Creation-Date: 2025-02-03T10:03:58+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 
@@ -43,7 +43,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/deprecated/stm_lms_courses_grid.php:135
 #: _core/includes/visual_composer/modules/stm_lms_courses_grid.php:44
 #: _core/stm-lms-templates/account/private/instructor_parts/courses.php:143
-#: _core/stm-lms-templates/components/discussions.php:88
+#: _core/stm-lms-templates/components/discussions.php:90
 #: _core/stm-lms-templates/courses/load_more.php:20
 #: assets/gutenberg/blocks/courses/courses-load-more/index.js:1
 msgid "Load more"
@@ -167,35 +167,35 @@ msgid "You do not have a permission to delete media files"
 msgstr ""
 
 #: includes/Plugin/Addons.php:79
-#: _core/lms/helpers.php:828
+#: _core/lms/helpers.php:854
 #: _core/settings/main_settings/certificates.php:54
 msgid "Certificate Builder"
 msgstr ""
 
 #: includes/Plugin/Addons.php:82
-#: _core/lms/helpers.php:831
+#: _core/lms/helpers.php:857
 msgid "Сreate and design your own certificates to award them to students after the course completion."
 msgstr ""
 
 #: includes/Plugin/Addons.php:87
-#: _core/lms/helpers.php:810
+#: _core/lms/helpers.php:836
 msgid "Email Manager"
 msgstr ""
 
 #: includes/Plugin/Addons.php:90
 #: includes/Plugin/Addons.php:97
-#: _core/lms/helpers.php:813
-#: _core/lms/helpers.php:821
+#: _core/lms/helpers.php:839
+#: _core/lms/helpers.php:847
 msgid "Adjust your email templates for different types of notifications and make your messages look good and clear."
 msgstr ""
 
 #: includes/Plugin/Addons.php:95
-#: _core/lms/helpers.php:818
+#: _core/lms/helpers.php:844
 msgid "Email Branding"
 msgstr ""
 
 #: includes/Plugin/Addons.php:103
-#: _core/lms/helpers.php:836
+#: _core/lms/helpers.php:862
 msgid "LMS Forms Editor"
 msgstr ""
 
@@ -204,27 +204,27 @@ msgid "Customize the forms in your LMS. Change fields in menus on contact forms,
 msgstr ""
 
 #: includes/Plugin/Addons.php:111
-#: _core/lms/helpers.php:794
+#: _core/lms/helpers.php:820
 msgid "Zoom Conference"
 msgstr ""
 
 #: includes/Plugin/Addons.php:114
-#: _core/lms/helpers.php:797
+#: _core/lms/helpers.php:823
 msgid "Enjoy the new type of lesson — connect Zoom Video Conferencing with your website and interact with your students in real-time."
 msgstr ""
 
 #: includes/Plugin/Addons.php:119
-#: _core/lms/helpers.php:852
+#: _core/lms/helpers.php:878
 msgid "Google Meet"
 msgstr ""
 
 #: includes/Plugin/Addons.php:122
-#: _core/lms/helpers.php:855
+#: _core/lms/helpers.php:881
 msgid "Connect MasterStudy LMS with Google Meet to host live online classes. Students can attend live classes right from the lesson page."
 msgstr ""
 
 #: includes/Plugin/Addons.php:128
-#: _core/lms/helpers.php:755
+#: _core/lms/helpers.php:781
 #: _core/stm-lms-templates/components/course/details.php:50
 #: _core/stm-lms-templates/components/statistics-block.php:19
 #: assets/course-builder/js/main.js:1
@@ -236,7 +236,7 @@ msgid "Use assignments to check your students' knowledge. Create interesting tas
 msgstr ""
 
 #: includes/Plugin/Addons.php:136
-#: _core/lms/helpers.php:725
+#: _core/lms/helpers.php:751
 #: assets/course-builder/js/main.js:1
 msgid "Drip Content"
 msgstr ""
@@ -246,7 +246,7 @@ msgid "Use this tool to provide a proper flow of the education process. Regulate
 msgstr ""
 
 #: includes/Plugin/Addons.php:144
-#: _core/lms/helpers.php:747
+#: _core/lms/helpers.php:773
 msgid "Group Courses"
 msgstr ""
 
@@ -255,7 +255,7 @@ msgid "Sell online courses to groups of students. Whether they are an organizati
 msgstr ""
 
 #: includes/Plugin/Addons.php:152
-#: _core/lms/helpers.php:740
+#: _core/lms/helpers.php:766
 msgid "Live Streaming"
 msgstr ""
 
@@ -264,12 +264,12 @@ msgid "Have live lessons and interact with your students in real time. Answer th
 msgstr ""
 
 #: includes/Plugin/Addons.php:159
-#: _core/lms/helpers.php:771
+#: _core/lms/helpers.php:797
 msgid "Course Bundle"
 msgstr ""
 
 #: includes/Plugin/Addons.php:162
-#: _core/lms/helpers.php:774
+#: _core/lms/helpers.php:800
 msgid "Add similar or related courses to the one bundle and sell them as a package at a discount price."
 msgstr ""
 
@@ -278,32 +278,32 @@ msgid "Point System"
 msgstr ""
 
 #: includes/Plugin/Addons.php:170
-#: _core/lms/helpers.php:766
+#: _core/lms/helpers.php:792
 msgid "Motivate and engage students by awarding them points for their progress and activity on the website."
 msgstr ""
 
 #: includes/Plugin/Addons.php:175
-#: _core/lms/helpers.php:844
+#: _core/lms/helpers.php:870
 msgid "Media File Manager"
 msgstr ""
 
 #: includes/Plugin/Addons.php:177
-#: _core/lms/helpers.php:846
+#: _core/lms/helpers.php:872
 msgid "Manage, keep and load files of various formats while creating e-learning content in the front-end."
 msgstr ""
 
 #: includes/Plugin/Addons.php:183
-#: _core/lms/helpers.php:802
+#: _core/lms/helpers.php:828
 msgid "Scorm"
 msgstr ""
 
 #: includes/Plugin/Addons.php:186
-#: _core/lms/helpers.php:805
+#: _core/lms/helpers.php:831
 msgid "Easily upload to your LMS any course that was created with the help of different content authoring tools."
 msgstr ""
 
 #: includes/Plugin/Addons.php:191
-#: _core/lms/helpers.php:717
+#: _core/lms/helpers.php:743
 msgid "Trial Courses"
 msgstr ""
 
@@ -312,17 +312,17 @@ msgid "Let your potential students try out your online courses for free. Give tr
 msgstr ""
 
 #: includes/Plugin/Addons.php:199
-#: _core/lms/helpers.php:709
+#: _core/lms/helpers.php:735
 msgid "Statistics and Payout"
 msgstr ""
 
 #: includes/Plugin/Addons.php:202
-#: _core/lms/helpers.php:712
+#: _core/lms/helpers.php:738
 msgid "Manage all payments and track affiliated statistics for the sold courses, such as Total Profit, Total Payments, and manage authors fee."
 msgstr ""
 
 #: includes/Plugin/Addons.php:207
-#: _core/lms/helpers.php:701
+#: _core/lms/helpers.php:727
 msgid "Online Testing"
 msgstr ""
 
@@ -331,27 +331,27 @@ msgid "Easily put any quizzes on any page of your website, not just confined to 
 msgstr ""
 
 #: includes/Plugin/Addons.php:215
-#: _core/lms/helpers.php:779
+#: _core/lms/helpers.php:805
 msgid "Multi-instructors"
 msgstr ""
 
 #: includes/Plugin/Addons.php:217
-#: _core/lms/helpers.php:781
+#: _core/lms/helpers.php:807
 msgid "Use the help of a colleague and assign one more instructor to the same course to share responsibilities."
 msgstr ""
 
 #: includes/Plugin/Addons.php:222
-#: _core/lms/helpers.php:786
+#: _core/lms/helpers.php:812
 msgid "Google Classrooms"
 msgstr ""
 
 #: includes/Plugin/Addons.php:225
-#: _core/lms/helpers.php:789
+#: _core/lms/helpers.php:815
 msgid "Ease the process of structuring the workflow by connecting your Google Classroom account with your website and import the needed classes."
 msgstr ""
 
 #: includes/Plugin/Addons.php:230
-#: _core/lms/helpers.php:686
+#: _core/lms/helpers.php:712
 msgid "Udemy Importer"
 msgstr ""
 
@@ -360,7 +360,7 @@ msgid "Import courses from Udemy and display them on your website. Enrich your c
 msgstr ""
 
 #: includes/Plugin/Addons.php:238
-#: _core/lms/helpers.php:694
+#: _core/lms/helpers.php:720
 #: assets/course-builder/js/main.js:1
 msgid "Prerequisites"
 msgstr ""
@@ -370,7 +370,7 @@ msgid "Set the requirements for students. So they will need to complete certain 
 msgstr ""
 
 #: includes/Plugin/Addons.php:245
-#: _core/lms/helpers.php:733
+#: _core/lms/helpers.php:759
 msgid "The Gradebook"
 msgstr ""
 
@@ -592,24 +592,29 @@ msgstr ""
 msgid "Count"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:150
+#: includes/Repositories/CoursePlayerRepository.php:140
+#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:89
+msgid "completed"
+msgstr ""
+
+#: includes/Repositories/CoursePlayerRepository.php:163
 #: _core/stm-lms-templates/components/course/curriculum/udemy-materials.php:34
 #: assets/course-builder/js/main.js:1
 msgid "Text lesson"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:151
+#: includes/Repositories/CoursePlayerRepository.php:164
 #: assets/course-builder/js/main.js:1
 msgid "Audio lesson"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:152
+#: includes/Repositories/CoursePlayerRepository.php:165
 #: _core/stm-lms-templates/components/course/curriculum/udemy-materials.php:38
 #: assets/course-builder/js/main.js:1
 msgid "Video lesson"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:153
+#: includes/Repositories/CoursePlayerRepository.php:166
 #: _core/includes/post_type/posts.php:130
 #: _core/includes/wizard/main.php:72
 #: _core/settings/main_settings/quiz.php:33
@@ -619,22 +624,22 @@ msgstr ""
 msgid "Quiz"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:154
+#: includes/Repositories/CoursePlayerRepository.php:167
 #: assets/course-builder/js/main.js:1
 msgid "Assignment"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:155
+#: includes/Repositories/CoursePlayerRepository.php:168
 #: assets/course-builder/js/main.js:1
 msgid "Stream lesson"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:156
+#: includes/Repositories/CoursePlayerRepository.php:169
 #: assets/course-builder/js/main.js:1
 msgid "Zoom lesson"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:157
+#: includes/Repositories/CoursePlayerRepository.php:170
 msgid "Google Meet webinar"
 msgstr ""
 
@@ -2060,7 +2065,7 @@ msgstr ""
 
 #: _core/includes/elementor/widgets/courses/content/instructor.php:7
 #: _core/includes/elementor/widgets/deprecated/stm_lms_featured_teacher.php:117
-#: _core/lms/classes/comments.php:304
+#: _core/lms/classes/comments.php:309
 #: _core/lms/helpers.php:181
 #: _core/settings/main_settings/sortable_menu.php:18
 #: _core/stm-lms-templates/account/float_menu/user.php:10
@@ -5440,7 +5445,7 @@ msgid "Declined by admin"
 msgstr ""
 
 #. translators: %s: Count of Questions
-#: _core/includes/user_manager/UserManager.CourseUser.php:273
+#: _core/includes/user_manager/UserManager.CourseUser.php:274
 msgid "%s question"
 msgid_plural "%s questions"
 msgstr[0] ""
@@ -6005,7 +6010,7 @@ msgstr ""
 #: _core/lms/admin_helpers.php:243
 #: _core/lms/admin_helpers.php:266
 #: _core/lms/admin_helpers.php:267
-#: _core/lms/helpers.php:1476
+#: _core/lms/helpers.php:1502
 msgid "Edit with Course Builder"
 msgstr ""
 
@@ -6149,7 +6154,7 @@ msgstr ""
 
 #. translators: %s: number
 #: _core/lms/classes/comments.php:150
-#: _core/lms/classes/comments.php:289
+#: _core/lms/classes/comments.php:290
 msgid "%s reply"
 msgid_plural "%s replies"
 msgstr[0] ""
@@ -6168,11 +6173,11 @@ msgstr ""
 msgid "%s commented - \"%s\" on lesson %s in the course %s"
 msgstr ""
 
-#: _core/lms/classes/comments.php:264
+#: _core/lms/classes/comments.php:265
 msgid "No comments here"
 msgstr ""
 
-#: _core/lms/classes/comments.php:266
+#: _core/lms/classes/comments.php:267
 msgid "Comments not found"
 msgstr ""
 
@@ -6539,19 +6544,19 @@ msgstr ""
 msgid "Your submission has been rejected"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:104
+#: _core/lms/classes/lesson.php:105
 msgid "Section 1"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:119
+#: _core/lms/classes/lesson.php:120
 msgid "Lecture %s"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:123
+#: _core/lms/classes/lesson.php:124
 msgid "Assignment %s"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:127
+#: _core/lms/classes/lesson.php:128
 msgid "Quiz %s"
 msgstr ""
 
@@ -6711,7 +6716,7 @@ msgstr ""
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:138
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:247
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:267
-#: _core/stm-lms-templates/course-player/navigation.php:63
+#: _core/stm-lms-templates/course-player/navigation.php:81
 msgid "Completed"
 msgstr ""
 
@@ -7247,8 +7252,8 @@ msgid "Enrolled Courses"
 msgstr ""
 
 #: _core/lms/classes/user_menu.php:256
-#: _core/lms/helpers.php:1495
-#: _core/lms/helpers.php:1498
+#: _core/lms/helpers.php:1521
+#: _core/lms/helpers.php:1524
 #: _core/settings/main_settings.php:12
 #: _core/settings/main_settings.php:16
 #: _core/settings/main_settings.php:103
@@ -7401,123 +7406,123 @@ msgid_plural "%s seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: _core/lms/helpers.php:689
+#: _core/lms/helpers.php:715
 msgid "Import courses from Udemy and display them on your website. Use ready-made courses on your platform and earn commissions."
 msgstr ""
 
-#: _core/lms/helpers.php:696
+#: _core/lms/helpers.php:722
 msgid "Set the requirements students must complete before they are able to enroll in the next course of a higher level."
 msgstr ""
 
-#: _core/lms/helpers.php:704
+#: _core/lms/helpers.php:730
 msgid "Easily paste any quizzes through the shortcode to any page and check the quizzes’ performance."
 msgstr ""
 
-#: _core/lms/helpers.php:720
+#: _core/lms/helpers.php:746
 msgid "Enable free trial lessons, so that your students could try some of the modules before taking the course."
 msgstr ""
 
-#: _core/lms/helpers.php:728
+#: _core/lms/helpers.php:754
 msgid "Use this tool to provide a proper flow of the education process, regulate the sequence of the lessons, in order, by date or in your own sequence."
 msgstr ""
 
-#: _core/lms/helpers.php:735
+#: _core/lms/helpers.php:761
 msgid "Collect statistics of your students’ progress, check their performance, and keep track of their grades."
 msgstr ""
 
-#: _core/lms/helpers.php:742
+#: _core/lms/helpers.php:768
 msgid "Stream in online mode and interact with your students in real-time answering their questions and giving feedback immediately."
 msgstr ""
 
-#: _core/lms/helpers.php:750
+#: _core/lms/helpers.php:776
 msgid "Distribute courses to a group of people. You can sell them to enterprises, or to a group of company employees."
 msgstr ""
 
-#: _core/lms/helpers.php:758
+#: _core/lms/helpers.php:784
 msgid "Use assignments to test your students, create interesting tasks for them, ask them to upload essays."
 msgstr ""
 
-#: _core/lms/helpers.php:763
+#: _core/lms/helpers.php:789
 msgid "Point system"
 msgstr ""
 
-#: _core/lms/helpers.php:839
+#: _core/lms/helpers.php:865
 msgid "LMS Forms Editor is an addon that allows you to customize the profile (incl. registration) form, Become Instructor request form and Enterprise form of the MasterStudy LMS"
 msgstr ""
 
-#: _core/lms/helpers.php:928
+#: _core/lms/helpers.php:954
 msgid "Available in"
 msgstr ""
 
-#: _core/lms/helpers.php:929
+#: _core/lms/helpers.php:955
 #: _core/settings/lms_wpcfto_helpers.php:220
 msgid "Pro Version"
 msgstr ""
 
-#: _core/lms/helpers.php:940
+#: _core/lms/helpers.php:966
 msgid "Choose category"
 msgstr ""
 
-#: _core/lms/helpers.php:975
+#: _core/lms/helpers.php:1001
 msgid "All courses categories"
 msgstr ""
 
-#: _core/lms/helpers.php:1059
+#: _core/lms/helpers.php:1085
 #: _core/settings/main_settings/course.php:201
 msgid "HTML (MP4)"
 msgstr ""
 
-#: _core/lms/helpers.php:1063
+#: _core/lms/helpers.php:1089
 #: _core/settings/main_settings/course.php:208
 msgid "YouTube"
 msgstr ""
 
-#: _core/lms/helpers.php:1067
+#: _core/lms/helpers.php:1093
 #: _core/settings/main_settings/course.php:215
 msgid "Vimeo"
 msgstr ""
 
-#: _core/lms/helpers.php:1071
+#: _core/lms/helpers.php:1097
 #: assets/course-builder/js/main.js:1
 msgid "External Link"
 msgstr ""
 
-#: _core/lms/helpers.php:1075
+#: _core/lms/helpers.php:1101
 #: _core/settings/main_settings/course.php:229
 msgid "Embed"
 msgstr ""
 
-#: _core/lms/helpers.php:1079
+#: _core/lms/helpers.php:1105
 #: _core/settings/main_settings/course.php:236
 #: assets/course-builder/js/main.js:1
 msgid "Shortcode"
 msgstr ""
 
-#: _core/lms/helpers.php:1086
+#: _core/lms/helpers.php:1112
 msgid "Presto Player"
 msgstr ""
 
-#: _core/lms/helpers.php:1101
+#: _core/lms/helpers.php:1127
 msgid "VdoCipher"
 msgstr ""
 
-#: _core/lms/helpers.php:1302
+#: _core/lms/helpers.php:1328
 msgid "Media:"
 msgstr ""
 
-#: _core/lms/helpers.php:1309
+#: _core/lms/helpers.php:1335
 msgid "Quizzes:"
 msgstr ""
 
-#: _core/lms/helpers.php:1316
+#: _core/lms/helpers.php:1342
 msgid "Pages:"
 msgstr ""
 
-#: _core/lms/helpers.php:1323
+#: _core/lms/helpers.php:1349
 msgid "Assignments:"
 msgstr ""
 
-#: _core/lms/helpers.php:1418
+#: _core/lms/helpers.php:1444
 msgid "MasterStudy Addons"
 msgstr ""
 
@@ -7825,12 +7830,12 @@ msgstr ""
 #: _core/stm-lms-templates/account/private/edit_account/custom_fields.php:68
 #: _core/stm-lms-templates/account/private/edit_account/profile-cover.php:36
 #: _core/stm-lms-templates/account/private/manage_students/main.php:280
-#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:127
+#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:135
 #: _core/stm-lms-templates/account/public/instructor_parts/fast_message.php:34
 #: _core/stm-lms-templates/components/attachment-media.php:139
 #: _core/stm-lms-templates/components/authorization/register-form.php:161
-#: _core/stm-lms-templates/components/discussions.php:24
-#: _core/stm-lms-templates/components/discussions.php:63
+#: _core/stm-lms-templates/components/discussions.php:26
+#: _core/stm-lms-templates/components/discussions.php:65
 #: _core/stm-lms-templates/components/modals/become-instructor.php:101
 #: _core/stm-lms-templates/components/modals/enterprise.php:100
 #: _core/stm-lms-templates/course-player/content/quiz/main.php:39
@@ -7847,11 +7852,11 @@ msgid "Import Demo courses"
 msgstr ""
 
 #: _core/settings/demo_import/tpls/field.php:31
-#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:88
-#: _core/stm-lms-templates/course-player/navigation.php:169
-#: _core/stm-lms-templates/dashboard/components/course_user.php:57
-#: _core/stm-lms-templates/dashboard/components/course_user.php:65
-#: _core/stm-lms-templates/dashboard/components/course_user.php:71
+#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:96
+#: _core/stm-lms-templates/course-player/navigation.php:211
+#: _core/stm-lms-templates/dashboard/components/course_user.php:60
+#: _core/stm-lms-templates/dashboard/components/course_user.php:68
+#: _core/stm-lms-templates/dashboard/components/course_user.php:74
 msgid "Complete"
 msgstr ""
 
@@ -7921,8 +7926,8 @@ msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:261
 #: _core/stm-lms-templates/course-player/content/quiz/main.php:38
-#: _core/stm-lms-templates/course-player/navigation.php:76
-#: _core/stm-lms-templates/course-player/navigation.php:109
+#: _core/stm-lms-templates/course-player/navigation.php:94
+#: _core/stm-lms-templates/course-player/navigation.php:127
 #: assets/course-builder/js/main.js:1
 msgid "Submit"
 msgstr ""
@@ -9811,7 +9816,7 @@ msgid "Media Gallery"
 msgstr ""
 
 #: _core/settings/media_library/main.php:24
-#: _core/stm-lms-templates/components/discussions.php:44
+#: _core/stm-lms-templates/components/discussions.php:46
 #: _core/stm-lms-templates/components/search.php:16
 #: assets/course-builder/js/main.js:1
 msgid "Search"
@@ -10848,15 +10853,15 @@ msgstr ""
 msgid "Course progress"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:124
+#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:132
 msgid "Reset progress"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:125
+#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:133
 msgid "Are you sure you want to reset this student's progress ?"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:126
+#: _core/stm-lms-templates/account/private/manage_students/student-progress.php:134
 #: _core/stm-lms-templates/components/progress.php:41
 #: _core/stm-lms-templates/dashboard/components/course_user.php:16
 msgid "Reset"
@@ -11343,11 +11348,11 @@ msgstr ""
 msgid "Record video"
 msgstr ""
 
-#: _core/stm-lms-templates/components/audio-player.php:66
+#: _core/stm-lms-templates/components/audio-player.php:77
 msgid "Press Enter or Space to show volume slider."
 msgstr ""
 
-#: _core/stm-lms-templates/components/audio-player.php:75
+#: _core/stm-lms-templates/components/audio-player.php:86
 msgid "Use Up/Down Arrow keys to increase or decrease volume."
 msgstr ""
 
@@ -11671,12 +11676,12 @@ msgid "enrolled"
 msgstr ""
 
 #: _core/stm-lms-templates/components/course/curriculum/materials.php:90
-#: _core/stm-lms-templates/components/curriculum-accordion.php:109
+#: _core/stm-lms-templates/components/curriculum-accordion.php:121
 msgid "Trial"
 msgstr ""
 
 #: _core/stm-lms-templates/components/course/curriculum/materials.php:94
-#: _core/stm-lms-templates/components/curriculum-accordion.php:115
+#: _core/stm-lms-templates/components/curriculum-accordion.php:127
 #: _core/stm-lms-templates/courses/styles/style_3.php:75
 msgid "Preview"
 msgstr ""
@@ -11831,26 +11836,26 @@ msgstr ""
 msgid "View Certificate"
 msgstr ""
 
-#: _core/stm-lms-templates/components/discussions.php:23
-#: _core/stm-lms-templates/components/discussions.php:55
+#: _core/stm-lms-templates/components/discussions.php:25
+#: _core/stm-lms-templates/components/discussions.php:57
 #: _core/stm-lms-templates/components/modals/message.php:39
 msgid "Enter message"
 msgstr ""
 
-#: _core/stm-lms-templates/components/discussions.php:25
+#: _core/stm-lms-templates/components/discussions.php:27
 #: assets/course-builder/js/main.js:1
 msgid "Reply"
 msgstr ""
 
-#: _core/stm-lms-templates/components/discussions.php:26
+#: _core/stm-lms-templates/components/discussions.php:28
 msgid "No discussions yet..."
 msgstr ""
 
-#: _core/stm-lms-templates/components/discussions.php:27
+#: _core/stm-lms-templates/components/discussions.php:29
 msgid "Here you can ask a question or discuss a topic"
 msgstr ""
 
-#: _core/stm-lms-templates/components/discussions.php:73
+#: _core/stm-lms-templates/components/discussions.php:75
 msgid "Comment"
 msgstr ""
 
@@ -11944,6 +11949,14 @@ msgstr ""
 msgid "Courses completed"
 msgstr ""
 
+#: _core/stm-lms-templates/components/video-media.php:115
+msgid "Required video progress"
+msgstr ""
+
+#: _core/stm-lms-templates/components/video-media.php:123
+msgid "Current video progress"
+msgstr ""
+
 #: _core/stm-lms-templates/components/video-recorder.php:47
 msgid "Start record"
 msgstr ""
@@ -11956,8 +11969,16 @@ msgstr ""
 msgid "Course Builder"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/lesson/audio.php:51
+#: _core/stm-lms-templates/course-player/content/lesson/audio.php:69
 msgid "Your browser does not support the audio external link."
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/lesson/audio.php:86
+msgid "Required audio progress"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/lesson/audio.php:94
+msgid "Current audio progress"
 msgstr ""
 
 #: _core/stm-lms-templates/course-player/content/lesson/materials.php:22
@@ -12074,21 +12095,31 @@ msgstr ""
 msgid "All of the most interesting lessons further. In order to continue you just need to purchase it."
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/navigation.php:50
+#. translators: %s: video required progress
+#: _core/stm-lms-templates/course-player/navigation.php:37
+msgid "You must watch at least %s%% of the video to move on to the next lesson"
+msgstr ""
+
+#. translators: %s: video required progress
+#: _core/stm-lms-templates/course-player/navigation.php:42
+msgid "You must listen at least %s%% of the audio to move on to the next lesson"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/navigation.php:68
 #: _core/stm-lms-templates/wizard/views/footer.php:13
 msgid "Previous"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/navigation.php:97
+#: _core/stm-lms-templates/course-player/navigation.php:115
 msgid "Save as draft"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/navigation.php:125
+#: _core/stm-lms-templates/course-player/navigation.php:143
 msgid "Complete & Next"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/navigation.php:135
-#: _core/stm-lms-templates/course-player/navigation.php:194
+#: _core/stm-lms-templates/course-player/navigation.php:153
+#: _core/stm-lms-templates/course-player/navigation.php:236
 #: _core/stm-lms-templates/elementor-widgets/blog/pagination.php:12
 #: _core/stm-lms-templates/elementor-widgets/courses/courses-archive/pagination/pagination-style-2.php:13
 #: _core/stm-lms-templates/elementor-widgets/courses/courses-grid/pagination/pagination-style-2.php:13
@@ -13069,10 +13100,6 @@ msgid "Show tabs for better navigation and extra info on a course page"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
-msgid "0"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
 msgid "This field is required"
 msgstr ""
 
@@ -13122,6 +13149,10 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Add new"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Preview video"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -13777,6 +13808,14 @@ msgid "Enter VdoCipher video ID"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "Required video progress (%)"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Enter video progress"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "Select media type"
 msgstr ""
 
@@ -14073,7 +14112,27 @@ msgid "New question"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "Listen audio"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "Q&A"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Link specific parts of the video to text with timecodes. Just add the time in brackets, like"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid " and include a short text to highlight key moments. This helps learners quickly find important sections."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Link specific parts of the audio to text with timecodes. Just add the time in brackets, like"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Pro tip: "
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -14154,6 +14213,14 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Only users who are signed in to a Zoom account will join the meeting."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Required audio progress (%)"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Enter audio progress"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1

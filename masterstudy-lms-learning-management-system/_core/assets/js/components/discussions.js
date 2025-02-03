@@ -107,6 +107,7 @@
           'action': 'stm_lms_get_comments',
           'nonce': discussions_data.get_nonce,
           'post_id': discussions_data.lesson_id,
+          'lesson_type': discussions_data.lesson_type,
           'offset': offset,
           'search': search
         },
@@ -159,6 +160,7 @@
           'nonce': discussions_data.add_nonce,
           'post_id': discussions_data.lesson_id,
           'course_id': discussions_data.course_id,
+          'lesson_type': discussions_data.lesson_type,
           'comment': comment,
           'parent': parent
         },

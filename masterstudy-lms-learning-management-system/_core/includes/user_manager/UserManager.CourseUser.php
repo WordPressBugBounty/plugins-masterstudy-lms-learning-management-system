@@ -258,6 +258,7 @@ class STM_LMS_User_Manager_Course_User {
 		$user_id   = $user['id'];
 		$duration  = '';
 		$questions = '';
+		$progress  = '';
 		$quiz_info = array();
 
 		if ( 'stm-quizzes' === $material['post_type'] ) {
@@ -299,6 +300,7 @@ class STM_LMS_User_Manager_Course_User {
 			$completed = STM_LMS_Lesson::is_lesson_completed( $user_id, $course_id, $material['post_id'] );
 			$type      = get_post_meta( $material['post_id'], 'type', true );
 			$duration  = get_post_meta( $material['post_id'], 'duration', true );
+			$progress  = masterstudy_lms_get_user_lesson_progress( $user_id, $course_id, $material['post_id'] ) ?? 0;
 		}
 
 		if ( empty( $type ) ) {
@@ -317,7 +319,7 @@ class STM_LMS_User_Manager_Course_User {
 
 		$locked = ( empty( $locked ) );
 
-		return compact( 'type', 'quiz_info', 'locked', 'completed', 'has_preview', 'duration', 'questions' );
+		return compact( 'type', 'quiz_info', 'locked', 'completed', 'has_preview', 'duration', 'questions', 'progress' );
 	}
 
 

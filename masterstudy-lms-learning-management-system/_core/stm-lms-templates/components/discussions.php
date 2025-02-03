@@ -3,6 +3,7 @@
 /**
  * @var int $course_id
  * @var int $lesson_id
+ * @var string $lesson_type
  * @var boolean $dark_mode
  * @var array $settings
  *
@@ -20,6 +21,7 @@ wp_localize_script(
 		'ajax_url'                  => admin_url( 'admin-ajax.php' ),
 		'course_id'                 => $course_id,
 		'lesson_id'                 => $lesson_id,
+		'lesson_type'               => $lesson_type,
 		'textarea_placeholder'      => __( 'Enter message', 'masterstudy-lms-learning-management-system' ),
 		'cancel_title'              => __( 'Cancel', 'masterstudy-lms-learning-management-system' ),
 		'reply_title'               => __( 'Reply', 'masterstudy-lms-learning-management-system' ),

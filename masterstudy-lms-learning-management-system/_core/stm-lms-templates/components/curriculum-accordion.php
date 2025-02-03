@@ -27,7 +27,7 @@ wp_enqueue_script( 'masterstudy-curriculum-accordion' );
 	$material_index = 0;
 	foreach ( $curriculum as $section ) {
 		$opened               = in_array( $current_lesson_id, array_column( $section['materials'], 'post_id' ), true ) ? 'masterstudy-curriculum-accordion__wrapper_opened' : '';
-		$section['materials'] = ( new CoursePlayerRepository() )->hydrate_materials( $section['materials'] );
+		$section['materials'] = ( new CoursePlayerRepository() )->hydrate_materials( $section['materials'], $course_id, $user_id );
 		$completed_count      = 0;
 
 		if ( is_user_logged_in() ) {
@@ -97,9 +97,21 @@ wp_enqueue_script( 'masterstudy-curriculum-accordion' );
 										echo esc_html( $question_count ? sprintf( __( '%d questions', 'masterstudy-lms-learning-management-system' ), $question_count ) : '' );
 										echo esc_html( ! $question_count ? $material['label'] : '' );
 									} else {
-										echo esc_html( $material['duration'] ?? '' );
-										echo esc_html( $material['meta'] ?? '' );
-										echo esc_html( empty( $material['meta'] ) && empty( $material['duration'] ) ? $material['label'] : '' );
+										if ( ! empty( $material['duration'] ) ) {
+											?>
+											<div class="masterstudy-curriculum-accordion__meta-value">
+												<?php echo esc_html( $material['duration'] ); ?>
+											</div>
+											<?php
+										}
+										if ( ! empty( $material['progress'] ) ) {
+											?>
+											<div class="masterstudy-curriculum-accordion__meta-value">
+												<?php echo esc_html( $material['progress'] ); ?>
+											</div>
+											<?php
+										}
+										echo esc_html( empty( $material['progress'] ) && empty( $material['duration'] ) ? $material['label'] : '' );
 									}
 									?>
 								</div>

@@ -2,6 +2,7 @@
 
 namespace MasterStudy\Lms\Repositories;
 
+use MasterStudy\Lms\Enums\LessonType;
 use MasterStudy\Lms\Plugin\PostType;
 
 final class CoursePlayerRepository {
@@ -67,6 +68,14 @@ final class CoursePlayerRepository {
 			: $this->data['content_type'];
 		$this->data['lesson_type_label'] = $lesson_types_labels[ $this->data['lesson_type'] ] ?? '';
 
+		if ( LessonType::VIDEO === $this->data['lesson_type'] ) {
+			$this->data['video_type']              = get_post_meta( $lesson_id, 'video_type', true );
+			$this->data['video_required_progress'] = get_post_meta( $lesson_id, 'video_required_progress', true );
+		} elseif ( LessonType::AUDIO === $this->data['lesson_type'] ) {
+			$this->data['audio_type']              = get_post_meta( $lesson_id, 'audio_type', true );
+			$this->data['audio_required_progress'] = get_post_meta( $lesson_id, 'audio_required_progress', true );
+		}
+
 		if ( is_user_logged_in() ) {
 			$user_mode = get_user_meta( $user_id, 'masterstudy_course_player_theme_mode', true );
 			if ( ! empty( $user_mode ) ) {
@@ -104,12 +113,12 @@ final class CoursePlayerRepository {
 		return apply_filters( 'masterstudy_lms_course_player_data', $this->data );
 	}
 
-	public function hydrate_materials( $materials ): array {
+	public function hydrate_materials( $materials, $course_id = null, $user_id = null ): array {
 		$lesson_types_labels = $this->get_lesson_labels();
 
 		if ( ! empty( $materials ) ) {
 			return array_map(
-				function ( $material ) use ( $lesson_types_labels ) {
+				function ( $material ) use ( $lesson_types_labels, $course_id, $user_id ) {
 					$material['post_id']                  = apply_filters( 'wpml_object_id', $material['post_id'], 'post' ) ?? $material['post_id'];
 					$material['lesson_type']              = ! empty( $material['lesson_type'] ) ? $material['lesson_type'] : 'text';
 					$material['lesson_lock_before_start'] = false;
@@ -123,13 +132,17 @@ final class CoursePlayerRepository {
 						$material['quiz_data']       = $this->get_quiz_data( $material['post_id'] );
 					} else {
 						$material['icon']     = $material['lesson_type'];
-						$material['meta']     = '';
+						$material['progress'] = '';
 						$material['duration'] = get_post_meta( $material['post_id'], 'duration', true );
 						$material['label']    = $lesson_types_labels[ $material['lesson_type'] ];
+						if ( ! empty( $course_id ) && ! empty( $user_id ) ) {
+							$user_progress        = masterstudy_lms_get_user_lesson_progress( $user_id, $course_id, $material['post_id'] ) ?? 0;
+							$material['progress'] = $user_progress > 0 ? $user_progress . '% ' . esc_html__( 'completed', 'masterstudy-lms-learning-management-system' ) : '';
+						}
 						if ( PostType::ASSIGNMENT === $material['post_type'] ) {
-							$material['icon']  = 'assignments';
-							$material['meta']  = '';
-							$material['label'] = $lesson_types_labels[ self::CONTENT_TYPES[ $material['post_type'] ] ];
+							$material['icon']     = 'assignments';
+							$material['progress'] = '';
+							$material['label']    = $lesson_types_labels[ self::CONTENT_TYPES[ $material['post_type'] ] ];
 						} elseif ( PostType::GOOGLE_MEET === $material['post_type'] ) {
 							$material['icon']  = 'google-meet';
 							$material['label'] = $lesson_types_labels[ self::CONTENT_TYPES[ $material['post_type'] ] ];

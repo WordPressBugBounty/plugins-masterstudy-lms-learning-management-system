@@ -82,6 +82,14 @@ wp_enqueue_script( 'masterstudy-student-progress-list' );
 										<?php if ( in_array( $material['type'], array( 'assignment', 'quiz' ), true ) ) : ?>
 										<span class="masterstudy-student-progress-list__content-toggler"></span>
 										<?php endif; ?>
+										<?php if ( $material['progress'] > 0 ) { ?>
+											<span class="masterstudy-student-progress-list__progress">
+												<?php
+												echo esc_html( $material['progress'] ) . '% ';
+												echo esc_html__( 'completed', 'masterstudy-lms-learning-management-system' );
+												?>
+											</span>
+										<?php } ?>
 										<span class="masterstudy-student-progress-list__meta">
 											<input type="checkbox" class="masterstudy-student-progress-list__meta-checkbox" value="1" <?php echo esc_attr( $material['completed'] ? 'checked' : '' ); ?> data-item-id="<?php echo esc_attr( $material['post_id'] ?? 0 ); ?>" data-type="<?php echo esc_attr( $material['type'] ?? '' ); ?>">
 											<span class="masterstudy-student-progress-list__meta-checkbox__tooltip">

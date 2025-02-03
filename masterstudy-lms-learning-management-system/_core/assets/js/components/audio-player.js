@@ -14,17 +14,24 @@ function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _ty
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 var MasterstudyAudioPlayer = /*#__PURE__*/function () {
   function MasterstudyAudioPlayer(player, options) {
+    var _document$getElementB, _document$querySelect, _this$submitButton;
     _classCallCheck(this, MasterstudyAudioPlayer);
     this.audioPlayer = typeof player === 'string' ? document.querySelector(player) : player;
 
     // Prevent duplicate initialization
     if (this.audioPlayer.dataset.initialized) {
-      console.warn('Player already initialized.');
       return;
     }
     this.audioPlayer.dataset.initialized = true;
     var opts = options || {};
     this.audioPlayer.classList.add('masterstudy-audio-player');
+    this.progressDisplay = document.getElementById('current-audio-progress');
+    this.userProgress = parseInt((_document$getElementB = document.getElementById('current-audio-progress')) === null || _document$getElementB === void 0 || (_document$getElementB = _document$getElementB.dataset) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.progress, 10) || 0;
+    this.requiredProgress = parseInt((_document$querySelect = document.querySelector('#required-audio-progress')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.getAttribute('data-required-progress'), 10) || 0;
+    this.submitButton = document.querySelector('[data-id="masterstudy-course-player-lesson-submit"]');
+    this.hint = document.querySelector('.masterstudy-course-player-navigation__next .masterstudy-hint');
+    this.dataQuery = (_this$submitButton = this.submitButton) === null || _this$submitButton === void 0 ? void 0 : _this$submitButton.getAttribute('data-query');
+    this.initialLoad = true;
     this.isDevice = /ipad|iphone|ipod|android/i.test(window.navigator.userAgent.toLowerCase()) && !window.MSStream;
     this.playPauseBtn = this.audioPlayer.querySelector('.masterstudy-audio-player__play-pause-btn');
     this.loading = this.audioPlayer.querySelector('.masterstudy-audio-player__loading');
@@ -51,6 +58,10 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
     this.playbackSpeedSelect = document.getElementById('playback-speed');
     if (this.playbackSpeedSelect) {
       this.playbackSpeedSelect.addEventListener('change', this.changePlaybackSpeed.bind(this));
+    }
+    if (this.userProgress < this.requiredProgress && this.submitButton) {
+      this.submitButton.setAttribute('disabled', 'true');
+      this.submitButton.classList.add('masterstudy-button_disabled');
     }
     var self = this;
     this.labels = {
@@ -189,6 +200,19 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
         self.player.currentTime = 0;
         self.playPauseBtn.setAttribute('aria-label', self.labels.play);
         self.hasSetAttribute(self.playPauseBtn, 'title', self.labels.play);
+        if (_this.progressDisplay && audio_player_data.audio_progress) {
+          _this.userProgress = 100;
+          if (_this.dataQuery) {
+            var queryObject = JSON.parse(_this.dataQuery);
+            queryObject.progress = _this.userProgress;
+            _this.submitButton.setAttribute('data-query', JSON.stringify(queryObject));
+            _this.hint.style.display = 'none';
+            _this.submitButton.removeAttribute('disabled');
+            _this.submitButton.classList.remove('masterstudy-button_disabled');
+          }
+          _this.progressDisplay.textContent = "".concat(_this.userProgress, "%");
+          _this.progressDisplay.setAttribute('data-progress', _this.userProgress);
+        }
       });
       this.volumeBtn.addEventListener('click', this.showHideVolume.bind(self));
       document.addEventListener('click', function (event) {
@@ -271,6 +295,30 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
       this.progress.setAttribute('aria-valuenow', percent);
       this.progress.style.width = "".concat(percent, "%");
       this.currentTime.textContent = MasterstudyAudioPlayer.formatTime(current, this.player);
+      if (this.progressDisplay && audio_player_data.audio_progress) {
+        if (this.initialLoad && this.userProgress > 0) {
+          return;
+        }
+        this.initialLoad = false;
+        var trackProgress = !isNaN(this.player.duration) && this.player.duration > 0 ? Math.floor(this.player.currentTime / this.player.duration * 100) : 0;
+        if (this.userProgress >= this.requiredProgress) {
+          this.hint.style.display = 'none';
+          this.submitButton.removeAttribute('disabled');
+          this.submitButton.classList.remove('masterstudy-button_disabled');
+        }
+        if (this.userProgress > Math.floor(trackProgress)) {
+          return;
+        }
+        if (Math.floor(trackProgress) > 100) trackProgress = 100;
+        this.userProgress = Math.floor(trackProgress);
+        if (this.dataQuery) {
+          var queryObject = JSON.parse(this.dataQuery);
+          queryObject.progress = this.userProgress;
+          this.submitButton.setAttribute('data-query', JSON.stringify(queryObject));
+        }
+        this.progressDisplay.textContent = "".concat(this.userProgress, "%");
+        this.progressDisplay.setAttribute('data-progress', this.userProgress);
+      }
     }
   }, {
     key: "updateVolume",
@@ -513,7 +561,6 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
       } else if (this.audioPlayer.getBoundingClientRect().top < 210) {
         this.volumeControls.classList.add('bottom');
       } else {
-        console.log(this.audioPlayer.getBoundingClientRect().top);
         this.volumeControls.classList.add('top');
       }
     }

@@ -44,10 +44,11 @@ wp_enqueue_script( 'masterstudy-course-player-discussions' );
 				STM_LMS_Templates::show_lms_template(
 					'components/discussions',
 					array(
-						'course_id' => $post_id,
-						'lesson_id' => $item_id,
-						'dark_mode' => $dark_mode,
-						'settings'  => $settings,
+						'course_id'   => $post_id,
+						'lesson_id'   => $item_id,
+						'lesson_type' => $lesson_type,
+						'dark_mode'   => $dark_mode,
+						'settings'    => $settings,
 					)
 				);
 				?>

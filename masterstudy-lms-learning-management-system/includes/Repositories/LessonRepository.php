@@ -19,18 +19,21 @@ final class LessonRepository extends AbstractRepository {
 	);
 
 	protected static array $fields_meta_map = array(
-		'type'       => 'type',
-		'duration'   => 'duration',
-		'preview'    => 'preview',
-		'excerpt'    => 'lesson_excerpt',
-		'video_type' => 'video_type',
-		'audio_type' => 'audio_type',
+		'type'                    => 'type',
+		'duration'                => 'duration',
+		'preview'                 => 'preview',
+		'excerpt'                 => 'lesson_excerpt',
+		'video_type'              => 'video_type',
+		'audio_type'              => 'audio_type',
+		'audio_required_progress' => 'audio_required_progress',
 	);
 
 	protected static array $casts = array(
-		'preview'           => 'bool',
-		'start_date'        => 'int',
-		'presto_player_idx' => 'int',
+		'preview'                 => 'bool',
+		'start_date'              => 'int',
+		'presto_player_idx'       => 'int',
+		'audio_required_progress' => 'int',
+		'video_required_progress' => 'int',
 	);
 
 	public function create( array $data ): int {
@@ -109,6 +112,16 @@ final class LessonRepository extends AbstractRepository {
 				update_post_meta( $post_id, $meta_key, $this->convert_to_meta( $field, $data[ $field ] ) );
 			}
 		}
+	}
+
+	protected function cast( $field, $value ) {
+		$cast = self::$casts[ $field ] ?? '';
+
+		if ( 'int' === $cast ) {
+			return ! empty( $value ) ? (int) $value : null;
+		}
+
+		return parent::cast( $field, $value );
 	}
 
 	private function hydrate( \WP_Post $post ) {

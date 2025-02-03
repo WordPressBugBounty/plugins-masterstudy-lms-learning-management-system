@@ -10,31 +10,37 @@ trait VideoTrait {
 			'embed_ctx' => 'lesson_embed_ctx',
 		),
 		LessonVideoType::EXT_LINK      => array(
-			'external_url' => 'lesson_ext_link_url',
-			'video_poster' => 'lesson_video_poster',
+			'external_url'            => 'lesson_ext_link_url',
+			'video_poster'            => 'lesson_video_poster',
+			'video_required_progress' => 'video_required_progress',
 		),
 		LessonVideoType::HTML          => array(
-			'video'        => 'lesson_video',
-			'video_poster' => 'lesson_video_poster',
-			'video_width'  => 'lesson_video_width',
+			'video'                   => 'lesson_video',
+			'video_poster'            => 'lesson_video_poster',
+			'video_width'             => 'lesson_video_width',
+			'video_required_progress' => 'video_required_progress',
 		),
 		LessonVideoType::PRESTO_PLAYER => array(
-			'presto_player_idx' => 'presto_player_idx',
+			'presto_player_idx'       => 'presto_player_idx',
+			'video_required_progress' => 'video_required_progress',
 		),
 		LessonVideoType::VDOCIPHER     => array(
-			'vdocipher_id' => 'vdocipher_id',
+			'vdocipher_id'            => 'vdocipher_id',
+			'video_required_progress' => 'video_required_progress',
 		),
 		LessonVideoType::SHORTCODE     => array(
 			'shortcode' => 'lesson_shortcode',
 		),
 		LessonVideoType::VIMEO         => array(
-			'vimeo_url' => 'lesson_vimeo_url',
+			'vimeo_url'               => 'lesson_vimeo_url',
+			'video_required_progress' => 'video_required_progress',
 		),
 		LessonVideoType::FILE          => array(
 			'file' => 'file',
 		),
 		LessonVideoType::YOUTUBE       => array(
-			'youtube_url' => 'lesson_youtube_url',
+			'youtube_url'             => 'lesson_youtube_url',
+			'video_required_progress' => 'video_required_progress',
 		),
 	);
 

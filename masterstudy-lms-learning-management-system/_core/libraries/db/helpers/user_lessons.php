@@ -32,6 +32,23 @@ function stm_lms_get_user_lesson( $user_id, $course_id, $lesson_id, $fields = ar
 	);
 }
 
+function masterstudy_lms_get_user_lesson_progress( $user_id, $course_id, $lesson_id ) {
+	global $wpdb;
+	$table = stm_lms_user_lessons_name( $wpdb );
+
+	$progress = $wpdb->get_var(
+		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT progress FROM {$table} WHERE user_id = %d AND course_id = %d AND lesson_id = %d",
+			$user_id,
+			$course_id,
+			$lesson_id
+		)
+	);
+
+	return is_null( $progress ) ? null : intval( $progress );
+}
+
 function stm_lms_get_user_course_lessons( $user_id, $course_id, $fields = array() ) {
 	global $wpdb;
 	$table = stm_lms_user_lessons_name( $wpdb );

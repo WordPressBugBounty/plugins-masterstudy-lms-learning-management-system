@@ -24,6 +24,7 @@
           data: {
             course: jsonData.course,
             lesson: jsonData.lesson,
+            progress: jsonData.progress,
             action: 'stm_lms_complete_lesson',
             nonce: stm_lms_nonces['stm_lms_complete_lesson']
           },

@@ -68,6 +68,7 @@ class STM_LMS_Lesson {
 		$user_id   = $user['id'];
 		$course_id = intval( $_GET['course'] );
 		$lesson_id = intval( $_GET['lesson'] );
+		$progress  = ! empty( $_GET['progress'] ) ? intval( $_GET['progress'] ) : null;
 
 		/*Check if already passed*/
 		if ( self::is_lesson_completed( $user_id, $course_id, $lesson_id ) ) {
@@ -84,7 +85,7 @@ class STM_LMS_Lesson {
 
 		$end_time   = time();
 		$start_time = get_user_meta( $user_id, "stm_lms_course_started_{$lesson_id}_{$course_id}", true );
-		stm_lms_add_user_lesson( compact( 'user_id', 'course_id', 'lesson_id', 'start_time', 'end_time' ) );
+		stm_lms_add_user_lesson( compact( 'user_id', 'course_id', 'lesson_id', 'start_time', 'end_time', 'progress' ) );
 		STM_LMS_Course::update_course_progress( $user_id, $course_id );
 
 		do_action( 'stm_lms_lesson_passed', $user_id, $lesson_id, $course_id );

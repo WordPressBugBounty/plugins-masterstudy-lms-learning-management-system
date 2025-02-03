@@ -54,6 +54,9 @@
 										v-bind:class="'completed_' + item.completed">
 										<input type="checkbox" v-model="item.completed"
 											v-on:change="completeItem(item)"/>
+										<span v-if="(item.type==='audio' || item.type==='video') && item.progress > 0" class="section_item__progress">
+											{{ item.progress }}%
+										</span>
 										<span><?php esc_html_e( 'Complete', 'masterstudy-lms-learning-management-system' ); ?></span>
 									</div>
 								</label>

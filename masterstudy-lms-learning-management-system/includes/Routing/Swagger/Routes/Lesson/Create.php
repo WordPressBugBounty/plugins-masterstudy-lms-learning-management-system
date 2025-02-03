@@ -77,6 +77,10 @@ class Create extends Route implements RequestInterface, ResponseInterface {
 				'type'        => 'integer',
 				'description' => 'For video type html',
 			),
+			'video_required_progress'            => array(
+				'type'        => 'integer',
+				'description' => 'Applicable to all video types, excluding "embed" and "shortcode"',
+			),
 			'vimeo_url'                          => array(
 				'type'        => 'string',
 				'description' => 'For video type vimeo',
