@@ -87,13 +87,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     if (order.cart_items.hasOwnProperty(key)) {
                       var item = order.cart_items[key];
                       var matchingItem = order.items.find(function (i) {
-                        return i.item_id === key;
+                        return i.item_id == key;
                       });
                       var additionalInfo = "";
                       if (matchingItem) {
                         if (matchingItem.enterprise && matchingItem.enterprise !== "0" || matchingItem.enterprise_id && matchingItem.enterprise_id !== "0") {
                           additionalInfo = "<span class=\"order-status\">enterprise</span>";
-                        } else if (matchingItem.bundle && matchingItem.bundle !== "0" || item.bundle_courses_count > 0 && matchingItem.bundle_id && matchingItem.bundle_id !== "0") {
+                        } else if ((matchingItem.bundle && matchingItem.bundle !== "0" || item.bundle_courses_count > 0) && matchingItem.bundle_id && matchingItem.bundle_id !== "0") {
                           additionalInfo = "<span class=\"order-status\">bundle</span>";
                         }
                       }

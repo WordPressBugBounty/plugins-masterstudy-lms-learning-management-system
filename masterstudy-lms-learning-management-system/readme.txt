@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.13
+Stable tag: 3.5.14
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,10 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.14 - 2025-02-06 =
+- **Enhancement:** Added support for the File Manager addon to upload WebP, GIF, and SVG file types in the Course Builder.
+- **Fix:** Fixed an issue when selecting a certificate for SCORM courses was not possible.
+
 = 3.5.13 - 2025-02-03 =
 - **New Feature:** Added video and audio progression tracking to monitor watched time for video and audio lessons. (Pro)
 - **New Feature:** Added Strict Mode for video lessons, ensuring the 'Complete' button unlocks only after the video is fully watched. (Pro)
@@ -319,18 +323,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 = 3.5.11 - 2025-01-23 =
 - **Fix:** Fixed a conflict with the GDPR plugin from WebToffee.
 - **Fix:** Fixed a conflict with the CookieYes plugin.
-
-= 3.5.10 - 2025-01-16 =
-- **New Feature:** Added an option in User Account Settings to set a public Display Name.
-- **Enhancement:** Redesigned the Course Page Style selection in the Wizard for easier customization.
-- **Enhancement:** Centered the Show More button in Course Reviews for better alignment.
-- **Enhancement:** Renamed the Announcement tab to Notice in the Single Course view.
-- **Fix:** Removed the maximum width of the Submit Quiz button in Online Testing.
-- **Fix:** Fixed pagination issues in Manage Students when student numbers exceed 10,000.
-- **Fix:** Resolved an issue where students signed up for Coming Soon courses didn’t appear in Manage Students.
-- **Fix:** Fixed a conflict with the GDPR Cookie Consent plugin from WebToffee.
-- **Fix:** Corrected True/False quiz questions in the course player not translating.
-- **Fix:** Added lazy loading for course images in Gutenberg blocks.
-- **Fix:** Corrected an Italian translation issue in the Grades settings.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

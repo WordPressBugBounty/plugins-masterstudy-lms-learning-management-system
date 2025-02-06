@@ -413,7 +413,7 @@ function masterstudy_lms_wrap_timecode( $content ) {
 			$total_seconds = $hours * 3600 + $minutes * 60 + $seconds;
 
 			$timecode_span  = '<span class="masterstudy-timecode" data-timecode="' . $total_seconds . '">';
-			$timecode_span .= $pre_text . ' <span class="masterstudy-timecode__value">' . $timecode . '</span> ' . $post_text;
+			$timecode_span .= $pre_text . ' <span class="masterstudy-timecode__value">' . $timecode . '</span>' . $post_text;
 			$timecode_span .= '</span>';
 
 			return $timecode_span;
@@ -1246,7 +1246,7 @@ function ms_plugin_favicon_url() {
 
 function ms_plugin_files_formats() {
 	return array(
-		'img'        => array( 'png', 'jpg', 'jpeg', 'gif', 'svg' ),
+		'img'        => array( 'png', 'jpg', 'jpeg', 'gif', 'webp' ),
 		'excel'      => array( 'xls', 'xlsx' ),
 		'word'       => array( 'doc', 'docx' ),
 		'powerpoint' => array( 'ppt', 'pptx' ),

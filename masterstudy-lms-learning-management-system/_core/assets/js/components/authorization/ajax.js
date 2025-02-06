@@ -247,6 +247,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             if (container.find("span[data-error-id=\"".concat(error.id, "\"]")).length === 0) {
               block.length > 0 ? $(html).insertBefore(block) : inputField.closest('.masterstudy-form-builder__checkbox-group').append(html);
             }
+          } else if (inputField.closest('.masterstudy-form-builder__radio-group').length > 0) {
+            var radioGroup = inputField.closest('.masterstudy-form-builder__radio-group');
+            if (radioGroup.find("span[data-error-id=\"".concat(error.id, "\"]")).length === 0) {
+              var descriptionBlock = radioGroup.find('.masterstudy-form-builder__radio-description');
+              if (descriptionBlock.length > 0) {
+                descriptionBlock.before(html);
+              } else {
+                radioGroup.append(html);
+              }
+            }
           } else if (inputField.parent().parent().hasClass('masterstudy-form-builder-file-upload')) {
             var _container = inputField.closest('.masterstudy-form-builder-file-upload');
             $(_container).parent().addClass('masterstudy-authorization__form-field_has-error');

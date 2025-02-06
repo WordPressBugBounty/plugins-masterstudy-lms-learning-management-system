@@ -82,11 +82,26 @@ class STM_LMS_Order {
 					'terms'           => ! empty( $terms ) ? $terms : wp_list_pluck( get_the_terms( $course['item_id'], 'product_cat' ), 'name' ),
 					'price_formatted' => STM_LMS_Helpers::display_price( $course['price'] ),
 				);
-				$total                           += $course['price'];
+				$total                           += $course['price'] + ( isset( $course['tax'] ) ? $course['tax'] : 0 );
 
 				$bundle = $course['bundle'] ?? null;
 
-				$cart_items[ $course['item_id'] ]['bundle_courses_count'] = ! empty( $bundle ) && '0' !== $bundle && get_post( (int) $bundle ) ? self::get_bundle_courses_count( $bundle ) : self::get_bundle_courses_count( $course['item_id'] );
+				if ( empty( $bundle ) ) {
+					$stm_lms_courses_meta = get_post_meta( $order_id, 'stm_lms_courses', true );
+
+					if ( is_array( $stm_lms_courses_meta ) && isset( $stm_lms_courses_meta[0]['bundle_id'] ) ) {
+						$bundle = $stm_lms_courses_meta[0]['bundle_id'];
+					}
+				}
+
+				if ( ! empty( $bundle ) && get_post( (int) $bundle ) ) {
+					$bundle_ids   = get_post_meta( (int) $bundle, 'stm_lms_bundle_ids', true );
+					$bundle_count = is_array( $bundle_ids ) ? count( $bundle_ids ) : 0;
+				} else {
+					$bundle_count = self::get_bundle_courses_count( $order_id );
+				}
+
+				$cart_items[ $course['item_id'] ]['bundle_courses_count'] = $bundle_count;
 				$cart_items[ $course['item_id'] ]['enterprise_name']      = ( ! empty( $course['enterprise'] ) && '0' !== $course['enterprise'] && get_post( (int) $course['enterprise'] ) ) ? get_the_title( (int) $course['enterprise'] ) : '';
 			}
 		}
@@ -178,7 +193,7 @@ class STM_LMS_Order {
 					INNER JOIN {$wpdb->prefix}postmeta pm ON pm.post_id = p.ID
 					INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta oim ON oim.meta_value = pm.meta_value
 					WHERE pm.meta_key = 'stm_lms_product_id'
-					AND p.post_type = 'stm-courses'
+					AND p.post_type IN ('stm-courses', 'stm-course-bundles')
 					AND p.post_author = %d
 					AND oim.meta_key = '_product_id'
 					AND oim.order_item_id IN (
@@ -210,7 +225,10 @@ class STM_LMS_Order {
 		}
 
 		foreach ( $courses as $course ) {
-			$terms = stm_lms_get_terms_array( $course->course_id, 'stm_lms_course_taxonomy', 'name' );
+			$terms      = stm_lms_get_terms_array( $course->course_id, 'stm_lms_course_taxonomy', 'name' );
+			$meta_price = get_post_meta( $course->course_id, 'price', true );
+			$price      = ! empty( $meta_price ) ? $meta_price : get_post_meta( $course->course_id, 'stm_lms_bundle_price', true );
+			$bundle_ids = get_post_meta( $course->course_id, 'stm_lms_bundle_ids', true );
 
 			$cart_items[ $course->course_id ] = array(
 				'thumbnail_id'    => get_post_thumbnail_id( $course->course_id ),
@@ -219,12 +237,13 @@ class STM_LMS_Order {
 				'image'           => get_the_post_thumbnail( $course->course_id, 'img-300-225' ),
 				'image_full'      => get_the_post_thumbnail( $course->course_id, 'full' ),
 				'placeholder'     => STM_LMS_URL . '/assets/img/image_not_found.png',
-				'price'           => get_post_meta( $course->course_id, 'price', true ),
+				'price'           => $price,
+				'bundle'          => is_array( $bundle_ids ) ? count( $bundle_ids ) : 0,
 				'terms'           => ! empty( $terms ) ? $terms : wp_list_pluck( get_the_terms( $course->course_id, 'product_cat' ), 'name' ),
-				'price_formatted' => STM_LMS_Helpers::display_price( get_post_meta( $course->course_id, 'price', true ) ),
+				'price_formatted' => STM_LMS_Helpers::display_price( $price ),
 			);
 
-			$total += get_post_meta( $course->course_id, 'price', true );
+			$total += $price;
 		}
 
 		$order_meta = apply_filters( 'stm_lms_order_details', array(), $order_id );
@@ -236,6 +255,7 @@ class STM_LMS_Order {
 		$timezone = get_option( 'gmt_offset' );
 		$diff     = ( ! empty( $timezone ) ) ? $timezone * 60 * 60 : 0;
 		$diff     = apply_filters( 'stm_lms_gmt_offset', $diff );
+		$tax      = isset( $order_meta['items'] ) ? array_sum( array_column( $order_meta['items'], 'tax' ) ) : 0;
 
 		return array_merge(
 			$order_meta,
@@ -247,7 +267,7 @@ class STM_LMS_Order {
 					? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $order_meta['date'] + $diff )
 					: '',
 				'cart_items'     => $cart_items,
-				'total'          => STM_LMS_Helpers::display_price( $total ),
+				'total'          => STM_LMS_Helpers::display_price( $total + $tax ),
 				'user'           => isset( $order_meta['user_id'] )
 					? STM_LMS_User::get_current_user( $order_meta['user_id'] )
 					: null,
