@@ -1,8 +1,9 @@
-<?php if ( ! defined( 'ABSPATH' ) ) {
-	exit;} // Exit if accessed directly ?>
-
 <?php
-get_header();
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+STM_LMS_Templates::show_lms_template( 'header' );
 
 $lms_current_user = STM_LMS_User::get_current_user( '', true, true );
 
@@ -20,4 +21,5 @@ stm_lms_register_style( 'user_info_top' );
 		</div>
 	</div>
 
-<?php get_footer(); ?>
+<?php
+STM_LMS_Templates::show_lms_template( 'footer' );

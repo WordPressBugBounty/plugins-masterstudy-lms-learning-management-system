@@ -1,5 +1,6 @@
 <?php
 
+use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Pro\AddonsPlus\Grades\Repositories\GradesRepository;
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Repositories\CurriculumSectionRepository;
@@ -266,6 +267,15 @@ class STM_LMS_Course {
 
 		stm_lms_update_user_course_progress( $user_course_id, $progress, $reset );
 
+		$threshold  = STM_LMS_Options::get_option( 'certificate_threshold', 70 );
+		$option_key = "masterstudy_plugin_course_completion_{$user_id}_{$course_id}";
+
+		if ( $progress > $threshold && ! get_option( $option_key ) ) {
+			do_action( 'masterstudy_plugin_student_course_completion', $user_id, $course_id, false );
+			// Store the completion status
+			update_option( $option_key, true, false ); // Set autoload to false for performance
+		}
+
 		if ( 100 === $progress ) {
 			stm_lms_update_user_course_endtime( $user_course['user_course_id'], time() );
 		}
@@ -476,9 +486,30 @@ class STM_LMS_Course {
 
 	public static function course_in_plan( $course_id ) {
 		$response      = array();
-		$terms         = stm_lms_get_terms_array( $course_id, 'stm_lms_course_taxonomy', 'term_id', false );
 		$levels        = pmpro_getAllLevels( true, true );
 		$simple_levels = array();
+
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			global $sitepress;
+
+			$course_id    = (int) apply_filters( 'wpml_original_element_id', null, $course_id, 'post_' . PostType::COURSE );
+			$current_lang = $sitepress->get_current_language();
+			$default_lang = $sitepress->get_default_language();
+
+			$sitepress->switch_lang( $default_lang );
+		}
+
+		$terms = wp_get_post_terms(
+			$course_id,
+			'stm_lms_course_taxonomy',
+			array(
+				'fields' => 'ids',
+			)
+		);
+
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! empty( $current_lang ) ) {
+			$sitepress->switch_lang( $current_lang );
+		}
 
 		foreach ( $levels as $level ) {
 			$level_id = $level->id;

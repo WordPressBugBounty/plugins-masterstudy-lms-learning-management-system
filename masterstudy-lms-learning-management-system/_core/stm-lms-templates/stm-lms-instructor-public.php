@@ -11,7 +11,7 @@ if ( empty( $instructor['id'] ) ) {
 	return;
 }
 
-get_header();
+STM_LMS_Templates::show_lms_template( 'header' );
 
 $settings                       = get_option( 'stm_lms_settings' );
 $settings['course_tab_reviews'] = $settings['course_tab_reviews'] ?? true;
@@ -289,4 +289,5 @@ STM_LMS_Templates::show_lms_template(
 		</div>
 	</div>
 </div>
-<?php get_footer(); ?>
+<?php
+STM_LMS_Templates::show_lms_template( 'footer' );

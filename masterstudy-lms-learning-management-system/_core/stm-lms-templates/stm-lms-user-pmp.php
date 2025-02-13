@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 do_action( 'stm_lms_template_main' );
 
-get_header();
+STM_LMS_Templates::show_lms_template( 'header' );
 
 stm_lms_register_style( 'pmpro_membership' );
 ?>
@@ -220,4 +220,4 @@ stm_lms_register_style( 'pmpro_membership' );
 	</div>
 </div>
 <?php
-get_footer();
+STM_LMS_Templates::show_lms_template( 'footer' );

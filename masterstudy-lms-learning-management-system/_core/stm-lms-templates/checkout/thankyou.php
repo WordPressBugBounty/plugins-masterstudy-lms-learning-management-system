@@ -8,7 +8,7 @@ $payment_methods = STM_LMS_Options::get_option( 'payment_methods' );
 
 stm_lms_register_style( 'user-orders' );
 
-get_header();
+STM_LMS_Templates::show_lms_template( 'header' );
 
 $order_info = \STM_LMS_Order::get_order_info( $order_id );
 ?>
@@ -215,4 +215,4 @@ $order_info = \STM_LMS_Order::get_order_info( $order_id );
 </div>
 
 <?php
-get_footer();
+STM_LMS_Templates::show_lms_template( 'footer' );

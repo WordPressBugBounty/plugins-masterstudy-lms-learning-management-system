@@ -444,27 +444,34 @@ class STM_LMS_User {
 		/*Delete User first and save his data to transient*/
 		require_once ABSPATH . 'wp-admin/includes/ms.php';
 
+		$reset_url  = self::login_page_url() . '?user_token=' . $token;
+		$user_login = get_userdata( $user )->user_login;
+		$blog_name  = get_bloginfo( 'name' );
+
 		wp_delete_user( $user );
 		wpmu_delete_user( $user );
 
-		$reset_url = self::login_page_url() . '?user_token=' . $token;
 		/* translators: %s: site name */
 		$subject = sprintf( esc_html__( 'Activate your account', 'masterstudy-lms-learning-management-system' ) );
-		$message = sprintf(
-			/* translators: %s: link url */
-			esc_html__(
-				'Please activate your account via this link - %s',
-				'masterstudy-lms-learning-management-system'
-			),
-			$reset_url
-		);
+		if ( ( ! STM_LMS_Helpers::is_pro_plus() && empty( get_option( 'stm_lms_email_manager_settings' ) ) ) || STM_LMS_Helpers::is_pro_plus() && empty( get_option( 'stm_lms_email_manager_settings' ) ) ) {
+			$reset_url = '<a href="' . $reset_url . '">' . $reset_url . '</a>';
+		}
+
+		/* translators: %s: User login. */
+		$message = sprintf( esc_html__( 'Hi %s', 'masterstudy-lms-learning-management-system' ), $user_login ) . '<br>';
+		/* translators: %s: Site title. */
+		$message .= sprintf( esc_html__( 'Welcome to %s ', 'masterstudy-lms-learning-management-system' ), $blog_name );
+		$message .= esc_html__( 'To start using your account, please activate it by clicking the link below:', 'masterstudy-lms-learning-management-system' ) . '<br>';
+		/* translators: %s: Login URL. */
+		$message .= sprintf( esc_html__( 'Activation Link: %s ', 'masterstudy-lms-learning-management-system' ), $reset_url ) . '<br><br>';
+		$message .= sprintf( esc_html__( 'We look forward to seeing you on %s!', 'masterstudy-lms-learning-management-system' ), $blog_name ) . '<br><br>';
 
 		STM_LMS_Helpers::send_email(
 			$user_email,
 			$subject,
 			$message,
 			'stm_lms_account_premoderation',
-			compact( 'reset_url' )
+			compact( 'reset_url', 'user_login', 'blog_name' )
 		);
 	}
 
@@ -543,20 +550,30 @@ class STM_LMS_User {
 		}
 
 		do_action( 'stm_lms_user_registered', $user, $data );
+		$blog_name  = get_bloginfo( 'name' );
+		$user_login = get_userdata( $user )->user_login;
+		$login_url  = esc_url( site_url() . '/' . get_post_field( 'post_name', STM_LMS_Options::get_option( 'user_url', true ) ) );
 
-		$blog_name = get_bloginfo( 'name' );
-		$subject   = esc_html__( 'You have successfully registered on the website.', 'masterstudy-lms-learning-management-system' );
-		$message   = sprintf(
-			/* translators: %s: site name */
-			esc_html__(
-				'You are an active user on the website - %s. Add your information and start enrolling in courses with ease.',
-				'masterstudy-lms-learning-management-system'
-			),
-			$blog_name
-		);
+		if ( ( ! STM_LMS_Helpers::is_pro_plus() && empty( get_option( 'stm_lms_email_manager_settings' ) ) ) || STM_LMS_Helpers::is_pro_plus() && empty( get_option( 'stm_lms_email_manager_settings' ) ) ) {
+			$login_url = '<a href="' . $login_url . '">' . $login_url . '</a>';
+		}
+
+		$subject    = esc_html__( 'You have successfully registered on the website.', 'masterstudy-lms-learning-management-system' );
+
+		/* translators: %s: User login. */
+		$message = sprintf( esc_html__( 'Hi %s', 'masterstudy-lms-learning-management-system' ), $user_login ) . '<br>';
+		/* translators: %s: Site title. */
+		$message .= sprintf( esc_html__( 'Welcome to %s ', 'masterstudy-lms-learning-management-system' ), $blog_name );
+		$message .= esc_html__( 'Your registration was successful.', 'masterstudy-lms-learning-management-system' ) . '<br>';
+		$message .= esc_html__( 'You can now log in to your account using the following link:', 'masterstudy-lms-learning-management-system' ) . '<br>';
+		/* translators: %s: Login URL. */
+		$message .= sprintf( esc_html__( 'Login URL: %s', 'masterstudy-lms-learning-management-system' ), $login_url ) . '<br><br>';
+		$message .= esc_html__( 'We are thrilled to have you on board!', 'masterstudy-lms-learning-management-system' ) . "\r\n";
 
 		$email_data = array(
-			'blog_name' => $blog_name,
+			'blog_name'  => $blog_name,
+			'user_login' => $user_login,
+			'login_url'  => $login_url,
 		);
 
 		if ( ! empty( $data['additional'] ) ) {

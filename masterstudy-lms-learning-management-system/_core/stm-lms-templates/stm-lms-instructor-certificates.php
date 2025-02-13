@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-get_header();
+STM_LMS_Templates::show_lms_template( 'header' );
 
 $lms_current_user = STM_LMS_User::get_current_user( '', true, true );
 
@@ -22,4 +22,5 @@ STM_LMS_Templates::show_lms_template( 'modals/preloader' );
 	</div>
 </div>
 
-<?php get_footer(); ?>
+<?php
+STM_LMS_Templates::show_lms_template( 'footer' );

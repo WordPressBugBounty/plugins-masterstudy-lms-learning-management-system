@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.14
+Stable tag: 3.5.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,13 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.15 - 2025-02-13 =
+- **Fix:** Resolved an issue where the header and footer of the Twenty Twenty-Four theme were not displayed on the Single Course Page.
+- **Fix:** Corrected the ampersand (&) in Lesson Names in Course Builder, which was displaying as Unicode after reuploading the page.
+- **Fix:** Improved compatibility between PMPro, WPML, and MasterStudy LMS for better translation support.
+- **Fix:** Fixed an issue where the Login widget in the header did not apply a custom link correctly.
+- **Enhancement:** Added a search bar to quickly find settings and options in the plugin settings.
+
 = 3.5.14 - 2025-02-06 =
 - **Enhancement:** Added support for the File Manager addon to upload WebP, GIF, and SVG file types in the Course Builder.
 - **Fix:** Fixed an issue when selecting a certificate for SCORM courses was not possible.
@@ -319,9 +326,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Enhancement:** Improved the design of the Profile Menu for better navigation.
 - **Fix:** Fixed minor bugs in the Profile Menu Elementor widget.
 - **Fix:** Resolved an issue where True & False quiz questions appeared as False & False in Spanish.
-
-= 3.5.11 - 2025-01-23 =
-- **Fix:** Fixed a conflict with the GDPR plugin from WebToffee.
-- **Fix:** Fixed a conflict with the CookieYes plugin.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

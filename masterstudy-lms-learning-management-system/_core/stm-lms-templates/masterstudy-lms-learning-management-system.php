@@ -4,7 +4,7 @@
 
 STM_LMS_Course::course_views( get_the_ID() );
 
-get_header();
+STM_LMS_Templates::show_lms_template( 'header' );
 
 STM_LMS_Templates::show_lms_template( 'modals/preloader' );
 // phpcs:ignoreFile
@@ -22,4 +22,4 @@ STM_LMS_Templates::show_lms_template( 'modals/preloader' );
 	</div>
 </div>
 <?php
-get_footer();
+STM_LMS_Templates::show_lms_template( 'footer' );

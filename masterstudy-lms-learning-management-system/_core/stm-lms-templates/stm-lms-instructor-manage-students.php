@@ -18,7 +18,7 @@ if ( ! empty( $student_id ) && ( empty( $course ) || intval( $course['course_id'
 	die;
 }
 
-get_header();
+STM_LMS_Templates::show_lms_template( 'header' );
 
 do_action( 'stm_lms_template_main' );
 
@@ -52,4 +52,5 @@ $style = STM_LMS_Options::get_option( 'profile_style', 'default' );
 
 	</div>
 
-<?php get_footer(); ?>
+<?php
+STM_LMS_Templates::show_lms_template( 'footer' );

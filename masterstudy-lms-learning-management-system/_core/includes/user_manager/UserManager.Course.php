@@ -140,7 +140,8 @@ class STM_LMS_User_Manager_Course {
 		if ( ! STM_LMS_Course::check_course_author( $course_id, get_current_user_id() ) ) {
 			die;
 		}
-
+		$option_key = "masterstudy_plugin_course_completion_{$user_id}_{$course_id}";
+		update_option( $option_key, false );
 		stm_lms_get_delete_user_course( $user_id, $course_id );
 		$meta = STM_LMS_Helpers::parse_meta_field( $course_id );
 

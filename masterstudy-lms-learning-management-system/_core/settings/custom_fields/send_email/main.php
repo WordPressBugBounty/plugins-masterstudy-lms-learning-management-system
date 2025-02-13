@@ -47,6 +47,35 @@ function stm_lms_send_test_email_ajax() {
 			STM_LMS_Mails::send_email_to_student( get_option( 'admin_email' ), 0, array(), $template_name, true );
 			wp_send_json_success();
 		}
+		if ( 'stm_lms_certificates_preview_checked' === $email_id ) {
+			global $wpdb;
+
+			// Fetch the first course ID directly from the database (much faster than get_posts())
+			$first_course_id = $wpdb->get_var(
+				"SELECT ID FROM {$wpdb->posts}
+			WHERE post_type = 'stm-courses'
+			AND post_status = 'publish'
+			ORDER BY ID ASC LIMIT 1"
+			);
+
+			// Fetch the first admin user ID directly from the database (faster than get_users())
+			$admin_id = $wpdb->get_var(
+				"SELECT ID FROM {$wpdb->users}
+			WHERE ID IN (
+			SELECT user_id FROM {$wpdb->usermeta}
+			WHERE meta_key = '{$wpdb->prefix}capabilities'
+			AND meta_value LIKE '%administrator%'
+			)
+			ORDER BY ID ASC LIMIT 1"
+			);
+
+			if ( $admin_id && $first_course_id ) {
+				do_action( 'masterstudy_plugin_student_course_completion', $admin_id, $first_course_id, true );
+				wp_send_json_success();
+			} else {
+				wp_send_json_error( 'No admin or course found.' );
+			}
+		}
 
 		if ( ! empty( $email_manager ) && is_array( $email_manager ) ) {
 			$subject      = $email_manager[ $email_id . '_subject' ];

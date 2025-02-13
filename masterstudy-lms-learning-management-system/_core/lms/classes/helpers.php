@@ -379,7 +379,7 @@ class STM_LMS_Helpers {
 		return 'text/html';
 	}
 
-	public static function send_email( $to, $subject, $message, $filter = 'stm_lms_send_email_filter', $data = array() ) {
+	public static function send_email( $to, $subject, $message, $filter = 'stm_lms_send_email_filter', $data = array(), $isInlineSubject = false ) {
 		$to = ( empty( $to ) || 'admin' === $to ) ? get_option( 'admin_email' ) : $to;
 
 		add_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
@@ -387,7 +387,7 @@ class STM_LMS_Helpers {
 		$data = apply_filters(
 			'stm_lms_filter_email_data',
 			array(
-				'subject'     => $subject,
+				'subject'     => ! $isInlineSubject ? $subject : '',
 				'message'     => $message,
 				'vars'        => $data,
 				'filter_name' => $filter,
@@ -407,7 +407,7 @@ class STM_LMS_Helpers {
 		}
 
 		if ( ! isset( $data['enabled'] ) || ( isset( $data['enabled'] ) && $data['enabled'] ) ) {
-			wp_mail( $to, $data['subject'], $data['message'] );
+			wp_mail( $to, $subject, $data['message'] );
 		}
 
 		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );

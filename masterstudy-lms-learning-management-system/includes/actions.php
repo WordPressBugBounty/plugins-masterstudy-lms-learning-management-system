@@ -170,6 +170,12 @@ function masterstudy_analytics_revenue_page() {
 			return;
 		}
 
+		if ( ! empty( $_GET['bundle_id'] ) ) {
+			STM_LMS_Templates::show_lms_template( 'analytics/bundle' );
+
+			return;
+		}
+
 		if ( ! empty( $_GET['user_id'] ) ) {
 			STM_LMS_Templates::show_lms_template( 'analytics/student' );
 
