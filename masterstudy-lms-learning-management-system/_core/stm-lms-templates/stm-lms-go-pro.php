@@ -72,9 +72,9 @@ function get_freemius_info() {
 					),
 				),
 			),
-			'5'    => array(
+			'10'    => array(
 				'classname' => 'stm_plan--popular',
-				'text'      => __( 'Up to 5 Sites', 'masterstudy-lms-learning-management-system' ),
+				'text'      => __( 'Up to 10 Sites', 'masterstudy-lms-learning-management-system' ),
 				'type'      => __( 'Most Popular', 'masterstudy-lms-learning-management-system' ),
 				'features'  => array(
 					'annual'   => array_merge(
@@ -82,7 +82,7 @@ function get_freemius_info() {
 						array(
 							'license' => array(
 								'icon'        => 'globe.svg',
-								'description' => __( '5 Sites License', 'masterstudy-lms-learning-management-system' ),
+								'description' => __( '10 Sites License', 'masterstudy-lms-learning-management-system' ),
 							),
 						),
 					),
@@ -91,7 +91,7 @@ function get_freemius_info() {
 						array(
 							'license' => array(
 								'icon'        => 'globe.svg',
-								'description' => __( '5 Sites License', 'masterstudy-lms-learning-management-system' ),
+								'description' => __( '10 Sites License', 'masterstudy-lms-learning-management-system' ),
 							),
 							'update'  => array(
 								'icon'        => 'cloud-download.svg',
@@ -193,11 +193,11 @@ $is_promotion = $current_time >= $start_date->format( 'U' ) && $current_time < $
 
 if ( $is_promotion ) {
 	$freemius_info['plan']['licenses_5000']->annual_price = 419;
-	$freemius_info['plan']['licenses_5']->annual_price    = 239;
+	$freemius_info['plan']['licenses_10']->annual_price    = 199;
 	$freemius_info['plan']['licenses_1']->annual_price    = 99;
 
 	$freemius_info['plan']['licenses_5000']->lifetime_price = 999;
-	$freemius_info['plan']['licenses_5']->lifetime_price    = 629;
+	$freemius_info['plan']['licenses_10']->lifetime_price    = 499;
 	$freemius_info['plan']['licenses_1']->lifetime_price    = 319;
 }
 

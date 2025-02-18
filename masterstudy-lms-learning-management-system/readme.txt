@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.15
+Stable tag: 3.5.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,9 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.16 - 2025-02-18 =
+- **Fix:** Minor bug fixes.
+
 = 3.5.15 - 2025-02-13 =
 - **Fix:** Resolved an issue where the header and footer of the Twenty Twenty-Four theme were not displayed on the Single Course Page.
 - **Fix:** Corrected the ampersand (&) in Lesson Names in Course Builder, which was displaying as Unicode after reuploading the page.
@@ -320,11 +323,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **New Feature:** Added Strict Mode for video lessons, ensuring the 'Complete' button unlocks only after the video is fully watched. (Pro)
 - **New Feature:** Introduced the option to add timecodes to audio and video lessons for easy navigation. (Pro)
 - **Fix:** Fixed an issue where recorded audio in Assignments could not be played until a reply was sent. (Pro)
-
-= 3.5.12 - 2025-01-30 =
-- **Enhancement:** Redesigned the LMS Checkout page for improved user experience.
-- **Enhancement:** Improved the design of the Profile Menu for better navigation.
-- **Fix:** Fixed minor bugs in the Profile Menu Elementor widget.
-- **Fix:** Resolved an issue where True & False quiz questions appeared as False & False in Spanish.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
