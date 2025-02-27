@@ -794,7 +794,7 @@ class STM_LMS_User {
 				$subscription_enabled = STM_LMS_Subscriptions::subscription_enabled();
 				$in_enterprise        = STM_LMS_Order::is_purchased_by_enterprise( $course, $user_id );
 				$my_course            = ( intval( get_post_field( 'post_author', $id ) ) === intval( $user_id ) );
-				$is_free              = ( ! get_post_meta( $id, 'not_single_sale', true ) && empty( STM_LMS_Course::get_course_price( $id ) ) );
+				$is_free              = ( get_post_meta( $id, 'single_sale', true ) && empty( STM_LMS_Course::get_course_price( $id ) ) );
 				$is_bought            = STM_LMS_Order::has_purchased_courses( $user_id, $id );
 				$in_bundle            = isset( $course['bundle_id'] ) && ! empty( $course['bundle_id'] );
 				$bought_by_membership = ! empty( $course['subscription_id'] );
@@ -985,7 +985,7 @@ class STM_LMS_User {
 		$subscription_enabled = STM_LMS_Subscriptions::subscription_enabled();
 		$in_enterprise        = isset( $course[0] ) && STM_LMS_Order::is_purchased_by_enterprise( $course[0], $user_id );
 		$my_course            = intval( $author_id ) === intval( $user_id );
-		$is_free              = ( ! get_post_meta( $course_id, 'not_single_sale', true ) && empty( STM_LMS_Course::get_course_price( $course_id ) ) );
+		$is_free              = ( get_post_meta( $course_id, 'single_sale', true ) && empty( STM_LMS_Course::get_course_price( $course_id ) ) );
 		$is_bought            = STM_LMS_Order::has_purchased_courses( $user_id, $course_id );
 		$in_bundle            = isset( $course[0]['bundle_id'] ) && ! empty( $course[0]['bundle_id'] );
 		$for_points           = isset( $course[0]['for_points'] ) && ! empty( $course[0]['for_points'] );
@@ -1455,7 +1455,14 @@ class STM_LMS_User {
 		if ( ! empty( $user_data['display_name'] ) ) {
 			$display_name = sanitize_text_field( $user_data['display_name'] );
 		}
-		if ( ! empty( $nicename ) || ! empty( $display_name ) ) {
+
+		$current_display_name = get_the_author_meta( 'display_name', $user_id );
+
+		if ( empty( $display_name ) ) {
+			$display_name = $current_display_name;
+		}
+
+		if ( $display_name !== $current_display_name ) {
 			wp_update_user(
 				array(
 					'ID'           => $user_id,
@@ -1572,7 +1579,9 @@ class STM_LMS_User {
 		if ( 'custom' === $data['fields_type'] && ! empty( $data['fields'] ) ) {
 			$message   = '';
 			$subject   = esc_html__( 'Enterprise Request', 'masterstudy-lms-learning-management-system' );
-			$user_data = array();
+			$user_data = array(
+				'date' => date( 'Y-m-d H:i:s' ),
+			);
 
 			foreach ( $data['fields'] as $field ) {
 				if ( ! empty( $field['required'] ) && $field['required'] && empty( $field['value'] ) ) {
@@ -1628,21 +1637,24 @@ class STM_LMS_User {
 			$name    = $data['fields']['enterprise_name'];
 			$email   = $data['fields']['enterprise_email'];
 			$text    = $data['fields']['enterprise_text'];
+			$date    = date( 'Y-m-d H:i:s' );
 			$subject = esc_html__( 'Enterprise Request', 'masterstudy-lms-learning-management-system' );
-			$message = sprintf(
-				/* translators: %s: data */
-				esc_html__( 'Name - %1$s; Email - %2$s; Message - %3$s', 'masterstudy-lms-learning-management-system' ),
-				$name,
-				$email,
-				$text
-			);
+
+			$message = esc_html__( 'You have received a new enterprise inquiry', 'masterstudy-lms-learning-management-system-pro' ) . ' <br/>' . // phpcs:disable
+				esc_html__( 'from the "For Enterprise" form.', 'masterstudy-lms-learning-management-system-pro' ) . ' <br/>' .
+				esc_html__( 'Here are the details:', 'masterstudy-lms-learning-management-system-pro' ) . ' <br/> ' .
+				'<b>' . esc_html__( 'Name: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $name . ' <br>' .
+				'<b>' . esc_html__( 'Email: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $email . ' <br>' .
+				'<b>' . esc_html__( 'Message: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $text . ' <br>' .
+				'<b>' . esc_html__( 'Submission Date: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $date . ' <br><br/>' .
+				esc_html__( 'Please review this inquiry and follow up as needed.', 'masterstudy-lms-learning-management-system-pro' ) . '</a> <br/>'; // phpcs:enable
 
 			STM_LMS_Helpers::send_email(
 				'',
 				$subject,
 				$message,
 				'stm_lms_enterprise',
-				compact( 'name', 'email', 'text' )
+				compact( 'name', 'email', 'text', 'date' )
 			);
 		}
 

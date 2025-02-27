@@ -33,8 +33,8 @@ class STM_LMS_Cart {
 
 		$r = array();
 
-		$not_salebale = get_post_meta( $item_id, 'not_single_sale', true );
-		if ( $not_salebale ) {
+		$single_sale = get_post_meta( $item_id, 'single_sale', true );
+		if ( ! $single_sale ) {
 			die;
 		}
 

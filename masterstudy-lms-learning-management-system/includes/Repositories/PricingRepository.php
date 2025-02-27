@@ -54,8 +54,6 @@ final class PricingRepository {
 			update_post_meta( $course_id, $key, $value );
 		}
 
-		// todo: Remove all dependencies from "not_single_sale" during refactoring
-		update_post_meta( $course_id, 'not_single_sale', $pricing['single_sale'] ? '' : 'on' );
 		do_action( 'masterstudy_lms_course_price_updated', $course_id );
 	}
 

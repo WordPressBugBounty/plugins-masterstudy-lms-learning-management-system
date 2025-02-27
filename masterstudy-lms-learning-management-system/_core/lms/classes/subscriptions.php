@@ -72,22 +72,17 @@ class STM_LMS_Subscriptions {
 
 			if ( 'disable' === $method ) {
 				$args['meta_query'] = array(
-					'relation' => 'OR',
 					array(
-						'key'     => 'not_single_sale',
-						'compare' => 'NOT EXISTS',
-					),
-					array(
-						'key'     => 'not_single_sale',
+						'key'     => 'single_sale',
 						'compare' => '=',
-						'value'   => '',
+						'value'   => 'on',
 					),
 				);
 			} else {
 				$args['meta_query'] = array(
 					array(
-						'key'     => 'not_single_sale',
-						'compare' => '=',
+						'key'     => 'single_sale',
+						'compare' => '!=',
 						'value'   => 'on',
 					),
 				);
@@ -102,7 +97,6 @@ class STM_LMS_Subscriptions {
 					$id        = get_the_ID();
 					$r['next'] = 'going_next';
 
-					update_post_meta( $id, 'not_single_sale', ( 'disable' === $method ) ? 'on' : '' );
 					update_post_meta( $id, 'single_sale', ( 'disable' === $method ) ? '' : 'on' );
 				}
 				wp_reset_postdata();

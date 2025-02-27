@@ -30,11 +30,12 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 		<ul class="masterstudy-popular-courses__list">
 			<?php
 			foreach ( $course_ids as $course_id ) {
-				$popular_course = ( new CourseRepository() )->find( $course_id, 'grid' );
-				$course_url     = STM_LMS_Course::courses_page_url() . $popular_course->slug;
-				$is_sale_active = STM_LMS_Helpers::is_sale_price_active( $course_id );
-				$course_status  = STM_LMS_Course::get_post_status( $course_id );
-				$sale_price     = ! empty( $popular_course->sale_price ) && $is_sale_active ? true : false;
+				$popular_course     = ( new CourseRepository() )->find( $course_id, 'grid' );
+				$course_url         = STM_LMS_Course::courses_page_url() . $popular_course->slug;
+				$is_sale_active     = STM_LMS_Helpers::is_sale_price_active( $course_id );
+				$course_status      = STM_LMS_Course::get_post_status( $course_id );
+				$sale_price         = ! empty( $popular_course->sale_price ) && $is_sale_active ? true : false;
+				$course_free_status = masterstudy_lms_course_free_status( $popular_course->single_sale, $popular_course->price );
 
 				if ( $popular_course->is_udemy_course ) {
 					$author_name = $popular_course->udemy_instructor['display_name'];
@@ -58,26 +59,20 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 								<?php echo esc_html( stm_lms_minimize_word( $popular_course->title, 40 ) ); ?>
 							</a>
 							<div class="masterstudy-popular-courses__item-block">
-								<?php if ( $popular_course->not_single_sale && STM_LMS_Subscriptions::subscription_enabled() ) { ?>
+								<?php if ( ! $popular_course->single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $popular_course->not_in_membership ) { ?>
 									<div class="masterstudy-popular-courses__subscription">
 										<img class="masterstudy-popular-courses__subscription-image" src="<?php echo esc_url( STM_LMS_URL . '/assets/img/members_only.svg' ); ?>" alt="<?php esc_attr_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>"/>
 										<div class="masterstudy-popular-courses__subscription-title">
 											<?php esc_html_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>
 										</div>
 									</div>
-								<?php } else { ?>
+								<?php } elseif ( $popular_course->is_udemy_course && ! $course_free_status['zero_price'] ) { ?>
 									<div class="masterstudy-popular-courses__price <?php echo $sale_price ? 'masterstudy-popular-courses__price_sale' : ''; ?>">
-										<?php
-										if ( $popular_course->not_single_sale && ! $popular_course->is_udemy_course ) {
-											echo esc_html__( 'Free', 'masterstudy-lms-learning-management-system' );
-										} else {
-											if ( $popular_course->is_udemy_course ) {
-												echo esc_html( STM_LMS_Helpers::display_price( $popular_course->price ) );
-											} else {
-												echo esc_html( ( ! empty( $popular_course->price ) && 0 !== floatval( $popular_course->price ) ) ? STM_LMS_Helpers::display_price( $popular_course->price ) : __( 'Free', 'masterstudy-lms-learning-management-system' ) );
-											}
-										}
-										?>
+										<?php echo esc_html( STM_LMS_Helpers::display_price( $popular_course->price ) ); ?>
+									</div>
+								<?php } elseif ( $popular_course->single_sale && ! $course_free_status['zero_price'] ) { ?>
+									<div class="masterstudy-popular-courses__price <?php echo $sale_price ? 'masterstudy-popular-courses__price_sale' : ''; ?>">
+										<?php echo esc_html( STM_LMS_Helpers::display_price( $popular_course->price ) ); ?>
 									</div>
 									<?php
 									if ( $sale_price ) {
@@ -87,6 +82,12 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 										</div>
 										<?php
 									}
+								} elseif ( $course_free_status['is_free'] ) {
+									?>
+									<div class="masterstudy-related-courses__price">
+										<?php echo esc_html__( 'Free', 'masterstudy-lms-learning-management-system' ); ?>
+									</div>
+									<?php
 								}
 								if ( ! empty( $popular_course->rate ) && ! $popular_course->is_udemy_course && $course_reviews ) {
 									?>

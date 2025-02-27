@@ -21,6 +21,13 @@ function stm_lms_settings_certificates_section() {
 				'description' => esc_html__( 'Decide whether instructors are permitted to create certificates for their courses', 'masterstudy-lms-learning-management-system' ),
 				'value'       => false,
 			),
+			'user_name_certificates'   => array(
+				'type'        => 'checkbox',
+				'pro'         => true,
+				'label'       => esc_html__( 'Use current student name on certificate', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'If enabled, certificates will use the user\'s current name from their profile. If disabled, the initially provided name will be displayed.', 'masterstudy-lms-learning-management-system' ),
+				'value'       => false,
+			),
 			'certificate_banner'       => array(
 				'type'        => 'notification_message',
 				'image'       => STM_LMS_URL . 'assets/addons/certtificate_builder.png',

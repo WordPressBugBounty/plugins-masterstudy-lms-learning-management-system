@@ -81,7 +81,6 @@ class Course {
 	public ?string $udemy_articles;
 	public ?string $udemy_certificate;
 	public ?string $price_info;
-	public bool $not_single_sale;
 	public ?float $price;
 	public ?float $sale_price;
 	public ?string $coming_soon_date;

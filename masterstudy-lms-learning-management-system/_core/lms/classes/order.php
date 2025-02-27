@@ -84,13 +84,14 @@ class STM_LMS_Order {
 				);
 				$total                           += $course['price'] + ( isset( $course['tax'] ) ? $course['tax'] : 0 );
 
-				$bundle = $course['bundle'] ?? null;
+				$bundle               = $course['bundle'] ?? null;
+				$stm_lms_courses_meta = get_post_meta( $order_id, 'stm_lms_courses', true );
 
-				if ( empty( $bundle ) ) {
-					$stm_lms_courses_meta = get_post_meta( $order_id, 'stm_lms_courses', true );
-
-					if ( is_array( $stm_lms_courses_meta ) && isset( $stm_lms_courses_meta[0]['bundle_id'] ) ) {
+				if ( is_array( $stm_lms_courses_meta ) ) {
+					if ( isset( $stm_lms_courses_meta[0]['bundle_id'] ) ) {
 						$bundle = $stm_lms_courses_meta[0]['bundle_id'];
+					} elseif ( isset( $stm_lms_courses_meta[0]['item_id'] ) ) {
+						$bundle = $stm_lms_courses_meta[0]['item_id'];
 					}
 				}
 
@@ -188,7 +189,13 @@ class STM_LMS_Order {
 					SELECT
 						p.ID AS course_id,
 						p.post_author,
-						pm.meta_value AS product_id
+						pm.meta_value AS product_id,
+						( SELECT meta_value 
+						FROM {$wpdb->prefix}woocommerce_order_itemmeta 
+						WHERE order_item_id = oim.order_item_id 
+								AND meta_key = '_line_total'
+						LIMIT 1
+						) AS price
 					FROM {$wpdb->prefix}posts p
 					INNER JOIN {$wpdb->prefix}postmeta pm ON pm.post_id = p.ID
 					INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta oim ON oim.meta_value = pm.meta_value
@@ -212,7 +219,8 @@ class STM_LMS_Order {
 					"
 					SELECT
 						oi.object_id AS course_id,
-						p.post_author
+						p.post_author,
+						oi.price
 					FROM {$wpdb->prefix}stm_lms_order_items oi
 					INNER JOIN {$wpdb->prefix}posts p ON oi.object_id = p.ID
 					WHERE oi.order_id = %d
@@ -226,8 +234,7 @@ class STM_LMS_Order {
 
 		foreach ( $courses as $course ) {
 			$terms      = stm_lms_get_terms_array( $course->course_id, 'stm_lms_course_taxonomy', 'name' );
-			$meta_price = get_post_meta( $course->course_id, 'price', true );
-			$price      = ! empty( $meta_price ) ? $meta_price : get_post_meta( $course->course_id, 'stm_lms_bundle_price', true );
+			$price      = $course->price;
 			$bundle_ids = get_post_meta( $course->course_id, 'stm_lms_bundle_ids', true );
 
 			$cart_items[ $course->course_id ] = array(

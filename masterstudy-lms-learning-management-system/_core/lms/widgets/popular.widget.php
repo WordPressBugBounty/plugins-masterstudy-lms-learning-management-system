@@ -56,15 +56,18 @@ class Stm_Lms_Popular_Courses extends WP_Widget {
 				<?php
 				while ( $r->have_posts() ) :
 					$r->the_post();
-					$post_id        = get_the_ID();
-					$meta           = STM_LMS_Helpers::parse_meta_field( $post_id );
-					$meta['price']  = $meta['price'] ?? '';
-					$is_sale_active = STM_LMS_Helpers::is_sale_price_active( $post_id );
-					$price          = ! empty( $meta['sale_price'] ) && $is_sale_active ? $meta['sale_price'] : $meta['price'];
-					$rates          = ! empty( $meta['course_marks'] ) ? STM_LMS_Course::course_average_rate( $meta['course_marks'] ) : array();
-					$not_salebale   = get_post_meta( $post_id, 'not_single_sale', true );
-					$content        = '';
-					if ( $not_salebale ) {
+					$post_id            = get_the_ID();
+					$meta               = STM_LMS_Helpers::parse_meta_field( $post_id );
+					$meta['price']      = $meta['price'] ?? '';
+					$is_sale_active     = STM_LMS_Helpers::is_sale_price_active( $post_id );
+					$price              = ! empty( $meta['sale_price'] ) && $is_sale_active ? $meta['sale_price'] : $meta['price'];
+					$sale_price         = ! empty( $meta['sale_price'] ) && $is_sale_active ? true : false;
+					$rates              = ! empty( $meta['course_marks'] ) ? STM_LMS_Course::course_average_rate( $meta['course_marks'] ) : array();
+					$single_sale        = get_post_meta( $post_id, 'single_sale', true );
+					$not_in_membership  = get_post_meta( $post_id, 'not_membership', true );
+					$course_free_status = masterstudy_lms_course_free_status( $single_sale, $price );
+					$content            = '';
+					if ( ! $single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership ) {
 						ob_start();
 						$subscription_image = STM_LMS_URL . '/assets/img/members_only.svg';
 						?>
@@ -88,22 +91,36 @@ class Stm_Lms_Popular_Courses extends WP_Widget {
 
 								<?php if ( ! empty( $content ) ) : ?>
 									<div><?php echo wp_kses_post( stm_lms_filtered_output( $content ) ); ?></div>
-								<?php else : ?>
-									<div class="stm_featured_product_price">
-										<div class="price <?php echo esc_attr( ( ! empty( $meta['price'] ) && 0 !== floatval( $meta['price'] ) ) ? 'price-pay' : 'price-free' ); ?>">
-											<?php echo esc_html( ( ! empty( $meta['price'] ) && 0 !== floatval( $meta['price'] ) ) ? STM_LMS_Helpers::display_price( $price ) : __( 'Free', 'masterstudy-lms-learning-management-system' ) ); ?>
+									<?php elseif ( $single_sale && ! $course_free_status['zero_price'] ) : ?>
+										<div class="stm_featured_product_price">
+											<div class="price price-pay">
+												<?php echo esc_html( STM_LMS_Helpers::display_price( $price ) ); ?>
+											</div>
+										</div>
+									<?php elseif ( $course_free_status['is_free'] ) : ?>
+										<div class="stm_featured_product_price">
+											<div class="price price-free">
+												<?php echo esc_html__( 'Free', 'masterstudy-lms-learning-management-system' ); ?>
+											</div>
+										</div>
+									<?php endif; ?>
+
+									<?php if ( ! empty( $rates ) ) : ?>
+									<div class="rating">
+										<div class="star-rating">
+											<span style="width:<?php echo ( ! empty( $rates ) ) ? floatval( $rates['percent'] ) . '%' : ''; ?>">&nbsp;</span>
 										</div>
 									</div>
 								<?php endif; ?>
-
-								<?php if ( ! empty( $rates ) ) : ?>
-								<div class="rating">
-									<div class="star-rating"><span
-												style="width:<?php echo ( ! empty( $rates ) ) ? floatval( $rates['percent'] ) . '%' : ''; ?>">&nbsp;</span>
-									</div>
+								<div class="expert">
+									<?php
+									printf(
+										/* translators: %s: string */
+										esc_html__( 'By %s', 'masterstudy-lms-learning-management-system' ),
+										get_the_author()
+									);
+									?>
 								</div>
-								<?php endif; ?>
-								<div class="expert"><?php printf( esc_html__( 'By %s', 'masterstudy-lms-learning-management-system' ), get_the_author() ); ?></div>
 							</div>
 						</a>
 					</li>

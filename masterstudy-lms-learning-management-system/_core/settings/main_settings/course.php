@@ -328,8 +328,14 @@ function stm_lms_settings_course_section() {
 			),
 			'columns'     => '50',
 		),
-		'enable_related_courses'     => array(
+		'enable_popular_courses'     => array(
 			'group'       => 'started',
+			'type'        => 'checkbox',
+			'label'       => esc_html__( 'Popular courses', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Display a section with the top-rated courses on the course page', 'masterstudy-lms-learning-management-system' ),
+			'value'       => true,
+		),
+		'enable_related_courses'     => array(
 			'type'        => 'checkbox',
 			'label'       => esc_html__( 'Related courses', 'masterstudy-lms-learning-management-system' ),
 			'description' => esc_html__( 'Show courses that are similar to the one being viewed', 'masterstudy-lms-learning-management-system' ),

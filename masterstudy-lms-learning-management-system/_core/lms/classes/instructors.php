@@ -413,15 +413,18 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					continue;
 				}
 
-				$rating            = get_post_meta( $id, 'course_marks', true );
-				$rates             = STM_LMS_Course::course_average_rate( $rating );
-				$average           = $rates['average'];
-				$percent           = $rates['percent'];
-				$status            = get_post_status( $id );
-				$price             = get_post_meta( $id, 'price', true );
-				$availability      = get_post_meta( $id, 'coming_soon_status', true );
-				$sale_price        = get_post_meta( $id, 'sale_price', true );
-				$sale_price_active = STM_LMS_Helpers::is_sale_price_active( $id );
+				$rating             = get_post_meta( $id, 'course_marks', true );
+				$rates              = STM_LMS_Course::course_average_rate( $rating );
+				$average            = $rates['average'];
+				$percent            = $rates['percent'];
+				$status             = get_post_status( $id );
+				$price              = get_post_meta( $id, 'price', true );
+				$availability       = get_post_meta( $id, 'coming_soon_status', true );
+				$sale_price         = get_post_meta( $id, 'sale_price', true );
+				$sale_price_active  = STM_LMS_Helpers::is_sale_price_active( $id );
+				$single_sale        = get_post_meta( $id, 'single_sale', true );
+				$not_in_membership  = get_post_meta( $id, 'not_membership', true );
+				$course_free_status = masterstudy_lms_course_free_status( $single_sale, $price );
 
 				switch ( $status ) {
 					case 'publish':
@@ -462,6 +465,10 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					'price'                       => STM_LMS_Helpers::display_price( $price ),
 					'simple_price'                => $sale_price_active && $sale_price ? $sale_price : $price,
 					'sale_price'                  => $sale_price ? STM_LMS_Helpers::display_price( $sale_price ) : 0,
+					'single_sale'                 => $single_sale,
+					'is_free'                     => $course_free_status['is_free'],
+					'zero_price'                  => $course_free_status['zero_price'],
+					'members_only'                => STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership,
 					'edit_link'                   => ms_plugin_manage_course_url() . "/$id",
 					'coming_soon_link'            => ms_plugin_manage_course_url() . "/$id/settings/access",
 					'post_status'                 => $post_status,
@@ -596,13 +603,14 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			if ( ! empty( $data['fields_type'] ) && 'custom' === $data['fields_type'] ) {
 				if ( ! empty( $data['fields'] ) ) {
 
-					$subject = esc_html__( 'New Instructor Application', 'masterstudy-lms-learning-management-system' );
-					$user    = STM_LMS_User::get_current_user( $user_id );
-
+					$subject    = esc_html__( 'New Instructor Application', 'masterstudy-lms-learning-management-system' );
+					$user       = STM_LMS_User::get_current_user( $user_id );
 					$user_login = $user['login'];
+
 					$email_data = array(
 						'user_login' => $user_login,
 						'user_id'    => $user_id,
+						'date'       => date( 'Y-m-d H:i:s' ),
 					);
 
 					foreach ( $data['fields'] as $field ) {
@@ -670,18 +678,41 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				update_user_meta( $user_id, 'submission_date', time() );
 				update_user_meta( $user_id, 'submission_status', 'pending' );
 
-				$user_login = $user['login'];
+				$user_info  = get_userdata( $user_id );
+				$first_name = get_user_meta( $user_id, 'first_name', true );
+				$last_name  = get_user_meta( $user_id, 'last_name', true );
+
+				if ( ! empty( $first_name ) && ! empty( $last_name ) ) {
+					// If both first name and last name are available, use both.
+					$display_name = $first_name . ' ' . $last_name;
+				} elseif ( ! empty( $first_name ) ) {
+					// If only first name is available, use it.
+					$display_name = $first_name;
+				} elseif ( ! empty( $last_name ) ) {
+					// If only last name is available, use it.
+					$display_name = $last_name;
+				} else {
+					// If both are empty, fall back to the user login.
+					$display_name = $user_info->user_login;
+				}
+
+				$user_login = $display_name ?? $user['login'];
 
 				$instructor_premoderation = STM_LMS_Options::get_option( 'instructor_premoderation', false );
 
-				$message = sprintf(
-					/* translators: %s User Login, User ID, Degree, Expertize */
-					__( 'User %1$s with id - %2$s, wants to become an Instructor. Degree - %3$s. Expertize - %4$s', 'masterstudy-lms-learning-management-system' ),
-					$user_login,
-					$user_id,
-					$degree,
-					$expertize
-				);
+				$date       = date( 'Y-m-d H:i:s' );
+				$user_email = $user['email'];
+
+				$message = esc_html__( 'You have received a new instructor application from ', 'masterstudy-lms-learning-management-system-pro' ) . $user_login . ', <br/>' . // phpcs:disable
+					esc_html__( 'Here are the details:', 'masterstudy-lms-learning-management-system-pro' ) . ' <br/>' .
+					'<b>' . esc_html__( 'Name: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $user_login . ' <br>' .
+					'<b>' . esc_html__( 'ID: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $user_id . ' <br>' .
+					'<b>' . esc_html__( 'Email: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $user_email . ' <br>' .
+					'<b>' . esc_html__( 'Degree: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $degree . ' <br>' .
+					'<b>' . esc_html__( 'Expertize: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $expertize . ' <br>' .
+					'<b>' . esc_html__( 'Application Date: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $date . ' <br><br>' .
+					esc_html__( 'Please review the application at your earliest convenience.', 'masterstudy-lms-learning-management-system-pro' ) . '</a> <br/><br/>'; // phpcs:enable
+
 				if ( ! $instructor_premoderation ) {
 					$update_user = wp_update_user(
 						array(
@@ -704,7 +735,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					$subject,
 					$message,
 					'stm_lms_become_instructor_email',
-					compact( 'user_login', 'user_id', 'degree', 'expertize' )
+					compact( 'user_login', 'user_id', 'user_email', 'date', 'degree', 'expertize' )
 				);
 			}
 		}

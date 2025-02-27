@@ -57,11 +57,12 @@ if ( ! empty( $course_ids ) ) { ?>
 		<ul class="masterstudy-related-courses__list">
 			<?php
 			foreach ( $course_ids as $course_id ) {
-				$related_course = ( new CourseRepository() )->find( $course_id, 'grid' );
-				$course_status  = STM_LMS_Course::get_post_status( $course_id );
-				$course_url     = STM_LMS_Course::courses_page_url() . $related_course->slug;
-				$is_sale_active = STM_LMS_Helpers::is_sale_price_active( $course_id );
-				$sale_price     = ! empty( $related_course->sale_price ) && $is_sale_active ? true : false;
+				$related_course     = ( new CourseRepository() )->find( $course_id, 'grid' );
+				$course_status      = STM_LMS_Course::get_post_status( $course_id );
+				$course_url         = STM_LMS_Course::courses_page_url() . $related_course->slug;
+				$is_sale_active     = STM_LMS_Helpers::is_sale_price_active( $course_id );
+				$sale_price         = ! empty( $related_course->sale_price ) && $is_sale_active ? true : false;
+				$course_free_status = masterstudy_lms_course_free_status( $related_course->single_sale, $related_course->price );
 
 				if ( $related_course->is_udemy_course ) {
 					$author_name = $related_course->udemy_instructor['display_name'];
@@ -85,26 +86,20 @@ if ( ! empty( $course_ids ) ) { ?>
 								<?php echo esc_html( stm_lms_minimize_word( $related_course->title, 40 ) ); ?>
 							</a>
 							<div class="masterstudy-related-courses__item-block">
-								<?php if ( $related_course->not_single_sale && STM_LMS_Subscriptions::subscription_enabled() ) { ?>
+								<?php if ( ! $related_course->single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $related_course->not_in_membership ) { ?>
 									<div class="masterstudy-related-courses__subscription">
 										<img class="masterstudy-related-courses__subscription-image" src="<?php echo esc_url( STM_LMS_URL . '/assets/img/members_only.svg' ); ?>" alt="<?php esc_attr_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>"/>
 										<div class="masterstudy-related-courses__subscription-title">
 											<?php esc_html_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>
 										</div>
 									</div>
-								<?php } else { ?>
+								<?php } elseif ( $related_course->is_udemy_course && ! $course_free_status['zero_price'] ) { ?>
 									<div class="masterstudy-related-courses__price <?php echo $sale_price ? 'masterstudy-related-courses__price_sale' : ''; ?>">
-										<?php
-										if ( $related_course->not_single_sale && ! $related_course->is_udemy_course ) {
-											echo esc_html__( 'Free', 'masterstudy-lms-learning-management-system' );
-										} else {
-											if ( $related_course->is_udemy_course ) {
-												echo esc_html( STM_LMS_Helpers::display_price( $related_course->price ) );
-											} else {
-												echo esc_html( ( ! empty( $related_course->price ) && 0 !== floatval( $related_course->price ) ) ? STM_LMS_Helpers::display_price( $related_course->price ) : __( 'Free', 'masterstudy-lms-learning-management-system' ) );
-											}
-										}
-										?>
+										<?php echo esc_html( STM_LMS_Helpers::display_price( $related_course->price ) ); ?>
+									</div>
+								<?php } elseif ( $related_course->single_sale && ! $course_free_status['zero_price'] ) { ?>
+									<div class="masterstudy-related-courses__price <?php echo $sale_price ? 'masterstudy-related-courses__price_sale' : ''; ?>">
+										<?php echo esc_html( STM_LMS_Helpers::display_price( $related_course->price ) ); ?>
 									</div>
 									<?php
 									if ( $sale_price ) {
@@ -114,6 +109,12 @@ if ( ! empty( $course_ids ) ) { ?>
 										</div>
 										<?php
 									}
+								} elseif ( $course_free_status['is_free'] ) {
+									?>
+									<div class="masterstudy-related-courses__price">
+										<?php echo esc_html__( 'Free', 'masterstudy-lms-learning-management-system' ); ?>
+									</div>
+									<?php
 								}
 								if ( ! empty( $related_course->rate ) && ! $related_course->is_udemy_course && $course_reviews ) {
 									?>

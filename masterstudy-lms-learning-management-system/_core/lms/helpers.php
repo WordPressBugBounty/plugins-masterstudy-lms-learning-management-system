@@ -1560,3 +1560,10 @@ function masterstudy_course_header_meta_data() {
 	}
 }
 add_action( 'wp_head', 'masterstudy_course_header_meta_data' );
+
+function masterstudy_lms_course_free_status( $single_sale, $price ) {
+	return array(
+		'is_free'    => $single_sale && 0.0 === floatval( $price ),
+		'zero_price' => empty( $price ) || 0.0 === floatval( $price ),
+	);
+}

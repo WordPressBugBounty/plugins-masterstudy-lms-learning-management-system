@@ -36,8 +36,10 @@ class STM_LMS_Course {
 		}
 
 		if ( ! empty( $course_id ) ) {
-			$not_salebale = get_post_meta( $course_id, 'not_single_sale', true );
-			if ( $not_salebale ) {
+			$single_sale       = get_post_meta( $course_id, 'single_sale', true );
+			$not_in_membership = get_post_meta( $course_id, 'not_membership', true );
+
+			if ( ! $single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership ) {
 				ob_start();
 				$subscription_image = STM_LMS_URL . '/assets/img/members_only.svg';
 				?>
@@ -647,6 +649,7 @@ class STM_LMS_Course {
 		$current_user_id                            = get_current_user_id();
 		$settings                                   = get_option( 'stm_lms_settings', array() );
 		$settings['enable_related_courses']         = $settings['enable_related_courses'] ?? false;
+		$settings['enable_popular_courses']         = $settings['enable_popular_courses'] ?? true;
 		$settings['course_allow_basic_info']        = $settings['course_allow_basic_info'] ?? false;
 		$settings['course_allow_requirements_info'] = $settings['course_allow_requirements_info'] ?? false;
 		$settings['course_allow_intended_audience'] = $settings['course_allow_intended_audience'] ?? false;

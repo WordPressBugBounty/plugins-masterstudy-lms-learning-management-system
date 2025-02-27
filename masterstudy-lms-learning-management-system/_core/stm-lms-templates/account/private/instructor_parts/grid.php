@@ -116,13 +116,23 @@ $reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 
 
 					<div class="stm_lms_instructor_courses__single--price heading_font"
-						v-if="course.sale_price && course.price">
+						v-if="course.single_sale && ! course.zero_price && course.sale_price && course.price">
 						<span>{{ course.price }}</span>
 						<strong>{{ course.sale_price }}</strong>
 					</div>
-					<div class="stm_lms_instructor_courses__single--price heading_font" v-else>
+					<div class="stm_lms_instructor_courses__single--price heading_font"
+						v-else-if="course.single_sale && ! course.zero_price && ! course.sale_price && course.price">
 						<strong>{{ course.price }}</strong>
 					</div>
+					<div class="stm_lms_instructor_courses__single--price heading_font"
+						v-else-if="course.is_free">
+						<strong><?php echo esc_html__( 'Free', 'masterstudy-lms-learning-management-system' ); ?></strong>
+					</div>
+					<div class="stm_lms_instructor_courses__single--price heading_font members_only"
+						v-else-if="! course.single_sale && course.members_only">
+						<strong><?php echo esc_html__( 'Members only', 'masterstudy-lms-learning-management-system' ); ?></strong>
+					</div>
+					<div class="stm_lms_instructor_courses__single--price heading_font" v-else ></div>
 				</div>
 
 				<div class="stm_lms_instructor_courses__single--featured heading_font"

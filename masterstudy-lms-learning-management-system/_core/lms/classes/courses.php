@@ -31,7 +31,8 @@ class STM_LMS_Courses {
 				MAX(CASE WHEN pm.meta_key = 'level' THEN pm.meta_value END) AS level,
 				MAX(CASE WHEN pm.meta_key = 'price' THEN pm.meta_value END) AS price,
 				MAX(CASE WHEN pm.meta_key = 'sale_price' THEN pm.meta_value END) AS sale_price,
-				MAX(CASE WHEN pm.meta_key = 'not_single_sale' THEN pm.meta_value END) AS not_single_sale,
+				MAX(CASE WHEN pm.meta_key = 'single_sale' THEN pm.meta_value END) AS single_sale,
+				MAX(CASE WHEN pm.meta_key = 'not_membership' THEN pm.meta_value END) AS not_in_membership,
 				MAX(CASE WHEN pm.meta_key = 'featured' THEN pm.meta_value END) AS featured,
 				MAX(CASE WHEN pm.meta_key = 'duration_info' THEN pm.meta_value END) AS duration_info,
 				MAX(CASE WHEN pm.meta_key = 'course_marks' THEN pm.meta_value END) AS course_marks
@@ -237,9 +238,9 @@ class STM_LMS_Courses {
 					'compare' => 'in',
 				),
 				array(
-					'key'     => 'not_single_sale',
+					'key'     => 'single_sale',
 					'value'   => 'on',
-					'compare' => '!=',
+					'compare' => '=',
 				),
 			),
 			'paid_courses' => array(
@@ -248,9 +249,17 @@ class STM_LMS_Courses {
 				'compare' => '>',
 			),
 			'subscription' => array(
-				'key'     => 'not_single_sale',
-				'value'   => 'on',
-				'compare' => '=',
+				'relation' => 'AND',
+				array(
+					'key'     => 'single_sale',
+					'value'   => 'on',
+					'compare' => '!=',
+				),
+				array(
+					'key'     => 'not_membership',
+					'value'   => 'on',
+					'compare' => '!=',
+				),
 			),
 		);
 		if ( ! empty( $value ) ) {
@@ -644,16 +653,9 @@ class STM_LMS_Courses {
 							'compare' => 'EXISTS',
 						),
 						array(
-							'relation' => 'OR',
-							array(
-								'key'     => 'not_single_sale',
-								'value'   => 'on',
-								'compare' => '!=',
-							),
-							array(
-								'key'     => 'not_single_sale',
-								'compare' => 'NOT EXISTS',
-							),
+							'key'     => 'single_sale',
+							'value'   => 'on',
+							'compare' => '=',
 						),
 					),
 				);
@@ -676,16 +678,9 @@ class STM_LMS_Courses {
 								),
 							),
 							array(
-								'relation' => 'OR',
-								array(
-									'key'     => 'not_single_sale',
-									'value'   => 'on',
-									'compare' => '!=',
-								),
-								array(
-									'key'     => 'not_single_sale',
-									'compare' => 'NOT EXISTS',
-								),
+								'key'     => 'single_sale',
+								'value'   => 'on',
+								'compare' => '=',
 							),
 						),
 					);
@@ -702,16 +697,9 @@ class STM_LMS_Courses {
 								'compare' => '>',
 							),
 							array(
-								'relation' => 'OR',
-								array(
-									'key'     => 'not_single_sale',
-									'value'   => 'on',
-									'compare' => '!=',
-								),
-								array(
-									'key'     => 'not_single_sale',
-									'compare' => 'NOT EXISTS',
-								),
+								'key'     => 'single_sale',
+								'value'   => 'on',
+								'compare' => '=',
 							),
 						),
 					);
@@ -721,9 +709,17 @@ class STM_LMS_Courses {
 			if ( in_array( 'subscription', $_GET['price'], true ) ) {
 				$args['meta_query']['subscription'][] = array(
 					array(
-						'key'     => 'not_single_sale',
-						'value'   => 'on',
-						'compare' => '=',
+						'relation' => 'AND',
+						array(
+							'key'     => 'single_sale',
+							'value'   => 'on',
+							'compare' => '!=',
+						),
+						array(
+							'key'     => 'not_membership',
+							'value'   => 'on',
+							'compare' => '!=',
+						),
 					),
 				);
 			}

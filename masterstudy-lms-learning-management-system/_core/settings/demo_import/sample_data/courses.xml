@@ -141,7 +141,7 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[single_sale]]></wp:meta_key>
-		<wp:meta_value><![CDATA[]]></wp:meta_value>
+		<wp:meta_value><![CDATA[on]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[free_course]]></wp:meta_key>
@@ -246,14 +246,6 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[course_marks]]></wp:meta_key>
 		<wp:meta_value><![CDATA[a:6:{i:104;i:3;i:162;i:5;i:126;i:5;i:107;i:5;i:111;i:3;i:169;i:3;}]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_start]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1530644400000]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_end]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1531681200000]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[status_dates_start]]></wp:meta_key>
@@ -389,7 +381,7 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 		</wp:postmeta>
 		<wp:postmeta>
 		<wp:meta_key><![CDATA[single_sale]]></wp:meta_key>
-		<wp:meta_value><![CDATA[]]></wp:meta_value>
+		<wp:meta_value><![CDATA[on]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[free_course]]></wp:meta_key>
@@ -494,14 +486,6 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[course_marks]]></wp:meta_key>
 		<wp:meta_value><![CDATA[a:6:{i:104;i:3;i:162;i:5;i:126;i:5;i:107;i:5;i:111;i:3;i:169;i:3;}]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_start]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1530644400000]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_end]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1531681200000]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[status_dates_start]]></wp:meta_key>
@@ -637,7 +621,7 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 		</wp:postmeta>
 		<wp:postmeta>
 		<wp:meta_key><![CDATA[single_sale]]></wp:meta_key>
-		<wp:meta_value><![CDATA[]]></wp:meta_value>
+		<wp:meta_value><![CDATA[on]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[free_course]]></wp:meta_key>
@@ -742,14 +726,6 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[course_marks]]></wp:meta_key>
 		<wp:meta_value><![CDATA[a:6:{i:104;i:3;i:162;i:5;i:126;i:5;i:107;i:5;i:111;i:3;i:169;i:3;}]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_start]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1530644400000]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_end]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1531681200000]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[status_dates_start]]></wp:meta_key>
@@ -889,7 +865,7 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 		</wp:postmeta>
 		<wp:postmeta>
 		<wp:meta_key><![CDATA[single_sale]]></wp:meta_key>
-		<wp:meta_value><![CDATA[]]></wp:meta_value>
+		<wp:meta_value><![CDATA[on]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[free_course]]></wp:meta_key>
@@ -994,14 +970,6 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[course_marks]]></wp:meta_key>
 		<wp:meta_value><![CDATA[a:6:{i:104;i:3;i:162;i:3;i:126;i:5;i:107;i:5;i:111;i:3;i:169;i:3;}]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_start]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1530644400000]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_end]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1531681200000]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[status_dates_start]]></wp:meta_key>
@@ -1137,7 +1105,7 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[single_sale]]></wp:meta_key>
-		<wp:meta_value><![CDATA[]]></wp:meta_value>
+		<wp:meta_value><![CDATA[on]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[free_course]]></wp:meta_key>
@@ -1242,14 +1210,6 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[course_marks]]></wp:meta_key>
 		<wp:meta_value><![CDATA[a:6:{i:104;i:5;i:162;i:5;i:126;i:5;i:107;i:5;i:111;i:5;i:169;i:3;}]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_start]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1530644400000]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_end]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1531681200000]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[status_dates_start]]></wp:meta_key>
@@ -1385,7 +1345,7 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[single_sale]]></wp:meta_key>
-		<wp:meta_value><![CDATA[]]></wp:meta_value>
+		<wp:meta_value><![CDATA[on]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[free_course]]></wp:meta_key>
@@ -1490,14 +1450,6 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[course_marks]]></wp:meta_key>
 		<wp:meta_value><![CDATA[a:6:{i:104;i:4;i:162;i:4;i:126;i:5;i:107;i:5;i:111;i:4;i:169;i:5;}]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_start]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1530644400000]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_end]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1531681200000]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[status_dates_start]]></wp:meta_key>
@@ -1629,7 +1581,7 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[single_sale]]></wp:meta_key>
-		<wp:meta_value><![CDATA[]]></wp:meta_value>
+		<wp:meta_value><![CDATA[on]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[free_course]]></wp:meta_key>
@@ -1734,14 +1686,6 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[course_marks]]></wp:meta_key>
 		<wp:meta_value><![CDATA[a:6:{i:104;i:5;i:162;i:5;i:126;i:5;i:107;i:5;i:111;i:5;i:169;i:5;}]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_start]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1530644400000]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_end]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1531681200000]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[status_dates_start]]></wp:meta_key>
@@ -1881,7 +1825,7 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[single_sale]]></wp:meta_key>
-		<wp:meta_value><![CDATA[]]></wp:meta_value>
+		<wp:meta_value><![CDATA[on]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[free_course]]></wp:meta_key>
@@ -1986,14 +1930,6 @@ I have spent a lot of time deconstructing what it takes to learn a game engine f
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[course_marks]]></wp:meta_key>
 		<wp:meta_value><![CDATA[a:6:{i:104;i:3;i:162;i:3;i:126;i:3;i:107;i:3;i:111;i:3;i:169;i:3;}]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_start]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1530644400000]]></wp:meta_value>
-		</wp:postmeta>
-							<wp:postmeta>
-		<wp:meta_key><![CDATA[sale_price_dates_end]]></wp:meta_key>
-		<wp:meta_value><![CDATA[1531681200000]]></wp:meta_value>
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[status_dates_start]]></wp:meta_key>

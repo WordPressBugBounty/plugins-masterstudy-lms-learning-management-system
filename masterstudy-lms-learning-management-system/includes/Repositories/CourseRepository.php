@@ -113,9 +113,9 @@ final class CourseRepository {
 					'compare' => 'in',
 				),
 				array(
-					'key'     => 'not_single_sale',
+					'key'     => 'single_sale',
 					'value'   => 'on',
-					'compare' => '!=',
+					'compare' => '=',
 				),
 			),
 			'paid_courses' => array(
@@ -124,9 +124,17 @@ final class CourseRepository {
 				'compare' => '>',
 			),
 			'subscription' => array(
-				'key'     => 'not_single_sale',
-				'value'   => 'on',
-				'compare' => '=',
+				'relation' => 'AND',
+				array(
+					'key'     => 'single_sale',
+					'value'   => 'on',
+					'compare' => '!=',
+				),
+				array(
+					'key'     => 'not_membership',
+					'value'   => 'on',
+					'compare' => '!=',
+				),
 			),
 		),
 	);
@@ -557,6 +565,7 @@ final class CourseRepository {
 	private function hydrate_courses( array $posts ): array {
 		$user_wishlist          = $this->get_user_wishlist();
 		$is_coming_soon_enabled = is_ms_lms_addon_enabled( 'coming_soon' );
+		$subscription_enabled   = \STM_LMS_Subscriptions::subscription_enabled();
 
 		foreach ( $posts as &$post ) {
 			$meta           = get_post_meta( $post->ID );
@@ -566,6 +575,7 @@ final class CourseRepository {
 			$extra_fields = array(
 				'price'                  => $meta['price'][0] ?? '',
 				'sale_price'             => \STM_LMS_Course::get_sale_price( $post->ID ),
+				'single_sale'            => $meta['single_sale'][0] ?? '',
 				'symbol'                 => \STM_LMS_Options::get_option( 'currency_symbol', '$' ),
 				'rating_visibility'      => \STM_LMS_Options::get_option( 'course_tab_reviews', true ),
 				'rating'                 => $meta['course_mark_average'][0] ?? 0,
@@ -589,7 +599,7 @@ final class CourseRepository {
 				'user_avatar'            => get_user_meta( get_current_user_id(), 'stm_lms_user_avatar', true ),
 				'coming_soon_status'     => $meta['coming_soon_status'][0] ?? '',
 				'coming_soon_start_time' => $is_coming_soon_enabled ? intval( masterstudy_lms_coming_soon_start_time( $post->ID ) ) : false,
-				'membership'             => $meta['not_single_sale'][0] ?? '',
+				'membership'             => $subscription_enabled && ! $meta['not_membership'][0] && ! $meta['single_sale'][0],
 				'trial'                  => $meta['shareware'][0] ?? null,
 			);
 
@@ -670,21 +680,22 @@ final class CourseRepository {
 	private function hydrate_grid( \WP_Post $post ): Course {
 		$meta = get_post_meta( $post->ID );
 
-		$course                   = new Course();
-		$course->id               = $post->ID;
-		$course->slug             = $post->post_name;
-		$course->owner            = $this->find_user( $post->post_author );
-		$course->title            = $post->post_title;
-		$course->not_single_sale  = (bool) ( $meta['not_single_sale'][0] ?? false );
-		$course->price            = floatval( $meta['price'][0] ?? 0 );
-		$course->sale_price       = floatval( $meta['sale_price'][0] ?? 0 );
-		$course->is_sale_active   = \STM_LMS_Helpers::is_sale_price_active( $post->ID );
-		$course->marks            = $this->get_course_marks( $post->ID );
-		$course->rate             = $this->get_course_rate( $course->marks );
-		$course->is_udemy_course  = $meta['udemy_course_id'][0] ?? false;
-		$course->udemy_instructor = $this->get_course_udemy_instructor( $post->ID );
-		$course->udemy_rate       = floatval( $meta['udemy_avg_rating'][0] ?? 0 );
-		$course->thumbnail        = $this->get_course_image( $post, 'img-300-225' );
+		$course                    = new Course();
+		$course->id                = $post->ID;
+		$course->slug              = $post->post_name;
+		$course->owner             = $this->find_user( $post->post_author );
+		$course->title             = $post->post_title;
+		$course->single_sale       = (bool) ( $meta['single_sale'][0] ?? true );
+		$course->not_in_membership = (bool) ( $meta['not_membership'][0] ?? false );
+		$course->price             = floatval( $meta['price'][0] ?? 0 );
+		$course->sale_price        = floatval( $meta['sale_price'][0] ?? 0 );
+		$course->is_sale_active    = \STM_LMS_Helpers::is_sale_price_active( $post->ID );
+		$course->marks             = $this->get_course_marks( $post->ID );
+		$course->rate              = $this->get_course_rate( $course->marks );
+		$course->is_udemy_course   = $meta['udemy_course_id'][0] ?? false;
+		$course->udemy_instructor  = $this->get_course_udemy_instructor( $post->ID );
+		$course->udemy_rate        = floatval( $meta['udemy_avg_rating'][0] ?? 0 );
+		$course->thumbnail         = $this->get_course_image( $post, 'img-300-225' );
 
 		return apply_filters( 'masterstudy_lms_popular_course_hydrate', $course, $meta );
 	}

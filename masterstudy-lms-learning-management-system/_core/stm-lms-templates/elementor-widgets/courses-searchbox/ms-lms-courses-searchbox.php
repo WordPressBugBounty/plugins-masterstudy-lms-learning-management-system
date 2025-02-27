@@ -32,7 +32,7 @@ if ( ! empty( $popup ) ) { ?>
 		?>
 		<div class="ms_lms_course_search_box__categories <?php echo ( ! empty( $categories_button_align ) ) ? esc_attr( $categories_button_align ) : ''; ?>">
 			<i class="stmlms-hamburger"></i>
-			<span><?php esc_html_e( 'Category', 'masterstudy' ); ?></span>
+			<span><?php esc_html_e( 'Category', 'masterstudy-lms-learning-management-system' ); ?></span>
 			<div class="ms_lms_course_search_box__categories_dropdown <?php echo ( ! empty( $categories_dropdown_align ) ) ? esc_attr( $categories_dropdown_align ) : ''; ?>">
 				<?php
 				STM_LMS_Templates::show_lms_template(

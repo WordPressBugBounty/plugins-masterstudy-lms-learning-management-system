@@ -111,16 +111,9 @@ if ( class_exists( 'STM_LMS_Helpers' ) ) :
 					),
 				),
 				array(
-					'relation' => 'OR',
-					array(
-						'key'     => 'not_single_sale',
-						'value'   => 'on',
-						'compare' => '!=',
-					),
-					array(
-						'key'     => 'not_single_sale',
-						'compare' => 'NOT EXISTS',
-					),
+					'key'     => 'single_sale',
+					'value'   => 'on',
+					'compare' => '=',
 				),
 			),
 		);

@@ -8,7 +8,7 @@
 
 $price             = get_post_meta( $post_id, 'price', true );
 $sale_price        = get_post_meta( $post_id, 'sale_price', true );
-$not_saleable      = get_post_meta( $post_id, 'not_single_sale', true );
+$single_sale       = get_post_meta( $post_id, 'single_sale', true );
 $not_in_membership = get_post_meta( $post_id, 'not_membership', true );
 $points_price      = get_post_meta( $post_id, 'points_price', true );
 $show_buttons      = apply_filters( 'stm_lms_pro_show_button', true, $post_id );
@@ -49,8 +49,8 @@ if ( $show_buttons ) :
 			'components/buy-button/paid-courses/buy-course',
 			array(
 				'attributes'        => $attributes,
-				'price'             => 'on' === $not_saleable ? '' : $price,
-				'sale_price'        => 'on' === $not_saleable ? '' : $sale_price,
+				'price'             => 'on' !== $single_sale ? '' : $price,
+				'sale_price'        => 'on' !== $single_sale ? '' : $sale_price,
 				'sale_price_active' => $sale_price_active,
 			)
 		);

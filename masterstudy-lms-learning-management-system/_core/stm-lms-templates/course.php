@@ -171,7 +171,9 @@
 				),
 			);
 		}
-		STM_LMS_Templates::show_lms_template( 'components/course/popular-courses', array( 'course' => $course_data['course'] ) );
+		if ( $course_data['settings']['enable_popular_courses'] ) {
+			STM_LMS_Templates::show_lms_template( 'components/course/popular-courses', array( 'course' => $course_data['course'] ) );
+		}
 		if ( is_active_sidebar( 'stm_lms_sidebar' ) ) {
 			?>
 			<div class="masterstudy-single-course-widgets">

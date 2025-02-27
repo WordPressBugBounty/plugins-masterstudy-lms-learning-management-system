@@ -121,7 +121,7 @@ function stm_lms_settings_general_section() {
 			'guest_checkout'                 => array(
 				'type'        => 'checkbox',
 				'label'       => esc_html__( 'Guest checkout', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'Enable guest checkout in WooCommerce to let students buy courses', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Allow guests to register an account during checkout', 'masterstudy-lms-learning-management-system' ),
 			),
 			'pro_banner_woo'                 => array(
 				'type'  => 'pro_banner',

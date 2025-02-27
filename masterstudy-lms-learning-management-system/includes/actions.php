@@ -204,3 +204,58 @@ function masterstudy_remove_admin_notices() {
 	}
 }
 add_action( 'admin_head', 'masterstudy_remove_admin_notices' );
+
+/**
+ * Hook for enrolling a user in courses after completing a WooCommerce checkout as a guest.
+ *
+ * This hook triggers when an order status changes to "completed".
+ * It ensures that users who purchased a course via WooCommerce Checkout as a guest
+ * and were automatically registered are properly enrolled in their courses.
+ *
+ * 🔹 Workflow:
+ * 1. Retrieve the user ID from the order.
+ * 2. Loop through the order items and get the `product_id`.
+ * 3. Check if the product is linked to a course and retrieve its `stm_lms_product_id`.
+ * 4. If the product is a bundle, fetch the course list from `stm_lms_bundle_ids`.
+ * 5. Enroll the user in all courses from the bundle using `STM_LMS_Course::add_user_course()`.
+ *
+ * ⚠️ Important: This only works for orders with the status "completed".
+ *
+ * @param int $order_id The order ID.
+ */
+add_action(
+	'woocommerce_order_status_completed',
+	function( $order_id ) {
+		$order   = wc_get_order( $order_id );
+		$user_id = $order->get_user_id();
+
+		if ( ! $user_id ) {
+			return;
+		}
+
+		foreach ( $order->get_items() as $item ) {
+			$product_id = $item->get_product_id();
+			$course_id  = get_post_meta( $product_id, 'stm_lms_product_id', true );
+
+			if ( ! $course_id ) {
+				continue;
+			}
+
+			$course_ids = array( $course_id );
+			$bundle_ids = get_post_meta( $course_id, 'stm_lms_bundle_ids', true );
+
+			if ( is_array( $bundle_ids ) && ! empty( $bundle_ids ) ) {
+				$course_ids = array_merge( $course_ids, $bundle_ids );
+			}
+
+			$course_ids = array_unique( $course_ids );
+
+			foreach ( $course_ids as $course ) {
+				STM_LMS_Course::add_user_course( $course, $user_id, 0, 0 );
+				STM_LMS_Course::add_student( $course );
+			}
+		}
+	},
+	10,
+	1
+);
