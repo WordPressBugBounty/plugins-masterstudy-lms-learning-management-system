@@ -558,7 +558,7 @@ class STM_LMS_User {
 			$login_url = '<a href="' . $login_url . '">' . $login_url . '</a>';
 		}
 
-		$subject    = esc_html__( 'You have successfully registered on the website.', 'masterstudy-lms-learning-management-system' );
+		$subject = esc_html__( 'You have successfully registered on the website.', 'masterstudy-lms-learning-management-system' );
 
 		/* translators: %s: User login. */
 		$message = sprintf( esc_html__( 'Hi %s', 'masterstudy-lms-learning-management-system' ), $user_login ) . '<br>';
@@ -643,10 +643,10 @@ class STM_LMS_User {
 				} else {
 					$avatar = get_avatar( $current_user->ID, $avatar_size );
 
-					preg_match( '/(src=["\'](.*?)["\'])/', $avatar, $match );
-					$split = preg_split( '/["\']/', $match[0] );
-					if ( is_array( $split ) && ! empty( $split[1] ) ) {
-						$avatar_url = $split[1];
+					if ( preg_match( '/src=["\']([^"\']+)["\']/', $avatar, $match ) ) {
+						$avatar_url = $match[1]; // Extract the URL directly
+					} else {
+						$avatar_url = $stm_lms_user_avatar; // Default to empty string if no match found
 					}
 				}
 			} else {
@@ -796,9 +796,9 @@ class STM_LMS_User {
 				$my_course            = ( intval( get_post_field( 'post_author', $id ) ) === intval( $user_id ) );
 				$is_free              = ( get_post_meta( $id, 'single_sale', true ) && empty( STM_LMS_Course::get_course_price( $id ) ) );
 				$is_bought            = STM_LMS_Order::has_purchased_courses( $user_id, $id );
-				$in_bundle            = isset( $course['bundle_id'] ) && ! empty( $course['bundle_id'] );
+				$in_bundle            = ! empty( $course['bundle_id'] );
 				$bought_by_membership = ! empty( $course['subscription_id'] );
-				$for_points           = isset( $course['for_points'] ) && ! empty( $course['for_points'] );
+				$for_points           = ! empty( $course['for_points'] );
 				$not_in_membership    = get_post_meta( $id, 'not_membership', true );
 				$only_for_membership  = ! $not_in_membership && ! $is_bought && ! $is_free && ! $in_enterprise && ! $in_bundle && ! $for_points;
 				$membership_level     = $subscription_enabled && STM_LMS_Subscriptions::user_has_subscription( $user_id );

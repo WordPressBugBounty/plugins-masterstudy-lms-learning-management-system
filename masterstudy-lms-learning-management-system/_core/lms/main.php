@@ -37,7 +37,6 @@ if ( class_exists( 'BuddyPress' ) ) {
 	require_once STM_LMS_PATH . '/lms/classes/buddypress.php';
 }
 
-
 /*Router*/
 require_once STM_LMS_PATH . '/lms/classes/class-wp-request.php';
 require_once STM_LMS_PATH . '/lms/classes/class-wp-middleware.php';

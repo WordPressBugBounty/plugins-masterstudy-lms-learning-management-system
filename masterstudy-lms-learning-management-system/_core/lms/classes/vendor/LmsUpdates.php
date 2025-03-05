@@ -43,6 +43,7 @@ abstract class LmsUpdates {
 		'3.5.5'  => array( 'lms_flush_rewrite_rules', 'lms_reset_page_routes' ), // Refresh Page Routes for Public Profile pages
 		'3.5.7'  => array( 'lms_rename_lazyload_settings' ),
 		'3.5.13' => array( 'lms_update_user_lesson_table' ), // Update User Lessons Table
+		'3.5.18' => array( 'lms_migration_order_lms_courses' ),
 	);
 
 	/**

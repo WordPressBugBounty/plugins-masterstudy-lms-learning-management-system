@@ -3,7 +3,6 @@
 namespace stmLms\Classes\Models\Admin;
 
 use stmLms\Classes\Models\StmOrderItems;
-use WP_User_Query;
 use \WP_List_Table;
 use stmLms\Classes\Vendor\Query;
 use stmLms\Classes\Models\StmOrder;
@@ -38,34 +37,32 @@ class StmStatisticsListTable extends WP_List_Table {
 	}
 
 	public function prepare_items() {
-		global $wpdb;
 		$this->_column_headers = $this->get_column_info();
 		$per_page              = $this->get_items_per_page( 'stm_lms_statistics_per_page', 10 );
 		$current_page          = $this->get_pagenum();
 		$this->items           = $this->getList( $per_page, $current_page );
 
-		$all_items = $this->getList( 99999999, 1 );
-		$orders    = wp_list_pluck( $all_items, 'post_id' );
-		$total     = 0;
-		foreach ( $orders as $order ) {
-			$status = get_post_meta( $order, 'status', true );
-			$woo_order = get_post_meta( $order, 'stm_lms_courses', true );
+		$all_items  = $this->getList( 99999999, 1 );
+		$orders_ids = wp_list_pluck( $all_items, 'post_id' );
+		$total      = 0;
+		foreach ( $orders_ids as $order_id ) {
+			$order       = wc_get_order( $order_id );
+			$order_items = ( ! empty( $order ) ) ? $order->get_items( apply_filters( 'woocommerce_purchase_order_item_types', 'line_item' ) ) : null;
+			$status      = get_post_meta( $order_id, 'status', true );
 
 			if ( ! empty( $status ) && 'completed' === $status ) {
-				$order_total = get_post_meta( $order, '_order_total', true );
+				$order_total = get_post_meta( $order_id, '_order_total', true );
 				if ( ! empty( $order_total ) ) {
 					$total += floatval( $order_total );
 				}
 			}
-			if ( ! empty( $woo_order ) && class_exists( 'WooCommerce' ) && 'completed' === wc_get_order( $order )->get_status() ) {
+			if ( ! empty( $order_items ) && class_exists( 'WooCommerce' ) && $order && 'completed' === $order->get_status() ) {
 				$order_total = 0;
-				if ( is_array( $woo_order ) ) {
-					foreach ( $woo_order as $item ) {
-						$order_total += ( intval( $item['price'] ) * intval( $item['quantity'] ) );
-					}
-				} else {
-					$order_total += ( intval( $woo_order['price'] ) * intval( $woo_order['quantity'] ) );
+
+				foreach ( $order->get_items( apply_filters( 'woocommerce_purchase_order_item_types', 'line_item' ) ) as $order_item ) {
+					$order_total += $order_item->get_total() * $order_item->get_quantity();
 				}
+
 				$total += floatval( $order_total );
 			}
 		}
@@ -186,13 +183,9 @@ class StmStatisticsListTable extends WP_List_Table {
 		$filter = $_GET['filter'] ?? array(); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		$id                = ( isset( $filter['id'] ) ) ? $filter['id'] : null;
-		$status            = ( isset( $filter['status'] ) ) ? $filter['status'] : null;
-		$total_price       = ( isset( $filter['total_price'] ) ) ? $filter['total_price'] : null;
 		$created_date_from = ( isset( $filter['created_date_from'] ) ) ? $filter['created_date_from'] : null;
 		$created_date_to   = ( isset( $filter['created_date_to'] ) ) ? $filter['created_date_to'] : null;
 
-		$author  = array();
-		$user    = array();
 		$_author = __( 'Search by Author', 'masterstudy-lms-learning-management-system' );
 		$_user   = __( 'Search by User', 'masterstudy-lms-learning-management-system' );
 
@@ -388,7 +381,6 @@ class StmStatisticsListTable extends WP_List_Table {
 	 * @return null|string|void
 	 */
 	public function column_default( $item, $colname ) {
-		global $wpdb;
 		$user  = null;
 		$price = null;
 		$type  = null;
@@ -437,7 +429,7 @@ class StmStatisticsListTable extends WP_List_Table {
 					if ( ! $item_post ) {
 						continue;
 					}
-					$author = $item->get_items_author( $type );
+					$author = $item->get_items_author();
 
 					$payout   = ( $item->transaction ) ? 'Yes' : 'No';
 					$content .= '<strong>' . __( 'Course', 'masterstudy-lms-learning-management-system' ) . ' </strong>: ' . $item_post->post_title . ' <br>

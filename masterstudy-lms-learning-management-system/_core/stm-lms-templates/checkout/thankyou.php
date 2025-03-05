@@ -82,31 +82,19 @@ $order_info = \STM_LMS_Order::get_order_info( $order_id );
 											<a href="<?php echo esc_url( $item['link'] ); ?>"><?php echo esc_html( $item['title'] ); ?></a>
 										<?php else : ?>
 											<em><?php echo esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' ); ?></em>
-											<?php
-										endif;
+										<?php endif; ?>
 
-										$additional_info  = '';
-										$enterprise_title = '';
-
-										foreach ( $order_info['items'] as $order_item ) {
-											if ( (int) $order_item['item_id'] === (int) $key ) {
-												if ( ! empty( $order_item['enterprise'] ) && '0' !== $order_item['enterprise'] ) {
-													$additional_info  = '<span class="order-status">enterprise</span>';
-													$enterprise_title = get_the_title( $order_item['enterprise'] );
-												} elseif ( ! empty( $order_item['bundle'] ) && '0' !== $order_item['bundle'] ) {
-													$additional_info = '<span class="order-status">bundle</span>';
-												}
-												break;
-											}
-										}
-
-										echo wp_kses_post( $additional_info );
-										?>
+										<?php if ( ! empty( $item['bundle'] ) ) : ?>
+											<span class="order-status"><?php echo esc_html__( 'bundle', 'masterstudy-lms-learning-management-system' ); ?></span>
+										<?php endif; ?>
+										<?php if ( ! empty( $item['enterprise'] ) ) : ?>
+											<span class="order-status"><?php echo esc_html__( 'enterprise', 'masterstudy-lms-learning-management-system' ); ?></span>
+										<?php endif; ?>
 									</div>
 									<div class="masterstudy-orders-course-info__category">
 										<?php
-										if ( ! empty( $enterprise_title ) ) {
-											echo esc_html__( 'for group', 'masterstudy-lms-learning-management-system' ) . ' ' . esc_html( $enterprise_title );
+										if ( ! empty( $item['enterprise'] ) ) {
+											printf( esc_html__( 'for group', 'masterstudy-lms-learning-management-system' ) . ' %s', esc_html( get_the_title( $item['enterprise'] ) ) );
 										} else {
 											echo esc_html( implode( ', ', $item['terms'] ) );
 										}

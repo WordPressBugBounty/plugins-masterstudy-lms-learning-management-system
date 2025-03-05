@@ -2,12 +2,14 @@
 
 namespace stmLms\Classes\Vendor;
 
+use Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableDataStore;
 use MasterStudy\Lms\Database\CurriculumMaterial;
 use MasterStudy\Lms\Database\CurriculumSection;
 use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Repositories\CurriculumSectionRepository;
 use MasterStudy\Lms\Utility\CourseGrade;
+use Automattic\WooCommerce\Utilities\OrderUtil;
 
 abstract class LmsUpdateCallbacks {
 
@@ -134,9 +136,9 @@ abstract class LmsUpdateCallbacks {
 					if ( is_numeric( $curriculum_item ) ) {
 						if ( ! empty( $current_section->id ) ) {
 							$current_material = ( new CurriculumMaterial() )->query()
-								->where( 'post_id', $curriculum_item )
-								->where( 'section_id', $current_section->id )
-								->findOne();
+																			->where( 'post_id', $curriculum_item )
+																			->where( 'section_id', $current_section->id )
+																			->findOne();
 
 							if ( ! $current_material ) {
 								$material_repository->create(
@@ -148,14 +150,11 @@ abstract class LmsUpdateCallbacks {
 									)
 								);
 
-								$material_order++;
+								$material_order ++;
 							}
 						}
 					} else {
-						$current_section = ( new CurriculumSection() )->query()
-							->where( 'course_id', $course->ID )
-							->where( 'title', urldecode( $curriculum_item ) )
-							->findOne();
+						$current_section = ( new CurriculumSection() )->query()->where( 'course_id', $course->ID )->where( 'title', urldecode( $curriculum_item ) )->findOne();
 
 						if ( ! $current_section ) {
 							$current_section = $section_repository->create(
@@ -166,7 +165,7 @@ abstract class LmsUpdateCallbacks {
 								)
 							);
 
-							$section_order++;
+							$section_order ++;
 						}
 
 						$material_order = 1;
@@ -532,7 +531,7 @@ abstract class LmsUpdateCallbacks {
 		// Patch is_gradable column
 		$course_ids = $wpdb->get_col(
 			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT DISTINCT cs.course_id FROM $course_sections_table AS cs JOIN $course_materials_table AS cm ON cs.id = cm.section_id WHERE cm.post_type IN(%s, %s)",
 				PostType::QUIZ,
 				PostType::ASSIGNMENT
@@ -544,7 +543,7 @@ abstract class LmsUpdateCallbacks {
 
 			$wpdb->query(
 				$wpdb->prepare(
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 					"UPDATE $user_courses_table SET is_gradable = 1 WHERE course_id IN ($placeholders)",
 					...$course_ids
 				)
@@ -553,7 +552,7 @@ abstract class LmsUpdateCallbacks {
 
 		if ( \STM_LMS_Helpers::is_pro_plus() ) {
 			$user_courses = $wpdb->get_results(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT user_id, course_id, MAX(user_course_id) AS latest_id FROM $user_courses_table WHERE is_gradable = 1 GROUP BY user_id, course_id",
 				ARRAY_A
 			);
@@ -586,6 +585,119 @@ abstract class LmsUpdateCallbacks {
 		}
 
 		update_option( 'stm_lms_settings', $settings );
+	}
+
+
+	public static function lms_migration_order_lms_courses() {
+		if ( ! class_exists( 'WooCommerce' ) || ! OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			return;
+		}
+
+		global $wpdb;
+
+		$wc_orders_table = OrdersTableDataStore::get_orders_table_name();
+		$query           = "SELECT pm.post_id as id, pm.meta_value as items FROM {$wc_orders_table} orders
+        LEFT JOIN {$wpdb->postmeta} pm ON pm.post_id = orders.id
+        WHERE pm.meta_key = %s AND pm.meta_value != %s AND orders.status IN ( '" . implode( "','", array_keys( wc_get_order_statuses() ) ) . "' )";
+
+		$order_lms_items = $wpdb->get_results(
+			$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$query,
+				'stm_lms_courses',
+				'a:0:{}'
+			),
+			ARRAY_A
+		);
+
+		if ( ! empty( $order_lms_items ) ) {
+			foreach ( $order_lms_items as $item ) {
+				$order_id = $item['id'];
+				$order    = wc_get_order( $order_id );
+				$items    = maybe_unserialize( $item['items'] );
+
+				if ( ! empty( $items ) && $order && is_a( $order, 'WC_Order' ) ) {
+					$order_items = $order->get_items( apply_filters( 'woocommerce_purchase_order_item_types', 'line_item' ) );
+
+					foreach ( $items as $course ) {
+						if ( false === get_post_status( $course['item_id'] ) ) {
+							continue;
+						}
+
+						$enterprise       = ! empty( $course['enterprise_id'] );
+						$bundle           = ! empty( $course['bundle_id'] );
+						$product_meta_key = $enterprise ? 'stm_lms_enterprise_id' : 'stm_lms_product_id';
+						$product_id       = get_post_meta( $course['item_id'], $product_meta_key, true );
+
+						/* Removing product, i.e. outdated course purchase method as duplicate in woocommerce products */
+						wp_delete_post( $product_id, true );
+
+						$order_item = array_filter(
+							$order_items,
+							function ( $item ) use ( $order, $product_id ) {
+								if ( ! is_a( $item, 'STM_Course_Order_Item_Product' ) ) {
+									return false;
+								}
+
+								return absint( $product_id ) === absint( get_metadata( 'order_item', $item->get_id(), '_product_id', true ) );
+							}
+						);
+						$order_item = ( ! empty( $order_item ) ) ? reset( $order_item ) : null;
+
+						if ( empty( $order_item ) || ! is_a( $order_item, 'STM_Course_Order_Item_Product' ) ) {
+							continue;
+						}
+
+						$order_item->update_meta_data( '_masterstudy_lms-course', 'yes' );
+						$order_item->set_product_id( $course['item_id'] );
+
+						if ( $enterprise ) {
+							$order_item->update_meta_data( '_enterprise_id', $course['enterprise_id'] );
+						}
+
+						if ( $bundle ) {
+							$order_item->update_meta_data( '_bundle_id', $course['bundle_id'] );
+						}
+					}
+
+					$order->save();
+				}
+			}
+
+			self::lms_products_remove_in_woocommerce();
+		}
+	}
+
+	public static function lms_products_remove_in_woocommerce() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		$query_lms_products = "SELECT p.ID FROM {$wpdb->posts} p
+        LEFT JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID AND p.post_type = 'product'
+        WHERE pm.meta_key = %s || pm.meta_key = %s AND pm.meta_value != ''";
+
+		$lms_products = $wpdb->get_col(
+			$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$query_lms_products,
+				'stm_lms_product_id',
+				'stm_lms_enterprise_id'
+			)
+		);
+
+		if ( ! empty( $lms_products ) ) {
+			foreach ( $lms_products as $lms_product_id ) {
+				if ( empty( $lms_product_id ) ) {
+					continue;
+				}
+
+				/* Removing product, i.e. outdated course purchase method as duplicate in woocommerce products */
+				wp_delete_post( $lms_product_id, true );
+			}
+		}
 	}
 
 	public static function lms_update_user_lesson_table() {

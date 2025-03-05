@@ -50,6 +50,24 @@ class StmOrderItems extends StmBaseModel {
 		return $wpdb->prefix . 'stm_lms_order_items';
 	}
 
+	public function get() {
+		global $wpdb;
+
+		// Escape the value
+		$object_id = $this->object_id;
+		$order_id  = $this->order_id;
+
+		// Get the table name
+		$table = static::get_table();
+
+		// Get the item
+		return $wpdb->get_row(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT * FROM {$table} io WHERE io.object_id = {$object_id} AND io.order_id = {$order_id}",
+			ARRAY_A
+		);
+	}
+
 	public static function get_searchable_fields() {
 		return array(
 			'id',
@@ -95,7 +113,9 @@ class StmOrderItems extends StmBaseModel {
 			$order_items->price       = $item['price'];
 			$order_items->quantity    = 1;
 			$order_items->transaction = 0;
-			$order_items->save();
+			if ( empty( $order_items->get() ) ) {
+				$order_items->save();
+			}
 		}
 	}
 
@@ -117,7 +137,9 @@ class StmOrderItems extends StmBaseModel {
 			$order_items->price       = ( isset( $cart_item['data'] ) ) ? $cart_item['data']->get_price() : 0;
 			$order_items->quantity    = $cart_item['quantity'];
 			$order_items->transaction = 0;
-			$order_items->save();
+			if ( empty( $order_items->get() ) ) {
+				$order_items->save();
+			}
 		}
 	}
 
@@ -135,14 +157,8 @@ class StmOrderItems extends StmBaseModel {
 	/**
 	 * @return string
 	 */
-	public function get_items_author( $type = 'Lms' ) {
-		$object_id = $this->object_id;
-
-		if ( 'WooCommerce' === $type ) {
-			$object_id = get_post_meta( $this->object_id, 'stm_lms_product_id', true );
-		}
-
-		$post = get_post( $object_id );
+	public function get_items_author() {
+		$post = $this->get_items_posts();
 
 		return ! empty( $post ) ? get_userdata( $post->post_author ) : false;
 	}

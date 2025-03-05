@@ -1,4 +1,5 @@
 <?php
+use MasterStudy\Lms\Plugin\PostType;
 
 STM_LMS_Order::init();
 
@@ -32,6 +33,54 @@ class STM_LMS_Order {
 
 		add_action( 'wp_ajax_get_pagination', 'STM_LMS_Order::get_pagination' );
 		add_action( 'wp_ajax_nopriv_get_pagination', 'STM_LMS_Order::get_pagination' );
+
+		add_action( 'plugins_loaded', array( self::class, 'loaded' ) );
+	}
+
+	public static function loaded() {
+		if ( STM_LMS_Cart::woocommerce_checkout_enabled() ) {
+			require_once STM_LMS_PATH . '/lms/classes/woocommerce/class-wc-product-cpt.php';
+			require_once STM_LMS_PATH . '/lms/classes/woocommerce/class-woocommerce-order-item.php';
+
+			add_action( 'init', array( self::class, 'woocommerce_init' ) );
+		}
+	}
+
+	public static function woocommerce_init() {
+		add_filter( 'woocommerce_get_order_item_classname', array( self::class, 'get_order_item_classname' ), 20, 2 );
+
+		add_filter( 'woocommerce_data_stores', array( self::class, 'set_course_data_store' ), 10, 1 );
+
+		add_filter( 'woocommerce_hidden_order_itemmeta', array( self::class, 'hidden_order_itemmeta' ), 20, 1 );
+	}
+
+	public static function get_order_item_classname( $classname, $item_type ) {
+		if ( in_array( $item_type, array( 'line_item', 'product' ), true ) ) {
+			$classname = 'STM_Course_Order_Item_Product';
+		}
+
+		return $classname;
+	}
+
+	/**
+	 * The woocommerce_data_stores filter sets the course post type in the product data store.
+	 *
+	 * @return array
+	 */
+	public static function set_course_data_store( $stores ) {
+		if ( STM_LMS_Cart::woocommerce_checkout_enabled() ) {
+			$stores['product'] = 'STM_Course_Data_Store_CPT';
+		}
+
+		return $stores;
+	}
+
+	public static function hidden_order_itemmeta( $items_meta ) {
+		$items_meta[] = '_enterprise_id';
+		$items_meta[] = '_bundle_id';
+		$items_meta[] = '_masterstudy_lms-course';
+
+		return $items_meta;
 	}
 
 	public static function ajax_get_order_info() {
@@ -65,52 +114,68 @@ class STM_LMS_Order {
 
 		$cart_items = array();
 		$total      = 0;
+		$subtotal   = 0;
+		$tax        = 0;
 
 		if ( isset( $order_meta['items'] ) && is_array( $order_meta['items'] ) ) {
-			foreach ( $order_meta['items'] as $course ) {
-				$terms = stm_lms_get_terms_array( $course['item_id'], 'stm_lms_course_taxonomy', 'name' );
+			foreach ( $order_meta['items'] as $order_item ) {
+				$item_id = $order_item['item_id'];
+				$terms   = stm_lms_get_terms_array( $item_id, 'stm_lms_course_taxonomy', 'name' );
 
-				$cart_items[ $course['item_id'] ] = array(
-					'thumbnail_id'    => get_post_thumbnail_id( $course['item_id'] ),
-					'title'           => get_the_title( $course['item_id'] ),
-					'link'            => get_the_permalink( $course['item_id'] ),
-					'image'           => get_the_post_thumbnail( $course['item_id'], 'img-300-225' ),
-					'image_url'       => get_the_post_thumbnail_url( $course['item_id'] ),
-					'image_full'      => get_the_post_thumbnail( $course['item_id'], 'full' ),
+				$cart_item = array(
+					'item_id'         => $item_id,
+					'thumbnail_id'    => get_post_thumbnail_id( $item_id ),
+					'title'           => ! empty( $order_item['title'] ) ? $order_item['title'] : get_the_title( $item_id ),
+					'link'            => get_the_permalink( $item_id ),
+					'image'           => get_the_post_thumbnail( $item_id, 'img-300-225' ),
+					'image_url'       => get_the_post_thumbnail_url( $item_id ),
+					'image_full'      => get_the_post_thumbnail( $item_id, 'full' ),
 					'placeholder'     => STM_LMS_URL . '/assets/img/image_not_found.png',
-					'price'           => $course['price'],
-					'terms'           => ! empty( $terms ) ? $terms : wp_list_pluck( get_the_terms( $course['item_id'], 'product_cat' ), 'name' ),
-					'price_formatted' => STM_LMS_Helpers::display_price( $course['price'] ),
+					'price'           => $order_item['price'],
+					'terms'           => ! empty( $terms ) ? $terms : wp_list_pluck( get_the_terms( $item_id, 'product_cat' ), 'name' ),
+					'price_formatted' => STM_LMS_Helpers::display_price( $order_item['price'] ),
 				);
-				$total                           += $course['price'] + ( isset( $course['tax'] ) ? $course['tax'] : 0 );
 
-				$bundle               = $course['bundle'] ?? null;
-				$stm_lms_courses_meta = get_post_meta( $order_id, 'stm_lms_courses', true );
+				$total    += $order_item['price'] + ( $order_item['tax'] ?? 0 );
+				$subtotal += $order_item['subtotal'];
+				$tax      += $order_item['tax'];
 
-				if ( is_array( $stm_lms_courses_meta ) ) {
-					if ( isset( $stm_lms_courses_meta[0]['bundle_id'] ) ) {
-						$bundle = $stm_lms_courses_meta[0]['bundle_id'];
-					} elseif ( isset( $stm_lms_courses_meta[0]['item_id'] ) ) {
-						$bundle = $stm_lms_courses_meta[0]['item_id'];
+				$cart_item['enterprise_id'] = ! empty( $order_item['enterprise_id'] ) ? $order_item['enterprise_id'] : null;
+				$cart_item['bundle_id']     = ! empty( $order_item['bundle_id'] ) ? $order_item['bundle_id'] : null;
+				$cart_item['enterprise']    = ! empty( $order_item['enterprise'] ) ? $order_item['enterprise'] : null;
+				$cart_item['bundle']        = ! empty( $order_item['bundle'] ) ? $order_item['bundle'] : null;
+
+				if ( ! empty( $order_item['downloads'] ) ) {
+					foreach ( $order_item['downloads'] as $download ) {
+						$cart_item['downloads'][] = array(
+							'name'                => $download['name'] ?? '',
+							'url'                 => $download['url'] ?? '',
+							'downloads_remaining' => $download['downloads_remaining'] ? $download['downloads_remaining'] : '∞',
+							'access_expires'      => $download['access_expires'] ?? __( 'Never', 'masterstudy-lms-learning-management-system' ),
+						);
 					}
 				}
 
-				if ( ! empty( $bundle ) && get_post( (int) $bundle ) ) {
-					$bundle_ids   = get_post_meta( (int) $bundle, 'stm_lms_bundle_ids', true );
-					$bundle_count = is_array( $bundle_ids ) ? count( $bundle_ids ) : 0;
-				} else {
-					$bundle_count = self::get_bundle_courses_count( $order_id );
+				$bundle          = ! empty( $cart_item['bundle_id'] ) ? $cart_item['bundle_id'] : $cart_item['bundle'];
+				$bundle_count    = self::get_bundle_courses_count( $bundle );
+				$enterprise      = ! empty( $cart_item['enterprise_id'] ) ? $cart_item['enterprise_id'] : $cart_item['enterprise'];
+				$enterprise_name = '';
+
+				if ( ! empty( $enterprise ) ) {
+					$enterprise_name = get_the_title( (int) $enterprise );
 				}
 
-				$cart_items[ $course['item_id'] ]['bundle_courses_count'] = $bundle_count;
-				$cart_items[ $course['item_id'] ]['enterprise_name']      = ( ! empty( $course['enterprise'] ) && '0' !== $course['enterprise'] && get_post( (int) $course['enterprise'] ) ) ? get_the_title( (int) $course['enterprise'] ) : '';
+				$cart_item['bundle_courses_count'] = $bundle_count;
+				$cart_item['enterprise_name']      = $enterprise_name;
+
+				$cart_items[] = $cart_item;
 			}
 		}
 
 		$i18n = self::translates();
 
 		$timezone = get_option( 'gmt_offset' );
-		$diff     = ( ! empty( $timezone ) ) ? $timezone * 60 * 60 : 0;
+		$diff     = ! empty( $timezone ) ? $timezone * 60 * 60 : 0;
 		$diff     = apply_filters( 'stm_lms_gmt_offset', $diff );
 
 		return array_merge(
@@ -124,6 +189,8 @@ class STM_LMS_Order {
 					: '',
 				'cart_items'     => $cart_items,
 				'total'          => STM_LMS_Helpers::display_price( $total ),
+				'subtotal'       => $tax > 0 ? STM_LMS_Helpers::display_price( $subtotal ) : null,
+				'tax'            => $tax > 0 ? STM_LMS_Helpers::display_price( $tax ) : null,
 				'user'           => isset( $order_meta['user_id'] )
 					? STM_LMS_User::get_current_user( $order_meta['user_id'] )
 					: null,
@@ -185,47 +252,31 @@ class STM_LMS_Order {
 		if ( STM_LMS_Cart::woocommerce_checkout_enabled() && function_exists( 'wc_get_order' ) ) {
 			$courses = $wpdb->get_results(
 				$wpdb->prepare(
-					"
-					SELECT
-						p.ID AS course_id,
-						p.post_author,
-						pm.meta_value AS product_id,
-						( SELECT meta_value 
-						FROM {$wpdb->prefix}woocommerce_order_itemmeta 
-						WHERE order_item_id = oim.order_item_id 
-								AND meta_key = '_line_total'
-						LIMIT 1
-						) AS price
-					FROM {$wpdb->prefix}posts p
-					INNER JOIN {$wpdb->prefix}postmeta pm ON pm.post_id = p.ID
-					INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta oim ON oim.meta_value = pm.meta_value
-					WHERE pm.meta_key = 'stm_lms_product_id'
-					AND p.post_type IN ('stm-courses', 'stm-course-bundles')
-					AND p.post_author = %d
-					AND oim.meta_key = '_product_id'
-					AND oim.order_item_id IN (
-						SELECT order_item_id
-						FROM {$wpdb->prefix}woocommerce_order_items oi
-						WHERE oi.order_id = %d
-					)
-					",
-					$current_user_id,
-					$order_id
+					"SELECT
+                        p.ID AS course_id,
+                        product_lookup.product_net_revenue as price,
+                        enterprise.meta_value as enterprise_id,
+                        bundle.meta_value as bundle_id
+                        FROM {$wpdb->posts} p
+                        INNER JOIN {$wpdb->prefix}wc_order_product_lookup product_lookup ON product_lookup.product_id = p.ID AND product_lookup.order_id = %d
+                        LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta enterprise ON enterprise.order_item_id = product_lookup.order_item_id AND enterprise.meta_key = '_enterprise_id'
+                        LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta bundle ON bundle.order_item_id = product_lookup.order_item_id AND bundle.meta_key = '_bundle_id'
+                        WHERE p.post_type IN ( %s, %s ) AND p.post_author = %d",
+					$order_id,
+					PostType::COURSE,
+					'stm-course-bundles',
+					$current_user_id
 				)
 			);
 		} else {
 			$courses = $wpdb->get_results(
 				$wpdb->prepare(
-					"
-					SELECT
-						oi.object_id AS course_id,
-						p.post_author,
-						oi.price
+					"SELECT oi.object_id AS course_id, oi.price, pm.meta_value as items
 					FROM {$wpdb->prefix}stm_lms_order_items oi
-					INNER JOIN {$wpdb->prefix}posts p ON oi.object_id = p.ID
+					INNER JOIN {$wpdb->posts} p ON oi.object_id = p.ID
+					INNER JOIN {$wpdb->postmeta} pm ON pm.post_id = oi.order_id AND pm.meta_key = 'items'
 					WHERE oi.order_id = %d
-					AND p.post_author = %d
-					",
+					AND p.post_author = %d",
 					$order_id,
 					$current_user_id
 				)
@@ -233,24 +284,47 @@ class STM_LMS_Order {
 		}
 
 		foreach ( $courses as $course ) {
-			$terms      = stm_lms_get_terms_array( $course->course_id, 'stm_lms_course_taxonomy', 'name' );
-			$price      = $course->price;
-			$bundle_ids = get_post_meta( $course->course_id, 'stm_lms_bundle_ids', true );
+			$terms = stm_lms_get_terms_array( $course->course_id, 'stm_lms_course_taxonomy', 'name' );
 
-			$cart_items[ $course->course_id ] = array(
-				'thumbnail_id'    => get_post_thumbnail_id( $course->course_id ),
-				'title'           => get_the_title( $course->course_id ),
-				'link'            => get_the_permalink( $course->course_id ),
-				'image'           => get_the_post_thumbnail( $course->course_id, 'img-300-225' ),
-				'image_full'      => get_the_post_thumbnail( $course->course_id, 'full' ),
-				'placeholder'     => STM_LMS_URL . '/assets/img/image_not_found.png',
-				'price'           => $price,
-				'bundle'          => is_array( $bundle_ids ) ? count( $bundle_ids ) : 0,
-				'terms'           => ! empty( $terms ) ? $terms : wp_list_pluck( get_the_terms( $course->course_id, 'product_cat' ), 'name' ),
-				'price_formatted' => STM_LMS_Helpers::display_price( $price ),
+			if ( ! empty( $course->items ) ) {
+				$items         = maybe_unserialize( $course->items );
+				$enterprise_id = wp_list_filter(
+					$items,
+					array(
+						'item_id'    => $course->course_id,
+						'enterprise' => true,
+					)
+				);
+
+				$course->enterprise_id = ! empty( $enterprise_id ) ? reset( $enterprise_id )['enterprise'] : null;
+
+				$bundle_id = wp_list_filter(
+					$items,
+					array(
+						'item_id' => $course->course_id,
+						'bundle'  => true,
+					)
+				);
+
+				$course->bundle_id = ! empty( $bundle_id ) ? reset( $bundle_id )['bundle'] : null;
+			}
+
+			$cart_items[] = array(
+				'thumbnail_id'         => get_post_thumbnail_id( $course->course_id ),
+				'title'                => get_the_title( $course->course_id ),
+				'link'                 => get_the_permalink( $course->course_id ),
+				'image'                => get_the_post_thumbnail( $course->course_id, 'img-300-225' ),
+				'image_full'           => get_the_post_thumbnail( $course->course_id, 'full' ),
+				'placeholder'          => STM_LMS_URL . '/assets/img/image_not_found.png',
+				'price'                => $course->price,
+				'terms'                => ! empty( $terms ) ? $terms : wp_list_pluck( get_the_terms( $course->course_id, 'product_cat' ), 'name' ),
+				'price_formatted'      => STM_LMS_Helpers::display_price( $course->price ),
+				'enterprise_id'        => ! empty( $course->enterprise_id ) ? $course->enterprise_id : null,
+				'bundle_id'            => ! empty( $course->bundle_id ) ? $course->bundle_id : null,
+				'bundle_courses_count' => self::get_bundle_courses_count( $course->bundle_id ),
 			);
 
-			$total += $price;
+			$total += $course->price;
 		}
 
 		$order_meta = apply_filters( 'stm_lms_order_details', array(), $order_id );
@@ -260,7 +334,7 @@ class STM_LMS_Order {
 
 		$i18n     = self::translates();
 		$timezone = get_option( 'gmt_offset' );
-		$diff     = ( ! empty( $timezone ) ) ? $timezone * 60 * 60 : 0;
+		$diff     = ! empty( $timezone ) ? $timezone * 60 * 60 : 0;
 		$diff     = apply_filters( 'stm_lms_gmt_offset', $diff );
 		$tax      = isset( $order_meta['items'] ) ? array_sum( array_column( $order_meta['items'], 'tax' ) ) : 0;
 
@@ -540,7 +614,7 @@ class STM_LMS_Order {
 		if ( isset( $course['enterprise_id'] ) && class_exists( 'STM_LMS_Enterprise_Courses' ) ) {
 			$group_users = STM_LMS_Enterprise_Courses::get_group_users( $course['enterprise_id'] );
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-			$in_enterprise = ( isset( $group_users ) && is_array( $group_users ) ) ? in_array( $user_id, $group_users ) : false;
+			$in_enterprise = ! empty( $group_users ) && is_array( $group_users ) && in_array( $user_id, $group_users );
 		}
 
 		return $in_enterprise;

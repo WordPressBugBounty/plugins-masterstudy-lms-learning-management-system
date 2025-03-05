@@ -83,11 +83,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   $(clone).find("[data-order-status]").text(order.status_name || order.status).addClass("".concat(order.status));
                   $(clone).find("[data-order-date]").text("".concat(order.date_formatted));
                   $(clone).find("[data-order-payment]").text(order.payment_code === 'wire_transfer' ? 'Wire transfer' : order.payment_code);
-                  var _loop = function _loop(key) {
+                  var _loop = function _loop() {
                     if (order.cart_items.hasOwnProperty(key)) {
                       var item = order.cart_items[key];
                       var matchingItem = order.items.find(function (i) {
-                        return i.item_id == key;
+                        return Number(i.item_id) === Number(item.item_id) || Number(i.enterprise_id) === Number(item.enterprise_id);
                       });
                       var additionalInfo = "";
                       if (matchingItem) {
@@ -102,7 +102,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     }
                   };
                   for (var key in order.cart_items) {
-                    _loop(key);
+                    _loop();
                   }
                   $(clone).find("[data-order-total]").text("".concat(order.total));
                   var detailsContainer = $(clone).find(".masterstudy-orders-course-info__details");

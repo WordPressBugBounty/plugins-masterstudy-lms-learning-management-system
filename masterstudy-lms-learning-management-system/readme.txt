@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.17
+Stable tag: 3.5.18
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,10 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.18 - 2025-03-05 =
+- **Fix:** Fixed an issue in the admin dashboard that happened when user avatars were disabled globally on site.
+- **Enhancement:** Added compatibility with WooCommerce High-Performance Order Storage.
+
 = 3.5.17 - 2025-02-27 =
 - **Enhancement:** Replaced the placeholder text in the Lesson Duration field in the course builder for audio, stream, text, video and Zoom lessons.
 - **Enhancement:** Updated the "Become Instructor" email template for new clients.
@@ -326,11 +330,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 = 3.5.14 - 2025-02-06 =
 - **Enhancement:** Added support for the File Manager addon to upload WebP, GIF, and SVG file types in the Course Builder.
 - **Fix:** Fixed an issue when selecting a certificate for SCORM courses was not possible.
-
-= 3.5.13 - 2025-02-03 =
-- **New Feature:** Added video and audio progression tracking to monitor watched time for video and audio lessons. (Pro)
-- **New Feature:** Added Strict Mode for video lessons, ensuring the 'Complete' button unlocks only after the video is fully watched. (Pro)
-- **New Feature:** Introduced the option to add timecodes to audio and video lessons for easy navigation. (Pro)
-- **Fix:** Fixed an issue where recorded audio in Assignments could not be played until a reply was sent. (Pro)
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
