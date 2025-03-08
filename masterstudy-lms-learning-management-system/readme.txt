@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.18
+Stable tag: 3.5.19
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,9 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.19 - 2025-03-07 =
+- **Fix:** Minor bug fixes.
+
 = 3.5.18 - 2025-03-05 =
 - **Fix:** Fixed an issue in the admin dashboard that happened when user avatars were disabled globally on site.
 - **Enhancement:** Added compatibility with WooCommerce High-Performance Order Storage.
@@ -326,9 +329,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fix:** Improved compatibility between PMPro, WPML, and MasterStudy LMS for better translation support.
 - **Fix:** Fixed an issue where the Login widget in the header did not apply a custom link correctly.
 - **Enhancement:** Added a search bar to quickly find settings and options in the plugin settings.
-
-= 3.5.14 - 2025-02-06 =
-- **Enhancement:** Added support for the File Manager addon to upload WebP, GIF, and SVG file types in the Course Builder.
-- **Fix:** Fixed an issue when selecting a certificate for SCORM courses was not possible.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
