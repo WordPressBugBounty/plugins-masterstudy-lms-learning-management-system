@@ -77,14 +77,18 @@ class STM_LMS_Chat {
 		$conversations = stm_lms_get_user_conversations( $user['id'] );
 		if ( ! empty( $conversations ) ) {
 			foreach ( $conversations as $conversation ) {
-				$companion_id = ( absint( $user_id ) === absint( $conversation['user_from'] ) ) ? $conversation['user_to'] : $conversation['user_from'];
-
+				$companion_id        = ( absint( $user_id ) === absint( $conversation['user_from'] ) ) ? $conversation['user_to'] : $conversation['user_from'];
+				$companion           = STM_LMS_User::get_current_user( $companion_id );
 				$conversation['ago'] = stm_lms_time_elapsed_string( wp_date( 'Y-m-d H:i:s', $conversation['timestamp'] ) );
+
+				// Remove Emails from response
+				unset( $companion['email'] );
+				unset( $user['email'] );
 
 				$response[] = array(
 					'conversation_info' => $conversation,
 					'me'                => $user,
-					'companion'         => STM_LMS_User::get_current_user( $companion_id ),
+					'companion'         => $companion,
 				);
 
 			}
@@ -117,11 +121,22 @@ class STM_LMS_Chat {
 
 		$messages = stm_lms_get_user_messages( $conversation_id, $user_id, array(), $just_send );
 
+		$users = array();
+
 		if ( ! empty( $messages ) ) {
 			foreach ( $messages as $message_key => $message ) {
+				$user_from_id = $message['user_from'];
+
+				if ( empty( $users[ $user_from_id ] ) ) {
+					$users[ $user_from_id ] = STM_LMS_User::get_current_user( $user_from_id );
+
+					// Remove Email from response
+					unset( $users[ $user_from_id ]['email'] );
+				}
+
 				$messages[ $message_key ]['message']   = STM_LMS_Quiz::deslash( nl2br( $message['message'] ) );
 				$messages[ $message_key ]['isOwner']   = ( absint( $user_id ) === absint( $message['user_from'] ) );
-				$messages[ $message_key ]['companion'] = STM_LMS_User::get_current_user( $message['user_from'] );
+				$messages[ $message_key ]['companion'] = $users[ $user_from_id ];
 				$messages[ $message_key ]['ago']       = stm_lms_time_elapsed_string( wp_date( 'Y-m-d H:i:s', $message['timestamp'] ) );
 			}
 		}
@@ -152,7 +167,7 @@ class STM_LMS_Chat {
 				foreach ( $conversations as $conversation ) {
 					if ( (int) $user_id === (int) $conversation['user_from'] ) {
 						$messages_num += $conversation['uf_new_messages'];
-					} else if ( (int) $user_id === (int) $conversation['user_to'] ) {
+					} elseif ( (int) $user_id === (int) $conversation['user_to'] ) {
 						$messages_num += $conversation['ut_new_messages'];
 					}
 				}

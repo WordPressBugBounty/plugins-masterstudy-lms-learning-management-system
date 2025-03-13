@@ -1,4 +1,5 @@
 <?php
+
 class STM_Course_Data_Store_CPT extends WC_Product_Data_Store_CPT implements WC_Object_Data_Store_Interface, WC_Product_Data_Store_Interface {
 	/**
 	 * Method to read a product from the database.
@@ -22,11 +23,11 @@ class STM_Course_Data_Store_CPT extends WC_Product_Data_Store_CPT implements WC_
 			);
 
 			if ( is_ms_lms_addon_enabled( 'enterprise_courses' ) ) {
-				$post_types[] = 'stm-ent-groups';
+				$post_types[] = MasterStudy\Lms\Plugin\PostType::COURSE_GROUPS;
 			}
 
 			if ( is_ms_lms_addon_enabled( 'course_bundle' ) ) {
-				$post_types[] = 'stm-course-bundles';
+				$post_types[] = MasterStudy\Lms\Plugin\PostType::COURSE_BUNDLES;
 			}
 		}
 		$post_object = get_post( $product->get_id() );
@@ -54,22 +55,30 @@ class STM_Course_Data_Store_CPT extends WC_Product_Data_Store_CPT implements WC_
 			)
 		);
 
-		$not_saleable      = get_post_meta( $post_object->ID, 'not_single_sale', true );
-		$price             = get_post_meta( $post_object->ID, 'price', true );
-		$sale_price        = get_post_meta( $post_object->ID, 'sale_price', true );
-		$sale_price_active = STM_LMS_Helpers::is_sale_price_active( $post_object->ID );
-		$thumbnail_id      = get_post_thumbnail_id( $post_object->ID );
+		if ( MasterStudy\Lms\Plugin\PostType::COURSE_BUNDLES === $post_object->post_type ) {
+			$price = MasterStudy\Lms\Pro\addons\CourseBundle\Repository\CourseBundleRepository::get_bundle_price( $post_object->ID );
 
-		if ( 'on' !== $not_saleable ) {
-			if ( $sale_price_active && ! empty( $price ) && ! empty( $sale_price ) ) {
-				$product->set_regular_price( $price );
-				$product->set_sale_price( $sale_price );
-				$product->set_price( $sale_price );
-			} else {
-				$product->set_regular_price( $price );
-				$product->set_price( $price );
+			$product->set_regular_price( $price );
+			$product->set_price( $price );
+		} else {
+			$not_saleable      = get_post_meta( $post_object->ID, 'not_single_sale', true );
+			$price             = get_post_meta( $post_object->ID, 'price', true );
+			$sale_price        = get_post_meta( $post_object->ID, 'sale_price', true );
+			$sale_price_active = STM_LMS_Helpers::is_sale_price_active( $post_object->ID );
+
+			if ( 'on' !== $not_saleable ) {
+				if ( $sale_price_active && ! empty( $price ) && ! empty( $sale_price ) ) {
+					$product->set_regular_price( $price );
+					$product->set_sale_price( $sale_price );
+					$product->set_price( $sale_price );
+				} else {
+					$product->set_regular_price( $price );
+					$product->set_price( $price );
+				}
 			}
 		}
+
+		$thumbnail_id = get_post_thumbnail_id( $post_object->ID );
 
 		$product->set_image_id( $thumbnail_id ?? null );
 		$product->set_virtual( true );
@@ -78,8 +87,6 @@ class STM_Course_Data_Store_CPT extends WC_Product_Data_Store_CPT implements WC_
 		$this->read_attributes( $product );
 		$this->read_downloads( $product );
 		$this->read_visibility( $product );
-		$this->read_product_data( $product );
-		$this->read_extra_data( $product );
 		$product->set_object_read( true );
 
 		do_action( 'woocommerce_product_read', $product->get_id() );

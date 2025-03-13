@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.19
+Stable tag: 3.5.20
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,12 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.20 - 2025-03-13 =
+- **Fix:** Resolved warnings in the Course Player when adding standalone questions to the question bank.
+- **Fix:** The Thank You page now displays correctly for guest checkout in WooCommerce.
+- **Fix:** SCORM courses now show the course name in the browser tab instead of a random post title (PRO).
+- **Fix:** Discounted course prices now always display correctly on the Shop page.
+
 = 3.5.19 - 2025-03-07 =
 - **Fix:** Minor bug fixes.
 
@@ -322,12 +328,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.5.16 - 2025-02-18 =
 - **Fix:** Minor bug fixes.
-
-= 3.5.15 - 2025-02-13 =
-- **Fix:** Resolved an issue where the header and footer of the Twenty Twenty-Four theme were not displayed on the Single Course Page.
-- **Fix:** Corrected the ampersand (&) in Lesson Names in Course Builder, which was displaying as Unicode after reuploading the page.
-- **Fix:** Improved compatibility between PMPro, WPML, and MasterStudy LMS for better translation support.
-- **Fix:** Fixed an issue where the Login widget in the header did not apply a custom link correctly.
-- **Enhancement:** Added a search bar to quickly find settings and options in the plugin settings.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

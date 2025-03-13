@@ -11,7 +11,8 @@ stm_lms_register_style( 'user-orders' );
 STM_LMS_Templates::show_lms_template( 'header' );
 
 $order_info = \STM_LMS_Order::get_order_info( $order_id );
-?>
+if ( ! empty( $order_info ) ) :
+	?>
 
 <div class="stm-lms-wrapper">
 	<div class="container">
@@ -202,5 +203,6 @@ $order_info = \STM_LMS_Order::get_order_info( $order_id );
 	</div>
 </div>
 
-<?php
+	<?php
+endif;
 STM_LMS_Templates::show_lms_template( 'footer' );

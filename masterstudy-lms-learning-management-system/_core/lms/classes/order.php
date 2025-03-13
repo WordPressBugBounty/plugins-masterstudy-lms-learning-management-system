@@ -92,23 +92,29 @@ class STM_LMS_Order {
 	}
 
 	public static function get_order_info( $order_id = '' ) {
-		$author_id = get_post_field( 'user_id', $order_id );
+		$checkout_enabled  = STM_LMS_Cart::woocommerce_checkout_enabled();
+		$order             = $checkout_enabled ? wc_get_order( $order_id ) : null;
+		$woocommerce_order = $order instanceof WC_Order;
+		$author_id         = $woocommerce_order ? $order->get_user_id() : get_post_field( 'user_id', $order_id );
 
-		if ( empty( $author_id ) ) {
-			$author_id = get_current_user_id();
-		}
-		if ( empty( $order_id ) || ! is_user_logged_in()
+		if ( empty( $order_id )
 			|| ( get_current_user_id() !== intval( $author_id )
 			&& ! current_user_can( 'manage_options' )
 			&& ! STM_LMS_Instructor::is_instructor() ) ) {
+			if ( ! $woocommerce_order ) {
+				STM_LMS_Templates::show_lms_template( 'stm-lms-login' );
+
+				return array();
+			}
 			die;
 		}
 
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );
-		$order_meta  = apply_filters( 'stm_lms_order_details', array(), $order_id );
 
-		if ( empty( $order_meta ) && ! STM_LMS_Cart::woocommerce_checkout_enabled() ) {
+		if ( $woocommerce_order ) {
+			$order_meta = apply_filters( 'stm_lms_order_details', array(), $order_id );
+		} else {
 			$order_meta = STM_LMS_Helpers::parse_meta_field( $order_id );
 		}
 
@@ -137,8 +143,8 @@ class STM_LMS_Order {
 				);
 
 				$total    += $order_item['price'] + ( $order_item['tax'] ?? 0 );
-				$subtotal += $order_item['subtotal'];
-				$tax      += $order_item['tax'];
+				$subtotal += ! empty( $order_item['subtotal'] ) ? $order_item['subtotal'] : 0;
+				$tax      += ! empty( $order_item['tax'] ) ? $order_item['tax'] : 0;
 
 				$cart_item['enterprise_id'] = ! empty( $order_item['enterprise_id'] ) ? $order_item['enterprise_id'] : null;
 				$cart_item['bundle_id']     = ! empty( $order_item['bundle_id'] ) ? $order_item['bundle_id'] : null;

@@ -1,11 +1,7 @@
 <?php
 stm_lms_register_style( 'admin/questions' );
-
-$quiz_media_type = STM_LMS_Options::get_option( 'quiz_media_type', 'upload' );
 ?>
-
 <div>
-
 	<!--Wrapper-->
 	<div class="stm_lms_questions_v2_wrapper">
 		<div class="stm_lms_curriculum_v2 stm_lms_questions_v2">
@@ -54,7 +50,7 @@ $quiz_media_type = STM_LMS_Options::get_option( 'quiz_media_type', 'upload' );
 									stm_lms_answers_load_template(
 										'image',
 										array(
-											'quiz_media_type' => $quiz_media_type,
+											'quiz_media_type' => 'upload',
 											'image_name'  => 'text_image',
 											'description' => 'text',
 										)
@@ -136,7 +132,7 @@ $quiz_media_type = STM_LMS_Options::get_option( 'quiz_media_type', 'upload' );
 									stm_lms_answers_load_template(
 										'image',
 										array(
-											'quiz_media_type' => $quiz_media_type,
+											'quiz_media_type' => 'upload',
 											'image_name'  => 'text_image',
 											'description' => 'text',
 										)
@@ -280,7 +276,7 @@ $quiz_media_type = STM_LMS_Options::get_option( 'quiz_media_type', 'upload' );
 											stm_lms_answers_load_template(
 												'image',
 												array(
-													'quiz_media_type' => $quiz_media_type,
+													'quiz_media_type' => 'upload',
 													'image_name' => 'question_image',
 													'description' => 'question',
 												)
@@ -295,7 +291,7 @@ $quiz_media_type = STM_LMS_Options::get_option( 'quiz_media_type', 'upload' );
 											stm_lms_answers_load_template(
 												'image',
 												array(
-													'quiz_media_type' => $quiz_media_type,
+													'quiz_media_type' => 'upload',
 													'image_name' => 'text_image',
 													'description' => 'text',
 												)

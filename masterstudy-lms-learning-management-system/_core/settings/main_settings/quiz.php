@@ -45,16 +45,6 @@ function stm_lms_settings_quiz_section() {
 				'value'       => 'unlimited',
 			),
 			'quiz_style'      => stm_lms_quiz_types(),
-			'quiz_media_type' => array(
-				'type'        => 'select',
-				'label'       => esc_html__( 'Media type', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'Select how users can attach media for quizzes', 'masterstudy-lms-learning-management-system' ),
-				'options'     => array(
-					'upload' => esc_html__( 'File Upload', 'masterstudy-lms-learning-management-system' ),
-					'url'    => esc_html__( 'URL (Text Input)', 'masterstudy-lms-learning-management-system' ),
-				),
-				'value'       => 'upload',
-			),
 			'pro_banner'      => array(
 				'type'  => 'pro_banner',
 				'label' => esc_html__( 'Question Media', 'masterstudy-lms-learning-management-system' ),

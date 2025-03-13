@@ -23,7 +23,7 @@ if ( ! empty( $question_bank ) && $question_bank->have_posts() ) { ?>
 				'content' => str_replace( '../../', site_url() . '/', stm_lms_filtered_output( get_the_content() ) ),
 			);
 			$question              = array_merge( $question_data, STM_LMS_Helpers::parse_meta_field( $question_data['id'] ) );
-			$question['view_type'] = $question['question_view_type'];
+			$question['view_type'] = $question['question_view_type'] ?? '';
 
 			wp_reset_postdata();
 			?>

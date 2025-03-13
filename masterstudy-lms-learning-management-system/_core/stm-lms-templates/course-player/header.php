@@ -36,7 +36,15 @@ $masterstudy_course_player_template = true;
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
-	<title><?php echo esc_html( $post->post_title ?? get_bloginfo( 'charset' ) ); ?></title>
+	<title>
+		<?php
+		if ( ! empty( $is_scorm_course ) && $is_scorm_course ) {
+			echo esc_html( $course_title );
+		} else {
+			echo esc_html( $post->post_title ?? get_bloginfo( 'charset' ) );
+		}
+		?>
+	</title>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
