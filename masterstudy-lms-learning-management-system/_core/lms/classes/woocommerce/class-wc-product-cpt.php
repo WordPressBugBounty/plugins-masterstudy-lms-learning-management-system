@@ -15,21 +15,19 @@ class STM_Course_Data_Store_CPT extends WC_Product_Data_Store_CPT implements WC_
 		$product->set_defaults();
 
 		if ( has_filter( 'masterstudy_woo_post_types' ) ) {
-			$post_types = apply_filters( 'masterstudy_woo_post_types', array( 'product' ) );
+			$lms_types = apply_filters( 'masterstudy_woo_post_types', array() );
 		} else {
-			$post_types = array(
-				MasterStudy\Lms\Plugin\PostType::COURSE,
-				'product',
-			);
+			$lms_types = array( MasterStudy\Lms\Plugin\PostType::COURSE );
 
 			if ( is_ms_lms_addon_enabled( 'enterprise_courses' ) ) {
-				$post_types[] = MasterStudy\Lms\Plugin\PostType::COURSE_GROUPS;
+				$lms_types[] = MasterStudy\Lms\Plugin\PostType::COURSE_GROUPS;
 			}
 
 			if ( is_ms_lms_addon_enabled( 'course_bundle' ) ) {
-				$post_types[] = MasterStudy\Lms\Plugin\PostType::COURSE_BUNDLES;
+				$lms_types[] = MasterStudy\Lms\Plugin\PostType::COURSE_BUNDLES;
 			}
 		}
+		$post_types  = array_merge( $lms_types, array( 'product' ) );
 		$post_object = get_post( $product->get_id() );
 
 		if ( ! $product->get_id() || ! $post_object || ! in_array( $post_object->post_type, $post_types, true ) ) {
@@ -87,6 +85,9 @@ class STM_Course_Data_Store_CPT extends WC_Product_Data_Store_CPT implements WC_
 		$this->read_attributes( $product );
 		$this->read_downloads( $product );
 		$this->read_visibility( $product );
+		if ( ! in_array( $post_object->post_type, $lms_types, true ) ) {
+			$this->read_product_data( $product );
+		}
 		$product->set_object_read( true );
 
 		do_action( 'woocommerce_product_read', $product->get_id() );
