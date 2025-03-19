@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.21
+Stable tag: 3.5.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,10 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.22 - 2025-03-19 =
+- **Enhancement:** Added a setting to display password strength and enable weak password registration.
+- **Enhancement:** Introduced an option to show or hide the "Have a Question?" form in profile settings.
+
 = 3.5.21 - 2025-03-17 =
 - **Fix:** Virtual WooCommerce products incorrectly displaying as free when WooCommerce checkout is enabled. (Pro)
 
@@ -328,8 +332,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Enhancement:** Added a setting to display popular courses on the single course page.
 - **Fix:** Added the ability to translate the word "Category" in the Course Search Box widget.
 - **Fix:** Fixed an issue with the Gutenberg editor when adding the Masterstudy Adaptive Container widget.
-
-= 3.5.16 - 2025-02-18 =
-- **Fix:** Minor bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

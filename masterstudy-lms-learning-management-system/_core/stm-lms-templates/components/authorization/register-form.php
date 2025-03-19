@@ -4,6 +4,8 @@
  * @var array $additional_fields
  * @var array $instructor_fields
  * @var boolean $only_for_instructor
+ * @var boolean $strength_password
+ * @var boolean $weak_password
  * @var boolean $separate_instructor_registration
  * @var boolean $disable_instructor
  * @var boolean $is_logged_in
@@ -22,10 +24,20 @@
 			</div>
 			<div class="masterstudy-authorization__form-field">
 				<input type="password" name="register_user_password" class="masterstudy-authorization__form-input masterstudy-authorization__form-input_pass" placeholder="<?php echo esc_html__( 'Enter password', 'masterstudy-lms-learning-management-system' ); ?>">
+				<?php if ( ! empty( $strength_password ) ) : ?>
+				<div class="masterstudy-authorization__strength-password">
+					<div class="masterstudy-authorization__strength-password__separator"></div>
+					<div class="masterstudy-authorization__strength-password__separator"></div>
+					<div class="masterstudy-authorization__strength-password__separator"></div>
+					<div class="masterstudy-authorization__strength-password__separator"></div>
+				</div>
+				<?php endif; ?>
 				<span class="masterstudy-authorization__form-show-pass"></span>
+				<?php if ( empty( $weak_password ) ) : ?>
 				<span class="masterstudy-authorization__form-explain-pass">
 					<?php echo esc_html__( 'The password must have a minimum of 8 characters of numbers and letters, contain at least 1 capital letter', 'masterstudy-lms-learning-management-system' ); ?>
 				</span>
+				<?php endif; ?>
 			</div>
 			<div class="masterstudy-authorization__form-field">
 				<input type="password" name="register_user_password_re" class="masterstudy-authorization__form-input masterstudy-authorization__form-input_pass" placeholder="<?php echo esc_html__( 'Repeat password', 'masterstudy-lms-learning-management-system' ); ?>">

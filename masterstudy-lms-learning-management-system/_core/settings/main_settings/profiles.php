@@ -125,6 +125,12 @@ function stm_lms_settings_profiles_section() {
 			'submenu' => $submenu_general,
 			'pro'     => true,
 		),
+		'have_a_question_form'              => array(
+			'type'        => 'checkbox',
+			'label'       => esc_html__( 'Have a question form', 'masterstudy-lms-learning-management-system' ),
+			'value'       => true,
+			'submenu'     => $submenu_general,
+		),
 		'instructors_page'                  => array(
 			'type'        => 'select',
 			'label'       => esc_html__( 'Instructors archive page', 'masterstudy-lms-learning-management-system' ),
@@ -298,6 +304,21 @@ function stm_lms_settings_profiles_section() {
 				'value' => 'not_empty',
 			),
 			'readonly'    => true,
+		),
+		'registration_strength_password'    => array(
+			'group'       => 'started',
+			'group_title' => esc_html__( 'Password requirements', 'masterstudy-lms-learning-management-system' ),
+			'type'        => 'checkbox',
+			'label'       => esc_html__( 'Show password strength', 'masterstudy-lms-learning-management-system' ),
+			'submenu'     => $submenu_auth,
+			'value'       => false,
+		),
+		'registration_weak_password'        => array(
+			'group'   => 'ended',
+			'type'    => 'checkbox',
+			'label'   => esc_html__( 'Allow weak passwords', 'masterstudy-lms-learning-management-system' ),
+			'submenu' => $submenu_auth,
+			'value'   => false,
 		),
 	);
 

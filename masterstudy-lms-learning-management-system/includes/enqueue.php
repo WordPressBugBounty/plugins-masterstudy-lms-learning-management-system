@@ -33,6 +33,6 @@ function masterstudy_lms_course_player_register_assets() {
 	wp_register_script( 'masterstudy-course-player-quiz', STM_LMS_URL . '/assets/js/course-player/content/quiz.js', array( 'jquery', 'jquery-ui-sortable' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-course-player-question', STM_LMS_URL . '/assets/js/course-player/content/questions.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'jspdf', STM_LMS_URL . '/assets/vendors/jspdf.umd.js', array(), MS_LMS_VERSION, false );
-	wp_register_script( 'masterstudy-course-player-certificate', STM_LMS_URL . '/assets/js/course-player/generate-certificate.js', array( 'jspdf', 'masterstudy_certificate_fonts' ), MS_LMS_VERSION, false );
+	wp_register_script( 'masterstudy-course-player-certificate', STM_LMS_URL . '/assets/js/course-player/generate-certificate.js', array( 'jspdf' ), MS_LMS_VERSION, false );
 }
 add_action( 'masterstudy_lms_course_player_register_assets', 'masterstudy_lms_course_player_register_assets' );

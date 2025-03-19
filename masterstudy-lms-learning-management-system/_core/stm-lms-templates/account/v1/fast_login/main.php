@@ -71,6 +71,15 @@ wp_enqueue_style( 'masterstudy-button' );
 					class="stm_lms_fast_login__input stm_lms_fast_login__input_pass"
 					placeholder="<?php echo esc_html__( 'Enter your password', 'masterstudy-lms-learning-management-system' ); ?>"
 				>
+				<?php if ( ! empty( STM_LMS_Options::get_option( 'registration_strength_password', false ) ) ) : ?>
+				<div class="masterstudy-authorization__strength-password" :class="passwordStrengthClass">
+					<div v-for="(separator, index) in 4" :key="index"
+						class="masterstudy-authorization__strength-password__separator"
+						:class="{'active': index < passwordStrength}">
+					</div>
+				</div>
+				<span class="masterstudy-authorization__strength-password__label">{{ passwordStrengthText }}</span>
+				<?php endif; ?>
 				<span v-for="error in errors" :key="error.id" v-if="error.field === 'password'" :data-id="error.id" class="stm_lms_fast_login__error">
 					{{ error.text }}
 				</span>

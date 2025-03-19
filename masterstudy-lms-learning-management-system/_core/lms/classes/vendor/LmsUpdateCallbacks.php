@@ -707,4 +707,54 @@ abstract class LmsUpdateCallbacks {
 			stm_lms_user_lessons();
 		}
 	}
+
+	public static function lms_update_certificate_fonts() {
+		global $wpdb;
+
+		$meta_key = 'stm_fields';
+		$font_replacements = array(
+			'OpenSans' => 'Open Sans',
+			'MPLUS2'   => 'M PLUS 2',
+		);
+
+		$results = $wpdb->get_results(
+			$wpdb->prepare( "SELECT meta_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s", $meta_key ),
+			ARRAY_A
+		);
+
+		if ( empty( $results ) ) {
+			return;
+		}
+
+		foreach ( $results as $row ) {
+			$meta_id    = $row['meta_id'];
+			$meta_value = json_decode( $row['meta_value'], true );
+
+			if ( ! is_array( $meta_value ) ) {
+				continue;
+			}
+
+			$updated = false;
+
+			array_walk_recursive(
+				$meta_value,
+				function ( &$value, $key ) use ( $font_replacements, &$updated ) {
+					if ( 'fontFamily' === $key && isset( $font_replacements[ $value ] ) ) {
+						$value   = $font_replacements[ $value ];
+						$updated = true;
+					}
+				}
+			);
+
+			if ( $updated ) {
+				$wpdb->update(
+					$wpdb->postmeta,
+					array( 'meta_value' => json_encode( $meta_value, JSON_UNESCAPED_UNICODE ) ),
+					array( 'meta_id' => $meta_id ),
+					array( '%s' ),
+					array( '%d' ),
+				);
+			}
+		}
+	}
 }

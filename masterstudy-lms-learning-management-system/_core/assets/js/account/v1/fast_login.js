@@ -19,6 +19,29 @@
           status: ''
         };
       },
+      computed: {
+        passwordStrength: function passwordStrength() {
+          return this.getPasswordStrength(this.password);
+        },
+        passwordStrengthText: function passwordStrengthText() {
+          var _masterstudy_authoriz, _masterstudy_authoriz2, _masterstudy_authoriz3, _masterstudy_authoriz4;
+          var strengthLevels = {
+            1: ((_masterstudy_authoriz = masterstudy_authorization_data) === null || _masterstudy_authoriz === void 0 ? void 0 : _masterstudy_authoriz.bad) || "Bad",
+            2: ((_masterstudy_authoriz2 = masterstudy_authorization_data) === null || _masterstudy_authoriz2 === void 0 ? void 0 : _masterstudy_authoriz2.normal) || "Normal",
+            3: ((_masterstudy_authoriz3 = masterstudy_authorization_data) === null || _masterstudy_authoriz3 === void 0 ? void 0 : _masterstudy_authoriz3.good) || "Good",
+            4: ((_masterstudy_authoriz4 = masterstudy_authorization_data) === null || _masterstudy_authoriz4 === void 0 ? void 0 : _masterstudy_authoriz4.hard) || "Hard"
+          };
+          return strengthLevels[this.passwordStrength] || "";
+        },
+        passwordStrengthClass: function passwordStrengthClass() {
+          return {
+            'bad': this.passwordStrength === 1,
+            'normal': this.passwordStrength === 2,
+            'good': this.passwordStrength === 3,
+            'hard': this.passwordStrength === 4
+          };
+        }
+      },
       methods: {
         logIn: function logIn() {
           var vm = this;
@@ -74,6 +97,23 @@
           return this.errors.some(function (error) {
             return error.field === fieldName;
           });
+        },
+        getPasswordStrength: function getPasswordStrength(password) {
+          if (!password) return 0;
+          var length = password.length;
+          var hasLower = /[a-z]/.test(password);
+          var hasUpper = /[A-Z]/.test(password);
+          var hasNumber = /[0-9]/.test(password);
+          if (length >= 8 && length <= 11 && hasLower && hasUpper && hasNumber) {
+            return 2;
+          }
+          if (length >= 12 && length <= 15 && hasLower && hasUpper && hasNumber) {
+            return 3;
+          }
+          if (length >= 16 && hasLower && hasUpper && hasNumber) {
+            return 4;
+          }
+          return 1;
         }
       }
     });

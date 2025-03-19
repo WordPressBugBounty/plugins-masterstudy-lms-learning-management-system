@@ -147,6 +147,16 @@ function stm_lms_enqueue_component_scripts() {
 	/*Components scripts registration*/
 	wp_register_script( 'masterstudy-authorization-main', STM_LMS_URL . '/assets/js/components/authorization/main.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-authorization-ajax', STM_LMS_URL . '/assets/js/components/authorization/ajax.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_localize_script(
+		'masterstudy-authorization-ajax',
+		'masterstudy_authorization_data',
+		array(
+			'bad'    => esc_html__( 'Bad', 'masterstudy-lms-learning-management-system' ),
+			'normal' => esc_html__( 'Normal', 'masterstudy-lms-learning-management-system' ),
+			'good'   => esc_html__( 'Good', 'masterstudy-lms-learning-management-system' ),
+			'hard'   => esc_html__( 'Hard', 'masterstudy-lms-learning-management-system' ),
+		)
+	);
 	wp_register_script( 'masterstudy-authorization-new-pass', STM_LMS_URL . '/assets/js/components/authorization/new-pass.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-countdown', STM_LMS_URL . '/assets/js/components/countdown.js', array( 'jquery', 'jquery.countdown', 'js.countdown' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-curriculum-accordion', STM_LMS_URL . 'assets/js/components/curriculum-accordion.js', array( 'jquery' ), MS_LMS_VERSION, true );

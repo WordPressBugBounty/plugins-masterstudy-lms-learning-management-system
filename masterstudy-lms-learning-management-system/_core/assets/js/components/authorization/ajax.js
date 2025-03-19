@@ -20,6 +20,43 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           }
         }
       });
+      var $strengthContainer = $('.masterstudy-authorization__strength-password');
+      var $separators = $strengthContainer.find('.masterstudy-authorization__strength-password__separator');
+      if ($strengthContainer.find('.masterstudy-authorization__strength-password__label').length === 0) {
+        $strengthContainer.append('<div class="masterstudy-authorization__strength-password__label"></div>');
+      }
+      var $label = $strengthContainer.find('.masterstudy-authorization__strength-password__label');
+      $('input[name="register_user_password"]').on('input', function () {
+        var password = $(this).val();
+        var strength = getPasswordStrength(password);
+        var strengthText = '';
+        $strengthContainer.removeClass("bad normal good hard");
+        switch (strength) {
+          case 1:
+            $strengthContainer.addClass("bad");
+            strengthText = masterstudy_authorization_data.bad || "Bad";
+            break;
+          case 2:
+            $strengthContainer.addClass("normal");
+            strengthText = masterstudy_authorization_data.normal || "Normal";
+            break;
+          case 3:
+            $strengthContainer.addClass("good");
+            strengthText = masterstudy_authorization_data.good || "Good";
+            break;
+          case 4:
+            $strengthContainer.addClass("hard");
+            strengthText = masterstudy_authorization_data.hard || "Hard";
+            break;
+        }
+        $label.text(strengthText);
+        $separators.removeClass('active');
+        $separators.each(function (index) {
+          if (index < strength) {
+            $(this).addClass('active');
+          }
+        });
+      });
       formContainer.find('[data-id="masterstudy-authorization-login-button"]').click(function (e) {
         e.preventDefault();
         var login_data = {
@@ -100,6 +137,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     });
   });
+  function getPasswordStrength(password) {
+    if (!password) return 0;
+    var length = password.length;
+    var hasLower = /[a-z]/.test(password);
+    var hasUpper = /[A-Z]/.test(password);
+    var hasNumber = /[0-9]/.test(password);
+    if (length >= 8 && length <= 11 && hasLower && hasUpper && hasNumber) {
+      return 2;
+    }
+    if (length >= 12 && length <= 15 && hasLower && hasUpper && hasNumber) {
+      return 3;
+    }
+    if (length >= 16 && hasLower && hasUpper && hasNumber) {
+      return 4;
+    }
+    return 1;
+  }
   function processFields(fields, formContainer) {
     if (fields.length > 0) {
       var _iterator = _createForOfIteratorHelper(fields),

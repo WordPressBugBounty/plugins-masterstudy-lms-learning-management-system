@@ -13,6 +13,16 @@
 wp_enqueue_style( 'masterstudy-authorization' );
 wp_enqueue_script( 'masterstudy-authorization-main' );
 wp_enqueue_script( 'masterstudy-authorization-ajax' );
+wp_localize_script(
+	'masterstudy-authorization-ajax',
+	'masterstudy_authorization_data',
+	array(
+		'bad'    => esc_html__( 'Bad', 'masterstudy-lms-learning-management-system' ),
+		'normal' => esc_html__( 'Normal', 'masterstudy-lms-learning-management-system' ),
+		'good'   => esc_html__( 'Good', 'masterstudy-lms-learning-management-system' ),
+		'hard'   => esc_html__( 'Hard', 'masterstudy-lms-learning-management-system' ),
+	)
+);
 
 $titles = array(
 	'login'    => array(
@@ -179,6 +189,8 @@ if ( $modal ) {
 				'instructor_fields'                => ! empty( $additional_fields['become_instructor'] ) ? $additional_fields['become_instructor'] : array(),
 				'disable_instructor'               => ! $settings['register_as_instructor'],
 				'separate_instructor_registration' => $settings['separate_instructor_registration'],
+				'strength_password'                => STM_LMS_Options::get_option( 'registration_strength_password', false ),
+				'weak_password'                    => STM_LMS_Options::get_option( 'registration_weak_password', false ),
 				'is_instructor'                    => $is_instructor,
 				'only_for_instructor'              => $only_for_instructor,
 				'is_logged_in'                     => $is_logged_in,

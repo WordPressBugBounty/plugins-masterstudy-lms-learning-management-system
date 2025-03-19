@@ -355,7 +355,9 @@ class STM_LMS_User {
 			);
 		}
 
-		if ( ! empty( $register_user_password ) ) {
+		$weak_password = STM_LMS_Options::get_option( 'registration_weak_password', false );
+
+		if ( ! $weak_password && ! empty( $register_user_password ) ) {
 			/* If Password shorter than 8 characters*/
 			if ( strlen( $register_user_password ) < 8 ) {
 				$response['errors'][] = array(
@@ -388,13 +390,14 @@ class STM_LMS_User {
 					'text'  => esc_html__( 'Password must include at least one capital letter!', 'masterstudy-lms-learning-management-system' ),
 				);
 			}
-			if ( ! empty( $register_user_password_re ) && $register_user_password !== $register_user_password_re ) {
-				$response['errors'][] = array(
-					'id'    => 'not_match',
-					'field' => 'register_user_password_re',
-					'text'  => esc_html__( 'Passwords do not match', 'masterstudy-lms-learning-management-system' ),
-				);
-			}
+		}
+
+		if ( ! empty( $register_user_password_re ) && $register_user_password !== $register_user_password_re ) {
+			$response['errors'][] = array(
+				'id'    => 'not_match',
+				'field' => 'register_user_password_re',
+				'text'  => esc_html__( 'Passwords do not match', 'masterstudy-lms-learning-management-system' ),
+			);
 		}
 
 		if ( ! empty( $response['errors'] ) ) {
@@ -1164,10 +1167,10 @@ class STM_LMS_User {
 				'label' => esc_html__( 'Bio', 'masterstudy-lms-learning-management-system' ),
 			),
 			'first_name'  => array(
-				'label' => esc_html__( 'Name', 'masterstudy-lms-learning-management-system' ),
+				'label' => esc_html__( 'First name', 'masterstudy-lms-learning-management-system' ),
 			),
 			'last_name'   => array(
-				'label' => esc_html__( 'Name', 'masterstudy-lms-learning-management-system' ),
+				'label' => esc_html__( 'Last name', 'masterstudy-lms-learning-management-system' ),
 			),
 
 		);
@@ -1176,7 +1179,7 @@ class STM_LMS_User {
 	}
 
 	public static function rating_fields() {
-		return array(
+		$rating_fields = array(
 			'sum_rating'    => array(
 				'label' => esc_html__( 'Summary rating', 'masterstudy-lms-learning-management-system' ),
 			),
@@ -1184,6 +1187,8 @@ class STM_LMS_User {
 				'label' => esc_html__( 'Total Reviews', 'masterstudy-lms-learning-management-system' ),
 			),
 		);
+
+		return apply_filters( 'stm_lms_rating_user_fields', $rating_fields );
 	}
 
 	public static function extra_fields_display( $user ) {
@@ -1353,6 +1358,8 @@ class STM_LMS_User {
 		$new_pass    = ( isset( $user_data['new_pass'] ) ) ? $user_data['new_pass'] : '';
 		$new_pass_re = ( isset( $user_data['new_pass_re'] ) ) ? $user_data['new_pass_re'] : '';
 
+		$weak_password = STM_LMS_Options::get_option( 'registration_weak_password', false );
+
 		if ( ! empty( $new_pass ) && ! empty( $new_pass_re ) ) {
 			if ( $new_pass !== $new_pass_re ) {
 				wp_send_json(
@@ -1361,60 +1368,63 @@ class STM_LMS_User {
 						'message' => esc_html__( 'New password do not match', 'masterstudy-lms-learning-management-system' ),
 					)
 				);
-			} elseif ( strlen( $new_pass ) < 8 ) {
-				/* If Password shorter than 8 characters*/
-				$r['status']  = 'error';
-				$r['message'] = esc_html__( 'Password must have at least 8 characters', 'masterstudy-lms-learning-management-system' );
-
-				wp_send_json( $r );
-
-			} elseif ( ! preg_match( '#[a-z]+#', $new_pass ) ) {
-				/* if contains letter */
-				$r['status']  = 'error';
-				$r['message'] = esc_html__( 'Password must include at least one lowercase letter!', 'masterstudy-lms-learning-management-system' );
-
-				wp_send_json( $r );
-
-				die;
-
-			} elseif ( ! preg_match( '#[0-9]+#', $new_pass ) ) {
-				/* if contains number */
-				$r['status']  = 'error';
-				$r['message'] = esc_html__( 'Password must include at least one number!', 'masterstudy-lms-learning-management-system' );
-
-				wp_send_json( $r );
-
-				die;
-
-			} elseif ( ! preg_match( '#[A-Z]+#', $new_pass ) ) {
-				/* if contains CAPS */
-				$r['status']  = 'error';
-				$r['message'] = esc_html__( 'Password must include at least one capital letter!', 'masterstudy-lms-learning-management-system' );
-
-				wp_send_json( $r );
-
-				die;
-
-			} else {
-
-				$subject = esc_html__( 'Password change', 'masterstudy-lms-learning-management-system' );
-				$message = esc_html__( 'Password changed successfully.', 'masterstudy-lms-learning-management-system' );
-				STM_LMS_Helpers::send_email(
-					$user['email'],
-					$subject,
-					$message,
-					'stm_lms_password_change'
-				);
-
-				wp_set_password( $new_pass, $user_id );
-				wp_send_json(
-					array(
-						'relogin' => self::login_page_url(),
-						'status'  => 'success',
-						'message' => esc_html__( 'Password Changed. Re-login now', 'masterstudy-lms-learning-management-system' ),
-					)
-				);
 			}
+
+			if ( ! $weak_password ) {
+				if ( strlen( $new_pass ) < 8 ) {
+					wp_send_json(
+						array(
+							'status'  => 'error',
+							'message' => esc_html__( 'Password must have at least 8 characters', 'masterstudy-lms-learning-management-system' ),
+						)
+					);
+				}
+
+				if ( ! preg_match( '#[a-z]+#', $new_pass ) ) {
+					wp_send_json(
+						array(
+							'status'  => 'error',
+							'message' => esc_html__( 'Password must include at least one lowercase letter!', 'masterstudy-lms-learning-management-system' ),
+						)
+					);
+				}
+
+				if ( ! preg_match( '#[0-9]+#', $new_pass ) ) {
+					wp_send_json(
+						array(
+							'status'  => 'error',
+							'message' => esc_html__( 'Password must include at least one number!', 'masterstudy-lms-learning-management-system' ),
+						)
+					);
+				}
+
+				if ( ! preg_match( '#[A-Z]+#', $new_pass ) ) {
+					wp_send_json(
+						array(
+							'status'  => 'error',
+							'message' => esc_html__( 'Password must include at least one capital letter!', 'masterstudy-lms-learning-management-system' ),
+						)
+					);
+				}
+			}
+
+			$subject = esc_html__( 'Password change', 'masterstudy-lms-learning-management-system' );
+			$message = esc_html__( 'Password changed successfully.', 'masterstudy-lms-learning-management-system' );
+			STM_LMS_Helpers::send_email(
+				$user['email'],
+				$subject,
+				$message,
+				'stm_lms_password_change'
+			);
+
+			wp_set_password( $new_pass, $user_id );
+			wp_send_json(
+				array(
+					'relogin' => self::login_page_url(),
+					'status'  => 'success',
+					'message' => esc_html__( 'Password Changed. Re-login now', 'masterstudy-lms-learning-management-system' ),
+				)
+			);
 		}
 
 		$fields = self::extra_fields();
@@ -1994,37 +2004,42 @@ class STM_LMS_User {
 			return wp_send_json( $response );
 		}
 
-		if ( strlen( $password ) < 8 ) {
-			$response['errors'][] = array(
-				'id'    => 'characters',
-				'field' => 'user_new_password',
-				'text'  => esc_html__( 'Password must have at least 8 characters', 'masterstudy-lms-learning-management-system' ),
-			);
+		$weak_password = STM_LMS_Options::get_option( 'registration_weak_password', false );
+
+		if ( ! $weak_password && ! empty( $register_user_password ) ) {
+			if ( strlen( $password ) < 8 ) {
+				$response['errors'][] = array(
+					'id'    => 'characters',
+					'field' => 'user_new_password',
+					'text'  => esc_html__( 'Password must have at least 8 characters', 'masterstudy-lms-learning-management-system' ),
+				);
+			}
+			/* if contains letter */
+			if ( ! preg_match( '#[a-z]+#', $password ) ) {
+				$response['errors'][] = array(
+					'id'    => 'lowercase',
+					'field' => 'user_new_password',
+					'text'  => esc_html__( 'Password must include at least one lowercase letter!', 'masterstudy-lms-learning-management-system' ),
+				);
+			}
+			/* if contains number */
+			if ( ! preg_match( '#[0-9]+#', $password ) ) {
+				$response['errors'][] = array(
+					'id'    => 'number',
+					'field' => 'user_new_password',
+					'text'  => esc_html__( 'Password must include at least one number!', 'masterstudy-lms-learning-management-system' ),
+				);
+			}
+			/* if contains CAPS */
+			if ( ! preg_match( '#[A-Z]+#', $password ) ) {
+				$response['errors'][] = array(
+					'id'    => 'capital',
+					'field' => 'user_new_password',
+					'text'  => esc_html__( 'Password must include at least one capital letter!', 'masterstudy-lms-learning-management-system' ),
+				);
+			}
 		}
-		/* if contains letter */
-		if ( ! preg_match( '#[a-z]+#', $password ) ) {
-			$response['errors'][] = array(
-				'id'    => 'lowercase',
-				'field' => 'user_new_password',
-				'text'  => esc_html__( 'Password must include at least one lowercase letter!', 'masterstudy-lms-learning-management-system' ),
-			);
-		}
-		/* if contains number */
-		if ( ! preg_match( '#[0-9]+#', $password ) ) {
-			$response['errors'][] = array(
-				'id'    => 'number',
-				'field' => 'user_new_password',
-				'text'  => esc_html__( 'Password must include at least one number!', 'masterstudy-lms-learning-management-system' ),
-			);
-		}
-		/* if contains CAPS */
-		if ( ! preg_match( '#[A-Z]+#', $password ) ) {
-			$response['errors'][] = array(
-				'id'    => 'capital',
-				'field' => 'user_new_password',
-				'text'  => esc_html__( 'Password must include at least one capital letter!', 'masterstudy-lms-learning-management-system' ),
-			);
-		}
+
 		if ( ! empty( $repeat_password ) && $password !== $repeat_password ) {
 			$response['errors'][] = array(
 				'id'    => 'not_match',

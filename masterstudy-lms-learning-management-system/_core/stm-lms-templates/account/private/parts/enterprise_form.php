@@ -1,6 +1,10 @@
 <?php
 stm_lms_register_style( 'enterprise' );
-?>
+
+$show_form = STM_LMS_Options::get_option( 'have_a_question_form', true );
+
+if ( $show_form ) :
+	?>
 <div class="stm_lms_become_instructor masterstudy-enterprise-modal-parent">
 	<i class="stmlms-case secondary_color"></i>
 	<h3><?php esc_html_e( 'Have a question?', 'masterstudy-lms-learning-management-system' ); ?></h3>
@@ -17,3 +21,5 @@ stm_lms_register_style( 'enterprise' );
 	);
 	?>
 </div>
+	<?php
+endif;

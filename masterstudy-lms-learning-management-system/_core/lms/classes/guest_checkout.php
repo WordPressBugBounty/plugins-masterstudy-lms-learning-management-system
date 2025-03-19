@@ -133,7 +133,9 @@ class STM_LMS_Guest_Checkout {
 			}
 		}
 
-		if ( ! empty( $data['password'] ) ) {
+		$weak_password = STM_LMS_Options::get_option( 'registration_weak_password', false );
+
+		if ( ! $weak_password && ! empty( $data['password'] ) ) {
 			/* If Password shorter than 8 characters*/
 			if ( strlen( $data['password'] ) < 8 ) {
 				$response['errors'][] = array(
@@ -166,12 +168,6 @@ class STM_LMS_Guest_Checkout {
 					'text'  => esc_html__( 'Password must include at least one capital letter! one number!', 'masterstudy-lms-learning-management-system' ),
 				);
 			}
-		} else {
-			$response['errors'][] = array(
-				'id'    => 'empty_pass',
-				'field' => 'password',
-				'text'  => esc_html__( 'Field is required', 'masterstudy-lms-learning-management-system' ),
-			);
 		}
 
 		if ( ! empty( $response['errors'] ) ) {
