@@ -54,7 +54,7 @@ if ( ! class_exists( 'STM_Lms_Post_Type' ) ) {
 				}
 			}
 
-			if ( is_admin() || current_user_can( 'administrator' ) ) {
+			if ( is_admin() || current_user_can( 'administrator' ) || current_user_can( 'stm_lms_instructor' ) ) {
 				$unlock_lesson = true;
 			}
 

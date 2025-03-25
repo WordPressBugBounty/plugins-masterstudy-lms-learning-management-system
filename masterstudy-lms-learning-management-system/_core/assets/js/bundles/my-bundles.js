@@ -36,8 +36,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           };
           if (_typeof(bundle.courses) === 'object') {
             for (var course_key in bundle.courses) {
+              var _vm$courses$course, _vm$courses$course2;
               var course = bundle.courses[course_key];
-              if (_typeof(vm.courses[course].average) && vm.courses[course].percent) {
+              if (_typeof((_vm$courses$course = vm.courses[course]) === null || _vm$courses$course === void 0 ? void 0 : _vm$courses$course.average) && (_vm$courses$course2 = vm.courses[course]) !== null && _vm$courses$course2 !== void 0 && _vm$courses$course2.percent) {
                 total.count++;
                 total.average += vm.courses[course].average;
                 total.percent += vm.courses[course].percent;
@@ -45,7 +46,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
             }
           } else {
             bundle.courses.forEach(function (course) {
-              if (_typeof(vm.courses[course].average) && vm.courses[course].percent) {
+              var _vm$courses$course3, _vm$courses$course4;
+              if (_typeof((_vm$courses$course3 = vm.courses[course]) === null || _vm$courses$course3 === void 0 ? void 0 : _vm$courses$course3.average) && (_vm$courses$course4 = vm.courses[course]) !== null && _vm$courses$course4 !== void 0 && _vm$courses$course4.percent) {
                 total.count++;
                 total.average += vm.courses[course].average;
                 total.percent += vm.courses[course].percent;
@@ -64,11 +66,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           if (_typeof(bundle.courses) === 'object') {
             for (var course_key in bundle.courses) {
               var course = bundle.courses[course_key];
-              if (vm.courses[course]['simple_price']) total += parseFloat(vm.courses[course]['simple_price']);
+              if (vm.courses[course] && vm.courses[course]['simple_price']) total += parseFloat(vm.courses[course]['simple_price']);
             }
           } else {
             bundle.courses.forEach(function (course) {
-              if (vm.courses[course]['simple_price']) total += parseFloat(vm.courses[course]['simple_price']);
+              if (vm.courses[course] && vm.courses[course]['simple_price']) total += parseFloat(vm.courses[course]['simple_price']);
             });
           }
           return stm_lms_price_format(total);

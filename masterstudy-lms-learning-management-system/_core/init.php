@@ -3,7 +3,7 @@ define( 'STM_LMS_FILE', __FILE__ );
 define( 'STM_LMS_DIR', __DIR__ );
 define( 'STM_LMS_PATH', dirname( STM_LMS_FILE ) );
 define( 'STM_LMS_URL', plugin_dir_url( STM_LMS_FILE ) );
-define( 'STM_LMS_VERSION', '3.5.22' );
+define( 'STM_LMS_VERSION', '3.5.23' );
 define( 'STM_LMS_DB_VERSION', '3.5.5' );
 define( 'STM_LMS_BASE_API_URL', '/wp-json/lms' );
 define( 'STM_LMS_LIBRARY', STM_LMS_PATH . '/libraries' );

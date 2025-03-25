@@ -135,6 +135,10 @@ if ( $reviews ) {
 	$sort_options['rating'] = esc_html__( 'Overall Rating', 'masterstudy-lms-learning-management-system' );
 }
 
+if ( is_ms_lms_addon_enabled( 'coming_soon' ) ) {
+	$sort_options['coming_soon'] = esc_html__( 'Coming Soon', 'masterstudy-lms-learning-management-system' );
+}
+
 $this->add_control(
 	'sort_by',
 	array(

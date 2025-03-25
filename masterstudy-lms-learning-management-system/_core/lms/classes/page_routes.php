@@ -13,6 +13,7 @@ class STM_LMS_Page_Router {
 	private $routes                = array();
 	private static $regex          = '([^/]+)';
 	private $is_wpml               = false;
+	private $is_polylang           = false;
 	private $current_language_code = 'en';
 
 	private static $pages_transient_name        = 'stm_lms_routes_pages_transient';
@@ -23,6 +24,7 @@ class STM_LMS_Page_Router {
 		add_action( 'stm_lms_pages_generated', array( $this, 'reset_config' ) );
 		add_action( 'wpcfto_settings_saved', array( $this, 'reset_config' ) );
 		add_action( 'permalink_structure_changed', array( $this, 'reset_config' ) );
+		add_action( 'pll_add_language', array( $this, 'reset_config' ) );
 
 		add_action( 'save_post', array( $this, 'reset_page_config' ) );
 
@@ -31,6 +33,8 @@ class STM_LMS_Page_Router {
 		add_action( 'template_redirect', array( $this, 'include_template' ) );
 
 		add_filter( 'wpml_active_languages', array( $this, 'modify_switcher' ) );
+
+		add_filter( 'pll_translation_url', array( $this, 'pll_translation_url' ), 10, 2 );
 
 		add_filter( 'wpml_ls_language_url', array( $this, 'wpml_current_language_url' ) );
 	}
@@ -41,12 +45,12 @@ class STM_LMS_Page_Router {
 		if ( ! $has_config || $this->update_config() ) {
 			$this->settings = get_option( 'stm_lms_settings', array() );
 
-			$this->wpml_config();
+			$this->multilingual_config();
 
 			$this->set_pages();
 
-			if ( $this->is_wpml ) {
-				$this->add_wpml_pages();
+			if ( $this->is_wpml || $this->is_polylang ) {
+				$this->add_multilingual_pages();
 			}
 
 			$this->page_config = $this->pages;
@@ -103,14 +107,34 @@ class STM_LMS_Page_Router {
 		if ( ! empty( $current_page ) && ! empty( $current_page['parent'] ) && ! empty( $current_page['parent'][0] ) ) {
 			$current_page_path = $current_page['parent'][0];
 
-			foreach ( $langs as &$lang ) {
-				$page_path = $pages[ $lang['code'] ]['parent'][0];
+			if ( ! empty( $langs ) ) {
+				foreach ( $langs as &$lang ) {
+					$page_path = $pages[ $lang['code'] ]['parent'][0];
 
-				$lang['url'] = esc_url( str_replace( $current_page_path, "/{$page_path}", $lang['url'] ?? '' ) );
+					$lang['url'] = esc_url( str_replace( $current_page_path, "/{$page_path}", $lang['url'] ?? '' ) );
+				}
 			}
 		}
 
 		return $langs;
+	}
+
+	public function pll_translation_url( $url, $lang ) {
+		$is_default  = pll_default_language() === $lang;
+		$endpoint    = get_query_var( 'lms_template' );
+		$user_url    = $is_default ? 'user_url' : "user_url_{$lang}";
+		$lang_prefix = $is_default ? '' : "/$lang";
+
+		if ( ! empty( $endpoint ) && ! empty( $this->pages[ $user_url ]['sub_pages'] ) ) {
+			foreach ( $this->pages[ $user_url ]['sub_pages'] as $subpage ) {
+				if ( $subpage['template'] === $endpoint && false === strpos( $url, $subpage['url'] ) ) {
+					$url = rtrim( $url, '/' ) . "$lang_prefix/{$this->pages[ $user_url ]['url']}/{$subpage['url']}";
+					break;
+				}
+			}
+		}
+
+		return $url;
 	}
 
 	public function wpml_current_language_url( $url ) {
@@ -355,9 +379,8 @@ class STM_LMS_Page_Router {
 
 				$permalink = get_the_permalink( $page_id );
 
-				if ( $this->is_wpml ) {
-					$permalink = apply_filters( 'wpml_permalink', get_permalink( $page_settings['page_id'] ), $this->current_language_code, true );
-				}
+				// WPML & Polylang Compatibility
+				$permalink = apply_filters( 'wpml_permalink', get_permalink( $page_settings['page_id'] ), $this->current_language_code, true );
 
 				$page_settings['url'] = ( ! empty( $page_settings['page_id'] ) ) ? basename( $permalink ) : '';
 			} elseif ( empty( $page_settings['url'] ) ) {
@@ -401,7 +424,7 @@ class STM_LMS_Page_Router {
 	public function fill_parent_data( &$page ) {
 		if ( ! empty( $page['sub_pages'] ) ) {
 			foreach ( $page['sub_pages'] as &$page_settings ) {
-				$page_settings['parent']   = ( ! empty( $page['parent'] ) ) ? $page['parent'] : array();
+				$page_settings['parent']   = ! empty( $page['parent'] ) ? $page['parent'] : array();
 				$page_settings['parent'][] = $page['url'];
 
 				if ( ! empty( $page['post_type'] ) ) {
@@ -438,6 +461,15 @@ class STM_LMS_Page_Router {
 	}
 
 	public function add_rewrite_rules() {
+		$is_polylang = function_exists( 'pll_current_language' );
+
+		if ( $is_polylang ) {
+			$pll_languages        = function_exists( 'pll_languages_list' ) ? pll_languages_list( array( 'fields' => 'slug' ) ) : array();
+			$pll_default_language = function_exists( 'pll_default_language' ) ? pll_default_language() : '';
+			$pll_settings         = get_option( 'polylang' );
+			$pll_force_lang       = 1 === intval( $pll_settings['force_lang'] ?? 0 );
+		}
+
 		foreach ( $this->routes as $route ) {
 			if ( empty( $route['parent'] ) ) {
 				continue;
@@ -461,6 +493,11 @@ class STM_LMS_Page_Router {
 					$query = self::modify_post_type_query( $query );
 				}
 
+				// Polylang support for Subpages
+				if ( $is_polylang && ! empty( $route['lang'] ) ) {
+					$base = "{$route['lang']}/$base";
+				}
+
 				add_rewrite_rule(
 					"{$base}/([^/]+)/?",
 					$query,
@@ -472,6 +509,21 @@ class STM_LMS_Page_Router {
 				$regex = "{$base}/({$route['url']})/?";
 
 				$query = 'index.php?lms_template=' . $route['template'];
+
+				// Polylang Compatibility
+				if ( $is_polylang && $pll_force_lang && ! empty( $pll_languages ) ) {
+					foreach ( $pll_languages as $language ) {
+						if ( $language === $pll_default_language ) {
+							continue;
+						}
+
+						add_rewrite_rule(
+							"{$language}/{$regex}",
+							"{$query}&lang={$language}",
+							'top'
+						);
+					}
+				}
 
 				$query .= "&lang={$lang}";
 
@@ -526,20 +578,35 @@ class STM_LMS_Page_Router {
 		}
 	}
 
-	public function add_wpml_pages() {
+	public function add_multilingual_pages() {
 		global $sitepress;
 
-		$languages = apply_filters( 'wpml_active_languages', null, 'orderby=id&order=desc' );
+		$languages        = array();
+		$default_language = $this->is_wpml ? $sitepress->get_default_language() : pll_default_language();
+
+		if ( $this->is_wpml ) {
+			$languages = apply_filters( 'wpml_active_languages', null, 'orderby=id&order=desc' );
+		} elseif ( $this->is_polylang ) {
+			$languages = pll_languages_list( array( 'fields' => 'slug' ) );
+		}
+
+		if ( empty( $languages ) ) {
+			return;
+		}
 
 		$page_ids = array_filter( array_column( $this->pages, 'page_id' ) );
 
 		foreach ( $languages as $language ) {
+			$lang_code = $this->is_wpml ? $language['code'] : $language;
+
 			foreach ( $this->pages as $page_key => $page ) {
 				if ( empty( $page['page_id'] ) ) {
 					continue;
 				}
 
-				$page_id = apply_filters( 'wpml_object_id', $page['page_id'], get_post_type( $page['page_id'] ), false, $language['code'] );
+				$page_id = $this->is_wpml
+					? apply_filters( 'wpml_object_id', $page['page_id'], get_post_type( $page['page_id'] ), false, $lang_code )
+					: pll_get_post( $page['page_id'], $lang_code );
 
 				if ( in_array( $page_id, $page_ids ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					continue;
@@ -548,24 +615,33 @@ class STM_LMS_Page_Router {
 				$page_language            = $page;
 				$page_language['page_id'] = $page_id;
 				$page_language['title']   = get_the_title( $page_id );
-				$page_language['url']     = basename( apply_filters( 'wpml_permalink', get_permalink( $page['page_id'] ), $language['code'], true ) );
-				$page_language['lang']    = $language['code'];
+				$page_language['url']     = basename( apply_filters( 'wpml_permalink', get_permalink( $page_id ), $lang_code, true ) );
+				$page_language['lang']    = $lang_code;
 
-				$this->insert_language_code( $page_language, $language['code'] );
+				$this->insert_language_code( $page_language, $lang_code );
 
-				$this->pages[ "{$page_key}_{$language['code']}" ] = $page_language;
+				$this->pages[ "{$page_key}_{$lang_code}" ] = $page_language;
 			}
 
 			// Add Course Player page for each language
-			if ( $language['code'] !== $sitepress->get_default_language() ) {
-				$courses_page_id = apply_filters( 'wpml_object_id', STM_LMS_Options::courses_page(), 'page', false, $language['code'] );
+			if ( $lang_code !== $default_language ) {
+				$courses_page    = STM_LMS_Options::get_option( 'courses_page' );
+				$courses_page_id = $this->is_wpml
+					? apply_filters( 'wpml_object_id', $courses_page, 'page', false, $lang_code )
+					: pll_get_post( $courses_page, $lang_code );
 
 				if ( ! empty( $courses_page_id ) ) {
-					$this->pages[ "courses_url_{$language['code']}" ] = array_merge(
+					$url = get_post_field( 'post_name', $courses_page_id ) . '/' . self::$regex;
+
+					if ( $this->is_polylang ) {
+						$url = "$lang_code/$url";
+					}
+
+					$this->pages[ "courses_url_{$lang_code}" ] = array_merge(
 						$this->pages['courses_url'],
 						array(
-							'url'  => get_post_field( 'post_name', $courses_page_id ) . '/' . self::$regex,
-							'lang' => $language['code'],
+							'url'  => $url,
+							'lang' => $lang_code,
 						)
 					);
 				}
@@ -582,12 +658,17 @@ class STM_LMS_Page_Router {
 		}
 	}
 
-	public function wpml_config() {
-		$this->is_wpml = class_exists( 'SitePress' );
+	public function multilingual_config() {
+		$this->is_wpml     = class_exists( 'SitePress' );
+		$this->is_polylang = function_exists( 'pll_current_language' );
 
 		if ( $this->is_wpml ) {
 			global $sitepress;
 			$this->current_language_code = $sitepress->get_default_language();
+		}
+
+		if ( $this->is_polylang ) {
+			$this->current_language_code = pll_current_language();
 		}
 	}
 

@@ -145,9 +145,8 @@ function stm_lms_get_user_courses( $user_id, $limit = '', $offset = '', $fields 
 		$fields = 'COUNT(*)';
 	}
 
-	if ( defined( 'ICL_LANGUAGE_CODE' ) || ! empty( $GLOBALS['sitepress'] ) ) {
-		global $sitepress;
-		$courses = $wpdb->prepare( ' AND lng_code=%s ', $sitepress->get_locale( ICL_LANGUAGE_CODE ) ) . $courses;
+	if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+		$courses = $wpdb->prepare( ' AND lng_code=%s ', get_locale() ) . $courses;
 	}
 
 	if ( empty( $sort ) ) {

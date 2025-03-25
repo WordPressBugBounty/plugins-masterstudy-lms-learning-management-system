@@ -84,6 +84,9 @@
       } else {
         endpoint = "".concat(ms_lms_resturl, "/instructor-public-courses?page=").concat(pageId, "&user=").concat(instructor_data.user, "&pp=").concat(perPage);
       }
+      if (typeof pll_current_language !== 'undefined') {
+        endpoint += "&lang=".concat(pll_current_language);
+      }
       $('.masterstudy-instructor-public__empty').removeClass('masterstudy-instructor-public__empty_show');
       var ListContainer = $('.masterstudy-instructor-public__list');
       var paginationContainer = $('.masterstudy-instructor-public__list-pagination');

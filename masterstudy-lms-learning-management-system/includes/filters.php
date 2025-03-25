@@ -157,3 +157,15 @@ function masterstudy_lms_capture_textdomain_path( $mofile, $domain ) {
 }
 add_filter( 'load_textdomain_mofile', 'masterstudy_lms_capture_textdomain_path', 10, 2 );
 
+// Multilingual support for courses page
+function masterstudy_lms_courses_page( $page_id ) {
+	return apply_filters( 'wpml_object_id', $page_id, 'page' );
+}
+add_filter( 'stm_lms_courses_page', 'masterstudy_lms_courses_page' );
+
+// Multilingual support for instructors page
+function masterstudy_lms_instructors_page( $page_id ) {
+	return apply_filters( 'wpml_object_id', $page_id, 'page' );
+}
+add_filter( 'stm_lms_instructors_page', 'masterstudy_lms_instructors_page' );
+

@@ -16,7 +16,8 @@ class EditController {
 	}
 
 	public function __invoke( $course_id, WP_REST_Request $request ): \WP_REST_Response {
-		$course = $this->course_repository->find_post( $course_id );
+		$course       = $this->course_repository->find_post( $course_id );
+		$courses_page = \STM_LMS_Options::courses_page();
 
 		// builder settings extracted to separate controller
 		// consider to deprecte and remove data from this controller
@@ -54,7 +55,7 @@ class EditController {
 				),
 				'options'             => $options,
 				'urls'                => array(
-					'courses'           => home_url( \STM_LMS_Options::courses_page_slug() ),
+					'courses'           => $courses_page ? get_permalink( $courses_page ) : home_url( \STM_LMS_Options::courses_page_slug() . '/' ),
 					'user_account'      => \STM_LMS_User::user_page_url(),
 					'dashboard_courses' => admin_url( 'edit.php?post_type=stm-courses' ),
 					'addons'            => \STM_LMS_Helpers::is_pro()

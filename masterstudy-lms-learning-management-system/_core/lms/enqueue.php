@@ -12,6 +12,9 @@ function stm_lms_wp_head() {
 		var ms_lms_resturl = '<?php echo rest_url( 'masterstudy-lms/v2', 'json' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>';
 		var ms_lms_nonce = '<?php echo wp_create_nonce( 'wp_rest' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>';
 		var stm_ajax_add_pear_hb = '<?php echo wp_create_nonce( 'stm_ajax_add_pear_hb' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>';
+		<?php if ( function_exists( 'pll_current_language' ) ) : ?>
+		var pll_current_language = '<?php echo esc_js( pll_current_language() ); ?>';
+		<?php endif; ?>
 	</script>
 	<style>
 		.vue_is_disabled {

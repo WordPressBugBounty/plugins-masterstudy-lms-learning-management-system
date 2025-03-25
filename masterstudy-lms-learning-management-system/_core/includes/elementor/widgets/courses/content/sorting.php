@@ -47,6 +47,11 @@ if ( $reviews ) {
 	$default_options[]      = 'rating';
 }
 
+if ( is_ms_lms_addon_enabled( 'coming_soon' ) ) {
+	$sort_options['coming_soon'] = esc_html__( 'Coming Soon', 'masterstudy-lms-learning-management-system' );
+	$default_options[]           = 'coming_soon';
+}
+
 $this->add_control(
 	'sort_options',
 	array(

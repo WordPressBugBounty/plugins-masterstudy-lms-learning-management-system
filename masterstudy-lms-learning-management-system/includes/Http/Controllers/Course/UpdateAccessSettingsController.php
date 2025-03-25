@@ -50,7 +50,7 @@ class UpdateAccessSettingsController {
 
 		$this->course_repository->update_access( $course_id, $data );
 
-		if ( key_exists( 'coming_soon_status', $data ) && ( empty( $data['coming_soon_status'] ) || empty( $data['coming_soon_time'] ) || empty( $data['coming_soon_date'] ) ) ) {
+		if ( ! empty( $data['coming_soon_status'] ) && ( empty( $data['coming_soon_status'] ) || empty( $data['coming_soon_time'] ) || empty( $data['coming_soon_date'] ) ) ) {
 			return new \WP_REST_Response(
 				array(
 					'error_code' => 'create_coming_soon_course_forbidden',

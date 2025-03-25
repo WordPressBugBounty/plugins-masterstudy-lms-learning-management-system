@@ -112,7 +112,18 @@ class STM_LMS_User {
 	public static function login_page_url() {
 		$settings = get_option( 'stm_lms_settings', array() );
 
-		return ( empty( $settings['user_url'] ) ) ? home_url( '/' ) : get_the_permalink( $settings['user_url'] );
+		if ( empty( $settings['user_url'] ) ) {
+			return home_url( '/' );
+		}
+
+		$user_page = $settings['user_url'];
+
+		// Polylang Compatibility
+		if ( function_exists( 'pll_get_post' ) ) {
+			$user_page = pll_get_post( $user_page, pll_current_language() );
+		}
+
+		return get_the_permalink( $user_page );
 	}
 
 	public static function user_page_url( $user_id = '', $force = false ) {
@@ -2112,38 +2123,17 @@ class STM_LMS_User {
 	}
 
 	public static function settings_url() {
-		$pages_config = STM_LMS_Page_Router::pages_config();
-
-		return self::login_page_url() . $pages_config['user_url']['sub_pages']['settings_url']['url'];
-	}
-
-	public static function enrolled_courses_url() {
-		$pages_config = STM_LMS_Page_Router::pages_config();
-
-		return self::login_page_url() . $pages_config['user_url']['sub_pages']['enrolled_courses_url']['url'];
-	}
-
-	public static function enrolled_quizzes_url() {
-		$pages_config = STM_LMS_Page_Router::pages_config();
-
-		return self::login_page_url() . $pages_config['user_url']['sub_pages']['enrolled_quizzes_url']['url'];
-	}
-
-	public static function my_orders_url() {
-		$pages_config = STM_LMS_Page_Router::pages_config();
-
-		return self::login_page_url() . $pages_config['user_url']['sub_pages']['my_orders_url']['url'];
+		return ms_plugin_user_account_url( 'settings' );
 	}
 
 	public static function my_pmpro_url() {
-		$pages_config = STM_LMS_Page_Router::pages_config();
-
-		return self::login_page_url() . $pages_config['user_url']['sub_pages']['paid_membership_url']['url'];
+		return ms_plugin_user_account_url( 'memberships-pmp' );
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static function my_announcements_url() {
-		$pages_config = STM_LMS_Page_Router::pages_config();
-
-		return self::login_page_url() . $pages_config['user_url']['sub_pages']['announcement']['url'];
+		return ms_plugin_user_account_url( 'announcement' );
 	}
 }

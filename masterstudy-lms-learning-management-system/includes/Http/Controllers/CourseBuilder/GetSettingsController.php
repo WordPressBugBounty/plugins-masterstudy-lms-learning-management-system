@@ -28,6 +28,7 @@ final class GetSettingsController {
 		);
 
 		$lesson_types = apply_filters( 'masterstudy_lms_lesson_types', array_map( 'strval', LessonType::cases() ) );
+		$courses_page = \STM_LMS_Options::courses_page();
 
 		return new \WP_REST_Response(
 			array(
@@ -42,7 +43,7 @@ final class GetSettingsController {
 				),
 				'options'             => $options,
 				'urls'                => array(
-					'courses'         => home_url( \STM_LMS_Options::courses_page_slug() ),
+					'courses'         => $courses_page ? get_permalink( $courses_page ) : home_url( \STM_LMS_Options::courses_page_slug() . '/' ),
 					'user_account'    => \STM_LMS_User::user_page_url(),
 					'dashboard_posts' => admin_url( 'edit.php?post_type=' ),
 					'addons'          => \STM_LMS_Helpers::is_pro()

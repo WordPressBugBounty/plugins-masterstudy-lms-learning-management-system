@@ -115,9 +115,15 @@ class MsLmsCourses extends Widget_Base {
 			'price_low'  => esc_html__( 'Price low', 'masterstudy-lms-learning-management-system' ),
 			'popular'    => esc_html__( 'Most Viewed', 'masterstudy-lms-learning-management-system' ),
 		);
+
 		if ( self::show_reviews() ) {
 			$sorting_options['rating'] = esc_html__( 'Overall Rating', 'masterstudy-lms-learning-management-system' );
 		}
+
+		if ( is_ms_lms_addon_enabled( 'coming_soon' ) ) {
+			$sorting_options['coming_soon'] = esc_html__( 'Coming Soon', 'masterstudy-lms-learning-management-system' );
+		}
+
 		if ( ! empty( $value ) ) {
 			$array = array_filter(
 				$sorting_options,

@@ -298,6 +298,7 @@ final class CourseRepository {
 		}
 
 		update_post_meta( $post_id, 'featured', '' );
+		update_post_meta( $post_id, 'coming_soon_status', '' );
 
 		if ( \STM_LMS_Subscriptions::subscription_enabled() && \STM_LMS_Course::course_in_plan( $post_id ) ) {
 			update_post_meta( $post_id, 'single_sale', '' );

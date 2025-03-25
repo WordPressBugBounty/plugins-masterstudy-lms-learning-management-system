@@ -242,7 +242,7 @@ class STM_LMS_User_Menu {
 			'lms_template' => 'stm-lms-user-courses',
 			'menu_title'   => esc_html__( 'Enrolled Courses', 'masterstudy-lms-learning-management-system' ),
 			'menu_icon'    => 'fa-book',
-			'menu_url'     => STM_LMS_User::enrolled_courses_url(),
+			'menu_url'     => ms_plugin_user_account_url( 'enrolled-courses' ),
 			'is_active'    => ( ! $is_instructor && intval( $settings['user_url'] ?? null ) === get_queried_object_id() ),
 			'menu_place'   => 'learning',
 		);
@@ -255,7 +255,7 @@ class STM_LMS_User_Menu {
 				'lms_template' => 'stm-lms-user-settings',
 				'menu_title'   => esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ),
 				'menu_icon'    => 'fa-cog',
-				'menu_url'     => STM_LMS_User::settings_url(),
+				'menu_url'     => ms_plugin_user_account_url( 'settings' ),
 				'menu_place'   => 'learning',
 			);
 		}
@@ -268,7 +268,7 @@ class STM_LMS_User_Menu {
 				'lms_template' => 'stm-lms-user-chats',
 				'menu_title'   => esc_html__( 'Messages', 'masterstudy-lms-learning-management-system' ),
 				'menu_icon'    => 'fa-envelope',
-				'menu_url'     => STM_LMS_Chat::chat_url(),
+				'menu_url'     => ms_plugin_user_account_url( 'chat' ),
 				'badge_count'  => STM_LMS_Chat::user_new_messages( $user_id ),
 				'menu_place'   => 'learning',
 			);
@@ -292,7 +292,7 @@ class STM_LMS_User_Menu {
 			'lms_template' => 'stm-lms-user-quizzes',
 			'menu_title'   => esc_html__( 'Enrolled Quizzes', 'masterstudy-lms-learning-management-system' ),
 			'menu_icon'    => 'fa-question',
-			'menu_url'     => STM_LMS_User::enrolled_quizzes_url(),
+			'menu_url'     => ms_plugin_user_account_url( 'enrolled-quizzes' ),
 			'menu_place'   => 'learning',
 		);
 		$menus[] = array(
@@ -302,7 +302,7 @@ class STM_LMS_User_Menu {
 			'lms_template' => 'stm-lms-user-orders',
 			'menu_title'   => esc_html__( 'My Orders', 'masterstudy-lms-learning-management-system' ),
 			'menu_icon'    => 'fa-shopping-basket',
-			'menu_url'     => STM_LMS_User::my_orders_url(),
+			'menu_url'     => ms_plugin_user_account_url( 'my-orders' ),
 			'menu_place'   => 'learning',
 		);
 

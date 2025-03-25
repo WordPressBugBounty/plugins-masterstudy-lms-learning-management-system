@@ -118,13 +118,7 @@ class STM_LMS_Course {
 			$course['status']           = 'enrolled';
 			$course['progress_percent'] = $progress;
 			$course['start_time']       = time();
-
-			if ( function_exists( 'wpml_get_language_information' ) ) {
-				$post_language_information = wpml_get_language_information( null, $course_id );
-				$course['lng_code']        = $post_language_information['locale'];
-			} else {
-				$course['lng_code'] = get_locale();
-			}
+			$course['lng_code']         = get_locale();
 
 			$course['enterprise_id'] = $enterprise;
 			$course['bundle_id']     = $bundle;
@@ -299,11 +293,13 @@ class STM_LMS_Course {
 	}
 
 	public static function certificates_page_url( $course_id = '' ) {
-		$pages_config = STM_LMS_Page_Router::pages_config();
+		$url = ms_plugin_user_account_url( 'my-certificates' );
 
-		$base_path = STM_LMS_User::login_page_url() . $pages_config['user_url']['sub_pages']['certificate_url']['url'];
+		if ( ! empty( $course_id ) ) {
+			$url .= '/' . $course_id;
+		}
 
-		return $base_path . '/' . $course_id;
+		return $url;
 	}
 
 	public static function add_student( $course_id ) {

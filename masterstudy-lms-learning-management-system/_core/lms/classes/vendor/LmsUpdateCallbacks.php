@@ -668,6 +668,24 @@ abstract class LmsUpdateCallbacks {
 		}
 	}
 
+	public static function lms_add_coming_soon_meta() {
+		global $wpdb;
+
+		$courses = $wpdb->get_results(
+			"SELECT p.ID
+			FROM {$wpdb->posts} p
+			LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'coming_soon_status'
+			WHERE p.post_type = 'stm-courses'
+			AND pm.meta_id IS NULL"
+		);
+
+		if ( ! empty( $courses ) ) {
+			foreach ( $courses as $course ) {
+				add_post_meta( $course->ID, 'coming_soon_status', '', true );
+			}
+		}
+	}
+
 	public static function lms_products_remove_in_woocommerce() {
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return;

@@ -62,7 +62,10 @@ foreach ( $load_scripts as $handle ) {
 		lmsUrl: '<?php echo esc_url_raw( rest_url( 'masterstudy-lms/v2' ) ); ?>',
 		wpUrl: '<?php echo esc_url_raw( rest_url( 'wp/v2' ) ); ?>',
 		nonce: '<?php echo esc_html( wp_create_nonce( 'wp_rest' ) ); ?>',
-	}
+	};
+	<?php if ( function_exists( 'pll_current_language' ) ) { ?>
+	window.lmsApiSettings.lang = '<?php echo esc_js( pll_current_language() ); ?>';
+	<?php } ?>
 </script>
 <?php
 $scripts->print_translations( 'ms-lms-course-builder' );

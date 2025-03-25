@@ -395,6 +395,10 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		$result  = array( 'posts' => array() );
 		$get_ids = ( ! empty( $_GET['ids_only'] ) );
 
+		if ( function_exists( 'pll_current_language' ) ) {
+			$args['lang'] = pll_current_language();
+		}
+
 		$query = new WP_Query( $args );
 
 		$total              = $query->found_posts;
@@ -469,8 +473,8 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					'is_free'                     => $course_free_status['is_free'],
 					'zero_price'                  => $course_free_status['zero_price'],
 					'members_only'                => STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership,
-					'edit_link'                   => ms_plugin_manage_course_url() . "/$id",
-					'coming_soon_link'            => ms_plugin_manage_course_url() . "/$id/settings/access",
+					'edit_link'                   => ms_plugin_manage_course_url( $id ),
+					'coming_soon_link'            => ms_plugin_manage_course_url( "$id/settings/access" ),
 					'post_status'                 => $post_status,
 					'manage_students_link'        => self::instructor_manage_students_url() . "/?course_id=$id",
 					'can_instructor_add_students' => self::instructor_can_add_students(),
@@ -610,7 +614,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					$email_data = array(
 						'user_login' => $user_login,
 						'user_id'    => $user_id,
-						'date'       => date( 'Y-m-d H:i:s' ),
+						'date'       => gmdate( 'Y-m-d H:i:s' ),
 					);
 
 					foreach ( $data['fields'] as $field ) {

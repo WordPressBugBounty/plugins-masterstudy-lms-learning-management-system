@@ -215,6 +215,11 @@ class STM_LMS_Courses {
 				'orderby'  => 'meta_value_num',
 				'order'    => 'ASC',
 			),
+			'coming_soon' => array(
+				'meta_key' => 'coming_soon_status',
+				'orderby'  => 'meta_value_num',
+				'order'    => 'DESC',
+			),
 		);
 		if ( ! empty( $value ) ) {
 			$array = array_filter(

@@ -179,10 +179,11 @@ class STM_LMS_Chat {
 		return $messages_num;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static function chat_url() {
-		$pages_config = STM_LMS_Page_Router::pages_config();
-
-		return STM_LMS_User::login_page_url() . $pages_config['user_url']['sub_pages']['chat_url']['url'];
+		return ms_plugin_user_account_url( 'chat' );
 	}
 
 	public static function stm_lms_handle_clear_new_messages() {

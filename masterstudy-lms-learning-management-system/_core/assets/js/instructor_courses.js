@@ -33,6 +33,9 @@
           if (postMeta) {
             apiUrl += "&status=".concat(postMeta);
           }
+          if (typeof pll_current_language !== 'undefined') {
+            apiUrl += "&lang=".concat(pll_current_language);
+          }
           fetch(apiUrl, {
             method: 'GET',
             headers: {
