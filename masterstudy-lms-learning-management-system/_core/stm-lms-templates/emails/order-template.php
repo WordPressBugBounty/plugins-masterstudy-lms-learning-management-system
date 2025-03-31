@@ -34,9 +34,9 @@ if ( ! empty( $instructor_items ) ) {
 	$totalPrice = STM_LMS_Options::get_option( 'currency_symbol', '$' ) . $totalPrice;
 }
 
-$view_order_url = home_url() . '/user-account/my-orders/';
+$view_order_url = ms_plugin_user_account_url( 'my-orders' );
 if ( $customer_section ) {
-	$view_order_url = home_url() . '/user-account/sales/';
+	$view_order_url = ms_plugin_user_account_url( 'sales' );
 }
 
 $title_render            = true;

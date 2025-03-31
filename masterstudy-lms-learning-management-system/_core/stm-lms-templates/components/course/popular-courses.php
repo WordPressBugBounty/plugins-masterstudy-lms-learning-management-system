@@ -1,12 +1,16 @@
 <?php
 /**
  * @var object $course
+ * @var integer $courses_per_page
+ * @var string $style
  */
 
 use MasterStudy\Lms\Repositories\CourseRepository;
 
-$query_args = array(
-	'posts_per_page' => 4,
+$style            = isset( $style ) ? $style : '';
+$courses_per_page = isset( $courses_per_page ) ? $courses_per_page : 4;
+$query_args       = array(
+	'posts_per_page' => $courses_per_page,
 	'exclude'        => array( $course->id ),
 	'post_status'    => 'publish',
 	'post_type'      => 'stm-courses',
@@ -23,7 +27,7 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 ?>
 
 <?php if ( ! empty( $course_ids ) ) { ?>
-	<div class="masterstudy-popular-courses">
+	<div class="masterstudy-popular-courses <?php echo esc_attr( 'horizontal' === $style ? 'masterstudy-popular-courses_horizontal' : '' ); ?>">
 		<span class="masterstudy-popular-courses__title">
 			<?php echo esc_html__( 'Popular courses', 'masterstudy-lms-learning-management-system' ); ?>
 		</span>

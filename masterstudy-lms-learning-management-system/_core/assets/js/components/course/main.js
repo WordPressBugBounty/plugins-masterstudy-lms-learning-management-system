@@ -3,7 +3,7 @@
 (function ($) {
   $(document).ready(function () {
     //expired component
-    if (expired_data.load_scripts) {
+    if (typeof expired_data !== 'undefined' && expired_data.load_scripts) {
       var cookie_name = "stm_lms_expired_course_".concat(expired_data.id);
       var cookie = $.cookie(cookie_name);
       $('.masterstudy-single-course-expired-popup').removeAttr('style');
@@ -35,129 +35,123 @@
       });
     }
 
-    //reviews component
-    var offset = 0;
-    var total = true;
-    var reviewText = '';
-    var userMark = '';
-    var editor = false;
-    var loadMoreButton = $("[data-id='masterstudy-single-course-reviews-more']");
-    var reviewsList = $('.masterstudy-single-course-reviews__list-wrapper');
-    var showAddReviewButton = $('.masterstudy-single-course-reviews__add-button');
-    var closeReviewButton = $('.masterstudy-single-course-reviews__form-close');
-    var addReviewForm = $('.masterstudy-single-course-reviews__form');
-    var submitReviewButton = $("[data-id='masterstudy-single-course-reviews-submit']");
-    var errorMessageBlock = $('.masterstudy-single-course-reviews__form-message');
-    var reviewFormStars = $('.masterstudy-single-course-reviews__form-rating').find('.masterstudy-single-course-reviews__star');
-    if (typeof reviews_data !== 'undefined') {
-      getReviews();
-      if (typeof tinyMCE !== 'undefined') {
-        getEditor();
-      }
-      loadMoreButton.click(function (event) {
-        event.preventDefault();
+    // Reviews component
+    $('.masterstudy-single-course-reviews').each(function (index) {
+      var offset = 0;
+      var total = true;
+      var reviewText = '';
+      var userMark = '';
+      var pp = reviews_data.style === 'grid' ? 9 : 5;
+      var editors = {};
+      var reviewContainer = $(this);
+      var courseId = reviewContainer.data('course-id');
+      var loadMoreButton = reviewContainer.find("[data-id='masterstudy-single-course-reviews-more']");
+      var reviewsList = reviewContainer.find('.masterstudy-single-course-reviews__list-wrapper');
+      var showAddReviewButton = reviewContainer.find('.masterstudy-single-course-reviews__add-button');
+      var closeReviewButton = reviewContainer.find('.masterstudy-single-course-reviews__form-close');
+      var submitReviewButton = reviewContainer.find("[data-id='masterstudy-single-course-reviews-submit']");
+      var errorMessageBlock = reviewContainer.find('.masterstudy-single-course-reviews__form-message');
+      var reviewFormStars = reviewContainer.find('.masterstudy-single-course-reviews__form-rating .masterstudy-single-course-reviews__star');
+      if (typeof reviews_data !== 'undefined') {
         getReviews();
-      });
-      showAddReviewButton.click(function (event) {
-        event.preventDefault();
-        addReviewForm.addClass('masterstudy-single-course-reviews__form_active');
-      });
-      closeReviewButton.click(function (event) {
-        event.preventDefault();
-        errorMessageBlock.removeClass('masterstudy-single-course-reviews__form-message_active');
-        errorMessageBlock.html('');
-        addReviewForm.removeClass('masterstudy-single-course-reviews__form_active');
-        reviewFormStars.removeClass('masterstudy-single-course-reviews__star_clicked');
-        if (editor) {
-          editor.setContent('');
-          $('.masterstudy-wp-editor__word-count').html('');
+        if (typeof tinyMCE !== 'undefined') {
+          getEditor(index);
         }
-      });
-      submitReviewButton.click(function (event) {
-        event.preventDefault();
-        addReview();
-      });
-      reviewFormStars.click(function () {
-        $(this).addClass('masterstudy-single-course-reviews__star_clicked');
-        $(this).siblings().removeClass('masterstudy-single-course-reviews__star_clicked');
-        $(this).prevAll().addBack().addClass('masterstudy-single-course-reviews__star_clicked');
-        userMark = $('.masterstudy-single-course-reviews__star_clicked').length;
-      });
-      reviewFormStars.hover(function () {
-        $(this).prevAll().addBack().addClass('masterstudy-single-course-reviews__star_filled');
-      }, function () {
-        $(this).parent().find('.masterstudy-single-course-reviews__star').removeClass('masterstudy-single-course-reviews__star_filled');
-      });
-    }
-    function getReviews() {
-      var getReviewsUrl = "".concat(stm_lms_ajaxurl, "?action=stm_lms_get_reviews&nonce=").concat(stm_lms_nonces['stm_lms_get_reviews'], "&offset=").concat(offset, "&post_id=").concat(reviews_data.course_id);
-      var reviewHtml = '';
-      loadMoreButton.addClass('masterstudy-button_loading');
-      $.get(getReviewsUrl, function (response) {
-        if (response.posts.length > 0) {
-          response.posts.forEach(function (review) {
-            reviewHtml += generateReviewHtml(review);
-          });
-          reviewsList.html(reviewsList.html() + reviewHtml);
-          offset++;
-          total = response.total;
-        }
-        loadMoreButton.removeClass('masterstudy-button_loading');
-        total ? loadMoreButton.parent().hide() : loadMoreButton.parent().show();
-      });
-    }
-    function addReview() {
-      var addReviewsUrl = stm_lms_ajaxurl + '?action=stm_lms_add_review&nonce=' + stm_lms_nonces['stm_lms_add_review'];
-      if (editor) {
-        reviewText = editor.getContent();
+        loadMoreButton.click(function (event) {
+          event.preventDefault();
+          getReviews();
+        });
+        showAddReviewButton.click(function (event) {
+          event.preventDefault();
+          reviewContainer.find('.masterstudy-single-course-reviews__form').addClass('masterstudy-single-course-reviews__form_active');
+        });
+        closeReviewButton.click(function (event) {
+          event.preventDefault();
+          errorMessageBlock.removeClass('masterstudy-single-course-reviews__form-message_active').html('');
+          reviewContainer.find('.masterstudy-single-course-reviews__form').removeClass('masterstudy-single-course-reviews__form_active');
+          reviewFormStars.removeClass('masterstudy-single-course-reviews__star_clicked');
+          if (editor) {
+            editor.setContent('');
+            $('.masterstudy-wp-editor__word-count').html('');
+          }
+        });
+        submitReviewButton.click(function (event) {
+          event.preventDefault();
+          addReview(submitReviewButton, index);
+        });
+        reviewFormStars.click(function () {
+          $(this).addClass('masterstudy-single-course-reviews__star_clicked');
+          $(this).siblings().removeClass('masterstudy-single-course-reviews__star_clicked');
+          $(this).prevAll().addBack().addClass('masterstudy-single-course-reviews__star_clicked');
+          userMark = reviewContainer.find('.masterstudy-single-course-reviews__star_clicked').length;
+        });
       }
-      submitReviewButton.addClass('masterstudy-button_loading');
-      $.post(addReviewsUrl, {
-        post_id: reviews_data.course_id,
-        mark: userMark,
-        review: reviewText
-      }, function (response) {
-        if (response.status === 'success') {
-          errorMessageBlock.html(response.message);
-          errorMessageBlock.addClass('masterstudy-single-course-reviews__form-message_success').addClass('masterstudy-single-course-reviews__form-message_active');
-          setTimeout(function () {
-            addReviewForm.removeClass('masterstudy-single-course-reviews__form_active');
-            if (editor) {
-              editor.setContent('');
-              $('.masterstudy-wp-editor__word-count').html('');
-            }
-          }, 1500);
-        } else {
-          errorMessageBlock.html(response.message);
-          errorMessageBlock.addClass('masterstudy-single-course-reviews__form-message_active');
-        }
-        submitReviewButton.removeClass('masterstudy-button_loading');
-      });
-    }
-    function generateReviewHtml(review) {
-      var starsHtml = '';
-      for (var i = 1; i <= 5; i++) {
-        if (i <= review.mark) {
-          starsHtml += '<span class="masterstudy-single-course-reviews__star masterstudy-single-course-reviews__star_filled"></span>';
-        } else {
-          starsHtml += '<span class="masterstudy-single-course-reviews__star"></span>';
-        }
+      function getReviews() {
+        var getReviewsUrl = "".concat(stm_lms_ajaxurl, "?action=stm_lms_get_reviews&nonce=").concat(stm_lms_nonces['stm_lms_get_reviews'], "&offset=").concat(offset, "&post_id=").concat(courseId, "&pp=").concat(pp);
+        var reviewHtml = '';
+        loadMoreButton.addClass('masterstudy-button_loading');
+        $.get(getReviewsUrl, function (response) {
+          if (response.posts.length > 0) {
+            response.posts.forEach(function (review) {
+              reviewHtml += generateReviewHtml(review);
+            });
+            reviewsList.html(reviewsList.html() + reviewHtml);
+            offset++;
+            total = response.total;
+          }
+          loadMoreButton.removeClass('masterstudy-button_loading');
+          total ? loadMoreButton.parent().hide() : loadMoreButton.parent().show();
+        });
       }
-      return "\n                <div class=\"masterstudy-single-course-reviews__item\">\n                    <div class=\"masterstudy-single-course-reviews__item-header\">\n                        <div class=\"masterstudy-single-course-reviews__item-mark\">\n                            ".concat(starsHtml, "\n                        </div>\n                        ").concat(review.status === 'pending' ? "\n                            <div class=\"masterstudy-single-course-reviews__item-status\">\n                                ".concat(reviews_data.status, "\n                            </div>") : '', "\n                    </div>\n                    <div class=\"masterstudy-single-course-reviews__item-content\">\n                        ").concat(review.content, "\n                    </div>\n                    <div class=\"masterstudy-single-course-reviews__item-row\">\n                        <a class=\"masterstudy-single-course-reviews__item-user\"\n                            ").concat(reviews_data.student_public_profile ? "href=\"".concat(review.user_url, "\"") : '', "\n                        >\n                            <span class=\"masterstudy-single-course-reviews__item-author\">\n                                ").concat(reviews_data.author_label, "\n                            </span>\n                            <span class=\"masterstudy-single-course-reviews__item-author-name\">\n                                ").concat(review.user, "\n                            </span>\n                        </a>\n                        <div class=\"masterstudy-single-course-reviews__item-date\">\n                            ").concat(review.time, "\n                        </div>\n                    </div>\n                </div>");
-    }
-    function getEditor() {
-      editor = tinyMCE.get(reviews_data.editor_id);
-      if (editor) {
-        if (editor.iframeElement === undefined) {
-          setTimeout(function () {
-            getEditor();
-          }, 500);
-        } else {
-          editor.theme.resizeTo(null, 200);
-          reviewText = editor.getContent();
+      function getEditor(index) {
+        var editorId = reviews_data.editor_id;
+        function initializeEditor() {
+          editors[index] = tinyMCE.get(editorId);
+          if (editors[index] && editors[index].initialized) {
+            editors[index].theme.resizeTo(null, 200);
+          } else {
+            setTimeout(initializeEditor, 500);
+          }
         }
+        initializeEditor();
       }
-    }
+      function addReview(buttonContainer, index) {
+        var addReviewsUrl = stm_lms_ajaxurl + '?action=stm_lms_add_review&nonce=' + stm_lms_nonces['stm_lms_add_review'];
+        var currentEditor = editors[index] || null;
+        if (currentEditor) {
+          reviewText = currentEditor.getContent();
+        }
+        buttonContainer.addClass('masterstudy-button_loading');
+        $.post(addReviewsUrl, {
+          post_id: courseId,
+          mark: userMark,
+          review: reviewText
+        }, function (response) {
+          if (response.status === 'success') {
+            errorMessageBlock.html(response.message);
+            errorMessageBlock.addClass('masterstudy-single-course-reviews__form-message_success masterstudy-single-course-reviews__form-message_active');
+            setTimeout(function () {
+              reviewContainer.find('.masterstudy-single-course-reviews__form').removeClass('masterstudy-single-course-reviews__form_active');
+              if (currentEditor) {
+                currentEditor.setContent('');
+                $('.masterstudy-wp-editor__word-count').html('');
+              }
+            }, 1500);
+          } else {
+            errorMessageBlock.html(response.message);
+            errorMessageBlock.addClass('masterstudy-single-course-reviews__form-message_active');
+          }
+          buttonContainer.removeClass('masterstudy-button_loading');
+        });
+      }
+      function generateReviewHtml(review) {
+        var starsHtml = '';
+        for (var i = 1; i <= 5; i++) {
+          starsHtml += "<span class=\"masterstudy-single-course-reviews__star".concat(i <= review.mark ? ' masterstudy-single-course-reviews__star_filled' : '', "\"></span>");
+        }
+        return "\n                    <div class=\"masterstudy-single-course-reviews__item\">\n                        <div class=\"masterstudy-single-course-reviews__item-header\">\n                            <div class=\"masterstudy-single-course-reviews__item-mark\">".concat(starsHtml, "</div>\n                            ").concat(review.status === 'pending' ? "<div class=\"masterstudy-single-course-reviews__item-status\">".concat(reviews_data.status, "</div>") : '', "\n                        </div>\n                        <div class=\"masterstudy-single-course-reviews__item-content\">").concat(review.content, "</div>\n                        <div class=\"masterstudy-single-course-reviews__item-row\">\n                            <a class=\"masterstudy-single-course-reviews__item-user\" ").concat(reviews_data.student_public_profile ? "href=\"".concat(review.user_url, "\"") : '', ">\n                                <span class=\"masterstudy-single-course-reviews__item-author\">").concat(reviews_data.author_label, "</span>\n                                <span class=\"masterstudy-single-course-reviews__item-author-name\">").concat(review.user, "</span>\n                            </a>\n                            <div class=\"masterstudy-single-course-reviews__item-date\">").concat(review.time, "</div>\n                        </div>\n                    </div>");
+      }
+    });
 
     //curriculum component
     $('.masterstudy-curriculum-list__toggler').click(function (event) {
@@ -378,7 +372,7 @@
     var _this = $(this);
     tempInput.style.position = "absolute";
     tempInput.style.left = "-9999px";
-    tempInput.value = share_data.course_url;
+    tempInput.value = $(this).data('url');
     document.body.appendChild(tempInput);
     tempInput.select();
     document.execCommand("copy");

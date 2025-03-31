@@ -8,16 +8,15 @@
 
 $with_image = isset( $with_image ) ? $with_image : false;
 $mode       = $mode ?? '';
-
 ?>
 
 <div class="masterstudy-single-course-description">
-	<?php if ( ! empty( $course->thumbnail ) && $with_image && ( empty( $course_preview['video_type'] ) || 'none' == $course_preview['video_type'] ) ) { ?>
+	<?php if ( ! empty( $course->full_image ) && $with_image && ( empty( $course_preview['video_type'] ) || 'none' == $course_preview['video_type'] ) ) { ?>
 		<img class="masterstudy-single-course-description__image"
-			src="<?php echo esc_url( $course->thumbnail['url'] ); ?>"
-			alt="<?php echo esc_html( $course->thumbnail['title'] ); ?>">
+			src="<?php echo esc_url( $course->full_image['url'] ); ?>"
+			alt="<?php echo esc_html( $course->full_image['title'] ); ?>">
 		<?php
-	} else if ( ! empty( $course_preview['video_type'] ) && $with_image || 'full_width' === $mode ) {
+	} elseif ( ! empty( $course_preview['video_type'] ) && $with_image || 'full_width' === $mode ) {
 		wp_enqueue_style( 'masterstudy-single-course-video-preview' );
 		STM_LMS_Templates::show_lms_template(
 			'components/video-media',

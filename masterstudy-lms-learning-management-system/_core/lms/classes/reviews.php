@@ -83,7 +83,7 @@ class STM_LMS_Reviews {
 		}
 	}
 
-	public static function get( $course_id, $offset = '' ) {
+	public static function get( $course_id, $offset = '', $pp = 5 ) {
 		global $wpdb;
 
 		$response = array(
@@ -91,7 +91,11 @@ class STM_LMS_Reviews {
 			'total' => 0,
 		);
 
-		$pp       = 5;
+		if ( empty( $course_id ) ) {
+			return $response;
+		}
+
+		$pp       = $pp;
 		$user_id  = get_current_user_id();
 		$is_admin = current_user_can( 'administrator' ) || current_user_can( 'super_admin' );
 		$offset   = $offset * $pp;
@@ -180,8 +184,9 @@ class STM_LMS_Reviews {
 		$course_id = intval( $_GET['post_id'] );
 
 		$offset = ( ! empty( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) : 0;
+		$pp     = ( ! empty( $_GET['pp'] ) ) ? intval( $_GET['pp'] ) : 5;
 
-		$r = self::get( $course_id, $offset );
+		$r = self::get( $course_id, $offset, $pp );
 
 		wp_send_json( $r );
 	}

@@ -2,6 +2,8 @@
 /**
  * @var int $course_id
  * @var array $curriculum
+ * @var boolean $show_section_title
+ * @var integer $section_to_show
  * @var boolean $dark_mode
  */
 

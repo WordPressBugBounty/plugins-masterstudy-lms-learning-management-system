@@ -3,6 +3,7 @@
  * @var array $user_id
  * @var array $settings
  * @var int $course_id
+ * @var boolean $elementor_widget
  * @var boolean $lesson_completed
  * @var boolean $block_enabled
  * @var boolean $dark_mode
@@ -15,6 +16,8 @@ $course_passed    = false;
 $dark_mode        = isset( $dark_mode ) ? $dark_mode : false;
 $lesson_completed = isset( $lesson_completed ) ? $lesson_completed : false;
 $block_enabled    = isset( $block_enabled ) ? $block_enabled : false;
+$elementor_widget = isset( $elementor_widget ) ? $elementor_widget : false;
+$elementor_editor = isset( $elementor_editor ) ? $elementor_editor : false;
 
 if ( ! empty( $total_progress['course']['progress_percent'] ) ) {
 	$course_passed = $total_progress['course']['progress_percent'] >= ( $settings['certificate_threshold'] ?? 70 );
@@ -26,14 +29,16 @@ wp_localize_script(
 	'masterstudy-single-course-complete',
 	'course_completed',
 	array(
-		'course_id'     => $course_id,
-		'user_id'       => ! empty( $user_id ),
-		'completed'     => $lesson_completed,
-		'block_enabled' => $block_enabled,
-		'nonce'         => wp_create_nonce( 'stm_lms_total_progress' ),
-		'ajax_url'      => admin_url( 'admin-ajax.php' ),
+		'elementor_widget' => $elementor_widget,
+		'course_id'        => $course_id,
+		'user_id'          => ! empty( $user_id ),
+		'completed'        => $lesson_completed,
+		'block_enabled'    => $block_enabled,
+		'nonce'            => wp_create_nonce( 'stm_lms_total_progress' ),
+		'ajax_url'         => admin_url( 'admin-ajax.php' ),
 	)
 );
+
 if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
 	wp_register_script( 'jspdf', STM_LMS_PRO_URL . '/assets/js/certificate-builder/jspdf.umd.js', array(), STM_LMS_PRO_VERSION, false );
 	wp_register_script( 'qrcode', STM_LMS_PRO_URL . '/assets/js/certificate-builder/qrcode.min.js', array(), STM_LMS_PRO_VERSION, false );
@@ -95,11 +100,13 @@ if ( ! empty( $total_progress ) && $total_progress['course_completed'] && $block
 		</div>
 	</div>
 	<?php
+} elseif ( $elementor_widget && $elementor_editor ) {
+	echo esc_html__( 'You must start taking the course for the data to be displayed on the page.', 'masterstudy-lms-learning-management-system' );
 }
 
 if ( ! empty( $user_id ) ) {
 	?>
-	<div id="masterstudy-single-course-complete" class="masterstudy-single-course-complete" style="display: none;">
+	<div id="masterstudy-single-course-complete" class="masterstudy-single-course-complete" data-course-id="<?php echo esc_attr( $course_id ); ?>" style="display: none;">
 		<div class="masterstudy-single-course-complete__wrapper">
 			<div class="masterstudy-single-course-complete__container">
 				<span class="masterstudy-single-course-complete__close"></span>
@@ -186,6 +193,7 @@ if ( ! empty( $user_id ) ) {
 								'style'         => 'tertiary',
 								'size'          => 'md',
 								'data'          => array(),
+								'id'            => 'gotit',
 								'icon_position' => '',
 								'icon_name'     => '',
 							)

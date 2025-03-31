@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.23
+Stable tag: 3.5.24
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,10 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.24 - 2025-03-31 =
+- **Enhancement:** Improve the quality of the Featured Image on single course page.
+- **Enhancement:** Converted single course elements into widgets for easier custom design of the page.
+
 = 3.5.23 - 2025-03-25 =
 - **Enhancement:** Added compatibility with the Polylang plugin. 
 - **Enhancement:** Instructors with admin access can now edit lessons in Elementor.
@@ -324,18 +328,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.5.19 - 2025-03-07 =
 - **Fix:** Minor bug fixes.
-
-= 3.5.18 - 2025-03-05 =
-- **Fix:** Fixed an issue in the admin dashboard that happened when user avatars were disabled globally on site.
-- **Enhancement:** Added compatibility with WooCommerce High-Performance Order Storage.
-
-= 3.5.17 - 2025-02-27 =
-- **Enhancement:** Replaced the placeholder text in the Lesson Duration field in the course builder for audio, stream, text, video and Zoom lessons.
-- **Enhancement:** Updated the "Become Instructor" email template for new clients.
-- **Enhancement:** Updated the "Enterprise Request" email template for new clients.
-- **Enhancement:** Made internal changes to the price display logic in courses and course cards.
-- **Enhancement:** Added a setting to display popular courses on the single course page.
-- **Fix:** Added the ability to translate the word "Category" in the Course Search Box widget.
-- **Fix:** Fixed an issue with the Gutenberg editor when adding the Masterstudy Adaptive Container widget.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

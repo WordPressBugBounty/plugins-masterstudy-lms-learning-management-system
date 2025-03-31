@@ -94,7 +94,7 @@ class StmLmsCoursesCategories extends Widget_Base {
 	 * @return array Widget categories.
 	 */
 	public function get_categories() {
-		return array( 'stm_lms_old' );
+		return array( 'stm_lms' );
 	}
 
 	protected function register_controls() {

@@ -3,11 +3,13 @@
 /**
  * @var $course_id
  * @var $mode
+ * @var $show_title
  */
 $coming_soon                    = get_post_meta( $course_id, 'coming_soon_status', true );
 $coming_soon_start_date         = get_post_meta( $course_id, 'coming_soon_date', true );
 $coming_soon_email_notification = get_post_meta( $course_id, 'coming_soon_email_notification', true );
 $is_course_coming_soon          = STM_LMS_Helpers::masterstudy_lms_is_course_coming_soon( $course_id );
+$show_title                     = $show_title ?? true;
 
 if ( ! $is_course_coming_soon || empty( $coming_soon_start_date ) ) {
 	return;
@@ -115,9 +117,11 @@ if ( 'card' === $mode ) {
 			);
 			?>
 		</div>
-		<div class="coming-soon-heading">
-			<?php echo esc_html( $coming_soon_message ); ?>
-		</div>
+		<?php if ( $show_title ) { ?>
+			<div class="coming-soon-heading">
+				<?php echo esc_html( $coming_soon_message ); ?>
+			</div>
+		<?php } ?>
 	</div>
 	<div class="masterstudy-coming-soon-modal" style="display:none;">
 		<div class="masterstudy-coming-soon-modal__wrapper">

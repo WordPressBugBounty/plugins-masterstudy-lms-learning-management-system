@@ -22,7 +22,7 @@ class STM_LMS_Course {
 
 		add_filter( 'stm_lms_course_tabs', 'STM_LMS_Course::course_tabs', 10, 2 );
 
-		add_filter( 'masterstudy_course_page_header', 'STM_LMS_Course::masterstudy_course_page_header', 10, 1 );
+		add_filter( 'masterstudy_course_page_header', 'STM_LMS_Course::masterstudy_course_page_header', 10, 2 );
 
 		add_action( 'stm_lms_before_item_template_start', 'STM_LMS_Course::check_course_item', 10, 3 );
 	}
@@ -267,9 +267,13 @@ class STM_LMS_Course {
 		$option_key = "masterstudy_plugin_course_completion_{$user_id}_{$course_id}";
 
 		if ( $progress > $threshold && ! get_option( $option_key ) ) {
-			do_action( 'masterstudy_plugin_student_course_completion', $user_id, $course_id, false );
-			// Store the completion status
-			update_option( $option_key, true, false ); // Set autoload to false for performance
+			$email_settings = get_option( 'stm_lms_email_manager_settings', array() );
+
+			if ( ! empty( $email_settings ) && isset( $email_settings['stm_lms_certificates_preview_checked_enable'] ) &&
+				true === $email_settings['stm_lms_certificates_preview_checked_enable'] && is_ms_lms_addon_enabled( 'email_manager' ) && is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
+				do_action( 'masterstudy_plugin_student_course_completion', $user_id, $course_id, false );
+				update_option( $option_key, true, false ); // Set autoload to false for performance
+			}
 		}
 
 		if ( 100 === $progress ) {
@@ -631,15 +635,29 @@ class STM_LMS_Course {
 		}
 	}
 
-	public static function masterstudy_course_page_header( $template ) {
+	public static function masterstudy_course_page_header( $template, $elementor_course_id = null ) {
 		wp_enqueue_style( 'masterstudy-fonts' );
 		wp_enqueue_style( 'masterstudy-single-course-components' );
 		wp_enqueue_script( 'masterstudy-single-course-components' );
-		wp_enqueue_style( 'masterstudy-single-course-' . $template );
-		wp_enqueue_script( 'masterstudy-single-course-' . $template );
+
+		if ( $template ) {
+			wp_enqueue_style( 'masterstudy-single-course-' . $template );
+			wp_enqueue_script( 'masterstudy-single-course-' . $template );
+		}
+
 		wp_enqueue_script( 'masterstudy-single-course-main' );
 
-		$course                                     = ( new CourseRepository() )->find( get_the_ID() );
+		$course_id = get_the_ID();
+
+		if ( $elementor_course_id ) {
+			$course_id = $elementor_course_id;
+		}
+
+		if ( empty( $course_id ) || 'stm-courses' !== get_post_type( $course_id ) ) {
+			return array();
+		}
+
+		$course                                     = ( new CourseRepository() )->find( $course_id );
 		$is_coming_soon                             = STM_LMS_Helpers::masterstudy_lms_is_course_coming_soon( $course->id );
 		$instructor                                 = STM_LMS_User::get_current_user( $course->owner->ID );
 		$current_user_id                            = get_current_user_id();

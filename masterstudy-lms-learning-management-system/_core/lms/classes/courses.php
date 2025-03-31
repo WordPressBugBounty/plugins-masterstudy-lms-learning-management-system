@@ -86,6 +86,23 @@ class STM_LMS_Courses {
 		return $course;
 	}
 
+	public static function get_all_courses_for_options() {
+		global $wpdb;
+
+		$results = $wpdb->get_results(
+			"SELECT ID, post_title FROM {$wpdb->posts} WHERE post_type = 'stm-courses' AND post_status = 'publish'",
+			ARRAY_A
+		);
+
+		$courses = array();
+
+		foreach ( $results as $row ) {
+			$courses[ $row['ID'] ] = $row['post_title'];
+		}
+
+		return $courses;
+	}
+
 	public static function get_all_courses( $args ) {
 		$default_args = array(
 			'post_type'   => 'stm-courses',

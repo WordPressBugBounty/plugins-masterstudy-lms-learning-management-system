@@ -92,7 +92,7 @@ class StmLmsSingleCourseCarousel extends Widget_Base {
 	 */
 
 	public function get_categories() {
-		return array( 'stm_lms_old' );
+		return array( 'stm_lms' );
 	}
 
 	public static function show_reviews() {

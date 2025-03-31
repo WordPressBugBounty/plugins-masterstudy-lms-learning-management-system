@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'stmlms';
-  src:  url('fonts/stmlms.eot?4eslc4');
-  src:  url('fonts/stmlms.eot?4eslc4#iefix') format('embedded-opentype'),
-    url('fonts/stmlms.ttf?4eslc4') format('truetype'),
-    url('fonts/stmlms.woff?4eslc4') format('woff'),
-    url('fonts/stmlms.svg?4eslc4#stmlms') format('svg');
+  src:  url('fonts/stmlms.eot?u436ga');
+  src:  url('fonts/stmlms.eot?u436ga#iefix') format('embedded-opentype'),
+    url('fonts/stmlms.ttf?u436ga') format('truetype'),
+    url('fonts/stmlms.woff?u436ga') format('woff'),
+    url('fonts/stmlms.svg?u436ga#stmlms') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,87 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.stmlms-course-countdown:before {
+  content: "\ea0e";
+}
+.stmlms-course-grade-a:before {
+  content: "\ea0d";
+}
+.stmlms-widget-locked:before {
+  content: "\ea0b";
+}
+.stmlms-widget:before {
+  content: "\ea0c";
+}
+.stmlms-course-info:before {
+  content: "\e9ff";
+}
+.stmlms-course-layers:before {
+  content: "\ea00";
+}
+.stmlms-course-megaphone:before {
+  content: "\ea01";
+}
+.stmlms-course-navigation:before {
+  content: "\ea02";
+}
+.stmlms-course-price:before {
+  content: "\ea03";
+}
+.stmlms-course-rating:before {
+  content: "\ea04";
+}
+.stmlms-course-review:before {
+  content: "\ea05";
+}
+.stmlms-course-share:before {
+  content: "\ea06";
+}
+.stmlms-course-short-text:before {
+  content: "\ea07";
+}
+.stmlms-course-teacher:before {
+  content: "\ea08";
+}
+.stmlms-course-title:before {
+  content: "\ea09";
+}
+.stmlms-course-users:before {
+  content: "\ea0a";
+}
+.stmlms-course-application:before {
+  content: "\ea20";
+}
+.stmlms-course-attached-documents:before {
+  content: "\ea21";
+}
+.stmlms-course-buy:before {
+  content: "\ea22";
+}
+.stmlms-course-calendar:before {
+  content: "\ea23";
+}
+.stmlms-course-categories:before {
+  content: "\ea24";
+}
+.stmlms-course-check:before {
+  content: "\ea25";
+}
+.stmlms-course-complete:before {
+  content: "\ea26";
+}
+.stmlms-course-details:before {
+  content: "\ea27";
+}
+.stmlms-course-faq:before {
+  content: "\ea28";
+}
+.stmlms-course-heart:before {
+  content: "\ea2a";
+}
+.stmlms-course-Image:before {
+  content: "\ea2b";
+}
 .stmlms-grades:before {
   content: "\e9fd";
 }

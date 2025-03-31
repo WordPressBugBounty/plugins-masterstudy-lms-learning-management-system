@@ -11,6 +11,6 @@
 		echo wp_kses_post( htmlspecialchars_decode( $course->announcement ) );
 	} else {
 		?>
-		<p><?php echo esc_html__( 'No announcements at this moment.', 'masterstudy-lms-learning-management-system' ); ?></p>
+		<p><?php echo esc_html__( 'No notices at this moment.', 'masterstudy-lms-learning-management-system' ); ?></p>
 	<?php } ?>
 </div>

@@ -2,6 +2,8 @@
 /**
  * @var int $course_id
  * @var array $curriculum
+ * @var boolean $show_section_title
+ * @var integer $section_to_show
  * @var boolean $dark_mode
  */
 
@@ -9,6 +11,7 @@ use MasterStudy\Lms\Repositories\CoursePlayerRepository;
 
 $trial_lessons       = 0;
 $material_index      = 0;
+$section_index       = 0;
 $guest_trial_enabled = false;
 $is_enrolled         = is_user_logged_in()
 	? STM_LMS_Course::get_user_course( get_current_user_id(), $course_id )
@@ -25,13 +28,21 @@ if ( class_exists( 'STM_LMS_Shareware' ) ) {
 }
 
 foreach ( $curriculum as $section ) {
+	$current_index = $section_index++;
+
+	if ( 'all' !== $section_to_show && $section_index !== (int) $section_to_show ) {
+		continue;
+	}
+
 	$section['materials'] = ( new CoursePlayerRepository() )->hydrate_materials( $section['materials'], $course_id, get_current_user_id() );
 	?>
 	<div class="masterstudy-curriculum-list__wrapper masterstudy-curriculum-list__wrapper_opened">
-		<div class="masterstudy-curriculum-list__section">
-			<span class="masterstudy-curriculum-list__section-title"><?php echo esc_html( $section['title'] ); ?></span>
-			<span class="masterstudy-curriculum-list__toggler"></span>
-		</div>
+		<?php if ( $show_section_title ) { ?>
+			<div class="masterstudy-curriculum-list__section">
+				<span class="masterstudy-curriculum-list__section-title"><?php echo esc_html( $section['title'] ); ?></span>
+				<span class="masterstudy-curriculum-list__toggler"></span>
+			</div>
+		<?php } ?>
 		<ul class="masterstudy-curriculum-list__materials">
 			<?php
 			foreach ( $section['materials'] as $material ) {
@@ -132,4 +143,7 @@ foreach ( $curriculum as $section ) {
 		</ul>
 	</div>
 	<?php
+	if ( 'all' !== $section_to_show ) {
+		break;
+	}
 }

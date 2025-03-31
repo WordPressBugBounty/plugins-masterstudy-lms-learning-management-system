@@ -2,6 +2,8 @@
 /**
  * @var object $course
  * @var string $style
+ * @var boolean $show_section_title
+ * @var integer $section_to_show
  * @var boolean $dark_mode
  *
  * masterstudy-curriculum-list_dark-mode - for dark mode
@@ -28,9 +30,11 @@ if ( empty( $curriculum ) ) {
 	STM_LMS_Templates::show_lms_template(
 		"components/course/curriculum/{$template}",
 		array(
-			'course_id'  => $course->id,
-			'curriculum' => $curriculum,
-			'dark_mode'  => $dark_mode,
+			'course_id'          => $course->id,
+			'curriculum'         => $curriculum,
+			'show_section_title' => $show_section_title ?? true,
+			'section_to_show'    => $section_to_show ?? 'all',
+			'dark_mode'          => $dark_mode,
 		)
 	);
 	?>

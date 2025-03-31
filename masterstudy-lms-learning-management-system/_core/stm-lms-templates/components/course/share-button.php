@@ -9,8 +9,7 @@ wp_localize_script(
 	'masterstudy-single-course-components',
 	'share_data',
 	array(
-		'copy_text'  => __( 'Copied to clipboard!', 'masterstudy-lms-learning-management-system' ),
-		'course_url' => $course_url,
+		'copy_text' => __( 'Copied to clipboard!', 'masterstudy-lms-learning-management-system' ),
 	)
 );
 ?>
@@ -52,7 +51,7 @@ wp_localize_script(
 					</a>
 				</div>
 				<div class="masterstudy-single-course-share-button-modal__link-wrapper">
-					<a href="#" class="masterstudy-single-course-share-button-modal__link masterstudy-single-course-share-button-modal__link_copy">
+					<a href="#" data-url="<?php echo esc_url( $course_url ); ?>" class="masterstudy-single-course-share-button-modal__link masterstudy-single-course-share-button-modal__link_copy">
 						<?php echo esc_html__( 'Copy link', 'masterstudy-lms-learning-management-system' ); ?>
 					</a>
 				</div>

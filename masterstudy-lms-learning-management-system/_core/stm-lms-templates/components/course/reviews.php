@@ -2,9 +2,12 @@
 /**
  * @var object $course
  * @var integer $user_id
+ * @var string $style
  *
  * masterstudy-single-course-reviews__form_active - to show add review form
  */
+
+$style = isset( $style ) ? $style : '';
 
 wp_localize_script(
 	'masterstudy-single-course-components',
@@ -12,8 +15,9 @@ wp_localize_script(
 	array(
 		'course_id'              => $course->id,
 		'author_label'           => esc_html__( 'by', 'masterstudy-lms-learning-management-system' ),
-		'editor_id'              => 'editor_add_review',
+		'editor_id'              => 'editor_add_review_' . $course->id,
 		'status'                 => 'pending for review',
+		'style'                  => $style,
 		'student_public_profile' => STM_LMS_Options::get_option( 'student_public_profile', true ),
 	)
 );
@@ -39,7 +43,7 @@ if ( $course->is_udemy_course ) {
 	}
 }
 ?>
-<div class="masterstudy-single-course-reviews">
+<div class="masterstudy-single-course-reviews masterstudy-single-course-reviews_<?php echo esc_attr( $style ); ?>" data-course-id="<?php echo esc_attr( $course->id ); ?>">
 	<div class="masterstudy-single-course-reviews__main <?php echo empty( $course_marks ) ? 'masterstudy-single-course-reviews__main_empty' : ''; ?>">
 		<?php if ( ! empty( $user_id ) ) { ?>
 			<div class="masterstudy-single-course-reviews__form <?php echo empty( $course_marks ) ? 'masterstudy-single-course-reviews__form_empty' : ''; ?>">
@@ -59,7 +63,7 @@ if ( $course->is_udemy_course ) {
 					STM_LMS_Templates::show_lms_template(
 						'components/wp-editor',
 						array(
-							'id'       => 'editor_add_review',
+							'id'       => 'editor_add_review_' . $course->id,
 							'content'  => '',
 							'settings' => array(
 								'quicktags'     => false,
