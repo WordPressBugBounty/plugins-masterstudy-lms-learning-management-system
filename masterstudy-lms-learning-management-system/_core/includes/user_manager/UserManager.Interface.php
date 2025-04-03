@@ -36,7 +36,7 @@ class STM_LMS_User_Manager_Interface {
 			stm_lms_register_style( 'dashboard/dashboard' );
 
 			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
-			wp_register_script( 'vue-router.js', 'https://unpkg.com/vue-router@2.0.0/dist/vue-router.js', array(), STM_LMS_VERSION );
+			wp_register_script( 'vue-router.js', 'https://cdn.jsdelivr.net/npm/vue-router@2.0.0/dist/vue-router.min.js', array(), '2.0.0' );
 
 			$components = self::components_list();
 

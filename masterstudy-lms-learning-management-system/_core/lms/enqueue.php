@@ -193,6 +193,7 @@ function stm_lms_enqueue_component_scripts() {
 	wp_register_script( 'masterstudy-single-course-components', STM_LMS_URL . '/assets/js/components/course/main.js', array( 'jquery', 'jquery.cookie' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-file-upload', STM_LMS_URL . '/assets/js/components/file-upload.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-orders', STM_LMS_URL . 'assets/js/orders/main.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-pmpro-checkout', STM_LMS_URL . 'assets/js/pmpro-checkout.js', array( 'jquery', 'masterstudy-select2' ), MS_LMS_VERSION, true );
 
 	wp_register_style( 'masterstudy-course-player-video-plyr', STM_LMS_URL . 'assets/css/course-player/content/lesson/plyr.css', null, MS_LMS_VERSION );
 	wp_register_script( 'plyr', STM_LMS_URL . '/assets/vendors/plyr/plyr.js', array(), MS_LMS_VERSION, false );

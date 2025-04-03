@@ -202,32 +202,32 @@ class STM_LMS_Courses {
 
 	public function sorting_options( $value ) {
 		$sorting_options = array(
-			'date_low'   => array(
+			'date_low'    => array(
 				'meta_key' => '',
 				'orderby'  => 'date',
 				'order'    => 'ASC',
 			),
-			'date_high'  => array(
+			'date_high'   => array(
 				'meta_key' => '',
 				'orderby'  => 'date',
 				'order'    => 'DESC',
 			),
-			'rating'     => array(
+			'rating'      => array(
 				'meta_key' => 'course_mark_average',
 				'orderby'  => 'meta_value_num',
 				'order'    => 'DESC',
 			),
-			'popular'    => array(
+			'popular'     => array(
 				'meta_key' => 'views',
 				'orderby'  => 'meta_value_num',
 				'order'    => 'DESC',
 			),
-			'price_high' => array(
+			'price_high'  => array(
 				'meta_key' => 'price',
 				'orderby'  => 'meta_value_num',
 				'order'    => 'DESC',
 			),
-			'price_low'  => array(
+			'price_low'   => array(
 				'meta_key' => 'price',
 				'orderby'  => 'meta_value_num',
 				'order'    => 'ASC',
@@ -299,14 +299,42 @@ class STM_LMS_Courses {
 	public function filter_courses( $default_args, $terms, $metas, $sort_by ) {
 		if ( is_array( $default_args ) ) {
 			if ( ! empty( $terms ) && is_array( $terms ) ) {
-				$default_args['tax_query'] = array(
-					array(
-						'taxonomy' => 'stm_lms_course_taxonomy',
-						'field'    => 'term_id',
-						'terms'    => $terms,
-					),
-				);
+				$tax_query    = array( 'relation' => 'OR' );
+				$parent_terms = array();
+				$child_terms  = array();
+
+				foreach ( $terms as $term_id ) {
+					$term = get_term( $term_id, 'stm_lms_course_taxonomy' );
+					if ( $term && 0 === $term->parent ) {
+						$parent_terms[] = $term_id;
+					} else {
+						$child_terms[] = $term_id;
+					}
+				}
+
+				if ( ! empty( $parent_terms ) && empty( $child_terms ) ) {
+					$tax_query[] = array(
+						'taxonomy'         => 'stm_lms_course_taxonomy',
+						'field'            => 'term_id',
+						'terms'            => $parent_terms,
+						'operator'         => 'IN',
+						'include_children' => true,
+					);
+				}
+
+				if ( ! empty( $child_terms ) ) {
+					$tax_query[] = array(
+						'taxonomy'         => 'stm_lms_course_taxonomy',
+						'field'            => 'term_id',
+						'terms'            => $child_terms,
+						'operator'         => 'IN',
+						'include_children' => false,
+					);
+				}
+
+				$default_args['tax_query'] = $tax_query;
 			}
+
 			if ( ! empty( $metas ) && is_array( $metas ) ) {
 				foreach ( $metas as $key => $value ) {
 					switch ( $key ) {
@@ -325,13 +353,10 @@ class STM_LMS_Courses {
 						case 'status':
 							$default_args['meta_query'][ $key ] = array( 'relation' => 'OR' );
 							foreach ( $value as $item ) {
-								array_push(
-									$default_args['meta_query'][ $key ],
-									array(
-										'key'     => $key,
-										'value'   => $item,
-										'compare' => '=',
-									)
+								$default_args['meta_query'][ $key ][] = array(
+									'key'     => $key,
+									'value'   => $item,
+									'compare' => '=',
 								);
 							}
 							break;
@@ -345,7 +370,6 @@ class STM_LMS_Courses {
 										'compare' => '=',
 									),
 								);
-								break;
 							} elseif ( 'available_now' === $value ) {
 								$default_args['meta_query'][ $key ] = array(
 									'relation' => 'OR',
@@ -359,7 +383,6 @@ class STM_LMS_Courses {
 										'compare' => '!=',
 									),
 								);
-								break;
 							}
 							break;
 						case 'level':
@@ -387,6 +410,7 @@ class STM_LMS_Courses {
 					}
 				}
 			}
+
 			if ( ! empty( $sort_by ) ) {
 				$sorting_options          = $this->sorting_options( $sort_by );
 				$default_args['meta_key'] = $sorting_options['meta_key'];
@@ -394,6 +418,7 @@ class STM_LMS_Courses {
 				$default_args['order']    = $sorting_options['order'];
 			}
 		}
+
 		return $default_args;
 	}
 

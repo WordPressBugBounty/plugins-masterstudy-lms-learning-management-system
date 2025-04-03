@@ -169,3 +169,9 @@ function masterstudy_lms_instructors_page( $page_id ) {
 }
 add_filter( 'stm_lms_instructors_page', 'masterstudy_lms_instructors_page' );
 
+function masterstudy_lms_pmpro_pages_custom_template_path( $templates, $page_name ) {
+	$templates[] = STM_LMS_PATH . '/stm-lms-templates/pmpro/pages/' . $page_name . '.php';
+
+	return $templates;
+}
+add_filter( 'pmpro_pages_custom_template_path', 'masterstudy_lms_pmpro_pages_custom_template_path', 10, 2 );

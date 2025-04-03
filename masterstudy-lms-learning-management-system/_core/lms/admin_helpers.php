@@ -312,7 +312,7 @@ function masterstudy_plugin_save_questions_custom_title( $post_id, $post, $updat
 	}
 
 	if ( isset( $_POST['question_title'] ) ) {
-		$editor_question_title = ( $_POST['question_title'] );
+		$editor_question_title = stripslashes( $_POST['question_title'] );
 
 		if ( $post->post_title !== $editor_question_title ) {
 			$wpdb->update(

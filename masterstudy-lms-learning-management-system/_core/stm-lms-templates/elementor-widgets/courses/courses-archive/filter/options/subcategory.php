@@ -1,6 +1,8 @@
 <?php
 $parents = get_transient( 'ms_lms_courses_archive_parent_categories' );
 $terms   = STM_LMS_Courses::get_courses_child_terms( $parents );
+
+$selected_subcategories = ! empty( $_GET['terms'] ) ? array_map( 'intval', $_GET['terms'] ) : array();
 ?>
 <div class="ms_lms_courses_archive__filter_options_item">
 	<div class="ms_lms_courses_archive__filter_options_item_title">
@@ -15,7 +17,7 @@ $terms   = STM_LMS_Courses::get_courses_child_terms( $parents );
 					<div class="ms_lms_courses_archive__filter_options_item_category">
 						<label class="ms_lms_courses_archive__filter_options_item_checkbox">
 							<span class="ms_lms_courses_archive__filter_options_item_checkbox_inner">
-								<input type="checkbox" value="<?php echo intval( $item->term_id ); ?>" <?php checked( in_array( $item->term_id, $terms ) ); ?> name="subcategory[]"/>
+								<input type="checkbox" value="<?php echo intval( $item->term_id ); ?>" <?php checked( in_array( $item->term_id, $selected_subcategories, true ) ); ?> name="subcategory[]"/>
 								<span><i class="fa fa-check"></i></span>
 							</span>
 							<span class="ms_lms_courses_archive__filter_options_item_checkbox_label"><?php echo esc_html( $item->name ); ?></span>
