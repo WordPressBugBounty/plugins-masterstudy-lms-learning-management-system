@@ -22,6 +22,8 @@ if ( is_admin() ) {
 	require_once STM_LMS_LIBRARY . '/db/tables/user_quizzes.times.table.php';
 	require_once STM_LMS_LIBRARY . '/db/tables/user_lessons.table.php';
 	require_once STM_LMS_LIBRARY . '/db/tables/user_answers.table.php';
+	require_once STM_LMS_LIBRARY . '/db/tables/lesson_markers_questions.table.php';
+	require_once STM_LMS_LIBRARY . '/db/tables/lesson_marker_user_answers.table.php';
 	require_once STM_LMS_LIBRARY . '/db/tables/user_cart.table.php';
 	require_once STM_LMS_LIBRARY . '/db/tables/user_chat.table.php';
 	require_once STM_LMS_LIBRARY . '/db/tables/user_searches.table.php';

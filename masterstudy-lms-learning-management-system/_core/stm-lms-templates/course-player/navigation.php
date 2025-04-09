@@ -8,6 +8,7 @@
  * @var string $audio_type
  * @var string $video_required_progress
  * @var string $audio_required_progress
+ * @var array $video_questions_stats
  * @var array $material_ids
  * @var boolean $lesson_completed
  * @var boolean $has_access
@@ -31,18 +32,25 @@ $next_lesson_url     = '';
 $next_lesson_preview = false;
 $progress_video_type = ! empty( $video_type ) && ! in_array( $video_type, array( 'embed', 'shortcode' ), true );
 $progress_audio_type = ! empty( $audio_type ) && ! in_array( $audio_type, array( 'embed', 'shortcode' ), true );
+$questions_must_done = $progress_video_type && get_post_meta( $item_id, 'questions_must_done', true );
 $progress_hint_text  = 'video' === $lesson_type
 	? sprintf(
 		/* translators: %s: video required progress */
-		esc_html__( 'You must watch at least %s%% of the video to move on to the next lesson', 'masterstudy-lms-learning-management-system' ),
+		esc_html__( 'You must watch at least %s%% of the video to complete the lesson', 'masterstudy-lms-learning-management-system' ),
 		$video_required_progress
 	)
 	: sprintf(
 		/* translators: %s: video required progress */
-		esc_html__( 'You must listen at least %s%% of the audio to move on to the next lesson', 'masterstudy-lms-learning-management-system' ),
+		esc_html__( 'You must listen at least %s%% of the audio to complete the lesson', 'masterstudy-lms-learning-management-system' ),
 		$audio_required_progress
 	);
-$is_draft_assignment = 'assignments' === $lesson_type
+
+if ( 'video' === $lesson_type && $questions_must_done ) {
+	$progress_hint_text .= ' ' . esc_html__( 'and you must answer all questions correctly.', 'masterstudy-lms-learning-management-system' );
+}
+
+$video_questions_hint = esc_html__( 'You must answer all questions correctly to complete the lesson', 'masterstudy-lms-learning-management-system' );
+$is_draft_assignment  = 'assignments' === $lesson_type
 	&& method_exists( 'MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository', 'is_assignment_draft' )
 	&& ( new AssignmentStudentRepository() )->is_assignment_draft( $item_id, $user_id );
 
@@ -160,17 +168,30 @@ if ( ! empty( $next_lesson ) ) {
 					?>
 					<div class="masterstudy-course-player-navigation__next">
 						<?php
-						if ( $is_pro_plus && 'masterstudy-course-player-lesson-submit' === $button_id &&
-						( $progress_video_type || $progress_audio_type ) &&
-						( $video_required_progress || $audio_required_progress ) ) {
-							STM_LMS_Templates::show_lms_template(
-								'components/hint',
-								array(
-									'content'   => $progress_hint_text,
-									'side'      => is_rtl() ? 'left' : 'right',
-									'dark_mode' => $dark_mode,
-								)
-							);
+						if ( $is_pro_plus ) {
+							if ( $questions_must_done && ( $video_questions_stats['completed'] < $video_questions_stats['total'] ) ) {
+								STM_LMS_Templates::show_lms_template(
+									'components/hint',
+									array(
+										'content'   => $video_questions_hint,
+										'side'      => is_rtl() ? 'left' : 'right',
+										'dark_mode' => $dark_mode,
+									)
+								);
+							}
+
+							if ( 'masterstudy-course-player-lesson-submit' === $button_id &&
+							( $progress_video_type || $progress_audio_type ) &&
+							( $video_required_progress || $audio_required_progress ) ) {
+								STM_LMS_Templates::show_lms_template(
+									'components/hint',
+									array(
+										'content'   => $progress_hint_text,
+										'side'      => is_rtl() ? 'left' : 'right',
+										'dark_mode' => $dark_mode,
+									)
+								);
+							}
 						}
 
 						STM_LMS_Templates::show_lms_template(
@@ -194,17 +215,31 @@ if ( ! empty( $next_lesson ) ) {
 				?>
 				<div class="masterstudy-course-player-navigation__next">
 					<?php
-					if ( $is_pro_plus && ( $progress_video_type || $progress_audio_type ) &&
-					( $video_required_progress || $audio_required_progress ) ) {
-						STM_LMS_Templates::show_lms_template(
-							'components/hint',
-							array(
-								'content'   => $progress_hint_text,
-								'side'      => is_rtl() ? 'left' : 'right',
-								'dark_mode' => $dark_mode,
-							)
-						);
+					if ( $is_pro_plus ) {
+						if ( $questions_must_done && ( $video_questions_stats['completed'] < $video_questions_stats['total'] ) ) {
+							STM_LMS_Templates::show_lms_template(
+								'components/hint',
+								array(
+									'content'   => $video_questions_hint,
+									'side'      => is_rtl() ? 'left' : 'right',
+									'dark_mode' => $dark_mode,
+								)
+							);
+						}
+
+						if ( ( $progress_video_type || $progress_audio_type ) &&
+						( $video_required_progress || $audio_required_progress ) ) {
+							STM_LMS_Templates::show_lms_template(
+								'components/hint',
+								array(
+									'content'   => $progress_hint_text,
+									'side'      => is_rtl() ? 'left' : 'right',
+									'dark_mode' => $dark_mode,
+								)
+							);
+						}
 					}
+
 					STM_LMS_Templates::show_lms_template(
 						'components/nav-button',
 						array(

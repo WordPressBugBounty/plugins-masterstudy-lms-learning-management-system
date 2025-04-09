@@ -13,6 +13,7 @@ class STM_LMS_Lesson {
 		add_action( 'wp_ajax_stm_lms_complete_lesson', 'STM_LMS_Lesson::complete_lesson' );
 		add_action( 'wp_ajax_nopriv_stm_lms_complete_lesson', 'STM_LMS_Lesson::complete_lesson' );
 		add_action( 'wp_ajax_stm_lms_total_progress', 'STM_LMS_Lesson::total_progress' );
+		add_action( 'wp_ajax_stm_lms_answer_video_lesson', 'STM_LMS_Lesson::answer_video_lesson' );
 	}
 
 	public static function get_lesson_url( $post_id, $lesson_id ) {
@@ -319,5 +320,60 @@ class STM_LMS_Lesson {
 		$data['certificate_url']  = STM_LMS_Course::certificates_page_url( $course_id );
 
 		return $data;
+	}
+
+	public static function get_lesson_video_questions( $user_id, $lesson_id ) {
+		$markers = stm_lms_get_lesson_markers( $lesson_id );
+
+		if ( ! empty( $markers ) ) {
+			foreach ( $markers as &$marker ) {
+				if ( empty( $marker['answers'] ) ) {
+					continue;
+				}
+
+				$correct_answers = array_column(
+					array_filter(
+						$marker['answers'],
+						fn ( $a ) => $a['is_correct']
+					),
+					'id'
+				);
+
+				$marker['user_answers'] = stm_lms_get_user_marker_answers( $user_id, $lesson_id, $marker['id'] );
+				$user_answers           = $marker['user_answers'];
+
+				sort( $correct_answers );
+				sort( $user_answers );
+
+				$marker['is_completed'] = $correct_answers === $user_answers;
+				$marker['is_answered']  = ! empty( $user_answers );
+
+				if ( ! empty( $marker['answers'] ) ) {
+					foreach ( $marker['answers'] as &$answer ) {
+						$answer['is_selected'] = in_array( $answer['id'], $marker['user_answers'], true );
+					}
+				}
+			}
+		}
+
+		return $markers;
+	}
+
+	public static function answer_video_lesson() {
+		check_ajax_referer( 'stm_lms_answer_video_lesson', 'nonce' );
+
+		$user = STM_LMS_User::get_current_user();
+
+		$answer = array(
+			'user_id'     => $user['id'] ?? null,
+			'course_id'   => isset( $_POST['course_id'] ) ? intval( $_POST['course_id'] ) : null,
+			'lesson_id'   => isset( $_POST['lesson_id'] ) ? intval( $_POST['lesson_id'] ) : null,
+			'question_id' => isset( $_POST['question_id'] ) ? intval( $_POST['question_id'] ) : null,
+			'user_answer' => isset( $_POST['user_answer'] ) ? sanitize_text_field( wp_unslash( $_POST['user_answer'] ) ) : null,
+		);
+
+		stm_lms_add_user_marker_answer( $answer );
+
+		return wp_send_json( 'correct' );
 	}
 }

@@ -24,6 +24,14 @@ function stm_lms_user_lessons_name( $wpdb ) {
 	return $wpdb->prefix . 'stm_lms_user_lessons';
 }
 
+function stm_lms_lesson_marker_questions_name( $wpdb ) {
+	return $wpdb->prefix . 'stm_lms_lesson_marker_questions';
+}
+
+function stm_lms_lesson_marker_user_answers_name( $wpdb ) {
+	return $wpdb->prefix . 'stm_lms_lesson_marker_user_answers';
+}
+
 function stm_lms_user_cart_name( $wpdb ) {
 	return $wpdb->prefix . 'stm_lms_user_cart';
 }

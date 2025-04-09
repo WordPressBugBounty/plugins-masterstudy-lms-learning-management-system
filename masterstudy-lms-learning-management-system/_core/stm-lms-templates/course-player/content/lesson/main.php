@@ -4,6 +4,8 @@
  * @var int $item_id
  * @var int $user_id
  * @var string $lesson_type
+ * @var array $video_questions
+ * @var array $video_questions_stats
  * @var boolean $lesson_completed
  * @var boolean $dark_mode
  */
@@ -31,10 +33,12 @@ if ( $post instanceof \WP_Post && PostType::LESSON === $post->post_type ) {
 			STM_LMS_Templates::show_lms_template(
 				'course-player/content/lesson/video',
 				array(
-					'id'               => $item_id,
-					'user_id'          => $user_id,
-					'course_id'        => $post_id,
-					'lesson_completed' => $lesson_completed,
+					'id'                    => $item_id,
+					'user_id'               => $user_id,
+					'course_id'             => $post_id,
+					'video_questions'       => $video_questions,
+					'video_questions_stats' => $video_questions_stats,
+					'lesson_completed'      => $lesson_completed,
 				),
 			);
 		}
@@ -64,6 +68,15 @@ if ( $post instanceof \WP_Post && PostType::LESSON === $post->post_type ) {
 		}
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo stm_lms_filtered_output( $content );
+
+		if ( 'video' === $lesson_type ) {
+			STM_LMS_Templates::show_lms_template(
+				'components/video-questions-list',
+				array(
+					'video_questions' => $video_questions,
+				)
+			);
+		}
 		?>
 	</div>
 	<span class="masterstudy-course-player-lesson__submit-trigger"></span>

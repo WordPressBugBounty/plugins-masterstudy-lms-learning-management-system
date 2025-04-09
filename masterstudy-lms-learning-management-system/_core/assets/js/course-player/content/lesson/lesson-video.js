@@ -6,41 +6,69 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 (function ($) {
   $(document).ready(function () {
+    var _video_player_data$vi, _video_player_data$vi2, _video_player_data$vi3, _video_player_data$qu, _video_player_data$vi4, _video_player_data$vi5;
     var videoPlayerWrapper = $('.masterstudy-course-player-lesson-video__wrapper');
     var videoPlayerContainer = $('.masterstudy-course-player-lesson-video');
+    var videoWrapper = $('.masterstudy-course-player-lesson-video__container');
     var playButton = $('.masterstudy-course-player-lesson-video__play-button');
     var currentProgressContainer = $('#current-video-progress');
+    var currentUserProgressContainer = $('#current-video-progress-user');
     var iframe = document.getElementById('videoPlayer');
     var requiredProgress = parseInt($('#required-video-progress').data('required-progress'), 10) || 0;
+    var videoMarkers = (_video_player_data$vi = video_player_data.video_markers) !== null && _video_player_data$vi !== void 0 ? _video_player_data$vi : [];
+    var videoQuestions = (_video_player_data$vi2 = video_player_data.video_questions) !== null && _video_player_data$vi2 !== void 0 ? _video_player_data$vi2 : [];
+    var totalQuestions = (_video_player_data$vi3 = video_player_data.video_questions_stats['total']) !== null && _video_player_data$vi3 !== void 0 ? _video_player_data$vi3 : 0;
+    var questionsMustDone = (_video_player_data$qu = video_player_data.questions_must_done) !== null && _video_player_data$qu !== void 0 ? _video_player_data$qu : false;
+    var questionsProgressContainer = $('#current-questions-progress-user');
+    var questionsProgressBar = $('.masterstudy-course-player-lesson-video__progress-bar-value');
+    var completedQuestions = (_video_player_data$vi4 = video_player_data.video_questions_stats['completed']) !== null && _video_player_data$vi4 !== void 0 ? _video_player_data$vi4 : 0;
+    var answeredQuestions = (_video_player_data$vi5 = video_player_data.video_questions_stats['answered']) !== null && _video_player_data$vi5 !== void 0 ? _video_player_data$vi5 : 0;
     var userProgress = parseInt(currentProgressContainer.data('progress'), 10) || 0;
     var submitButton = $('[data-id="masterstudy-course-player-lesson-submit"]');
     var hint = $('.masterstudy-course-player-navigation__next .masterstudy-hint');
     var dataQuery = submitButton.attr('data-query');
+    var lastCheckedSecond = -1;
+    var wasFullscreen = false;
     var initialLoad = true;
-    var youTubePlayer;
-    if (userProgress < requiredProgress) {
+    var youTubePlayer = null;
+    var vimeoPlayer = null;
+    var plyrVideoPlayer = null;
+    var prestoPlayer = null;
+    var playerVDO = null;
+    var videoDefault = null;
+    var videoElement = null;
+    var lastTime = 0;
+    var isSeeking = false;
+    if (userProgress < requiredProgress || questionsMustDone && completedQuestions < totalQuestions) {
       submitButton.attr('disabled', 1);
       submitButton.addClass('masterstudy-button_disabled');
     }
-    var videoElement = $('.masterstudy-course-player-lesson-video__wrapper video');
+    videoElement = $('.masterstudy-course-player-lesson-video__wrapper video');
     if (videoElement.length) {
+      blockSeeking('html5', videoElement.get(0));
       videoElement.click(function () {
         $(this).siblings('span').hide();
       });
       $('body').on('click', '.masterstudy-timecode', function () {
+        if (video_player_data.strict_mode) return;
         var timecode = parseInt($(this).data('timecode'), 10);
         if (!isNaN(timecode)) {
-          var video = videoElement.get(0);
-          if (video) {
+          videoDefault = videoElement.get(0);
+          if (videoDefault) {
             videoPlayerContainer[0].scrollIntoView({
               behavior: 'smooth',
               block: 'start'
             });
-            video.currentTime = timecode;
-            if (video.paused) {
-              video.play();
+            videoDefault.currentTime = timecode;
+            if (videoDefault.paused) {
+              videoDefault.play();
             }
           }
+        }
+      });
+      videoElement.on('timeupdate', function () {
+        if (!isSeeking) {
+          checkVideoQuestions(this.currentTime);
         }
       });
     }
@@ -68,20 +96,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           return _regeneratorRuntime().wrap(function _callee3$(_context3) {
             while (1) switch (_context3.prev = _context3.next) {
               case 0:
-                timecode = parseInt($(this).data('timecode'), 10);
-                if (!isNaN(timecode)) {
-                  _context3.next = 3;
+                if (!video_player_data.strict_mode) {
+                  _context3.next = 2;
                   break;
                 }
                 return _context3.abrupt("return");
-              case 3:
+              case 2:
+                timecode = parseInt($(this).data('timecode'), 10);
+                if (!isNaN(timecode)) {
+                  _context3.next = 5;
+                  break;
+                }
+                return _context3.abrupt("return");
+              case 5:
                 videoPlayerContainer[0].scrollIntoView({
                   behavior: 'smooth',
                   block: 'start'
                 });
-                _context3.next = 6;
+                _context3.next = 8;
                 return waitForYouTubePlayer();
-              case 6:
+              case 8:
                 if (youTubePlayer && typeof youTubePlayer.seekTo === 'function') {
                   youTubePlayer.seekTo(timecode, true);
                   setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
@@ -121,27 +155,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     }, _callee2);
                   })), 300);
                 }
-              case 7:
+              case 9:
               case "end":
                 return _context3.stop();
             }
           }, _callee3, this);
         })));
       } else if ('vimeo' === video_player_data.video_type && !video_player_data.plyr_vimeo_player) {
-        var player = new Vimeo.Player(iframe);
-        player.on('timeupdate', function (data) {
-          return onTimeUpdate(data.seconds, data.duration);
+        vimeoPlayer = new Vimeo.Player(iframe);
+        blockSeeking('vimeo', vimeoPlayer);
+        vimeoPlayer.on('timeupdate', function (data) {
+          if (!isSeeking) {
+            onTimeUpdate(data.seconds, data.duration);
+            checkVideoQuestions(data.seconds);
+          }
         });
-        player.on('ended', finalizeProgress);
+        vimeoPlayer.on('ended', finalizeProgress);
         $('body').on('click', '.masterstudy-timecode', function () {
+          if (video_player_data.strict_mode) return;
           var timecode = parseInt($(this).data('timecode'), 10);
           if (!isNaN(timecode)) {
             videoPlayerContainer[0].scrollIntoView({
               behavior: 'smooth',
               block: 'start'
             });
-            player.setCurrentTime(timecode).then(function () {
-              player.play();
+            vimeoPlayer.setCurrentTime(timecode).then(function () {
+              vimeoPlayer.play();
             });
           }
         });
@@ -156,17 +195,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
               if (!(youTubePlayer && typeof youTubePlayer.seekTo === 'function')) {
-                _context4.next = 2;
+                _context4.next = 3;
                 break;
               }
+              blockSeeking('youtube', youTubePlayer);
               return _context4.abrupt("return");
-            case 2:
-              _context4.next = 4;
+            case 3:
+              _context4.next = 5;
               return loadYouTubeAPI();
-            case 4:
-              _context4.next = 6;
+            case 5:
+              _context4.next = 7;
               return initYouTubePlayer();
-            case 6:
+            case 7:
             case "end":
               return _context4.stop();
           }
@@ -208,10 +248,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, 500);
       });
     }
-    var plyrVideoPlayer = document.querySelector('.masterstudy-course-player-lesson-video .masterstudy-plyr-video-player');
-    if (plyrVideoPlayer) {
-      var videoPlayer = new Plyr($(plyrVideoPlayer), {
-        invertTime: true
+    var plyrVideoPlayerContainer = document.querySelector('.masterstudy-course-player-lesson-video .masterstudy-plyr-video-player');
+    if (plyrVideoPlayerContainer) {
+      plyrVideoPlayer = new Plyr($(plyrVideoPlayerContainer), {
+        invertTime: true,
+        markers: {
+          enabled: true,
+          points: videoMarkers
+        }
       });
       var overlay = $('<div>').addClass('plyr-overlay');
       var _iframe = $(plyrVideoPlayer).find('iframe');
@@ -219,13 +263,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         _iframe.before(overlay);
         _iframe.after(overlay.clone());
       }
-      videoPlayer.on('timeupdate', function (event) {
+      blockSeeking('plyr', plyrVideoPlayer);
+      plyrVideoPlayer.on('timeupdate', function (event) {
         var currentTime = event.detail.plyr.currentTime || 0;
         var duration = event.detail.plyr.duration || 0;
-        onTimeUpdate(currentTime, duration);
+        if (!isSeeking) {
+          onTimeUpdate(currentTime, duration);
+          checkVideoQuestions(currentTime);
+        }
       });
-      videoPlayer.on('ended', finalizeProgress);
+      plyrVideoPlayer.on('ended', finalizeProgress);
       $('body').on('click', '.masterstudy-timecode', function () {
+        if (video_player_data.strict_mode) return;
         var timecode = parseInt($(this).data('timecode'), 10);
         if (!isNaN(timecode)) {
           videoPlayerContainer[0].scrollIntoView({
@@ -233,44 +282,49 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             block: 'start'
           });
           if (video_player_data.video_type === 'youtube') {
-            if (videoPlayer.embed && videoPlayer.embed.playVideo) {
-              videoPlayer.embed.seekTo(timecode, true);
-              if (videoPlayer.embed.getPlayerState() !== YT.PlayerState.PLAYING) {
-                videoPlayer.embed.playVideo();
-                videoPlayer.play();
+            if (plyrVideoPlayer.embed && plyrVideoPlayer.embed.playVideo) {
+              plyrVideoPlayer.embed.seekTo(timecode, true);
+              if (plyrVideoPlayer.embed.getPlayerState() !== YT.PlayerState.PLAYING) {
+                plyrVideoPlayer.embed.playVideo();
+                plyrVideoPlayer.play();
               }
             }
           } else if (video_player_data.video_type === 'vimeo') {
-            if (videoPlayer.embed && videoPlayer.embed.setCurrentTime) {
-              videoPlayer.embed.setCurrentTime(timecode).then(function () {
-                videoPlayer.embed.getPaused().then(function (paused) {
+            if (plyrVideoPlayer.embed && plyrVideoPlayer.embed.setCurrentTime) {
+              plyrVideoPlayer.embed.setCurrentTime(timecode).then(function () {
+                plyrVideoPlayer.embed.getPaused().then(function (paused) {
                   if (paused) {
-                    videoPlayer.embed.play();
-                    videoPlayer.play();
+                    plyrVideoPlayer.embed.play();
+                    plyrVideoPlayer.play();
                   }
                 });
               });
             }
           } else {
-            videoPlayer.currentTime = timecode;
-            if (videoPlayer.paused) {
-              videoPlayer.play();
+            plyrVideoPlayer.currentTime = timecode;
+            if (plyrVideoPlayer.paused) {
+              plyrVideoPlayer.play();
             }
           }
         }
       });
     }
-    var prestoPlayer = document.querySelector('.masterstudy-course-player-lesson-video presto-player');
+    prestoPlayer = document.querySelector('.masterstudy-course-player-lesson-video presto-player');
     if (prestoPlayer) {
+      blockSeeking('presto', prestoPlayer);
       wp.hooks.addAction('presto.playerTimeUpdate', 'masterstudy-presto-time-update', function (player) {
         var currentTime = player.currentTime || 0;
         var duration = player.duration || 0;
-        onTimeUpdate(currentTime, duration);
+        if (!isSeeking) {
+          onTimeUpdate(currentTime, duration);
+          checkVideoQuestions(currentTime);
+        }
       });
       wp.hooks.addAction('presto.playerEnded', 'masterstudy-presto-ended', function (player) {
         finalizeProgress();
       });
       $('body').on('click', '.masterstudy-timecode', function () {
+        if (video_player_data.strict_mode) return;
         var timecode = parseInt($(this).data('timecode'), 10);
         if (!isNaN(timecode)) {
           videoPlayerContainer[0].scrollIntoView({
@@ -286,28 +340,181 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
     var vdoIframe = document.querySelector('.masterstudy-course-player-lesson-video iframe[src*="vdocipher.com"]');
     if (vdoIframe) {
-      var _player = VdoPlayer.getInstance(vdoIframe);
-      if (_player && _player.video) {
-        _player.video.addEventListener('timeupdate', function () {
-          var currentTime = _player.video.currentTime || 0;
-          var duration = _player.video.duration || 0;
-          onTimeUpdate(currentTime, duration);
+      playerVDO = VdoPlayer.getInstance(vdoIframe);
+      if (playerVDO && playerVDO.video) {
+        blockSeeking('vdocipher', playerVDO);
+        playerVDO.video.addEventListener('timeupdate', function () {
+          var currentTime = playerVDO.video.currentTime || 0;
+          var duration = playerVDO.video.duration || 0;
+          if (!isSeeking) {
+            onTimeUpdate(currentTime, duration);
+            checkVideoQuestions(currentTime);
+          }
         });
-        _player.video.addEventListener('ended', finalizeProgress);
+        playerVDO.video.addEventListener('ended', finalizeProgress);
         $('body').on('click', '.masterstudy-timecode', function () {
+          if (video_player_data.strict_mode) return;
           var timecode = parseInt($(this).data('timecode'), 10);
           if (!isNaN(timecode)) {
             videoPlayerContainer[0].scrollIntoView({
               behavior: 'smooth',
               block: 'start'
             });
-            _player.video.currentTime = timecode;
+            playerVDO.video.currentTime = timecode;
           }
         });
       }
     }
+    $('body').on('click', '[data-id="masterstudy-video-question-skip"], [data-id="masterstudy-video-question-continue"]', function () {
+      $('.masterstudy-lesson-video-question').removeClass('masterstudy-lesson-video-question_show');
+      videoWrapper.show();
+      toggleVideoPlayback();
+      if (wasFullscreen) {
+        enterFullscreenIfNeeded();
+      }
+    });
+    $('body').on('click', '.masterstudy-lesson-video-list-question', function () {
+      var timecode = parseInt($(this).data('marker'), 10);
+      if (isNaN(timecode)) return;
+      if ($(this).hasClass('masterstudy-lesson-video-list-question_completed')) return;
+      var isFailed = $(this).hasClass('masterstudy-lesson-video-list-question_failed');
+      if (!isFailed && video_player_data.strict_mode) {
+        return;
+      }
+      lastCheckedSecond = -1;
+      if (isFailed && video_player_data.strict_mode) {
+        isSeeking = false;
+        lastTime = timecode;
+        checkVideoQuestions(timecode);
+      }
+      videoPlayerContainer[0].scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      playerSeekTo(timecode);
+      if (isFailed && video_player_data.strict_mode) {
+        toggleVideoPlayback(true);
+      }
+    });
+    $('body').on('click', '[data-id="masterstudy-video-question-rewatch"]', function (event) {
+      event.preventDefault();
+      var questionElement = $(this).closest('.masterstudy-lesson-video-question');
+      questionElement.removeClass('masterstudy-lesson-video-question_show masterstudy-lesson-video-question_answered masterstudy-lesson-video-question_failed');
+      videoWrapper.show();
+      questionElement.find('.masterstudy-lesson-video-question__answer').removeClass('masterstudy-lesson-video-question__answer_selected masterstudy-lesson-video-question__answer_failed masterstudy-lesson-video-question__answer_completed');
+      questionElement.find('.masterstudy-lesson-video-question__radio_checked, .masterstudy-lesson-video-question__checkbox_checked').removeClass('masterstudy-lesson-video-question__radio_checked masterstudy-lesson-video-question__checkbox_checked');
+      questionElement.find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
+      var timecode = parseInt($(this).parent().data('rewatch'), 10);
+      if (video_player_data.strict_mode) {
+        isSeeking = false;
+        lastTime = timecode;
+      }
+      if (!isNaN(timecode)) {
+        playerSeekTo(timecode);
+      }
+    });
+    $('body').on('click', '[data-id="masterstudy-video-question-submit"]', function (e) {
+      e.preventDefault();
+      var _this = $(this);
+      var current_question = $(this).closest('.masterstudy-lesson-video-question');
+      var question_id = current_question.attr('id');
+      var list_question = $('.masterstudy-lesson-video-list-question').filter(function () {
+        return $(this).attr('id') === question_id;
+      });
+      var selected_answers = current_question.find('input:checked').map(function () {
+        return $(this).attr('id');
+      }).get();
+      var current_answer = selected_answers.join(',');
+      $.ajax({
+        url: stm_lms_ajaxurl,
+        type: 'POST',
+        data: {
+          action: 'stm_lms_answer_video_lesson',
+          nonce: video_player_data.video_questions_nonce,
+          course_id: parseInt(video_player_data.course_id),
+          lesson_id: parseInt(video_player_data.lesson_id),
+          question_id: parseInt(question_id),
+          user_answer: current_answer
+        },
+        beforeSend: function beforeSend() {
+          _this.addClass('masterstudy-button_loading');
+        },
+        success: function success(response) {
+          if (response === 'correct') {
+            var currentProgress = parseInt(questionsProgressContainer.text()) || 0;
+            questionsProgressContainer.text(currentProgress + 1);
+            current_question.addClass('masterstudy-lesson-video-question_answered masterstudy-lesson-video-question_completed');
+            list_question.removeClass('masterstudy-lesson-video-list-question_failed').addClass('masterstudy-lesson-video-list-question_completed');
+            selected_answers.forEach(function (answer_id) {
+              var answerElement = current_question.find('#' + answer_id).closest('.masterstudy-lesson-video-question__answer');
+              answerElement.addClass('masterstudy-lesson-video-question__answer_selected masterstudy-lesson-video-question__answer_completed');
+            });
+            completedQuestions++;
+            updateQuestionsProgress();
+            if (questionsMustDone && completedQuestions === totalQuestions && userProgress >= requiredProgress) {
+              hint.hide();
+              submitButton.removeAttr('disabled');
+              submitButton.removeClass('masterstudy-button_disabled');
+            }
+          } else if (response === 'wrong') {
+            var _currentProgress = parseInt(questionsProgressContainer.text()) || 0;
+            questionsProgressContainer.text(_currentProgress + 1);
+            current_question.addClass('masterstudy-lesson-video-question_answered masterstudy-lesson-video-question_failed');
+            list_question.removeClass('masterstudy-lesson-video-list-question_completed').addClass('masterstudy-lesson-video-list-question_failed');
+            selected_answers.forEach(function (answer_id) {
+              var answerElement = current_question.find('#' + answer_id).closest('.masterstudy-lesson-video-question__answer');
+              answerElement.addClass('masterstudy-lesson-video-question__answer_selected masterstudy-lesson-video-question__answer_failed');
+            });
+            updateQuestionsProgress();
+          }
+        },
+        complete: function complete() {
+          _this.removeClass('masterstudy-button_loading');
+        }
+      });
+    });
+    function playerSeekTo(timecode) {
+      if (videoElement.length) {
+        videoDefault = videoElement.get(0);
+        if (videoDefault) {
+          videoDefault.currentTime = timecode;
+          if (videoDefault.paused) {
+            videoDefault.play();
+          }
+        }
+      }
+      if (youTubePlayer && typeof youTubePlayer.seekTo === 'function') {
+        youTubePlayer.seekTo(timecode, true);
+        if (youTubePlayer.getPlayerState() !== YT.PlayerState.PLAYING) {
+          youTubePlayer.playVideo();
+        }
+      }
+      if (vimeoPlayer) {
+        vimeoPlayer.setCurrentTime(timecode).then(function () {
+          vimeoPlayer.play();
+        });
+      }
+      if (plyrVideoPlayer) {
+        plyrVideoPlayer.currentTime = timecode;
+        if (plyrVideoPlayer.paused) {
+          plyrVideoPlayer.play();
+        }
+      }
+      if (prestoPlayer) {
+        prestoPlayer.currentTime = timecode;
+        if (!prestoPlayer.playerPlaying) {
+          prestoPlayer.play();
+        }
+      }
+      if (playerVDO && playerVDO.video) {
+        playerVDO.video.currentTime = timecode;
+        if (playerVDO.video.paused) {
+          playerVDO.video.play();
+        }
+      }
+    }
     function onPlayerStateChange(event) {
-      if (event.data == YT.PlayerState.PLAYING) {
+      if (event.data == YT.PlayerState.PLAYING || event.data === YT.PlayerState.PAUSED) {
         updateYouTubeProgress();
       } else if (event.data === YT.PlayerState.ENDED) {
         finalizeProgress();
@@ -317,9 +524,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (youTubePlayer) {
         var currentTime = Math.floor(youTubePlayer.getCurrentTime()) || 0;
         var duration = Math.floor(youTubePlayer.getDuration()) || 0;
-        onTimeUpdate(currentTime, duration);
-        if (youTubePlayer.getPlayerState() === YT.PlayerState.PLAYING) {
-          requestAnimationFrame(updateYouTubeProgress);
+        var playerState = youTubePlayer.getPlayerState();
+        if (video_player_data.strict_mode) {
+          if (Math.abs(currentTime - lastTime) > 1) {
+            isSeeking = true;
+            youTubePlayer.seekTo(lastTime, true);
+            if (youTubePlayer.getPlayerState() === YT.PlayerState.PAUSED) {
+              youTubePlayer.playVideo();
+            }
+            isSeeking = false;
+            return;
+          }
+          lastTime = currentTime;
+        }
+        if (!isSeeking) {
+          checkVideoQuestions(currentTime);
+          onTimeUpdate(currentTime, duration);
+          if (playerState === YT.PlayerState.PLAYING || playerState === YT.PlayerState.PAUSED) {
+            requestAnimationFrame(updateYouTubeProgress);
+          }
         }
       }
     }
@@ -346,7 +569,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           submitButton.attr('data-query', JSON.stringify(queryObject));
         }
         if (currentProgressContainer) {
-          currentProgressContainer.text("".concat(userProgress, "%"));
+          currentUserProgressContainer.text("".concat(userProgress, "%"));
+          currentProgressContainer.css('width', "".concat(userProgress, "%"));
           currentProgressContainer.attr('data-progress', userProgress);
         }
       }
@@ -362,8 +586,144 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           submitButton.removeAttr('disabled');
           submitButton.removeClass('masterstudy-button_disabled');
         }
-        currentProgressContainer.text("".concat(userProgress, "%"));
+        currentUserProgressContainer.text("".concat(userProgress, "%"));
+        currentProgressContainer.css('width', "".concat(userProgress, "%"));
         currentProgressContainer.attr('data-progress', userProgress);
+      }
+    }
+    function checkVideoQuestions(currentTime) {
+      var currentSecond = Math.floor(currentTime);
+      if (currentSecond !== lastCheckedSecond) {
+        lastCheckedSecond = currentSecond;
+        videoQuestions.forEach(function (question) {
+          var questionElement = $("#".concat(question.id));
+          var markerTime = question.marker;
+          if (currentSecond === markerTime && !questionElement.hasClass('masterstudy-lesson-video-question_completed') && !questionElement.hasClass('masterstudy-lesson-video-question_show')) {
+            exitFullscreenIfNeeded();
+            toggleVideoPlayback(true);
+            $('.masterstudy-lesson-video-question').removeClass('masterstudy-lesson-video-question_show');
+            questionElement.addClass('masterstudy-lesson-video-question_show');
+            videoWrapper.hide();
+          }
+        });
+      }
+    }
+    function updateQuestionsProgress() {
+      if (totalQuestions > 0) {
+        answeredQuestions++;
+        var progressPercent = answeredQuestions / totalQuestions * 100;
+        questionsProgressBar.css('width', progressPercent + '%');
+      }
+    }
+    function toggleVideoPlayback(shouldPause) {
+      if (videoElement.length) {
+        var video = videoElement.get(0);
+        if (video) {
+          shouldPause ? video.pause() : video.play();
+        }
+      }
+      if (youTubePlayer) {
+        shouldPause ? youTubePlayer.pauseVideo() : youTubePlayer.playVideo();
+      }
+      if (vimeoPlayer) {
+        shouldPause ? vimeoPlayer.pause() : vimeoPlayer.play();
+      }
+      if (prestoPlayer) {
+        shouldPause ? prestoPlayer.pause() : prestoPlayer.play();
+      }
+      if (plyrVideoPlayer) {
+        shouldPause ? plyrVideoPlayer.pause() : plyrVideoPlayer.play();
+      }
+      if (playerVDO && playerVDO.video) {
+        shouldPause ? playerVDO.video.pause() : playerVDO.video.play();
+      }
+    }
+    function isFullscreen() {
+      return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    }
+    function exitFullscreenIfNeeded() {
+      if (isFullscreen()) {
+        wasFullscreen = true;
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    }
+    function enterFullscreenIfNeeded() {
+      if (plyrVideoPlayer) {
+        plyrVideoPlayer.fullscreen.enter();
+      }
+      wasFullscreen = false;
+    }
+    function blockSeeking(playerType, playerInstance) {
+      if (!playerInstance || !video_player_data.strict_mode) return;
+      switch (playerType) {
+        case 'html5':
+          playerInstance.addEventListener('timeupdate', function () {
+            var currentTime = playerInstance.currentTime;
+            if (Math.abs(currentTime - lastTime) > 1) {
+              playerInstance.currentTime = lastTime;
+              isSeeking = true;
+              return;
+            }
+            lastTime = currentTime;
+            isSeeking = false;
+          });
+          break;
+        case 'vimeo':
+          playerInstance.on('timeupdate', function (data) {
+            var currentTime = data.seconds;
+            if (Math.abs(currentTime - lastTime) > 1) {
+              playerInstance.setCurrentTime(lastTime);
+              isSeeking = true;
+              return;
+            }
+            lastTime = currentTime;
+            isSeeking = false;
+          });
+          break;
+        case 'plyr':
+          playerInstance.on('timeupdate', function (data) {
+            var currentTime = playerInstance.currentTime;
+            if (Math.abs(currentTime - lastTime) > 1) {
+              playerInstance.currentTime = lastTime;
+              isSeeking = true;
+              return;
+            }
+            lastTime = currentTime;
+            isSeeking = false;
+          });
+          break;
+        case 'presto':
+          wp.hooks.addAction('presto.playerTimeUpdate', 'track-presto-time', function (player) {
+            var currentTime = player.currentTime;
+            if (Math.abs(currentTime - lastTime) > 1) {
+              player.currentTime = lastTime;
+              isSeeking = true;
+              return;
+            }
+            lastTime = currentTime;
+            isSeeking = false;
+          });
+          break;
+        case 'vdocipher':
+          playerInstance.video.addEventListener('timeupdate', function () {
+            var currentTime = playerInstance.video.currentTime;
+            if (Math.abs(currentTime - lastTime) > 1) {
+              playerInstance.video.currentTime = lastTime;
+              isSeeking = true;
+              return;
+            }
+            lastTime = currentTime;
+            isSeeking = false;
+          });
+          break;
       }
     }
   });

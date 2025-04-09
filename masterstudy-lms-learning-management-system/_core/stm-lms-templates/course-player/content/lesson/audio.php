@@ -82,19 +82,20 @@ wp_localize_script(
 	if ( $audio_progress && STM_LMS_Helpers::is_pro_plus() && ! ( 0 === $user_progress && $lesson_completed ) ) {
 		?>
 		<div class="masterstudy-course-player-audio-lesson-type__progress">
-			<div class="masterstudy-course-player-audio-lesson-type__progress-container">
-				<span class="masterstudy-course-player-audio-lesson-type__progress-label">
-					<?php echo esc_html__( 'Required audio progress', 'masterstudy-lms-learning-management-system' ); ?>:
+			<div class="masterstudy-course-player-audio-lesson-type__progress-title">
+				<?php echo esc_html__( 'Lesson audio progress', 'masterstudy-lms-learning-management-system' ) . ':'; ?>
+				<div id="current-audio-progress-user" class="masterstudy-course-player-audio-lesson-type__progress-user">
+					<?php echo esc_html( $user_progress ) . '%'; ?>
+				</div>
+				<span class="masterstudy-course-player-audio-lesson-type__progress-separator">
+					<?php echo esc_html__( 'of', 'masterstudy-lms-learning-management-system' ); ?>
 				</span>
-				<span data-required-progress="<?php echo esc_attr( $lesson_data['audio_required_progress'] ); ?>" id="required-audio-progress" class="masterstudy-course-player-audio-lesson-type__progress-value">
-					<?php echo esc_html( $lesson_data['audio_required_progress'] ); ?>%
-				</span>
+				<div class="masterstudy-course-player-audio-lesson-type__progress-required">
+					<?php echo esc_html( $lesson_data['audio_required_progress'] ) . '%'; ?>
+				</div>
 			</div>
-			<div class="masterstudy-course-player-audio-lesson-type__progress-container">
-				<span class="masterstudy-course-player-audio-lesson-type__progress-label">
-					<?php echo esc_html__( 'Current audio progress', 'masterstudy-lms-learning-management-system' ); ?>:
-				</span>
-				<span class="masterstudy-course-player-audio-lesson-type__progress-value" data-progress="<?php echo esc_attr( $user_progress ); ?>" id="current-audio-progress"><?php echo esc_html( $user_progress ); ?>%</span>
+			<div class="masterstudy-course-player-audio-lesson-type__progress-bar" data-required-progress="<?php echo esc_attr( $lesson_data['audio_required_progress'] ); ?>" id="required-audio-progress">
+				<span class="masterstudy-course-player-audio-lesson-type__progress-bar-value" data-progress="<?php echo esc_attr( $user_progress ); ?>" id="current-audio-progress" style="width:<?php echo esc_attr( $user_progress ); ?>%"></span>
 			</div>
 		</div>
 	<?php } ?>

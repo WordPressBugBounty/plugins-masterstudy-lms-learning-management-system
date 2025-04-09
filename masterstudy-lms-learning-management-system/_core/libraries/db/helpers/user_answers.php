@@ -51,6 +51,83 @@ function stm_lms_get_user_answers( $user_id, $quiz_id, $attempt = '1', $get_corr
 	return $wpdb->get_results( $request, ARRAY_N );
 }
 
+function stm_lms_get_lesson_markers( $lesson_id ) {
+	global $wpdb;
+
+	if ( ! $lesson_id ) {
+		return array();
+	}
+
+	$table = stm_lms_lesson_marker_questions_name( $wpdb );
+
+	$markers = $wpdb->get_results(
+		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT * FROM {$table} WHERE lesson_id = %d",
+			$lesson_id,
+		),
+		ARRAY_A
+	);
+
+	return $markers ?? array();
+}
+
+function stm_lms_get_user_marker_answers( $user_id, $lesson_id, $question_id ) {
+	global $wpdb;
+
+	if ( ! $user_id || ! $lesson_id || $question_id ) {
+		return array();
+	}
+
+	$table = stm_lms_lesson_marker_user_answers_name( $wpdb );
+
+	$user_answer = $wpdb->get_var(
+		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT user_answer FROM {$table} WHERE user_ID = %d AND lesson_id = %d AND question_id = %d",
+			$user_id,
+			$lesson_id,
+			$question_id
+		)
+	);
+
+	return $user_answer ? array_map( 'intval', explode( ',', $user_answer ) ) : array();
+}
+
+function stm_lms_add_user_marker_answer( $user_answer ) {
+	global $wpdb;
+
+	if ( in_array( null, $user_answer, true ) ) {
+		return 0;
+	}
+
+	$table_name = stm_lms_lesson_marker_user_answers_name( $wpdb );
+
+	$existing = $wpdb->get_var(
+		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT user_answer_id FROM {$table_name} WHERE user_id = %d AND question_id = %d AND lesson_id = %d",
+			$user_answer['user_id'],
+			$user_answer['question_id'],
+			$user_answer['lesson_id']
+		)
+	);
+
+	if ( $existing ) {
+		$result = $wpdb->update(
+			$table_name,
+			$user_answer,
+			array( 'user_answer_id' => $existing )
+		);
+
+		return false !== $result ? $existing : 0;
+	}
+
+	$wpdb->insert( $table_name, $user_answer );
+
+	return (int) $wpdb->insert_id;
+}
+
 function stm_lms_get_quiz_latest_answers( $user_id, $quiz_id, $questions_quantity, $fields = array() ) {
 	global $wpdb;
 	$table = stm_lms_user_answers_name( $wpdb );

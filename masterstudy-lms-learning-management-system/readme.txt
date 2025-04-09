@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.5.25
+Stable tag: 3.5.26
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,9 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.26 - 2025-04-08 =
+- **Enhancement:** Added support for instructor comments at specific video timestamps, visible to students as hoverable timeline markers. (Pro)
+
 = 3.5.25 - 2025-04-03 =
 - **Enhancement:** Improved search within course subcategories within the Elementor course archive widget. Search will now give more specific results when both category and subcategory are selected.
 - **Enhancement:** Paid Membership Pro Templates updated.
@@ -314,7 +317,7 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Enhancement:** Converted single course elements into widgets for easier custom design of the page.
 
 = 3.5.23 - 2025-03-25 =
-- **Enhancement:** Added compatibility with the Polylang plugin. 
+- **Enhancement:** Added compatibility with the Polylang plugin.
 - **Enhancement:** Instructors with admin access can now edit lessons in Elementor.
 - **Enhancement:** Added an option to sort courses by "Coming Soon" in Archive and Grid Elementor widgets.
 
@@ -322,16 +325,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Enhancement:** Added a setting to display password strength and enable weak password registration.
 - **Enhancement:** Introduced an option to show or hide the "Have a Question?" form in profile settings.
 
-= 3.5.21 - 2025-03-17 =
-- **Fix:** Virtual WooCommerce products incorrectly displaying as free when WooCommerce checkout is enabled. (Pro)
-
-= 3.5.20 - 2025-03-13 =
-- **Fix:** Resolved warnings in the Course Player when adding standalone questions to the question bank.
-- **Fix:** The Thank You page now displays correctly for guest checkout in WooCommerce.
-- **Fix:** SCORM courses now show the course name in the browser tab instead of a random post title (PRO).
-- **Fix:** Discounted course prices now always display correctly on the Shop page.
-
-= 3.5.19 - 2025-03-07 =
-- **Fix:** Minor bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

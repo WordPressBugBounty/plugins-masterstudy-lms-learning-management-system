@@ -26,6 +26,7 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
     var opts = options || {};
     this.audioPlayer.classList.add('masterstudy-audio-player');
     this.progressDisplay = document.getElementById('current-audio-progress');
+    this.progressUserDisplay = document.getElementById('current-audio-progress-user');
     this.userProgress = parseInt((_document$getElementB = document.getElementById('current-audio-progress')) === null || _document$getElementB === void 0 || (_document$getElementB = _document$getElementB.dataset) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.progress, 10) || 0;
     this.requiredProgress = parseInt((_document$querySelect = document.querySelector('#required-audio-progress')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.getAttribute('data-required-progress'), 10) || 0;
     this.submitButton = document.querySelector('[data-id="masterstudy-course-player-lesson-submit"]');
@@ -210,7 +211,8 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
             _this.submitButton.removeAttribute('disabled');
             _this.submitButton.classList.remove('masterstudy-button_disabled');
           }
-          _this.progressDisplay.textContent = "".concat(_this.userProgress, "%");
+          _this.progressUserDisplay.textContent = "".concat(_this.userProgress, "%");
+          _this.progressDisplay.style.width = "".concat(_this.userProgress, "%");
           _this.progressDisplay.setAttribute('data-progress', _this.userProgress);
         }
       });
@@ -316,7 +318,8 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
           queryObject.progress = this.userProgress;
           this.submitButton.setAttribute('data-query', JSON.stringify(queryObject));
         }
-        this.progressDisplay.textContent = "".concat(this.userProgress, "%");
+        this.progressUserDisplay.textContent = "".concat(this.userProgress, "%");
+        this.progressDisplay.style.width = "".concat(this.userProgress, "%");
         this.progressDisplay.setAttribute('data-progress', this.userProgress);
       }
     }

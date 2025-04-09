@@ -59,12 +59,12 @@ class STM_Course_Data_Store_CPT extends WC_Product_Data_Store_CPT implements WC_
 			$product->set_regular_price( $price );
 			$product->set_price( $price );
 		} else {
-			$not_saleable      = get_post_meta( $post_object->ID, 'not_single_sale', true );
+			$single_sale       = get_post_meta( $post_object->ID, 'single_sale', true );
 			$price             = get_post_meta( $post_object->ID, 'price', true );
 			$sale_price        = get_post_meta( $post_object->ID, 'sale_price', true );
 			$sale_price_active = STM_LMS_Helpers::is_sale_price_active( $post_object->ID );
 
-			if ( 'on' !== $not_saleable ) {
+			if ( 'on' === $single_sale ) {
 				if ( $sale_price_active && ! empty( $price ) && ! empty( $sale_price ) ) {
 					$product->set_regular_price( $price );
 					$product->set_sale_price( $sale_price );

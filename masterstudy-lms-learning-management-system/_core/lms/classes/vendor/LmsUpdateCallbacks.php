@@ -447,6 +447,18 @@ abstract class LmsUpdateCallbacks {
 		}
 	}
 
+	public static function lms_update_lesson_video_markers() {
+		require_once STM_LMS_LIBRARY . '/db/tables.php';
+
+		if ( ! function_exists( 'stm_lms_tables_update' ) ) {
+			return;
+		}
+		stm_lms_lesson_marker_questions();
+		stm_lms_lesson_marker_user_answers();
+
+		update_option( 'stm_lms_db_version', STM_LMS_DB_VERSION );
+	}
+
 	public static function lms_update_grades() {
 		require_once STM_LMS_LIBRARY . '/db/tables.php';
 

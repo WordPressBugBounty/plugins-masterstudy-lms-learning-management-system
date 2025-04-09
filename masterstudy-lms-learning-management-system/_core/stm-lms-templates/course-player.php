@@ -127,7 +127,7 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 			);
 		}
 		?>
-		<div class="masterstudy-course-player-content__wrapper">
+		<div class="masterstudy-course-player-content__wrapper <?php echo esc_attr( 'video' === $data['lesson_type'] && ! empty( $data['video_questions'] ) ? 'masterstudy-has-video-questions' : '' ); ?>">
 			<?php
 			$has_access = apply_filters( 'masterstudy_lms_course_guest_trial_enabled', false, $data['post_id'] )
 				? $data['has_access']
@@ -151,14 +151,16 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 					STM_LMS_Templates::show_lms_template(
 						'course-player/content/' . $data['content_type'] . '/main',
 						array(
-							'post_id'          => $data['post_id'],
-							'item_id'          => $data['item_id'],
-							'user_id'          => $data['user_id'],
-							'lesson_type'      => $data['lesson_type'],
-							'lesson_completed' => $data['lesson_completed'],
-							'data'             => 'quiz' === $data['content_type'] ? $quiz_data : array(),
-							'last_lesson'      => $data['last_lesson'],
-							'dark_mode'        => $data['dark_mode'],
+							'post_id'               => $data['post_id'],
+							'item_id'               => $data['item_id'],
+							'user_id'               => $data['user_id'],
+							'lesson_type'           => $data['lesson_type'],
+							'lesson_completed'      => $data['lesson_completed'],
+							'data'                  => 'quiz' === $data['content_type'] ? $quiz_data : array(),
+							'last_lesson'           => $data['last_lesson'],
+							'video_questions'       => $data['video_questions'] ?? array(),
+							'video_questions_stats' => $data['video_questions_stats'] ?? array(),
+							'dark_mode'             => $data['dark_mode'],
 						)
 					);
 				}
@@ -218,6 +220,7 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 						'has_access'               => $data['has_access'],
 						'lesson_lock_before_start' => $data['lesson_lock_before_start'],
 						'lesson_locked_by_drip'    => $data['lesson_locked_by_drip'],
+						'video_questions_stats'    => $data['video_questions_stats'] ?? array(),
 						'dark_mode'                => $data['dark_mode'],
 					)
 				);

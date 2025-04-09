@@ -38,7 +38,8 @@
             submitButton.attr('data-query', JSON.stringify(queryObject));
           }
           if (currentProgressContainer) {
-            currentProgressContainer.text("".concat(userProgress, "%"));
+            currentUserProgressContainer.text("".concat(userProgress, "%"));
+            currentProgressContainer.css('width', "".concat(userProgress, "%"));
             currentProgressContainer.attr('data-progress', userProgress);
           }
         }
@@ -54,12 +55,14 @@
             submitButton.removeAttr('disabled');
             submitButton.removeClass('masterstudy-button_disabled');
           }
-          currentProgressContainer.text("".concat(userProgress, "%"));
+          currentUserProgressContainer.text("".concat(userProgress, "%"));
+          currentProgressContainer.css('width', "".concat(userProgress, "%"));
           currentProgressContainer.attr('data-progress', userProgress);
         }
       };
       var _audioPlayer = document.querySelector('.audio-external-links-type');
       var currentProgressContainer = $('#current-audio-progress');
+      var currentUserProgressContainer = $('#current-audio-progress-user');
       var userProgress = parseInt($('#current-audio-progress').data('progress'), 10) || 0;
       var requiredProgress = parseInt($('#required-audio-progress').data('required-progress'), 10) || 0;
       var submitButton = $('[data-id="masterstudy-course-player-lesson-submit"]');

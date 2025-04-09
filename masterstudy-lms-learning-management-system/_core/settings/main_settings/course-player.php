@@ -42,6 +42,12 @@ function stm_lms_settings_course_player_section() {
 				'description' => esc_html__( 'Show a sidebar for discussion boards where instructors and students can chat', 'masterstudy-lms-learning-management-system' ),
 				'value'       => true,
 			),
+			'course_player_video_strict_mode'           => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Disable video seeking', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'This setting prevents users from skipping or rewinding videos.', 'masterstudy-lms-learning-management-system' ),
+				'value'       => false,
+			),
 			'course_player_youtube_video_player'        => array(
 				'type'        => 'checkbox',
 				'label'       => esc_html__( 'Use MasterStudy player for videos from Youtube', 'masterstudy-lms-learning-management-system' ),
