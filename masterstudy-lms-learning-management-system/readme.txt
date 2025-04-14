@@ -3,9 +3,9 @@ Contributors: Stylemix
 Donate link: https://stylemixthemes.com/
 Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.5.26
+Stable tag: 3.5.27
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -304,6 +304,9 @@ No, you don’t have to extend your license, the core features will be available
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.27 - 2025-04-14 =
+- **Fixes:** Minor bug fixes.
+
 = 3.5.26 - 2025-04-08 =
 - **Enhancement:** Added support for instructor comments at specific video timestamps, visible to students as hoverable timeline markers. (Pro)
 
@@ -320,10 +323,6 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Enhancement:** Added compatibility with the Polylang plugin.
 - **Enhancement:** Instructors with admin access can now edit lessons in Elementor.
 - **Enhancement:** Added an option to sort courses by "Coming Soon" in Archive and Grid Elementor widgets.
-
-= 3.5.22 - 2025-03-19 =
-- **Enhancement:** Added a setting to display password strength and enable weak password registration.
-- **Enhancement:** Introduced an option to show or hide the "Have a Question?" form in profile settings.
 
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

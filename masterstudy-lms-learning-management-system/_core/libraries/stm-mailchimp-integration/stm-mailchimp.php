@@ -82,6 +82,11 @@ if ( ! function_exists( 'stm_mailchimp_admin_init' ) ) {
 		if ( ! class_exists( 'STMMailChimpBase' ) ) {
 			require_once __DIR__ . '/classes/STMMailChimpBase.php';
 		}
-		STMMailChimpBase::init( $plugin_data );
+		add_action(
+			'init',
+			function() use ( $plugin_data ) {
+				STMMailChimpBase::init( $plugin_data );
+			}
+		);
 	}
 }
