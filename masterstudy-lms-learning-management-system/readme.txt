@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.5.27
+Stable tag: 3.5.28
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -299,11 +299,18 @@ The plugin allows uploading absolutely different formats of files. There are thr
 
 No, you don’t have to extend your license, the core features will be available. In case you want to receive further updates and support you need to renew your license. The MasterStudy WordPress LMS plugin Pro is available at $89.
 
+= How can I report security bugs? =
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability](https://patchstack.com/database/vdp/masterstudy-lms-learning-management-system).
+
 == Upgrade Notice ==
 
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.28 - 2025-04-15 =
+- **Fixes:** Minor bug fixes.
+
 = 3.5.27 - 2025-04-14 =
 - **Fixes:** Minor bug fixes.
 
@@ -318,11 +325,6 @@ It’s recommended to have a backup of your website before hitting the update bu
 = 3.5.24 - 2025-03-31 =
 - **Enhancement:** Improve the quality of the Featured Image on single course page.
 - **Enhancement:** Converted single course elements into widgets for easier custom design of the page.
-
-= 3.5.23 - 2025-03-25 =
-- **Enhancement:** Added compatibility with the Polylang plugin.
-- **Enhancement:** Instructors with admin access can now edit lessons in Elementor.
-- **Enhancement:** Added an option to sort courses by "Coming Soon" in Archive and Grid Elementor widgets.
 
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
