@@ -1049,13 +1049,17 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		wp_send_json( $r );
 	}
 
-	public static function ban_user() {
-		check_ajax_referer( 'stm_lms_ban_user', 'nonce' );
-		if ( ! empty( $_GET['user_id'] ) ) {
-			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$banned = ! empty( $_GET['banned'] ) && 'true' == $_GET['banned'];
-			update_user_meta( intval( $_GET['user_id'] ), 'stm_lms_user_banned', $banned );
+	public static function ban_user(): void {
+		check_admin_referer( 'stm_lms_ban_user', 'nonce' );
+
+		$user_id = absint( $_GET['user_id'] ?? 0 );
+		if ( ! $user_id || ! get_userdata( $user_id ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json( 'unsaved' );
 		}
+
+		$banned = 'true' === ( $_GET['banned'] ?? '' );
+		update_user_meta( $user_id, 'stm_lms_user_banned', $banned );
+
 		wp_send_json( 'saved' );
 	}
 

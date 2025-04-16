@@ -210,8 +210,7 @@ class STM_LMS_Templates {
 		if ( file_exists( $element ) ) {
 			include $element;
 		} else {
-			echo esc_html__( 'Element not found in', 'masterstudy-lms-learning-management-system' );
-			echo esc_html( ' ' . $element );
+			echo esc_html__( 'Element not found', 'masterstudy-lms-learning-management-system' );
 		}
 	}
 
