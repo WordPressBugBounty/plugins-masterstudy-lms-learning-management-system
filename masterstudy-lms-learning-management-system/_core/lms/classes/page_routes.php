@@ -221,6 +221,25 @@ class STM_LMS_Page_Router {
 						'protected' => true,
 						'url'       => 'enrolled-quizzes',
 					),
+					'enrolled_quiz_attempts_url' => array(
+						'template'  => 'stm-lms-user-quiz-attempts',
+						'protected' => true,
+						'url'       => 'enrolled-quiz-attempts',
+						'vars'      => array(
+							'course_id' => 2,
+							'quiz_id'   => 3,
+						),
+					),
+					'enrolled_quiz_attempt_url'  => array(
+						'template'  => 'stm-lms-user-quiz-attempt',
+						'protected' => true,
+						'url'       => 'enrolled-quiz-attempts',
+						'vars'      => array(
+							'course_id'  => 2,
+							'quiz_id'    => 3,
+							'attempt_id' => 4,
+						),
+					),
 					'my_orders_url'              => array(
 						'template'  => 'stm-lms-user-orders',
 						'protected' => true,
@@ -503,6 +522,29 @@ class STM_LMS_Page_Router {
 					$query,
 					'top'
 				);
+			} elseif ( ! empty( $route['vars'] ) ) {
+				$query = 'index.php?lms_page_path=$matches[1]';
+				$base .= '/([^/]+)/';
+
+				foreach ( $route['vars'] as $var => $match ) {
+					add_rewrite_tag( "%{$var}%", '([0-9]+)' );
+					$query .= "&{$var}" . '=$matches[' . ( $match ?? 2 ) . ']';
+					$base  .= '([0-9]+)/';
+				}
+
+				$query .= '&lms_template=' . $route['template'] . "&lang={$lang}";
+				$base  .= '?$';
+
+				if ( ! empty( $route['type'] ) ) {
+					$query = self::modify_post_type_query( $query );
+				}
+
+				// Polylang support for Subpages
+				if ( $is_polylang && ! empty( $route['lang'] ) ) {
+					$base = "{$route['lang']}/$base";
+				}
+
+				add_rewrite_rule( $base, $query, 'top' );
 			} else {
 				add_rewrite_tag( '%lms_template%', '([^/]+)' );
 

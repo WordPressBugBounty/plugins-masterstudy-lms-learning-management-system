@@ -741,7 +741,7 @@ abstract class LmsUpdateCallbacks {
 	public static function lms_update_certificate_fonts() {
 		global $wpdb;
 
-		$meta_key = 'stm_fields';
+		$meta_key          = 'stm_fields';
 		$font_replacements = array(
 			'OpenSans' => 'Open Sans',
 			'MPLUS2'   => 'M PLUS 2',
@@ -779,12 +779,20 @@ abstract class LmsUpdateCallbacks {
 			if ( $updated ) {
 				$wpdb->update(
 					$wpdb->postmeta,
-					array( 'meta_value' => json_encode( $meta_value, JSON_UNESCAPED_UNICODE ) ),
+					array( 'meta_value' => wp_json_encode( $meta_value, JSON_UNESCAPED_UNICODE ) ),
 					array( 'meta_id' => $meta_id ),
 					array( '%s' ),
 					array( '%d' ),
 				);
 			}
+		}
+	}
+
+	public static function update_table_lms_user_quizzes() {
+		require_once STM_LMS_LIBRARY . '/db/tables.php';
+
+		if ( function_exists( 'stm_lms_tables_update' ) ) {
+			stm_lms_user_quizzes();
 		}
 	}
 }

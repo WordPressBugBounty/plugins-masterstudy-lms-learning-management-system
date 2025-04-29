@@ -34,7 +34,7 @@ function stm_lms_settings_quiz_section() {
 		'label'  => esc_html__( 'Quiz Settings', 'masterstudy-lms-learning-management-system' ),
 		'icon'   => 'fas fa-question',
 		'fields' => array(
-			'quiz_attempts'   => array(
+			'quiz_attempts'         => array(
 				'type'        => 'select',
 				'label'       => esc_html__( 'Attempts to retake quizzes', 'masterstudy-lms-learning-management-system' ),
 				'description' => esc_html__( 'You can choose limited or unlimited attempts for students to retake quizzes.', 'masterstudy-lms-learning-management-system' ),
@@ -44,8 +44,18 @@ function stm_lms_settings_quiz_section() {
 				),
 				'value'       => 'unlimited',
 			),
-			'quiz_style'      => stm_lms_quiz_types(),
-			'pro_banner'      => array(
+			'show_attempts_history' => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Quiz Attempt History', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Let students view their past quiz attempts in the course player', 'masterstudy-lms-learning-management-system' ),
+			),
+			'retry_after_passing'   => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Retake After Passing', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Allow students to retake the quiz even after passing', 'masterstudy-lms-learning-management-system' ),
+			),
+			'quiz_style'            => stm_lms_quiz_types(),
+			'pro_banner'            => array(
 				'type'  => 'pro_banner',
 				'label' => esc_html__( 'Question Media', 'masterstudy-lms-learning-management-system' ),
 				'img'   => STM_LMS_URL . 'assets/img/pro-features/addons/question-media-addon.png',

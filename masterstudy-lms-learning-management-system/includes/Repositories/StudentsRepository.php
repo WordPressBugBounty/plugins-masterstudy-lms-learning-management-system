@@ -41,8 +41,8 @@ final class StudentsRepository {
 		}
 
 		$total_query = "SELECT COUNT(*) FROM {$course_table}
-			INNER JOIN $user_table 
-			ON {$course_table}.user_id = {$user_table}.ID 
+			INNER JOIN $user_table
+			ON {$course_table}.user_id = {$user_table}.ID
 			WHERE {$course_table}.course_id = %d";
 
 		if ( ! empty( $params['s'] ) ) {
@@ -53,8 +53,8 @@ final class StudentsRepository {
 		}
 
 		$base_query = "SELECT {$fields} FROM {$course_table}
-			INNER JOIN $user_table 
-			ON {$course_table}.user_id = {$user_table}.ID 
+			INNER JOIN $user_table
+			ON {$course_table}.user_id = {$user_table}.ID
 			WHERE {$course_table}.course_id = %d {$filtering}";
 
 		$students = $wpdb->get_results(
@@ -405,7 +405,7 @@ final class StudentsRepository {
 			$lesson_post_type = get_post_type( $last_lesson );
 
 			if ( PostType::QUIZ === $lesson_post_type ) {
-				$last_quiz        = \STM_LMS_Helpers::simplify_db_array( stm_lms_get_user_last_quiz( $student_id, $last_lesson ) );
+				$last_quiz        = stm_lms_get_user_last_quiz( $student_id, $last_lesson, array( 'progress' ) );
 				$passing_grade    = get_post_meta( $last_lesson, 'passing_grade', true );
 				$lesson_completed = ! empty( $last_quiz['progress'] ) && $last_quiz['progress'] >= ( $passing_grade ?? 0 ) ? 'completed' : '';
 			} else {

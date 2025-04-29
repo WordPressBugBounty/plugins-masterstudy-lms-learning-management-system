@@ -1,70 +1,89 @@
 <?php
-wp_enqueue_script( 'vue.js' );
-wp_enqueue_script( 'vue-resource.js' );
-stm_lms_register_script( 'account/v1/enrolled-quizzes' );
-stm_lms_register_style( 'user-courses' );
-stm_lms_register_style( 'instructor_courses' );
+wp_enqueue_script( 'masterstudy-enrolled-quizzes' );
+wp_enqueue_style( 'masterstudy-pagination' );
 stm_lms_register_style( 'user-quizzes' );
 ?>
 
-<?php
-STM_LMS_Templates::show_lms_template(
-	'account/private/parts/top_info',
-	array(
-		'title' => esc_html__( 'Enrolled Quizzes', 'masterstudy-lms-learning-management-system' ),
-	)
-);
-?>
-
-<div id="enrolled-quizzes">
-
-	<div class="stm-lms-user-quizzes" v-bind:class="{'loading' : loading}">
-
-		<div class="stm-lms-user-quiz__head heading_font">
-
-			<div class="stm-lms-user-quiz__head_title">
-				<?php esc_html_e( 'Course', 'masterstudy-lms-learning-management-system' ); ?>
-			</div>
-
-			<div class="stm-lms-user-quiz__head_quiz">
-				<?php esc_html_e( 'Quiz', 'masterstudy-lms-learning-management-system' ); ?>
-			</div>
-
-			<div class="stm-lms-user-quiz__head_status">
-				<?php esc_html_e( 'Status', 'masterstudy-lms-learning-management-system' ); ?>
-			</div>
-
-		</div>
-
-		<div class="stm-lms-user-quiz" v-for="(quiz, key) in quizzes">
-
-			<div class="stm-lms-user-quiz__title">
-				<a v-bind:href="quiz.course_url" v-html="quiz.course_title"></a>
-			</div>
-
-			<a v-bind:href="quiz.url" v-html="quiz.title" class="stm-lms-user-quiz__name"></a>
-
-			<div class="stm-lms-user-quiz__progress">
-				<div class="stm-lms-user-quiz__progress_bar">
-					<div class="filled" v-bind:class="quiz.status" v-bind:style="{'width' : quiz.progress + '%'}"></div>
+<div class="masterstudy-enrolled-quizzes">
+	<div class="stm_lms_user_info_top">
+		<h3><?php echo esc_html__( 'Enrolled Quizzes', 'masterstudy-lms-learning-management-system' ); ?></h3>
+		<?php STM_LMS_Templates::show_lms_template( 'account/private/parts/search-quizzes-input' ); ?>
+	</div>
+	<div class="masterstudy-enrolled-quizzes-container">
+		<div class="ms_lms_loader_"></div>
+		<template id="masterstudy-enrolled-quizzes-template">
+			<div class="masterstudy-enrolled-quizzes__course">
+				<div class="masterstudy-enrolled-quizzes__header">
+					<div class="masterstudy-enrolled-quizzes-course__label">
+						<?php echo esc_html__( 'Course:', 'masterstudy-lms-learning-management-system' ); ?>
+					</div>
+					<div class="masterstudy-enrolled-quizzes-course__value">
+						<a href="#" class="masterstudy-enrolled-quizzes-course__link"></a>
+					</div>
 				</div>
-				<div class="progress-status">{{quiz.progress + '%'}}</div>
+				<div class="masterstudy-enrolled-quizzes-items">
+					<div class="masterstudy-enrolled-quizzes-item">
+						<div class="masterstudy-enrolled-quizzes-item__name">
+							<a href="#" class="masterstudy-enrolled-quizzes-item__name--link"></a>
+						</div>
+						<div class="masterstudy-enrolled-quizzes-item__attempts"></div>
+						<div class="masterstudy-enrolled-quizzes-item__questions"></div>
+						<div class="masterstudy-enrolled-quizzes-item__info">
+							<div class="masterstudy-enrolled-quizzes-item__progress-wrapper">
+								<div class="masterstudy-enrolled-quizzes-item__progress" data-quiz-progress>
+									<span class="masterstudy-enrolled-quizzes-item__progress--bar">
+										<span class="masterstudy-enrolled-quizzes-item__progress--filled"></span>
+									</span>
+									<span class="masterstudy-enrolled-quizzes-item__progress--status"></span>
+								</div>
+								<div class="masterstudy-enrolled-quizzes-item__status" data-quiz-status></div>
+							</div>
+							<a href="#" class="masterstudy-enrolled-quizzes-item__details">
+								<?php echo esc_html__( 'Details', 'masterstudy-lms-learning-management-system' ); ?>
+							</a>
+						</div>
+					</div>
+				</div>
 			</div>
-
-			<div class="stm-lms-user-quiz__status">
-				<i class="stmlms-checkmark-circle" v-if="quiz.status == 'passed'"></i>
-				<i class="stmlms-cross" v-else></i>
-				<div class="status" v-bind:class="quiz.status">{{quiz.status_label}}</div>
+		</template>
+		<template id="masterstudy-enrolled-quizzes-no-found-template">
+			<div class="masterstudy-enrolled-quizzes-no-found__info">
+				<div class="masterstudy-enrolled-quizzes-no-found__info-icon"><span class="stmlms-order"></span></div>
+				<div class="masterstudy-enrolled-quizzes-no-found__info-title masterstudy-enrolled-quizzes-no-found__items">
+					<?php echo esc_html__( 'No enrolled quizzes yet', 'masterstudy-lms-learning-management-system' ); ?>
+				</div>
+				<div class="masterstudy-enrolled-quizzes-no-found__info-title masterstudy-enrolled-quizzes-no-found__search">
+					<?php echo esc_html__( 'No quizzes match your search', 'masterstudy-lms-learning-management-system' ); ?>
+				</div>
+				<div class="masterstudy-enrolled-quizzes-no-found__info-description">
+					<?php echo esc_html__( 'All information about your enrolled quizzes will be displayed here', 'masterstudy-lms-learning-management-system' ); ?>
+				</div>
 			</div>
-
-		</div>
-
-		<h4 v-if="!quizzes.length"><?php esc_html_e( 'No quizzes.', 'masterstudy-lms-learning-management-system' ); ?></h4>
-
+		</template>
 	</div>
 
-	<a @click="getQuizzes()" v-if="!total" class="btn btn-default" v-bind:class="{'loading' : loading}">
-		<span><?php esc_html_e( 'Show more', 'masterstudy-lms-learning-management-system' ); ?></span>
-	</a>
-
+	<div class="masterstudy-enrolled-quizzes-navigation">
+		<div class="masterstudy-enrolled-quizzes-navigation__pagination"></div>
+		<div class="masterstudy-enrolled-quizzes-navigation__per-page">
+			<?php
+			STM_LMS_Templates::show_lms_template(
+				'components/select',
+				array(
+					'select_id'    => 'enrolled-quizzes-per-page',
+					'select_width' => '170px',
+					'select_name'  => 'per_page',
+					'placeholder'  => esc_html__( '10 per page', 'masterstudy-lms-learning-management-system' ),
+					'default'      => 10,
+					'is_queryable' => false,
+					'options'      => array(
+						'25'  => esc_html__( '25 per page', 'masterstudy-lms-learning-management-system' ),
+						'50'  => esc_html__( '50 per page', 'masterstudy-lms-learning-management-system' ),
+						'75'  => esc_html__( '75 per page', 'masterstudy-lms-learning-management-system' ),
+						'100' => esc_html__( '100 per page', 'masterstudy-lms-learning-management-system' ),
+					),
+				)
+			);
+			?>
+		</div>
+	</div>
 </div>

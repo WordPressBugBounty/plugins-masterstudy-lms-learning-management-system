@@ -47,6 +47,7 @@ abstract class LmsUpdates {
 		'3.5.22' => array( 'lms_update_certificate_fonts' ),
 		'3.5.23' => array( 'lms_add_coming_soon_meta' ),
 		'3.5.26' => array( 'lms_update_lesson_video_markers' ), //Update Database Tables
+		'3.5.30' => array( 'update_table_lms_user_quizzes' ),
 	);
 
 	/**

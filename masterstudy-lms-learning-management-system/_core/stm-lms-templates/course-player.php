@@ -28,12 +28,13 @@ if ( $post instanceof \WP_Post ) {
 $course_player = new CoursePlayerRepository();
 $data          = $course_player->get_main_data( $lms_page_path, $lesson_id );
 $quiz_data     = 'quiz' === $data['lesson_type']
-	? $course_player->get_quiz_data( $data['item_id'] )
+	? $course_player->get_quiz_data( $data['item_id'], $data['user_id'], $data['post_id'] )
 	: array();
 
 do_action( 'masterstudy_lms_course_player_register_assets' );
 
 wp_enqueue_style( 'masterstudy-course-player-main' );
+wp_enqueue_script( 'masterstudy-course-player-quiz-attempt' );
 
 if ( empty( $data['theme_fonts'] ) ) {
 	wp_enqueue_style( 'masterstudy-fonts' );
@@ -63,6 +64,8 @@ STM_LMS_Templates::show_lms_template(
 		'theme_fonts'              => $data['theme_fonts'],
 		'discussions_sidebar'      => $data['discussions_sidebar'],
 		'user_id'                  => $data['user_id'],
+		'course_id'                => $data['post_id'],
+		'quiz_data'                => $quiz_data,
 	)
 );
 
@@ -161,8 +164,24 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 							'video_questions'       => $data['video_questions'] ?? array(),
 							'video_questions_stats' => $data['video_questions_stats'] ?? array(),
 							'dark_mode'             => $data['dark_mode'],
+							'has_attempts'          => $quiz_data['has_attempts'] ?? false,
 						)
 					);
+					if ( 'quiz' === $data['content_type'] && STM_LMS_Options::get_option( 'show_attempts_history', false ) && ! empty( $quiz_data['has_attempts'] ) ) {
+						STM_LMS_Templates::show_lms_template(
+							'course-player/content/quiz/history',
+							array(
+								'post_id'          => $data['post_id'],
+								'item_id'          => $data['item_id'],
+								'user_id'          => $data['user_id'],
+								'lesson_type'      => $data['lesson_type'],
+								'lesson_completed' => $data['lesson_completed'],
+								'data'             => $quiz_data,
+								'last_lesson'      => $data['last_lesson'],
+								'dark_mode'        => $data['dark_mode'],
+							)
+						);
+					}
 				}
 
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

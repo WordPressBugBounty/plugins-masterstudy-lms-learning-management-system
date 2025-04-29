@@ -12,6 +12,35 @@ class STM_LMS_Helpers {
 		add_action( 'wp_ajax_masterstudy_lms_dark_mode', array( self::class, 'course_player_user_dark_mode' ) );
 	}
 
+	public static function format_date( $date ) {
+		if ( ! $date ) {
+			return array();
+		}
+
+		$date_format     = get_option( 'date_format', 'Y-m-d' );
+		$time_format     = get_option( 'time_format', 'H:i:s' );
+		$datetime_format = trim( $date_format . ' ' . $time_format );
+
+		$datetime = \DateTime::createFromFormat( $datetime_format, $date );
+
+		if ( ! $datetime || $datetime->format( $datetime_format ) !== $date ) {
+			try {
+				$datetime = new \DateTime( $date );
+			} catch ( \Exception $e ) {
+				return array();
+			}
+		}
+
+		if ( $datetime->getTimestamp() > 0 ) {
+			return array(
+				'date' => wp_date( $date_format, $datetime->getTimestamp() ),
+				'time' => wp_date( $time_format, $datetime->getTimestamp() ),
+			);
+		}
+
+		return array();
+	}
+
 	public static function is_pro() {
 		return defined( 'STM_LMS_PRO_PATH' );
 	}

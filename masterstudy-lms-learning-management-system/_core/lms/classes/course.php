@@ -1,7 +1,6 @@
 <?php
 
 use MasterStudy\Lms\Plugin\PostType;
-use MasterStudy\Lms\Pro\AddonsPlus\Grades\Repositories\GradesRepository;
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Repositories\CurriculumSectionRepository;
 use MasterStudy\Lms\Repositories\CourseRepository;
@@ -224,8 +223,8 @@ class STM_LMS_Course {
 		}
 
 		foreach ( $passed_quizzes as $quiz_id ) {
-			$quiz_data = STM_LMS_Helpers::simplify_meta_array( stm_lms_get_user_last_quiz( $user_id, $quiz_id, array( 'status' ) ), 'status' );
-			if ( ! empty( $quiz_data[0] ) && 'failed' === $quiz_data[0] ) {
+			$quiz_data = stm_lms_get_user_last_quiz( $user_id, $quiz_id, array( 'status' ) );
+			if ( ! empty( $quiz_data ) && 'failed' === $quiz_data['status'] ) {
 				continue;
 			}
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
@@ -680,7 +679,7 @@ class STM_LMS_Course {
 		if ( 'modern-curriculum' === $template ) {
 			add_filter(
 				'stm_lms_course_tabs',
-				function( $tabs, $course_id ) {
+				function( $tabs ) {
 					if ( isset( $tabs['curriculum'] ) ) {
 						unset( $tabs['curriculum'] );
 					}

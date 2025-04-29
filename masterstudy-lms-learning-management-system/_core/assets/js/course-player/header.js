@@ -113,6 +113,16 @@
         $('.masterstudy-course-player-header__discussions').removeClass('masterstudy-course-player-header__discussions_open');
       }
     });
+    $('.masterstudy-course-player-header__discussions, [data-id="masterstudy-curriculum-switcher"]').on('click', function () {
+      if ($('[data-id="masterstudy-curriculum-switcher"]').hasClass('masterstudy-switch-button_active') && $('.masterstudy-course-player-header__discussions').hasClass('masterstudy-course-player-header__discussions_open')) {
+        $('body').addClass('masterstudy-course-player-reduced-content');
+      } else {
+        $('body').removeClass('masterstudy-course-player-reduced-content');
+      }
+    });
+    if ((url.searchParams.has('discussions_open') || localStorage.getItem('discussions_open') === 'yes') && (url.searchParams.has('curriculum_open') || localStorage.getItem('curriculum_open') === 'yes')) {
+      $('body').addClass('masterstudy-course-player-reduced-content');
+    }
 
     // tabs toggler
     $('.masterstudy-course-player-header .masterstudy-tabs__item').on('click', function () {

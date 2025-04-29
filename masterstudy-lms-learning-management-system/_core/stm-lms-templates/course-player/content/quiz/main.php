@@ -8,6 +8,8 @@
  * @var boolean $dark_mode
  */
 
+use MasterStudy\Lms\Pro\AddonsPlus\Grades\Services\GradeCalculator;
+
 $is_single_quiz = $is_single_quiz ?? false;
 
 wp_enqueue_style( 'masterstudy-course-player-quiz' );
@@ -42,30 +44,37 @@ STM_LMS_Templates::show_lms_template(
 		'dark_mode'           => $dark_mode,
 	)
 );
+$passing_grade = intval( $data['passing_grade'] ?? 0 );
+$grade         = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $passing_grade ) : round( $passing_grade, 1 ) . '%';
 ?>
 
 <div class="masterstudy-course-player-quiz <?php echo esc_attr( $data['show_answers'] ? 'masterstudy-course-player-quiz_show-answers' : '' ); ?>">
 	<?php
 	$data['last_answers'] = ! empty( $data['last_answers'] ) ? $data['last_answers'] : array();
 	if ( ! empty( $data['last_quiz'] ) ) {
-		$correct_answers = array_filter(
-			$data['last_answers'],
-			function ( $item ) {
-				return isset( $item['correct_answer'] ) && '1' === $item['correct_answer'];
-			}
-		);
 		STM_LMS_Templates::show_lms_template(
 			'course-player/content/quiz/result',
 			array(
 				'is_retakable'       => $data['is_retakable'],
 				'progress'           => intval( $data['progress'] ),
-				'passing_grade'      => intval( $data['passing_grade'] ?? 0 ),
-				'questions_quantity' => intval( $data['questions_quantity'] ?? 0 ),
-				'answered_quantity'  => ! empty( $correct_answers ) ? count( $correct_answers ) : 0,
+				'passing_grade_text' => $grade,
+				'passing_grade'      => $passing_grade,
+				'questions_quantity' => count( $data['last_answers'] ),
+				'correct_answers'    => count( array_filter( $data['last_answers'], fn( $item ) => isset( $item['correct_answer'] ) && '1' === $item['correct_answer'] ) ),
+				'incorrect_answers'  => count( array_filter( $data['last_answers'], fn( $item ) => isset( $item['correct_answer'] ) && '0' === $item['correct_answer'] ) ),
 				'show_emoji'         => $data['show_emoji'],
 				'emoji_name'         => $data['emoji_name'],
 				'quiz_attempts'      => $data['quiz_attempts'] ?? false,
 				'attempts_left'      => $data['attempts_left'] ?? 0,
+				'created_at'         => $data['created_at'] ?? null,
+				'course_id'          => $post_id,
+				'quiz_id'            => $item_id,
+				'quiz_data'          => $data,
+				'attempts'           => ! empty( $data['show_attempts'] ) ? stm_lms_get_quiz_all_attempts(
+					get_current_user_id(),
+					$post_id,
+					$item_id
+				) : array(),
 			)
 		);
 	}
@@ -82,12 +91,15 @@ STM_LMS_Templates::show_lms_template(
 			STM_LMS_Templates::show_lms_template(
 				'course-player/content/quiz/metas',
 				array(
-					'passing_grade'      => intval( $data['passing_grade'] ?? 0 ),
+					'passing_grade_text' => $grade,
+					'passing_grade'      => $passing_grade,
 					'questions_quantity' => intval( $data['questions_for_nav'] ?? 0 ),
 					'duration_value'     => intval( $data['duration_value'] ?? 0 ),
 					'duration_measure'   => $data['duration_measure'] ?? '',
 					'allowed_attempts'   => $data['attempts'] ?? 0,
 					'quiz_attempts'      => $data['quiz_attempts'] ?? 0,
+					'show_result'        => ! empty( $data['last_quiz'] ),
+					'has_attempts'       => $data['has_attempts'] ?? false,
 				)
 			);
 		}
@@ -117,27 +129,16 @@ STM_LMS_Templates::show_lms_template(
 		?>
 		<form class="masterstudy-course-player-quiz__form <?php echo esc_attr( ! $data['show_answers'] || empty( $data['last_quiz'] ) ? 'masterstudy-course-player-quiz__form_hide' : '' ); ?>">
 			<input type="hidden" name="source" value="<?php echo intval( $post_id ); ?>">
-			<div class="masterstudy-course-player-quiz__questions <?php echo esc_attr( 'pagination' === $data['quiz_style'] ? 'masterstudy-course-player-quiz__questions_pagination' : '' ); ?>">
-				<?php
-				global $ms_question_number;
-				$ms_question_number = 1;
-				foreach ( $data['questions'] as $index => $question ) {
-					STM_LMS_Templates::show_lms_template(
-						'course-player/content/quiz/questions/main',
-						array(
-							'data'           => $question,
-							'last_answers'   => $data['last_answers'],
-							'show_answers'   => $data['show_answers'],
-							'quiz_style'     => $data['quiz_style'],
-							'last_quiz'      => $data['last_quiz'],
-							'question_banks' => $data['question_banks'] ?? array(),
-							'item_id'        => $item_id,
-							'dark_mode'      => $dark_mode,
-						)
-					);
-				}
-				?>
-			</div>
+			<?php
+				STM_LMS_Templates::show_lms_template(
+					'course-player/content/quiz/questions',
+					array(
+						'dark_mode' => $dark_mode,
+						'quiz_data' => $data,
+						'quiz_id'   => $item_id,
+					)
+				);
+			?>
 			<?php if ( 'pagination' === $data['quiz_style'] && $data['questions_for_nav'] > 1 ) { ?>
 				<div class="masterstudy-course-player-quiz__pagination">
 					<?php
@@ -155,7 +156,7 @@ STM_LMS_Templates::show_lms_template(
 				</div>
 				<?php
 			}
-			if ( ! $data['passed'] || $is_single_quiz ) {
+			if ( ! $data['passed'] || STM_LMS_Options::get_option( 'retry_after_passing', false ) || $is_single_quiz ) {
 				?>
 				<input type="hidden" name="question_ids" value="<?php echo esc_attr( implode( ',', array_column( $data['questions'], 'id' ) ) ); ?>"/>
 				<input type="hidden" name="action" value="stm_lms_user_answers"/>

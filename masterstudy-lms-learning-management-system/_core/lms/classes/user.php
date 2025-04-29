@@ -22,8 +22,6 @@ class STM_LMS_User {
 
 		add_action( 'wp_ajax_stm_lms_get_user_courses', 'STM_LMS_User::get_user_courses' );
 
-		add_action( 'wp_ajax_stm_lms_get_user_quizzes', 'STM_LMS_User::get_user_quizzes' );
-
 		add_action( 'wp_ajax_stm_lms_wishlist', 'STM_LMS_User::wishlist' );
 
 		add_action( 'wsl_hook_process_login_before_wp_safe_redirect', 'STM_LMS_User::wsl_new_register_redirect_url', 100, 4 );
@@ -737,20 +735,16 @@ class STM_LMS_User {
 			die;
 		}
 
-		$user_id  = $user['id'];
-		$response = array(
-			'posts' => array(),
-			'total' => false,
+		$user_id        = $user['id'];
+		$posts_per_page = absint( get_option( 'posts_per_page', apply_filters( 'stm_lms_get_user_courses_per_page', 10 ) ) );
+		$offset         = $offset * $posts_per_page;
+		$total          = 0;
+		$response       = array(
+			'posts'  => array(),
+			'offset' => $offset,
 		);
 
-		$pp     = get_option( 'posts_per_page' );
-		$offset = $offset * $pp;
-
-		$response['offset'] = $offset;
-		$total              = 0;
-		$all_courses        = stm_lms_get_user_courses( $user_id, '', '', array() );
-
-		foreach ( $all_courses as $course_user ) {
+		foreach ( stm_lms_get_user_courses( $user_id ) as $course_user ) {
 			if ( get_post_type( $course_user['course_id'] ) !== 'stm-courses' ) {
 				stm_lms_get_delete_courses( $course_user['course_id'] );
 				continue;
@@ -760,18 +754,11 @@ class STM_LMS_User {
 		}
 
 		$columns = array( 'course_id', 'current_lesson_id', 'progress_percent', 'subscription_id', 'start_time', 'status', 'enterprise_id', 'bundle_id', 'for_points' );
-		$courses = stm_lms_get_user_courses(
-			$user_id,
-			$pp,
-			$offset,
-			$columns,
-			null,
-			null,
-		);
+		$courses = stm_lms_get_user_courses( $user_id, $posts_per_page, $offset, $columns, null, null );
 
 		$response['total_posts'] = $total;
-		$response['total']       = $total <= $offset + $pp;
-		$response['pages']       = ceil( $total / $pp );
+		$response['total']       = $total <= $offset + $posts_per_page;
+		$response['pages']       = ceil( $total / $posts_per_page );
 
 		if ( ! empty( $courses ) ) {
 			foreach ( $courses as $course ) {
@@ -874,7 +861,7 @@ class STM_LMS_User {
 				$lesson_post_type = get_post_type( $last_lesson );
 
 				if ( PostType::QUIZ === $lesson_post_type ) {
-					$last_quiz        = STM_LMS_Helpers::simplify_db_array( stm_lms_get_user_last_quiz( $user_id, $last_lesson ) );
+					$last_quiz        = stm_lms_get_user_last_quiz( $user_id, $last_lesson, array( 'progress' ) );
 					$passing_grade    = get_post_meta( $last_lesson, 'passing_grade', true );
 					$lesson_completed = ! empty( $last_quiz['progress'] ) && $last_quiz['progress'] >= ( $passing_grade ?? 0 ) ? 'completed' : '';
 				} else {
@@ -916,54 +903,6 @@ class STM_LMS_User {
 		wp_send_json( apply_filters( 'stm_lms_get_user_courses_filter', $r ) );
 	}
 
-	public static function get_user_quizzes() {
-		check_ajax_referer( 'stm_lms_get_user_quizzes', 'nonce' );
-
-		$user = self::get_current_user();
-		if ( empty( $user['id'] ) ) {
-			die;
-		}
-		$user_id = $user['id'];
-
-		$r = array(
-			'posts' => array(),
-			'total' => false,
-		);
-
-		$pp     = get_option( 'posts_per_page' );
-		$offset = ( ! empty( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) : 0;
-
-		$offset = $offset * $pp;
-
-		$quizzes = stm_lms_get_user_all_quizzes( $user_id, $pp, $offset, array( 'course_id', 'quiz_id', 'progress', 'status' ) );
-
-		$total = STM_LMS_Helpers::simplify_db_array( stm_lms_get_user_all_quizzes( $user_id, '', '', array( 'course_id' ), true ) );
-		$total = $total['COUNT(*)'];
-
-		$r['total'] = $total <= $offset + $pp;
-
-		if ( ! empty( $quizzes ) ) {
-			foreach ( $quizzes as $quiz ) {
-				$post_id      = $quiz['course_id'];
-				$item_id      = $quiz['quiz_id'];
-				$status_label = ( 'passed' == $quiz['status'] ) ? esc_html__( 'Passed', 'masterstudy-lms-learning-management-system' ) : esc_html__( 'Failed', 'masterstudy-lms-learning-management-system' ); // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-				$course_title = ( ! empty( get_post_status( $post_id ) ) ) ? get_the_title( $post_id ) : esc_html__( 'Course Deleted', 'masterstudy-lms-learning-management-system' );
-				$r['posts'][] = array_merge(
-					$quiz,
-					array(
-						'course_title' => $course_title,
-						'course_url'   => get_the_permalink( $post_id ),
-						'title'        => get_the_title( $item_id ),
-						'url'          => STM_LMS_Lesson::get_lesson_url( $post_id, $item_id ),
-						'status_label' => $status_label,
-					)
-				);
-			}
-		}
-
-		wp_send_json( $r );
-	}
-
 	public static function get_user_meta( $user_id, $key ) {
 		return get_user_meta( $user_id, $key, true );
 	}
@@ -1001,11 +940,9 @@ class STM_LMS_User {
 		$my_course            = intval( $author_id ) === intval( $user_id );
 		$is_free              = ( get_post_meta( $course_id, 'single_sale', true ) && empty( STM_LMS_Course::get_course_price( $course_id ) ) );
 		$is_bought            = STM_LMS_Order::has_purchased_courses( $user_id, $course_id );
-		$in_bundle            = isset( $course[0]['bundle_id'] ) && ! empty( $course[0]['bundle_id'] );
-		$for_points           = isset( $course[0]['for_points'] ) && ! empty( $course[0]['for_points'] );
 		$bought_by_membership = ! empty( $course[0]['subscription_id'] );
 		$not_in_membership    = get_post_meta( $course_id, 'not_membership', true );
-		$only_for_membership  = ! $not_in_membership && ! $is_bought && ! $is_free && ! $in_enterprise && ! $in_bundle && ! $for_points;
+		$only_for_membership  = ! $not_in_membership && ! $is_bought && ! $is_free && ! $in_enterprise && empty( $course[0]['bundle_id'] ) && empty( $course[0]['for_points'] );
 		$membership_level     = STM_LMS_Subscriptions::user_has_subscription( $user_id );
 		$membership_status    = ( $subscription_enabled ) ? STM_LMS_Subscriptions::get_membership_status( $user_id ) : 'inactive';
 		$membership_expired   = $subscription_enabled && 'expired' === $membership_status && $only_for_membership && ! $my_course && $bought_by_membership;

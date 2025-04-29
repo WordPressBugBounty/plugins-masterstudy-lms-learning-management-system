@@ -263,7 +263,7 @@ class STM_LMS_User_Manager_Course_User {
 
 		if ( 'stm-quizzes' === $material['post_type'] ) {
 			$type      = 'quiz';
-			$quiz_info = STM_LMS_Helpers::simplify_db_array( stm_lms_get_user_quizzes( $user_id, $material['post_id'], array( 'progress' ) ) );
+			$quiz_info = STM_LMS_Helpers::simplify_db_array( stm_lms_get_user_quizzes( $user_id, $material['post_id'], $course_id, array( 'progress' ) ) );
 			$completed = STM_LMS_Quiz::quiz_passed( $material['post_id'], $user_id );
 
 			$q = get_post_meta( $material['post_id'], 'questions', true );

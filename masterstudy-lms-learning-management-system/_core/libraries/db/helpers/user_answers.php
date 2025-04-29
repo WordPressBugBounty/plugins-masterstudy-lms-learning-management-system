@@ -128,22 +128,20 @@ function stm_lms_add_user_marker_answer( $user_answer ) {
 	return (int) $wpdb->insert_id;
 }
 
-function stm_lms_get_quiz_latest_answers( $user_id, $quiz_id, $questions_quantity, $fields = array() ) {
+function stm_lms_get_quiz_latest_answers( int $user_id, int $quiz_id, array $fields = array() ): array {
 	global $wpdb;
-	$table = stm_lms_user_answers_name( $wpdb );
+	$table      = stm_lms_user_answers_name( $wpdb );
+	$fields_sql = empty( $fields ) ? '*' : implode( ',', array_map( 'esc_sql', $fields ) );
 
-	$fields = ( empty( $fields ) ) ? '*' : implode( ',', $fields );
-
-	return $wpdb->get_results(
-		$wpdb->prepare(
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			"SELECT {$fields} FROM {$table} WHERE user_ID = %d AND quiz_id = %d ORDER BY user_answer_id DESC LIMIT %d",
-			$user_id,
-			$quiz_id,
-			$questions_quantity
-		),
-		ARRAY_A
+	$sql = sprintf(
+		"SELECT %s FROM {$table} WHERE user_id = %%d AND quiz_id = %%d
+        AND attempt_number = (SELECT MAX(attempt_number) FROM {$table} WHERE user_id = %%d AND quiz_id = %%d)
+		ORDER BY user_answer_id DESC",
+		$fields_sql
 	);
+
+	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	return $wpdb->get_results( $wpdb->prepare( $sql, $user_id, $quiz_id, $user_id, $quiz_id ), ARRAY_A );
 }
 
 function stm_lms_get_quiz_attempt_answers( $user_id, $quiz_id, $fields = array(), $attempt = 1 ) {

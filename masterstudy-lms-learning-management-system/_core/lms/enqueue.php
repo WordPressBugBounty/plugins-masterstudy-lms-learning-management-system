@@ -143,6 +143,8 @@ function stm_lms_enqueue_component_scripts() {
 		)
 	);
 
+	wp_register_script( 'masterstudy-enrolled-quizzes', STM_LMS_URL . '/assets/js/enrolled-quizzes.js', array( 'jquery' ), MS_LMS_VERSION, true );
+
 	/*Components vendors*/
 	wp_register_script( 'masterstudy-select2', STM_LMS_URL . '/assets/vendors/select2.min.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_style( 'masterstudy-select2', STM_LMS_URL . '/assets/vendors/select2.min.css', array(), MS_LMS_VERSION );
@@ -398,6 +400,7 @@ function stm_lms_nonces() {
 		'stm_lms_wizard_save_business_type',
 		'stm_lms_get_enrolled_assingments',
 		'stm-lms-starter-theme-install',
+		'stm_lms_enrolled_quizzes',
 	);
 
 	$nonces_list = array();

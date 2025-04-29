@@ -76,7 +76,7 @@
       if (!currentCart.includes(item_id_str)) {
         currentCart.push(item_id_str);
       }
-      setCookie('stm_lms_notauth_cart', JSON.stringify(currentCart), {
+      setCookie('stm_lms_notauth_cart', JSON.stringify(currentCart).replace(/"/g, ''), {
         path: '/'
       });
     });

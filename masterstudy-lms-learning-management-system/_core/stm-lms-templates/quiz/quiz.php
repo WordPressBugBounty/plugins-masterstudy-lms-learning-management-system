@@ -52,7 +52,6 @@ if ( ! empty( $questions ) ) :
 		$last_answers = stm_lms_get_quiz_latest_answers(
 			$user['id'],
 			$item_id,
-			$questions_quantity,
 			array(
 				'question_id',
 				'user_answer',

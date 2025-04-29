@@ -215,6 +215,7 @@
       $('.masterstudy-course-player-quiz__result-container').hide();
       $('.masterstudy-course-player-answer__hint').hide();
       $('.masterstudy-course-player-header__navigation-quiz').addClass('masterstudy-course-player-header__navigation-quiz_show');
+      $('.masterstudy-tabs-attempts-history').hide();
       startQuiz();
     });
     function startQuiz() {

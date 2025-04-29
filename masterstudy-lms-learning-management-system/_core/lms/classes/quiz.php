@@ -105,116 +105,104 @@ class STM_LMS_Quiz {
 		$user      = STM_LMS_User::get_current_user();
 		$user_id   = $user['id'] ?? null;
 		$course_id = apply_filters( 'user_answers__course_id', intval( $_POST['course_id'] ?? 0 ), $source );
+		$quiz_id   = intval( $_POST['quiz_id'] ?? 0 );
 
-		if ( empty( $course_id ) || empty( $_POST['quiz_id'] ) ) {
-			die;
+		if ( empty( $course_id ) || empty( $quiz_id ) ) {
+			wp_die();
 		}
 
-		$quiz_id         = intval( $_POST['quiz_id'] );
-		$progress        = 0;
 		$quiz_info       = STM_LMS_Helpers::parse_meta_field( $quiz_id );
-		$total_questions = count( explode( ',', $quiz_info['questions'] ) );
-
-		$questions = explode( ',', $quiz_info['questions'] );
+		$questions       = explode( ',', $quiz_info['questions'] ?? '' );
+		$total_questions = count( $questions );
 
 		foreach ( $questions as $question ) {
-			$type = get_post_meta( $question, 'type', true );
-
-			if ( 'question_bank' !== $type ) {
+			if ( 'question_bank' !== get_post_meta( $question, 'type', true ) ) {
 				continue;
 			}
 
 			$answers = get_post_meta( $question, 'answers', true );
 
-			if ( ! empty( $answers[0] ) && ! empty( $answers[0]['categories'] ) && ! empty( $answers[0]['number'] ) ) {
-				$number     = $answers[0]['number'];
-				$categories = wp_list_pluck( $answers[0]['categories'], 'slug' );
+			if ( empty( $answers[0]['categories'] ) || empty( $answers[0]['number'] ) ) {
+				continue;
+			}
 
-				$questions = get_post_meta( $quiz_id, 'questions', true );
-				$questions = ( ! empty( $questions ) ) ? explode( ',', $questions ) : array();
+			$number     = intval( $answers[0]['number'] );
+			$categories = wp_list_pluck( $answers[0]['categories'], 'slug' );
 
-				$args = array(
-					'post_type'      => 'stm-questions',
-					'posts_per_page' => $number,
-					'post__not_in'   => $questions,
-					'tax_query'      => array(
-						array(
-							'taxonomy' => 'stm_lms_question_taxonomy',
-							'field'    => 'slug',
-							'terms'    => $categories,
-						),
+			$args = array(
+				'post_type'      => MasterStudy\Lms\Plugin\PostType::QUESTION,
+				'posts_per_page' => $number,
+				'post__not_in'   => $questions,
+				'tax_query'      => array(
+					array(
+						'taxonomy' => MasterStudy\Lms\Plugin\Taxonomy::QUESTION_CATEGORY,
+						'field'    => 'slug',
+						'terms'    => $categories,
 					),
-				);
+				),
+			);
 
-				$q = new WP_Query( $args );
-
-				if ( $q->have_posts() ) {
-					$total_in_bank    = $q->found_posts > $number ? $number : $q->found_posts;
-					$total_questions += --$total_in_bank;
-
-					wp_reset_postdata();
-				}
+			$q = new WP_Query( $args );
+			if ( $q->have_posts() ) {
+				$total_questions += min( $q->found_posts, $number ) - 1;
+				wp_reset_postdata();
 			}
 		}
 
-		$single_question_score_percent = 100 / $total_questions;
-		$cutting_rate                  = ( ! empty( $quiz_info['re_take_cut'] ) ) ? ( 100 - $quiz_info['re_take_cut'] ) / 100 : 1;
-		$passing_grade                 = ( ! empty( $quiz_info['passing_grade'] ) ) ? intval( $quiz_info['passing_grade'] ) : 0;
-		$user_answer_id                = 0;
-		$user_quizzes                  = stm_lms_get_user_quizzes( $user_id, $quiz_id, array( 'user_quiz_id', 'progress' ) );
-		$attempt_number                = count( $user_quizzes ) + 1;
-		$prev_answers                  = ( 1 !== $attempt_number ) ? stm_lms_get_user_answers( $user_id, $quiz_id, $attempt_number - 1, true, array( 'question_id' ) ) : array();
+		$score_per_question = 100 / $total_questions;
+		$cutting_rate       = ! empty( $quiz_info['re_take_cut'] ) ? ( 100 - $quiz_info['re_take_cut'] ) / 100 : 1;
+		$passing_grade      = intval( $quiz_info['passing_grade'] ?? 0 );
+		$user_answer_id     = 0;
+		$attempt_number     = stm_lms_get_user_quizzes( $user_id, $quiz_id, $course_id, array(), true ) + 1;
+
+		$progress = 0;
 
 		foreach ( $_POST as $question_id => $value ) {
-			if ( is_numeric( $question_id ) ) {
-				$question_id = intval( $question_id );
-				$type        = get_post_meta( $question_id, 'type', true );
-
-				if ( 'fill_the_gap' === $type || 'item_match' === $type || 'single_choice' === $type || 'multi_choice' === $type || 'keywords' === $type ) {
-					if ( is_array( $value ) ) {
-						$value = array_map( 'trim', $value );
-					} elseif ( is_string( $value ) ) {
-						$value = trim( $value );
-					}
-					$answer = self::deslash( $value );
-				} elseif ( is_array( $value ) ) {
-						$answer = self::sanitize_answers( $value );
-				} else {
-					$answer = sanitize_text_field( self::deslash( $value ) );
-				}
-
-				$user_answer = ( is_array( $answer ) ) ? implode( ',', $answer ) : $answer;
-
-				$correct_answer = self::check_answer( $question_id, $answer );
-
-				if ( $correct_answer ) {
-					$single_question_score = $single_question_score_percent;
-					$progress             += $single_question_score;
-				}
-
-				$add_answer     = compact( 'user_id', 'course_id', 'quiz_id', 'question_id', 'attempt_number', 'user_answer', 'correct_answer' );
-				$user_answer_id = stm_lms_add_user_answer( $add_answer );
+			if ( ! is_numeric( $question_id ) ) {
+				continue;
 			}
+
+			$question_id = intval( $question_id );
+			$type        = get_post_meta( $question_id, 'type', true );
+
+			switch ( $type ) {
+				case 'fill_the_gap':
+				case 'item_match':
+				case 'single_choice':
+				case 'multi_choice':
+				case 'keywords':
+					$answer = is_array( $value ) ? array_map( 'trim', $value ) : trim( (string) $value );
+					$answer = self::deslash( $answer );
+					break;
+
+				default:
+					$answer = is_array( $value ) ? self::sanitize_answers( $value ) : sanitize_text_field( self::deslash( $value ) );
+					break;
+			}
+
+			$user_answer    = is_array( $answer ) ? implode( ',', $answer ) : $answer;
+			$correct_answer = self::check_answer( $question_id, $answer );
+			$progress      += $correct_answer ? $score_per_question : 0;
+
+			$user_answer_id = stm_lms_add_user_answer( compact( 'user_id', 'course_id', 'quiz_id', 'question_id', 'attempt_number', 'user_answer', 'correct_answer' ) );
 		}
 
-		/*Add user quiz*/
-		$progress  = 1 === $attempt_number ? round( $progress ) : round( $progress * $cutting_rate );
-		$status    = ( $progress < $passing_grade ) ? 'failed' : 'passed';
-		$user_quiz = compact( 'user_id', 'course_id', 'quiz_id', 'progress', 'status', 'sequency' );
+		$progress = 1 === $attempt_number ? round( $progress ) : round( $progress * $cutting_rate );
+		$status   = $progress < $passing_grade ? 'failed' : 'passed';
 
+		$user_quiz = compact( 'user_id', 'course_id', 'quiz_id', 'progress', 'status', 'sequency' );
 		stm_lms_add_user_quiz( $user_quiz );
 
-		/*REMOVE TIMER*/
 		stm_lms_get_delete_user_quiz_time( $user_id, $quiz_id );
-
 		STM_LMS_Course::update_course_progress( $user_id, $course_id );
 
 		if ( 'passed' === $status ) {
 			$user_login   = $user['login'];
 			$course_title = get_the_title( $course_id );
 			$quiz_name    = get_the_title( $quiz_id );
-			$message      = sprintf(
-			/* translators: %1$s Course Title, %2$s User Login */
+
+			$message = sprintf(
+				/* translators: %1$s login, %2$s quiz title, %3$s course title, %4$s passing grade, %5$s result */
 				esc_html__( '%1$s completed the %2$s on the course %3$s with a Passing grade of %4$s%% and a result of %5$s%%', 'masterstudy-lms-learning-management-system' ),
 				$user_login,
 				$quiz_name,
@@ -223,14 +211,20 @@ class STM_LMS_Quiz {
 				$progress
 			);
 
-			STM_LMS_Helpers::send_email( $user['email'], 'Quiz Completed', $message, 'stm_lms_course_quiz_completed_for_user', compact( 'user_login', 'course_title', 'quiz_name', 'passing_grade', 'progress' ) );
+			$subject = esc_html__( 'Quiz Completed', 'masterstudy-lms-learning-management-system' );
+
+			if ( class_exists( 'STM_LMS_Email_Manager' ) ) {
+				$email_manager = STM_LMS_Email_Manager::stm_lms_get_settings();
+				$subject       = $email_manager['stm_lms_course_quiz_completed_for_user_subject'] ?? $subject;
+			}
+
+			STM_LMS_Helpers::send_email( $user['email'], $subject, $message, 'stm_lms_course_quiz_completed_for_user', compact( 'user_login', 'course_title', 'quiz_name', 'passing_grade', 'progress' ) );
 		}
 
 		$user_quiz['user_answer_id'] = $user_answer_id;
 		$user_quiz['passed']         = $progress >= $passing_grade;
-		$user_quiz['progress']       = round( $user_quiz['progress'] );
-		$user_quiz['url']            = '<a class="btn btn-default btn-close-quiz-modal-results" href="' . apply_filters( 'stm_lms_item_url_quiz_ended', STM_LMS_Lesson::get_lesson_url( $course_id, $quiz_id ) ) . '">' . esc_html__( 'Close', 'masterstudy-lms-learning-management-system' ) . '</a>';
-		$user_quiz['url']            = apply_filters( 'user_answers__course_url', $user_quiz['url'], $source );
+		$user_quiz['progress']       = $progress;
+		$user_quiz['url']            = apply_filters( 'user_answers__course_url', '<a class="btn btn-default btn-close-quiz-modal-results" href="' . apply_filters( 'stm_lms_item_url_quiz_ended', STM_LMS_Lesson::get_lesson_url( $course_id, $quiz_id ) ) . '">' . esc_html__( 'Close', 'masterstudy-lms-learning-management-system' ) . '</a>', $source );
 
 		do_action( 'stm_lms_quiz_' . $status, $user_id, $quiz_id, $user_quiz['progress'], $course_id );
 
@@ -247,17 +241,7 @@ class STM_LMS_Quiz {
 		$course_id = intval( $_POST['sources']['post_id'] );
 		$quiz_id   = intval( $_POST['sources']['item_id'] );
 		$user_id   = get_current_user_id();
-
-		$last_quiz = STM_LMS_Helpers::simplify_db_array(
-			stm_lms_get_user_last_quiz(
-				$user_id,
-				$quiz_id,
-				array(
-					'progress',
-					'status',
-				)
-			)
-		);
+		$last_quiz = stm_lms_get_user_last_quiz( $user_id, $quiz_id, array( 'progress', 'status' ) );
 
 		if ( ! empty( $last_quiz ) && ! empty( $last_quiz['status'] ) && 'passed' === $last_quiz['status'] ) {
 			wp_send_json( $res );
@@ -485,7 +469,6 @@ class STM_LMS_Quiz {
 		if ( empty( $last_quiz ) ) {
 			return false;
 		}
-		$last_quiz     = STM_LMS_Helpers::simplify_db_array( $last_quiz );
 		$passing_grade = self::passing_grade( STM_LMS_Helpers::parse_meta_field( $quiz_id ) );
 
 		return $last_quiz['progress'] >= $passing_grade;
@@ -513,7 +496,7 @@ class STM_LMS_Quiz {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		return ! empty( $_GET['show_answers'] ) && $_GET['show_answers'];
+		return ! empty( $_GET['show_answers'] );
 	}
 
 	public static function get_quiz_duration( $quiz_id ) {

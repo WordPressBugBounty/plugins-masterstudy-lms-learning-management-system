@@ -7,6 +7,7 @@ $sections = $data['sections'] ?? array();
 
 wp_enqueue_style( 'masterstudy-student-progress-list' );
 wp_enqueue_script( 'masterstudy-student-progress-list' );
+wp_enqueue_script( 'masterstudy-course-player-quiz-attempt' );
 ?>
 
 <div class="masterstudy-student-progress">

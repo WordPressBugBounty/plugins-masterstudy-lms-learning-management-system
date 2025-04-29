@@ -15,7 +15,11 @@
  * @var boolean $theme_fonts
  * @var boolean $discussions_sidebar
  * @var int $user_id
+ * @var int $course_id
+ * @var array $quiz_data
  */
+
+use MasterStudy\Lms\Repositories\QuizRepository;
 
 wp_enqueue_style( 'masterstudy-course-player-header' );
 wp_enqueue_script( 'masterstudy-course-player-header' );
@@ -38,7 +42,7 @@ $masterstudy_course_player_template = true;
 <head>
 	<title>
 		<?php
-		if ( ! empty( $is_scorm_course ) && $is_scorm_course ) {
+		if ( ! empty( $is_scorm_course ) ) {
 			echo esc_html( $course_title );
 		} else {
 			echo esc_html( $post->post_title ?? get_bloginfo( 'charset' ) );
@@ -125,6 +129,28 @@ $classes = implode(
 							'title' => __( 'Materials', 'masterstudy-lms-learning-management-system' ),
 						),
 					),
+					'style'            => 'nav-sm',
+					'active_tab_index' => 0,
+					'dark_mode'        => $dark_mode,
+				)
+			);
+		}
+
+		if ( $has_access && ( new QuizRepository() )->exists( $post->ID ) && ! empty( $quiz_data['show_history'] ) && ! empty( $quiz_data['has_attempts'] ) ) {
+			STM_LMS_Templates::show_lms_template(
+				'components/tabs',
+				array(
+					'items'            => array(
+						array(
+							'id'    => 'quiz',
+							'title' => __( 'Quiz', 'masterstudy-lms-learning-management-system' ),
+						),
+						array(
+							'id'    => 'history',
+							'title' => __( 'History', 'masterstudy-lms-learning-management-system' ),
+						),
+					),
+					'class'            => 'masterstudy-tabs-attempts-history',
 					'style'            => 'nav-sm',
 					'active_tab_index' => 0,
 					'dark_mode'        => $dark_mode,

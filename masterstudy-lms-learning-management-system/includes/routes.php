@@ -491,6 +491,21 @@ $router->group(
 			\MasterStudy\Lms\Routing\Swagger\Routes\Order\GetOrders::class
 		);
 		$router->get(
+			'/enrolled-quizzes',
+			\MasterStudy\Lms\Http\Controllers\Quiz\GetEnrolledQuizzesController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Quiz\GetEnrolledQuizzes::class
+		);
+		$router->get(
+			'/quiz/attempts',
+			\MasterStudy\Lms\Http\Controllers\Quiz\GetQuizAttemptsController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Quiz\GetQuizAttempts::class
+		);
+		$router->get(
+			'/quiz/attempt',
+			\MasterStudy\Lms\Http\Controllers\Quiz\GetQuizAttemptController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Quiz\GetQuizAttempt::class
+		);
+		$router->get(
 			'/instructor-public-courses',
 			\MasterStudy\Lms\Http\Controllers\Course\GetInstructorPublicCoursesController::class,
 			\MasterStudy\Lms\Routing\Swagger\Routes\Course\GetInstructorPublicCourses::class

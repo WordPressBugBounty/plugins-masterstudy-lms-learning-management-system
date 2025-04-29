@@ -4,6 +4,7 @@ namespace MasterStudy\Lms\Repositories;
 
 use MasterStudy\Lms\Enums\LessonType;
 use MasterStudy\Lms\Plugin\PostType;
+use function Patchwork\CodeManipulation\prime;
 
 final class CoursePlayerRepository {
 	public array $data = array();
@@ -60,6 +61,7 @@ final class CoursePlayerRepository {
 			'theme_fonts'              => $settings['course_player_theme_fonts'] ?? false,
 			'discussions_sidebar'      => $settings['course_player_discussions_sidebar'] ?? true,
 			'dark_mode'                => $settings['course_player_theme_mode'] ?? false,
+			'show_attempts_history'    => $settings['course_player_theme_mode'] ?? false,
 		);
 
 		$lesson_types_labels             = $this->get_lesson_labels();
@@ -108,9 +110,9 @@ final class CoursePlayerRepository {
 			$this->data['is_enrolled'] = ! empty( $this->data['user_course'] );
 
 			if ( PostType::QUIZ === $lesson_post_type ) {
-				$this->data['last_quiz']        = \STM_LMS_Helpers::simplify_db_array( stm_lms_get_user_last_quiz( $this->data['user_id'], $lesson_id ) );
+				$this->data['last_quiz']        = stm_lms_get_user_last_quiz( $this->data['user_id'], $lesson_id, array(), $post_id );
 				$passing_grade                  = get_post_meta( $lesson_id, 'passing_grade', true );
-				$this->data['lesson_completed'] = ! empty( $this->data['last_quiz']['progress'] ) && $this->data['last_quiz']['progress'] >= ( $passing_grade ?? 0 ) ? 'completed' : '';
+				$this->data['lesson_completed'] = ( ! empty( $this->data['last_quiz']['progress'] ) && $this->data['last_quiz']['progress'] >= ( $passing_grade ?? 0 ) ) && ! \STM_LMS_Options::get_option( 'retry_after_passing', false ) ? 'completed' : '';
 			} else {
 				$this->data['lesson_completed'] = \STM_LMS_Lesson::is_lesson_completed( $user_id, $post_id, $lesson_id ) ? 'completed' : '';
 			}
@@ -193,7 +195,7 @@ final class CoursePlayerRepository {
 		);
 	}
 
-	public function get_quiz_data( int $quiz_id, int $user_id = 0 ): array {
+	public function get_quiz_data( int $quiz_id, int $user_id = 0, int $course_id = 0 ): array {
 		$quiz = ( new QuizRepository() )->get( $quiz_id );
 
 		if ( ! $quiz ) {
@@ -215,15 +217,17 @@ final class CoursePlayerRepository {
 				'duration_value' => $quiz['duration'],
 				'quiz_attempts'  => \STM_LMS_Options::get_option( 'quiz_attempts' ),
 				'is_retakable'   => true,
+				'show_attempts'  => true,
 			)
 		);
 
 		if ( empty( $this->data ) ) {
 			$user_id    = ! empty( $user_id ) ? $user_id : get_current_user_id();
+			$last_quiz  = stm_lms_get_user_last_quiz( $user_id, $quiz_id, array(), $course_id );
 			$this->data = array(
 				'user_id'          => $user_id,
-				'last_quiz'        => \STM_LMS_Helpers::simplify_db_array( stm_lms_get_user_last_quiz( $user_id, $quiz_id ) ),
-				'lesson_completed' => ! empty( $this->data['last_quiz']['progress'] ) && $this->data['last_quiz']['progress'] >= ( $quiz_data['passing_grade'] ?? 0 ) ? 'completed' : '',
+				'last_quiz'        => $last_quiz,
+				'lesson_completed' => ! empty( $last_quiz['progress'] ) && $last_quiz['progress'] >= ( $quiz_data['passing_grade'] ?? 0 ) ? 'completed' : '',
 			);
 		}
 
@@ -236,8 +240,15 @@ final class CoursePlayerRepository {
 			$quiz_data['attempts_left'] = intval( $quiz_data['attempts'] ) - intval( $total_attempts['COUNT(*)'] ?? 0 );
 		}
 
-		$quiz_data['last_quiz']    = $this->data['last_quiz'] ?? array();
+		$quiz_data['last_quiz'] = $this->data['last_quiz'] ?? array();
+		$created_at             = isset( $quiz_data['last_quiz']['created_at'] ) ? \STM_LMS_Helpers::format_date( $quiz_data['last_quiz']['created_at'] ) : null;
+
+		if ( empty( $created_at ) ) {
+			$created_at['date'] = sprintf( '№ %d', esc_html( $quiz_data['last_quiz']['attempt_number'] ?? 0 ) );
+		}
+
 		$quiz_data['progress']     = $quiz_data['last_quiz']['progress'] ?? 0;
+		$quiz_data['created_at']   = $created_at;
 		$quiz_data['passed']       = $quiz_data['progress'] >= $quiz_data['passing_grade'] && ! empty( $quiz_data['progress'] );
 		$quiz_data['emoji_type']   = $quiz_data['progress'] < $quiz_data['passing_grade'] ? 'assignments_quiz_failed_emoji' : 'assignments_quiz_passed_emoji';
 		$quiz_data['show_emoji']   = \STM_LMS_Options::get_option( 'assignments_quiz_result_emoji_show', true ) ?? false;
@@ -322,7 +333,6 @@ final class CoursePlayerRepository {
 					stm_lms_get_quiz_latest_answers(
 						$this->data['user_id'],
 						$quiz_id,
-						$quiz_data['questions_quantity'],
 						array(
 							'question_id',
 							'user_answer',
@@ -333,6 +343,13 @@ final class CoursePlayerRepository {
 				);
 			}
 		}
+
+		$quiz_data['has_attempts']      = stm_lms_attempts_exists( $course_id, $quiz_id, $user_id );
+		$quiz_data['has_h5p_shortcode'] = isset( $quiz['content'] ) && preg_match( '/\[h5p id="\d+"\]/', $quiz['content'] );
+		$quiz_data['show_history']      =
+			\STM_LMS_Options::get_option( 'show_attempts_history', false )
+			&& ! empty( $quiz_data['questions'] )
+			&& ! $quiz_data['has_h5p_shortcode'];
 
 		return $quiz_data;
 	}
@@ -346,6 +363,7 @@ final class CoursePlayerRepository {
 			++$attempt;
 			$quiz_data['attempt']      = $attempt;
 			$quiz_data['progress']     = $quiz['progress'];
+			$quiz_data['created_at']   = \STM_LMS_Helpers::format_date( $quiz['created_at'] );
 			$quiz_data['passed']       = $quiz['progress'] >= $quiz_data['passing_grade'];
 			$quiz_data['emoji_type']   = $quiz['progress'] < $quiz_data['passing_grade'] ? 'assignments_quiz_failed_emoji' : 'assignments_quiz_passed_emoji';
 			$quiz_data['emoji_name']   = \STM_LMS_Options::get_option( $quiz_data['emoji_type'] );

@@ -34,7 +34,7 @@ class STM_LMS_Order {
 		add_action( 'wp_ajax_get_pagination', 'STM_LMS_Order::get_pagination' );
 		add_action( 'wp_ajax_nopriv_get_pagination', 'STM_LMS_Order::get_pagination' );
 
-		add_action( 'plugins_loaded', array( self::class, 'loaded' ) );
+		add_action( 'woocommerce_loaded', array( self::class, 'loaded' ) );
 	}
 
 	public static function loaded() {
@@ -42,16 +42,12 @@ class STM_LMS_Order {
 			require_once STM_LMS_PATH . '/lms/classes/woocommerce/class-wc-product-cpt.php';
 			require_once STM_LMS_PATH . '/lms/classes/woocommerce/class-woocommerce-order-item.php';
 
-			add_action( 'init', array( self::class, 'woocommerce_init' ) );
+			add_filter( 'woocommerce_get_order_item_classname', array( self::class, 'get_order_item_classname' ), 20, 2 );
+
+			add_filter( 'woocommerce_data_stores', array( self::class, 'set_course_data_store' ), 10, 1 );
+
+			add_filter( 'woocommerce_hidden_order_itemmeta', array( self::class, 'hidden_order_itemmeta' ), 20, 1 );
 		}
-	}
-
-	public static function woocommerce_init() {
-		add_filter( 'woocommerce_get_order_item_classname', array( self::class, 'get_order_item_classname' ), 20, 2 );
-
-		add_filter( 'woocommerce_data_stores', array( self::class, 'set_course_data_store' ), 10, 1 );
-
-		add_filter( 'woocommerce_hidden_order_itemmeta', array( self::class, 'hidden_order_itemmeta' ), 20, 1 );
 	}
 
 	public static function get_order_item_classname( $classname, $item_type ) {

@@ -41,7 +41,7 @@ wp_enqueue_script( 'masterstudy-select', STM_LMS_URL . 'assets/js/components/sel
 	<div class="masterstudy-select__dropdown">
 		<ul class="masterstudy-select__options">
 			<?php foreach ( $options as $value => $content ) : ?>
-				<li class="masterstudy-select__option" data-value="<?php echo esc_attr( $value ); ?>">
+				<li class="masterstudy-select__option <?php echo (string) $default === (string) $value ? 'masterstudy-select__option_selected' : ''; ?>" data-value="<?php echo esc_attr( $value ); ?>">
 					<?php echo esc_html( $content ); ?>
 				</li>
 			<?php endforeach; ?>

@@ -84,7 +84,7 @@
     }
 
     // submit question
-    $('.masterstudy-course-player-answer').click(function (e) {
+    $(document).on('click', '.masterstudy-course-player-answer', function (e) {
       if (!$('.masterstudy-course-player-quiz').hasClass('masterstudy-course-player-quiz_show-answers')) {
         var input = $(this).find('input');
         if (input.is(':radio')) {
