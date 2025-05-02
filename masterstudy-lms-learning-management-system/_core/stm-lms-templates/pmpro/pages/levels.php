@@ -21,7 +21,7 @@ if ( $pmpro_msg ) { ?>
 	<div class="pmpro_message <?php echo esc_attr( $pmpro_msg ); ?>"><?php echo wp_kses_post( $pmpro_msg ); ?></div>
 <?php } ?>
 <div class="stm_lms_pmpro_head">
-	<h1 class="stm_lms_pmpro_title"><?php esc_html_e( 'Membership plans', 'masterstudy' ); ?></h1>
+	<h1 class="stm_lms_pmpro_title"><?php esc_html_e( 'Membership plans', 'masterstudy-lms-learning-management-system' ); ?></h1>
 	<div class="stm_lms_pmpro_groups heading_font"></div>
 </div>
 <div class="stm_lms_plans">
@@ -35,21 +35,21 @@ if ( $pmpro_msg ) { ?>
 		$featured_quotas  = get_option( "stm_lms_featured_courses_number_{$level->id}" );
 		$plan_group       = get_option( "stm_lms_plan_group_{$level->id}" );
 		if ( empty( $plan_group ) ) {
-			$plan_group = esc_html__( 'All', 'masterstudy' );
+			$plan_group = esc_html__( 'All', 'masterstudy-lms-learning-management-system' );
 		}
 		if ( empty( $current_user->membership_level->ID ) || ! $current_level ) {
-			$text = esc_html__( 'Get now', 'masterstudy' );
+			$text = esc_html__( 'Get now', 'masterstudy-lms-learning-management-system' );
 			$url  = pmpro_url( 'checkout', '?level=' . $level->id, 'https' );
 		} elseif ( $current_level ) {
 			if ( pmpro_isLevelExpiringSoon( $current_user->membership_level ) && $current_user->membership_level->allow_signups ) {
-				$text = esc_html__( 'Renew', 'masterstudy' );
+				$text = esc_html__( 'Renew', 'masterstudy-lms-learning-management-system' );
 				$url  = pmpro_url( 'checkout', '?level=' . $level->id, 'https' );
 			} else {
-				$text = esc_html__( 'Your Level', 'masterstudy' );
+				$text = esc_html__( 'Your Level', 'masterstudy-lms-learning-management-system' );
 				$url  = pmpro_url( 'account' );
 			}
 		}
-		$level_price  = ( pmpro_isLevelFree( $level ) ) ? esc_html__( 'Free', 'masterstudy' ) : pmpro_formatPrice( $level->initial_payment );
+		$level_price  = ( pmpro_isLevelFree( $level ) ) ? esc_html__( 'Free', 'masterstudy-lms-learning-management-system' ) : pmpro_formatPrice( $level->initial_payment );
 		$level_period = pmpro_translate_billing_period( $level->cycle_period );
 		$cost_text    = pmpro_getLevelCost( $level, false, false );
 		if ( ( empty( $level->trial_amount ) && empty( $level->trial_limit ) ) || empty( $level->billing_amount ) ) {
@@ -77,7 +77,7 @@ if ( $pmpro_msg ) { ?>
 							<div class="stm_lms_plan__period heading_font">
 								<?php
 								/* translators: %s: string */
-								printf( esc_html__( 'per %s', 'masterstudy' ), esc_html( $level_period ) );
+								printf( esc_html__( 'per %s', 'masterstudy-lms-learning-management-system' ), esc_html( $level_period ) );
 								?>
 							</div>
 						<?php endif; ?>
@@ -88,7 +88,7 @@ if ( $pmpro_msg ) { ?>
 						<div class="stm_lms_plan__included">
 							<?php
 							/* translators: %s: string */
-							printf( esc_html__( 'Courses included: %s', 'masterstudy' ), esc_html( $courses_included ) );
+							printf( esc_html__( 'Courses included: %s', 'masterstudy-lms-learning-management-system' ), esc_html( $courses_included ) );
 							?>
 						</div>
 					<?php endif; ?>
@@ -96,7 +96,7 @@ if ( $pmpro_msg ) { ?>
 						<div class="stm_lms_plan__included">
 							<?php
 							/* translators: %s: string */
-							printf( esc_html__( 'Featured courses quote included: %s', 'masterstudy' ), esc_html( $featured_quotas ) );
+							printf( esc_html__( 'Featured courses quote included: %s', 'masterstudy-lms-learning-management-system' ), esc_html( $featured_quotas ) );
 							?>
 						</div>
 					<?php endif; ?>

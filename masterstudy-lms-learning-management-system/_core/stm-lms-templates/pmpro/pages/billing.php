@@ -20,17 +20,17 @@ if ( isset( $level->id ) && ! empty( $level->id ) ) {
 		do_action( 'pmpro_billing_bullets_top', $level );
 		?>
 		<li>
-			<strong><?php esc_html_e( 'Plan', 'masterstudy' ); ?>:</strong> <?php echo esc_html( $level->name ); ?>
+			<strong><?php esc_html_e( 'Plan', 'masterstudy-lms-learning-management-system' ); ?>:</strong> <?php echo esc_html( $level->name ); ?>
 		</li>
 		<?php if ( $level->billing_amount > 0 ) { ?>
 		<li>
-			<strong><?php esc_html_e( 'Membership Fee', 'masterstudy' ); ?>:</strong>
+			<strong><?php esc_html_e( 'Membership Fee', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 			<?php
 			$level = $current_user->membership_level;
 			if ( $current_user->membership_level->cycle_number > 1 ) {
-				printf( wp_kses_post( __( '%1$s every %2$d %3$s.', 'masterstudy' ) ), wp_kses_post( pmpro_formatPrice( $level->billing_amount ) ), esc_html( $level->cycle_number ), wp_kses_post( pmpro_translate_billing_period( $level->cycle_period, $level->cycle_number ) ) );
+				printf( wp_kses_post( __( '%1$s every %2$d %3$s.', 'masterstudy-lms-learning-management-system' ) ), wp_kses_post( pmpro_formatPrice( $level->billing_amount ) ), esc_html( $level->cycle_number ), wp_kses_post( pmpro_translate_billing_period( $level->cycle_period, $level->cycle_number ) ) );
 			} elseif ( 1 == $current_user->membership_level->cycle_number ) {
-				printf( wp_kses_post( __( '%1$s per %2$s.', 'masterstudy' ) ), wp_kses_post( pmpro_formatPrice( $level->billing_amount ) ), wp_kses_post( pmpro_translate_billing_period( $level->cycle_period ) ) );
+				printf( wp_kses_post( __( '%1$s per %2$s.', 'masterstudy-lms-learning-management-system' ) ), wp_kses_post( pmpro_formatPrice( $level->billing_amount ) ), wp_kses_post( pmpro_translate_billing_period( $level->cycle_period ) ) );
 			} else {
 				echo wp_kses_post( pmpro_formatPrice( $current_user->membership_level->billing_amount ) );
 			}
@@ -40,7 +40,7 @@ if ( isset( $level->id ) && ! empty( $level->id ) ) {
 		}
 		if ( $level->billing_limit ) {
 			?>
-			<li><strong><?php esc_html_e( 'Duration', 'masterstudy' ); ?>
+			<li><strong><?php esc_html_e( 'Duration', 'masterstudy-lms-learning-management-system' ); ?>
 				:</strong> <?php echo esc_html( $level->billing_limit ) . ' ' . esc_html( sornot( $level->cycle_period, $level->billing_limit ) ); ?>
 			</li>
 			<?php
@@ -53,8 +53,8 @@ if ( isset( $level->id ) && ! empty( $level->id ) ) {
 if ( pmpro_isLevelRecurring( $level ) ) {
 	if ( $show_paypal_link ) {
 		?>
-		<p><?php esc_html_e( 'Your payment subscription is managed by PayPal. Please login to PayPal to update your billing information.', 'masterstudy' ); ?></p>
-		<p><?php esc_html_e( 'Your payment subscription is managed by PayPal. Please login to PayPal to update your billing information.', 'masterstudy' ); ?></p>
+		<p><?php esc_html_e( 'Your payment subscription is managed by PayPal. Please login to PayPal to update your billing information.', 'masterstudy-lms-learning-management-system' ); ?></p>
+		<p><?php esc_html_e( 'Your payment subscription is managed by PayPal. Please login to PayPal to update your billing information.', 'masterstudy-lms-learning-management-system' ); ?></p>
 	<?php } else { ?>
 		<form id="pmpro_form" class="pmpro_form" action="<?php echo esc_url( pmpro_url( 'billing', '', 'https' ) ); ?>" method="post">
 			<input type="hidden" name="level" value="<?php echo esc_attr( $level->id ); ?>"/>
@@ -70,52 +70,52 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 				<div id="pmpro_billing_address_fields" class="pmpro_checkout">
 					<hr/>
 					<h3>
-						<span class="pmpro_checkout-h3-name"><?php esc_html_e( 'Billing Address', 'masterstudy' ); ?></span>
+						<span class="pmpro_checkout-h3-name"><?php esc_html_e( 'Billing Address', 'masterstudy-lms-learning-management-system' ); ?></span>
 					</h3>
 					<div class="pmpro_checkout-fields">
 						<div class="pmpro_checkout-field pmpro_checkout-field-bfirstname">
-							<label for="bfirstname"><?php esc_html_e( 'First Name', 'masterstudy' ); ?></label>
+							<label for="bfirstname"><?php esc_html_e( 'First Name', 'masterstudy-lms-learning-management-system' ); ?></label>
 							<input id="bfirstname" name="bfirstname" type="text"
 								class="input <?php echo esc_attr( pmpro_getClassForField( 'bfirstname' ) ); ?>" size="30"
 								value="<?php echo esc_attr( $bfirstname ); ?>"/>
 						</div> <!-- end pmpro_checkout-field-bfirstname -->
 						<div class="pmpro_checkout-field pmpro_checkout-field-blastname">
-							<label for="blastname"><?php esc_html_e( 'Last Name', 'masterstudy' ); ?></label>
+							<label for="blastname"><?php esc_html_e( 'Last Name', 'masterstudy-lms-learning-management-system' ); ?></label>
 							<input id="blastname" name="blastname" type="text"
 								class="input <?php echo esc_attr( pmpro_getClassForField( 'blastname' ) ); ?>" size="30"
 								value="<?php echo esc_attr( $blastname ); ?>"/>
 						</div> <!-- end pmpro_checkout-field-blastname -->
 						<div class="pmpro_checkout-field pmpro_checkout-field-baddress1">
-							<label for="baddress1"><?php esc_html_e( 'Address 1', 'masterstudy' ); ?></label>
+							<label for="baddress1"><?php esc_html_e( 'Address 1', 'masterstudy-lms-learning-management-system' ); ?></label>
 							<input id="baddress1" name="baddress1" type="text"
 								class="input <?php echo esc_attr( pmpro_getClassForField( 'baddress1' ) ); ?>" size="30"
 								value="<?php echo esc_attr( $baddress1 ); ?>"/>
 						</div> <!-- end pmpro_checkout-field-baddress1 -->
 						<div class="pmpro_checkout-field pmpro_checkout-field-baddress2">
-							<label for="baddress2"><?php esc_html_e( 'Address 2', 'masterstudy' ); ?></label>
+							<label for="baddress2"><?php esc_html_e( 'Address 2', 'masterstudy-lms-learning-management-system' ); ?></label>
 							<input id="baddress2" name="baddress2" type="text"
 								class="input <?php echo esc_attr( pmpro_getClassForField( 'baddress2' ) ); ?>" size="30"
 								value="<?php echo esc_attr( $baddress2 ); ?>"/>
-							<small class="lite">(<?php esc_html_e( 'optional', 'masterstudy' ); ?>)</small>
+							<small class="lite">(<?php esc_html_e( 'optional', 'masterstudy-lms-learning-management-system' ); ?>)</small>
 						</div> <!-- end pmpro_checkout-field-baddress2 -->
 						<?php
 						$longform_address = apply_filters( 'pmpro_longform_address', false );
 						if ( $longform_address ) {
 							?>
 							<div class="pmpro_checkout-field pmpro_checkout-field-bcity">
-								<label for="bcity"><?php esc_html_e( 'City', 'masterstudy' ); ?></label>
+								<label for="bcity"><?php esc_html_e( 'City', 'masterstudy-lms-learning-management-system' ); ?></label>
 								<input id="bcity" name="bcity" type="text"
 									class="input <?php echo esc_attr( pmpro_getClassForField( 'bcity' ) ); ?>" size="30"
 									value="<?php echo esc_attr( $bcity ); ?>"/>
 							</div> <!-- end pmpro_checkout-field-bcity -->
 							<div class="pmpro_checkout-field pmpro_checkout-field-bstate">
-								<label for="bstate"><?php esc_html_e( 'State', 'masterstudy' ); ?></label>
+								<label for="bstate"><?php esc_html_e( 'State', 'masterstudy-lms-learning-management-system' ); ?></label>
 								<input id="bstate" name="bstate" type="text"
 									class="input <?php echo esc_attr( pmpro_getClassForField( 'bstate' ) ); ?>" size="30"
 									value="<?php echo esc_attr( $bstate ); ?>"/>
 							</div> <!-- end pmpro_checkout-field-bstate -->
 							<div class="pmpro_checkout-field pmpro_checkout-field-bzipcode">
-								<label for="bzipcode"><?php esc_html_e( 'Postal Code', 'masterstudy' ); ?></label>
+								<label for="bzipcode"><?php esc_html_e( 'Postal Code', 'masterstudy-lms-learning-management-system' ); ?></label>
 								<input id="bzipcode" name="bzipcode" type="text"
 									class="input <?php echo esc_attr( pmpro_getClassForField( 'bzipcode' ) ); ?>" size="30"
 									value="<?php echo esc_attr( $bzipcode ); ?>"/>
@@ -124,7 +124,7 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 						} else {
 							?>
 							<div class="pmpro_checkout-field pmpro_checkout-field-bcity_state_zip">
-								<label for="bcity_state_zip"><?php esc_html_e( 'City, State Zip', 'masterstudy' ); ?></label>
+								<label for="bcity_state_zip"><?php esc_html_e( 'City, State Zip', 'masterstudy-lms-learning-management-system' ); ?></label>
 								<input id="bcity" name="bcity" type="text"
 									class="input <?php echo esc_attr( pmpro_getClassForField( 'bcity' ) ); ?>" size="14"
 									value="<?php echo esc_attr( $bcity ); ?>"/>
@@ -178,7 +178,7 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 						if ( $show_country ) {
 							?>
 							<div class="pmpro_checkout-field pmpro_checkout-field-bcountry">
-								<label for="bcountry"><?php esc_html_e( 'Country', 'masterstudy' ); ?></label>
+								<label for="bcountry"><?php esc_html_e( 'Country', 'masterstudy-lms-learning-management-system' ); ?></label>
 								<select name="bcountry" class="<?php echo esc_attr( pmpro_getClassForField( 'bcountry' ) ); ?>">
 									<?php
 									global $pmpro_countries, $pmpro_default_country;
@@ -204,7 +204,7 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 						}
 						?>
 						<div class="pmpro_checkout-field pmpro_checkout-field-bphone">
-							<label for="bphone"><?php esc_html_e( 'Phone', 'masterstudy' ); ?></label>
+							<label for="bphone"><?php esc_html_e( 'Phone', 'masterstudy-lms-learning-management-system' ); ?></label>
 							<input id="bphone" name="bphone" type="text"
 								class="input <?php echo esc_attr( pmpro_getClassForField( 'bphone' ) ); ?>" size="30"
 								value="<?php echo esc_attr( $bphone ); ?>"/>
@@ -219,14 +219,14 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 							}
 							?>
 							<div class="pmpro_checkout-field pmpro_checkout-field-bemail">
-								<label for="bemail"><?php esc_html_e( 'E-mail Address', 'masterstudy' ); ?></label>
+								<label for="bemail"><?php esc_html_e( 'E-mail Address', 'masterstudy-lms-learning-management-system' ); ?></label>
 								<input id="bemail" name="bemail"
 									type="<?php echo( esc_attr( $pmpro_email_field_type ) ? 'email' : 'text' ); ?>"
 									class="input <?php echo esc_attr( pmpro_getClassForField( 'bemail' ) ); ?>" size="30"
 									value="<?php echo esc_attr( $bemail ); ?>"/>
 							</div> <!-- end pmpro_checkout-field-bemail -->
 							<div class="pmpro_checkout-field pmpro_checkout-field-bconfirmemail">
-								<label for="bconfirmemail"><?php esc_html_e( 'Confirm E-mail', 'masterstudy' ); ?></label>
+								<label for="bconfirmemail"><?php esc_html_e( 'Confirm E-mail', 'masterstudy-lms-learning-management-system' ); ?></label>
 								<input id="bconfirmemail" name="bconfirmemail"
 									type="<?php echo( esc_attr( $pmpro_email_field_type ) ? 'email' : 'text' ); ?>"
 									class="input <?php echo esc_attr( pmpro_getClassForField( 'bconfirmemail' ) ); ?>" size="30"
@@ -248,8 +248,8 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 				?>
 				<div id="pmpro_payment_information_fields" class="pmpro_checkout">
 					<h3>
-						<span class="pmpro_checkout-h3-name"><?php esc_html_e( 'Credit Card Information', 'masterstudy' ); ?></span>
-						<span class="pmpro_checkout-h3-msg"><?php printf( esc_html__( 'We accept %s', 'masterstudy' ), esc_html( $pmpro_accepted_credit_cards_string ) ); ?></span>
+						<span class="pmpro_checkout-h3-name"><?php esc_html_e( 'Credit Card Information', 'masterstudy-lms-learning-management-system' ); ?></span>
+						<span class="pmpro_checkout-h3-msg"><?php printf( esc_html__( 'We accept %s', 'masterstudy-lms-learning-management-system' ), esc_html( $pmpro_accepted_credit_cards_string ) ); ?></span>
 					</h3>
 					<?php
 					$sslseal = pmpro_getOption( 'sslseal' );
@@ -263,7 +263,7 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 						if ( $pmpro_include_cardtype_field ) {
 							?>
 							<div class="pmpro_checkout-field pmpro_payment-card-type">
-								<label for="CardType"><?php esc_html_e( 'Card Type', 'masterstudy' ); ?></label>
+								<label for="CardType"><?php esc_html_e( 'Card Type', 'masterstudy-lms-learning-management-system' ); ?></label>
 								<select id="CardType" name="CardType"
 									class="<?php echo esc_attr( pmpro_getClassForField( 'CardType' ) ); ?>">
 									<?php foreach ( $pmpro_accepted_credit_cards as $cc ) { ?>
@@ -304,13 +304,13 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 						}
 						?>
 						<div class="pmpro_checkout-field pmpro_payment-account-number">
-							<label for="AccountNumber"><?php esc_html_e( 'Card Number', 'masterstudy' ); ?></label>
+							<label for="AccountNumber"><?php esc_html_e( 'Card Number', 'masterstudy-lms-learning-management-system' ); ?></label>
 							<input id="AccountNumber" name="AccountNumber"
 								class="input <?php echo esc_attr( pmpro_getClassForField( 'AccountNumber' ) ); ?>" type="text"
 								size="25" value="<?php echo esc_attr( $AccountNumber ); ?>" autocomplete="off"/>
 						</div>
 						<div class="pmpro_checkout-field pmpro_payment-expiration">
-							<label for="ExpirationMonth"><?php esc_html_e( 'Expiration Date', 'masterstudy' ); ?></label>
+							<label for="ExpirationMonth"><?php esc_html_e( 'Expiration Date', 'masterstudy-lms-learning-management-system' ); ?></label>
 							<select id="ExpirationMonth" name="ExpirationMonth">
 								<option value="01"<?php selected( $ExpirationMonth, '01' ); ?>>01</option>
 								<option value="02"<?php selected( $ExpirationMonth, '02' ); ?>>02</option>
@@ -348,7 +348,7 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 							}
 							?>
 							<div class="pmpro_checkout-field pmpro_payment-cvv">
-								<label for="CVV"><?php esc_html_e( 'CVV', 'masterstudy' ); ?></label>
+								<label for="CVV"><?php esc_html_e( 'CVV', 'masterstudy-lms-learning-management-system' ); ?></label>
 								<input id="CVV" name="CVV" type="text" size="4"
 									value="
 									<?php
@@ -358,7 +358,7 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 									?>
 									" class="input <?php echo esc_attr( pmpro_getClassForField( 'CVV' ) ); ?>"/>
 								<small>(<a href="javascript:void(0);"
-										onclick="javascript:window.open('<?php echo esc_attr( pmpro_https_filter( $cvv_template ) ); ?>','cvv','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=475');"><?php esc_html_e( "what's this?", 'masterstudy' ); ?></a>)
+										onclick="javascript:window.open('<?php echo esc_attr( pmpro_https_filter( $cvv_template ) ); ?>','cvv','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=475');"><?php esc_html_e( "what's this?", 'masterstudy-lms-learning-management-system' ); ?></a>)
 								</small>
 							</div>
 						<?php } ?>
@@ -370,9 +370,9 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 			?>
 			<div class="stm_lms_billing_buttons">
 				<input type="hidden" name="update-billing" value="1"/>
-				<input type="submit" class="btn btn-default" value="<?php esc_html_e( 'Update', 'masterstudy' ); ?>"/>
+				<input type="submit" class="btn btn-default" value="<?php esc_html_e( 'Update', 'masterstudy-lms-learning-management-system' ); ?>"/>
 				<input type="button" name="cancel" class="btn btn-default"
-					value="<?php esc_html_e( 'Cancel', 'masterstudy' ); ?>"
+					value="<?php esc_html_e( 'Cancel', 'masterstudy-lms-learning-management-system' ); ?>"
 					onclick="location.href='<?php echo esc_url( STM_LMS_User::my_pmpro_url() ); ?>';"/>
 			</div>
 		</form>
@@ -388,5 +388,5 @@ if ( pmpro_isLevelRecurring( $level ) ) {
 		</script>
 	<?php } ?>
 <?php } else { ?>
-	<p><?php esc_html_e( "This subscription is not recurring. So you don't need to update your billing information.", 'masterstudy' ); ?></p>
+	<p><?php esc_html_e( "This subscription is not recurring. So you don't need to update your billing information.", 'masterstudy-lms-learning-management-system' ); ?></p>
 <?php } ?>

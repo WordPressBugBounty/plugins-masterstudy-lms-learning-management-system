@@ -46,7 +46,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 	);
 }
 ?>
-<h1 class="pmpro_checkout_title"><?php esc_html_e( 'Checkout', 'masterstudy' ); ?></h1>
+<h1 class="pmpro_checkout_title"><?php esc_html_e( 'Checkout', 'masterstudy-lms-learning-management-system' ); ?></h1>
 <div id="pmpro_level-<?php echo esc_attr( $pmpro_level->id ); ?>" class="pmpro_form_container">
 	<form id="pmpro_form" class="pmpro_form"
 		action="<?php echo ( ! empty( $_REQUEST['review'] ) ) ? esc_attr( pmpro_url( 'checkout', '?level=' . $pmpro_level->id ) ) : ''; ?>"
@@ -69,7 +69,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 				?>
 
 				<?php if ( $pmpro_review ) { ?>
-					<p><?php esc_html_e( 'Almost done. Review the membership information and pricing below then <strong>click the "Complete Payment" button</strong> to finish your order.', 'masterstudy' ); ?></p>
+					<p><?php esc_html_e( 'Almost done. Review the membership information and pricing below then <strong>click the "Complete Payment" button</strong> to finish your order.', 'masterstudy-lms-learning-management-system' ); ?></p>
 				<?php } ?>
 
 				<?php
@@ -82,9 +82,9 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 						<thead>
 						<tr>
 							<th>
-								<h3 class="pmpro_thead-name"><?php esc_html_e( 'Account Information', 'masterstudy' ); ?></h3>
-								<span class="pmpro_thead-msg"><?php esc_html_e( 'Have an account?', 'masterstudy' ); ?>
-									<a href="<?php echo esc_url( add_query_arg( 'redirect_to', pmpro_url( 'checkout', '?level=' . $pmpro_level->id ), STM_LMS_User::login_page_url() ) ); ?>"><?php esc_html_e( 'Log in here', 'masterstudy' ); ?></a>
+								<h3 class="pmpro_thead-name"><?php esc_html_e( 'Account Information', 'masterstudy-lms-learning-management-system' ); ?></h3>
+								<span class="pmpro_thead-msg"><?php esc_html_e( 'Have an account?', 'masterstudy-lms-learning-management-system' ); ?>
+									<a href="<?php echo esc_url( add_query_arg( 'redirect_to', pmpro_url( 'checkout', '?level=' . $pmpro_level->id ), STM_LMS_User::login_page_url() ) ); ?>"><?php esc_html_e( 'Log in here', 'masterstudy-lms-learning-management-system' ); ?></a>
 								</span>
 							</th>
 						</tr>
@@ -95,10 +95,10 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 								<div class="lp-pmpro-desc">
 									<div class="pmpro_label_wrapper">
 										<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/pmpro_user.svg' ); ?>" alt="">
-										<label for="username"><?php esc_html_e( 'Username', 'masterstudy' ); ?></label>
+										<label for="username"><?php esc_html_e( 'Username', 'masterstudy-lms-learning-management-system' ); ?></label>
 									</div>
 									<input id="username" name="username" type="text" 
-										placeholder="<?php esc_attr_e( 'Enter username', 'masterstudy' ); ?>"
+										placeholder="<?php esc_attr_e( 'Enter username', 'masterstudy-lms-learning-management-system' ); ?>"
 										class="input <?php echo esc_attr( pmpro_getClassForField( 'username' ) ); ?>" size="30"
 										value="<?php echo esc_attr( $username ); ?>"/>
 								</div>
@@ -110,7 +110,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 								<div class="lp-pmpro-desc">
 									<div class="pmpro_label_wrapper">
 										<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/pmpro_email.svg' ); ?>" alt="">
-										<label for="bemail"><?php esc_html_e( 'E-mail Address', 'masterstudy' ); ?></label>
+										<label for="bemail"><?php esc_html_e( 'E-mail Address', 'masterstudy-lms-learning-management-system' ); ?></label>
 									</div>
 									<input id="bemail" name="bemail" placeholder="example@gmail.com"
 										type="<?php echo ( esc_attr( $pmpro_email_field_type ) ) ? 'email' : 'text'; ?>"
@@ -122,7 +122,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 								if ( $pmpro_checkout_confirm_email ) {
 									?>
 									<div class="lp-pmpro-desc">
-										<label for="bconfirmemail"><?php esc_html_e( 'Confirm E-mail Address', 'masterstudy' ); ?></label>
+										<label for="bconfirmemail"><?php esc_html_e( 'Confirm E-mail Address', 'masterstudy-lms-learning-management-system' ); ?></label>
 										<input id="bconfirmemail" name="bconfirmemail"
 											type="<?php echo( esc_attr( $pmpro_email_field_type ) ? 'email' : 'text' ); ?>"
 											class="input <?php echo esc_attr( pmpro_getClassForField( 'bconfirmemail' ) ); ?>" size="30"
@@ -144,14 +144,14 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 								<div class="lp-pmpro-desc">
 									<div class="pmpro_label_wrapper">
 										<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/pmpro_padlock.svg' ); ?>" alt="">
-										<label for="password"><?php esc_html_e( 'Password', 'masterstudy' ); ?></label>
+										<label for="password"><?php esc_html_e( 'Password', 'masterstudy-lms-learning-management-system' ); ?></label>
 									</div>
 									<div class="pmpro_pass_wrapper">
 										<a href="#" class="pmpro_show_pass">
 											<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/show_password.svg' ); ?>" alt="">
 										</a>
 										<input id="password" name="password" type="password"
-											placeholder="<?php esc_html_e( 'Enter password', 'masterstudy' ); ?>"
+											placeholder="<?php esc_html_e( 'Enter password', 'masterstudy-lms-learning-management-system' ); ?>"
 											class="input <?php echo esc_attr( pmpro_getClassForField( 'password' ) ); ?>" size="30"
 											value="<?php echo esc_attr( $password ); ?>"/>
 									</div>
@@ -163,14 +163,14 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 									<div class="lp-pmpro-desc">
 										<div class="pmpro_label_wrapper">
 											<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/pmpro_padlock.svg' ); ?>" alt="">
-											<label for="password2"><?php esc_html_e( 'Confirm Password', 'masterstudy' ); ?></label>
+											<label for="password2"><?php esc_html_e( 'Confirm Password', 'masterstudy-lms-learning-management-system' ); ?></label>
 										</div>
 										<div class="pmpro_pass_wrapper">
 											<a href="#" class="pmpro_show_pass">
 												<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/show_password.svg' ); ?>" alt="">
 											</a>
 											<input id="password2" name="password2" type="password"
-												placeholder="<?php esc_html_e( 'Repeat password', 'masterstudy' ); ?>"
+												placeholder="<?php esc_html_e( 'Repeat password', 'masterstudy-lms-learning-management-system' ); ?>"
 												class="input <?php echo esc_attr( pmpro_getClassForField( 'password2' ) ); ?>" size="30"
 												value="<?php echo esc_attr( $password2 ); ?>"/>
 										</div>
@@ -188,10 +188,10 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 								?>
 
 								<div class="pmpro_hidden">
-									<label for="fullname"><?php esc_html_e( 'Full Name', 'masterstudy' ); ?></label>
+									<label for="fullname"><?php esc_html_e( 'Full Name', 'masterstudy-lms-learning-management-system' ); ?></label>
 									<input id="fullname" name="fullname" type="text"
 										class="input <?php echo esc_attr( pmpro_getClassForField( 'fullname' ) ); ?>" size="30" value=""/>
-									<strong><?php esc_html_e( 'LEAVE THIS BLANK', 'masterstudy' ); ?></strong>
+									<strong><?php esc_html_e( 'LEAVE THIS BLANK', 'masterstudy-lms-learning-management-system' ); ?></strong>
 								</div>
 
 								<div class="pmpro_captcha">
@@ -215,15 +215,15 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 				} elseif ( $current_user->ID && ! $pmpro_review ) {
 					if ( class_exists( 'STM_LMS_User' ) ) {
 						$url  = STM_LMS_User::login_page_url();
-						$text = esc_html__( 'log in', 'masterstudy' );
+						$text = esc_html__( 'log in', 'masterstudy-lms-learning-management-system' );
 					} else {
 						$url  = wp_logout_url();
-						$text = esc_html__( 'log out now', 'masterstudy' );
+						$text = esc_html__( 'log out now', 'masterstudy-lms-learning-management-system' );
 					}
 					?>
 					<div id="pmpro_account_loggedin" class="message message-notice">
 						<i class="fa fa-info"></i>
-						<p><?php printf( wp_kses_post( __( 'You are logged in as <strong>%1$s</strong>. If you would like to use a different account for this membership, <a href="%2$s">%3$s.</a>', 'masterstudy' ) ), esc_html( $current_user->user_login ), esc_url( $url ), wp_kses_post( $text ) ); ?></p>
+						<p><?php printf( wp_kses_post( __( 'You are logged in as <strong>%1$s</strong>. If you would like to use a different account for this membership, <a href="%2$s">%3$s.</a>', 'masterstudy-lms-learning-management-system' ) ), esc_html( $current_user->user_login ), esc_url( $url ), wp_kses_post( $text ) ); ?></p>
 					</div>
 				<?php } ?>
 
@@ -244,7 +244,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 					>
 						<thead>
 						<tr>
-							<th><h3><?php esc_html_e( 'Choose Payment Method', 'masterstudy' ); ?></h3></th>
+							<th><h3><?php esc_html_e( 'Choose Payment Method', 'masterstudy-lms-learning-management-system' ); ?></h3></th>
 						</tr>
 						</thead>
 						<tbody>
@@ -258,7 +258,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 												?>
 													checked="checked"<?php } ?> />
 										<a href="javascript:void(0);"
-										class="pmpro_radio"><?php esc_html_e( 'Check Out with a Credit Card Here', 'masterstudy' ); ?></a>
+										class="pmpro_radio"><?php esc_html_e( 'Check Out with a Credit Card Here', 'masterstudy-lms-learning-management-system' ); ?></a>
 									</span>
 										<span class="gateway_paypalexpress">
 										<input type="radio" name="gateway" value="paypalexpress"
@@ -267,7 +267,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 												?>
 													checked="checked"<?php } ?> />
 										<a href="javascript:void(0);"
-										class="pmpro_radio"><?php esc_html_e( 'Check Out with PayPal', 'masterstudy' ); ?></a>
+										class="pmpro_radio"><?php esc_html_e( 'Check Out with PayPal', 'masterstudy-lms-learning-management-system' ); ?></a>
 									</span>
 								</div>
 							</td>
@@ -288,7 +288,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 					>
 						<thead>
 						<tr>
-							<th><h3><?php esc_html_e( 'Billing Address', 'masterstudy' ); ?></h3></th>
+							<th><h3><?php esc_html_e( 'Billing Address', 'masterstudy-lms-learning-management-system' ); ?></h3></th>
 						</tr>
 						</thead>
 						<tbody>
@@ -296,30 +296,30 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 							<td>
 								<div class="stm_lms_checkout_fields">
 									<div>
-										<label for="bfirstname"><?php esc_html_e( 'First Name', 'masterstudy' ); ?></label>
+										<label for="bfirstname"><?php esc_html_e( 'First Name', 'masterstudy-lms-learning-management-system' ); ?></label>
 										<input id="bfirstname" name="bfirstname" type="text"
-											placeholder="<?php esc_html_e( 'Enter name', 'masterstudy' ); ?>"
+											placeholder="<?php esc_html_e( 'Enter name', 'masterstudy-lms-learning-management-system' ); ?>"
 											class="input <?php echo esc_attr( pmpro_getClassForField( 'bfirstname' ) ); ?>" size="30"
 											value="<?php echo esc_attr( $bfirstname ); ?>"/>
 									</div>
 									<div>
-										<label for="blastname"><?php esc_html_e( 'Last Name', 'masterstudy' ); ?></label>
+										<label for="blastname"><?php esc_html_e( 'Last Name', 'masterstudy-lms-learning-management-system' ); ?></label>
 										<input id="blastname" name="blastname" type="text"
-											placeholder="<?php esc_html_e( 'Enter name', 'masterstudy' ); ?>"
+											placeholder="<?php esc_html_e( 'Enter name', 'masterstudy-lms-learning-management-system' ); ?>"
 											class="input <?php echo esc_attr( pmpro_getClassForField( 'blastname' ) ); ?>" size="30"
 											value="<?php echo esc_attr( $blastname ); ?>"/>
 									</div>
 									<div>
-										<label for="baddress1"><?php esc_html_e( 'Address 1', 'masterstudy' ); ?></label>
+										<label for="baddress1"><?php esc_html_e( 'Address 1', 'masterstudy-lms-learning-management-system' ); ?></label>
 										<input id="baddress1" name="baddress1" type="text"
-											placeholder="<?php esc_html_e( 'Enter address', 'masterstudy' ); ?>"
+											placeholder="<?php esc_html_e( 'Enter address', 'masterstudy-lms-learning-management-system' ); ?>"
 											class="input <?php echo esc_attr( pmpro_getClassForField( 'baddress1' ) ); ?>" size="30"
 											value="<?php echo esc_attr( $baddress1 ); ?>"/>
 									</div>
 									<div>
-										<label for="baddress2"><?php esc_html_e( 'Address 2', 'masterstudy' ); ?></label>
+										<label for="baddress2"><?php esc_html_e( 'Address 2', 'masterstudy-lms-learning-management-system' ); ?></label>
 										<input id="baddress2" name="baddress2" type="text"
-											placeholder="<?php esc_html_e( 'Enter address', 'masterstudy' ); ?>"
+											placeholder="<?php esc_html_e( 'Enter address', 'masterstudy-lms-learning-management-system' ); ?>"
 											class="input <?php echo esc_attr( pmpro_getClassForField( 'baddress2' ) ); ?>" size="30"
 											value="<?php echo esc_attr( $baddress2 ); ?>"/>
 									</div>
@@ -329,21 +329,21 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 									if ( $longform_address ) {
 										?>
 										<div>
-											<label for="bcity"><?php esc_html_e( 'City', 'masterstudy' ); ?></label>
+											<label for="bcity"><?php esc_html_e( 'City', 'masterstudy-lms-learning-management-system' ); ?></label>
 											<input id="bcity" name="bcity" type="text"
-												placeholder="<?php esc_html_e( 'Enter city', 'masterstudy' ); ?>"
+												placeholder="<?php esc_html_e( 'Enter city', 'masterstudy-lms-learning-management-system' ); ?>"
 												class="input <?php echo esc_attr( pmpro_getClassForField( 'bcity' ) ); ?>" size="30"
 												value="<?php echo esc_attr( $bcity ); ?>"/>
 										</div>
 										<div>
-											<label for="bstate"><?php esc_html_e( 'State', 'masterstudy' ); ?></label>
+											<label for="bstate"><?php esc_html_e( 'State', 'masterstudy-lms-learning-management-system' ); ?></label>
 											<input id="bstate" name="bstate" type="text"
-												placeholder="<?php esc_html_e( 'Enter state', 'masterstudy' ); ?>"
+												placeholder="<?php esc_html_e( 'Enter state', 'masterstudy-lms-learning-management-system' ); ?>"
 												class="input <?php echo esc_attr( pmpro_getClassForField( 'bstate' ) ); ?>" size="30"
 												value="<?php echo esc_attr( $bstate ); ?>"/>
 										</div>
 										<div>
-											<label for="bzipcode"><?php esc_html_e( 'Postal Code', 'masterstudy' ); ?></label>
+											<label for="bzipcode"><?php esc_html_e( 'Postal Code', 'masterstudy-lms-learning-management-system' ); ?></label>
 											<input id="bzipcode" name="bzipcode" type="text"
 												placeholder=""
 												class="input <?php echo esc_attr( pmpro_getClassForField( 'bzipcode' ) ); ?>" size="30"
@@ -353,7 +353,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 									} else {
 										?>
 										<div>
-											<label for="bcity_state_zip"><?php esc_html_e( 'City, State Zip', 'masterstudy' ); ?></label>
+											<label for="bcity_state_zip"><?php esc_html_e( 'City, State Zip', 'masterstudy-lms-learning-management-system' ); ?></label>
 											<input id="bcity" name="bcity" type="text"
 												class="input <?php echo esc_attr( pmpro_getClassForField( 'bcity' ) ); ?>" size="14"
 												value="<?php echo esc_attr( $bcity ); ?>"/>,
@@ -412,7 +412,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 									if ( $show_country ) {
 										?>
 										<div>
-											<label for="bcountry"><?php esc_html_e( 'Country', 'masterstudy' ); ?></label>
+											<label for="bcountry"><?php esc_html_e( 'Country', 'masterstudy-lms-learning-management-system' ); ?></label>
 											<select name="bcountry" class=" <?php echo esc_attr( pmpro_getClassForField( 'bcountry' ) ); ?>">
 												<?php
 												global $pmpro_countries, $pmpro_default_country;
@@ -439,7 +439,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 									}
 									?>
 									<div>
-										<label for="bphone"><?php esc_html_e( 'Phone', 'masterstudy' ); ?></label>
+										<label for="bphone"><?php esc_html_e( 'Phone', 'masterstudy-lms-learning-management-system' ); ?></label>
 										<input id="bphone" name="bphone" type="text"
 											placeholder="(1) 212-535-4721"
 											class="input <?php echo esc_attr( pmpro_getClassForField( 'bphone' ) ); ?>" size="30"
@@ -457,7 +457,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 										}
 										?>
 										<div>
-											<label for="bemail"><?php esc_html_e( 'E-mail Address', 'masterstudy' ); ?></label>
+											<label for="bemail"><?php esc_html_e( 'E-mail Address', 'masterstudy-lms-learning-management-system' ); ?></label>
 											<input id="bemail" name="bemail"
 												type="<?php echo( esc_attr( $pmpro_email_field_type ) ? 'email' : 'text' ); ?>"
 												class="input <?php echo esc_attr( pmpro_getClassForField( 'bemail' ) ); ?>" size="30"
@@ -468,7 +468,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 										if ( $pmpro_checkout_confirm_email ) {
 											?>
 											<div>
-												<label for="bconfirmemail"><?php esc_html_e( 'Confirm E-mail', 'masterstudy' ); ?></label>
+												<label for="bconfirmemail"><?php esc_html_e( 'Confirm E-mail', 'masterstudy-lms-learning-management-system' ); ?></label>
 												<input id="bconfirmemail" name="bconfirmemail"
 													type="<?php echo( esc_attr( $pmpro_email_field_type ) ? 'email' : 'text' ); ?>"
 													class="input <?php echo esc_attr( pmpro_getClassForField( 'bconfirmemail' ) ); ?>"
@@ -512,7 +512,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 						<thead>
 						<tr>
 							<th class="pmpro_payment_info">
-								<h3><?php esc_html_e( 'Payment Information', 'masterstudy' ); ?></h3>
+								<h3><?php esc_html_e( 'Payment Information', 'masterstudy-lms-learning-management-system' ); ?></h3>
 								<div class="pmpro_cards_container">
 									<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/visa_card.svg' ); ?>" alt="">
 									<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/mastercard.svg' ); ?>" alt="">
@@ -531,7 +531,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 									if ( $pmpro_include_cardtype_field ) {
 										?>
 										<div class="pmpro_payment-card-type">
-											<label for="CardType"><?php esc_html_e( 'Card Type', 'masterstudy' ); ?></label>
+											<label for="CardType"><?php esc_html_e( 'Card Type', 'masterstudy-lms-learning-management-system' ); ?></label>
 											<select id="CardType" name="CardType" class=" <?php echo esc_attr( pmpro_getClassForField( 'CardType' ) ); ?>">
 												<?php foreach ( $pmpro_accepted_credit_cards as $cc ) { ?>
 													<option value="<?php echo esc_attr( $cc ); ?>"
@@ -577,7 +577,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 									?>
 
 									<div class="pmpro_payment-account-number">
-										<label for="AccountNumber"><?php esc_html_e( 'Card Number', 'masterstudy' ); ?></label>
+										<label for="AccountNumber"><?php esc_html_e( 'Card Number', 'masterstudy-lms-learning-management-system' ); ?></label>
 										<input id="AccountNumber" name="AccountNumber"
 											placeholder="0000 0000 0000 0000"
 											class="input <?php echo esc_attr( pmpro_getClassForField( 'AccountNumber' ) ); ?>" type="text"
@@ -587,7 +587,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 									</div>
 
 									<div class="pmpro_payment-expiration">
-										<label for="ExpirationMonth"><?php esc_html_e( 'Expiration Date', 'masterstudy' ); ?></label>
+										<label for="ExpirationMonth"><?php esc_html_e( 'Expiration Date', 'masterstudy-lms-learning-management-system' ); ?></label>
 										<div class="pmpro-expiration-wrapper">
 											<div class="pmpro_expiration_container">
 												<select id="ExpirationMonth" name="ExpirationMonth" class=" <?php echo esc_attr( pmpro_getClassForField( 'ExpirationMonth' ) ); ?>">
@@ -633,9 +633,9 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 										?>
 										<div class="pmpro_payment-cvv">
 											<div class="pmpro-payment_label_wrapper">
-												<label for="CVV"><?php esc_html_e( 'CVV', 'masterstudy' ); ?></label>
+												<label for="CVV"><?php esc_html_e( 'CVV', 'masterstudy-lms-learning-management-system' ); ?></label>
 												<small><a href="javascript:void(0);"
-														onclick="javascript:window.open('<?php echo esc_url( pmpro_https_filter( PMPRO_URL ) ); ?>/pages/popup-cvv.html','cvv','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=475');"><?php esc_html_e( "What's this?", 'masterstudy' ); ?></a>
+														onclick="javascript:window.open('<?php echo esc_url( pmpro_https_filter( PMPRO_URL ) ); ?>/pages/popup-cvv.html','cvv','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=475');"><?php esc_html_e( "What's this?", 'masterstudy-lms-learning-management-system' ); ?></a>
 												</small>
 											</div>
 											<input class="input" id="CVV" name="CVV" type="text" size="4"
@@ -646,12 +646,12 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 
 									<?php if ( $pmpro_show_discount_code ) { ?>
 										<div class="pmpro_payment-discount-code">
-											<label for="pmpro_discount_code"><?php esc_html_e( 'Discount Code', 'masterstudy' ); ?></label>
+											<label for="pmpro_discount_code"><?php esc_html_e( 'Discount Code', 'masterstudy-lms-learning-management-system' ); ?></label>
 											<input class="input <?php echo esc_attr( pmpro_get_element_class( 'input pmpro_alter_price', 'discount_code' ) ); ?>"
 												id="pmpro_discount_code" name="pmpro_discount_code" type="text" size="10"
 												value="<?php echo esc_attr( $discount_code ); ?>"/>
 											<input type="button" id="discount_code_button" name="discount_code_button"
-												value="<?php esc_html_e( 'Apply', 'masterstudy' ); ?>"/>
+												value="<?php esc_html_e( 'Apply', 'masterstudy-lms-learning-management-system' ); ?>"/>
 												<p id="discount_code_message" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_message', 'discount_code_message' ) ); ?>" style="display: none;"></p>
 										</div>
 									<?php } ?>
@@ -690,7 +690,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 								</div>
 								<input type="checkbox" name="tos" value="1" id="tos"/>
 								<label class="pmpro_normal pmpro_clickable"
-									for="tos"><?php printf( esc_html__( 'I agree to the %s', 'masterstudy' ), esc_html( $tospage->post_title ) ); ?></label>
+									for="tos"><?php printf( esc_html__( 'I agree to the %s', 'masterstudy-lms-learning-management-system' ), esc_html( $tospage->post_title ) ); ?></label>
 							</td>
 						</tr>
 						</tbody>
@@ -723,7 +723,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 						<input type="hidden" name="token" value="<?php echo esc_attr( $pmpro_paypal_token ); ?>"/>
 						<input type="hidden" name="gateway" value="<?php echo esc_attr( $gateway ); ?>"/>
 						<input id="pmpro_btn-submit" type="submit" class="pmpro_btn pmpro_btn-submit-checkout"
-							value="<?php esc_html_e( 'Complete Payment', 'masterstudy' ); ?> &raquo;"/>
+							value="<?php esc_html_e( 'Complete Payment', 'masterstudy-lms-learning-management-system' ); ?> &raquo;"/>
 					</span>
 
 					<?php } else { ?>
@@ -737,9 +737,9 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 							<input id="pmpro_btn-submit" type="submit" class="btn btn-default pmpro_btn-submit-checkout" value="
 							<?php
 							if ( $pmpro_requirebilling ) {
-								esc_html_e( 'Submit and Checkout', 'masterstudy' );
+								esc_html_e( 'Submit and Checkout', 'masterstudy-lms-learning-management-system' );
 							} else {
-								esc_html_e( 'Submit and Confirm', 'masterstudy' );
+								esc_html_e( 'Submit and Confirm', 'masterstudy-lms-learning-management-system' );
 							}
 							?>
 							"/>
@@ -752,7 +752,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 
 					<span id="pmpro_processing_message" style="visibility: hidden;">
 					<?php
-					$processing_message = apply_filters( 'pmpro_processing_message', __( 'Processing...', 'masterstudy' ) );
+					$processing_message = apply_filters( 'pmpro_processing_message', __( 'Processing...', 'masterstudy-lms-learning-management-system' ) );
 					echo wp_kses_post( $processing_message );
 					?>
 				</span>
@@ -763,7 +763,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 					<thead>
 					<tr>
 						<th>
-							<h3 class="pmpro_thead-name"><?php esc_html_e( 'Membership Plan', 'masterstudy' ); ?></h3>
+							<h3 class="pmpro_thead-name"><?php esc_html_e( 'Membership Plan', 'masterstudy-lms-learning-management-system' ); ?></h3>
 						</th>
 					</tr>
 					</thead>
@@ -776,9 +776,9 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 							if ( pmpro_isLevelRecurring( $pmpro_level ) ) {
 								if ( 1 < $pmpro_level->cycle_number ) {
 									?>
-									<span><?php echo sprintf( wp_kses_post( __( '/ per %1$d %2$s', 'masterstudy' ) ), esc_html( $pmpro_level->cycle_number ), esc_html( $level_period_count ) ); ?></span>
+									<span><?php echo sprintf( wp_kses_post( __( '/ per %1$d %2$s', 'masterstudy-lms-learning-management-system' ) ), esc_html( $pmpro_level->cycle_number ), esc_html( $level_period_count ) ); ?></span>
 								<?php } else { ?>
-									<span><?php echo sprintf( wp_kses_post( __( '/ per %s', 'masterstudy' ) ), esc_html( $level_period_count ) ); ?></span>
+									<span><?php echo sprintf( wp_kses_post( __( '/ per %s', 'masterstudy-lms-learning-management-system' ) ), esc_html( $level_period_count ) ); ?></span>
 									<?php
 								}
 							}
@@ -791,19 +791,19 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 							</div>
 							<div class="lp-pmpro-content">
 								<?php if ( $discount_code && pmpro_checkDiscountCode( $discount_code ) ) { ?>
-									<p class="pmpro_level_discount_applied"><?php echo wp_kses_post( printf( __( 'The <strong>%s</strong> code has been applied to your order.', 'masterstudy' ), esc_html( $discount_code ) ) ); ?></p>
+									<p class="pmpro_level_discount_applied"><?php echo wp_kses_post( printf( __( 'The <strong>%s</strong> code has been applied to your order.', 'masterstudy-lms-learning-management-system' ), esc_html( $discount_code ) ) ); ?></p>
 								<?php } ?>
 							<div class="lp-pmpro-plan-included">
 								<?php if ( ! empty( $courses_included ) ) { ?>
 									<div class="lp-pmpro-plan-included--wrapper">
 										<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/pmpro_checkmark.svg' ); ?>" alt="">
-										<label><?php printf( esc_html__( 'Courses included: %s', 'masterstudy' ), esc_html( $courses_included ) ); ?></label>
+										<label><?php printf( esc_html__( 'Courses included: %s', 'masterstudy-lms-learning-management-system' ), esc_html( $courses_included ) ); ?></label>
 									</div>
 								<?php } ?>
 								<?php if ( ! empty( $featured_quotas ) ) { ?>
 									<div class="lp-pmpro-plan-included--wrapper">
 										<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/pmpro_checkmark.svg' ); ?>" alt="">
-										<label><?php printf( esc_html__( 'Featured courses quote included: %d', 'masterstudy' ), esc_html( $featured_quotas ) ); ?></label>
+										<label><?php printf( esc_html__( 'Featured courses quote included: %d', 'masterstudy-lms-learning-management-system' ), esc_html( $featured_quotas ) ); ?></label>
 									</div>
 								<?php } ?>
 							</div>
@@ -814,15 +814,15 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 							<?php } ?>
 								<div id="pmpro_level_cost">
 									<div class="lp-pmpro-desc">
-										<label><?php esc_html_e( 'Price:', 'masterstudy' ); ?></label>
+										<label><?php esc_html_e( 'Price:', 'masterstudy-lms-learning-management-system' ); ?></label>
 										<div class="pmpro-level-price">
 											<?php
 												echo wp_kses_post( $level_price );
 											if ( pmpro_isLevelRecurring( $pmpro_level ) ) {
 												if ( 1 < $pmpro_level->cycle_number ) {
-													echo sprintf( wp_kses_post( __( ' / per %1$d %2$s*', 'masterstudy' ) ), esc_html( $pmpro_level->cycle_number ), esc_html( $level_period_count ) );
+													echo sprintf( wp_kses_post( __( ' / per %1$d %2$s*', 'masterstudy-lms-learning-management-system' ) ), esc_html( $pmpro_level->cycle_number ), esc_html( $level_period_count ) );
 												} else {
-													echo sprintf( wp_kses_post( __( ' / per %s*', 'masterstudy' ) ), esc_html( $level_period_count ) );
+													echo sprintf( wp_kses_post( __( ' / per %s*', 'masterstudy-lms-learning-management-system' ) ), esc_html( $level_period_count ) );
 												}
 											}
 											?>
@@ -837,8 +837,8 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 									<p><?php echo '* ' . wp_kses_post( $level_price_description ); ?></p>
 									<?php if ( $pmpro_level->expiration_period ) { ?>
 										<p>
-											<?php esc_html_e( 'Expires after:', 'masterstudy' ); ?>
-											<?php echo sprintf( wp_kses_post( '%1$d %2$s', 'masterstudy' ), esc_html( $pmpro_level->expiration_number ), wp_kses_post( pmpro_translate_billing_period( $pmpro_level->expiration_period, $pmpro_level->expiration_number ) ) ); ?>
+											<?php esc_html_e( 'Expires after:', 'masterstudy-lms-learning-management-system' ); ?>
+											<?php echo sprintf( wp_kses_post( '%1$d %2$s', 'masterstudy-lms-learning-management-system' ), esc_html( $pmpro_level->expiration_number ), wp_kses_post( pmpro_translate_billing_period( $pmpro_level->expiration_period, $pmpro_level->expiration_number ) ) ); ?>
 										</p>
 									<?php } ?>
 								</div>
@@ -851,23 +851,23 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 									<?php
 									if ( $discount_code && ! $pmpro_review ) {
 										?>
-										<span id="other_discount_code_p"><button type="button" id="other_discount_code_toggle"><?php esc_html_e( 'Click here to change your discount code', 'masterstudy' ); ?></button></span>
+										<span id="other_discount_code_p"><button type="button" id="other_discount_code_toggle"><?php esc_html_e( 'Click here to change your discount code', 'masterstudy-lms-learning-management-system' ); ?></button></span>
 										<?php
 									} elseif ( ! $pmpro_review ) {
 										?>
-										<span id="other_discount_code_p"><?php esc_html_e( 'Do you have a discount code?', 'masterstudy' ); ?> <button type="button" id="other_discount_code_toggle"><?php esc_html_e( 'Click here to enter your discount code', 'masterstudy' ); ?></button></span>
+										<span id="other_discount_code_p"><?php esc_html_e( 'Do you have a discount code?', 'masterstudy-lms-learning-management-system' ); ?> <button type="button" id="other_discount_code_toggle"><?php esc_html_e( 'Click here to enter your discount code', 'masterstudy-lms-learning-management-system' ); ?></button></span>
 										<?php
 									} elseif ( $pmpro_review && $discount_code ) {
 										?>
-										<span><strong><?php esc_html_e( 'Discount Code', 'masterstudy' ); ?>:</strong> <?php echo esc_html( $discount_code ); ?></span>
+										<span><strong><?php esc_html_e( 'Discount Code', 'masterstudy-lms-learning-management-system' ); ?>:</strong> <?php echo esc_html( $discount_code ); ?></span>
 										<?php
 									}
 									?>
 									<div id="other_discount_code_fields" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-text' ) ); ?>" style="display: none;">
-										<label for="pmpro_other_discount_code" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_label' ) ); ?>"><?php esc_html_e( 'Discount Code', 'masterstudy' ); ?></label>
+										<label for="pmpro_other_discount_code" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_label' ) ); ?>"><?php esc_html_e( 'Discount Code', 'masterstudy-lms-learning-management-system' ); ?></label>
 										<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fields-inline' ) ); ?>">
 											<input id="pmpro_other_discount_code" name="pmpro_other_discount_code" type="text" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-text pmpro_alter_price', 'other_discount_code' ) ); ?>" value="<?php echo esc_attr( $discount_code ); ?>" />
-											<input aria-label="<?php esc_html_e( 'Apply discount code', 'masterstudy' ); ?>" type="button" name="other_discount_code_button" id="other_discount_code_button" value="<?php esc_attr_e( 'Apply', 'masterstudy' ); ?>" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_btn pmpro_btn-submit-discount-code', 'other_discount_code_button' ) ); ?>" />
+											<input aria-label="<?php esc_html_e( 'Apply discount code', 'masterstudy-lms-learning-management-system' ); ?>" type="button" name="other_discount_code_button" id="other_discount_code_button" value="<?php esc_attr_e( 'Apply', 'masterstudy-lms-learning-management-system' ); ?>" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_btn pmpro_btn-submit-discount-code', 'other_discount_code_button' ) ); ?>" />
 										</div>
 									</div>
 								</div> <!-- end pmpro_card_actions -->

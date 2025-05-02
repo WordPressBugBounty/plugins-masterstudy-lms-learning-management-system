@@ -8,7 +8,7 @@
 
 global $wpdb, $current_user, $pmpro_invoice, $pmpro_msg, $pmpro_msgt;
 ?>
-<h1 class="pmpro_confirmation_title"><?php esc_html_e( 'Membership confirmation', 'masterstudy' ); ?></h1>
+<h1 class="pmpro_confirmation_title"><?php esc_html_e( 'Membership confirmation', 'masterstudy-lms-learning-management-system' ); ?></h1>
 <?php
 if ( $pmpro_msg ) {
 	?>
@@ -19,10 +19,10 @@ if ( $pmpro_msg ) {
 <div class="pmpro_message_wrapper">
 <?php
 if ( empty( $current_user->membership_level ) ) {
-	$confirmation_message = '<p>' . __( 'Your payment has been submitted. Your membership will be activated shortly.', 'masterstudy' ) . '</p>';
+	$confirmation_message = '<p>' . __( 'Your payment has been submitted. Your membership will be activated shortly.', 'masterstudy-lms-learning-management-system' ) . '</p>';
 } else {
 	/* translators: %s Level Name */
-	$confirmation_message = '<h3>' . sprintf( __( 'Thank you for your membership to %1$s. Your <span>%2$s</span> membership is now active.', 'masterstudy' ), get_bloginfo( 'name' ), $current_user->membership_level->name ) . '</h3>';
+	$confirmation_message = '<h3>' . sprintf( __( 'Thank you for your membership to %1$s. Your <span>%2$s</span> membership is now active.', 'masterstudy-lms-learning-management-system' ), get_bloginfo( 'name' ), $current_user->membership_level->name ) . '</h3>';
 }
 
 // Confirmation message for this level
@@ -37,7 +37,7 @@ if ( ! empty( $pmpro_invoice ) && ! empty( $pmpro_invoice->id ) ) {
 	$pmpro_invoice->getMembershipLevel();
 
 	/* translators: %s User Email */
-	$confirmation_message .= '<p>' . sprintf( __( 'Below are details about your membership account and a receipt for your initial membership invoice. A welcome email with a copy of your initial membership invoice has been sent to <span>%s</span>.', 'masterstudy' ), $pmpro_invoice->user->user_email ) . '</p>';
+	$confirmation_message .= '<p>' . sprintf( __( 'Below are details about your membership account and a receipt for your initial membership invoice. A welcome email with a copy of your initial membership invoice has been sent to <span>%s</span>.', 'masterstudy-lms-learning-management-system' ), $pmpro_invoice->user->user_email ) . '</p>';
 
 	// check instructions
 	if ( 'check' === $pmpro_invoice->gateway && ! pmpro_isLevelFree( $pmpro_invoice->membership_level ) ) {
@@ -58,48 +58,48 @@ if ( ! empty( $pmpro_invoice ) && ! empty( $pmpro_invoice->id ) ) {
 	<h3 class="invoice_info">
 		<?php
 		/* translators: %s Datetime */
-		printf( wp_kses_post( __( 'Invoice #%1$s on %2$s', 'masterstudy' ) ), esc_html( $pmpro_invoice->code ), esc_html( date_i18n( get_option( 'date_format' ), $pmpro_invoice->timestamp ) ) );
+		printf( wp_kses_post( __( 'Invoice #%1$s on %2$s', 'masterstudy-lms-learning-management-system' ) ), esc_html( $pmpro_invoice->code ), esc_html( date_i18n( get_option( 'date_format' ), $pmpro_invoice->timestamp ) ) );
 		?>
 	</h3>
-	<a class="pmpro_a-print" href="javascript:window.print()"><?php esc_html_e( 'Print', 'masterstudy' ); ?></a>
+	<a class="pmpro_a-print" href="javascript:window.print()"><?php esc_html_e( 'Print', 'masterstudy-lms-learning-management-system' ); ?></a>
 	<ul>
 		<?php do_action( 'pmpro_invoice_bullets_top', $pmpro_invoice ); ?>
 		<li>
-			<strong><?php esc_html_e( 'Account', 'masterstudy' ); ?>:</strong>
+			<strong><?php esc_html_e( 'Account', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 			<?php echo esc_html( $current_user->display_name ); ?>
 			(<?php echo esc_html( $current_user->user_email ); ?>)
 		</li>
 		<li>
-			<strong><?php esc_html_e( 'Membership Plan', 'masterstudy' ); ?>:</strong>
+			<strong><?php esc_html_e( 'Membership Plan', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 			<?php echo esc_html( $current_user->membership_level->name ); ?>
 		</li>
 		<?php if ( $current_user->membership_level->enddate ) { ?>
-			<li><strong><?php esc_html_e( 'Membership Expires', 'masterstudy' ); ?>:</strong>
+			<li><strong><?php esc_html_e( 'Membership Expires', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 				<?php echo esc_html( date_i18n( get_option( 'date_format' ), $current_user->membership_level->enddate ) ); ?>
 			</li>
 		<?php } ?>
 		<?php if ( $pmpro_invoice->getDiscountCode() ) { ?>
-			<li><strong><?php esc_html_e( 'Discount Code', 'masterstudy' ); ?>:</strong>
+			<li><strong><?php esc_html_e( 'Discount Code', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 			<?php echo esc_html( $pmpro_invoice->discount_code->code ); ?>
 			</li>
 		<?php } ?>
 		<li class="total_billed">
 		<?php if ( ! empty( $pmpro_invoice->tax ) ) { ?>
 			<div class="total_billed_wrapper">
-				<strong><?php esc_html_e( 'Subtotal', 'masterstudy' ); ?>:</strong>
+				<strong><?php esc_html_e( 'Subtotal', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 				<?php echo wp_kses_post( pmpro_formatPrice( $pmpro_invoice->subtotal ) ); ?>
 			</div>
 			<div class="total_billed_wrapper">
-				<strong><?php esc_html_e( 'Tax', 'masterstudy' ); ?>:</strong>
+				<strong><?php esc_html_e( 'Tax', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 				<?php echo wp_kses_post( pmpro_formatPrice( $pmpro_invoice->tax ) ); ?>
 			</div>
 			<div class="total_billed_wrapper">
-				<strong><?php esc_html_e( 'Total', 'masterstudy' ); ?>:</strong>
+				<strong><?php esc_html_e( 'Total', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 				<?php echo wp_kses_post( pmpro_formatPrice( $pmpro_invoice->total ) ); ?>
 			</div>
 		<?php } else { ?>
 			<div class="total_billed_wrapper">
-				<strong><?php esc_html_e( 'Total Billed', 'masterstudy' ); ?>:</strong>
+				<strong><?php esc_html_e( 'Total Billed', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 				<?php echo wp_kses_post( pmpro_formatPrice( $pmpro_invoice->total ) ); ?>
 			</div>
 		<?php } ?>
@@ -110,7 +110,7 @@ if ( ! empty( $pmpro_invoice ) && ! empty( $pmpro_invoice->id ) ) {
 	<div class="pmpro_invoice_details">
 		<?php if ( ! empty( $pmpro_invoice->billing->name ) ) { ?>
 			<div class="pmpro_invoice-billing-address">
-				<strong><?php esc_html_e( 'Billing Address', 'masterstudy' ); ?></strong>
+				<strong><?php esc_html_e( 'Billing Address', 'masterstudy-lms-learning-management-system' ); ?></strong>
 				<p><?php echo esc_html( $pmpro_invoice->billing->name ); ?></p>
 				<p><?php echo esc_html( $pmpro_invoice->billing->street ); ?></p>
 				<?php if ( $pmpro_invoice->billing->city && $pmpro_invoice->billing->state ) { ?>
@@ -134,7 +134,7 @@ if ( ! empty( $pmpro_invoice ) && ! empty( $pmpro_invoice->id ) ) {
 			?>
 			<div class="pmpro_invoice-payment-method">
 				<div class="payment-method-wrapper">
-					<strong><?php esc_html_e( 'Payment Method', 'masterstudy' ); ?></strong>
+					<strong><?php esc_html_e( 'Payment Method', 'masterstudy-lms-learning-management-system' ); ?></strong>
 					<?php
 					foreach ( $pmpro_card_images as $key => $value ) {
 						if ( $key === $pmpro_invoice->cardtype ) {
@@ -145,14 +145,14 @@ if ( ! empty( $pmpro_invoice ) && ! empty( $pmpro_invoice->id ) ) {
 					}
 					?>
 				</div>
-				<p><span><?php esc_html_e( 'Card Number', 'masterstudy' ); ?>:</span> **** **** **** <?php echo esc_html( last4( $pmpro_invoice->accountnumber ) ); ?></p>
-				<p><span><?php esc_html_e( 'Expiration Date', 'masterstudy' ); ?>:</span>
+				<p><span><?php esc_html_e( 'Card Number', 'masterstudy-lms-learning-management-system' ); ?>:</span> **** **** **** <?php echo esc_html( last4( $pmpro_invoice->accountnumber ) ); ?></p>
+				<p><span><?php esc_html_e( 'Expiration Date', 'masterstudy-lms-learning-management-system' ); ?>:</span>
 					<?php echo esc_html( $pmpro_invoice->expirationmonth ); ?>/<?php echo esc_html( $pmpro_invoice->expirationyear ); ?>
 				</p>
 			</div> <!-- end pmpro_invoice-payment-method -->
 		<?php } elseif ( $pmpro_invoice->payment_type ) { ?>
 			<div class="other_payment_method">
-				<strong><?php esc_html_e( 'Payment Method', 'masterstudy' ); ?></strong>
+				<strong><?php esc_html_e( 'Payment Method', 'masterstudy-lms-learning-management-system' ); ?></strong>
 				<span><?php echo esc_html( $pmpro_invoice->payment_type ); ?></span>
 			</div>
 		<?php } ?>
@@ -160,7 +160,7 @@ if ( ! empty( $pmpro_invoice ) && ! empty( $pmpro_invoice->id ) ) {
 	<?php
 } else {
 	/* translators: %s User Email */
-	$confirmation_message .= '<p>' . sprintf( __( 'Below are details about your membership account. A welcome email has been sent to %s.', 'masterstudy' ), $current_user->user_email ) . '</p>';
+	$confirmation_message .= '<p>' . sprintf( __( 'Below are details about your membership account. A welcome email has been sent to %s.', 'masterstudy-lms-learning-management-system' ), $current_user->user_email ) . '</p>';
 
 	/**
 	 * All devs to filter the confirmation message.
@@ -173,16 +173,16 @@ if ( ! empty( $pmpro_invoice ) && ! empty( $pmpro_invoice->id ) ) {
 	?>
 	<ul>
 		<li>
-			<strong><?php esc_html_e( 'Account', 'masterstudy' ); ?>:</strong>
+			<strong><?php esc_html_e( 'Account', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 			<?php echo esc_html( $current_user->display_name ); ?>
 			(<?php echo esc_html( $current_user->user_email ); ?>)
 		</li>
-		<li><strong><?php esc_html_e( 'Membership Plan', 'masterstudy' ); ?>:</strong>
+		<li><strong><?php esc_html_e( 'Membership Plan', 'masterstudy-lms-learning-management-system' ); ?>:</strong>
 			<?php
 			if ( ! empty( $current_user->membership_level ) ) {
 				echo esc_html( $current_user->membership_level->name );
 			} else {
-				esc_html_e( 'Pending', 'masterstudy' );
+				esc_html_e( 'Pending', 'masterstudy-lms-learning-management-system' );
 			}
 			?>
 		</li>
@@ -198,7 +198,7 @@ if ( ! empty( $current_user->membership_level ) && isset( $_COOKIE['stm_lms_cour
 		stm_lms_register_script( 'buy/redirect_to_cookie', array( 'jquery.cookie' ), true );
 		?>
 		<br/>
-		<h3><?php esc_html_e( 'Redirecting to course...', 'masterstudy' ); ?></h3>
+		<h3><?php esc_html_e( 'Redirecting to course...', 'masterstudy-lms-learning-management-system' ); ?></h3>
 		<?php
 	}
 } else {
@@ -206,9 +206,9 @@ if ( ! empty( $current_user->membership_level ) && isset( $_COOKIE['stm_lms_cour
 	<nav id="nav-below" class="navigation" role="navigation">
 		<div class="nav-next">
 			<?php if ( ! empty( $current_user->membership_level ) ) { ?>
-				<a href="<?php echo esc_url( STM_LMS_User::user_page_url() ); ?>" class="btn btn-default"><?php esc_html_e( 'View Your Account', 'masterstudy' ); ?></a>
+				<a href="<?php echo esc_url( STM_LMS_User::user_page_url() ); ?>" class="btn btn-default"><?php esc_html_e( 'View Your Account', 'masterstudy-lms-learning-management-system' ); ?></a>
 			<?php } else { ?>
-				<?php esc_html_e( 'If your account is not activated within a few minutes, please contact the site owner.', 'masterstudy' ); ?>
+				<?php esc_html_e( 'If your account is not activated within a few minutes, please contact the site owner.', 'masterstudy-lms-learning-management-system' ); ?>
 			<?php } ?>
 		</div>
 	</nav>

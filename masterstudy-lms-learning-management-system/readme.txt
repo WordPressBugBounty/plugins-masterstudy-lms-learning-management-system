@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.5.30
+Stable tag: 3.5.31
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.31 - 2025-05-02 =
+- **Fix:** Fixed the “Disable video seeking” option — viewers can no longer fast-forward or rewind the video. (PRO)
+- **Fix:** Added support for translating individual strings and words in the custom Paid Memberships checkout.
+
 = 3.5.30 - 2025-04-29 =
 - **Improvement:** Added the option to retake a quiz after completion.
 - **Fix:** Users can now view the history of quiz attempts in the course player.

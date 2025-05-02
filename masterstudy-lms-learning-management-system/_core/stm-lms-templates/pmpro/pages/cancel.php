@@ -40,7 +40,7 @@ if ( isset( $_REQUEST['levelstocancel'] ) && 'all' !== $_REQUEST['levelstocancel
 				<?php
 				if ( ! is_array( $old_level_ids ) && 'all' == $old_level_ids ) {
 					?>
-					<p><?php esc_html_e( 'Are you sure you want to cancel your membership?', 'masterstudy' ); ?></p>
+					<p><?php esc_html_e( 'Are you sure you want to cancel your membership?', 'masterstudy-lms-learning-management-system' ); ?></p>
 					<?php
 				} else {
 					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -49,15 +49,15 @@ if ( isset( $_REQUEST['levelstocancel'] ) && 'all' !== $_REQUEST['levelstocancel
 					<p>
 						<?php
 						/* translators: %s Level Name */
-						printf( esc_html( _n( 'Are you sure you want to cancel your %s membership?', 'Are you sure you want to cancel your %s memberships?', count( $level_names ), 'masterstudy' ) ), esc_html( pmpro_implodeToEnglish( $level_names ) ) );
+						printf( esc_html( _n( 'Are you sure you want to cancel your %s membership?', 'Are you sure you want to cancel your %s memberships?', count( $level_names ), 'masterstudy-lms-learning-management-system' ) ), esc_html( pmpro_implodeToEnglish( $level_names ) ) );
 						?>
 					</p>
 					<?php
 				}
 				?>
 				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_actionlinks' ) ); ?>">
-					<button type="submit" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_btn pmpro_btn-submit pmpro_yeslink yeslink', 'pmpro_btn-submit' ) ); ?>"><?php esc_html_e( 'Yes, cancel this membership', 'masterstudy' ); ?></button>
-					<a class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_btn pmpro_btn-cancel pmpro_nolink nolink', 'pmpro_btn-cancel' ) ); ?>" href="<?php echo esc_url( STM_LMS_User::my_pmpro_url() ); ?>"><?php esc_html_e( 'No, keep this membership', 'masterstudy' ); ?></a>
+					<button type="submit" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_btn pmpro_btn-submit pmpro_yeslink yeslink', 'pmpro_btn-submit' ) ); ?>"><?php esc_html_e( 'Yes, cancel this membership', 'masterstudy-lms-learning-management-system' ); ?></button>
+					<a class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_btn pmpro_btn-cancel pmpro_nolink nolink', 'pmpro_btn-cancel' ) ); ?>" href="<?php echo esc_url( STM_LMS_User::my_pmpro_url() ); ?>"><?php esc_html_e( 'No, keep this membership', 'masterstudy-lms-learning-management-system' ); ?></a>
 				</div>
 				<input type="hidden" name="levelstocancel" value="<?php echo esc_attr( $_REQUEST['levelstocancel'] ); ?>" />
 				<input type="hidden" name="confirm" value="1" />
@@ -67,12 +67,12 @@ if ( isset( $_REQUEST['levelstocancel'] ) && 'all' !== $_REQUEST['levelstocancel
 		} else {
 			if ( $current_user->membership_level->ID ) {
 				?>
-				<h2><?php esc_html_e( 'My Memberships', 'masterstudy' ); ?></h2>
+				<h2><?php esc_html_e( 'My Memberships', 'masterstudy-lms-learning-management-system' ); ?></h2>
 				<table class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_table' ) ); ?>" width="100%" cellpadding="0" cellspacing="0" border="0">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'Level', 'masterstudy' ); ?></th>
-							<th><?php esc_html_e( 'Expiration', 'masterstudy' ); ?></th>
+							<th><?php esc_html_e( 'Level', 'masterstudy-lms-learning-management-system' ); ?></th>
+							<th><?php esc_html_e( 'Expiration', 'masterstudy-lms-learning-management-system' ); ?></th>
 							<th></th>
 						</tr>
 					</thead>
@@ -96,7 +96,7 @@ if ( isset( $_REQUEST['levelstocancel'] ) && 'all' !== $_REQUEST['levelstocancel
 						?>
 							</td>
 							<td class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_cancel-membership-cancel' ) ); ?>">
-								<a href="<?php echo esc_url( pmpro_url( 'cancel', '?levelstocancel=' . $level->id ) ); ?>"><?php esc_html_e( 'Cancel', 'masterstudy' ); ?></a>
+								<a href="<?php echo esc_url( pmpro_url( 'cancel', '?levelstocancel=' . $level->id ) ); ?>"><?php esc_html_e( 'Cancel', 'masterstudy-lms-learning-management-system' ); ?></a>
 							</td>
 						</tr>
 						<?php
@@ -105,14 +105,14 @@ if ( isset( $_REQUEST['levelstocancel'] ) && 'all' !== $_REQUEST['levelstocancel
 					</tbody>
 				</table>
 				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_actions_nav' ) ); ?>">
-					<a href="<?php echo esc_url( pmpro_url( 'cancel', '?levelstocancel=all' ) ); ?>"><?php esc_html_e( 'Cancel All Memberships', 'masterstudy' ); ?></a>
+					<a href="<?php echo esc_url( pmpro_url( 'cancel', '?levelstocancel=all' ) ); ?>"><?php esc_html_e( 'Cancel All Memberships', 'masterstudy-lms-learning-management-system' ); ?></a>
 				</div>
 				<?php
 			}
 		}
 	} else {
 		?>
-		<p class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_cancel_return_home' ) ); ?>"><a href="<?php echo esc_url( get_home_url() ); ?>"><?php esc_html_e( 'Click here to go to the home page.', 'masterstudy' ); ?></a></p>
+		<p class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_cancel_return_home' ) ); ?>"><a href="<?php echo esc_url( get_home_url() ); ?>"><?php esc_html_e( 'Click here to go to the home page.', 'masterstudy-lms-learning-management-system' ); ?></a></p>
 		<?php
 	}
 	?>

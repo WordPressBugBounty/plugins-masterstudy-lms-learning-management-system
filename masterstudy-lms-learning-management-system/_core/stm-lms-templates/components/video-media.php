@@ -29,10 +29,10 @@ $user_id                   = isset( $user_id ) ? $user_id : '';
 $course_id                 = isset( $course_id ) ? $course_id : '';
 $lesson_completed          = isset( $lesson_completed ) ? $lesson_completed : false;
 $user_progress             = ! empty( $user_id ) && ! empty( $course_id ) ? masterstudy_lms_get_user_lesson_progress( $user_id, $course_id, $id ) ?? 0 : 0;
+$video_strict_mode         = $settings['course_player_video_strict_mode'] ?? false;
 
 if ( $is_pro_plus && ! empty( $video_questions ) ) {
 	$questions_must_done = get_post_meta( $id, 'questions_must_done', true );
-	$video_strict_mode   = $questions_must_done ? true : $settings['course_player_video_strict_mode'] ?? false;
 	$plyr_markers        = array_map(
 		function( $marker ) {
 			return array(
