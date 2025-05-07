@@ -20,9 +20,13 @@ class GetSettings extends Route implements RequestInterface, ResponseInterface {
 	}
 
 	public function response(): array {
+		$drip_settings = class_exists( '\STM_LMS_Sequential_Drip_Content' ) && method_exists( '\STM_LMS_Sequential_Drip_Content', 'stm_lms_get_settings' )
+		? \STM_LMS_Sequential_Drip_Content::stm_lms_get_settings()
+		: array();
+
 		return array(
-			'categories'     => Category::as_array(),
-			'certificates'   => array(
+			'categories'      => Category::as_array(),
+			'certificates'    => array(
 				'type'  => 'array',
 				'items' => array(
 					'type'       => 'object',
@@ -36,7 +40,7 @@ class GetSettings extends Route implements RequestInterface, ResponseInterface {
 					),
 				),
 			),
-			'course'         => array(
+			'course'          => array(
 				'type'       => 'object',
 				'properties' => array(
 					'access_status'                   => PostStatus::as_response(),
@@ -144,6 +148,10 @@ class GetSettings extends Route implements RequestInterface, ResponseInterface {
 						'type'        => 'boolean',
 						'description' => 'Featured Course',
 					),
+					'is_lock_lesson'                  => array(
+						'type'        => 'boolean',
+						'description' => 'Lock Lesson',
+					),
 					'owner'                           => User::as_object(),
 					'level'                           => array(
 						'type'     => 'string',
@@ -216,12 +224,13 @@ class GetSettings extends Route implements RequestInterface, ResponseInterface {
 					),
 				),
 			),
-			'levels'         => Level::as_array(),
-			'featured_quota' => array(
+			'levels'          => Level::as_array(),
+			'featured_quota'  => array(
 				'type'        => 'integer',
 				'description' => 'Featured Courses remained Quote',
 			),
-			'custom_fields'  => CustomFields::as_array(),
+			'custom_fields'   => CustomFields::as_array(),
+			'lock_all_lesson' => $drip_settings['locked'] ?? false,
 		);
 	}
 

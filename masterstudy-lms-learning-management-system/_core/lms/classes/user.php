@@ -977,6 +977,37 @@ class STM_LMS_User {
 		return apply_filters( 'stm_lms_has_course_access', count( $course ), $course_id, $item_id );
 	}
 
+	public static function get_user_course_access_list( $user_id = null ) {
+		global $wpdb;
+
+		if ( is_null( $user_id ) ) {
+			$user_id = get_current_user_id();
+		}
+
+		$course_table = stm_lms_user_courses_name( $wpdb );
+
+		$course_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT course_id FROM $course_table WHERE user_id = %d",
+				$user_id
+			)
+		);
+
+		$post_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_type = 'stm-courses' AND post_author = %d AND post_status = 'publish'",
+				$user_id
+			)
+		);
+
+		$course_ids = array_unique(
+			array_merge( $course_ids, $post_ids )
+		);
+
+		return array_flip( $course_ids );
+	}
+
 	public static function get_wishlist( $user_id = 0 ) {
 		$wishlist = array();
 

@@ -20,7 +20,6 @@ function stm_lms_lesson_marker_user_answers() {
 		lesson_id int NOT NULL,
 		question_id int NOT NULL,
 		user_answers TEXT NOT NULL DEFAULT '',
-		is_completed TINYINT(1) NOT NULL DEFAULT 0,
 		submitted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		PRIMARY KEY (user_answer_id)
 	) $charset_collate;";

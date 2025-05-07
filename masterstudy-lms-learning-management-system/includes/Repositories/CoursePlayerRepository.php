@@ -73,6 +73,11 @@ final class CoursePlayerRepository {
 		if ( LessonType::VIDEO === $this->data['lesson_type'] ) {
 			$this->data['video_type']              = get_post_meta( $lesson_id, 'video_type', true );
 			$this->data['video_required_progress'] = get_post_meta( $lesson_id, 'video_required_progress', true );
+			$this->data['video_questions_stats']   = array(
+				'answered'  => 0,
+				'completed' => 0,
+				'total'     => 0,
+			);
 
 			if ( \STM_LMS_Helpers::is_pro_plus() ) {
 				$this->data['video_questions']       = \STM_LMS_Lesson::get_lesson_video_questions( $user_id, $lesson_id );

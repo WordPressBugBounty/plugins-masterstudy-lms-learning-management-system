@@ -37,6 +37,7 @@ class Course {
 	 */
 	public ?array $image;
 	public bool $is_featured;
+	public bool $is_lock_lesson;
 	public ?string $level;
 	public WP_User $owner;
 	/**
@@ -58,6 +59,8 @@ class Course {
 	public ?int $status_date_start;
 	public ?int $status_date_end;
 	public string $title;
+	public bool $single_sale;
+	public bool $not_in_membership;
 	public ?string $video_duration;
 	public ?int $views;
 	public ?string $access_duration;

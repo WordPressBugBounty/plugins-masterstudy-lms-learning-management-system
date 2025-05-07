@@ -264,17 +264,45 @@ class STM_LMS_Lesson {
 			$data['course']['progress_percent'] = 100;
 		}
 
-		/*Curriculum*/
-		$course_materials = ( new CurriculumMaterialRepository() )->get_course_materials( $course_id );
-		$curriculum_data  = array();
+		$curriculum_repository   = new CurriculumMaterialRepository();
+		$course_materials        = $curriculum_repository->get_course_materials( $course_id );
+		$materials_with_sections = $curriculum_repository->get_course_materials_with_sections( $course_id, $course_materials );
+		$curriculum_data         = array();
 
 		foreach ( $course_materials as $item_id ) {
 			$type = get_post_meta( $item_id, 'type', true );
 			if ( empty( $type ) ) {
 				$type = 'text';
 			}
-			$lesson              = self::get_lesson_info( $course_id, $item_id );
+
+			$material = $materials_with_sections[ $item_id ] ?? null;
+
+			$lesson = array(
+				'section' => $material ? $material->section_title : esc_html__( 'Section 1', 'masterstudy-lms-learning-management-system' ),
+				'lesson'  => '',
+				'type'    => 'lesson',
+			);
+
+			if ( $material ) {
+				switch ( $material->post_type ) {
+					case PostType::LESSON:
+					case PostType::GOOGLE_MEET:
+						$lesson['type']   = 'lesson';
+						$lesson['lesson'] = sprintf( esc_html__( 'Lecture %s', 'masterstudy-lms-learning-management-system' ), $material->order );
+						break;
+					case PostType::ASSIGNMENT:
+						$lesson['type']   = 'assignment';
+						$lesson['lesson'] = sprintf( esc_html__( 'Assignment %s', 'masterstudy-lms-learning-management-system' ), $material->order );
+						break;
+					default:
+						$lesson['type']   = 'quiz';
+						$lesson['lesson'] = sprintf( esc_html__( 'Quiz %s', 'masterstudy-lms-learning-management-system' ), $material->order );
+						break;
+				}
+			}
+
 			$lesson['completed'] = self::is_lesson_completed( $user_id, $course_id, $item_id );
+
 			if ( 'lesson' === $lesson['type'] ) {
 				$lesson_type = get_post_meta( $item_id, 'type', true );
 				if ( empty( $lesson_type ) ) {
@@ -282,6 +310,7 @@ class STM_LMS_Lesson {
 				}
 				$lesson['lesson_type'] = $lesson_type;
 			}
+
 			$curriculum_data[] = $lesson;
 		}
 
@@ -331,15 +360,16 @@ class STM_LMS_Lesson {
 					continue;
 				}
 
-				$correct_answers = array_column(
+				$marker['answers'] = unserialize( $marker['answers'] );
+				$correct_answers   = array_column(
 					array_filter(
 						$marker['answers'],
 						fn ( $a ) => $a['is_correct']
 					),
-					'id'
+					'answer_id'
 				);
 
-				$marker['user_answers'] = stm_lms_get_user_marker_answers( $user_id, $lesson_id, $marker['id'] );
+				$marker['user_answers'] = stm_lms_get_user_marker_answers( $user_id, $lesson_id, intval( $marker['id'] ) );
 				$user_answers           = $marker['user_answers'];
 
 				sort( $correct_answers );
@@ -350,7 +380,7 @@ class STM_LMS_Lesson {
 
 				if ( ! empty( $marker['answers'] ) ) {
 					foreach ( $marker['answers'] as &$answer ) {
-						$answer['is_selected'] = in_array( $answer['id'], $marker['user_answers'], true );
+						$answer['is_selected'] = in_array( $answer['answer_id'], $marker['user_answers'], true );
 					}
 				}
 			}
@@ -365,15 +395,69 @@ class STM_LMS_Lesson {
 		$user = STM_LMS_User::get_current_user();
 
 		$answer = array(
-			'user_id'     => $user['id'] ?? null,
-			'course_id'   => isset( $_POST['course_id'] ) ? intval( $_POST['course_id'] ) : null,
-			'lesson_id'   => isset( $_POST['lesson_id'] ) ? intval( $_POST['lesson_id'] ) : null,
-			'question_id' => isset( $_POST['question_id'] ) ? intval( $_POST['question_id'] ) : null,
-			'user_answer' => isset( $_POST['user_answer'] ) ? sanitize_text_field( wp_unslash( $_POST['user_answer'] ) ) : null,
+			'user_id'      => $user['id'] ?? null,
+			'course_id'    => isset( $_POST['course_id'] ) ? intval( $_POST['course_id'] ) : null,
+			'lesson_id'    => isset( $_POST['lesson_id'] ) ? intval( $_POST['lesson_id'] ) : null,
+			'question_id'  => isset( $_POST['question_id'] ) ? intval( $_POST['question_id'] ) : null,
+			'user_answers' => isset( $_POST['user_answer'] ) ? sanitize_text_field( wp_unslash( $_POST['user_answer'] ) ) : null,
 		);
 
 		stm_lms_add_user_marker_answer( $answer );
 
-		return wp_send_json( 'correct' );
+		$correct_answer = stm_lms_get_lesson_markers_correct_answer(
+			$answer['lesson_id'],
+			$answer['question_id']
+		);
+		$user_answer    = array_map( 'intval', explode( ',', $answer['user_answers'] ) );
+
+		sort( $correct_answer );
+		sort( $user_answer );
+
+		$result             = $correct_answer === $user_answer ? 'correct' : 'wrong';
+		$per_answer_results = array();
+
+		foreach ( $user_answer as $answer_id ) {
+			$per_answer_results[] = array(
+				'id'     => $answer_id,
+				'status' => in_array( $answer_id, $correct_answer ) ? 'correct' : 'wrong',
+			);
+		}
+
+		return wp_send_json(
+			array(
+				'result'      => $result,
+				'user_answer' => $per_answer_results,
+			)
+		);
+	}
+
+	public static function get_completed_lessons( $user_id, $course_id ) {
+		global $wpdb;
+
+		$table      = esc_sql( stm_lms_user_lessons_name( $wpdb ) );
+		$lessons    = stm_lms_get_user_course_lessons( $user_id, $course_id, array( 'lesson_id' ) );
+		$lesson_ids = array_map(
+			static function( $lesson ) {
+				return absint( $lesson[0] );
+			},
+			$lessons
+		);
+
+		if ( empty( $lesson_ids ) ) {
+			return array();
+		}
+
+		$placeholders = implode( ',', array_fill( 0, count( $lesson_ids ), '%d' ) );
+
+		// Using dynamic table names and pre-sanitized IDs lists
+		$lesson_ids_selected = $wpdb->get_col(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT lesson_id FROM {$table} WHERE user_id = %d AND course_id = %d AND lesson_id IN ($placeholders)",
+				array_merge( array( $user_id, $course_id ), $lesson_ids )
+			)
+		);
+
+		return array_fill_keys( $lesson_ids_selected, true );
 	}
 }

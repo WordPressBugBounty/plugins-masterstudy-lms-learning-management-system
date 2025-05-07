@@ -73,7 +73,10 @@ final class EnrolledQuizzesRepository {
 					'progress'     => esc_html( $progress ),
 					'attempts'     => array(
 						'url'   => esc_url( ms_plugin_user_account_url( 'enrolled-quiz-attempts/' . $course_id . '/' . $quiz_id ) ),
-						'count' => sprintf( '%d attempts', $attempts_count ),
+						'count' => sprintf(
+							esc_html__( '%d attempts', 'masterstudy-lms-learning-management-system' ),
+							$attempts_count
+						),
 					),
 					'questions'    => $this->get_questions_count(
 						array(
@@ -256,7 +259,18 @@ final class EnrolledQuizzesRepository {
 
 	private function get_questions_count( array $quiz_data ): string {
 		$quiz_repo = ( new QuizRepository() )->get( $quiz_data['quiz_id'] );
-		return isset( $quiz_repo['content'] ) && preg_match( '/\[h5p id="\d+"\]/', $quiz_repo['content'] ) ? '' : sprintf( '%s questions', esc_html( $quiz_data['questions_count'] ?? 0 ) );
+		return isset( $quiz_repo['content'] ) && preg_match( '/\[h5p id="\d+"\]/', $quiz_repo['content'] ) ? '' :
+			esc_html(
+				sprintf(
+					_n(
+						'%s question',
+						'%s questions',
+						$quiz_data['questions_count'] ?? 0,
+						'masterstudy-lms-learning-management-system'
+					),
+					$quiz_data['questions_count'] ?? 0
+				)
+			);
 	}
 
 	private function format_status( string $status ): array {

@@ -38,6 +38,7 @@ final class CourseSerializer extends AbstractSerializer {
 				'id'                => $course->id,
 				'image'             => $course->image,
 				'is_featured'       => $course->is_featured,
+				'is_lock_lesson'    => $course->is_lock_lesson,
 				'owner'             => array(
 					'id'     => $course->owner->ID,
 					'name'   => $course->owner->display_name,

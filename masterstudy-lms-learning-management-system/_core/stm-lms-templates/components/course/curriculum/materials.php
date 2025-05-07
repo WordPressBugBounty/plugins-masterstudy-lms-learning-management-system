@@ -27,6 +27,9 @@ if ( class_exists( 'STM_LMS_Shareware' ) ) {
 	}
 }
 
+$user_id      = get_current_user_id();
+$user_courses = STM_LMS_User::get_user_course_access_list( $user_id );
+
 foreach ( $curriculum as $section ) {
 	$current_index = $section_index++;
 
@@ -49,7 +52,7 @@ foreach ( $curriculum as $section ) {
 				$material_index++;
 				$is_trial       = ! $is_enrolled && $trial_lessons > 0 && $material_index <= $trial_lessons;
 				$is_preview     = ! $is_enrolled && STM_LMS_Lesson::lesson_has_preview( $material['post_id'] );
-				$has_access     = STM_LMS_User::has_course_access( $course_id, $material['post_id'], false );
+				$has_access     = isset( $user_courses[ $course_id ] );
 				$material       = apply_filters( 'masterstudy_lms_lesson_curriculum_data', $material, $curriculum, $course_id );
 				$lesson_excerpt = get_post_meta( $material['post_id'], 'lesson_excerpt', true );
 				$question_count = ! empty( $material['questions_array'] ) ? count( $material['questions_array'] ) : 0;

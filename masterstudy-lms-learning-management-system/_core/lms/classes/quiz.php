@@ -529,4 +529,22 @@ class STM_LMS_Quiz {
 
 		return STM_LMS_Options::get_option( 'quiz_style', 'default' );
 	}
+
+	public static function get_passed_quizzes( $user_id, $course_id ) {
+		$quizzes = stm_lms_get_user_course_quizzes(
+			$user_id,
+			$course_id,
+			array( 'quiz_id' ),
+			'passed'
+		);
+
+		if ( empty( $quizzes ) ) {
+			return array();
+		}
+
+		return array_fill_keys(
+			array_column( $quizzes, 'quiz_id' ),
+			true
+		);
+	}
 }

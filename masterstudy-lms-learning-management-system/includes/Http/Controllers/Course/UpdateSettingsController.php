@@ -53,6 +53,7 @@ class UpdateSettingsController {
 				'excerpt'                 => 'nullable|string',
 				'image_id'                => 'nullable|integer',
 				'is_featured'             => 'required|boolean',
+				'is_lock_lesson'          => 'required|boolean',
 				'level'                   => 'nullable|string|contains_list,' . implode( ';', $levels ),
 				'slug'                    => 'required|string',
 				'status'                  => 'nullable|string|contains_list,' . implode( ';', CourseStatus::cases() ),
@@ -99,6 +100,7 @@ class UpdateSettingsController {
 		$course->excerpt           = $data['excerpt'] ?? null;
 		$course->image             = ! isset( $data['image_id'] ) ? null : array( 'id' => $data['image_id'] );
 		$course->is_featured       = $data['is_featured'];
+		$course->is_lock_lesson    = $data['is_lock_lesson'];
 		$course->level             = $data['level'] ?? null;
 		$course->slug              = $data['slug'];
 		$course->status            = $data['status'] ?? null;

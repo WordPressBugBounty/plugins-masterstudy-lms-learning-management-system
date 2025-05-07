@@ -147,6 +147,11 @@ final class GetSettings extends Route implements ResponseInterface {
 							'format'      => 'uri',
 							'description' => 'Dashboard > LMS Settings page URL.',
 						),
+						'admin_url'       => array(
+							'type'        => 'string',
+							'format'      => 'uri',
+							'description' => 'Admin URL.',
+						),
 					),
 				),
 			),

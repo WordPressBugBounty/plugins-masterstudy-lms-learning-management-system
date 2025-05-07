@@ -53,6 +53,7 @@ class STM_LMS_User_Manager_Course_User {
 		}
 
 		stm_lms_reset_user_answers( $course_id, $student_id );
+		stm_lms_reset_marker_answers( $course_id, $student_id );
 
 		STM_LMS_Course::update_course_progress( $student_id, $course_id, true );
 
@@ -159,6 +160,10 @@ class STM_LMS_User_Manager_Course_User {
 			case 'stm-quizzes':
 				self::complete_quiz( $student_id, $course_id, $item_id, $completed );
 				break;
+		}
+
+		if ( ! $completed ) {
+			stm_lms_reset_marker_answers( $course_id, $student_id );
 		}
 
 		STM_LMS_Course::update_course_progress( $student_id, $course_id );

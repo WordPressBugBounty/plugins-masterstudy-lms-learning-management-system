@@ -32,7 +32,7 @@ $next_lesson_url     = '';
 $next_lesson_preview = false;
 $progress_video_type = ! empty( $video_type ) && ! in_array( $video_type, array( 'embed', 'shortcode' ), true );
 $progress_audio_type = ! empty( $audio_type ) && ! in_array( $audio_type, array( 'embed', 'shortcode' ), true );
-$questions_must_done = $progress_video_type && get_post_meta( $item_id, 'questions_must_done', true );
+$questions_must_done = $progress_video_type && get_post_meta( $item_id, 'video_marker_questions_locked', true );
 $progress_hint_text  = 'video' === $lesson_type
 	? sprintf(
 		/* translators: %s: video required progress */
@@ -45,11 +45,11 @@ $progress_hint_text  = 'video' === $lesson_type
 		$audio_required_progress
 	);
 
-if ( 'video' === $lesson_type && $questions_must_done ) {
-	$progress_hint_text .= ' ' . esc_html__( 'and you must answer all questions correctly.', 'masterstudy-lms-learning-management-system' );
+if ( 'video' === $lesson_type && $questions_must_done && $video_questions_stats['total'] > 0 ) {
+	$progress_hint_text .= ' ' . esc_html__( 'and you must answer all questions.', 'masterstudy-lms-learning-management-system' );
 }
 
-$video_questions_hint = esc_html__( 'You must answer all questions correctly to complete the lesson', 'masterstudy-lms-learning-management-system' );
+$video_questions_hint = esc_html__( 'You must answer all questions to complete the lesson', 'masterstudy-lms-learning-management-system' );
 $is_draft_assignment  = 'assignments' === $lesson_type
 	&& method_exists( 'MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository', 'is_assignment_draft' )
 	&& ( new AssignmentStudentRepository() )->is_assignment_draft( $item_id, $user_id );

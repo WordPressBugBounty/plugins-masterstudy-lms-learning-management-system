@@ -20,7 +20,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var totalQuestions = (_video_player_data$vi3 = video_player_data.video_questions_stats['total']) !== null && _video_player_data$vi3 !== void 0 ? _video_player_data$vi3 : 0;
     var questionsMustDone = (_video_player_data$qu = video_player_data.questions_must_done) !== null && _video_player_data$qu !== void 0 ? _video_player_data$qu : false;
     var questionsProgressContainer = $('#current-questions-progress-user');
-    var questionsProgressBar = $('.masterstudy-course-player-lesson-video__progress-bar-value');
+    var questionsProgressBar = $('#current-questions-progress');
     var completedQuestions = (_video_player_data$vi4 = video_player_data.video_questions_stats['completed']) !== null && _video_player_data$vi4 !== void 0 ? _video_player_data$vi4 : 0;
     var answeredQuestions = (_video_player_data$vi5 = video_player_data.video_questions_stats['answered']) !== null && _video_player_data$vi5 !== void 0 ? _video_player_data$vi5 : 0;
     var userProgress = parseInt(currentProgressContainer.data('progress'), 10) || 0;
@@ -51,6 +51,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
       $('body').on('click', '.masterstudy-timecode', function () {
         if (video_player_data.strict_mode) return;
+        if ($('.masterstudy-lesson-video-question').hasClass('masterstudy-lesson-video-question_show')) {
+          return;
+        }
         var timecode = parseInt($(this).data('timecode'), 10);
         if (!isNaN(timecode)) {
           videoDefault = videoElement.get(0);
@@ -102,20 +105,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
                 return _context3.abrupt("return");
               case 2:
-                timecode = parseInt($(this).data('timecode'), 10);
-                if (!isNaN(timecode)) {
-                  _context3.next = 5;
+                if (!$('.masterstudy-lesson-video-question').hasClass('masterstudy-lesson-video-question_show')) {
+                  _context3.next = 4;
                   break;
                 }
                 return _context3.abrupt("return");
-              case 5:
+              case 4:
+                timecode = parseInt($(this).data('timecode'), 10);
+                if (!isNaN(timecode)) {
+                  _context3.next = 7;
+                  break;
+                }
+                return _context3.abrupt("return");
+              case 7:
                 videoPlayerContainer[0].scrollIntoView({
                   behavior: 'smooth',
                   block: 'start'
                 });
-                _context3.next = 8;
+                _context3.next = 10;
                 return waitForYouTubePlayer();
-              case 8:
+              case 10:
                 if (youTubePlayer && typeof youTubePlayer.seekTo === 'function') {
                   youTubePlayer.seekTo(timecode, true);
                   setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
@@ -155,7 +164,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     }, _callee2);
                   })), 300);
                 }
-              case 9:
+              case 11:
               case "end":
                 return _context3.stop();
             }
@@ -173,6 +182,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         vimeoPlayer.on('ended', finalizeProgress);
         $('body').on('click', '.masterstudy-timecode', function () {
           if (video_player_data.strict_mode) return;
+          if ($('.masterstudy-lesson-video-question').hasClass('masterstudy-lesson-video-question_show')) {
+            return;
+          }
           var timecode = parseInt($(this).data('timecode'), 10);
           if (!isNaN(timecode)) {
             videoPlayerContainer[0].scrollIntoView({
@@ -275,6 +287,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       plyrVideoPlayer.on('ended', finalizeProgress);
       $('body').on('click', '.masterstudy-timecode', function () {
         if (video_player_data.strict_mode) return;
+        if ($('.masterstudy-lesson-video-question').hasClass('masterstudy-lesson-video-question_show')) {
+          return;
+        }
         var timecode = parseInt($(this).data('timecode'), 10);
         if (!isNaN(timecode)) {
           videoPlayerContainer[0].scrollIntoView({
@@ -325,6 +340,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
       $('body').on('click', '.masterstudy-timecode', function () {
         if (video_player_data.strict_mode) return;
+        if ($('.masterstudy-lesson-video-question').hasClass('masterstudy-lesson-video-question_show')) {
+          return;
+        }
         var timecode = parseInt($(this).data('timecode'), 10);
         if (!isNaN(timecode)) {
           videoPlayerContainer[0].scrollIntoView({
@@ -354,6 +372,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         playerVDO.video.addEventListener('ended', finalizeProgress);
         $('body').on('click', '.masterstudy-timecode', function () {
           if (video_player_data.strict_mode) return;
+          if ($('.masterstudy-lesson-video-question').hasClass('masterstudy-lesson-video-question_show')) {
+            return;
+          }
           var timecode = parseInt($(this).data('timecode'), 10);
           if (!isNaN(timecode)) {
             videoPlayerContainer[0].scrollIntoView({
@@ -381,6 +402,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (!isFailed && video_player_data.strict_mode) {
         return;
       }
+      var relatedQuestionBlock = $('.masterstudy-lesson-video-question[data-marker="' + timecode + '"]');
+      if (relatedQuestionBlock.hasClass('masterstudy-lesson-video-question_show')) {
+        return;
+      }
       lastCheckedSecond = -1;
       if (isFailed && video_player_data.strict_mode) {
         isSeeking = false;
@@ -399,6 +424,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     $('body').on('click', '[data-id="masterstudy-video-question-rewatch"]', function (event) {
       event.preventDefault();
       var questionElement = $(this).closest('.masterstudy-lesson-video-question');
+      if (questionElement.hasClass('masterstudy-lesson-video-question_answered')) {
+        var currentProgress = parseInt(questionsProgressContainer.text(), 10) || 0;
+        if (currentProgress > 0) {
+          questionsProgressContainer.text(currentProgress - 1);
+          answeredQuestions--;
+          var progressPercent = answeredQuestions / totalQuestions * 100;
+          questionsProgressBar.css('width', progressPercent + '%');
+        }
+      }
       questionElement.removeClass('masterstudy-lesson-video-question_show masterstudy-lesson-video-question_answered masterstudy-lesson-video-question_failed');
       videoWrapper.show();
       questionElement.find('.masterstudy-lesson-video-question__answer').removeClass('masterstudy-lesson-video-question__answer_selected masterstudy-lesson-video-question__answer_failed masterstudy-lesson-video-question__answer_completed');
@@ -440,7 +474,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           _this.addClass('masterstudy-button_loading');
         },
         success: function success(response) {
-          if (response === 'correct') {
+          if (response.result === 'correct') {
             var currentProgress = parseInt(questionsProgressContainer.text()) || 0;
             questionsProgressContainer.text(currentProgress + 1);
             current_question.addClass('masterstudy-lesson-video-question_answered masterstudy-lesson-video-question_completed');
@@ -451,19 +485,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             });
             completedQuestions++;
             updateQuestionsProgress();
+            console.log(userProgress);
             if (questionsMustDone && completedQuestions === totalQuestions && userProgress >= requiredProgress) {
               hint.hide();
               submitButton.removeAttr('disabled');
               submitButton.removeClass('masterstudy-button_disabled');
             }
-          } else if (response === 'wrong') {
+          } else if (response.result === 'wrong') {
             var _currentProgress = parseInt(questionsProgressContainer.text()) || 0;
             questionsProgressContainer.text(_currentProgress + 1);
             current_question.addClass('masterstudy-lesson-video-question_answered masterstudy-lesson-video-question_failed');
             list_question.removeClass('masterstudy-lesson-video-list-question_completed').addClass('masterstudy-lesson-video-list-question_failed');
             selected_answers.forEach(function (answer_id) {
               var answerElement = current_question.find('#' + answer_id).closest('.masterstudy-lesson-video-question__answer');
-              answerElement.addClass('masterstudy-lesson-video-question__answer_selected masterstudy-lesson-video-question__answer_failed');
+              var answerData = response.user_answer.find(function (a) {
+                return a.id == answer_id;
+              });
+              if (answerData) {
+                if (answerData.status === 'correct') {
+                  answerElement.addClass('masterstudy-lesson-video-question__answer_selected masterstudy-lesson-video-question__answer_completed');
+                } else {
+                  answerElement.addClass('masterstudy-lesson-video-question__answer_selected masterstudy-lesson-video-question__answer_failed');
+                }
+              }
             });
             updateQuestionsProgress();
           }
@@ -554,9 +598,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (duration > 0 && video_player_data.video_progress) {
         var progress = Math.floor(currentTime / duration * 100);
         if (userProgress >= requiredProgress) {
-          hint.hide();
-          submitButton.removeAttr('disabled');
-          submitButton.removeClass('masterstudy-button_disabled');
+          if (totalQuestions > 0 && questionsMustDone) {
+            if (completedQuestions === totalQuestions) {
+              hint.hide();
+              submitButton.removeAttr('disabled');
+              submitButton.removeClass('masterstudy-button_disabled');
+            }
+          } else {
+            hint.hide();
+            submitButton.removeAttr('disabled');
+            submitButton.removeClass('masterstudy-button_disabled');
+          }
         }
         if (userProgress > progress) {
           return;
@@ -582,9 +634,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           var queryObject = JSON.parse(dataQuery);
           queryObject.progress = userProgress;
           submitButton.attr('data-query', JSON.stringify(queryObject));
-          hint.hide();
-          submitButton.removeAttr('disabled');
-          submitButton.removeClass('masterstudy-button_disabled');
+          if (totalQuestions > 0 && questionsMustDone) {
+            if (completedQuestions === totalQuestions) {
+              hint.hide();
+              submitButton.removeAttr('disabled');
+              submitButton.removeClass('masterstudy-button_disabled');
+            }
+          } else {
+            hint.hide();
+            submitButton.removeAttr('disabled');
+            submitButton.removeClass('masterstudy-button_disabled');
+          }
         }
         currentUserProgressContainer.text("".concat(userProgress, "%"));
         currentProgressContainer.css('width', "".concat(userProgress, "%"));
@@ -598,7 +658,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         videoQuestions.forEach(function (question) {
           var questionElement = $("#".concat(question.id));
           var markerTime = question.marker;
-          if (currentSecond === markerTime && !questionElement.hasClass('masterstudy-lesson-video-question_completed') && !questionElement.hasClass('masterstudy-lesson-video-question_show')) {
+          if (currentSecond === parseInt(markerTime) && !questionElement.hasClass('masterstudy-lesson-video-question_completed') && !questionElement.hasClass('masterstudy-lesson-video-question_show')) {
             exitFullscreenIfNeeded();
             toggleVideoPlayback(true);
             $('.masterstudy-lesson-video-question').removeClass('masterstudy-lesson-video-question_show');

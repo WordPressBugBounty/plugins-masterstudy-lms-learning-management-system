@@ -3,6 +3,7 @@
 namespace MasterStudy\Lms\Repositories;
 
 use MasterStudy\Lms\Database\CurriculumMaterial;
+use MasterStudy\Lms\Database\CurriculumSection;
 
 final class CurriculumMaterialRepository extends CurriculumRepository {
 	/**
@@ -139,5 +140,38 @@ final class CurriculumMaterialRepository extends CurriculumRepository {
 		}
 
 		return $materials;
+	}
+
+	public function get_course_materials_with_sections( $course_id, $material_ids ) {
+		global $wpdb;
+		$section_ids = ( new CurriculumSectionRepository() )->get_course_section_ids( $course_id );
+
+		if ( empty( $section_ids ) || empty( $material_ids ) ) {
+			return array();
+		}
+
+		$materials_table = esc_sql( ( new CurriculumMaterial() )->get_table() );
+		$sections_table  = esc_sql( ( new CurriculumSection() )->get_table() );
+
+		$section_placeholders  = implode( ',', array_fill( 0, count( $section_ids ), '%d' ) );
+		$material_placeholders = implode( ',', array_fill( 0, count( $material_ids ), '%d' ) );
+
+		$params = array_merge( $section_ids, $material_ids, $section_ids );
+
+		// Using dynamic table names and pre-sanitized IDs lists
+		$materials = $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT m.*, s.title AS section_title FROM {$materials_table} m LEFT JOIN {$sections_table} s ON m.section_id = s.id
+				WHERE m.section_id IN ({$section_placeholders}) AND m.post_id IN ({$material_placeholders}) ORDER BY FIELD(m.section_id, {$section_placeholders}), m.`order`", // phpcs:ignore
+				$params
+			)
+		);
+
+		if ( ! is_array( $materials ) ) {
+			return array();
+		}
+
+		return array_column( $materials, null, 'post_id' );
 	}
 }

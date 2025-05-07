@@ -51,6 +51,7 @@ final class GetSettingsController {
 						: admin_url( 'admin.php?page=stm-lms-go-pro' ),
 					'plugins'         => admin_url( 'plugins.php' ),
 					'settings'        => admin_url( 'admin.php?page=stm-lms-settings' ),
+					'admin_url'       => admin_url(),
 				),
 				'lesson_types'        => $lesson_types,
 				'video_sources'       => apply_filters( 'masterstudy_lms_lesson_video_sources', array() ),

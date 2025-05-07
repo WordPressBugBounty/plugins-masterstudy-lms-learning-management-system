@@ -29,6 +29,21 @@ function stm_lms_reset_user_answers( $course_id, $student_id ) {
 	wp_reset_postdata();
 }
 
+function stm_lms_reset_marker_answers( $course_id, $student_id ) {
+	global $wpdb;
+
+	$table = stm_lms_lesson_marker_user_answers_name( $wpdb );
+	$wpdb->query(
+		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"DELETE FROM {$table} WHERE `course_id` = %d AND `user_id` = %d",
+			$course_id,
+			$student_id
+		)
+	);
+	wp_reset_postdata();
+}
+
 function stm_lms_get_user_answers( $user_id, $quiz_id, $attempt = '1', $get_correct = false, $fields = array() ) {
 	global $wpdb;
 	$table = stm_lms_user_answers_name( $wpdb );
@@ -72,10 +87,44 @@ function stm_lms_get_lesson_markers( $lesson_id ) {
 	return $markers ?? array();
 }
 
+function stm_lms_get_lesson_markers_correct_answer( $lesson_id, $question_id ) {
+	global $wpdb;
+
+	if ( ! $lesson_id || ! $question_id ) {
+		return array();
+	}
+
+	$table = stm_lms_lesson_marker_questions_name( $wpdb );
+
+	$answers = $wpdb->get_var(
+		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT answers FROM {$table} WHERE id = %d AND lesson_id = %d",
+			$question_id,
+			$lesson_id
+		)
+	);
+
+	if ( ! empty( $answers ) ) {
+		$answers        = unserialize( $answers );
+		$correct_answer = array_column(
+			array_filter(
+				$answers,
+				fn ( $a ) => $a['is_correct']
+			),
+			'answer_id'
+		);
+
+		return $correct_answer;
+	}
+
+	return array();
+}
+
 function stm_lms_get_user_marker_answers( $user_id, $lesson_id, $question_id ) {
 	global $wpdb;
 
-	if ( ! $user_id || ! $lesson_id || $question_id ) {
+	if ( ! $user_id || ! $lesson_id || ! $question_id ) {
 		return array();
 	}
 
@@ -84,7 +133,7 @@ function stm_lms_get_user_marker_answers( $user_id, $lesson_id, $question_id ) {
 	$user_answer = $wpdb->get_var(
 		$wpdb->prepare(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			"SELECT user_answer FROM {$table} WHERE user_ID = %d AND lesson_id = %d AND question_id = %d",
+			"SELECT `user_answers` FROM {$table} WHERE user_id = %d AND lesson_id = %d AND question_id = %d",
 			$user_id,
 			$lesson_id,
 			$question_id

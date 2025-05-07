@@ -60,7 +60,7 @@ function stm_lms_get_user_all_course_quizzes( $user_id, $course_id, $quiz_id, $f
 	);
 }
 
-function stm_lms_get_user_course_quizzes( $user_id, $course_id = null, $fields = array(), $status = 'passed' ) {
+function stm_lms_get_user_course_quizzes( $user_id, $course_id = null, $fields = array(), $status = 'passed', $quiz_ids = array() ) {
 	global $wpdb;
 	$table = stm_lms_user_quizzes_name( $wpdb );
 
@@ -68,17 +68,27 @@ function stm_lms_get_user_course_quizzes( $user_id, $course_id = null, $fields =
 
 	$course_condition = ( $course_id )
 		? $wpdb->prepare(
-			'AND course_id = %d',
+			' AND course_id = %d',
 			$course_id
 		)
 		: '';
 
+	$quiz_condition = '';
+	if ( ! empty( $quiz_ids ) ) {
+		$placeholders = implode( ',', array_fill( 0, count( $quiz_ids ), '%d' ) );
+		$quiz_condition = " AND quiz_id IN ($placeholders)";
+	}
+
+	$params = array( $user_id, $status );
+	if ( ! empty( $quiz_ids ) ) {
+		$params = array_merge( $params, $quiz_ids );
+	}
+
 	return $wpdb->get_results(
 		$wpdb->prepare(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			"SELECT {$fields} FROM {$table} WHERE user_id = %d AND status = %s {$course_condition}",
-			$user_id,
-			$status
+			"SELECT {$fields} FROM {$table} WHERE user_id = %d AND status = %s {$course_condition}{$quiz_condition}",
+			$params
 		),
 		ARRAY_A
 	);

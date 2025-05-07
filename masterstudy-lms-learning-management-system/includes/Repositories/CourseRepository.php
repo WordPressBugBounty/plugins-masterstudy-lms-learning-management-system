@@ -7,7 +7,7 @@ use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Plugin\Taxonomy;
 use MasterStudy\Lms\Utility\Sanitizer;
 
-final class CourseRepository {
+final class CourseRepository extends AbstractRepository {
 	/**
 	 * course_property => meta_key
 	 */
@@ -29,6 +29,13 @@ final class CourseRepository {
 		'access_duration'   => 'access_duration',
 		'access_devices'    => 'access_devices',
 		'certificate_info'  => 'certificate_info',
+		'is_featured'       => 'featured',
+		'is_lock_lesson'    => 'lock_lesson',
+	);
+
+	protected static array $casts = array(
+		'is_featured'    => 'bool',
+		'is_lock_lesson' => 'bool',
 	);
 
 	/**
@@ -323,11 +330,11 @@ final class CourseRepository {
 
 		wp_set_post_terms( $post['ID'], $course->category, Taxonomy::COURSE_CATEGORY );
 
-		foreach ( self::FIELDS_META_MAPPING as $property => $meta_key ) {
-			update_post_meta( $post['ID'], $meta_key, $course->$property );
+		foreach ( self::FIELDS_META_MAPPING as $field => $meta_key ) {
+			if ( property_exists( $course, $field ) ) {
+				update_post_meta( $post['ID'], $meta_key, $this->convert_to_meta( $field, $course->$field ) );
+			}
 		}
-
-		update_post_meta( $post['ID'], 'featured', $course->is_featured ? 'on' : '' );
 
 		if ( null === $course->co_instructor ) {
 			delete_post_meta( $post['ID'], 'co_instructor' );
@@ -587,6 +594,7 @@ final class CourseRepository {
 				'members'                => $meta['current_students'][0] ?? '',
 				'end_time'               => intval( $meta['end_time'][0] ?? 0 ),
 				'featured'               => ( $meta['featured'][0] ?? null ) === 'on',
+				'lock_lesson'            => ( $meta['lock_lesson'][0] ?? null ) === 'on',
 				'level'                  => $meta['level'][0] ?? null,
 				'status'                 => $meta['status'][0] ?? null,
 				'views'                  => $meta['views'][0] ?? 0,
@@ -633,6 +641,7 @@ final class CourseRepository {
 		$course->id                   = $post->ID;
 		$course->image                = $this->get_course_image( $post );
 		$course->is_featured          = ( $meta['featured'][0] ?? null ) === 'on';
+		$course->is_lock_lesson       = ( $meta['lock_lesson'][0] ?? null ) === 'on';
 		$course->level                = $meta['level'][0] ?? null;
 		$course->owner                = $this->find_user( $post->post_author );
 		$course->slug                 = $post->post_name;

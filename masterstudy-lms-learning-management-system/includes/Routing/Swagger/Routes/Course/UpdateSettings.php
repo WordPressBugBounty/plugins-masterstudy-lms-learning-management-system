@@ -57,6 +57,10 @@ class UpdateSettings extends Route implements RequestInterface, ResponseInterfac
 				'type'        => 'boolean',
 				'description' => 'Mark this checkbox to add badge to course "Featured".',
 			),
+			'is_lock_lesson'    => array(
+				'type'        => 'boolean',
+				'description' => 'Mark this checkbox to add badge to course "Lock lesson".',
+			),
 			'level'             => array(
 				'nullable' => true,
 				'type'     => 'string',

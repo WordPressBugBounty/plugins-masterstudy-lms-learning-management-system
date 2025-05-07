@@ -24,7 +24,10 @@ wp_enqueue_script( 'masterstudy-curriculum-accordion' );
 
 <div class="masterstudy-curriculum-accordion <?php echo esc_attr( $dark_mode ? 'masterstudy-curriculum-accordion_dark-mode' : '' ); ?>">
 	<?php
-	$material_index = 0;
+	$completed_lessons = STM_LMS_Lesson::get_completed_lessons( $user_id, $course_id );
+	$passed_quizzes    = STM_LMS_Quiz::get_passed_quizzes( $user_id, $course_id );
+	$material_index    = 0;
+
 	foreach ( $curriculum as $section ) {
 		$opened               = in_array( $current_lesson_id, array_column( $section['materials'], 'post_id' ), true ) ? 'masterstudy-curriculum-accordion__wrapper_opened' : '';
 		$section['materials'] = ( new CoursePlayerRepository() )->hydrate_materials( $section['materials'], $course_id, $user_id );
@@ -34,9 +37,9 @@ wp_enqueue_script( 'masterstudy-curriculum-accordion' );
 			foreach ( $section['materials'] as $index => &$section_material ) {
 				if ( ! isset( $section_material['lesson_completed'] ) ) {
 					if ( PostType::QUIZ === $section_material['post_type'] ) {
-						$section_material['lesson_completed'] = STM_LMS_Quiz::quiz_passed( $section_material['post_id'], $user_id ) ? 'completed' : '';
+						$section_material['lesson_completed'] = isset( $passed_quizzes[ $section_material['post_id'] ] ) ? 'completed' : '';
 					} else {
-						$section_material['lesson_completed'] = STM_LMS_Lesson::is_lesson_completed( $user_id, $course_id, $section_material['post_id'] ) ? 'completed' : '';
+						$section_material['lesson_completed'] = isset( $completed_lessons[ $section_material['post_id'] ] ) ? 'completed' : '';
 					}
 				}
 

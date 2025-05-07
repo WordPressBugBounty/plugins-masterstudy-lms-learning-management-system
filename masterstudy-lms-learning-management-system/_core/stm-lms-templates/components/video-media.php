@@ -32,7 +32,7 @@ $user_progress             = ! empty( $user_id ) && ! empty( $course_id ) ? mast
 $video_strict_mode         = $settings['course_player_video_strict_mode'] ?? false;
 
 if ( $is_pro_plus && ! empty( $video_questions ) ) {
-	$questions_must_done = get_post_meta( $id, 'questions_must_done', true );
+	$questions_must_done = get_post_meta( $id, 'video_marker_questions_locked', true );
 	$plyr_markers        = array_map(
 		function( $marker ) {
 			return array(

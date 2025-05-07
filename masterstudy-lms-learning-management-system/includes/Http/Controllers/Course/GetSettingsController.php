@@ -24,7 +24,10 @@ class GetSettingsController {
 	}
 
 	public function __invoke( $course_id, WP_REST_Request $request ): \WP_REST_Response {
-		$course = $this->course_repository->find( $course_id );
+		$course        = $this->course_repository->find( $course_id );
+		$drip_settings = class_exists( '\STM_LMS_Sequential_Drip_Content' ) && method_exists( '\STM_LMS_Sequential_Drip_Content', 'stm_lms_get_settings' )
+		? \STM_LMS_Sequential_Drip_Content::stm_lms_get_settings()
+		: array();
 
 		return new \WP_REST_Response(
 			array(
@@ -40,6 +43,7 @@ class GetSettingsController {
 					$course_id,
 					apply_filters( 'masterstudy_lms_course_custom_fields', array() )
 				),
+				'lock_all_lesson'  => $drip_settings['locked'] ?? false,
 			)
 		);
 	}
