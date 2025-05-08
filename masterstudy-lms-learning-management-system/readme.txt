@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.5.32
+Stable tag: 3.5.33
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.33 - 2025-05-08 =
+- **Fixes:** Minor bug fixes.
+
 = 3.5.32 - 2025-05-07 =
 - **Enhancement:** Optimized database queries, so Single Course pages and the Course Player load faster
 - **Enhancement:** Added the ability to embed knowledge-check quizzes directly into video lessons (PRO)
@@ -324,24 +327,6 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.5.29 - 2025-04-16 =
 - **Update:** Compatibility with WordPress 6.8.
-
-= 3.5.28 - 2025-04-15 =
-- **Fixes:** Minor bug fixes.
-
-= 3.5.27 - 2025-04-14 =
-- **Fixes:** Minor bug fixes.
-
-= 3.5.26 - 2025-04-08 =
-- **Enhancement:** Added support for instructor comments at specific video timestamps, visible to students as hoverable timeline markers. (Pro)
-
-= 3.5.25 - 2025-04-03 =
-- **Enhancement:** Improved search within course subcategories within the Elementor course archive widget. Search will now give more specific results when both category and subcategory are selected.
-- **Enhancement:** Paid Membership Pro Templates updated.
-- **Fix:** Removed the slashes from question titles during creation through the Questions option in the admin dashboard, if the title contained quotes.
-
-= 3.5.24 - 2025-03-31 =
-- **Enhancement:** Improve the quality of the Featured Image on single course page.
-- **Enhancement:** Converted single course elements into widgets for easier custom design of the page.
 
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

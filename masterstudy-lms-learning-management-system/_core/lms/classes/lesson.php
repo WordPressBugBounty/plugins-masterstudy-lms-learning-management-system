@@ -384,6 +384,13 @@ class STM_LMS_Lesson {
 					}
 				}
 			}
+
+			usort(
+				$markers,
+				function( $a, $b ) {
+					return intval( $a['marker'] ) <=> intval( $b['marker'] );
+				}
+			);
 		}
 
 		return $markers;
