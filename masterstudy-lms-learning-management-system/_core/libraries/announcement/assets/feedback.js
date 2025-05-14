@@ -26,7 +26,8 @@
         /**
          * Feedback Review
          */
-        $(body).on('click', '#feedback-stars li', function (e) {
+        $(body).on('click', '#feedback-stars li, .feedback-modal li', function (e) {
+            $(this).parents().find(".ms-feedback-modal, .feedback-modal").addClass("selected");
             var rating  = parseInt($(this).data('value'), 10),
                 stars   = $(this).parent().children('li.star');
 
@@ -39,6 +40,12 @@
             $('.feedback-rating-stars span.rating-text').text($(this).attr('title'));
             $('.feedback-extra').toggle(rating < 4);
             $('.feedback-submit img').toggle(rating > 3);
+
+            if (rating < 4) {
+                $('.feedback-submit').addClass('bad');
+            } else {
+                $('.feedback-submit').removeClass('bad');
+            }
         });
 
         $(body).on('click', '.feedback-submit', function (e) {
@@ -68,6 +75,7 @@
             $(feedback_modal).find('.feedback-review-text').text(review);
             $('.feedback-review-text, .feedback-thank-you').show();
             $('.feedback-extra, .feedback-submit').hide();
+            $(".feedback-modal").addClass("review-sended");
 
             /** Remove Feedback Button */
             $.ajax({

@@ -1,5 +1,6 @@
 <?php
 require_once STM_LMS_LIBRARY . '/mailchimp-integration.php';
+require_once STM_LMS_LIBRARY . '/support-page-integration.php';
 require_once STM_LMS_LIBRARY . '/paypal/autoload.php';
 require_once STM_LMS_LIBRARY . '/db/tables.php';
 require_once STM_LMS_LIBRARY . '/mixpanel/init.php';
@@ -17,4 +18,5 @@ if ( is_admin() ) {
 	require_once STM_LMS_PATH . '/lms/classes/options.php';
 	require_once STM_LMS_LIBRARY . '/compatibility/notices.php';
 	require_once STM_LMS_LIBRARY . '/compatibility/bulk-update.php';
+	require_once STM_LMS_LIBRARY . '/support-page/support-page.php';
 }

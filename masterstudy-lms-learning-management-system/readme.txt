@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.5.33
+Stable tag: 3.5.34
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.34 - 2025-05-14 =
+- **Added:** Added "Help Center" page for quick access to the plugin’s documentation and support resources.
+
 = 3.5.33 - 2025-05-08 =
 - **Fixes:** Minor bug fixes.
 
@@ -324,9 +327,6 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fix:** Users can now view the history of quiz attempts in the course player.
 - **Fix:** The "Quiz Completed" email subject is now customizable via the Email Manager.
 - **Fix:** Resolved issue where courses were not being added to the cart using the LMS Guest Checkout.
-
-= 3.5.29 - 2025-04-16 =
-- **Update:** Compatibility with WordPress 6.8.
 
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

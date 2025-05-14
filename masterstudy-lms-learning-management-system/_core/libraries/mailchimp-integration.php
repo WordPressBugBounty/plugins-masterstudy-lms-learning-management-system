@@ -8,7 +8,10 @@ if ( is_admin() ) {
 	if ( file_exists( STM_LMS_LIBRARY . '/stm-mailchimp-integration/stm-mailchimp.php' ) ) {
 		require_once STM_LMS_LIBRARY . '/stm-mailchimp-integration/stm-mailchimp.php';
 
-		$plugin_pages      = array( 'stm-lms-settings' );
+		$plugin_pages      = array(
+			'stm-lms-settings',
+			'stm-support-page',
+		);
 		$plugin_post_types = array(
 			'stm-courses',
 			'stm-lessons',

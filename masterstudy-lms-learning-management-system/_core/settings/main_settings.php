@@ -105,6 +105,17 @@ add_action(
 			'stm-lms-settings',
 		);
 
+		add_submenu_page(
+			'stm-lms-settings',
+			esc_html__( 'Help center', 'masterstudy-lms-learning-management-system' ),
+			esc_html__( 'Help center', 'masterstudy-lms-learning-management-system' ),
+			'manage_options',
+			'stm-support-page-masterstudy',
+			function () {
+				STM_Support_Page::render_support_page( 'masterstudy-lms-learning-management-system' );
+			}
+		);
+
 		if ( ! STM_LMS_Helpers::is_theme_activated() ) {
 			add_submenu_page(
 				'stm-lms-settings',

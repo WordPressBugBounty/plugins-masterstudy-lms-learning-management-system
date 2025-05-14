@@ -13,11 +13,22 @@ if ( ! class_exists( 'StylemixAnnouncements' ) ) {
 
 			if ( ! get_option( 'stm_lms_feedback_added', false ) ) {
 				add_action( 'wpcfto_after_tab_nav', array( $this, 'add_feedback_button' ) );
-				add_action( 'admin_footer', array( $this, 'render_feedback_popup' ) );
+				add_action(
+					'admin_footer',
+					function() {
+						$current_page = isset( $_GET['page'] ) ? $_GET['page'] : '';
+
+						if ( 'stm-lms-settings' === $current_page ) {
+							$feedback_template = STM_LMS_LIBRARY . '/announcement/feedback.php';
+							if ( file_exists( $feedback_template ) ) {
+								require_once $feedback_template;
+							}
+						}
+					}
+				);
 			}
 
 			add_action( 'wpcfto_after_tab_nav', array( $this, 'add_version' ) );
-
 		}
 
 		public function dashboard_changelog() {
@@ -72,6 +83,9 @@ if ( ! class_exists( 'StylemixAnnouncements' ) ) {
 		}
 
 		public function scripts( $hook ) {
+			wp_enqueue_style( 'stm-lms-feedback', STM_LMS_LIBRARY_URL . 'announcement/assets/feedback.css', array(), STM_LMS_VERSION );
+			wp_enqueue_script( 'stm-lms-feedback', STM_LMS_LIBRARY_URL . 'announcement/assets/feedback.js', array(), STM_LMS_VERSION, true );
+
 			if ( 'index.php' === $hook ) {
 				$theme_info = time();
 				$assets     = STM_LMS_LIBRARY_URL . 'announcement/assets/';
@@ -88,9 +102,6 @@ if ( ! class_exists( 'StylemixAnnouncements' ) ) {
 		}
 
 		public function add_feedback_button() {
-			wp_enqueue_style( 'stm-lms-feedback', STM_LMS_LIBRARY_URL . 'announcement/assets/feedback.css', array(), STM_LMS_VERSION );
-			wp_enqueue_script( 'stm-lms-feedback', STM_LMS_LIBRARY_URL . 'announcement/assets/feedback.js', array(), STM_LMS_VERSION, true );
-
 			echo '<a href="#" class="ms-feedback-button">Feedback
 				<img src="' . esc_url( STM_LMS_LIBRARY_URL . 'announcement/assets/icons/feedback.svg' ) . '">
 			</a>';

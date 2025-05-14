@@ -4,7 +4,7 @@
   $(document).ready(function () {
     var classes = ['post-type-stm-courses', 'post-type-stm-lessons', 'post-type-stm-quizzes', 'post-type-stm-questions', 'post-type-stm-assignments', 'post-type-stm-google-meets', 'post-type-stm-user-assignment', 'post-type-stm-reviews', 'post-type-stm-orders', 'post-type-stm-ent-groups', 'post-type-stm-payout', 'taxonomy-stm_lms_course_taxonomy', 'taxonomy-stm_lms_question_taxonomy', 'stm-lms_page_stm-lms-online-testing', 'admin_page_stm_lms_scorm_settings', 'toplevel_page_stm-lms-dashboard'];
     var $settings_parent = $('.stm-lms-settings-menu-title').closest('li');
-    $settings_parent.nextAll('li').addClass('stm-lms-pro-addons-menu');
+    $settings_parent.next('li').addClass('stm-lms-help-support');
     if ($(".stm-lms-templates-menu-title").length === 0) {
       $settings_parent.addClass("stm-lms-settings-menu");
     }

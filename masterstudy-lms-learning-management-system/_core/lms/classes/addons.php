@@ -18,7 +18,7 @@ class STM_LMS_Addons {
 			'manage_options',
 			'stm-addons',
 			array( $this, 'addons_page' ),
-			( stm_lms_addons_menu_position() + 2 )
+			( stm_lms_addons_menu_position() + 3 )
 		);
 	}
 
