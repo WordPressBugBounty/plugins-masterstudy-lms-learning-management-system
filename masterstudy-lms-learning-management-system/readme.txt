@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.5.34
+Stable tag: 3.5.36
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.5.36 - 2025-05-20 =
+- **Fixes:** Minor bug fixes.
+
 = 3.5.34 - 2025-05-14 =
 - **Added:** Added "Help Center" page for quick access to the plugin’s documentation and support resources.
 

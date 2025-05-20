@@ -62,7 +62,7 @@ return array(
 			'buttons'        => array(
 				array(
 					'label' => __( 'Create Ticket', 'support-page' ),
-					'href'  => 'https://support.stylemixthemes.com/auth/login',
+					'href'  => esc_url( STM_Support_Page::get_freemius_ticket_url( $textdomain ) ),
 					'type'  => 'primary',
 				),
 			),

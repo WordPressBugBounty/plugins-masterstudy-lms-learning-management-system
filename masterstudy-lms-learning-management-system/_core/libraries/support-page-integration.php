@@ -8,7 +8,11 @@ add_action(
 		STM_Support_Page::set_api_urls(
 			'masterstudy-lms-learning-management-system',
 			array(
-				'promo' => 'https://promo-dashboard.stylemixthemes.com/wp-content/dashboard-promo/masterstudy-lms-learning-management-system_posts.json',
+				'promo'    => 'https://promo-dashboard.stylemixthemes.com/wp-content/dashboard-promo/masterstudy-lms-learning-management-system_posts.json',
+				'freemius' => array(
+					'plugin_slug' => 'masterstudy-lms-learning-management-system-pro',
+					'item_id'     => 26,
+				),
 			)
 		);
 
@@ -53,20 +57,34 @@ add_action(
 							),
 						),
 					),
+					'customization' => array(
+						'buttons' => array(
+							array(
+								'href' => 'https://stylemix.net/ticket-form/?utm_source=wpadmin&utm_medium=help_center&utm_campaign=ms_get_quotes',
+							),
+						),
+					),
 					'features'      => array(
 						'title'        => __( 'Get MasterStudy and Enjoy PRO Features', 'masterstudy-lms-learning-management-system' ),
 						'title_pro'    => __( 'Get MasterStudy and Enjoy PRO PLUS Features', 'masterstudy-lms-learning-management-system' ),
 						'description'  => __( 'Upgrade now and access a world of pro features, advanced addons, and limitless possibilities for your journey. Turbocharge your courses and make your e-learning platform truly outstanding!', 'masterstudy-lms-learning-management-system' ),
 						'buttons'      => array(
 							array(
-								'href' => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/',
+								'href' => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=help_center&utm_campaign=ms_promo_banner',
 							),
 							array(
-								'href' => 'https://stylemixthemes.com/wordpress-lms-plugin/',
+								'href' => 'https://stylemixthemes.com/wordpress-lms-plugin/?utm_source=wpadmin&utm_medium=help_center&utm_campaign=ms_promo_banner',
 							),
 						),
 						'has-pro'      => \STM_LMS_Helpers::is_pro(),
 						'has-pro-plus' => \STM_LMS_Helpers::is_pro_plus(),
+					),
+					'expert'        => array(
+						'buttons' => array(
+							array(
+								'href' => 'https://stylemix.net/?utm_source=wpadmin&utm_medium=help_center&utm_campaign=ms_hire_us',
+							),
+						),
 					),
 				),
 				'review'     => array(
