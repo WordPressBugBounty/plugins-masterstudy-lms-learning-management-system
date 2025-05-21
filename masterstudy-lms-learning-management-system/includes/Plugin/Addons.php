@@ -32,6 +32,7 @@ class Addons {
 	public const SOCIAL_LOGIN        = 'social_login';
 	public const AUDIO_LESSON        = 'audio_lesson';
 	public const GRADES              = 'grades';
+	public const AI_LAB              = 'ai_lab';
 
 	public static function all(): array {
 		return array(
@@ -61,6 +62,7 @@ class Addons {
 			self::SOCIAL_LOGIN,
 			self::AUDIO_LESSON,
 			self::GRADES,
+			self::AI_LAB,
 		);
 	}
 
@@ -290,6 +292,15 @@ class Addons {
 				'description'   => esc_html__( 'Grade assignments and quizzes, and give each student personalized feedback. View all scores in one place to see how your students are doing throughout the course.', 'masterstudy-lms-learning-management-system' ),
 				'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=grades&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 				'documentation' => 'grades',
+				'pro_plus'      => true,
+			),
+			self::AI_LAB              => array(
+				'name'          => esc_html__( 'AI Lab', 'masterstudy-lms-learning-management-system' ),
+				'url'           => esc_url( STM_LMS_URL . 'assets/addons/ai_lab.png' ),
+				'settings'      => admin_url( 'admin.php?page=stm-lms-settings#ai_lab' ),
+				'description'   => esc_html__( 'Instantly generate complete lessons and quizzes with AI features. Let AI create structured, ready-to-use content by describing your topic.', 'masterstudy-lms-learning-management-system' ),
+				'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ai_lab&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
+				'documentation' => 'ai-lab',
 				'pro_plus'      => true,
 			),
 		);

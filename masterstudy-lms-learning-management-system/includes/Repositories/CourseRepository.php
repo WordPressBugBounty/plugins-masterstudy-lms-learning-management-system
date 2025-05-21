@@ -294,7 +294,9 @@ final class CourseRepository extends AbstractRepository {
 
 		$post_id = wp_insert_post( $post );
 
-		wp_set_post_terms( $post_id, $data['category'], Taxonomy::COURSE_CATEGORY );
+		if ( ! empty( $data['category'] ) ) {
+			wp_set_post_terms( $post_id, $data['category'], Taxonomy::COURSE_CATEGORY );
+		}
 
 		if ( ! empty( $data['level'] ) ) {
 			update_post_meta( $post_id, 'level', $data['level'] );

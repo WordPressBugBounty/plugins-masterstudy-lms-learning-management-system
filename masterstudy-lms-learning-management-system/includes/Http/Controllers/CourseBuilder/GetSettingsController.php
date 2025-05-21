@@ -7,6 +7,7 @@ use MasterStudy\Lms\Plugin\Addons;
 
 final class GetSettingsController {
 	public function __invoke(): \WP_REST_Response {
+		$user_id   = get_current_user_id();
 		$timezones = apply_filters( 'masterstudy_lms_timezones', array() );
 		$options   = apply_filters(
 			'masterstudy_lms_course_options',
@@ -67,7 +68,7 @@ final class GetSettingsController {
 					$timezones,
 					array_keys( $timezones ),
 				),
-				'current_user_id'     => get_current_user_id(),
+				'current_user_id'     => $user_id,
 			)
 		);
 	}

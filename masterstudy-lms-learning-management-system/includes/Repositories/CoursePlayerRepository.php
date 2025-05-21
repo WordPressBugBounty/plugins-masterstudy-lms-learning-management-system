@@ -100,7 +100,7 @@ final class CoursePlayerRepository {
 					)
 				);
 			}
-		} elseif ( LessonType::AUDIO === $this->data['lesson_type'] ) {
+		} elseif ( 'audio' === $this->data['lesson_type'] ) {
 			$this->data['audio_type']              = get_post_meta( $lesson_id, 'audio_type', true );
 			$this->data['audio_required_progress'] = get_post_meta( $lesson_id, 'audio_required_progress', true );
 		}

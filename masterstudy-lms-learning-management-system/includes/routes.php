@@ -303,6 +303,12 @@ $router->post(
 	\MasterStudy\Lms\Routing\Swagger\Routes\Question\Create::class
 );
 
+$router->post(
+	'/questions/bulk',
+	\MasterStudy\Lms\Http\Controllers\Question\BulkCreateController::class,
+	\MasterStudy\Lms\Routing\Swagger\Routes\Question\BulkCreate::class
+);
+
 $router->get(
 	'/questions/{question_id}',
 	\MasterStudy\Lms\Http\Controllers\Question\GetController::class,

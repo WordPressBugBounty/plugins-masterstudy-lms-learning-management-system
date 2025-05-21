@@ -31,6 +31,7 @@ add_filter(
 				'section_5'             => stm_lms_settings_google_api_section(),
 				'section_4'             => stm_lms_settings_profiles_section(),
 				'section_7'             => stm_lms_settings_grades_section(),
+				'ai_lab'                => stm_lms_settings_ai_lab_section(),
 				'section_6'             => stm_lms_settings_certificates_section(),
 				'payout'                => stm_lms_settings_payout_section(),
 				'gdpr'                  => stm_lms_settings_gdpr_section(),

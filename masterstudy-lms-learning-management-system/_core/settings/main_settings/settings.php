@@ -6,6 +6,7 @@ require_once STM_LMS_PATH . '/settings/main_settings/course.php';
 require_once STM_LMS_PATH . '/settings/main_settings/course-player.php';
 require_once STM_LMS_PATH . '/settings/main_settings/analytics.php';
 require_once STM_LMS_PATH . '/settings/main_settings/grades.php';
+require_once STM_LMS_PATH . '/settings/main_settings/ai_lab.php';
 require_once STM_LMS_PATH . '/settings/main_settings/quiz.php';
 require_once STM_LMS_PATH . '/settings/main_settings/routes.php';
 require_once STM_LMS_PATH . '/settings/main_settings/payments.php';

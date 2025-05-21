@@ -35,6 +35,10 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 		add_action( 'wp_ajax_stm_lms_ban_user', 'STM_LMS_Instructor::ban_user' );
 
+		add_action( 'wp_ajax_stm_lms_toggle_user_ai_access', 'STM_LMS_Instructor::toggle_user_ai_access' );
+
+		add_action( 'wp_ajax_stm_lms_toggle_users_ai_access', 'STM_LMS_Instructor::toggle_users_ai_access' );
+
 		add_action( 'pending_to_publish', 'STM_LMS_Instructor::post_published', 10, 2 );
 
 		add_action( 'admin_menu', 'STM_LMS_Instructor::manage_users', 10000 );
@@ -603,10 +607,10 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 	public static function become_instructor( $data, $user_id ) {
 		if ( ! empty( $data['become_instructor'] ) && $data['become_instructor'] ) {
+			$is_ai_enabled = self::get_is_ai_enabled_for_all();
 
 			if ( ! empty( $data['fields_type'] ) && 'custom' === $data['fields_type'] ) {
 				if ( ! empty( $data['fields'] ) ) {
-
 					$subject    = esc_html__( 'New Instructor Application', 'masterstudy-lms-learning-management-system' );
 					$user       = STM_LMS_User::get_current_user( $user_id );
 					$user_login = $user['login'];
@@ -636,6 +640,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					update_user_meta( $user_id, 'become_instructor', $data );
 					update_user_meta( $user_id, 'submission_date', time() );
 					update_user_meta( $user_id, 'submission_status', 'pending' );
+					update_user_meta( $user_id, 'stm_lms_ai_enabled', $is_ai_enabled );
 
 					$instructor_premoderation = STM_LMS_Options::get_option( 'instructor_premoderation', true );
 
@@ -669,7 +674,6 @@ class STM_LMS_Instructor extends STM_LMS_User {
 						'stm_lms_become_instructor_email',
 						$email_data
 					);
-
 				}
 			} else {
 				$degree    = ( ! empty( $data['degree'] ) ) ? sanitize_text_field( $data['degree'] ) : esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
@@ -681,6 +685,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				update_user_meta( $user_id, 'become_instructor', $data );
 				update_user_meta( $user_id, 'submission_date', time() );
 				update_user_meta( $user_id, 'submission_status', 'pending' );
+				update_user_meta( $user_id, 'stm_lms_ai_enabled', $is_ai_enabled );
 
 				$user_info  = get_userdata( $user_id );
 				$first_name = get_user_meta( $user_id, 'first_name', true );
@@ -704,7 +709,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 				$instructor_premoderation = STM_LMS_Options::get_option( 'instructor_premoderation', false );
 
-				$date       = date( 'Y-m-d H:i:s' );
+				$date       = gmdate( 'Y-m-d H:i:s' );
 				$user_email = $user['email'];
 
 				$message = esc_html__( 'You have received a new instructor application from ', 'masterstudy-lms-learning-management-system-pro' ) . $user_login . ', <br/>' . // phpcs:disable
@@ -734,6 +739,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					);
 					update_user_meta( $user_id, 'submission_status', 'approved' );
 				}
+
 				STM_LMS_Helpers::send_email(
 					'',
 					$subject,
@@ -897,6 +903,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 	public static function get_submissions() {
 		check_ajax_referer( 'stm_lms_get_users_submissions', 'nonce' );
+
 		$page        = ! empty( $_GET['page'] ) ? intval( $_GET['page'] ) : 1;
 		$args        = array(
 			'role__in'   => array( 'subscriber', 'stm_lms_instructor' ),
@@ -915,20 +922,19 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		$date_format = 'M j, Y - H:i';
 
 		$r = array(
-			'total' => 0,
-			'users' => array(),
+			'total'              => 0,
+			'users'              => array(),
+			'ai_enabled_for_all' => self::get_is_ai_enabled_for_all(),
 		);
 		if ( ! empty( $users->get_results() ) ) {
 			foreach ( $users->get_results() as $user ) {
 				$user_id         = $user->ID;
 				$submission_data = get_user_meta( $user_id, 'become_instructor', true );
 
-				$status             = get_user_meta( $user_id, 'submission_status', true );
 				$submission_date    = get_user_meta( $user_id, 'submission_date', true );
-				$banned             = get_user_meta( $user_id, 'stm_lms_user_banned', true );
-				$degree             = ( ! empty( $submission_data['degree'] ) ) ? $submission_data['degree'] : esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
+				$degree             = ! empty( $submission_data['degree'] ) ? $submission_data['degree'] : esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
 				$custom_fields      = ! empty( $submission_data['fields'] ) ? $submission_data['fields'] : array();
-				$expertize          = ( ! empty( $submission_data['expertize'] ) ) ? $submission_data['expertize'] : esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
+				$expertize          = ! empty( $submission_data['expertize'] ) ? $submission_data['expertize'] : esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
 				$submission_history = get_user_meta( $user_id, 'submission_history', true );
 				if ( empty( $submission_history ) || ! is_array( $submission_history ) ) {
 					$submission_history = array();
@@ -939,19 +945,22 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					'display_name'       => $user->display_name,
 					'user_email'         => $user->user_email,
 					'degree'             => $degree,
-					'status'             => $status,
+					'status'             => get_user_meta( $user_id, 'submission_status', true ),
 					'expertize'          => $expertize,
 					'submission_date'    => gmdate( $date_format, $submission_date ),
 					'submission_time'    => $submission_date,
 					'submission_history' => $submission_history,
 					'message'            => '',
-					'banned'             => $banned,
+					'ai_enabled'         => get_user_meta( $user_id, 'stm_lms_ai_enabled', true ),
+					'banned'             => get_user_meta( $user_id, 'stm_lms_user_banned', true ),
 					'custom_fields'      => $custom_fields,
 				);
 				$r['users'][] = $user_data;
 			}
+
 			$r['total'] = $users->get_total();
 		}
+
 		wp_send_json( $r );
 	}
 
@@ -1063,6 +1072,47 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		wp_send_json( 'saved' );
 	}
 
+	public static function toggle_user_ai_access() {
+		check_ajax_referer( 'stm_lms_ban_user', 'nonce' );
+
+		if ( ! empty( $_GET['user_id'] ) ) {
+			$ai_enabled = ! empty( $_GET['ai_enabled'] ) && 'true' === $_GET['ai_enabled'];
+			update_user_meta( intval( $_GET['user_id'] ), 'stm_lms_ai_enabled', $ai_enabled );
+		}
+
+		wp_send_json( 'saved' );
+	}
+
+	public static function toggle_users_ai_access() {
+		check_ajax_referer( 'stm_lms_ban_user', 'nonce' );
+
+		$ai_enabled = ! empty( $_GET['ai_enabled'] ) && 'true' === $_GET['ai_enabled'];
+
+		$args        = array(
+			'role__in'   => array( 'subscriber', 'stm_lms_instructor' ),
+			'number'     => -1,
+			'fields'     => 'ids',
+			'orderby'    => 'meta_value_num',
+			'order'      => 'DESC',
+			'meta_query' => array(
+				array(
+					'key'     => 'submission_date',
+					'compare' => 'EXISTS',
+				),
+			),
+		);
+		$query       = new WP_User_Query( $args );
+		$instructors = $query->get_results();
+
+		foreach ( $instructors as $instructor_id ) {
+			update_user_meta( $instructor_id, 'stm_lms_ai_enabled', $ai_enabled );
+		}
+
+		update_option( 'stm_lms_ai_enabled_for_all', $ai_enabled );
+
+		wp_send_json( 'saved' );
+	}
+
 	public static function get_instructors( $sort_args ) {
 		$args = array(
 			'role' => self::role(),
@@ -1081,5 +1131,13 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			return count( $result );
 		}
 		return 0;
+	}
+
+	public static function get_is_ai_enabled_for_all() {
+		return get_option( 'stm_lms_ai_enabled_for_all', false );
+	}
+
+	public static function has_ai_access( $user_id ) {
+		return current_user_can( 'administrator' ) || get_user_meta( $user_id, 'stm_lms_ai_enabled', true );
 	}
 }

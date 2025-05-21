@@ -21,6 +21,7 @@ class EditController {
 
 		// builder settings extracted to separate controller
 		// consider to deprecte and remove data from this controller
+		$user_id   = get_current_user_id();
 		$timezones = apply_filters( 'masterstudy_lms_timezones', array() );
 		$options   = apply_filters(
 			'masterstudy_lms_course_options',
@@ -78,7 +79,7 @@ class EditController {
 					$timezones,
 					array_keys( $timezones ),
 				),
-				'current_user_id'     => get_current_user_id(),
+				'current_user_id'     => $user_id,
 			)
 		);
 	}
