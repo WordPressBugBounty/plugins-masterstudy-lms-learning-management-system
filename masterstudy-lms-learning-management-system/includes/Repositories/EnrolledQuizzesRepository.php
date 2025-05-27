@@ -74,6 +74,7 @@ final class EnrolledQuizzesRepository {
 					'attempts'     => array(
 						'url'   => esc_url( ms_plugin_user_account_url( 'enrolled-quiz-attempts/' . $course_id . '/' . $quiz_id ) ),
 						'count' => sprintf(
+							/* translators: %d count attempts */
 							esc_html__( '%d attempts', 'masterstudy-lms-learning-management-system' ),
 							$attempts_count
 						),
@@ -163,23 +164,24 @@ final class EnrolledQuizzesRepository {
 			return array();
 		}
 
-		$course_repository = new CoursePlayerRepository();
-		$quiz_data         = $course_repository->get_quiz_data( $quiz_id, $user_id, $course_id );
-		$last_answers      = $attempt['answers'] ?? array();
+		$quiz_data  = ( new CoursePlayerRepository() )->get_quiz_data( $quiz_id, $user_id, $course_id );
+		$emoji_type = $attempt['progress'] < $quiz_data['passing_grade'] ? 'assignments_quiz_failed_emoji' : 'assignments_quiz_passed_emoji';
 
 		return wp_parse_args(
 			array(
 				'created_at'    => $this->format_created_at( $attempt['created_at'], sprintf( '№ %d', esc_html( $attempt['attempt_number'] ) ) ),
-				'last_answers'  => $last_answers,
+				'last_answers'  => $attempt['answers'] ?? array(),
 				'last_quiz'     => $attempt,
 				'progress'      => $attempt['progress'] ?? 0,
-				'passed'        => $attempt['progress'] >= $quiz_data['passing_grade'] && ! empty( $attempt['progress'] ),
+				'passed'        => ! empty( $attempt['progress'] ) && $attempt['progress'] >= $quiz_data['passing_grade'],
 				'show_attempts' => false,
 				'is_retakable'  => false,
 				'content'       => '',
 				'show_answers'  => true,
 				'lesson_type'   => get_post_meta( $quiz_id, 'type', true ),
 				'has_attempts'  => $quiz_data['has_attempts'] ?? false,
+				'emoji_type'    => $emoji_type,
+				'emoji_name'    => $quiz_data['show_emoji'] ? \STM_LMS_Options::get_option( $emoji_type ) : '',
 			),
 			$quiz_data
 		);
@@ -213,6 +215,7 @@ final class EnrolledQuizzesRepository {
 		$correct_answers    = count( array_filter( $attempt['answers'], fn( $item ) => isset( $item['correct_answer'] ) && '1' === $item['correct_answer'] ) );
 		$incorrect_answers  = count( array_filter( $attempt['answers'], fn( $item ) => isset( $item['correct_answer'] ) && '0' === $item['correct_answer'] ) );
 		$created_at         = $this->format_created_at( $attempt['created_at'], sprintf( '№ %d', esc_html( $attempt['attempt_number'] ) ) );
+		$progress           = intval( $attempt['progress'] ?? 0 );
 
 		$answers = '';
 		if ( $questions_quantity > 0 ) {
@@ -227,7 +230,8 @@ final class EnrolledQuizzesRepository {
 		$quiz_data['last_quiz']    = $attempt;
 		$quiz_data['last_answers'] = $attempt['answers'];
 		$quiz_data['show_answers'] = $show_answers || $quiz_data['show_answers'] || ! \STM_LMS_Options::get_option( 'retry_after_passing', false );
-		$progress                  = intval( $attempt['progress'] ?? 0 );
+		$quiz_data['emoji_type']   = $progress < $quiz_data['passing_grade'] ? 'assignments_quiz_failed_emoji' : 'assignments_quiz_passed_emoji';
+		$quiz_data['emoji_name']   = $quiz_data['show_emoji'] ? \STM_LMS_Options::get_option( $quiz_data['emoji_type'] ) : '';
 
 		return array(
 			'date'           => $created_at['date'],
@@ -237,6 +241,7 @@ final class EnrolledQuizzesRepository {
 			'correct'        => $correct_answers,
 			'incorrect'      => $incorrect_answers,
 			'answers'        => $answers,
+			'emoji_name'     => $quiz_data['emoji_name'],
 			'passed'         => ! ( $progress < intval( $quiz_data['passing_grade'] ?? 0 ) ),
 			'questions_html' => STM_LMS_Templates::load_lms_template(
 				'course-player/content/quiz/questions',
@@ -262,6 +267,7 @@ final class EnrolledQuizzesRepository {
 		return isset( $quiz_repo['content'] ) && preg_match( '/\[h5p id="\d+"\]/', $quiz_repo['content'] ) ? '' :
 			esc_html(
 				sprintf(
+					/* translators: %s: count of questions */
 					_n(
 						'%s question',
 						'%s questions',

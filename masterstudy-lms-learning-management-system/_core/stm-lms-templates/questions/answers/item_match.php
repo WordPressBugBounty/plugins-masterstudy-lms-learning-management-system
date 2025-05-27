@@ -19,19 +19,16 @@ if ( ! empty( $user_answer['user_answer'] ) ) {
 
 ?>
 <div class="stm_lms_question_item_match">
-
 	<div class="stm_lms_question_item_match_row">
-
 		<div class="stm_lms_question_item_match_col">
 			<div class="stm_lms_question_item_match__questions">
 				<?php foreach ( $answers as $answer ) : ?>
 					<div class="stm_lms_question_item_match__single">
-						<?php echo wp_kses_post( $answer['question'] ?? '' ); ?>
+						<?php echo wp_kses_post( trim( str_replace( array( '\\(', '\\)' ), '', (string) ( $answer['question'] ?? '' ) ) ) ); ?>
 					</div>
 				<?php endforeach; ?>
 			</div>
 		</div>
-
 		<div class="stm_lms_question_item_match_col">
 			<div class="stm_lms_question_item_match__answers">
 				<?php
@@ -39,9 +36,7 @@ if ( ! empty( $user_answer['user_answer'] ) ) {
 					if ( empty( $user_answers[ $i ] ) ) {
 						?>
 						<div class="stm_lms_question_item_match__answer incorrect">
-
 							<div class="stm_lms_question_item_match__match"></div>
-
 							<?php if ( ! empty( $correct_answer['explain'] ) ) : ?>
 								<div class="stm-lms-single-answer__hint">
 									<i class="fa fa-info"></i>
@@ -53,12 +48,13 @@ if ( ! empty( $user_answer['user_answer'] ) ) {
 								</div>
 							<?php endif; ?>
 						</div>
-
 						<?php
 						continue;
 					}
 
-					$is_correct = ( strtolower( $user_answers[ $i ] ) === strtolower( $correct_answer['text'] ) ) ? 'correct' : 'incorrect';
+					$user_answer_text    = trim( str_replace( array( '\\(', '\\)' ), '', (string) $user_answers[ $i ] ) );
+					$correct_answer_text = trim( str_replace( array( '\\(', '\\)' ), '', (string) $correct_answer['text'] ) );
+					$is_correct          = ( strtolower( $user_answer_text ) === strtolower( $correct_answer_text ) ) ? 'correct' : 'incorrect';
 					?>
 					<div class="stm_lms_question_item_match__answer <?php echo esc_attr( $is_correct ); ?>">
 						<?php if ( ! empty( $user_answers[ $i ] ) ) : ?>
@@ -77,13 +73,9 @@ if ( ! empty( $user_answer['user_answer'] ) ) {
 								</div>
 							</div>
 						<?php endif; ?>
-
 					</div>
 				<?php endforeach; ?>
 			</div>
 		</div>
-
 	</div>
-
-
 </div>

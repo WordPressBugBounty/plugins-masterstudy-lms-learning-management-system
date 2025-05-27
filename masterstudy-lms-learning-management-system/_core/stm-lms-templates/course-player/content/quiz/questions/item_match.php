@@ -22,8 +22,18 @@ if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 	foreach ( $data['answers'] as $i => $answer ) {
 		$user_answer = $user_answers[ $i ] ?? null;
 		if ( $show_answers ) {
-			$data['correctly']    = isset( $user_answer['text'] ) && trim( $user_answer['text'] ) === trim( $answer['text'] );
-			$data['wrongly']      = ! isset( $user_answer['text'] ) || trim( $user_answer['text'] ) !== trim( $answer['text'] );
+			$correct_answer_text = trim( str_replace( array( '\\(', '\\)' ), '', (string) $answer['text'] ) );
+			$user_answer_text    = '';
+
+			if ( is_array( $user_answer ) && isset( $user_answer['text'] ) ) {
+				$user_answer_text = trim( str_replace( array( '\\(', '\\)' ), '', (string) $user_answer['text'] ) );
+			} elseif ( ! is_array( $user_answer ) ) {
+				$user_answer_text = trim( str_replace( array( '\\(', '\\)' ), '', (string) $user_answer ) );
+			}
+
+			$data['correctly'] = ! empty( $user_answer ) && $user_answer_text === $correct_answer_text;
+			$data['wrongly']   = empty( $user_answer ) || $user_answer_text !== $correct_answer_text;
+
 			$data['answer_class'] = implode(
 				' ',
 				array_filter(
@@ -60,7 +70,7 @@ if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 										<?php } ?>
 									</div>
 									<div class="masterstudy-course-player-item-match__answer-item-content">
-										<?php echo esc_html( trim( $user_answer['text'] ?? '' ) ); ?>
+										<?php echo wp_kses_post( trim( is_array( $user_answer ) ? $user_answer['text'] : $user_answer ) ); ?>
 									</div>
 									<?php if ( ! empty( $user_answer['explain'] ) && $show_answers && ! empty( $last_quiz ) ) { ?>
 										<div class="masterstudy-course-player-item-match__answer-item-hint">

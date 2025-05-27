@@ -1218,6 +1218,8 @@ function ms_plugin_edit_course_builder_url( $post_type ) {
 			return ms_plugin_user_account_url( 'edit-lesson' );
 		case 'stm-quizzes':
 			return ms_plugin_user_account_url( 'edit-quiz' );
+		case 'stm-questions':
+			return ms_plugin_user_account_url( 'edit-question' );
 		case 'stm-assignments':
 			return ms_plugin_user_account_url( 'edit-assignment' );
 		case 'stm-google-meets':

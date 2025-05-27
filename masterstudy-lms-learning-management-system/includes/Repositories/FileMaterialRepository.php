@@ -4,8 +4,9 @@ namespace MasterStudy\Lms\Repositories;
 
 final class FileMaterialRepository {
 	public const FILE_MATERIAL_TYPES = array(
-		'stm-courses' => 'course',
-		'stm-lessons' => 'lesson',
+		'stm-courses'     => 'course',
+		'stm-lessons'     => 'lesson',
+		'stm-assignments' => 'assignment',
 	);
 
 	/**

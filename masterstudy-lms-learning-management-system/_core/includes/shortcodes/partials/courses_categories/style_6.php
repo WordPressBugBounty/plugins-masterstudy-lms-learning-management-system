@@ -7,7 +7,7 @@ if ( empty( $taxonomy ) ) {
 if ( ! empty( $taxonomy ) ) :
 	if ( 'get_default' === $taxonomy ) {
 		$terms     = array();
-		$terms_all = stm_lms_get_terms_with_meta( 'course_icon' );
+		$terms_all = stm_lms_get_lms_terms_with_meta( 'course_icon' );
 		if ( ! empty( $terms_all ) ) {
 			foreach ( $terms_all as $term ) {
 				$meta_value = get_term_meta( $term->term_id, 'course_icon', true );

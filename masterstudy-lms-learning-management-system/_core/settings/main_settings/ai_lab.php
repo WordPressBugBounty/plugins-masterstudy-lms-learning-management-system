@@ -72,7 +72,7 @@ function stm_lms_settings_ai_lab_section() {
 		$ai_settings_fields = array(
 			'name'   => esc_html__( 'AI Lab', 'masterstudy-lms-learning-management-system' ),
 			'label'  => esc_html__( 'AI Lab Settings', 'masterstudy-lms-learning-management-system' ),
-			'icon'   => 'masterstudy-ai-icon',
+			'icon'   => 'fas fa-wand-magic-sparkles',
 			'fields' => array(
 				'pro_banner_ai_lab' => array(
 					'type'        => 'pro_banner',

@@ -12,8 +12,7 @@ do_action( 'stm_lms_template_main' );
 
 stm_lms_register_style( 'quiz-attempts' );
 
-$repository  = new EnrolledQuizzesRepository();
-$quiz_data   = $repository->get_attempt( compact( 'quiz_id', 'course_id', 'attempt_id' ) );
+$quiz_data   = ( new EnrolledQuizzesRepository() )->get_attempt( compact( 'quiz_id', 'course_id', 'attempt_id' ) );
 $is_answered = ! empty( $quiz_data['last_answers'] );
 do_action( 'masterstudy_lms_course_player_register_assets' );
 ?>

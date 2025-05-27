@@ -2,34 +2,39 @@
 # This file is distributed under the same license as the MasterStudy LMS WordPress Plugin – for Online Courses and Education plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.5.32\n"
+"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.6.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/masterstudy-lms-learning-management-system\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-05-07T09:44:57+00:00\n"
+"POT-Creation-Date: 2025-05-27T05:39:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.11.0\n"
 
 #. Plugin Name of the plugin
+#: masterstudy-lms-learning-management-system.php
 msgid "MasterStudy LMS WordPress Plugin – for Online Courses and Education"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: masterstudy-lms-learning-management-system.php
 msgid "http://masterstudy.stylemixthemes.com/lms-plugin/"
 msgstr ""
 
 #. Description of the plugin
+#: masterstudy-lms-learning-management-system.php
 msgid "Create brilliant lessons with videos, graphs, images, slides and any other attachments thanks to flexible and user-friendly lesson management tool powered by WYSIWYG editor."
 msgstr ""
 
 #. Author of the plugin
+#: masterstudy-lms-learning-management-system.php
 msgid "StylemixThemes"
 msgstr ""
 
 #. Author URI of the plugin
+#: masterstudy-lms-learning-management-system.php
 msgid "https://stylemixthemes.com/"
 msgstr ""
 
@@ -133,7 +138,7 @@ msgid "Revenue"
 msgstr ""
 
 #: includes/actions.php:155
-#: _core/lms/classes/instructors.php:210
+#: _core/lms/classes/instructors.php:214
 #: _core/stm-lms-templates/account/private/instructor_parts/grid.php:104
 msgid "Analytics"
 msgstr ""
@@ -163,64 +168,64 @@ msgstr ""
 msgid "You do not have a permission to delete media files"
 msgstr ""
 
-#: includes/Plugin/Addons.php:79
+#: includes/Plugin/Addons.php:81
 #: _core/lms/helpers.php:854
 #: _core/settings/main_settings/certificates.php:61
 msgid "Certificate Builder"
 msgstr ""
 
-#: includes/Plugin/Addons.php:82
+#: includes/Plugin/Addons.php:84
 #: _core/lms/helpers.php:857
 msgid "Сreate and design your own certificates to award them to students after the course completion."
 msgstr ""
 
-#: includes/Plugin/Addons.php:87
+#: includes/Plugin/Addons.php:89
 #: _core/lms/helpers.php:836
 msgid "Email Manager"
 msgstr ""
 
-#: includes/Plugin/Addons.php:90
-#: includes/Plugin/Addons.php:97
+#: includes/Plugin/Addons.php:92
+#: includes/Plugin/Addons.php:99
 #: _core/lms/helpers.php:839
 #: _core/lms/helpers.php:847
 msgid "Adjust your email templates for different types of notifications and make your messages look good and clear."
 msgstr ""
 
-#: includes/Plugin/Addons.php:95
+#: includes/Plugin/Addons.php:97
 #: _core/lms/helpers.php:844
 msgid "Email Branding"
 msgstr ""
 
-#: includes/Plugin/Addons.php:103
+#: includes/Plugin/Addons.php:105
 #: _core/lms/helpers.php:862
 msgid "LMS Forms Editor"
 msgstr ""
 
-#: includes/Plugin/Addons.php:106
+#: includes/Plugin/Addons.php:108
 msgid "Customize the forms in your LMS. Change fields in menus on contact forms, profiles, and registration/login pages."
 msgstr ""
 
-#: includes/Plugin/Addons.php:111
+#: includes/Plugin/Addons.php:113
 #: _core/lms/helpers.php:820
 msgid "Zoom Conference"
 msgstr ""
 
-#: includes/Plugin/Addons.php:114
+#: includes/Plugin/Addons.php:116
 #: _core/lms/helpers.php:823
 msgid "Enjoy the new type of lesson — connect Zoom Video Conferencing with your website and interact with your students in real-time."
 msgstr ""
 
-#: includes/Plugin/Addons.php:119
+#: includes/Plugin/Addons.php:121
 #: _core/lms/helpers.php:878
 msgid "Google Meet"
 msgstr ""
 
-#: includes/Plugin/Addons.php:122
+#: includes/Plugin/Addons.php:124
 #: _core/lms/helpers.php:881
 msgid "Connect MasterStudy LMS with Google Meet to host live online classes. Students can attend live classes right from the lesson page."
 msgstr ""
 
-#: includes/Plugin/Addons.php:128
+#: includes/Plugin/Addons.php:130
 #: _core/lms/helpers.php:781
 #: _core/stm-lms-templates/components/course/details.php:50
 #: _core/stm-lms-templates/components/statistics-block.php:19
@@ -228,195 +233,195 @@ msgstr ""
 msgid "Assignments"
 msgstr ""
 
-#: includes/Plugin/Addons.php:131
+#: includes/Plugin/Addons.php:133
 msgid "Use assignments to check your students' knowledge. Create interesting tasks for them and ask them to upload essays."
 msgstr ""
 
-#: includes/Plugin/Addons.php:136
+#: includes/Plugin/Addons.php:138
 #: _core/lms/helpers.php:751
 #: assets/course-builder/js/main.js:1
 msgid "Drip Content"
 msgstr ""
 
-#: includes/Plugin/Addons.php:139
+#: includes/Plugin/Addons.php:141
 msgid "Use this tool to provide a proper flow of the education process. Regulate the order of the lessons by date or in your own sequence."
 msgstr ""
 
-#: includes/Plugin/Addons.php:144
+#: includes/Plugin/Addons.php:146
 #: _core/lms/helpers.php:773
 msgid "Group Courses"
 msgstr ""
 
-#: includes/Plugin/Addons.php:147
+#: includes/Plugin/Addons.php:149
 msgid "Sell online courses to groups of students. Whether they are an organization, team, or any group interested, offer your courses."
 msgstr ""
 
-#: includes/Plugin/Addons.php:152
+#: includes/Plugin/Addons.php:154
 #: _core/lms/helpers.php:766
 msgid "Live Streaming"
 msgstr ""
 
-#: includes/Plugin/Addons.php:154
+#: includes/Plugin/Addons.php:156
 msgid "Have live lessons and interact with your students in real time. Answer their questions and give feedback immediately."
 msgstr ""
 
-#: includes/Plugin/Addons.php:159
+#: includes/Plugin/Addons.php:161
 #: _core/lms/helpers.php:797
 msgid "Course Bundle"
 msgstr ""
 
-#: includes/Plugin/Addons.php:162
+#: includes/Plugin/Addons.php:164
 #: _core/lms/helpers.php:800
 msgid "Add similar or related courses to the one bundle and sell them as a package at a discount price."
 msgstr ""
 
-#: includes/Plugin/Addons.php:167
+#: includes/Plugin/Addons.php:169
 msgid "Point System"
 msgstr ""
 
-#: includes/Plugin/Addons.php:170
+#: includes/Plugin/Addons.php:172
 #: _core/lms/helpers.php:792
 msgid "Motivate and engage students by awarding them points for their progress and activity on the website."
 msgstr ""
 
-#: includes/Plugin/Addons.php:175
+#: includes/Plugin/Addons.php:177
 #: _core/lms/helpers.php:870
 msgid "Media File Manager"
 msgstr ""
 
-#: includes/Plugin/Addons.php:177
+#: includes/Plugin/Addons.php:179
 #: _core/lms/helpers.php:872
 msgid "Manage, keep and load files of various formats while creating e-learning content in the front-end."
 msgstr ""
 
-#: includes/Plugin/Addons.php:183
+#: includes/Plugin/Addons.php:185
 #: _core/lms/helpers.php:828
 msgid "Scorm"
 msgstr ""
 
-#: includes/Plugin/Addons.php:186
+#: includes/Plugin/Addons.php:188
 #: _core/lms/helpers.php:831
 msgid "Easily upload to your LMS any course that was created with the help of different content authoring tools."
 msgstr ""
 
-#: includes/Plugin/Addons.php:191
+#: includes/Plugin/Addons.php:193
 #: _core/lms/helpers.php:743
 msgid "Trial Courses"
 msgstr ""
 
-#: includes/Plugin/Addons.php:194
+#: includes/Plugin/Addons.php:196
 msgid "Let your potential students try out your online courses for free. Give trial access to specific lessons within your courses and attract more learners."
 msgstr ""
 
-#: includes/Plugin/Addons.php:199
+#: includes/Plugin/Addons.php:201
 #: _core/lms/helpers.php:735
 msgid "Statistics and Payout"
 msgstr ""
 
-#: includes/Plugin/Addons.php:202
+#: includes/Plugin/Addons.php:204
 #: _core/lms/helpers.php:738
 msgid "Manage all payments and track affiliated statistics for the sold courses, such as Total Profit, Total Payments, and manage authors fee."
 msgstr ""
 
-#: includes/Plugin/Addons.php:207
+#: includes/Plugin/Addons.php:209
 #: _core/lms/helpers.php:727
 msgid "Online Testing"
 msgstr ""
 
-#: includes/Plugin/Addons.php:210
+#: includes/Plugin/Addons.php:212
 msgid "Easily put any quizzes on any page of your website, not just confined to courses. This feature-rich addon lets both your students and site visitors take these quizzes."
 msgstr ""
 
-#: includes/Plugin/Addons.php:215
+#: includes/Plugin/Addons.php:217
 #: _core/lms/helpers.php:805
 msgid "Multi-instructors"
 msgstr ""
 
-#: includes/Plugin/Addons.php:217
+#: includes/Plugin/Addons.php:219
 #: _core/lms/helpers.php:807
 msgid "Use the help of a colleague and assign one more instructor to the same course to share responsibilities."
 msgstr ""
 
-#: includes/Plugin/Addons.php:222
+#: includes/Plugin/Addons.php:224
 #: _core/lms/helpers.php:812
 msgid "Google Classrooms"
 msgstr ""
 
-#: includes/Plugin/Addons.php:225
+#: includes/Plugin/Addons.php:227
 #: _core/lms/helpers.php:815
 msgid "Ease the process of structuring the workflow by connecting your Google Classroom account with your website and import the needed classes."
 msgstr ""
 
-#: includes/Plugin/Addons.php:230
+#: includes/Plugin/Addons.php:232
 #: _core/lms/helpers.php:712
 msgid "Udemy Importer"
 msgstr ""
 
-#: includes/Plugin/Addons.php:233
+#: includes/Plugin/Addons.php:235
 msgid "Import courses from Udemy and display them on your website. Enrich your course catalog and earn affiliate commissions."
 msgstr ""
 
-#: includes/Plugin/Addons.php:238
+#: includes/Plugin/Addons.php:240
 #: _core/lms/helpers.php:720
 #: assets/course-builder/js/main.js:1
 msgid "Prerequisites"
 msgstr ""
 
-#: includes/Plugin/Addons.php:240
+#: includes/Plugin/Addons.php:242
 msgid "Set the requirements for students. So they will need to complete certain courses before they can enroll in higher-level courses."
 msgstr ""
 
-#: includes/Plugin/Addons.php:245
+#: includes/Plugin/Addons.php:247
 #: _core/lms/helpers.php:759
 msgid "The Gradebook"
 msgstr ""
 
-#: includes/Plugin/Addons.php:247
+#: includes/Plugin/Addons.php:249
 msgid "Track your student's progress. Watch what students have completed, their progress and how well they're doing."
 msgstr ""
 
-#: includes/Plugin/Addons.php:252
+#: includes/Plugin/Addons.php:254
 #: assets/course-builder/js/main.js:1
 msgid "Upcoming Course Status"
 msgstr ""
 
-#: includes/Plugin/Addons.php:255
+#: includes/Plugin/Addons.php:257
 msgid "Create and promote courses that are not yet available for enrollment. This addon lets you give a preview of the upcoming courses and a countdown to the launch date."
 msgstr ""
 
-#: includes/Plugin/Addons.php:261
+#: includes/Plugin/Addons.php:263
 #: _core/settings/main_settings/quiz.php:60
 #: _core/settings/main_settings/quiz.php:73
 msgid "Question Media"
 msgstr ""
 
-#: includes/Plugin/Addons.php:263
+#: includes/Plugin/Addons.php:265
 msgid "Quizzes are more interactive and engaging with this addon. Let admins and instructors create quiz questions while adding videos, audio, and images."
 msgstr ""
 
-#: includes/Plugin/Addons.php:269
+#: includes/Plugin/Addons.php:271
 #: _core/settings/main_settings/profiles.php:6
 #: _core/settings/main_settings/profiles.php:461
 #: _core/settings/main_settings/profiles.php:466
 msgid "Social Login"
 msgstr ""
 
-#: includes/Plugin/Addons.php:272
+#: includes/Plugin/Addons.php:274
 msgid "Let your users log in super easily using their Google or Facebook accounts with this addon. No more struggling with passwords – just one click and they're in!"
 msgstr ""
 
-#: includes/Plugin/Addons.php:278
+#: includes/Plugin/Addons.php:280
 msgid "Audio Lesson"
 msgstr ""
 
-#: includes/Plugin/Addons.php:281
+#: includes/Plugin/Addons.php:283
 #: _core/settings/main_settings/course.php:249
 msgid "Now you can share audio lessons. Upload audio files or add from Spotify or SoundCloud. Mix them with text, video and quizzes in your courses."
 msgstr ""
 
-#: includes/Plugin/Addons.php:287
+#: includes/Plugin/Addons.php:289
 #: _core/includes/elementor/widgets/course/ms_lms_course_grades.php:23
-#: _core/lms/classes/instructors.php:217
+#: _core/lms/classes/instructors.php:221
 #: _core/settings/main_settings/grades.php:58
 #: _core/settings/main_settings/grades.php:125
 #: _core/settings/main_settings/grades.php:131
@@ -425,8 +430,20 @@ msgstr ""
 msgid "Grades"
 msgstr ""
 
-#: includes/Plugin/Addons.php:290
+#: includes/Plugin/Addons.php:292
 msgid "Grade assignments and quizzes, and give each student personalized feedback. View all scores in one place to see how your students are doing throughout the course."
+msgstr ""
+
+#: includes/Plugin/Addons.php:298
+#: _core/settings/main_settings/ai_lab.php:9
+#: _core/settings/main_settings/ai_lab.php:73
+#: _core/settings/main_settings/ai_lab.php:79
+#: _core/settings/main_settings/ai_lab.php:85
+msgid "AI Lab"
+msgstr ""
+
+#: includes/Plugin/Addons.php:301
+msgid "Instantly generate complete lessons and quizzes with AI features. Let AI create structured, ready-to-use content by describing your topic."
 msgstr ""
 
 #: includes/Plugin/Taxonomy.php:67
@@ -645,17 +662,18 @@ msgstr ""
 msgid "Course Deleted"
 msgstr ""
 
-#: includes/Repositories/EnrolledQuizzesRepository.php:77
+#. translators: %d count attempts
+#: includes/Repositories/EnrolledQuizzesRepository.php:78
 msgid "%d attempts"
 msgstr ""
 
-#: includes/Repositories/EnrolledQuizzesRepository.php:131
-#: _core/lms/classes/instructors.php:675
-#: _core/lms/classes/instructors.php:676
-#: _core/lms/classes/instructors.php:929
-#: _core/lms/classes/instructors.php:931
-#: _core/lms/classes/instructors.php:975
-#: _core/lms/classes/instructors.php:976
+#: includes/Repositories/EnrolledQuizzesRepository.php:132
+#: _core/lms/classes/instructors.php:679
+#: _core/lms/classes/instructors.php:680
+#: _core/lms/classes/instructors.php:935
+#: _core/lms/classes/instructors.php:937
+#: _core/lms/classes/instructors.php:984
+#: _core/lms/classes/instructors.php:985
 #: _core/stm-lms-templates/checkout/thankyou.php:85
 #: _core/stm-lms-templates/stm-lms-user-pmp.php:200
 msgid "N/A"
@@ -663,31 +681,32 @@ msgstr ""
 
 #. translators: %1$d count answers , %2$d count questions
 #. translators: %d: number
-#: includes/Repositories/EnrolledQuizzesRepository.php:221
+#: includes/Repositories/EnrolledQuizzesRepository.php:224
 #: _core/stm-lms-templates/course-player/content/quiz/result.php:118
 msgid "<strong>%2$d</strong> out of <strong>%1$d</strong> questions answered correctly"
 msgstr ""
 
 #. translators: %1$d count answers , %2$d count questions
 #. translators: %d: number
-#: includes/Repositories/EnrolledQuizzesRepository.php:223
+#: includes/Repositories/EnrolledQuizzesRepository.php:226
 #: _core/stm-lms-templates/course-player/content/quiz/result.php:121
 msgid "<strong>%1$d</strong> out of <strong>%2$d</strong> questions answered correctly"
 msgstr ""
 
+#. translators: %s: count of questions
 #. translators: %s: Count of Questions
-#: includes/Repositories/EnrolledQuizzesRepository.php:265
+#: includes/Repositories/EnrolledQuizzesRepository.php:271
 #: _core/includes/user_manager/UserManager.CourseUser.php:279
 msgid "%s question"
 msgid_plural "%s questions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/Repositories/EnrolledQuizzesRepository.php:278
+#: includes/Repositories/EnrolledQuizzesRepository.php:284
 msgid "Passed"
 msgstr ""
 
-#: includes/Repositories/EnrolledQuizzesRepository.php:279
+#: includes/Repositories/EnrolledQuizzesRepository.php:285
 #: _core/lms/classes/order.php:408
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:170
 msgid "Failed"
@@ -1167,7 +1186,7 @@ msgstr ""
 #: _core/includes/elementor/helpers/add-controls-class.php:52
 #: _core/includes/elementor/widgets/course/ms_lms_course_coming_soon.php:98
 #: _core/includes/elementor/widgets/course/ms_lms_course_curriculum.php:79
-#: _core/includes/elementor/widgets/courses/content/carousel.php:63
+#: _core/includes/elementor/widgets/courses/content/carousel.php:74
 #: _core/includes/elementor/widgets/deprecated/stm_lms_courses_grid.php:112
 #: _core/includes/elementor/widgets/deprecated/stm_lms_courses_grid.php:140
 #: _core/includes/elementor/widgets/deprecated/stm_lms_courses_grid.php:155
@@ -1190,7 +1209,7 @@ msgstr ""
 #: _core/includes/elementor/helpers/add-controls-class.php:39
 #: _core/includes/elementor/widgets/course/ms_lms_course_coming_soon.php:99
 #: _core/includes/elementor/widgets/course/ms_lms_course_curriculum.php:80
-#: _core/includes/elementor/widgets/courses/content/carousel.php:64
+#: _core/includes/elementor/widgets/courses/content/carousel.php:75
 #: _core/includes/elementor/widgets/deprecated/stm_lms_courses_grid.php:111
 #: _core/includes/elementor/widgets/deprecated/stm_lms_courses_grid.php:139
 #: _core/includes/elementor/widgets/deprecated/stm_lms_courses_grid.php:154
@@ -1308,7 +1327,7 @@ msgstr ""
 msgid "Not now"
 msgstr ""
 
-#: _core/includes/elementor/helpers/ajax_actions.php:311
+#: _core/includes/elementor/helpers/ajax_actions.php:323
 msgid "No posts found"
 msgstr ""
 
@@ -1366,7 +1385,7 @@ msgstr ""
 
 #: _core/includes/elementor/helpers/unlock-banner.php:29
 #: _core/includes/elementor/StmLmsElementor.php:88
-#: _core/settings/main_settings.php:112
+#: _core/settings/main_settings.php:124
 #: _core/stm-lms-templates/analytics-preview.php:33
 #: _core/stm-lms-templates/journey/unlock-banner-component.php:101
 #: assets/course-builder/js/main.js:1
@@ -1494,9 +1513,9 @@ msgstr ""
 #: _core/includes/elementor/widgets/course/ms_lms_course_title.php:52
 #: _core/includes/elementor/widgets/course/ms_lms_course_wishlist.php:52
 #: _core/includes/post_type/posts.php:65
-#: _core/lms/classes/instructors.php:824
+#: _core/lms/classes/instructors.php:830
 #: _core/lms/classes/models/admin/StmStatisticsListTable.php:435
-#: _core/lms/classes/page_routes.php:342
+#: _core/lms/classes/page_routes.php:355
 #: _core/lms/views/payout/meta-box-payout-data.php:143
 #: _core/settings/main_settings/course.php:425
 #: _core/stm-lms-templates/account/private/parts/certificate-list.php:46
@@ -3475,7 +3494,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:433
 #: _core/includes/post_type/posts.php:177
 #: _core/lms/classes/course.php:725
-#: _core/lms/classes/instructors.php:589
+#: _core/lms/classes/instructors.php:593
 #: _core/settings/main_settings/course.php:30
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:73
 #: _core/stm-lms-templates/components/course/tabs.php:23
@@ -3628,7 +3647,7 @@ msgstr ""
 #: _core/lms/classes/models/StmLmsPayout.php:146
 #: _core/lms/classes/order.php:405
 #: _core/lms/views/payout/meta-box-payout-data.php:63
-#: _core/settings/manage_users/main.php:68
+#: _core/settings/manage_users/main.php:97
 #: _core/stm-lms-templates/courses/advanced_filters/filters/status.php:17
 #: _core/stm-lms-templates/pmpro/pages/invoice.php:33
 #: _core/stm-lms-templates/stm-lms-user-pmp.php:170
@@ -3646,7 +3665,7 @@ msgid "Thumbnail Layout"
 msgstr ""
 
 #: _core/includes/elementor/widgets/course/ms_lms_course_wishlist.php:22
-#: _core/lms/classes/page_routes.php:372
+#: _core/lms/classes/page_routes.php:385
 #: _core/lms/classes/user_menu.php:282
 #: _core/settings/main_settings/routes.php:56
 #: _core/settings/page_generator/api/get.php:6
@@ -4123,10 +4142,14 @@ msgid "Carousel"
 msgstr ""
 
 #: _core/includes/elementor/widgets/courses/content/carousel.php:15
+msgid "Show Courses From Categories"
+msgstr ""
+
+#: _core/includes/elementor/widgets/courses/content/carousel.php:26
 msgid "Slides To Show"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:38
+#: _core/includes/elementor/widgets/courses/content/carousel.php:49
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:313
 #: _core/includes/elementor/widgets/slider/content/options.php:30
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:120
@@ -4135,8 +4158,8 @@ msgstr ""
 msgid "Autoplay"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:40
 #: _core/includes/elementor/widgets/courses/content/carousel.php:51
+#: _core/includes/elementor/widgets/courses/content/carousel.php:62
 #: _core/includes/elementor/widgets/courses/content/sorting.php:70
 #: _core/includes/elementor/widgets/ms_lms_blog.php:106
 #: _core/includes/elementor/widgets/ms_lms_courses_searchbox.php:102
@@ -4151,8 +4174,8 @@ msgstr ""
 msgid "On"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:41
 #: _core/includes/elementor/widgets/courses/content/carousel.php:52
+#: _core/includes/elementor/widgets/courses/content/carousel.php:63
 #: _core/includes/elementor/widgets/courses/content/sorting.php:71
 #: _core/includes/elementor/widgets/ms_lms_blog.php:107
 #: _core/includes/elementor/widgets/ms_lms_courses_searchbox.php:103
@@ -4167,7 +4190,7 @@ msgstr ""
 msgid "Off"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:49
+#: _core/includes/elementor/widgets/courses/content/carousel.php:60
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:324
 #: _core/includes/elementor/widgets/slider/content/options.php:18
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:132
@@ -4176,14 +4199,14 @@ msgstr ""
 msgid "Loop"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:61
+#: _core/includes/elementor/widgets/courses/content/carousel.php:72
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:336
 #: _core/includes/elementor/widgets/slider/content/options.php:76
 #: assets/gutenberg/blocks/instructors-carousel/index.js:1
 msgid "Navigation"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:72
+#: _core/includes/elementor/widgets/courses/content/carousel.php:83
 #: _core/includes/elementor/widgets/courses/styles/navigation.php:11
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:123
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:1485
@@ -4192,31 +4215,31 @@ msgstr ""
 msgid "Nav Arrows"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:76
+#: _core/includes/elementor/widgets/courses/content/carousel.php:87
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:127
 #: _core/includes/elementor/widgets/slider/content/options.php:91
 msgid "Circle"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:77
+#: _core/includes/elementor/widgets/courses/content/carousel.php:88
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:128
 #: _core/includes/elementor/widgets/slider/content/options.php:92
 msgid "Square"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:78
+#: _core/includes/elementor/widgets/courses/content/carousel.php:89
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:129
 #: _core/includes/elementor/widgets/slider/content/options.php:93
 msgid "Filled Background"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:86
+#: _core/includes/elementor/widgets/courses/content/carousel.php:97
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:375
 #: _core/includes/elementor/widgets/slider/content/options.php:101
 msgid "Nav Arrows Position"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:90
+#: _core/includes/elementor/widgets/courses/content/carousel.php:101
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:381
 #: _core/includes/elementor/widgets/slider/content/options.php:106
 #: _core/settings/main_settings/profiles.php:335
@@ -4246,7 +4269,7 @@ msgstr ""
 msgid "Bottom"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:91
+#: _core/includes/elementor/widgets/courses/content/carousel.php:102
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:379
 #: _core/settings/main_settings/profiles.php:334
 #: assets/gutenberg/blocks/adaptive-box/index.js:1
@@ -4275,7 +4298,7 @@ msgstr ""
 msgid "Top"
 msgstr ""
 
-#: _core/includes/elementor/widgets/courses/content/carousel.php:92
+#: _core/includes/elementor/widgets/courses/content/carousel.php:103
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:380
 #: _core/includes/elementor/widgets/slider/content/options.php:105
 msgid "Side"
@@ -5341,6 +5364,7 @@ msgstr ""
 #: _core/includes/visual_composer/modules/stm_courses_searchbox.php:20
 #: _core/includes/visual_composer/modules/stm_lms_courses_categories.php:42
 #: _core/includes/visual_composer/modules/stm_lms_instructors_carousel.php:67
+#: assets/course-builder/js/main.js:1
 #: assets/gutenberg/blocks/course-carousel/index.js:1
 #: assets/gutenberg/blocks/course-categories/container/index.js:1
 #: assets/gutenberg/blocks/course-search/container/index.js:1
@@ -6310,8 +6334,8 @@ msgstr ""
 
 #: _core/includes/elementor/widgets/ms_lms_mailchimp.php:308
 #: _core/lms/classes/user.php:1558
-#: _core/settings/manage_users/main.php:44
-#: _core/settings/manage_users/main.php:69
+#: _core/settings/manage_users/main.php:73
+#: _core/settings/manage_users/main.php:98
 #: _core/stm-lms-templates/account/public/instructor_parts/fast_message.php:23
 msgid "Message"
 msgstr ""
@@ -6775,8 +6799,6 @@ msgid "Quizzes"
 msgstr ""
 
 #: _core/includes/post_type/posts.php:153
-#: _core/settings/answers/components/answers.php:217
-#: _core/settings/answers/components/answers.php:274
 #: _core/stm-lms-templates/quiz/style/pagination.php:23
 #: assets/course-builder/js/main.js:1
 msgid "Question"
@@ -6792,8 +6814,8 @@ msgid "Questions"
 msgstr ""
 
 #: _core/includes/post_type/posts.php:176
-#: _core/lms/classes/instructors.php:525
-#: _core/lms/classes/instructors.php:589
+#: _core/lms/classes/instructors.php:529
+#: _core/lms/classes/instructors.php:593
 msgid "Review"
 msgid_plural "Reviews"
 msgstr[0] ""
@@ -6802,7 +6824,7 @@ msgstr[1] ""
 #: _core/includes/post_type/posts.php:187
 #: _core/lms/classes/models/admin/StmStatisticsListTable.php:18
 #: _core/lms/classes/order.php:544
-#: _core/settings/lms_metaboxes.php:104
+#: _core/settings/lms_metaboxes.php:59
 msgid "Order"
 msgstr ""
 
@@ -7102,7 +7124,7 @@ msgid "Something important will be here soon"
 msgstr ""
 
 #. translators: %s: Plugin Version
-#: _core/libraries/announcement/main.php:104
+#: _core/libraries/announcement/main.php:115
 msgid "Version: %s"
 msgstr ""
 
@@ -7252,6 +7274,7 @@ msgid "The legacy course creation process will be switched to the new Course Bui
 msgstr ""
 
 #: _core/libraries/compatibility/notices.php:127
+#: _core/libraries/support-page/config/default.php:134
 #: _core/settings/main_settings/profiles.php:357
 #: _core/settings/main_settings/profiles.php:374
 #: _core/settings/main_settings/profiles.php:414
@@ -7470,18 +7493,232 @@ msgstr ""
 msgid "Allow"
 msgstr ""
 
-#: _core/lms/admin_helpers.php:234
+#: _core/libraries/support-page-integration.php:24
+msgid "MasterStudy Help Center"
+msgstr ""
+
+#: _core/libraries/support-page-integration.php:68
+msgid "Get MasterStudy and Enjoy PRO Features"
+msgstr ""
+
+#: _core/libraries/support-page-integration.php:69
+msgid "Get MasterStudy and Enjoy PRO PLUS Features"
+msgstr ""
+
+#: _core/libraries/support-page-integration.php:70
+msgid "Upgrade now and access a world of pro features, advanced addons, and limitless possibilities for your journey. Turbocharge your courses and make your e-learning platform truly outstanding!"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:27
+msgid "Learn More"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:42
+#: _core/libraries/support-page/config/default.php:210
+msgid "Find instant help with all resources in one place."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:48
+msgid "Documentation"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:49
+msgid "Explore in-depth guides and resources to help you navigate and maximize our products."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:52
+msgid "Read Docs"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:60
+msgid "Have a problem?"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:61
+msgid "Submit a support ticket and we’ll assist you as soon as possible."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:64
+msgid "Create Ticket"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:69
+msgid "Only for pro users"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:73
+msgid "Video Guides"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:74
+msgid "Watch step-by-step tutorials on how to use features and get the best results."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:77
+msgid "Watch Guides"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:85
+msgid "Feature Requests"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:86
+msgid "Submit your ideas, vote on what matters most, and help us shape future updates."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:89
+msgid "Request Feature"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:97
+msgid "Community"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:98
+msgid "Connect with fellow users, ask questions, and share experiences in a collaborative space."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:101
+msgid "Join Community"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:110
+#: _core/stm-lms-templates/wizard/views/steps/finish.php:80
+msgid "Customization"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:111
+msgid "Get custom changes and improvements done to suit your website’s needs."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:114
+msgid "Get Quotes"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:127
+msgid "Get PRO"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:128
+msgid "Get PRO PLUS"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:145
+msgid "Expert Setup & Optimization"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:146
+msgid "Get expert help to get started, customize, and improve your website for the best results."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:148
+msgid "Get a custom setup that’s perfectly tailored to your specific needs."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:149
+msgid "Enjoy personalized assistance to ensure smooth operation and support."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:150
+msgid "Optimize performance by boosting your platform’s speed and user experience."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:151
+msgid "Make your platform stand out with unique features and design changes."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:155
+msgid "Start a Project"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:166
+msgid "Affiliate"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:167
+msgid "Join our affiliate program and earn 30% for each sale you make. Start promoting and earning today!"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:170
+msgid "Become an Affiliate"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:179
+msgid "Onboarding"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:180
+msgid "Book a quick call with us. We’ll answer your questions and guide you in the right direction."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:183
+msgid "Book a Call"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:193
+msgid "Leave Review"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:194
+msgid "We’d love to hear your experience with our tools and services"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:197
+msgid "Write Review"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:209
+msgid "From Our Blog"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:213
+msgid "More Posts"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:224
+msgid "<span>Get all the latest news & updates</span> delivered straight to your inbox."
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:225
+msgid "Enter your email here"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:226
+msgid "I agree with storage and handling of my data by this website"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:228
+msgid "Thank you, your sign-up request was successful!"
+msgstr ""
+
+#: _core/libraries/support-page/config/default.php:229
+msgid "Please check your email inbox to confirm."
+msgstr ""
+
+#: _core/libraries/support-page/templates/main.php:167
+msgid "Submit Review"
+msgstr ""
+
+#: _core/libraries/support-page/templates/main.php:174
+msgid "Indicate how many stars you want to give"
+msgstr ""
+
+#: _core/libraries/support-page/templates/main.php:178
+msgid "Thanks for review!"
+msgstr ""
+
+#: _core/lms/admin_helpers.php:245
 msgid "You can make changes within Course Builder only if you set up the User Account page"
 msgstr ""
 
-#: _core/lms/admin_helpers.php:236
+#: _core/lms/admin_helpers.php:247
 msgid "Go to settings"
 msgstr ""
 
-#: _core/lms/admin_helpers.php:243
-#: _core/lms/admin_helpers.php:266
-#: _core/lms/admin_helpers.php:267
-#: _core/lms/helpers.php:1502
+#: _core/lms/admin_helpers.php:254
+#: _core/lms/admin_helpers.php:277
+#: _core/lms/admin_helpers.php:278
+#: _core/lms/helpers.php:1504
 msgid "Edit with Course Builder"
 msgstr ""
 
@@ -7846,142 +8083,142 @@ msgstr ""
 msgid "Bold with Full Width Cover"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:60
+#: _core/lms/classes/instructors.php:64
 msgid "Course published"
 msgstr ""
 
 #. translators: %1$s Course Title, %2$s User Login
-#: _core/lms/classes/instructors.php:63
+#: _core/lms/classes/instructors.php:67
 msgid "Your course - %1$s was approved, and is now live on the website"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:153
+#: _core/lms/classes/instructors.php:157
 msgid "Course Students"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:155
+#: _core/lms/classes/instructors.php:159
 msgid "Course Author"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:163
+#: _core/lms/classes/instructors.php:167
 msgid "Lesson Author"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:171
+#: _core/lms/classes/instructors.php:175
 msgid "Quiz Author"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:199
+#: _core/lms/classes/instructors.php:203
 msgid "Change Author"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:206
+#: _core/lms/classes/instructors.php:210
 msgid "Manage students"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:252
+#: _core/lms/classes/instructors.php:256
 msgid "After changing the course's author, the author of all lessons, quizzes and assignments related to this course will be changed automatically. Do you really want to change the author of the course?"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:435
+#: _core/lms/classes/instructors.php:439
 #: _core/stm-lms-templates/account/private/instructor_parts/courses.php:12
 #: _core/stm-lms-templates/account/private/instructor_parts/grid.php:79
 #: assets/course-builder/js/main.js:1
 msgid "Published"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:438
+#: _core/lms/classes/instructors.php:442
 #: _core/lms/classes/order.php:406
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:185
 #: _core/stm-lms-templates/stm-lms-user-pmp.php:188
 msgid "Pending"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:441
+#: _core/lms/classes/instructors.php:445
 #: assets/course-builder/js/main.js:1
 msgid "Draft"
 msgstr ""
 
 #. translators: %s Last Updated
-#: _core/lms/classes/instructors.php:456
+#: _core/lms/classes/instructors.php:460
 msgid "Last updated: %s"
 msgstr ""
 
 #. translators: %s Total Reviews, Label
-#: _core/lms/classes/instructors.php:528
+#: _core/lms/classes/instructors.php:532
 msgctxt "\"1 Review\" or \"2 Reviews\""
 msgid "%1$s %2$s"
 msgstr ""
 
 #. translators: %s: Review  %s: Reviews
-#: _core/lms/classes/instructors.php:592
+#: _core/lms/classes/instructors.php:596
 msgid "%1$s %2$s."
 msgstr ""
 
-#: _core/lms/classes/instructors.php:610
-#: _core/lms/classes/instructors.php:678
+#: _core/lms/classes/instructors.php:614
+#: _core/lms/classes/instructors.php:682
 msgid "New Instructor Application"
 msgstr ""
 
 #. translators: %s User Login, User ID
-#: _core/lms/classes/instructors.php:644
+#: _core/lms/classes/instructors.php:649
 msgid "User %1$s with id - %2$s, wants to become an Instructor."
 msgstr ""
 
 #. translators: %s User Login, User ID
-#: _core/lms/classes/instructors.php:658
+#: _core/lms/classes/instructors.php:663
 msgid "User %1$s with id - %2$s, registered as Instructor."
 msgstr ""
 
-#: _core/lms/classes/instructors.php:710
+#: _core/lms/classes/instructors.php:715
 msgid "You have received a new instructor application from "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:711
+#: _core/lms/classes/instructors.php:716
 #: _core/lms/classes/user.php:1634
 msgid "Here are the details:"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:712
+#: _core/lms/classes/instructors.php:717
 #: _core/lms/classes/user.php:1635
 msgid "Name: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:713
+#: _core/lms/classes/instructors.php:718
 msgid "ID: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:714
+#: _core/lms/classes/instructors.php:719
 #: _core/lms/classes/user.php:1636
 msgid "Email: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:715
+#: _core/lms/classes/instructors.php:720
 msgid "Degree: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:716
+#: _core/lms/classes/instructors.php:721
 msgid "Expertize: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:717
+#: _core/lms/classes/instructors.php:722
 msgid "Application Date: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:718
+#: _core/lms/classes/instructors.php:723
 msgid "Please review the application at your earliest convenience."
 msgstr ""
 
 #. translators: %s User Login, User ID, Degree, Expertize
-#: _core/lms/classes/instructors.php:729
+#: _core/lms/classes/instructors.php:734
 msgid "User %1$s with id - %2$s, registered as Instructor. Degree - %3$s. Expertize - %4$s"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:780
+#: _core/lms/classes/instructors.php:786
 msgid "Student added to course"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:825
+#: _core/lms/classes/instructors.php:831
 #: _core/settings/main_settings/sortable_menu.php:22
 #: _core/stm-lms-templates/account/float_menu/user.php:13
 #: _core/stm-lms-templates/account/private/parts/info.php:14
@@ -7993,34 +8230,34 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s Students Count, Courses Count
-#: _core/lms/classes/instructors.php:827
+#: _core/lms/classes/instructors.php:833
 msgid "%1$s added to %2$s"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:861
+#: _core/lms/classes/instructors.php:867
 msgid "You have been registered on the website"
 msgstr ""
 
 #. translators: %s Username, Password, Site URL
-#: _core/lms/classes/instructors.php:866
+#: _core/lms/classes/instructors.php:872
 msgid "Login: %1$s Password: %2$s Site URL: %3$s"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:885
-#: _core/lms/classes/instructors.php:886
+#: _core/lms/classes/instructors.php:891
+#: _core/lms/classes/instructors.php:892
 msgid "Instructor Requests"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:1008
+#: _core/lms/classes/instructors.php:1017
 msgid "Your submission has been approved"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:1009
-#: _core/lms/classes/instructors.php:1023
+#: _core/lms/classes/instructors.php:1018
+#: _core/lms/classes/instructors.php:1032
 msgid "Instructor submission"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:1022
+#: _core/lms/classes/instructors.php:1031
 msgid "Your submission has been rejected"
 msgstr ""
 
@@ -8255,15 +8492,15 @@ msgstr ""
 msgid "Private account"
 msgstr ""
 
-#: _core/lms/classes/page_routes.php:354
+#: _core/lms/classes/page_routes.php:367
 msgid "Instructor account"
 msgstr ""
 
-#: _core/lms/classes/page_routes.php:363
+#: _core/lms/classes/page_routes.php:376
 msgid "Student account"
 msgstr ""
 
-#: _core/lms/classes/page_routes.php:376
+#: _core/lms/classes/page_routes.php:389
 #: _core/settings/main_settings/routes.php:64
 #: _core/settings/page_generator/api/get.php:7
 #: _core/stm-lms-templates/checkout/guest-checkout.php:18
@@ -8435,7 +8672,7 @@ msgid "Successfully logged in. Redirecting..."
 msgstr ""
 
 #: _core/lms/classes/user.php:248
-#: _core/settings/manage_users/main.php:11
+#: _core/settings/manage_users/main.php:32
 #: _core/stm-lms-templates/pmpro/pages/checkout.php:98
 msgid "Username"
 msgstr ""
@@ -8780,11 +9017,11 @@ msgid "Enrolled Courses"
 msgstr ""
 
 #: _core/lms/classes/user_menu.php:256
-#: _core/lms/helpers.php:1521
-#: _core/lms/helpers.php:1524
+#: _core/lms/helpers.php:1523
+#: _core/lms/helpers.php:1526
 #: _core/settings/main_settings.php:12
 #: _core/settings/main_settings.php:16
-#: _core/settings/main_settings.php:103
+#: _core/settings/main_settings.php:104
 #: _core/stm-lms-templates/account/private/parts/settings_button.php:13
 #: assets/course-builder/js/main.js:1
 msgid "Settings"
@@ -9006,7 +9243,7 @@ msgid "Available in"
 msgstr ""
 
 #: _core/lms/helpers.php:955
-#: _core/settings/lms_wpcfto_helpers.php:220
+#: _core/settings/lms_wpcfto_helpers.php:165
 msgid "Pro Version"
 msgstr ""
 
@@ -9057,23 +9294,23 @@ msgstr ""
 msgid "VdoCipher"
 msgstr ""
 
-#: _core/lms/helpers.php:1328
+#: _core/lms/helpers.php:1330
 msgid "Media:"
 msgstr ""
 
-#: _core/lms/helpers.php:1335
+#: _core/lms/helpers.php:1337
 msgid "Quizzes:"
 msgstr ""
 
-#: _core/lms/helpers.php:1342
+#: _core/lms/helpers.php:1344
 msgid "Pages:"
 msgstr ""
 
-#: _core/lms/helpers.php:1349
+#: _core/lms/helpers.php:1351
 msgid "Assignments:"
 msgstr ""
 
-#: _core/lms/helpers.php:1444
+#: _core/lms/helpers.php:1446
 msgid "MasterStudy Addons"
 msgstr ""
 
@@ -9208,142 +9445,6 @@ msgstr ""
 
 #: _core/lms/widgets/popular.widget.php:166
 msgid "Output number:"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:25
-#: _core/settings/answers/components/answers.php:85
-#: _core/settings/answers/components/answers.php:110
-#: _core/settings/answers/components/answers.php:168
-#: _core/stm-lms-templates/course-player/content/quiz/history.php:37
-#: _core/stm-lms-templates/course-player/content/quiz/result.php:49
-#: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:69
-#: assets/course-builder/js/main.js:1
-msgid "Correct"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:37
-#: _core/settings/answers/components/answers.php:72
-#: _core/settings/answers/components/answers.php:119
-#: _core/settings/answers/components/answers.php:155
-#: _core/settings/answers/components/answers.php:243
-#: _core/settings/answers/components/answers.php:311
-#: _core/settings/answers/components/answers.php:355
-msgid "Question Explanation"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:39
-#: _core/settings/answers/components/answers.php:74
-#: _core/settings/answers/components/answers.php:121
-#: _core/settings/answers/components/answers.php:157
-#: _core/settings/answers/components/answers.php:245
-#: _core/settings/answers/components/answers.php:313
-#: _core/settings/answers/components/answers.php:357
-msgid "Answer explanation (Will be shown in \"Show Answers\" section)"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:63
-#: _core/settings/answers/components/answers.php:145
-#: _core/settings/answers/components/answers.php:343
-msgid "Enter answer"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:219
-msgid "Add question..."
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:225
-#: _core/settings/answers/components/answers.php:289
-msgid "Match"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:227
-msgid "Add answer..."
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:325
-msgid "Add new match"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:380
-msgid "Enter text, separate answers with \"|\" symbol"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:385
-#: assets/course-builder/js/main.js:1
-msgid "Example:"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:386
-msgid "Deborah was angry at her son. Her son didn't"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:387
-msgid "listen"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:388
-msgid "to her. Her son was 16 years old. Her son"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:389
-msgid "thought"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:390
-msgid "he knew everything. Her son"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:391
-msgid "yelled"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:392
-msgid "at Deborah."
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:408
-#: _core/stm-lms-templates/course-player/content/quiz/history.php:65
-#: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:89
-msgid "Questions:"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:415
-msgid "Categories:"
-msgstr ""
-
-#: _core/settings/answers/components/answers.php:436
-msgid "Enter new Answer"
-msgstr ""
-
-#: _core/settings/answers/components_js/answers.php:211
-#: _core/settings/answers/components_js/answers.php:220
-#: _core/settings/answers/components_js/answers.php:221
-#: _core/stm-lms-templates/course-player/content/quiz/questions/true_false.php:41
-#: _core/stm-lms-templates/course-player/content/quiz/questions/true_false.php:42
-#: _core/stm-lms-templates/questions/answers/true_false.php:44
-#: _core/stm-lms-templates/questions/answers/true_false.php:45
-#: _core/stm-lms-templates/questions/true_false.php:11
-#: _core/stm-lms-templates/questions/true_false.php:13
-#: assets/course-builder/js/main.js:1
-msgid "True"
-msgstr ""
-
-#: _core/settings/answers/components_js/answers.php:215
-#: _core/settings/answers/components_js/answers.php:220
-#: _core/stm-lms-templates/course-player/content/quiz/questions/true_false.php:44
-#: _core/stm-lms-templates/questions/answers/true_false.php:46
-#: _core/stm-lms-templates/questions/true_false.php:12
-#: _core/stm-lms-templates/questions/true_false.php:14
-#: assets/course-builder/js/main.js:1
-msgid "False"
-msgstr ""
-
-#: _core/settings/answers/tpls/image.php:5
-msgid "Add Image URL"
-msgstr ""
-
-#: _core/settings/answers/tpls/image.php:45
-msgid "Add description (not required)"
 msgstr ""
 
 #: _core/settings/course_taxonomy.php:6
@@ -9626,107 +9727,54 @@ msgstr ""
 msgid "Import <strong>posts, pages, comments, custom fields, categories, and tags</strong> from a WordPress export file."
 msgstr ""
 
-#: _core/settings/lms_metaboxes.php:10
-#: _core/settings/lms_metaboxes.php:38
-msgid "Question Settings"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:14
-#: _core/settings/lms_metaboxes.php:75
+#: _core/settings/lms_metaboxes.php:9
+#: _core/settings/lms_metaboxes.php:30
 msgid "Review info"
 msgstr ""
 
-#: _core/settings/lms_metaboxes.php:18
+#: _core/settings/lms_metaboxes.php:13
 msgid "Order info"
 msgstr ""
 
-#: _core/settings/lms_metaboxes.php:42
-msgid "Question Title"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:46
-#: assets/course-builder/js/main.js:1
-msgid "Question type"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:48
-#: assets/course-builder/js/main.js:1
-msgid "Single choice"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:49
-msgid "Multi choice"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:50
-msgid "True or False"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:51
-msgid "Item Match"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:52
-msgid "Image Match"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:53
-#: assets/course-builder/js/main.js:1
-msgid "Keywords"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:54
-msgid "Fill the Gap"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:60
-#: assets/course-builder/js/main.js:1
-msgid "Answers"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:65
-msgid "Question result explanation"
-msgstr ""
-
-#: _core/settings/lms_metaboxes.php:79
+#: _core/settings/lms_metaboxes.php:34
 msgid "Course Reviewed"
 msgstr ""
 
-#: _core/settings/lms_metaboxes.php:85
+#: _core/settings/lms_metaboxes.php:40
 msgid "User Reviewed"
 msgstr ""
 
-#: _core/settings/lms_metaboxes.php:90
+#: _core/settings/lms_metaboxes.php:45
 msgid "User Review mark"
 msgstr ""
 
-#: _core/settings/lms_wpcfto_helpers.php:31
+#: _core/settings/lms_wpcfto_helpers.php:27
 msgid "Choose User 1"
 msgstr ""
 
-#: _core/settings/lms_wpcfto_helpers.php:38
+#: _core/settings/lms_wpcfto_helpers.php:34
 msgid "Error occurred, please try again"
 msgstr ""
 
-#: _core/settings/lms_wpcfto_helpers.php:45
+#: _core/settings/lms_wpcfto_helpers.php:41
 msgid "Please, select file"
 msgstr ""
 
-#: _core/settings/lms_wpcfto_helpers.php:52
+#: _core/settings/lms_wpcfto_helpers.php:48
 msgid "Invalid file extension"
 msgstr ""
 
-#: _core/settings/lms_wpcfto_helpers.php:219
+#: _core/settings/lms_wpcfto_helpers.php:164
 msgid "Available in "
 msgstr ""
 
-#: _core/settings/lms_wpcfto_helpers.php:232
+#: _core/settings/lms_wpcfto_helpers.php:177
 #: _core/stm-lms-templates/journey/unlock-banner-component.php:36
 #: assets/course-builder/js/main.js:1
 msgid "Enable addon"
 msgstr ""
 
-#: _core/settings/lms_wpcfto_helpers.php:248
+#: _core/settings/lms_wpcfto_helpers.php:193
 #: assets/course-builder/js/main.js:1
 msgid "You have reached your featured courses quota limit!"
 msgstr ""
@@ -9736,24 +9784,77 @@ msgid "by StylemixThemes"
 msgstr ""
 
 #: _core/settings/main_settings.php:111
+#: _core/settings/main_settings.php:112
+msgid "Help center"
+msgstr ""
+
+#: _core/settings/main_settings.php:123
 msgid "MasterStudy templates"
 msgstr ""
 
-#: _core/settings/main_settings.php:112
+#: _core/settings/main_settings.php:124
 msgid "Templates"
 msgstr ""
 
-#: _core/settings/main_settings.php:128
+#: _core/settings/main_settings.php:140
 #: _core/stm-lms-templates/account/private/instructor_parts/courses.php:128
 msgid "Upgrade"
 msgstr ""
 
-#: _core/settings/main_settings.php:129
+#: _core/settings/main_settings.php:141
 msgid "Unlock PRO"
 msgstr ""
 
-#: _core/settings/main_settings.php:207
+#: _core/settings/main_settings.php:219
 msgid "Create a roadmap with us:<br>Vote for next feature"
+msgstr ""
+
+#: _core/settings/main_settings/ai_lab.php:10
+#: _core/settings/main_settings/ai_lab.php:74
+msgid "AI Lab Settings"
+msgstr ""
+
+#: _core/settings/main_settings/ai_lab.php:15
+msgid "Insert OpenAI API Key"
+msgstr ""
+
+#. Translators: %1$s: Open Link for account api key, %2$s: Close Link for account api key
+#: _core/settings/main_settings/ai_lab.php:18
+msgid "You can obtain your API key from your %1$sOpenAI Account%2$s."
+msgstr ""
+
+#: _core/settings/main_settings/ai_lab.php:26
+msgid "Number of Text Suggestions"
+msgstr ""
+
+#: _core/settings/main_settings/ai_lab.php:27
+msgid "How many variations of text AI should generate."
+msgstr ""
+
+#: _core/settings/main_settings/ai_lab.php:44
+msgid "Number of Image Suggestions"
+msgstr ""
+
+#: _core/settings/main_settings/ai_lab.php:45
+msgid "Choose how many images you want to generate. If you select 1, the image will be created with the DALL·E 3 model for higher quality."
+msgstr ""
+
+#: _core/settings/main_settings/ai_lab.php:81
+msgid "Generate your entire course in a click! AI instantly creates lessons, quizzes, and assignments based on your description—ready for you to edit and customize."
+msgstr ""
+
+#: _core/settings/main_settings/ai_lab.php:82
+#: _core/settings/main_settings/analytics.php:14
+#: _core/settings/main_settings/certificates.php:64
+#: _core/settings/main_settings/course.php:246
+#: _core/settings/main_settings/courses.php:256
+#: _core/settings/main_settings/grades.php:134
+#: _core/settings/main_settings/quiz.php:63
+#: _core/stm-lms-templates/analytics-preview.php:26
+#: _core/stm-lms-templates/journey/free-journey-addons-sidebars.php:11
+#: _core/stm-lms-templates/journey/unlock-banner-component.php:82
+#: assets/course-builder/js/main.js:1
+msgid "Unlock"
 msgstr ""
 
 #: _core/settings/main_settings/analytics.php:5
@@ -9766,19 +9867,6 @@ msgstr ""
 #: _core/settings/main_settings/analytics.php:13
 #: _core/stm-lms-templates/analytics-preview.php:38
 msgid "Track your success with Reports and Statistics! See your earnings, courses, students, and certificates in one place. Students can also see their progress, course bundles, group courses, reviews, certificates and points."
-msgstr ""
-
-#: _core/settings/main_settings/analytics.php:14
-#: _core/settings/main_settings/certificates.php:64
-#: _core/settings/main_settings/course.php:246
-#: _core/settings/main_settings/courses.php:256
-#: _core/settings/main_settings/grades.php:134
-#: _core/settings/main_settings/quiz.php:63
-#: _core/stm-lms-templates/analytics-preview.php:26
-#: _core/stm-lms-templates/journey/free-journey-addons-sidebars.php:11
-#: _core/stm-lms-templates/journey/unlock-banner-component.php:82
-#: assets/course-builder/js/main.js:1
-msgid "Unlock"
 msgstr ""
 
 #: _core/settings/main_settings/analytics.php:25
@@ -11332,62 +11420,73 @@ msgstr ""
 msgid "There are restrictions for dragging and/or disabling the option."
 msgstr ""
 
-#: _core/settings/manage_users/main.php:10
-msgid "User ID"
-msgstr ""
-
-#: _core/settings/manage_users/main.php:12
-msgid "User email"
-msgstr ""
-
-#: _core/settings/manage_users/main.php:13
-msgid "User Info"
+#: _core/settings/manage_users/main.php:15
+msgid "Enable AI Features"
 msgstr ""
 
 #: _core/settings/manage_users/main.php:17
+msgid "Enable or Restrict access to AI features for All Instructors."
+msgstr ""
+
+#: _core/settings/manage_users/main.php:31
+msgid "User ID"
+msgstr ""
+
+#: _core/settings/manage_users/main.php:33
+msgid "User email"
+msgstr ""
+
+#: _core/settings/manage_users/main.php:34
+msgid "User Info"
+msgstr ""
+
+#: _core/settings/manage_users/main.php:38
 msgid "Submission Date"
 msgstr ""
 
-#: _core/settings/manage_users/main.php:19
+#: _core/settings/manage_users/main.php:41
+msgid "AI Access"
+msgstr ""
+
+#: _core/settings/manage_users/main.php:43
 msgid "Actions"
 msgstr ""
 
-#: _core/settings/manage_users/main.php:20
-#: _core/settings/manage_users/main.php:50
+#: _core/settings/manage_users/main.php:44
+#: _core/settings/manage_users/main.php:79
 #: _core/stm-lms-templates/course-player/header.php:150
 msgid "History"
 msgstr ""
 
-#: _core/settings/manage_users/main.php:21
+#: _core/settings/manage_users/main.php:45
 msgid "Ban"
 msgstr ""
 
-#: _core/settings/manage_users/main.php:39
+#: _core/settings/manage_users/main.php:63
 msgid "Degree - "
 msgstr ""
 
-#: _core/settings/manage_users/main.php:40
+#: _core/settings/manage_users/main.php:64
 msgid "Expertize - "
 msgstr ""
 
-#: _core/settings/manage_users/main.php:45
+#: _core/settings/manage_users/main.php:74
 msgid "Approve"
 msgstr ""
 
-#: _core/settings/manage_users/main.php:46
+#: _core/settings/manage_users/main.php:75
 msgid "Decline"
 msgstr ""
 
-#: _core/settings/manage_users/main.php:67
+#: _core/settings/manage_users/main.php:96
 msgid "Submission date"
 msgstr ""
 
-#: _core/settings/manage_users/main.php:70
+#: _core/settings/manage_users/main.php:99
 msgid "Answer date"
 msgstr ""
 
 #: _core/settings/media_library/main.php:13
-#: assets/course-builder/js/main.js:1
 msgid "Media Gallery"
 msgstr ""
 
@@ -12270,6 +12369,7 @@ msgstr ""
 #: _core/stm-lms-templates/account/private/manage_students/import-modal.php:80
 #: _core/stm-lms-templates/account/private/manage_students/import-modal.php:143
 #: _core/stm-lms-templates/dashboard/components/user_data_transfer.php:73
+#: assets/course-builder/js/main.js:1
 msgid "Try again"
 msgstr ""
 
@@ -13265,19 +13365,19 @@ msgid "enrolled"
 msgstr ""
 
 #: _core/stm-lms-templates/components/course/curriculum/materials.php:104
-#: _core/stm-lms-templates/components/curriculum-accordion.php:124
+#: _core/stm-lms-templates/components/curriculum-accordion.php:126
 msgid "Trial"
 msgstr ""
 
 #: _core/stm-lms-templates/components/course/curriculum/materials.php:108
-#: _core/stm-lms-templates/components/curriculum-accordion.php:130
+#: _core/stm-lms-templates/components/curriculum-accordion.php:132
 #: _core/stm-lms-templates/courses/styles/style_3.php:75
 msgid "Preview"
 msgstr ""
 
 #. translators: %s: number
 #: _core/stm-lms-templates/components/course/curriculum/materials.php:115
-#: _core/stm-lms-templates/components/curriculum-accordion.php:100
+#: _core/stm-lms-templates/components/curriculum-accordion.php:102
 msgid "%d questions"
 msgstr ""
 
@@ -13454,6 +13554,7 @@ msgid "Drag %s here or click the button."
 msgstr ""
 
 #: _core/stm-lms-templates/components/file-upload.php:116
+#: assets/course-builder/js/main.js:1
 msgid "Supported file formats"
 msgstr ""
 
@@ -13575,6 +13676,13 @@ msgstr ""
 msgid "Attempt:"
 msgstr ""
 
+#: _core/stm-lms-templates/course-player/content/quiz/history.php:37
+#: _core/stm-lms-templates/course-player/content/quiz/result.php:49
+#: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:69
+#: assets/course-builder/js/main.js:1
+msgid "Correct"
+msgstr ""
+
 #: _core/stm-lms-templates/course-player/content/quiz/history.php:40
 #: _core/stm-lms-templates/course-player/content/quiz/result.php:52
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:72
@@ -13585,6 +13693,11 @@ msgstr ""
 #: _core/stm-lms-templates/course-player/content/quiz/history.php:61
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:85
 msgid "Attempt %s"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/quiz/history.php:65
+#: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:89
+msgid "Questions:"
 msgstr ""
 
 #: _core/stm-lms-templates/course-player/content/quiz/history.php:66
@@ -13634,11 +13747,11 @@ msgid "Number of allowed attempts"
 msgstr ""
 
 #: _core/stm-lms-templates/course-player/content/quiz/questions/image_match.php:95
-#: _core/stm-lms-templates/course-player/content/quiz/questions/item_match.php:84
+#: _core/stm-lms-templates/course-player/content/quiz/questions/item_match.php:94
 msgid "Drag answer here"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/quiz/questions/item_match.php:46
+#: _core/stm-lms-templates/course-player/content/quiz/questions/item_match.php:56
 #: _core/stm-lms-templates/questions/item_match.php:28
 msgid "The question was not set"
 msgstr ""
@@ -13657,6 +13770,24 @@ msgstr ""
 #: _core/stm-lms-templates/questions/answers/keywords.php:35
 #: _core/stm-lms-templates/questions/keywords.php:32
 msgid "Keyword #%s"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/quiz/questions/true_false.php:41
+#: _core/stm-lms-templates/course-player/content/quiz/questions/true_false.php:42
+#: _core/stm-lms-templates/questions/answers/true_false.php:44
+#: _core/stm-lms-templates/questions/answers/true_false.php:45
+#: _core/stm-lms-templates/questions/true_false.php:11
+#: _core/stm-lms-templates/questions/true_false.php:13
+#: assets/course-builder/js/main.js:1
+msgid "True"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/quiz/questions/true_false.php:44
+#: _core/stm-lms-templates/questions/answers/true_false.php:46
+#: _core/stm-lms-templates/questions/true_false.php:12
+#: _core/stm-lms-templates/questions/true_false.php:14
+#: assets/course-builder/js/main.js:1
+msgid "False"
 msgstr ""
 
 #. translators: %d attempt index
@@ -13838,6 +13969,7 @@ msgid "All Courses"
 msgstr ""
 
 #: _core/stm-lms-templates/dashboard/components/courses.php:23
+#: assets/course-builder/js/main.js:1
 msgid "Course title"
 msgstr ""
 
@@ -14824,7 +14956,7 @@ msgid "View All Invoices"
 msgstr ""
 
 #. translators: %s Course name
-#: _core/stm-lms-templates/stm-lms-user-quiz-attempt.php:41
+#: _core/stm-lms-templates/stm-lms-user-quiz-attempt.php:40
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:47
 msgid "Course: %s"
 msgstr ""
@@ -15031,10 +15163,6 @@ msgstr ""
 msgid "Help Desk"
 msgstr ""
 
-#: _core/stm-lms-templates/wizard/views/steps/finish.php:80
-msgid "Customization"
-msgstr ""
-
 #: _core/stm-lms-templates/wizard/views/steps/finish.php:89
 msgid "Facebook Community"
 msgstr ""
@@ -15176,30 +15304,6 @@ msgid "Remove"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
-msgid "The file has been uploaded successfully"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-msgid "Validation error"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-msgid "This file format is not supported"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-msgid "Maximum file size: %s"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-msgid "Drag & drop files here or browse files from your computer"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-msgid "Browse files"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
 msgid "by name"
 msgstr ""
 
@@ -15228,6 +15332,223 @@ msgid "Failed to remove file"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "Limit must be greater than or equal to 1"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Generate with AI"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Generate Course FAQs with AI"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Speed up FAQ creation with AI for your course"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Generate"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Unable to generate faq"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Course FAQ Generator"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Describe your course or what students might want to know. AI will generate relevant student FAQs"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Words limit"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Number of FAQs"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Tone"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "symbols left"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Continue manually"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Generate Lesson Title, Description & Content with AI"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "AI will generate the lesson’s title, short description, and main lesson content — including relevant images. However, no video or audio will be created."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Craft Your Content with AI"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Briefly describe the topic, audience, key points and any details needed to generate content for your lesson"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Images limit"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Complete!"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Your lesson has been generated successfully."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Change Prompt"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "An error occured"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Generate Assignment with AI"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "AI will generate the assignment’s title and main content — including relevant images. However, no video or audio will be created."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Craft Your Assignment with AI"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Briefly describe the topic, submission format for students, requirements, limits, key points and any details needed to generate content for your assignment"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Assignment generated successfully!"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Prompt is required"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "AI Course Creation"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Describe your course..."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Generate Entire Course"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Unable to generate images"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Image Generation"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Describe your image..."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Image Style"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Failed to upload image"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Use selected image"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Regenerate"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Build Courses & Content with AI"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Instantly generate entire courses - or individual lessons, quizzes, videos, and more. Just enter your API key to get started!"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Set API key"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "The file has been uploaded successfully"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Validation error"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "This file format is not supported"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Maximum file size: %s"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Drag & drop files here or browse files from your computer"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Browse files"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Upload from url"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: assets/gutenberg/blocks/featured-teacher/container/index.js:1
+msgid "Enter url"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Upload"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "File Manager"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Library"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "AI Generate"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "NEW"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "Drag and drop an image or upload it from your computer"
 msgstr ""
 
@@ -15249,6 +15570,10 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Drag file here"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "The file has been renamed successfully"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -15296,11 +15621,39 @@ msgid "Not found"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "Unable to generate text"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Describe what you need help writing. For example: “Write a blog intro about AI in education,” or “Generate a course title on web development.”"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Option"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Use selected text"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "AI Text Generator"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Are you sure you want to close this modal?"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "All unsaved data will be lost. Do you really want to leave this page?"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Confirm"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "AI course creation"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -15588,7 +15941,7 @@ msgid "No attached video yet"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
-msgid "Before adding markers to timeline, please upload video"
+msgid "Before adding markers or questions to timeline, please upload video"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -15600,7 +15953,7 @@ msgid "Your choosen video type is not supported"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
-msgid "Markers are unavailable for this video type. To enable markers, please use one of the supported formats: HTML, YouTube, Vimeo, or an external link."
+msgid "Markers & Questions are unavailable for this video type. To enable markers & questions, please use one of the supported formats: HTML, YouTube, Vimeo, or an external link."
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -15741,6 +16094,10 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Back to quizzes"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Back to questions"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -16036,6 +16393,26 @@ msgid "Add a lesson"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "Lesson is generating. Do you want to leave this page?"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Generating Lessons"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "AI is generating your course. You can edit everything once it’s ready and saved."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Regenerate missing lessons"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Save & Continue"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "Custom fields successfully saved"
 msgstr ""
 
@@ -16124,7 +16501,11 @@ msgid "Unlock the lesson after a certain time after the purchase"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
-msgid "Lesson preview (Everyone can see this lesson)"
+msgid "Lesson preview"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Everyone can see this lesson"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -16172,6 +16553,10 @@ msgid "New question"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "Single choice"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "Multiple choice"
 msgstr ""
 
@@ -16189,6 +16574,10 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Rewatch timecode"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Question type"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -16436,6 +16825,10 @@ msgid "Assignment content"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "Assignment materials"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "Enter assignment name"
 msgstr ""
 
@@ -16636,11 +17029,75 @@ msgid "Image matching"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "Keywords"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "Fill in the gap"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "At least one question"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Questions limit is required"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "At least two answers per question"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Answers limit is required"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Image style is required"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "At least 1 question type should be selected"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Prefered question types are required"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Craft your Questions with AI"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Describe the topic, target difficulty, key concepts, keywords, and any additional information you would like to include. For example: \"“World War II – Causes of the conflict (European theatre), Intermediate difficulty, focus on Treaty of Versailles, appeasement, Anschluss.\""
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Prefered question types"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Select All"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Answers"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Correct answer"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Saving..."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "Question Bank"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Generate Questions"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -16745,6 +17202,10 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Deborah was angry at her son. Her son didn't |listen| to her.Her son was 16 years old. Her son |thought| he knew everything. Her son |yelled| at Deborah."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Example:"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -16954,7 +17415,7 @@ msgid "Failed to save notice"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
-#: react/src/pages/course/tabs/settings/tabs/prerequisites/prerequisites-field/prerequisites-field.jsx:29
+#: react/src/pages/course/tabs/settings/tabs/prerequisites/prerequisites-field/prerequisites-field.jsx:40
 msgid "Sorry, no matching options."
 msgstr ""
 
@@ -17047,6 +17508,10 @@ msgid "Points for a course"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "Write the number of points needed to buy this course"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "Enter points"
 msgstr ""
 
@@ -17092,6 +17557,86 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Failed to update Google meet"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Enter question name"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Select question type"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Unable to generate course"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Course is generating. Do you want to leave this page?"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Section"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Failed to generate curriculum"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Regenerate Curriculum"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "No materials yet"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Are you sure you want to delete this FAQ item?"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "No FAQ items"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Course Description"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Course description"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Change prompt"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Course short description"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Course cover"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Course sections"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Generating Course"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "AI is generating your course. You can edit everything once it's ready and saved."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "No prompt provided"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Go back"
 msgstr ""
 
 #: assets/gutenberg/blocks/adaptive-box/index.js:1
@@ -19443,10 +19988,6 @@ msgstr ""
 
 #: assets/gutenberg/blocks/featured-teacher/container/index.js:1
 msgid "Button URL"
-msgstr ""
-
-#: assets/gutenberg/blocks/featured-teacher/container/index.js:1
-msgid "Enter url"
 msgstr ""
 
 #: assets/gutenberg/blocks/featured-teacher/container/index.js:1

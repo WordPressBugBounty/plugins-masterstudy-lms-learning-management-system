@@ -189,17 +189,18 @@ function ms_lms_courses_carousel_sorting() {
 	check_ajax_referer( 'filtering', 'nonce' );
 
 	/* check & sanitize all ajax data */
-	$cards_to_show     = ( isset( $_POST['cards_to_show'] ) ) ? intval( $_POST['cards_to_show'] ) : 8;
-	$posts_per_page    = ( ! isset( $_POST['cards_to_show_choice'] ) || 'all' === $_POST['cards_to_show_choice'] ) ? -1 : $cards_to_show;
-	$card_style        = ( isset( $_POST['card_template'] ) ) ? sanitize_text_field( wp_unslash( $_POST['card_template'] ) ) : 'card_style_1';
-	$course_image_size = ( isset( $_POST['course_image_size'] ) ) ? STM_LMS_Helpers::array_sanitize( wp_unslash( $_POST['course_image_size'] ) ) : '';
-	$meta_slots        = ( isset( $_POST['meta_slots'] ) ) ? STM_LMS_Helpers::array_sanitize( wp_unslash( $_POST['meta_slots'] ) ) : array();
-	$card_data         = ( isset( $_POST['card_data'] ) ) ? STM_LMS_Helpers::array_sanitize( wp_unslash( $_POST['card_data'] ) ) : array();
-	$popup_data        = ( isset( $_POST['popup_data'] ) ) ? STM_LMS_Helpers::array_sanitize( wp_unslash( $_POST['popup_data'] ) ) : array();
-	$sort_by           = ( isset( $_POST['sort_by'] ) ) ? sanitize_text_field( wp_unslash( $_POST['sort_by'] ) ) : '';
-	$sort_by_cat       = ( isset( $_POST['sort_by_cat'] ) ) ? sanitize_text_field( wp_unslash( $_POST['sort_by_cat'] ) ) : '';
-	$sort_by_default   = ( isset( $_POST['sort_by_default'] ) ) ? sanitize_text_field( wp_unslash( $_POST['sort_by_default'] ) ) : '';
-	$widget_type       = ( isset( $_POST['widget_type'] ) ) ? sanitize_text_field( wp_unslash( $_POST['widget_type'] ) ) : '';
+	$cards_to_show     = isset( $_POST['cards_to_show'] ) ? intval( $_POST['cards_to_show'] ) : 8;
+	$posts_per_page    = ! isset( $_POST['cards_to_show_choice'] ) || 'all' === $_POST['cards_to_show_choice'] ? -1 : $cards_to_show;
+	$card_style        = isset( $_POST['card_template'] ) ? sanitize_text_field( wp_unslash( $_POST['card_template'] ) ) : 'card_style_1';
+	$course_image_size = isset( $_POST['course_image_size'] ) ? STM_LMS_Helpers::array_sanitize( wp_unslash( $_POST['course_image_size'] ) ) : '';
+	$meta_slots        = isset( $_POST['meta_slots'] ) ? STM_LMS_Helpers::array_sanitize( wp_unslash( $_POST['meta_slots'] ) ) : array();
+	$card_data         = isset( $_POST['card_data'] ) ? STM_LMS_Helpers::array_sanitize( wp_unslash( $_POST['card_data'] ) ) : array();
+	$popup_data        = isset( $_POST['popup_data'] ) ? STM_LMS_Helpers::array_sanitize( wp_unslash( $_POST['popup_data'] ) ) : array();
+	$sort_by           = isset( $_POST['sort_by'] ) ? sanitize_text_field( wp_unslash( $_POST['sort_by'] ) ) : '';
+	$sort_by_cat       = isset( $_POST['sort_by_cat'] ) ? sanitize_text_field( wp_unslash( $_POST['sort_by_cat'] ) ) : '';
+	$sort_by_default   = isset( $_POST['sort_by_default'] ) ? sanitize_text_field( wp_unslash( $_POST['sort_by_default'] ) ) : '';
+	$categories        = isset( $_POST['categories'] ) && is_array( $_POST['categories'] ) ? array_map( 'intval', $_POST['categories'] ) : array();
+	$widget_type       = isset( $_POST['widget_type'] ) ? sanitize_text_field( wp_unslash( $_POST['widget_type'] ) ) : '';
 
 	/* query courses */
 	$default_args = array(
@@ -230,10 +231,21 @@ function ms_lms_courses_carousel_sorting() {
 		);
 		$sort_by                   = $sort_by_default;
 	}
+
+	if ( ! empty( $categories ) ) {
+		$default_args['tax_query'][] = array(
+			'taxonomy' => 'stm_lms_course_taxonomy',
+			'field'    => 'term_id',
+			'terms'    => $categories,
+		);
+	}
+
 	if ( 'all' === $sort_by ) {
 		$sort_by = $sort_by_default;
 	}
+
 	$default_args = apply_filters( 'stm_lms_filter_courses', $default_args, array(), array(), $sort_by );
+
 	if ( 0 !== $posts_per_page ) {
 		$courses = \STM_LMS_Courses::get_all_courses( $default_args );
 	}

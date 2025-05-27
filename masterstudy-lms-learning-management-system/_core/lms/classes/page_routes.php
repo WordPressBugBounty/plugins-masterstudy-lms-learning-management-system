@@ -323,6 +323,19 @@ class STM_LMS_Page_Router {
 							),
 						),
 					),
+					'manage_question'            => array(
+						'template'         => 'course-builder',
+						'protected'        => true,
+						'instructors_only' => true,
+						'url'              => 'edit-question',
+						'sub_pages'        => array(
+							'edit_course' => array(
+								'template'  => 'course-builder',
+								'protected' => true,
+								'var'       => 'question_id',
+							),
+						),
+					),
 					'manage_assignment'          => array(
 						'template'         => 'course-builder',
 						'protected'        => true,

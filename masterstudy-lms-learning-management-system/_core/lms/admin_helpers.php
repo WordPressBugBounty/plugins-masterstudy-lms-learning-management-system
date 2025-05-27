@@ -197,6 +197,7 @@ add_action(
 		$post_types = array(
 			'stm-courses'      => 'edit-course',
 			'stm-lessons'      => 'edit-lesson',
+			'stm-questions'    => 'edit-question',
 			'stm-quizzes'      => 'edit-quiz',
 			'stm-assignments'  => 'edit-assignment',
 			'stm-google-meets' => 'edit-google-meet',
@@ -225,6 +226,16 @@ add_action(
 
 		if ( empty( $edit_url ) ) {
 			return;
+		}
+
+		if ( PostType::QUESTION === $post->post_type ) {
+			?>
+			<div class="inside">
+				<div class="question-title">
+					<?php echo wp_kses_post( get_the_title( $post->ID ) ); ?>
+				</div>
+			</div>
+			<?php
 		}
 		?>
 		<div id="ms-lms-course-builder">
@@ -328,4 +339,3 @@ function masterstudy_plugin_save_questions_custom_title( $post_id, $post, $updat
 	}
 }
 add_action( 'save_post', 'masterstudy_plugin_save_questions_custom_title', 10, 3 );
-

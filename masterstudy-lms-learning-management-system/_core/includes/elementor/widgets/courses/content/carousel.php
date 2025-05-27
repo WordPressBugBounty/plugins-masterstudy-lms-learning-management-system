@@ -9,6 +9,17 @@ $this->start_controls_section(
 		'conditions' => $this->add_widget_type_conditions( array( 'courses-carousel' ) ),
 	)
 );
+$this->add_control(
+	'carousel_taxonomy',
+	array(
+		'label'              => __( 'Show Courses From Categories', 'masterstudy-lms-learning-management-system' ),
+		'type'               => Controls_Manager::SELECT2,
+		'label_block'        => true,
+		'multiple'           => true,
+		'options'            => stm_lms_elementor_autocomplete_terms( 'stm_lms_course_taxonomy' ),
+		'frontend_available' => true,
+	)
+);
 $this->add_responsive_control(
 	'slides_to_scroll',
 	array(

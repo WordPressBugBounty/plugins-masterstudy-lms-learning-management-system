@@ -96,6 +96,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           'showFeaturedBlock': widgetData['show_featured_block'],
           'sortByCat': widgetData['sort_by_cat'],
           'sortBy': sortBy,
+          'categories': widgetData['carousel_taxonomy'],
           'widgetType': widgetType,
           'sliderContainer': sliderContainer
         },
@@ -579,6 +580,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         sort_by: sort_by,
         sort_by_cat: filterArgs['sortByCat'],
         sort_by_default: filterArgs['sortBy'],
+        categories: filterArgs['categories'],
         cards_to_show_choice: filterArgs['cardsToShowChoice'],
         cards_to_show: filterArgs['cardsToShow'],
         meta_slots: filterArgs['metaSlots'],

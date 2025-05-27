@@ -221,15 +221,8 @@ class STM_Metaboxes {
 				foreach ( $section['fields'] as $field_name => $field ) {
 					$default_value = ( ! empty( $field['value'] ) ) ? $field['value'] : '';
 					$value         = ( isset( $meta[ $field_name ] ) ) ? $meta[ $field_name ] : $default_value;
-					if ( ! empty( $value ) ) {
-						switch ( $field['type'] ) {
-							case 'dates':
-								$value = explode( ',', $value );
-								break;
-							case 'answers':
-								$value = unserialize( $value ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize
-								break;
-						}
+					if ( ! empty( $value ) && 'dates' === $field['type'] ) {
+						$value = explode( ',', $value );
 					}
 					$metabox['args'][ $metabox_name ][ $section_name ]['fields'][ $field_name ]['value'] = $value;
 				}
@@ -739,6 +732,7 @@ function wpcfto_metaboxes_display_single_field( $section, $section_name, $field,
 			$field_id       = $section_name . '-' . $field_name;
 			$field_readonly = isset( $field_data['readonly'] ) ? 'true' : 'false';
 			$option_id      = $metabox_id;
+			$default_value  = isset( $field_data['default_value'] ) ? $field_data['default_value'] : '';
 
 			$file = apply_filters( "wpcfto_field_{$field_type}", STM_WPCFTO_PATH . '/metaboxes/fields/' . $field_type . '.php' );
 

@@ -86,6 +86,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     $('.masterstudy-course-player-quiz__result-progress', $container).text(data.grade);
     $('.masterstudy-course-player-quiz__result-answers', $container).html(data.answers);
     $('.masterstudy-course-player-quiz__questions', $container).html(data.questions_html);
+    if ("undefined" !== $('.masterstudy-course-player-quiz__emoji', $container)) {
+      $('.masterstudy-course-player-quiz__emoji', $container).html(data.emoji_name);
+    }
     $('.masterstudy-course-player-quiz__result', $container).toggleClass('masterstudy-course-player-quiz__result_failed', !data.passed);
   }
 })(jQuery);

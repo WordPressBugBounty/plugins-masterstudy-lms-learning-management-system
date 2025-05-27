@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.0
+Stable tag: 3.6.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,24 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.6.1 - 2025-05-27 =
+- **Improvement:** The single-question creation and editing page has been restyled to match the Course Builder
+- **Improvement:** Added clear tooltips for the Lesson Preview and Points Price settings in the Course Builder
+- **Improvement:** The Course Builder now shows the total number of questions while you create or edit a quiz
+- **Improvement:** The Elementor Courses Carousel widget can now display courses from selected categories
+- **Fixed:** Co-instructors can no longer access Course Builder tabs other than Curriculum in courses they do not own
+- **Fixed:** Removed the animation that moved a lesson back to the materials section when creating Drip Content links
+- **Fixed:** Apostrophes now display correctly in the Course Builder instead of Unicode codes
+- **Fixed:** Renaming a file in Course Materials or Lesson Materials now shows a success or error notification in the Course Builder
+- **Fixed:** Icons for .docx .doc .mp3 .pptx and .xlsx files now appear in Course Materials and Lesson Materials
+- **Fixed:** The Pricing section in the Course Builder now accepts prices with more than two decimal places
+- **Fixed:** The current course is now excluded from the Prerequisites list in the Course Builder
+- **Fixed:** You can now clear the Level field in the Course Builder
+- **Fixed:** Resolved several issues when creating or editing questions in the Course Builder
+- **Fixed:** Math formulas now display correctly in Matching questions when using the MathJax LaTeX plugin
+- **Fixed:** Fixed a fatal error in the Courses Categories widget when Style 6 is selected
+- **Fixed:** Result emojis now display correctly when users switch between attempts in a quiz
+
 = 3.6.0 - 2025-05-21 =
 - **New AI Lab add-on:** a powerful AI tool for generating complete courses, lessons, quizzes, thumbnails, and more. (PRO)
 - **Fixed:** Graded Student Assignments now appear as completed in the "Curriculum" sidebar of the Course Player  (PRO)
@@ -320,13 +338,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.5.33 - 2025-05-08 =
 - **Fixes:** Minor bug fixes.
-
-= 3.5.32 - 2025-05-07 =
-- **Enhancement:** Optimized database queries, so Single Course pages and the Course Player load faster
-- **Enhancement:** Added the ability to embed knowledge-check quizzes directly into video lessons (PRO)
-
-= 3.5.31 - 2025-05-02 =
-- **Fix:** Fixed the “Disable video seeking” option — viewers can no longer fast-forward or rewind the video. (PRO)
-- **Fix:** Added support for translating individual strings and words in the custom Paid Memberships checkout.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
