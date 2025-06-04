@@ -1,11 +1,1 @@
-"use strict";
-
-(function ($) {
-  $(document).ready(function () {
-    $.each($('.masterstudy-message'), function (i, container) {
-      $(container).find('.masterstudy-message__close').on('click', function (e) {
-        $(container).addClass('masterstudy-message_hidden');
-      });
-    });
-  });
-})(jQuery);
+"use strict";!function(s){s(document).ready((function(){s.each(s(".masterstudy-message"),(function(e,t){s(t).find(".masterstudy-message__close").on("click",(function(e){s(t).addClass("masterstudy-message_hidden")}))}))}))}(jQuery);

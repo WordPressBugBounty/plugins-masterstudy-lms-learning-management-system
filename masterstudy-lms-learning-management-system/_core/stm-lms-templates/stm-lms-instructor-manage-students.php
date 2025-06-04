@@ -1,12 +1,24 @@
 <?php
+/**
+ * @var string $student_id
+ * @var string $course_id
+ * */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$course_id  = intval( $_GET['course_id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$student_id = intval( $_GET['student_id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$lms_page_path = get_query_var( 'lms_page_path' );
+$course_id     = intval( $course_id ?? $_GET['course_id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$student_id    = intval( $student_id ?? $_GET['student_id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-if ( ! is_user_logged_in() || ! STM_LMS_Instructor::instructor_can_add_students() || ! STM_LMS_Instructor::is_instructor() || ! \STM_LMS_Course::check_course_author( $course_id, get_current_user_id() ) ) {
+if (
+	! is_user_logged_in() ||
+	! STM_LMS_Instructor::instructor_show_list_students() && 'enrolled-students' === $lms_page_path ||
+	! STM_LMS_Instructor::instructor_can_add_students() && 'enrolled-students' !== $lms_page_path ||
+	! STM_LMS_Instructor::is_instructor() ||
+	! \STM_LMS_Course::check_course_author( $course_id, get_current_user_id() )
+) {
 	wp_safe_redirect( STM_LMS_User::login_page_url() );
 	die;
 }

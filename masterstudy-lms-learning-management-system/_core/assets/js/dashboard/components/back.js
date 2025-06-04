@@ -1,10 +1,1 @@
-"use strict";
-
-stm_lms_components['back'] = {
-  template: '#stm-lms-dashboard-back',
-  methods: {
-    goBack: function goBack() {
-      this.$router.go(-1);
-    }
-  }
-};
+"use strict";stm_lms_components.back={template:"#stm-lms-dashboard-back",methods:{goBack:function(){var s=document.referrer;s&&s.includes("/wp-admin/admin.php?page=manage_students")?window.location.assign(s):this.$router.go(-1)}}};

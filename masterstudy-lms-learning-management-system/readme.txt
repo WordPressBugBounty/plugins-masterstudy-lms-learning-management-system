@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.1
+Stable tag: 3.6.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,23 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.6.2 - 2025-06-04 =
+- **Improvement:** Added a font size control for text editors in Course Builder.
+- **Improvement:** Added an image resize preview when uploading images in the Course Builder text editor.
+- **Improvement:** Added a full-width text option in the Course Builder text editor.
+- **Improvement:** Upgraded the TinyMCE editor in Course Builder to version 6.
+- **Improvement:** Questions Library now marks questions already included in the quiz.
+- **Improvement:** Added collapse/expand all lessons button in the Curriculum section.
+- **Improvement:** Added a Load More button to the Questions Library list.
+- **Improvement:** Course Builder now supports RTL layouts.
+- **Improvement:** You can now choose a custom font for Course Builder in MasterStudy settings.
+- **Improvement:** Added settings to rename the Lesson Materials and Video Questions sections.
+- **Improvement:** Added an option to hide the Video Questions block in video lessons.
+- **Improvement:** Question cards in Questions Library now show category and type; spacing between cards improved.
+- **Improvement:** Added a page to view all current students in the Admin Dashboard and in the instructor’s profile.
+- **Fix:** Fixed random lesson order changes after reordering lessons in the Curriculum section of Course Builder.
+- **Fix:** Vimeo videos now display correctly in the Questions & Markers area of video lessons.
+
 = 3.6.1 - 2025-05-27 =
 - **Improvement:** The single-question creation and editing page has been restyled to match the Course Builder
 - **Improvement:** Added clear tooltips for the Lesson Preview and Points Price settings in the Course Builder
@@ -335,8 +352,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.5.34 - 2025-05-14 =
 - **Added:** Added "Help Center" page for quick access to the plugin’s documentation and support resources.
-
-= 3.5.33 - 2025-05-08 =
-- **Fixes:** Minor bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

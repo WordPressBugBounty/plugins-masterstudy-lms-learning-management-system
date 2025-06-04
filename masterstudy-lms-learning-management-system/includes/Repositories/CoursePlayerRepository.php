@@ -154,11 +154,11 @@ final class CoursePlayerRepository {
 					$material['lesson_locked_by_drip']    = false;
 
 					if ( PostType::QUIZ === $material['post_type'] ) {
-						$material['icon']            = 'quiz';
-						$material['questions']       = get_post_meta( $material['post_id'], 'questions', true );
-						$material['questions_array'] = ! empty( $material['questions'] ) ? explode( ',', $material['questions'] ) : '';
-						$material['label']           = $lesson_types_labels[ self::CONTENT_TYPES[ $material['post_type'] ] ];
-						$material['quiz_data']       = $this->get_quiz_data( $material['post_id'] );
+						$material['icon']                      = 'quiz';
+						$material['questions']                 = get_post_meta( $material['post_id'], 'questions', true );
+						$material['questions_array']           = ! empty( $material['questions'] ) ? explode( ',', $material['questions'] ) : '';
+						$material['question_bank_total_items'] = $this->masterstudy_lms_get_question_bank_total_items( $material['post_id'] );
+						$material['label']                     = $lesson_types_labels[ self::CONTENT_TYPES[ $material['post_type'] ] ];
 					} else {
 						$material['icon']     = $material['lesson_type'];
 						$material['progress'] = '';
@@ -198,6 +198,73 @@ final class CoursePlayerRepository {
 			'zoom_conference' => esc_html__( 'Zoom lesson', 'masterstudy-lms-learning-management-system' ),
 			'google_meet'     => esc_html__( 'Google Meet webinar', 'masterstudy-lms-learning-management-system' ),
 		);
+	}
+
+	/**
+	 * Get total number of question-bank items.
+	 *
+	 * @param int $quiz_id Quiz post ID.
+	 *
+	 * @return int
+	 */
+	public static function masterstudy_lms_get_question_bank_total_items( $quiz_id ) {
+		static $cache = array();
+
+		if ( isset( $cache[ $quiz_id ] ) ) {
+			return $cache[ $quiz_id ];
+		}
+
+		$total_questions = 0;
+
+		$quiz_meta    = \STM_LMS_Helpers::parse_meta_field( $quiz_id );
+		$question_ids = array_filter( explode( ',', $quiz_meta['questions'] ?? '' ) );
+
+		$bank_ids = array();
+		foreach ( $question_ids as $qid ) {
+			$type = get_post_meta( $qid, 'type', true );
+
+			if ( 'question_bank' === $type ) {
+				$bank_ids[] = $qid;
+			} else {
+				$total_questions ++;
+			}
+		}
+
+		foreach ( $bank_ids as $bank_qid ) {
+			$q_meta  = \STM_LMS_Helpers::parse_meta_field( $bank_qid );
+			$answers = $q_meta['answers'] ?? array();
+
+			if ( empty( $answers[0]['categories'] ) || empty( $answers[0]['number'] ) ) {
+				continue;
+			}
+
+			$number     = absint( $answers[0]['number'] );
+			$categories = wp_list_pluck( $answers[0]['categories'], 'slug' );
+
+			$bank_query = new \WP_Query(
+				array(
+					'post_type'      => \MasterStudy\Lms\Plugin\PostType::QUESTION,
+					'posts_per_page' => $number,
+					'fields'         => 'ids',
+					'no_found_rows'  => true,
+					'post__not_in'   => $question_ids,
+					'tax_query'      => array(
+						array(
+							'taxonomy' => \MasterStudy\lms\Plugin\Taxonomy::QUESTION_CATEGORY,
+							'field'    => 'slug',
+							'terms'    => $categories,
+						),
+					),
+				)
+			);
+
+			$total_questions += count( $bank_query->posts );
+			wp_reset_postdata();
+		}
+
+		$cache[ $quiz_id ] = $total_questions;
+
+		return $total_questions;
 	}
 
 	public function get_quiz_data( int $quiz_id, int $user_id = 0, int $course_id = 0 ): array {

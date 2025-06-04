@@ -69,7 +69,9 @@ if ( $post instanceof \WP_Post && PostType::LESSON === $post->post_type ) {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo stm_lms_filtered_output( $content );
 
-		if ( 'video' === $lesson_type ) {
+		$show_questions_list = STM_LMS_Options::get_option( 'video_questions_list_show', true );
+
+		if ( 'video' === $lesson_type && $show_questions_list ) {
 			STM_LMS_Templates::show_lms_template(
 				'components/video-questions-list',
 				array(

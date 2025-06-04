@@ -126,7 +126,7 @@ function stm_lms_enqueue_ss() {
 	}
 }
 
-function stm_lms_enqueue_component_scripts() {
+function stm_lms_enqueue_component_scripts( $hook_suffix ) {
 	/*Components scripts registration*/
 	wp_register_script( 'masterstudy-lamejs', STM_LMS_URL . '/assets/vendors/lamejs.js', array( 'jquery' ), MS_LMS_VERSION, true );
 
@@ -142,6 +142,9 @@ function stm_lms_enqueue_component_scripts() {
 			'show_stats' => __( 'Show Statistics', 'masterstudy-lms-learning-management-system' ),
 		)
 	);
+
+	wp_register_script( 'masterstudy-list-students', STM_LMS_URL . '/assets/js/students.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_style( 'masterstudy-list-students', STM_LMS_URL . 'assets/css/parts/students.css', array(), MS_LMS_VERSION, 'all' );
 
 	wp_register_script( 'masterstudy-enrolled-quizzes', STM_LMS_URL . '/assets/js/enrolled-quizzes.js', array( 'jquery' ), MS_LMS_VERSION, true );
 
@@ -265,6 +268,85 @@ function stm_lms_enqueue_component_scripts() {
 	wp_register_style( 'font-awesome-min', STM_LMS_URL . '/assets/vendors/font-awesome.min.css', null, STM_LMS_VERSION, 'all' );
 	wp_register_style( 'linear', STM_LMS_URL . '/libraries/nuxy/taxonomy_meta/assets/linearicons/linear.css', null, STM_LMS_VERSION, 'all' );
 	wp_register_style( 'premium-templates', STM_LMS_URL . 'assets/css/parts/premium-templates/premium-templates.css', array(), MS_LMS_VERSION, 'all' );
+
+	masterstudy_enqueue_students_page( $hook_suffix );
+}
+
+function masterstudy_enqueue_students_page( string $hook_suffix ) {
+	$lms_template          = get_query_var( 'lms_template' );
+	$is_student_admin_page = ( 'masterstudy_page_manage_students' === $hook_suffix );
+	$is_student_list       = ( 'stm-lms-enrolled-students' === $lms_template );
+	$is_student_item       = ( 'stm-lms-enrolled-student' === $lms_template );
+
+	if ( $is_student_admin_page || $is_student_list ) {
+		$date_scripts_styles = masterstudy_datepicker();
+
+		if ( ! empty( $date_scripts_styles ) ) {
+			foreach ( $date_scripts_styles as $handle ) {
+				if ( wp_script_is( $handle, 'registered' ) ) {
+					wp_enqueue_script( $handle );
+				}
+
+				if ( wp_style_is( $handle, 'registered' ) ) {
+					wp_enqueue_style( $handle );
+				}
+			}
+		}
+
+		wp_enqueue_style( 'linear' );
+		wp_enqueue_style( 'masterstudy-list-students' );
+		wp_enqueue_style( 'masterstudy-pagination' );
+		wp_enqueue_script( 'masterstudy-select2' );
+		wp_enqueue_style( 'masterstudy-select2' );
+		wp_enqueue_style( 'font-awesome-min' );
+		wp_dequeue_style( 'font-awesome' );
+
+		if ( stm_lms_has_custom_colors() ) {
+			wp_enqueue_style( 'masterstudy-lms-learning-management-system', stm_lms_custom_styles_url() . '/stm_lms_styles/stm_lms.css', array(), stm_lms_custom_styles_v() );
+		} else {
+			wp_enqueue_style( 'masterstudy-lms-learning-management-system', STM_LMS_URL . 'assets/css/stm_lms.css', array(), MS_LMS_VERSION );
+		}
+	}
+
+	if ( $is_student_admin_page || $is_student_list || $is_student_item ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$student_id = absint( is_admin() ? ( isset( $_GET['user_id'] ) ? wp_unslash( $_GET['user_id'] ) : 0 ) : get_query_var( 'student_id' ) );
+
+		if ( empty( $student_id ) ) {
+			wp_localize_script(
+				'masterstudy-list-students',
+				'stats_data',
+				array(
+					'custom_period'    => __( 'Date range', 'masterstudy-lms-learning-management-system' ),
+					'user_account_url' => STM_LMS_User::login_page_url(),
+					'is_students'      => $is_student_admin_page || $is_student_list,
+					'is_student'       => $is_student_item,
+					'locale'           => masterstudy_get_locale_info(),
+					'is_admin'         => is_admin(),
+				)
+			);
+
+			wp_enqueue_script( 'masterstudy-list-students' );
+		}
+
+		wp_add_inline_script(
+			'masterstudy-list-students',
+			"const defaultDateRanges = getDefaultDateRanges();
+					const currentUrl = window.location.href;
+					const userAccountDashboardPage = currentUrl === stats_data.user_account_url;
+					let storedPeriodKey = localStorage.getItem( 'StudentsListSelectedPeriodKey' );
+					let selectedPeriod;
+
+					if ( storedPeriodKey && defaultDateRanges[ storedPeriodKey ] && !userAccountDashboardPage ) {
+						selectedPeriod = defaultDateRanges[ storedPeriodKey ];
+					} else {
+						const defaultDateRange = typeof customDateRange != 'undefined' ? customDateRange : defaultDateRanges.this_month;
+						const lmsDateRange = userAccountDashboardPage ? defaultDateRanges.all_time : defaultDateRange;
+						const storedPeriod = !userAccountDashboardPage ? localStorage.getItem( 'StudentsListSelectedPeriod' ) : null;
+						selectedPeriod = storedPeriod ? JSON.parse( storedPeriod ) : lmsDateRange;
+					}"
+		);
+	}
 }
 
 function stm_lms_enqueue_vss() {
@@ -414,4 +496,78 @@ function stm_lms_nonces() {
 		var stm_lms_nonces = <?php echo wp_json_encode( $nonces_list ); ?>;
 	</script>
 	<?php
+}
+
+function masterstudy_datepicker(): array {
+	$locale  = masterstudy_get_locale_info();
+	$handles = array(
+		'masterstudy-date-helpers',
+		'masterstudy-loaders-helpers',
+		'masterstudy-datatables-library',
+		'masterstudy-datatables-helpers',
+		'masterstudy-datatables',
+		'masterstudy-date-field',
+		'masterstudy-datepicker-library',
+		'masterstudy-datepicker-locale',
+		'masterstudy-datepicker-helpers',
+		'masterstudy-datepicker',
+	);
+
+	wp_register_script( 'masterstudy-date-helpers', STM_LMS_URL . 'assets/js/analytics/helpers/date.js', array( 'jquery' ), STM_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-loaders-helpers', STM_LMS_URL . 'assets/js/analytics/helpers/loaders.js', array( 'jquery' ), STM_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-datatables-library', STM_LMS_URL . 'assets/vendors/datatables.min.js', array( 'jquery' ), STM_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-datatables-helpers', STM_LMS_URL . 'assets/js/analytics/helpers/datatables.js', array( 'jquery', 'masterstudy-datatables-library' ), STM_LMS_VERSION, true );
+
+	wp_register_style( 'masterstudy-datatables-library', STM_LMS_URL . 'assets/vendors/datatables.min.css', null, STM_LMS_VERSION );
+	wp_register_style( 'masterstudy-datatables', STM_LMS_URL . 'assets/css/components/analytics/datatables.css', null, STM_LMS_VERSION );
+	wp_register_style( 'masterstudy-date-field', STM_LMS_URL . 'assets/css/components/analytics/date-field.css', null, STM_LMS_VERSION );
+	wp_register_style( 'masterstudy-datepicker-library', STM_LMS_URL . 'assets/vendors/flatpickr.min.css', null, STM_LMS_VERSION );
+	wp_register_style( 'masterstudy-datepicker', STM_LMS_URL . 'assets/css/components/analytics/datepicker.css', null, STM_LMS_VERSION );
+
+	wp_register_script( 'masterstudy-datepicker-library', STM_LMS_URL . 'assets/vendors/flatpickr.min.js', array( 'jquery' ), STM_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-datepicker-locale', "https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/{$locale['current_locale']}.js", array( 'masterstudy-datepicker-library' ), STM_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-datepicker-helpers', STM_LMS_URL . 'assets/js/analytics/helpers/datepicker.js', array( 'jquery', 'masterstudy-datepicker-library', 'masterstudy-datepicker-locale' ), STM_LMS_VERSION, true );
+
+	wp_localize_script(
+		'masterstudy-datatables-helpers',
+		'table_data',
+		array(
+			'per_page_placeholder' => __( 'per page', 'masterstudy-lms-learning-management-system' ),
+			'not_found'            => __( 'No matching items found', 'masterstudy-lms-learning-management-system' ),
+			'not_available'        => __( 'No data to display', 'masterstudy-lms-learning-management-system' ),
+			'not_started_lesson'   => __( 'Not Started', 'masterstudy-lms-learning-management-system' ),
+			'failed_lesson'        => __( 'Failed', 'masterstudy-lms-learning-management-system' ),
+			'completed_lesson'     => __( 'Complete', 'masterstudy-lms-learning-management-system' ),
+			'progress_lesson'      => __( 'In progress', 'masterstudy-lms-learning-management-system' ),
+			'img_route'            => STM_LMS_URL,
+		)
+	);
+	return $handles;
+}
+
+if ( ! function_exists( 'masterstudy_get_locale_info' ) ) {
+	function masterstudy_get_locale_info(): array {
+		$locale         = get_locale();
+		$current_locale = 'en';
+		$locales        = array(
+			'en_US' => 'en',
+			'en_GB' => 'en',
+			'ru_RU' => 'ru',
+			'ja'    => 'ja',
+			'zh_CN' => 'zh',
+			'de_DE' => 'de',
+			'it_IT' => 'it',
+			'fr_FR' => 'fr',
+			'es_ES' => 'es',
+		);
+
+		if ( array_key_exists( $locale, $locales ) ) {
+			$current_locale = $locales[ $locale ];
+		}
+
+		return array(
+			'current_locale' => $current_locale,
+			'firstDayOfWeek' => get_option( 'start_of_week', 0 ),
+		);
+	}
 }

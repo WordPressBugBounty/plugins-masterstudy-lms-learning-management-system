@@ -111,43 +111,7 @@ class STM_LMS_Quiz {
 			wp_die();
 		}
 
-		$quiz_info       = STM_LMS_Helpers::parse_meta_field( $quiz_id );
-		$questions       = explode( ',', $quiz_info['questions'] ?? '' );
-		$total_questions = count( $questions );
-
-		foreach ( $questions as $question ) {
-			if ( 'question_bank' !== get_post_meta( $question, 'type', true ) ) {
-				continue;
-			}
-
-			$answers = get_post_meta( $question, 'answers', true );
-
-			if ( empty( $answers[0]['categories'] ) || empty( $answers[0]['number'] ) ) {
-				continue;
-			}
-
-			$number     = intval( $answers[0]['number'] );
-			$categories = wp_list_pluck( $answers[0]['categories'], 'slug' );
-
-			$args = array(
-				'post_type'      => MasterStudy\Lms\Plugin\PostType::QUESTION,
-				'posts_per_page' => $number,
-				'post__not_in'   => $questions,
-				'tax_query'      => array(
-					array(
-						'taxonomy' => MasterStudy\Lms\Plugin\Taxonomy::QUESTION_CATEGORY,
-						'field'    => 'slug',
-						'terms'    => $categories,
-					),
-				),
-			);
-
-			$q = new WP_Query( $args );
-			if ( $q->have_posts() ) {
-				$total_questions += min( $q->found_posts, $number ) - 1;
-				wp_reset_postdata();
-			}
-		}
+		$total_questions = \MasterStudy\Lms\Repositories\CoursePlayerRepository::masterstudy_lms_get_question_bank_total_items( $quiz_id );
 
 		$score_per_question = 100 / $total_questions;
 		$cutting_rate       = ! empty( $quiz_info['re_take_cut'] ) ? ( 100 - $quiz_info['re_take_cut'] ) / 100 : 1;

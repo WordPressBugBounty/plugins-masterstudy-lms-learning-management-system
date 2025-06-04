@@ -56,7 +56,7 @@ foreach ( $curriculum as $section ) {
 				$material       = apply_filters( 'masterstudy_lms_lesson_curriculum_data', $material, $curriculum, $course_id );
 				$lesson_excerpt = get_post_meta( $material['post_id'], 'lesson_excerpt', true );
 				$question_count = ! empty( $material['questions_array'] ) ? count( $material['questions_array'] ) : 0;
-				$question_count = ! empty( $material['quiz_data']['questions_for_nav'] ) ? $material['quiz_data']['questions_for_nav'] : $question_count;
+				$question_count = ! empty( $material['question_bank_total_items'] ) ? $material['question_bank_total_items'] : $question_count;
 				?>
 				<li class="masterstudy-curriculum-list__item">
 				<?php

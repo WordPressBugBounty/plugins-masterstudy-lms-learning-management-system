@@ -11,27 +11,26 @@ $additional_scripts = apply_filters( 'ms_lms_course_builder_additional_scripts',
 
 wp_register_style( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_css', MS_LMS_URL . 'assets/course-builder/css/main.css' ), array(), MS_LMS_VERSION );
 wp_register_script( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_js', MS_LMS_URL . 'assets/course-builder/js/main.js' ), array(), MS_LMS_VERSION, true );
+wp_register_script( 'ms-lms-course-builder-tinymce', MS_LMS_URL . '_core/assets/tinymce/hugerte.min.js', array(), MS_LMS_VERSION, true );
+
 wp_set_script_translations( 'ms-lms-course-builder', 'masterstudy-lms-learning-management-system', $translations_path );
 
 $scripts = wp_scripts();
 $styles  = wp_styles();
 
 $load_scripts = array(
-	'jquery-core',
-	'jquery-migrate',
 	'wp-polyfill-inert',
 	'regenerator-runtime',
 	'wp-polyfill',
 	'wp-hooks',
 	'wp-i18n',
 	'utils',
-	'editor',
 );
 
 do_action( 'stm_lms_template_main' );
 ?>
 <!doctype html>
-<html lang="<?php echo esc_attr( get_locale() ); ?>">
+<html lang="<?php echo esc_attr( get_locale() ); ?>" <?php echo is_rtl() ? ' dir="rtl"' : ''; ?>>
 <head>
 	<title><?php esc_html_e( 'Course Builder', 'masterstudy-lms-learning-management-system' ); ?></title>
 	<link rel="shortcut icon" type="image/x-icon" href="<?php echo esc_url( ms_plugin_favicon_url() ); ?>" />
@@ -74,9 +73,10 @@ if ( ! class_exists( '\_WP_Editors', false ) ) {
 	require ABSPATH . WPINC . '/class-wp-editor.php';
 }
 
-\_WP_Editors::print_default_editor_scripts();
-\_WP_Editors::print_tinymce_scripts();
+//\_WP_Editors::print_default_editor_scripts();
+//\_WP_Editors::print_tinymce_scripts();
 ?>
+<script src="<?php echo esc_url( $scripts->registered['ms-lms-course-builder-tinymce']->src ); // phpcs:ignore ?>"></script>
 <script src="<?php echo esc_url( $scripts->registered['ms-lms-course-builder']->src ); // phpcs:ignore ?>"></script>
 <?php
 if ( ! empty( $additional_scripts ) ) {

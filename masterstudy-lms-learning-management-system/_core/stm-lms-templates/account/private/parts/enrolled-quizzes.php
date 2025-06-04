@@ -7,7 +7,16 @@ stm_lms_register_style( 'user-quizzes' );
 <div class="masterstudy-enrolled-quizzes">
 	<div class="stm_lms_user_info_top">
 		<h3><?php echo esc_html__( 'Enrolled Quizzes', 'masterstudy-lms-learning-management-system' ); ?></h3>
-		<?php STM_LMS_Templates::show_lms_template( 'account/private/parts/search-quizzes-input' ); ?>
+		<?php
+		STM_LMS_Templates::show_lms_template(
+			'components/search-input',
+			array(
+				'placeholder'     => __( 'Search course or quiz...', 'masterstudy-lms-learning-management-system' ),
+				'classes_wrapper' => 'masterstudy-enrolled-quizzes-search',
+				'classes_input'   => 'masterstudy-enrolled-quizzes-search__input',
+			)
+		);
+		?>
 	</div>
 	<div class="masterstudy-enrolled-quizzes-container">
 		<div class="ms_lms_loader_"></div>

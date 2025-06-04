@@ -1,7 +1,1 @@
-"use strict";
-
-(function ($) {
-  $(document).ready(function () {
-    $('body').addClass('stm-lms-user-account');
-  });
-})(jQuery);
+"use strict";!function(s){s(document).ready((function(){s("body").addClass("stm-lms-user-account")}))}(jQuery);

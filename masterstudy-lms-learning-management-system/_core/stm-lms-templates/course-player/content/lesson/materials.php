@@ -15,11 +15,13 @@ wp_localize_script(
 	)
 );
 
+$materials_title = STM_LMS_Options::get_option( 'lesson_materials_title', __( 'Lesson materials', 'masterstudy-lms-learning-management-system' ) );
+
 if ( is_array( $attachments ) ) {
 	?>
 	<div class="masterstudy-course-player-lesson-materials">
 		<h3 class="masterstudy-course-player-lesson-materials__title">
-			<?php echo esc_html__( 'Lesson materials', 'masterstudy-lms-learning-management-system' ); ?>
+			<?php echo esc_html( $materials_title ); ?>
 		</h3>
 		<?php
 		STM_LMS_Templates::show_lms_template(

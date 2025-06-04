@@ -107,6 +107,12 @@ function stm_lms_settings_profiles_section() {
 				'value' => 'not_empty',
 			),
 		),
+		'show_students_to_instructors'      => array(
+			'type'        => 'checkbox',
+			'label'       => esc_html__( 'Show students page to instructors', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Allow instructors to view all their students and track individual progress.', 'masterstudy-lms-learning-management-system' ),
+			'submenu'     => $submenu_general,
+		),
 		'student_public_profile_style'      => array(
 			'type'       => 'data_select',
 			'label'      => esc_html__( 'Choose a layout for the student profile', 'masterstudy-lms-learning-management-system' ),
@@ -126,10 +132,10 @@ function stm_lms_settings_profiles_section() {
 			'pro'     => true,
 		),
 		'have_a_question_form'              => array(
-			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Have a question form', 'masterstudy-lms-learning-management-system' ),
-			'value'       => true,
-			'submenu'     => $submenu_general,
+			'type'    => 'checkbox',
+			'label'   => esc_html__( 'Have a question form', 'masterstudy-lms-learning-management-system' ),
+			'value'   => true,
+			'submenu' => $submenu_general,
 		),
 		'instructors_page'                  => array(
 			'type'        => 'select',

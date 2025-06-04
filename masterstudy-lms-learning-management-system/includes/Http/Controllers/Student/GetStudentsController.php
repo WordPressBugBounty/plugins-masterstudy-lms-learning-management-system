@@ -15,13 +15,16 @@ final class GetStudentsController {
 		$validator = new Validator(
 			$request->get_params(),
 			array(
-				's'          => 'nullable|string',
-				'page'       => 'nullable|integer',
-				'per_page'   => 'nullable|integer',
-				'order'      => 'nullable|string',
-				'orderby'    => 'nullable|string',
-				'course_id'  => 'nullable|integer',
-				'subscribed' => 'nullable|boolean',
+				'show_all_enrolled' => 'nullable|string',
+				'date_from'         => 'nullable|string',
+				'date_to'           => 'nullable|string',
+				's'                 => 'nullable|string',
+				'page'              => 'nullable|integer',
+				'per_page'          => 'nullable|integer',
+				'order'             => 'nullable|string',
+				'orderby'           => 'nullable|string',
+				'course_id'         => 'nullable|integer',
+				'subscribed'        => 'nullable|boolean',
 			)
 		);
 
@@ -29,17 +32,29 @@ final class GetStudentsController {
 			return WpResponseFactory::validation_failed( $validator->get_errors_array() );
 		}
 
-		$params = $validator->get_validated();
-		$repo   = new CourseRepository();
+		$params        = $validator->get_validated();
+		$user_id       = get_current_user_id();
+		$course_repo   = new CourseRepository();
+		$students_repo = new StudentsRepository();
+		$course_id     = $params['course_id'] ?? null;
+		$show_all      = ! empty( $params['show_all_enrolled'] );
 
-		if ( ! $repo->exists( $params['course_id'] ?? 0 ) ) {
+		if ( ! $show_all && ! $course_repo->exists( $course_id ) ) {
 			return WpResponseFactory::not_found();
 		}
 
-		if ( ! \STM_LMS_Course::check_course_author( $params['course_id'], get_current_user_id() ) ) {
+		$has_access = $course_id
+			? \STM_LMS_Course::check_course_author( $course_id, $user_id )
+			: \STM_LMS_Instructor::is_instructor( $user_id );
+
+		if ( ! $has_access ) {
 			return WpResponseFactory::forbidden();
 		}
 
-		return new WP_REST_Response( ( new StudentsRepository() )->get_course_students( $params ) );
+		$students = $show_all
+			? $students_repo->get_all_students( $params )
+			: $students_repo->get_course_students( $params );
+
+		return new WP_REST_Response( $students );
 	}
 }

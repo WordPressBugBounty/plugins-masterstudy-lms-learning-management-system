@@ -31,11 +31,7 @@ function stm_lms_get_user_course( $user_id, $course_id, $fields = array(), $ente
 
 	$query .= ' LIMIT 1';
 
-	return $wpdb->get_results(
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$wpdb->prepare( $query, $params ),
-		ARRAY_A
-	);
+	return $wpdb->get_results( $wpdb->prepare( $query, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 }
 
 function stm_lms_get_course_id_by_user_course_id( $user_course_id ) {
@@ -228,6 +224,38 @@ function stm_lms_get_delete_user_courses( $user_id ) {
 	);
 }
 
+/**
+ * @param array $user_ids
+ *
+ * @return array
+ */
+function stm_lms_delete_users_in_courses( array $user_ids ): array {
+	global $wpdb;
+
+	if ( empty( $user_ids ) ) {
+		return array(
+			'data'  => array(),
+			'total' => 0,
+		);
+	}
+
+	$table        = stm_lms_user_courses_name( $wpdb );
+	$placeholders = implode( ',', array_fill( 0, count( $user_ids ), '%d' ) );
+	$params       = array_merge( $user_ids, array( get_current_user_id() ) );
+
+	$select_sql = "SELECT user_id, course_id FROM {$table} AS uc
+	  INNER JOIN {$wpdb->posts} AS p ON uc.course_id = p.ID
+	  WHERE uc.user_id IN ( {$placeholders} ) AND p.post_author = %d";
+	$delete_sql = "DELETE uc FROM {$table} AS uc
+       INNER JOIN {$wpdb->posts} AS p ON uc.course_id = p.ID
+       WHERE uc.user_id IN ( {$placeholders} ) AND p.post_author = %d";
+
+	return array(
+		'data'  => $wpdb->get_results( $wpdb->prepare( $select_sql, ...$params ), ARRAY_A ), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		'total' => $wpdb->query( $wpdb->prepare( $delete_sql, ...$params ) ), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	);
+}
+
 function stm_lms_get_delete_courses( $course_id ) {
 	global $wpdb;
 	$table = stm_lms_user_courses_name( $wpdb );
@@ -252,5 +280,249 @@ function stm_lms_update_user_current_lesson( $course_id, $item_id, $user_id ) {
 		),
 		array( '%d' ),
 		array( '%d' )
+	);
+}
+
+/**
+ * @param string $search
+ * @param int $course_id
+ * @param string $date_from
+ * @param string $date_to
+ * @param string $order
+ * @param string $orderby
+ *
+ * @return array
+ */
+function stm_lms_build_enrolled_query_parts( string $search = '', int $course_id = 0, string $date_from = '', string $date_to = '', string $order = '', string $orderby = '' ): array {
+	global $wpdb;
+
+	$courses_table  = stm_lms_user_courses_name( $wpdb );
+	$points_enabled = is_ms_lms_addon_enabled( 'point_system' );
+	$points_table   = $points_enabled ? stm_lms_point_system_name( $wpdb ) : '';
+
+	$params = ! current_user_can( 'administrator' ) ? array( get_current_user_id() ) : array();
+	$where  = array();
+
+	if ( $course_id > 0 ) {
+		$where[]       = 'c.course_id = %d';
+		$params[]      = $course_id;
+		$params[]      = $course_id;
+		$course_filter = 'AND c.course_id = %d';
+	} else {
+		$course_filter = '';
+	}
+
+	if ( '' !== $search ) {
+		$like    = '%' . $wpdb->esc_like( $search ) . '%';
+		$where[] =
+			"(u.display_name LIKE %s
+             OR u.user_email LIKE %s
+             OR u.user_login LIKE %s
+             OR u.user_nicename LIKE %s
+             OR EXISTS (
+                SELECT 1
+                FROM {$wpdb->usermeta} um
+                WHERE um.user_id = u.ID
+                  AND um.meta_key IN('first_name','last_name')
+                  AND um.meta_value LIKE %s
+             )
+            )";
+		$params  = array_merge( $params, array_fill( 0, 5, $like ) );
+	}
+
+	if ( current_user_can( 'administrator' ) ) {
+		$join_courses = "LEFT JOIN (
+            SELECT c.user_id, c.course_id, COUNT(*) AS enrolled
+            FROM {$courses_table} c
+            INNER JOIN {$wpdb->posts} p ON p.ID = c.course_id
+            WHERE 1=1 {$course_filter}
+            GROUP BY c.user_id
+        ) c ON c.user_id = u.ID";
+
+		$join_courses_export = "LEFT JOIN {$courses_table} c ON c.user_id = u.ID
+        LEFT JOIN {$wpdb->posts} p ON p.ID = c.course_id {$course_filter}";
+
+		if ( is_multisite() ) {
+			$join_user_meta       = " INNER JOIN {$wpdb->usermeta} AS um ON um.user_id = u.ID AND um.meta_key = %s";
+			$join_courses        .= $join_user_meta;
+			$join_courses_export .= $join_user_meta;
+			$params[]             = $wpdb->get_blog_prefix() . 'capabilities';
+		}
+	} else {
+		$join_courses = "INNER JOIN (
+            SELECT c.user_id, c.course_id, COUNT(*) AS enrolled
+            FROM {$courses_table} c
+            INNER JOIN {$wpdb->posts} p ON p.ID = c.course_id AND p.post_author = %d
+            WHERE 1=1 {$course_filter}
+            GROUP BY c.user_id
+        ) c ON c.user_id = u.ID";
+
+		$join_courses_export = "INNER JOIN {$courses_table} c ON c.user_id = u.ID
+        INNER JOIN {$wpdb->posts} p ON p.ID = c.course_id AND p.post_author = %d {$course_filter}";
+	}
+
+	if ( $date_from && $date_to ) {
+		$where[]  = 'u.user_registered BETWEEN %s AND %s';
+		$params[] = $date_from;
+		$params[] = $date_to;
+	}
+
+	$join_points = $points_enabled
+		? "LEFT JOIN (
+               SELECT user_id, SUM(score) AS points
+               FROM {$points_table}
+               GROUP BY user_id
+           ) p ON p.user_id = u.ID"
+		: '';
+
+	switch ( $orderby ) :
+		case 'joined':
+			$orderby = 'u.user_registered';
+			break;
+		case 'enrolled':
+			$orderby = 'c.enrolled';
+			break;
+		case 'points':
+			$orderby = 'p.points';
+			break;
+	endswitch;
+
+	$order_by = $orderby && $order ? "ORDER BY {$orderby} {$order}" : 'ORDER BY u.user_registered DESC';
+
+	$select = array( 'u.ID', 'c.enrolled' );
+	if ( $points_enabled ) {
+		$select[] = 'COALESCE(p.points, 0) AS points';
+	}
+
+	$select_sql = $select ? implode( ', ', $select ) : '';
+	$where_sql  = $where ? 'WHERE ' . implode( ' AND ', $where ) : '';
+
+	return compact( 'join_courses', 'join_courses_export', 'join_points', 'where_sql', 'params', 'select_sql', 'order_by' );
+}
+
+/**
+ * @param string $search
+ * @param int $course_id
+ * @param string $date_from
+ * @param string $date_to
+ * @param string $order
+ * @param string $orderby
+ *
+ * @return int
+ */
+function stm_lms_get_users_enrolled_count( string $search = '', int $course_id = 0, string $date_from = '', string $date_to = '' ): int {
+	global $wpdb;
+
+	$parts = stm_lms_build_enrolled_query_parts( $search, $course_id, $date_from, $date_to );
+	$sql   = "SELECT COUNT(DISTINCT u.ID) FROM {$wpdb->users} u {$parts['join_courses']} {$parts['where_sql']}";
+
+	return (int) $wpdb->get_var( $wpdb->prepare( $sql, ...$parts['params'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+}
+
+/**
+ *
+ * @param string $search
+ * @param int $course_id
+ * @param string $date_from
+ * @param string $date_to
+ * @param string $order
+ * @param string $orderby
+ * @param int $limit
+ * @param int $offset
+ *
+ * @return array
+ */
+function stm_lms_get_users_enrolled_list( string $search = '', int $course_id = 0, string $date_from = '', string $date_to = '', string $order = '', string $orderby = '', int $limit = 10, int $offset = 0 ): array {
+	global $wpdb;
+
+	$parts = stm_lms_build_enrolled_query_parts( $search, $course_id, $date_from, $date_to, $order, $orderby );
+
+	$sql = "SELECT {$parts['select_sql']}
+            FROM {$wpdb->users} u
+            {$parts['join_courses']}
+            {$parts['join_points']}
+            {$parts['where_sql']}
+            {$parts['order_by']}";
+
+	$params = $parts['params'];
+
+	if ( -1 !== $limit ) {
+		$sql     .= ' LIMIT %d';
+		$params[] = $limit;
+	}
+	if ( $offset ) {
+		$sql     .= ' OFFSET %d';
+		$params[] = $offset;
+	}
+
+	return $wpdb->get_results( $wpdb->prepare( $sql, ...$params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+}
+
+/**
+ * @param string $search
+ * @param int $course_id
+ * @param string $date_from
+ * @param string $date_to
+ * @param string $order
+ * @param string $orderby
+ * @param int $limit
+ * @param int $offset
+ *
+ * @return array
+ */
+function stm_lms_get_users_enrolled_export( string $search = '', int $course_id = 0, string $date_from = '', string $date_to = '', string $order = '', string $orderby = '', int $limit = 10, int $offset = 0 ): array {
+	global $wpdb;
+
+	$parts = stm_lms_build_enrolled_query_parts( $search, $course_id, $date_from, $date_to, $order, $orderby );
+
+	$sql_ids = "SELECT DISTINCT u.ID
+                FROM {$wpdb->users} u
+                {$parts['join_courses_export']}
+                {$parts['where_sql']}
+                {$parts['order_by']}";
+
+	$params_ids = $parts['params'];
+	if ( -1 !== $limit ) {
+		$sql_ids     .= ' LIMIT %d';
+		$params_ids[] = $limit;
+	}
+	if ( $offset ) {
+		$sql_ids     .= ' OFFSET %d';
+		$params_ids[] = $offset;
+	}
+
+	$user_ids = $wpdb->get_col( $wpdb->prepare( $sql_ids, ...$params_ids ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( empty( $user_ids ) ) {
+		return array();
+	}
+
+	$courses_table = stm_lms_user_courses_name( $wpdb );
+	$placeholders  = implode( ',', array_fill( 0, count( $user_ids ), '%d' ) );
+	$course_filter = $course_id > 0 ? 'c.course_id = %d AND' : '';
+
+	$sql_courses = "SELECT c.user_id, c.course_id
+                    FROM {$courses_table} c
+                    INNER JOIN {$wpdb->posts} p ON p.ID = c.course_id AND p.post_author = %d
+                    WHERE {$course_filter} c.user_id IN({$placeholders})
+                    GROUP BY c.course_id, c.user_id";
+
+	$course_params = array( get_current_user_id() );
+	if ( $course_id > 0 ) {
+		$course_params[] = $course_id;
+	}
+	$course_params = array_merge( $course_params, $user_ids );
+	$rows          = $wpdb->get_results( $wpdb->prepare( $sql_courses, ...$course_params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+	$grouped = array();
+	foreach ( $rows as $row ) {
+		$grouped[ $row['user_id'] ][] = $row['course_id'];
+	}
+
+	return array_map(
+		fn( $uid) => array(
+			'ID'      => $uid,
+			'courses' => $grouped[ $uid ] ?? array(),
+		),
+		$user_ids
 	);
 }

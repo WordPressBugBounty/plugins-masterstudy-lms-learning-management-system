@@ -10,7 +10,7 @@ if ( is_admin() ) {
 
 		$plugin_pages      = array(
 			'stm-lms-settings',
-			'stm-support-page',
+			'stm-support-page-masterstudy',
 		);
 		$plugin_post_types = array(
 			'stm-courses',

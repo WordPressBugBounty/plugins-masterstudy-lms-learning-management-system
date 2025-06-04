@@ -1,7 +1,1 @@
-"use strict";
-
-(function ($) {
-  $(document).ready(function () {
-    $('body').addClass('stm-online-testing');
-  });
-})(jQuery);
+"use strict";!function(n){n(document).ready((function(){n("body").addClass("stm-online-testing")}))}(jQuery);

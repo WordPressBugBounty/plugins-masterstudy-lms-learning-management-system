@@ -20,6 +20,7 @@ use MasterStudy\Lms\Repositories\CoursePlayerRepository;
 
 wp_enqueue_style( 'masterstudy-curriculum-accordion' );
 wp_enqueue_script( 'masterstudy-curriculum-accordion' );
+
 ?>
 
 <div class="masterstudy-curriculum-accordion <?php echo esc_attr( $dark_mode ? 'masterstudy-curriculum-accordion_dark-mode' : '' ); ?>">
@@ -65,7 +66,7 @@ wp_enqueue_script( 'masterstudy-curriculum-accordion' );
 					$material_index++;
 					$material       = apply_filters( 'masterstudy_lms_lesson_curriculum_data', $material, $curriculum, $course_id );
 					$question_count = ! empty( $material['questions_array'] ) ? count( $material['questions_array'] ) : 0;
-					$question_count = ! empty( $material['quiz_data']['questions_for_nav'] ) ? $material['quiz_data']['questions_for_nav'] : $question_count;
+					$question_count = ! empty( $material['question_bank_total_items'] ) ? $material['question_bank_total_items'] : $question_count;
 					?>
 					<li class="masterstudy-curriculum-accordion__item">
 						<a href="<?php echo esc_url( STM_LMS_Lesson::get_lesson_url( $course_id, $material['post_id'] ) ); ?>"

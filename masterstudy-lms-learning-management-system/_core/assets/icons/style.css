@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'stmlms';
-  src:  url('fonts/stmlms.eot?u436ga');
-  src:  url('fonts/stmlms.eot?u436ga#iefix') format('embedded-opentype'),
-    url('fonts/stmlms.ttf?u436ga') format('truetype'),
-    url('fonts/stmlms.woff?u436ga') format('woff'),
-    url('fonts/stmlms.svg?u436ga#stmlms') format('svg');
+  src:  url('fonts/stmlms.eot?7qi3j5');
+  src:  url('fonts/stmlms.eot?7qi3j5#iefix') format('embedded-opentype'),
+    url('fonts/stmlms.ttf?7qi3j5') format('truetype'),
+    url('fonts/stmlms.woff?7qi3j5') format('woff'),
+    url('fonts/stmlms.svg?7qi3j5#stmlms') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.stmlms-table-trash:before {
+  content: "\ea0f";
+}
 .stmlms-course-countdown:before {
   content: "\ea0e";
 }
@@ -344,13 +347,11 @@
   content: "\e9bc";
   color: #227aff;
 }
-.stmlms-download-alt:before {
-  content: "\e9bb";
-  color: #fff;
-}
 .stmlms-upload-alt:before {
   content: "\e9ba";
-  color: #227aff;
+}
+.stmlms-download-alt:before {
+  content: "\e9bb";
 }
 .stmlms-lnr-bullhorn:before {
   content: "\e9b9";

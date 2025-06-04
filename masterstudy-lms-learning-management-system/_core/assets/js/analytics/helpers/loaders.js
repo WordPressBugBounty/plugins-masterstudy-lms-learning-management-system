@@ -1,0 +1,1 @@
+"use strict";function hideLoaders(e){document.querySelectorAll(e).forEach((function(e){e.querySelectorAll(".masterstudy-analytics-loader").forEach((function(e){e.style.display="none"}))}))}function showLoaders(e){document.querySelectorAll(e).forEach((function(e){e.querySelectorAll(".masterstudy-analytics-loader").forEach((function(e){e.style.display="flex"}))}))}

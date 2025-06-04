@@ -232,6 +232,10 @@ final class CourseRepository extends AbstractRepository {
 			$args['s'] = sanitize_text_field( $request['s'] );
 		}
 
+		if ( ! empty( $request['current_user'] ) ) {
+			$args['author'] = get_current_user_id();
+		}
+
 		if ( ! empty( $request['author'] ) ) {
 			$args['author'] = intval( $request['author'] );
 		}
@@ -574,7 +578,7 @@ final class CourseRepository extends AbstractRepository {
 
 	private function hydrate_courses( array $posts ): array {
 		$user_wishlist          = $this->get_user_wishlist();
-		$is_coming_soon_enabled = is_ms_lms_addon_enabled( 'coming_soon' );
+		$is_coming_soon_enabled = is_ms_lms_addon_enabled( 'coming_soon' ) && function_exists( 'masterstudy_lms_coming_soon_start_time' );
 		$subscription_enabled   = \STM_LMS_Subscriptions::subscription_enabled();
 
 		foreach ( $posts as &$post ) {

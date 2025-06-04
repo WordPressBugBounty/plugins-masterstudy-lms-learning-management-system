@@ -209,6 +209,23 @@ function stm_lms_settings_general_section() {
 				'label'       => esc_html__( 'Restrict instructors from accessing the admin panel', 'masterstudy-lms-learning-management-system' ),
 				'description' => esc_html__( 'Enable this to prevent instructors from using the admin panel. They will be redirected to their account pages', 'masterstudy-lms-learning-management-system' ),
 			),
+			'course_builder_fonts'                 => array(
+				'type'     => 'typography',
+				'label'    => esc_html__( 'Course Builder Font Family', 'masterstudy-lms-learning-management-system' ),
+				'excluded' => array(
+					'backup-font',
+					'font-size',
+					'font-weight',
+					'line-height',
+					'letter-spacing',
+					'word-spacing',
+					'text-transform',
+					'text-align',
+					'subset',
+					'google-weight',
+					'color',
+				),
+			),
 			'ms_plugin_preloader'                  => array(
 				'type'        => 'checkbox',
 				'label'       => esc_html__( 'Loading animation', 'masterstudy-lms-learning-management-system' ),

@@ -56,6 +56,12 @@ function stm_lms_settings_course_player_section() {
 			'description' => esc_html__( 'Play Vimeo videos with the MasterStudy player', 'masterstudy-lms-learning-management-system' ),
 			'value'       => false,
 		),
+		'lesson_materials_title'                    => array(
+			'type'        => 'text',
+			'label'       => esc_html__( 'Lesson Materials Section Title', 'masterstudy-lms-learning-management-system' ),
+			'value'       => esc_html__( 'Lesson Materials', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Set the title for the downloadable materials section in the Course Player.', 'masterstudy-lms-learning-management-system' ),
+		),
 	);
 
 	$course_player_settings['fields'] = $course_player_primary_fields;
@@ -67,6 +73,18 @@ function stm_lms_settings_course_player_section() {
 				'label'       => esc_html__( 'Disable video seeking', 'masterstudy-lms-learning-management-system' ),
 				'description' => esc_html__( 'This setting prevents users from skipping or rewinding videos.', 'masterstudy-lms-learning-management-system' ),
 				'value'       => false,
+			),
+			'video_questions_title'           => array(
+				'type'        => 'text',
+				'label'       => esc_html__( 'Video Questions Section Title', 'masterstudy-lms-learning-management-system' ),
+				'value'       => esc_html__( 'Video Questions', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Set the title for the video questions section in the Course Player.', 'masterstudy-lms-learning-management-system' ),
+			),
+			'video_questions_list_show'       => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Video Questions Block', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Allows you to hide or show the questions block in video lessons.', 'masterstudy-lms-learning-management-system' ),
+				'value'       => true,
 			),
 		);
 

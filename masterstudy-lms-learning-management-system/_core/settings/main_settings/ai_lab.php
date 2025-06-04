@@ -1,6 +1,7 @@
 <?php
 
 use MasterStudy\Lms\Plugin\Addons;
+use MasterStudy\Lms\Pro\AddonsPlus\AiLab\Services\OpenAi\Model;
 
 function stm_lms_settings_ai_lab_section() {
 	$is_ai_enabled      = is_ms_lms_addon_enabled( Addons::AI_LAB );
@@ -20,6 +21,26 @@ function stm_lms_settings_ai_lab_section() {
 					'</a>'
 				),
 				'placeholder' => 'Enter your OpenAI API key (starts with sk-...)',
+			),
+			'openai_text_model'        => array(
+				'type'        => 'select',
+				'label'       => esc_html__( 'Model', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Choose the model for Text Generation.', 'masterstudy-lms-learning-management-system' ),
+				'options'     => array(
+					'gpt-4o'                  => 'GPT-4o',
+					'gpt-4o-mini'             => 'GPT-4o Mini',
+					'gpt-4.1'                  => 'GPT-4.1',
+					'gpt-4.1-mini'             => 'GPT-4.1 Mini',
+					'gpt-4.1-nano'             => 'GPT-4.1 Nano',
+					'gpt-4-turbo'             => 'GPT-4 Turbo',
+					'gpt-4-turbo-latest'      => 'GPT-4 Turbo Latest',
+					'gpt-4-turbo-latest-mini' => 'GPT-4 Turbo Latest Mini',
+					'gpt-4'                   => 'GPT-4',
+					'gpt-3.5-turbo'            => 'GPT-3.5 Turbo',
+					'gpt-3.5-turbo-16k'        => 'GPT-3.5 Turbo 16K',
+					'gpt-3.5-turbo-instruct'   => 'GPT-3.5 Turbo Instruct',
+				),
+				'value'       => 'gpt-3.5-turbo',
 			),
 			'openai_text_suggestions'  => array(
 				'type'        => 'select',
@@ -42,7 +63,7 @@ function stm_lms_settings_ai_lab_section() {
 			'openai_image_suggestions' => array(
 				'type'        => 'select',
 				'label'       => esc_html__( 'Number of Image Suggestions', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'Choose how many images you want to generate. If you select 1, the image will be created with the DALL·E 3 model for higher quality.', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Choose how many images you want to generate.', 'masterstudy-lms-learning-management-system' ),
 				'options'     => array(
 					1  => 1,
 					2  => 2,
@@ -55,7 +76,7 @@ function stm_lms_settings_ai_lab_section() {
 					9  => 9,
 					10 => 10,
 				),
-				'value'       => 1,
+				'value'       => 2,
 			),
 			'instructor_access'        => array(
 				'type'  => 'instructor-access',

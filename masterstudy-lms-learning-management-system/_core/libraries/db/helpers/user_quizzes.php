@@ -75,7 +75,7 @@ function stm_lms_get_user_course_quizzes( $user_id, $course_id = null, $fields =
 
 	$quiz_condition = '';
 	if ( ! empty( $quiz_ids ) ) {
-		$placeholders = implode( ',', array_fill( 0, count( $quiz_ids ), '%d' ) );
+		$placeholders   = implode( ',', array_fill( 0, count( $quiz_ids ), '%d' ) );
 		$quiz_condition = " AND quiz_id IN ($placeholders)";
 	}
 
@@ -84,14 +84,9 @@ function stm_lms_get_user_course_quizzes( $user_id, $course_id = null, $fields =
 		$params = array_merge( $params, $quiz_ids );
 	}
 
-	return $wpdb->get_results(
-		$wpdb->prepare(
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			"SELECT {$fields} FROM {$table} WHERE user_id = %d AND status = %s {$course_condition}{$quiz_condition}",
-			$params
-		),
-		ARRAY_A
-	);
+	$query = "SELECT {$fields} FROM {$table} WHERE user_id = %d AND status = %s {$course_condition}{$quiz_condition}";
+
+	return $wpdb->get_results( $wpdb->prepare( $query, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 }
 
 function stm_lms_get_user_last_quiz( $user_id, $quiz_id, $fields = array(), $course_id = null ) {
@@ -212,10 +207,11 @@ function stm_lms_get_course_all_quizzes( $user_id, $search = '', $limit = '', $o
 	if ( $get_total ) {
 		$sql_count = "SELECT COUNT(DISTINCT q.course_id) FROM {$quizzes_table} q
 			INNER JOIN {$wpdb->posts} p ON p.ID = q.quiz_id
+			INNER JOIN {$wpdb->posts} pc ON pc.ID = q.course_id AND pc.post_type = %s
 			{$join}
 			WHERE q.user_id = %d AND p.post_type = %s AND p.post_status = 'publish' {$where}";
 
-		return (int) $wpdb->get_var( $wpdb->prepare( $sql_count, $user_id, $quiz_post_type ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		return (int) $wpdb->get_var( $wpdb->prepare( $sql_count, $course_post_type, $user_id, $quiz_post_type ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
 
 	$sql_courses = "SELECT p.ID AS course_id, sub.max_id FROM {$quizzes_table} q

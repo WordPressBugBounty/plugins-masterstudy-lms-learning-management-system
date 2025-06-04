@@ -1,7 +1,1 @@
-"use strict";
-
-(function ($) {
-  $(window).on('load', function () {
-    $('.masterstudy-loader_global').fadeOut('fast');
-  });
-})(jQuery);
+"use strict";!function(t){t(window).on("load",(function(){t(".masterstudy-loader_global").fadeOut("fast")}))}(jQuery);

@@ -21,7 +21,7 @@ final class DeleteStudentController {
 			return WpResponseFactory::forbidden();
 		}
 
-		( new StudentsRepository() )->delete_student( $course_id, $student_id, $subscribed_email );
+		( new StudentsRepository() )->delete_student_by_course( $course_id, $student_id, $subscribed_email );
 
 		return WpResponseFactory::ok();
 	}

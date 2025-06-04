@@ -278,6 +278,29 @@ class STM_LMS_Page_Router {
 						'instructors_only' => true,
 						'url'              => 'manage-students',
 					),
+					'enrolled_students'          => array(
+						'template'         => 'stm-lms-enrolled-students',
+						'protected'        => true,
+						'instructors_only' => true,
+						'url'              => 'enrolled-students',
+						'sub_pages'        => array(
+							'enrolled_student' => array(
+								'template'  => 'stm-lms-enrolled-student',
+								'protected' => true,
+								'var'       => 'student_id',
+							),
+						),
+					),
+					'enrolled_students_progress' => array(
+						'template'         => 'stm-lms-instructor-manage-students',
+						'protected'        => true,
+						'instructors_only' => true,
+						'url'              => 'enrolled-students-progress',
+						'vars'             => array(
+							'student_id' => 2,
+							'course_id'  => 3,
+						),
+					),
 					'announcement'               => array(
 						'template'         => 'stm-lms-instructor-announcement',
 						'protected'        => true,

@@ -202,9 +202,27 @@ $router->put(
 );
 
 $router->get(
-	'/students',
+	'/students/',
 	\MasterStudy\Lms\Http\Controllers\Student\GetStudentsController::class,
 	\MasterStudy\Lms\Routing\Swagger\Routes\Student\GetStudents::class
+);
+
+$router->delete(
+	'/students/delete/',
+	\MasterStudy\Lms\Http\Controllers\Student\DeleteStudentsController::class,
+	\MasterStudy\Lms\Routing\Swagger\Routes\Student\DeleteStudents::class
+);
+
+$router->get(
+	'/students/{course_id}',
+	\MasterStudy\Lms\Http\Controllers\Student\GetStudentsController::class,
+	\MasterStudy\Lms\Routing\Swagger\Routes\Student\GetStudents::class
+);
+
+$router->get(
+	'/export/students/',
+	\MasterStudy\Lms\Http\Controllers\Student\ExportStudentsController::class,
+	\MasterStudy\Lms\Routing\Swagger\Routes\Student\ExportStudents::class
 );
 
 $router->get(

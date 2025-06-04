@@ -14,7 +14,7 @@ add_filter(
 			'logo'        => STM_LMS_URL . 'assets/admin/icon.svg',
 			'page'        => array(
 				'page_title' => esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ),
-				'menu_title' => 'MS LMS',
+				'menu_title' => 'MasterStudy',
 				'menu_slug'  => 'stm-lms-settings',
 				'icon'       => STM_LMS_URL . 'assets/admin/icon.png',
 				'position'   => 3,
@@ -108,8 +108,8 @@ add_action(
 
 		add_submenu_page(
 			'stm-lms-settings',
-			esc_html__( 'Help center', 'masterstudy-lms-learning-management-system' ),
-			esc_html__( 'Help center', 'masterstudy-lms-learning-management-system' ),
+			esc_html__( 'Help Center', 'masterstudy-lms-learning-management-system' ),
+			esc_html__( 'Help Center', 'masterstudy-lms-learning-management-system' ),
 			'manage_options',
 			'stm-support-page-masterstudy',
 			function () {

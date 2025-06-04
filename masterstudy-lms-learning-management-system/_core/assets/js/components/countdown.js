@@ -1,12 +1,1 @@
-"use strict";
-
-(function ($) {
-  $(document).ready(function () {
-    // launch timers
-    $('.masterstudy-countdown').each(function () {
-      $(this).countdown({
-        timestamp: $(this).data('timer')
-      });
-    });
-  });
-})(jQuery);
+"use strict";!function(t){t(document).ready((function(){t(".masterstudy-countdown").each((function(){t(this).countdown({timestamp:t(this).data("timer")})}))}))}(jQuery);

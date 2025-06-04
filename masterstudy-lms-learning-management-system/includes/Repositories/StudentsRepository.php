@@ -2,12 +2,14 @@
 
 namespace MasterStudy\Lms\Repositories;
 
+use MasterStudy\Lms\Http\WpResponseFactory;
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Plugin\PostType;
+use STM_LMS_Helpers;
 
 final class StudentsRepository {
 
-	public function get_course_students( array $params = array() ) {
+	public function get_course_students( array $params = array() ): array {
 		global $wpdb;
 
 		$course_table = stm_lms_user_courses_name( $wpdb );
@@ -101,6 +103,60 @@ final class StudentsRepository {
 		);
 
 		return $output;
+	}
+
+	public function get_all_students( array $params = array() ): array {
+		$per_page  = $params['per_page'] ?? get_option( 'posts_per_page', 10 );
+		$page      = $params['page'] ?? 1;
+		$search    = $params['s'] ?? '';
+		$course_id = $params['course_id'] ?? 0;
+		$date_from = $params['date_from'] ? wp_date( 'Y-m-d H:i:s', strtotime( $params['date_from'] ) ) : '';
+		$date_to   = $params['date_to'] ? wp_date( 'Y-m-d H:i:s', strtotime( $params['date_to'] . ' 23:59:59' ) ) : '';
+		$order     = $params['order'] ?? '';
+		$orderby   = $params['orderby'] ?? '';
+		$offset    = ( $page - 1 ) * $per_page;
+
+		$students = stm_lms_get_users_enrolled_list( $search, $course_id, $date_from, $date_to, $order, $orderby, $per_page, $offset );
+		$total    = stm_lms_get_users_enrolled_count( $search, $course_id, $date_from, $date_to );
+
+		if ( ! empty( $students ) ) {
+			foreach ( $students as &$student ) {
+				$user = get_userdata( $student['ID'] );
+
+				if ( ! $user->exists() ) {
+					continue;
+				}
+
+				$name         = trim( "{$user->first_name} {$user->last_name}" );
+				$display_name = '' !== $name ? $name : $user->data->display_name;
+
+				$referer  = isset( $_SERVER['HTTP_REFERER'] ) ? esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
+				$is_admin = strpos( $referer, '/wp-admin/' ) !== false;
+				$url      = '';
+
+				if ( STM_LMS_Helpers::is_pro_plus() ) {
+					$url = $is_admin ? admin_url( "admin.php?page=manage_students&user_id=$user->ID&role=student" ) : ms_plugin_user_account_url( "enrolled-students/$user->ID" );
+				}
+
+				$student = array(
+					'user_id'      => $user->ID,
+					'display_name' => $display_name,
+					'email'        => $user->user_email,
+					'registered'   => $user->user_registered,
+					'enrolled'     => $student['enrolled'] ?? 0,
+					'points'       => $student['points'] ?? 0,
+					'url'          => $url,
+				);
+			}
+		}
+
+		return array(
+			'students'       => $students,
+			'pages'          => (int) ceil( $total / $per_page ),
+			'current_page'   => (int) $page,
+			'total_students' => $total,
+			'total'          => ( $total <= $offset + $per_page ),
+		);
 	}
 
 	public function get_subscribed_users( $students, $total, $params ) {
@@ -257,28 +313,60 @@ final class StudentsRepository {
 		);
 	}
 
-	public function delete_student( $course_id, $student_id, $subscribed_email = null ) {
-		$userdata = get_userdata( $student_id );
-
-		if ( $userdata ) {
-			stm_lms_get_delete_user_course( $student_id, $course_id );
-			$meta = \STM_LMS_Helpers::parse_meta_field( $course_id );
-
-			if ( ! empty( $meta['current_students'] ) && $meta['current_students'] > 0 ) {
-				update_post_meta( $course_id, 'current_students', --$meta['current_students'] );
-			}
+	private function cleanup_course_after_removal( int $course_id, string $user_email, bool $coming_soon_on ): void {
+		$count = (int) get_post_meta( $course_id, 'current_students', true );
+		if ( $count > 0 ) {
+			update_post_meta( $course_id, 'current_students', $count - 1 );
 		}
 
-		if ( ! empty( $subscribed_email ) && is_ms_lms_addon_enabled( 'coming_soon' ) ) {
-			$coming_soon_emails      = get_post_meta( $course_id, 'coming_soon_student_emails', true ) ?? array();
-			$unsubscribe_email_index = array_search( $subscribed_email, array_column( $coming_soon_emails, 'email' ), true );
+		if ( $coming_soon_on ) {
+			$emails   = (array) get_post_meta( $course_id, 'coming_soon_student_emails', true );
+			$filtered = array_filter(
+				$emails,
+				static fn( $entry) => empty( $entry['email'] ) || $entry['email'] !== $user_email
+			);
 
-			unset( $coming_soon_emails[ $unsubscribe_email_index ] );
-			update_post_meta( $course_id, 'coming_soon_student_emails', array_values( $coming_soon_emails ) );
+			if ( count( $filtered ) !== count( $emails ) ) {
+				update_post_meta( $course_id, 'coming_soon_student_emails', array_values( $filtered ) );
+			}
 		}
 	}
 
-	public function export_students( $course_id ) {
+	public function delete_student( array $student_ids ): void {
+		if ( empty( $student_ids ) ) {
+			return;
+		}
+
+		$response = stm_lms_delete_users_in_courses( $student_ids )['data'];
+
+		foreach ( $response as $item ) {
+			$user = get_userdata( $item['user_id'] ?? 0 );
+
+			if ( ! $user ) {
+				continue;
+			}
+
+			if ( ! ( new CourseRepository() )->exists( $item['course_id'] ) ) {
+				continue;
+			}
+
+			if ( ! \STM_LMS_Course::check_course_author( $item['course_id'], get_current_user_id() ) ) {
+				continue;
+			}
+
+			$this->cleanup_course_after_removal( absint( $item['course_id'] ), sanitize_email( $user->user_email ), is_ms_lms_addon_enabled( 'coming_soon' ) );
+		}
+	}
+
+	public function delete_student_by_course( int $course_id, int $student_id, ?string $subscribed_email = null ): void {
+		$user = get_userdata( $student_id );
+		if ( $user ) {
+			stm_lms_get_delete_user_course( $student_id, $course_id );
+			$this->cleanup_course_after_removal( $course_id, sanitize_email( $subscribed_email ), is_ms_lms_addon_enabled( 'coming_soon' ) );
+		}
+	}
+
+	public function export_students_by_course( $course_id ): array {
 		$users      = stm_lms_get_course_users( $course_id );
 		$users_data = array();
 
@@ -294,6 +382,37 @@ final class StudentsRepository {
 		}
 
 		return $users_data;
+	}
+
+	public function export_students( array $params = array() ): array {
+		$date_from     = $params['date_from'] ? wp_date( 'Y-m-d H:i:s', strtotime( $params['date_from'] ) ) : '';
+		$date_to       = $params['date_to'] ? wp_date( 'Y-m-d H:i:s', strtotime( $params['date_to'] . ' 23:59:59' ) ) : '';
+		$students      = stm_lms_get_users_enrolled_export( $params['s'], $params['course_id'], $date_from, $date_to, '', '', -1 );
+		$students_data = array();
+
+		if ( ! empty( $students ) ) {
+			foreach ( $students as $student ) {
+				$user_data = get_userdata( $student['ID'] );
+				if ( ! $user_data || ! $user_data->exists() ) {
+					continue;
+				}
+
+				$courses = $student['courses'] ?? array();
+
+				$students_data[] = array(
+					'email'         => $user_data->user_email,
+					'first_name'    => $user_data->first_name,
+					'last_name'     => $user_data->last_name,
+					'course_ids'    => $courses,
+					'course_titles' => array_map(
+						fn( $course_id ) => esc_html( get_the_title( $course_id ) ),
+						$courses
+					),
+				);
+			}
+		}
+
+		return $students_data;
 	}
 
 	public function set_student_progress( $course_id, $student_id, $data ) {

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @var int $student_id
+ * @var int $course_id
+ * */
+
 stm_lms_register_style( 'manage_students/student-progress' );
 stm_lms_register_script( 'manage_students/student-progress' );
 
@@ -18,7 +23,9 @@ wp_enqueue_script( 'masterstudy-course-player-quiz-attempt' );
 				'components/back-link',
 				array(
 					'id'  => 'masterstudy-course-player-back',
-					'url' => STM_LMS_Instructor::instructor_manage_students_url() . "/?course_id=$course_id",
+					'url' => 'enrolled-students' === get_query_var( 'lms_page_path' ) ?
+						ms_plugin_user_account_url( "enrolled-students/$student_id" ) :
+						STM_LMS_Instructor::instructor_manage_students_url() . "/?course_id=$course_id",
 				)
 			);
 			?>

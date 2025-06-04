@@ -407,6 +407,9 @@ class STM_LMS_User_Menu {
 					case 'add_student':
 						$add_element = STM_LMS_Instructor::instructor_can_add_students() && $is_instructor && $instructor_menu;
 						break;
+					case 'enrolled-students':
+						$add_element = STM_LMS_Instructor::instructor_show_list_students() && $is_instructor && $instructor_menu;
+						break;
 					case 'assignments':
 						$add_element = class_exists( '\MasterStudy\Lms\Pro\addons\assignments\Assignments' ) && $is_instructor && $instructor_menu;
 						break;
@@ -526,6 +529,7 @@ class STM_LMS_User_Menu {
 			'payout',
 			'announcement',
 			'analytics',
+			'enrolled-students',
 			'sales',
 			'grades',
 		);

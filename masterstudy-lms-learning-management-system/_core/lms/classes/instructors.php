@@ -6,7 +6,7 @@ STM_LMS_Instructor::init();
 
 class STM_LMS_Instructor extends STM_LMS_User {
 	public static function init() {
-		add_filter( 'map_meta_cap', 'STM_LMS_Instructor::meta_cap', 10, 4 );
+		add_filter( 'map_meta_cap', array( self::class, 'meta_cap' ), 10, 4 );
 
 		add_action( 'wp_ajax_stm_lms_get_instructor_courses', 'STM_LMS_Instructor::get_courses' );
 
@@ -41,7 +41,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 		add_action( 'pending_to_publish', 'STM_LMS_Instructor::post_published', 10, 2 );
 
-		add_action( 'admin_menu', 'STM_LMS_Instructor::manage_users', 10000 );
+		add_action( 'admin_menu', array( self::class, 'manage_users' ), 10000 );
 
 		/*Plug for add student*/
 		if ( ! class_exists( 'STM_LMS_Enterprise_Courses' ) ) {
@@ -264,7 +264,9 @@ class STM_LMS_Instructor extends STM_LMS_User {
 	}
 
 	public static function meta_cap( $caps, $cap, $user_id, $args ) {
-		remove_filter( 'map_meta_cap', 'STM_LMS_Instructor::meta_cap', 10 );
+		remove_filter( 'map_meta_cap', array( self::class, 'meta_cap' ) );
+
+		global $post, $post_type;
 
 		if ( ! self::is_instructor() ) {
 			return $caps;
@@ -304,20 +306,16 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			}
 		}
 
-		add_filter( 'map_meta_cap', 'STM_LMS_Instructor::meta_cap', 10, 4 );
+		add_filter( 'map_meta_cap', array( self::class, 'meta_cap' ), 10, 4 );
 
 		return $caps;
 	}
 
-	public static function instructors_enabled() {
-		return STM_LMS_Options::get_option( 'enable_instructors', false );
-	}
-
-	public static function role() {
+	public static function role(): string {
 		return 'stm_lms_instructor';
 	}
 
-	public static function is_instructor( $user_id = null ) {
+	public static function is_instructor( $user_id = null ): bool {
 		$user = parent::get_current_user( $user_id, true, false, true );
 		if ( empty( $user['id'] ) ) {
 			return false;
@@ -330,7 +328,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		return in_array( self::role(), $user['roles'], true );
 	}
 
-	public static function has_instructor_role( $user_id = null ) {
+	public static function has_instructor_role( $user_id = null ): bool {
 		$user = parent::get_current_user( $user_id, true, false, true );
 		if ( empty( $user['id'] ) ) {
 			return false;
@@ -395,9 +393,9 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		wp_send_json( self::masterstudy_lms_get_instructor_courses( $args, $offset, $pp ) );
 	}
 
-	public static function masterstudy_lms_get_instructor_courses( $args = array(), $offset = 0, $pp = 0 ) {
+	public static function masterstudy_lms_get_instructor_courses( $args = array(), $offset = 0, $pp = 0 ): array {
 		$result  = array( 'posts' => array() );
-		$get_ids = ( ! empty( $_GET['ids_only'] ) );
+		$get_ids = ( ! empty( $_GET['ids_only'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		if ( function_exists( 'pll_current_language' ) ) {
 			$args['lang'] = pll_current_language();
@@ -502,11 +500,11 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		return $result;
 	}
 
-	public static function transient_name( $user_id, $name = '' ) {
+	public static function transient_name( $user_id, $name = '' ): string {
 		return "stm_lms_instructor_{$user_id}_{$name}";
 	}
 
-	public static function my_rating_v2( $user = '' ) {
+	public static function my_rating_v2( $user = '' ): array {
 		$user    = ( ! empty( $user ) ) ? $user : STM_LMS_User::get_current_user();
 		$user_id = $user['id'];
 
@@ -570,8 +568,6 @@ class STM_LMS_Instructor extends STM_LMS_User {
 							++$ratings['total_marks'];
 							$ratings['total'] += $mark;
 						}
-					} else {
-						continue;
 					}
 				}
 
@@ -606,7 +602,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 	}
 
 	public static function become_instructor( $data, $user_id ) {
-		if ( ! empty( $data['become_instructor'] ) && $data['become_instructor'] ) {
+		if ( ! empty( $data['become_instructor'] ) ) {
 			$is_ai_enabled = self::get_is_ai_enabled_for_all();
 
 			if ( ! empty( $data['fields_type'] ) && 'custom' === $data['fields_type'] ) {
@@ -622,19 +618,9 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					);
 
 					foreach ( $data['fields'] as $field ) {
-						$label = '';
-						if ( ! empty( $field['label'] ) ) {
-							$label = $field['label'];
-						} elseif ( ! empty( $field['slug'] ) ) {
-							$label = $field['slug'];
-						} elseif ( ! empty( $field['field_name'] ) ) {
-							$label = $field['field_name'];
-						}
 						if ( ! empty( $field['slug'] ) ) {
 							$email_data[ $field['slug'] ] = $field['value'];
 						}
-
-						$message .= $label . ' - ' . $field['value'] . ';<br>';
 					}
 
 					update_user_meta( $user_id, 'become_instructor', $data );
@@ -652,13 +638,13 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					);
 
 					if ( ! $instructor_premoderation ) {
-						$update_user = wp_update_user(
+						wp_update_user(
 							array(
 								'ID'   => $user_id,
 								'role' => 'stm_lms_instructor',
 							)
 						);
-						$message     = sprintf(
+						$message = sprintf(
 							/* translators: %s User Login, User ID */
 							__( 'User %1$s with id - %2$s, registered as Instructor.', 'masterstudy-lms-learning-management-system' ),
 							$user_login,
@@ -709,7 +695,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 				$instructor_premoderation = STM_LMS_Options::get_option( 'instructor_premoderation', false );
 
-				$date       = gmdate( 'Y-m-d H:i:s' );
+				$date       = wp_date( 'Y-m-d H:i:s' );
 				$user_email = $user['email'];
 
 				$message = esc_html__( 'You have received a new instructor application from ', 'masterstudy-lms-learning-management-system-pro' ) . $user_login . ', <br/>' . // phpcs:disable
@@ -719,17 +705,17 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					'<b>' . esc_html__( 'Email: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $user_email . ' <br>' .
 					'<b>' . esc_html__( 'Degree: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $degree . ' <br>' .
 					'<b>' . esc_html__( 'Expertize: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $expertize . ' <br>' .
-					'<b>' . esc_html__( 'Application Date: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $date . ' <br><br>' .
+					'<b>' . esc_html__( 'Application Date: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . wp_date( 'Y-m-d H:i:s' ) . ' <br><br>' .
 					esc_html__( 'Please review the application at your earliest convenience.', 'masterstudy-lms-learning-management-system-pro' ) . '</a> <br/><br/>'; // phpcs:enable
 
 				if ( ! $instructor_premoderation ) {
-					$update_user = wp_update_user(
+					wp_update_user(
 						array(
 							'ID'   => $user_id,
 							'role' => 'stm_lms_instructor',
 						)
 					);
-					$message     = sprintf(
+					$message = sprintf(
 						/* translators: %s User Login, User ID, Degree, Expertize */
 						__( 'User %1$s with id - %2$s, registered as Instructor. Degree - %3$s. Expertize - %4$s', 'masterstudy-lms-learning-management-system' ),
 						$user_login,
@@ -773,7 +759,11 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		return STM_LMS_Options::get_option( 'instructor_can_add_students', false );
 	}
 
-	public static function instructor_manage_students_url() {
+	public static function instructor_show_list_students() {
+		return STM_LMS_Options::get_option( 'show_students_to_instructors', false );
+	}
+
+	public static function instructor_manage_students_url(): string {
 		return STM_LMS_User::user_page_url() . 'manage-students';
 	}
 
@@ -810,7 +800,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 		foreach ( $courses as $course_id ) {
 			foreach ( $user_ids as $user_id ) {
-				$user_course = stm_lms_get_user_course( $user_id, $course_id, array() );
+				$user_course = stm_lms_get_user_course( $user_id, $course_id );
 
 				if ( ! empty( $user_course ) ) {
 					continue;
@@ -847,7 +837,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		wp_send_json( $data );
 	}
 
-	public static function create_users_from_emails( $emails ) {
+	public static function create_users_from_emails( $emails ): array {
 		$users = array();
 
 		foreach ( $emails as $email ) {
@@ -888,11 +878,11 @@ class STM_LMS_Instructor extends STM_LMS_User {
 	public static function manage_users() {
 		add_submenu_page(
 			'stm-lms-settings',
-			esc_html__( 'Instructor Requests', 'masterstudy-lms-learning-management-system' ),
-			esc_html__( 'Instructor Requests', 'masterstudy-lms-learning-management-system' ),
+			esc_html__( 'Instructors', 'masterstudy-lms-learning-management-system' ),
+			'<span class="stm-lms-instructors-menu-title">' . esc_html__( 'Instructors', 'masterstudy-lms-learning-management-system' ) . '</span>',
 			'manage_options',
 			'manage_users',
-			'STM_LMS_Instructor::manage_users_template',
+			array( self::class, 'manage_users_template' ),
 			stm_lms_addons_menu_position()
 		);
 	}
@@ -981,17 +971,14 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			$user_email      = $user->user_email;
 			$user_login      = $user->user_login;
 			$submission_data = get_user_meta( $user_id, 'become_instructor', true );
-			$degree          = ( ! empty( $submission_data['degree'] ) ) ? $submission_data['degree'] : esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
-			$expertize       = ( ! empty( $submission_data['expertize'] ) ) ? $submission_data['expertize'] : esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
 			$custom_fields   = ! empty( $submission_data['fields'] ) ? $submission_data['fields'] : array();
 			update_user_meta( $user_id, 'submission_status', sanitize_text_field( $status ) );
-			$date_format        = 'M j, Y - H:i';
-			$email_data         = array(
+			$date_format = 'M j, Y - H:i';
+			$email_data  = array(
 				'user_login'    => $user_login,
 				'user_id'       => $user_id,
 				'admin_message' => $admin_message,
 			);
-			$additional_message = '';
 			foreach ( $custom_fields as $field ) {
 				if ( empty( $field['value'] ) ) {
 					continue;
@@ -1008,14 +995,14 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				$email_data[ $label ] = $field['value'];
 			}
 			if ( 'approved' === $status ) {
-				$update_user = wp_update_user(
+				wp_update_user(
 					array(
 						'ID'   => $user_id,
 						'role' => 'stm_lms_instructor',
 					)
 				);
-				$message     = esc_html__( 'Your submission has been approved', 'masterstudy-lms-learning-management-system' );
-				$subject     = esc_html__( 'Instructor submission', 'masterstudy-lms-learning-management-system' );
+				$message = esc_html__( 'Your submission has been approved', 'masterstudy-lms-learning-management-system' );
+				$subject = esc_html__( 'Instructor submission', 'masterstudy-lms-learning-management-system' );
 				if ( ! empty( $admin_message ) ) {
 					$message .= '<br>' . sanitize_text_field( $admin_message );
 				}
@@ -1113,15 +1100,15 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		wp_send_json( 'saved' );
 	}
 
-	public static function get_instructors( $sort_args ) {
+	public static function get_instructors( $sort_args ): array {
 		$args = array(
 			'role' => self::role(),
 		);
 		if ( ! empty( $sort_args ) ) {
 			$args = array_merge( $args, $sort_args );
 		}
-		$instructors_query = new WP_User_Query( $args );
-		return $instructors_query->get_results();
+
+		return ( new WP_User_Query( $args ) )->get_results();
 	}
 
 	public static function get_course_quantity( $user_id ) {

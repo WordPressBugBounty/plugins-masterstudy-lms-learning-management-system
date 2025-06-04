@@ -1,7 +1,6 @@
 require=(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 
 },{}],"masterstudy-vue-resource":[function(require,module,exports){
-(function (window){(function (){
 /*!
  * vue-resource v1.5.3
  * https://github.com/pagekit/vue-resource
@@ -1471,5 +1470,4 @@ if (typeof window !== 'undefined' && window.Vue && !window.Vue.resource) {
 
 module.exports = plugin;
 
-}).call(this)}).call(this,{ Vue: require('masterstudy-vue') })
-},{"got":1,"masterstudy-vue":"masterstudy-vue"}]},{},[]);
+},{"got":1}]},{},[]);

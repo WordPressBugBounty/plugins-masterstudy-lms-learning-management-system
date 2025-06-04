@@ -15,6 +15,7 @@ require_once STM_LMS_PATH . '/lms/classes/options.php';
 require_once STM_LMS_PATH . '/lms/classes/reviews.php';
 require_once STM_LMS_PATH . '/lms/classes/user.php';
 require_once STM_LMS_PATH . '/lms/classes/instructors.php';
+require_once STM_LMS_PATH . '/lms/classes/students.php';
 require_once STM_LMS_PATH . '/lms/classes/course.php';
 require_once STM_LMS_PATH . '/lms/classes/courses.php';
 require_once STM_LMS_PATH . '/lms/classes/quiz.php';
