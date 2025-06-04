@@ -1,1 +1,102 @@
-"use strict";!function(s){s(document).ready((function(){var t,e,n,l,o=["post-type-stm-courses","post-type-stm-lessons","post-type-stm-quizzes","post-type-stm-questions","post-type-stm-assignments","post-type-stm-google-meets","post-type-stm-user-assignment","post-type-stm-reviews","post-type-stm-orders","post-type-stm-ent-groups","post-type-stm-payout","taxonomy-stm_lms_course_taxonomy","taxonomy-stm_lms_question_taxonomy","stm-lms_page_stm-lms-online-testing","admin_page_stm_lms_scorm_settings","toplevel_page_stm-lms-dashboard"];(t=s(".stm-lms-settings-menu-title").closest("li")).addClass("stm-lms-settings-menu"),t.nextAll("li").addClass("stm-lms-pro-addons-menu"),e=s(".stm-lms-instructors-menu-title").closest("li"),n=s(".stm-lms-students-menu-title").closest("li"),e.addClass("stm-lms-instructors-menu"),n.addClass("stm-lms-students-menu"),function(){var t=s(".stm-lms-templates-menu-title"),e=s(".stm-lms-settings-menu-title").closest("li");e.next("li").addClass("stm-lms-help-support"),0===t.length&&e.addClass("stm-lms-settings-menu");var n=t.closest("li");if(n.length){var l=s("li.stm-lms-pro-addons-menu:last");n.addClass("stm-lms-templates-menu"),n.next("li").addClass("stm-lms-addons-page-menu"),n.nextAll("li").addClass("stm-lms-pro-addons-menu"),l.find("span.stm-lms-unlock-pro-btn").length&&l.addClass("upgrade")}}(),(l=document.querySelector('a[href="admin.php?page=masterstudy-starter-demo-import"]'))&&(l.target="_blank",l.href="https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/"),s("body").is("."+o.join(", ."))&&(s("#adminmenu > li").removeClass("wp-has-current-submenu wp-menu-open").find(".wp-submenu").css("margin-right",0),s("#toplevel_page_stm-lms-settings").addClass("wp-has-current-submenu wp-menu-open").removeClass("wp-not-current-submenu"),s(".toplevel_page_stm-lms-settings").addClass("wp-has-current-submenu").removeClass("wp-not-current-submenu")),function(){var t=s("#unlock-slider-slide-holder"),e=t.children("div"),n=e.length;if(n){t.css("width","".concat(100*n,"%")),e.css("width","".concat(100/n,"%"));for(var l=s("#unlock-slider-slide-nav"),o=0;o<n;o++)l.append('<a href="javascript:void(0)" class="unlock-slider-slide-nav-bt'.concat(0===o?" active":"",'"></a>'));var m=0,a=function(s){t.css("margin-left","-".concat(100*s,"%")),l.children().removeClass("active").eq(s).addClass("active")},i=setInterval((function(){a(m=(m+1)%n)}),4e3);s("body").on("click",".unlock-slider-slide-nav-bt",(function(){m=l.children().index(this),a(m),clearInterval(i)}))}}()})),s(window).on("load",(function(){if(s("body").hasClass("post-type-stm-questions")){var t=s("#titlediv input").val();new MutationObserver((function(e,n){var l=s("#editorquestion_title .ql-editor");l.length&&(l.html(t),n.disconnect()),s("#section_question_settings .ql-toolbar").each((function(){s(this).find(".ql-color, .ql-blockquote").each((function(){s(this).parent().remove()}))}))})).observe(document.body,{childList:!0,subtree:!0})}}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    var classes = ['post-type-stm-courses', 'post-type-stm-lessons', 'post-type-stm-quizzes', 'post-type-stm-questions', 'post-type-stm-assignments', 'post-type-stm-google-meets', 'post-type-stm-user-assignment', 'post-type-stm-reviews', 'post-type-stm-orders', 'post-type-stm-ent-groups', 'post-type-stm-payout', 'taxonomy-stm_lms_course_taxonomy', 'taxonomy-stm_lms_question_taxonomy', 'stm-lms_page_stm-lms-online-testing', 'admin_page_stm_lms_scorm_settings', 'toplevel_page_stm-lms-dashboard'];
+    var setupSettingsMenu = function setupSettingsMenu() {
+      var $settingsParent = $('.stm-lms-settings-menu-title').closest('li');
+      $settingsParent.addClass('stm-lms-settings-menu');
+      $settingsParent.nextAll('li').addClass('stm-lms-pro-addons-menu');
+    };
+    var setupUsersMenu = function setupUsersMenu() {
+      var $instructorsParent = $('.stm-lms-instructors-menu-title').closest('li');
+      var $studentsParent = $('.stm-lms-students-menu-title').closest('li');
+      $instructorsParent.addClass('stm-lms-instructors-menu');
+      $studentsParent.addClass('stm-lms-students-menu');
+    };
+    var setupTemplatesMenu = function setupTemplatesMenu() {
+      var $templates = $('.stm-lms-templates-menu-title');
+      var $settings_parent = $('.stm-lms-settings-menu-title').closest('li');
+      $settings_parent.next('li').addClass('stm-lms-help-support');
+      if ($templates.length === 0) {
+        $settings_parent.addClass('stm-lms-settings-menu');
+      }
+      var $templatesParent = $templates.closest('li');
+      if (!$templatesParent.length) return;
+      var li_addon_last = $('li.stm-lms-pro-addons-menu:last');
+      $templatesParent.addClass('stm-lms-templates-menu');
+      $templatesParent.next('li').addClass('stm-lms-addons-page-menu');
+      $templatesParent.nextAll('li').addClass('stm-lms-pro-addons-menu');
+      if (li_addon_last.find('span.stm-lms-unlock-pro-btn').length) {
+        li_addon_last.addClass('upgrade');
+      }
+    };
+    var updateDemoLink = function updateDemoLink() {
+      var link = document.querySelector('a[href="admin.php?page=masterstudy-starter-demo-import"]');
+      if (link) {
+        link.target = "_blank";
+        link.href = "https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/";
+      }
+    };
+    var highlightMenu = function highlightMenu() {
+      if ($('body').is("." + classes.join(', .'))) {
+        $('#adminmenu > li').removeClass('wp-has-current-submenu wp-menu-open').find('.wp-submenu').css('margin-right', 0);
+        $('#toplevel_page_stm-lms-settings').addClass('wp-has-current-submenu wp-menu-open').removeClass('wp-not-current-submenu');
+        $('.toplevel_page_stm-lms-settings').addClass('wp-has-current-submenu').removeClass('wp-not-current-submenu');
+      }
+    };
+    var initUnlockSlider = function initUnlockSlider() {
+      var $holder = $('#unlock-slider-slide-holder');
+      var $slides = $holder.children('div');
+      var numSlides = $slides.length;
+      if (!numSlides) return;
+      $holder.css('width', "".concat(numSlides * 100, "%"));
+      $slides.css('width', "".concat(100 / numSlides, "%"));
+      var $nav = $('#unlock-slider-slide-nav');
+      for (var i = 0; i < numSlides; i++) {
+        $nav.append("<a href=\"javascript:void(0)\" class=\"unlock-slider-slide-nav-bt".concat(i === 0 ? ' active' : '', "\"></a>"));
+      }
+      var current = 0;
+      var moveSlide = function moveSlide(index) {
+        $holder.css('margin-left', "-".concat(index * 100, "%"));
+        $nav.children().removeClass('active').eq(index).addClass('active');
+      };
+      var autoSlide = function autoSlide() {
+        current = (current + 1) % numSlides;
+        moveSlide(current);
+      };
+      var interval = setInterval(autoSlide, 4000);
+      $('body').on('click', '.unlock-slider-slide-nav-bt', function () {
+        current = $nav.children().index(this);
+        moveSlide(current);
+        clearInterval(interval);
+      });
+    };
+    setupSettingsMenu();
+    setupUsersMenu();
+    setupTemplatesMenu();
+    updateDemoLink();
+    highlightMenu();
+    initUnlockSlider();
+  });
+  $(window).on('load', function () {
+    if (!$('body').hasClass('post-type-stm-questions')) return;
+    var originalTitle = $('#titlediv input').val();
+    var observer = new MutationObserver(function (mutationsList, observer) {
+      var $editor = $('#editorquestion_title .ql-editor');
+      if ($editor.length) {
+        $editor.html(originalTitle);
+        observer.disconnect();
+      }
+      $('#section_question_settings .ql-toolbar').each(function () {
+        $(this).find('.ql-color, .ql-blockquote').each(function () {
+          $(this).parent().remove();
+        });
+      });
+    });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  });
+})(jQuery);

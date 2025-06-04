@@ -1,1 +1,37 @@
-"use strict";!function(n){n(document).ready((function(){n(".stm_lms_buy_for_points").on("click",(function(t){t.preventDefault();var o=n(this);if(o.hasClass("not-enough-points"))return!1;var s=n(this).data("course");if(!confirm(stm_lms_points_buy.translate.confirm))return!1;n.ajax({url:stm_lms_ajaxurl,dataType:"json",context:this,data:{course_id:s,action:"stm_lms_buy_for_points",nonce:stm_lms_nonces.stm_lms_buy_for_points},beforeSend:function(){o.addClass("loading")},complete:function(n){n=n.responseJSON;window.location.href=n.url,o.removeClass("loading")}})})),n(".points_dist").on("click",(function(t){t.preventDefault(),t.stopPropagation(),window.open(n(this).data("href"),"_blank").focus()}))}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    $('.stm_lms_buy_for_points').on('click', function (e) {
+      e.preventDefault();
+      var $this = $(this);
+      if ($this.hasClass('not-enough-points')) return false;
+      var course_id = $(this).data('course');
+      if (!confirm(stm_lms_points_buy['translate']['confirm'])) return false;
+      $.ajax({
+        url: stm_lms_ajaxurl,
+        dataType: 'json',
+        context: this,
+        data: {
+          course_id: course_id,
+          action: 'stm_lms_buy_for_points',
+          nonce: stm_lms_nonces['stm_lms_buy_for_points']
+        },
+        beforeSend: function beforeSend() {
+          $this.addClass('loading');
+        },
+        complete: function complete(data) {
+          var data = data['responseJSON'];
+          window.location.href = data.url;
+          $this.removeClass('loading');
+        }
+      });
+    });
+    $('.points_dist').on('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var win = window.open($(this).data('href'), '_blank');
+      win.focus();
+    });
+  });
+})(jQuery);

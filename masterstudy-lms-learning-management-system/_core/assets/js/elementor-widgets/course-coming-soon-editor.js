@@ -1,1 +1,196 @@
-"use strict";function _typeof(e){return _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},_typeof(e)}function _classCallCheck(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function _defineProperties(e,t){for(var n=0;n<t.length;n++){var o=t[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,_toPropertyKey(o.key),o)}}function _createClass(e,t,n){return t&&_defineProperties(e.prototype,t),n&&_defineProperties(e,n),Object.defineProperty(e,"prototype",{writable:!1}),e}function _toPropertyKey(e){var t=_toPrimitive(e,"string");return"symbol"==_typeof(t)?t:t+""}function _toPrimitive(e,t){if("object"!=_typeof(e)||!e)return e;var n=e[Symbol.toPrimitive];if(void 0!==n){var o=n.call(e,t||"default");if("object"!=_typeof(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===t?String:Number)(e)}function _inherits(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),Object.defineProperty(e,"prototype",{writable:!1}),t&&_setPrototypeOf(e,t)}function _setPrototypeOf(e,t){return _setPrototypeOf=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},_setPrototypeOf(e,t)}function _createSuper(e){var t=_isNativeReflectConstruct();return function(){var n,o=_getPrototypeOf(e);if(t){var i=_getPrototypeOf(this).constructor;n=Reflect.construct(o,arguments,i)}else n=o.apply(this,arguments);return _possibleConstructorReturn(this,n)}}function _possibleConstructorReturn(e,t){if(t&&("object"==_typeof(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return _assertThisInitialized(e)}function _assertThisInitialized(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function _isNativeReflectConstruct(){try{var e=!Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){})))}catch(e){}return(_isNativeReflectConstruct=function(){return!!e})()}function _getPrototypeOf(e){return _getPrototypeOf=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},_getPrototypeOf(e)}var CourseComingSoon=function(){_inherits(t,elementorModules.frontend.handlers.Base);var e=_createSuper(t);function t(){return _classCallCheck(this,t),e.apply(this,arguments)}return _createClass(t,[{key:"getDefaultSettings",value:function(){return{selectors:{notifyAlertButton:".coming-soon-notify-alert",notifyContainer:".coming-soon-notify-container",notifyModalWrapper:".masterstudy-coming-soon-modal",notifyMeBtn:".coming-soon-notify-container .masterstudy-button",notifyInput:".coming-soon-notify-container input",modalClose:".masterstudy-coming-soon-modal__close",modalButton:".masterstudy-coming-soon-modal .masterstudy-button",curriculumPreview:".stm-curriculum-item .stm-curriculum-item__preview",countdown:".masterstudy-countdown"}}}},{key:"getDefaultElements",value:function(){var e=this.getSettings("selectors");return{$notifyAlertButton:this.$element.find(e.notifyAlertButton),$notifyContainer:this.$element.find(e.notifyContainer),$notifyModalWrapper:this.$element.find(e.notifyModalWrapper),$notifyMeBtn:this.$element.find(e.notifyMeBtn),$notifyInput:this.$element.find(e.notifyInput),$modalClose:this.$element.find(e.modalClose),$modalButton:this.$element.find(e.modalButton),$curriculumPreview:this.$element.find(e.curriculumPreview),$countdown:this.$element.find(e.countdown)}}},{key:"bindEvents",value:function(){var e=this;this.elements.$notifyAlertButton.on("click",(function(){return e.handleNotifyAlertClick()})),this.elements.$notifyInput.on("input",(function(t){return e.handleInputChange(t)})),this.elements.$notifyInput.on("keypress",(function(t){return e.handleKeyPress(t)})),this.elements.$notifyMeBtn.on("click",(function(t){return e.handleNotifyMeClick(t)})),this.elements.$modalClose.add(this.elements.$modalButton).on("click",(function(t){return e.handleModalClose(t)})),this.elements.$notifyModalWrapper.on("click",(function(t){return e.handleModalOutsideClick(t)})),this.elements.$notifyModalWrapper.removeAttr("style"),this.elements.$curriculumPreview.css("display","none"),this.elements.$countdown.each((function(){jQuery(this).countdown({timestamp:jQuery(this).data("timer")})}))}},{key:"handleNotifyAlertClick",value:function(){var e=this;this.elements.$notifyAlertButton.toggleClass("notify-me"),this.courseId=this.getElementSettings("course"),coming_soon.is_logged||this.elements.$notifyContainer.css("display","none"===this.elements.$notifyContainer.css("display")?"flex":"none"),jQuery.ajax({type:"POST",url:coming_soon.url,data:{action:"coming_soon_notify_me",email:"",nonce:coming_soon.nonce,id:this.courseId},success:function(t){t.success&&(e.elements.$notifyAlertButton.addClass("added-email"),e.elements.$notifyModalWrapper.addClass("masterstudy-coming-soon-modal_active"),jQuery("body").addClass("masterstudy-coming-soon-popup"),e.elements.$notifyModalWrapper.find(".masterstudy-coming-soon-modal__title").text(t.title),e.elements.$notifyModalWrapper.find(".masterstudy-coming-soon-modal__description").text(t.description))}})}},{key:"handleInputChange",value:function(e){jQuery(e.currentTarget).removeClass("coming-soon-notify-input_alert")}},{key:"handleKeyPress",value:function(e){13===e.which&&this.elements.$notifyMeBtn.trigger("click")}},{key:"handleNotifyMeClick",value:function(e){var t=this;e.preventDefault();var n=this.elements.$notifyInput.val();if(!this.isValidEmail(n))return this.elements.$notifyContainer.addClass("validation-error"),void this.elements.$notifyInput.addClass("coming-soon-notify-input_alert");this.elements.$notifyInput.removeClass("coming-soon-notify-input_alert"),this.elements.$notifyContainer.removeClass("validation-error"),this.courseId=this.getElementSettings("course"),jQuery.ajax({type:"POST",url:coming_soon.url,data:{action:"coming_soon_notify_me",email:n,nonce:coming_soon.nonce,id:this.courseId},beforeSend:function(){t.elements.$notifyMeBtn.addClass("masterstudy-button_loading")},success:function(e){e.success&&(t.elements.$notifyAlertButton.addClass("added-email"),t.elements.$notifyModalWrapper.addClass("masterstudy-coming-soon-modal_active"),jQuery("body").addClass("masterstudy-coming-soon-popup"),t.elements.$notifyModalWrapper.find(".masterstudy-coming-soon-modal__title").text(e.title),t.elements.$notifyModalWrapper.find(".masterstudy-coming-soon-modal__description").text(e.description)),t.elements.$notifyMeBtn.removeClass("masterstudy-button_loading")}})}},{key:"handleModalClose",value:function(e){e.preventDefault(),this.elements.$notifyModalWrapper.removeClass("masterstudy-coming-soon-modal_active"),jQuery("body").removeClass("masterstudy-coming-soon-popup"),this.elements.$notifyContainer.css("display","none")}},{key:"handleModalOutsideClick",value:function(e){e.target===this.elements.$notifyModalWrapper[0]&&this.handleModalClose(e)}},{key:"isValidEmail",value:function(e){return/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(e)}}]),t}();jQuery(window).on("elementor/frontend/init",(function(){elementorFrontend.hooks.addAction("frontend/element_ready/ms_lms_course_coming_soon.default",(function(e){elementorFrontend.elementsHandler.addHandler(CourseComingSoon,{$element:e})}))}));
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+var CourseComingSoon = /*#__PURE__*/function (_elementorModules$fro) {
+  _inherits(CourseComingSoon, _elementorModules$fro);
+  var _super = _createSuper(CourseComingSoon);
+  function CourseComingSoon() {
+    _classCallCheck(this, CourseComingSoon);
+    return _super.apply(this, arguments);
+  }
+  _createClass(CourseComingSoon, [{
+    key: "getDefaultSettings",
+    value: function getDefaultSettings() {
+      return {
+        selectors: {
+          notifyAlertButton: '.coming-soon-notify-alert',
+          notifyContainer: '.coming-soon-notify-container',
+          notifyModalWrapper: '.masterstudy-coming-soon-modal',
+          notifyMeBtn: '.coming-soon-notify-container .masterstudy-button',
+          notifyInput: '.coming-soon-notify-container input',
+          modalClose: '.masterstudy-coming-soon-modal__close',
+          modalButton: '.masterstudy-coming-soon-modal .masterstudy-button',
+          curriculumPreview: '.stm-curriculum-item .stm-curriculum-item__preview',
+          countdown: '.masterstudy-countdown'
+        }
+      };
+    }
+  }, {
+    key: "getDefaultElements",
+    value: function getDefaultElements() {
+      var selectors = this.getSettings('selectors');
+      return {
+        $notifyAlertButton: this.$element.find(selectors.notifyAlertButton),
+        $notifyContainer: this.$element.find(selectors.notifyContainer),
+        $notifyModalWrapper: this.$element.find(selectors.notifyModalWrapper),
+        $notifyMeBtn: this.$element.find(selectors.notifyMeBtn),
+        $notifyInput: this.$element.find(selectors.notifyInput),
+        $modalClose: this.$element.find(selectors.modalClose),
+        $modalButton: this.$element.find(selectors.modalButton),
+        $curriculumPreview: this.$element.find(selectors.curriculumPreview),
+        $countdown: this.$element.find(selectors.countdown)
+      };
+    }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      var _this = this;
+      this.elements.$notifyAlertButton.on('click', function () {
+        return _this.handleNotifyAlertClick();
+      });
+      this.elements.$notifyInput.on('input', function (event) {
+        return _this.handleInputChange(event);
+      });
+      this.elements.$notifyInput.on('keypress', function (event) {
+        return _this.handleKeyPress(event);
+      });
+      this.elements.$notifyMeBtn.on('click', function (event) {
+        return _this.handleNotifyMeClick(event);
+      });
+      this.elements.$modalClose.add(this.elements.$modalButton).on('click', function (event) {
+        return _this.handleModalClose(event);
+      });
+      this.elements.$notifyModalWrapper.on('click', function (event) {
+        return _this.handleModalOutsideClick(event);
+      });
+      this.elements.$notifyModalWrapper.removeAttr('style');
+      this.elements.$curriculumPreview.css('display', 'none');
+      this.elements.$countdown.each(function () {
+        jQuery(this).countdown({
+          timestamp: jQuery(this).data('timer')
+        });
+      });
+    }
+  }, {
+    key: "handleNotifyAlertClick",
+    value: function handleNotifyAlertClick() {
+      var _this2 = this;
+      this.elements.$notifyAlertButton.toggleClass('notify-me');
+      this.courseId = this.getElementSettings('course');
+      if (!coming_soon.is_logged) {
+        this.elements.$notifyContainer.css('display', this.elements.$notifyContainer.css('display') === 'none' ? 'flex' : 'none');
+      }
+      jQuery.ajax({
+        type: 'POST',
+        url: coming_soon.url,
+        data: {
+          action: 'coming_soon_notify_me',
+          email: '',
+          nonce: coming_soon.nonce,
+          id: this.courseId
+        },
+        success: function success(response) {
+          if (response.success) {
+            _this2.elements.$notifyAlertButton.addClass('added-email');
+            _this2.elements.$notifyModalWrapper.addClass('masterstudy-coming-soon-modal_active');
+            jQuery('body').addClass('masterstudy-coming-soon-popup');
+            _this2.elements.$notifyModalWrapper.find('.masterstudy-coming-soon-modal__title').text(response.title);
+            _this2.elements.$notifyModalWrapper.find('.masterstudy-coming-soon-modal__description').text(response.description);
+          }
+        }
+      });
+    }
+  }, {
+    key: "handleInputChange",
+    value: function handleInputChange(event) {
+      jQuery(event.currentTarget).removeClass('coming-soon-notify-input_alert');
+    }
+  }, {
+    key: "handleKeyPress",
+    value: function handleKeyPress(event) {
+      if (event.which === 13) {
+        this.elements.$notifyMeBtn.trigger('click');
+      }
+    }
+  }, {
+    key: "handleNotifyMeClick",
+    value: function handleNotifyMeClick(event) {
+      var _this3 = this;
+      event.preventDefault();
+      var email = this.elements.$notifyInput.val();
+      if (!this.isValidEmail(email)) {
+        this.elements.$notifyContainer.addClass('validation-error');
+        this.elements.$notifyInput.addClass('coming-soon-notify-input_alert');
+        return;
+      }
+      this.elements.$notifyInput.removeClass('coming-soon-notify-input_alert');
+      this.elements.$notifyContainer.removeClass('validation-error');
+      this.courseId = this.getElementSettings('course');
+      jQuery.ajax({
+        type: 'POST',
+        url: coming_soon.url,
+        data: {
+          action: 'coming_soon_notify_me',
+          email: email,
+          nonce: coming_soon.nonce,
+          id: this.courseId
+        },
+        beforeSend: function beforeSend() {
+          _this3.elements.$notifyMeBtn.addClass('masterstudy-button_loading');
+        },
+        success: function success(response) {
+          if (response.success) {
+            _this3.elements.$notifyAlertButton.addClass('added-email');
+            _this3.elements.$notifyModalWrapper.addClass('masterstudy-coming-soon-modal_active');
+            jQuery('body').addClass('masterstudy-coming-soon-popup');
+            _this3.elements.$notifyModalWrapper.find('.masterstudy-coming-soon-modal__title').text(response.title);
+            _this3.elements.$notifyModalWrapper.find('.masterstudy-coming-soon-modal__description').text(response.description);
+          }
+          _this3.elements.$notifyMeBtn.removeClass('masterstudy-button_loading');
+        }
+      });
+    }
+  }, {
+    key: "handleModalClose",
+    value: function handleModalClose(event) {
+      event.preventDefault();
+      this.elements.$notifyModalWrapper.removeClass('masterstudy-coming-soon-modal_active');
+      jQuery('body').removeClass('masterstudy-coming-soon-popup');
+      this.elements.$notifyContainer.css('display', 'none');
+    }
+  }, {
+    key: "handleModalOutsideClick",
+    value: function handleModalOutsideClick(event) {
+      if (event.target === this.elements.$notifyModalWrapper[0]) {
+        this.handleModalClose(event);
+      }
+    }
+  }, {
+    key: "isValidEmail",
+    value: function isValidEmail(email) {
+      var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      return emailPattern.test(email);
+    }
+  }]);
+  return CourseComingSoon;
+}(elementorModules.frontend.handlers.Base);
+jQuery(window).on('elementor/frontend/init', function () {
+  var addHandler = function addHandler($element) {
+    elementorFrontend.elementsHandler.addHandler(CourseComingSoon, {
+      $element: $element
+    });
+  };
+  elementorFrontend.hooks.addAction('frontend/element_ready/ms_lms_course_coming_soon.default', addHandler);
+});

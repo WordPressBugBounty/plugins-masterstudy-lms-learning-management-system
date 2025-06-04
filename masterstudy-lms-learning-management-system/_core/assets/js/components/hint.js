@@ -1,1 +1,29 @@
-"use strict";!function(t){t(document).ready((function(){t(".masterstudy-hint").on("mouseenter",(function(){var s=t(this),e=s.find(".masterstudy-hint__popup"),i=e.width(),d=e.height(),n=e.offset(),r=t(window).width(),a=t(window).height();n.left<0?(s.addClass("masterstudy-hint_side-left"),s.removeClass("masterstudy-hint_side-right")):n.left+i>r&&(s.addClass("masterstudy-hint_side-right"),s.removeClass("masterstudy-hint_side-left")),n.top<0?s.addClass("masterstudy-hint_side-bottom"):n.top+d>a&&s.removeClass("masterstudy-hint_side-bottom"),t(".masterstudy-course-player-answer__hint").css("z-index","7"),s.parent(".masterstudy-course-player-answer__hint").css("z-index","10")}))}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    $('.masterstudy-hint').on('mouseenter', function () {
+      var $this = $(this);
+      var $tooltip = $this.find('.masterstudy-hint__popup');
+      var tooltipWidth = $tooltip.width();
+      var tooltipHeight = $tooltip.height();
+      var tooltipOffset = $tooltip.offset();
+      var windowWidth = $(window).width();
+      var windowHeight = $(window).height();
+      if (tooltipOffset.left < 0) {
+        $this.addClass('masterstudy-hint_side-left');
+        $this.removeClass('masterstudy-hint_side-right');
+      } else if (tooltipOffset.left + tooltipWidth > windowWidth) {
+        $this.addClass('masterstudy-hint_side-right');
+        $this.removeClass('masterstudy-hint_side-left');
+      }
+      if (tooltipOffset.top < 0) {
+        $this.addClass('masterstudy-hint_side-bottom');
+      } else if (tooltipOffset.top + tooltipHeight > windowHeight) {
+        $this.removeClass('masterstudy-hint_side-bottom');
+      }
+      $('.masterstudy-course-player-answer__hint').css('z-index', '7');
+      $this.parent('.masterstudy-course-player-answer__hint').css('z-index', '10');
+    });
+  });
+})(jQuery);

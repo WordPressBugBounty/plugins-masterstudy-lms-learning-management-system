@@ -1,1 +1,37 @@
-"use strict";jQuery(document).ready((function(){new Vue({el:"#certificate_checker",data:function(){return{loading:!1,code:"",status:"",message:""}},methods:{checkCode:function(){var e=this;if(""===e.code||e.code.length<12)return e.status="error",e.message="Enter valid code",!1;e.loading=!0,e.status=e.message="";var t=stm_lms_ajaxurl+"?action=stm_lms_check_certificate_code&c_code="+e.code+"&nonce="+stm_lms_nonces.stm_lms_check_certificate_code;e.$http.get(t).then((function(t){e.status=t.body.status,e.message=t.body.message,e.loading=!1}))}}})}));
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    new Vue({
+      el: '#certificate_checker',
+      data: function data() {
+        return {
+          loading: false,
+          code: '',
+          status: '',
+          message: ''
+        };
+      },
+      methods: {
+        checkCode: function checkCode() {
+          var vm = this;
+
+          /*Check If added*/
+          if (vm.code === '' || vm.code.length < 12) {
+            vm.status = 'error';
+            vm.message = 'Enter valid code';
+            return false;
+          }
+          vm.loading = true;
+          vm.status = vm.message = '';
+          var url = stm_lms_ajaxurl + '?action=stm_lms_check_certificate_code&c_code=' + vm.code + '&nonce=' + stm_lms_nonces['stm_lms_check_certificate_code'];
+          vm.$http.get(url).then(function (res) {
+            vm.status = res.body.status;
+            vm.message = res.body.message;
+            vm.loading = false;
+          });
+        }
+      }
+    });
+  });
+})(jQuery);

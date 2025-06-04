@@ -1,1 +1,72 @@
-"use strict";Vue.component("stm-payout",{data:function(){return{payout_methods:[]}},created:function(){if("undefined"==typeof stm_payout_data)return!0;void 0!==stm_payout_data.payout_methods&&(this.payout_methods=stm_payout_data.payout_methods)},methods:{set_default:function(t){var e=this;t.loader=!0;var a=new FormData;a.append("payment_method",t.payment_method),this.$http.post(stm_payout_url_data.url+"/stm-lms-payout/payment/set_default",a,{headers:{"X-WP-Nonce":ms_lms_nonce}}).then((function(a){t.loader=!1,a.body.success&&(e.payout_methods.forEach((function(t){t.is_default=!1})),t.is_default=!0)}))},install:function(t){var e=new FormData;e.append("StmLmsPaymentMethod[payment_method]",t.payment_method),e.append("StmLmsPaymentMethod[type]","install"),t.loader=!0,this.$http.post(stm_payout_url_data.url+"/stm-lms-payout/settings",e,{headers:{"X-WP-Nonce":ms_lms_nonce}}).then((function(e){"success"==e.body.status&&(t.is_active=!0),t.loader=!1}))},uninstall:function(t){var e=new FormData;e.append("StmLmsPaymentMethod[payment_method]",t.payment_method),e.append("StmLmsPaymentMethod[type]","uninstall"),t.loader=!0,this.$http.post(stm_payout_url_data.url+"/stm-lms-payout/settings",e,{headers:{"X-WP-Nonce":ms_lms_nonce}}).then((function(e){"success"==e.body.status&&(t.is_active=!1),t.loader=!1}))}}});
+"use strict";
+
+Vue.component('stm-payout', {
+  data: function data() {
+    return {
+      payout_methods: []
+    };
+  },
+  created: function created() {
+    if (typeof stm_payout_data == "undefined") return true;
+    if (typeof stm_payout_data.payout_methods != "undefined") this.payout_methods = stm_payout_data.payout_methods;
+  },
+  methods: {
+    set_default: function set_default(payout_method) {
+      var vm = this;
+      payout_method.loader = true;
+      var formData = new FormData();
+      formData.append('payment_method', payout_method.payment_method);
+      this.$http.post(stm_payout_url_data['url'] + '/stm-lms-payout/payment/set_default', formData, {
+        headers: {
+          'X-WP-Nonce': ms_lms_nonce
+        }
+      }).then(function (response) {
+        payout_method.loader = false;
+        if (response.body.success) {
+          vm.payout_methods.forEach(function (item) {
+            item.is_default = false;
+          });
+          payout_method.is_default = true;
+        }
+      });
+    },
+    install: function install(payout_method) {
+      var formData = new FormData();
+      formData.append('StmLmsPaymentMethod[payment_method]', payout_method.payment_method);
+      formData.append('StmLmsPaymentMethod[type]', 'install');
+      payout_method.loader = true;
+      this.$http.post(stm_payout_url_data['url'] + '/stm-lms-payout/settings', formData, {
+        headers: {
+          'X-WP-Nonce': ms_lms_nonce
+        }
+      }).then(function (response) {
+        if (response.body.status == 'success') {
+          //alert(response.body.message)
+          payout_method.is_active = true;
+          //	location.reload();
+        }
+
+        payout_method.loader = false;
+      });
+    },
+    uninstall: function uninstall(payout_method) {
+      var formData = new FormData();
+      formData.append('StmLmsPaymentMethod[payment_method]', payout_method.payment_method);
+      formData.append('StmLmsPaymentMethod[type]', 'uninstall');
+      payout_method.loader = true;
+      this.$http.post(stm_payout_url_data['url'] + '/stm-lms-payout/settings', formData, {
+        headers: {
+          'X-WP-Nonce': ms_lms_nonce
+        }
+      }).then(function (response) {
+        if (response.body.status == 'success') {
+          //alert(response.body.message)
+          payout_method.is_active = false;
+          //location.reload();
+        }
+
+        payout_method.loader = false;
+      });
+    }
+  }
+});

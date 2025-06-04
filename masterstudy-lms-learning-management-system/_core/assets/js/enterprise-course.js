@@ -1,1 +1,175 @@
-"use strict";!function(e){var s=[],n=e("body");function a(){var n=e(".group-emails");n.html(""),s.forEach((function(e,s){n.append("<div class='group-emails-container'><span data-index='"+s+"'>"+e+"</span><i class='stmlms-cross'></i></div>")}))}function t(){var e=n.find(".btn-add-group");n.find("#group_name").val().length&&s.length?e.addClass("activex"):e.removeClass("activex")}function r(e){return/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(e)}e(document).ready((function(){var i=e(".buy-enterprise"),o=[];n.on("click",".stm_lms_select_group",(function(){var s=e(this);i=e(".buy-enterprise"),s.toggleClass("active"),function(){o=[];var s=0;e(".stm_lms_select_group").each((function(){var n=e(this);n.hasClass("active")&&(s++,o.push(n.attr("data-group-id")))}));var n=i.data("enterprise-price");i.find("span").html(stm_lms_price_format(n*s)),o.length?i.removeClass("disabled"):i.addClass("disabled")}()})),n.on("click",".buy-enterprise",(function(s){s.preventDefault();var n=e(this);if(!o.length)return!1;e.ajax({url:stm_lms_ajaxurl,dataType:"json",context:this,data:{action:"stm_lms_add_to_cart_enterprise",groups:o,course_id:n.data("course-id"),nonce:stm_lms_nonces.stm_lms_add_to_cart_enterprise},beforeSend:function(){n.addClass("loading")},complete:function(e){e=e.responseJSON,n.removeClass("loading"),e.redirect?window.location.replace(e.cart_url):n.html(e.text).attr("href",e.cart_url).removeClass("buy-enterprise")}})}));var l=e("#group_email");n.on("click",".create_group",(function(s){s.preventDefault(),e(".stm_lms_popup_create_group").toggleClass("active"),e(".stm_lms_popup_create_group__inner").find(".group-emails").children().length<2&&e(".stm_lms_popup_create_group__inner").find(".heading_font").children().removeClass("warning")})),n.on("keydown change","#group_name",(function(e){t()})),n.on("keyup change","#group_email",(function(s){var n=l=e(this),a=n.val();r(a)&&n.removeClass("invalid").addClass("valid"),r(a)||n.removeClass("valid").addClass("invalid"),a.length||n.removeClass("invalid valid")})),n.on("click",".add_email",(function(){var n=l.val(),i=e(".stm_lms_popup_create_group__inner").data("max-group")-1;return i=i>0?i:4,!(r(n)&&!s.includes(n))||(e(this).parents(".stm_lms_popup_create_group__inner").find(".group-emails").children().length>i?(e(this).parents(".stm_lms_popup_create_group__inner").find(".heading_font").children().addClass("warning"),!0):(e(this).parents(".stm_lms_popup_create_group__inner").find(".heading_font").children().removeClass("warning"),s.push(n),l.val("").removeClass("invalid valid"),a(),void t()))})),n.on("click",".stmlms-cross",(function(){var n=e(this).parent().find("span").text(),a=s.indexOf(n);s.splice(a,1),e(this).parent().remove(),s.length<2&&e(".stm_lms_popup_create_group__inner").find(".heading_font").children().removeClass("warning"),s.length<1&&e(".btn-add-group").removeClass("activex")})),n.on("click",".btn-add-group",(function(r){if(r.preventDefault(),!e(this).hasClass("activex"))return!1;var i=n.find("#group_name"),o=n.find(".stm_lms_group_new_error"),l=n.find(".stm_lms_popup_create_group"),_={title:i.val(),emails:s};e.ajax({url:stm_lms_ajaxurl+"?action=stm_lms_add_enterprise_group&nonce="+stm_lms_nonces.stm_lms_add_enterprise_group,type:"POST",data:JSON.stringify(_),dataType:"json",contentType:"application/json",beforeSend:function(){o.hide(),l.addClass("loading")},success:function(r){if(l.removeClass("loading"),r.message&&o.html(r.message).show(),"error"===r.status)return!1;e(".stm_lms_popup_create_group").removeClass("active"),n.find(".stm_lms_select_group__list").append('<div class="stm_lms_select_group" data-group-id="'+r.group.post_id+'"><span>'+r.group.title+"</span></div>"),s=[],n.find("#group_name").val(""),a(),t(),n.find(".actions.no-groups").removeClass("no-groups"),n.find(".no-groups-message").remove()}})}))}))}(jQuery);
+"use strict";
+
+(function ($) {
+  var emails = [];
+  var $body = $('body');
+  $(document).ready(function () {
+    var $price_btn = $('.buy-enterprise');
+    var group_ids = [];
+    $body.on('click', '.stm_lms_select_group', function () {
+      var $this = $(this);
+      $price_btn = $('.buy-enterprise');
+      $this.toggleClass('active');
+      calculatePrice();
+    });
+    function calculatePrice() {
+      group_ids = [];
+      var total = 0;
+      $('.stm_lms_select_group').each(function () {
+        var $this = $(this);
+        if ($this.hasClass('active')) {
+          total++;
+          group_ids.push($this.attr('data-group-id'));
+        }
+      });
+      var price = $price_btn.data('enterprise-price');
+      $price_btn.find('span').html(stm_lms_price_format(price * total));
+      disableBuy();
+    }
+    $body.on('click', '.buy-enterprise', function (e) {
+      e.preventDefault();
+      var $this = $(this);
+      if (!group_ids.length) return false;
+      $.ajax({
+        url: stm_lms_ajaxurl,
+        dataType: 'json',
+        context: this,
+        data: {
+          action: 'stm_lms_add_to_cart_enterprise',
+          groups: group_ids,
+          course_id: $this.data('course-id'),
+          nonce: stm_lms_nonces['stm_lms_add_to_cart_enterprise']
+        },
+        beforeSend: function beforeSend() {
+          $this.addClass('loading');
+        },
+        complete: function complete(data) {
+          data = data['responseJSON'];
+          $this.removeClass('loading');
+          if (data.redirect) {
+            window.location.replace(data.cart_url);
+          } else {
+            $this.html(data.text).attr('href', data.cart_url).removeClass('buy-enterprise');
+          }
+        }
+      });
+    });
+    function disableBuy() {
+      var l = group_ids.length;
+      if (l) {
+        $price_btn.removeClass('disabled');
+      } else {
+        $price_btn.addClass('disabled');
+      }
+    }
+
+    /*Create GRoup*/
+    var $group_email = $('#group_email');
+    $body.on('click', '.create_group', function (e) {
+      e.preventDefault();
+      $('.stm_lms_popup_create_group').toggleClass('active');
+      if ($('.stm_lms_popup_create_group__inner').find('.group-emails').children().length < 2) {
+        $('.stm_lms_popup_create_group__inner').find('.heading_font').children().removeClass('warning');
+      }
+    });
+    $body.on('keydown change', '#group_name', function (e) {
+      showButton();
+    });
+    $body.on('keyup change', '#group_email', function (e) {
+      var $this = $group_email = $(this);
+      var email = $this.val();
+      if (validEmail(email)) $this.removeClass('invalid').addClass('valid');
+      if (!validEmail(email)) $this.removeClass('valid').addClass('invalid');
+      if (!email.length) $this.removeClass('invalid valid');
+    });
+    $body.on('click', '.add_email', function () {
+      var email = $group_email.val();
+      var maxGroup = $('.stm_lms_popup_create_group__inner').data('max-group') - 1;
+      maxGroup = maxGroup > 0 ? maxGroup : 4;
+      if (!validEmail(email) || emails.includes(email)) return true;
+      if ($(this).parents('.stm_lms_popup_create_group__inner').find('.group-emails').children().length > maxGroup) {
+        $(this).parents('.stm_lms_popup_create_group__inner').find('.heading_font').children().addClass('warning');
+        return true;
+      } else {
+        $(this).parents('.stm_lms_popup_create_group__inner').find('.heading_font').children().removeClass('warning');
+      }
+      emails.push(email);
+      $group_email.val('').removeClass('invalid valid');
+      listEmails();
+      showButton();
+    });
+    $body.on('click', '.stmlms-cross', function () {
+      var email = $(this).parent().find('span').text();
+      var index = emails.indexOf(email);
+      emails.splice(index, 1);
+      $(this).parent().remove();
+      if (emails.length < 2) {
+        $('.stm_lms_popup_create_group__inner').find('.heading_font').children().removeClass('warning');
+      }
+      if (emails.length < 1) {
+        $('.btn-add-group').removeClass('activex');
+      }
+    });
+    $body.on('click', '.btn-add-group', function (e) {
+      e.preventDefault();
+      if (!$(this).hasClass('activex')) return false;
+      var $group_name = $body.find('#group_name');
+      var $error = $body.find('.stm_lms_group_new_error');
+      var $createWrapper = $body.find('.stm_lms_popup_create_group');
+      var data = {
+        title: $group_name.val(),
+        emails: emails
+      };
+      $.ajax({
+        url: stm_lms_ajaxurl + '?action=stm_lms_add_enterprise_group&nonce=' + stm_lms_nonces['stm_lms_add_enterprise_group'],
+        type: 'POST',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: "application/json",
+        beforeSend: function beforeSend() {
+          $error.hide();
+          $createWrapper.addClass('loading');
+        },
+        success: function success(data) {
+          $createWrapper.removeClass('loading');
+          if (data.message) $error.html(data.message).show();
+          if (data.status === 'error') return false;
+          $('.stm_lms_popup_create_group').removeClass('active');
+
+          /*Add Group*/
+          var $list = $body.find('.stm_lms_select_group__list');
+          $list.append('<div class="stm_lms_select_group" data-group-id="' + data.group.post_id + '"><span>' + data.group.title + '</span></div>');
+          resetForm();
+          $body.find('.actions.no-groups').removeClass('no-groups');
+          $body.find('.no-groups-message').remove();
+        }
+      });
+    });
+  });
+  function resetForm() {
+    emails = [];
+    $body.find('#group_name').val('');
+    listEmails();
+    showButton();
+  }
+  function listEmails() {
+    var $group_emails = $('.group-emails');
+    $group_emails.html('');
+    emails.forEach(function (value, index) {
+      $group_emails.append("<div class='group-emails-container'><span data-index='" + index + "'>" + value + "</span><i class='stmlms-cross'></i></div>");
+    });
+  }
+  function showButton() {
+    var $btn = $body.find('.btn-add-group');
+    var $group_name = $body.find('#group_name');
+    if ($group_name.val().length && emails.length) {
+      $btn.addClass('activex');
+    } else {
+      $btn.removeClass('activex');
+    }
+  }
+  function validEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+})(jQuery);

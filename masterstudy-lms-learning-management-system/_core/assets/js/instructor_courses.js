@@ -1,1 +1,107 @@
-"use strict";function stmLmsGoToHash(){var t=jQuery,s=window.location.hash;if(s){var e=t('.nav-tabs a[href="'+s+'"]');if(!e.length)return!1;e.click(),t([document.documentElement,document.body]).animate({scrollTop:e.offset().top},500)}}!function(t){t(document).ready((function(){new Vue({el:"#stm-lms-courses-grid",data:{vue_loaded:!0,courses:[],allCourses:[],loading:!0,offset:0,loggedUserId:0,total:!1,quota:{},statuses:[],selectedStatus:"all"},created:function(){this.offset=parseInt(masterstudy_lms_settings_coming_soon.per_page),this.loggedUserId=parseInt(masterstudy_lms_settings_coming_soon.logged_user),this.statuses=masterstudy_lms_settings_coming_soon.course_statuses,this.getCourses()},methods:{getCourses:function(){var t=this,s=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"",e=this;e.loading=!0,e.allCourses=[];var o="".concat(ms_lms_resturl,"/instructor-courses?per_page=").concat(this.offset,"&user=").concat(this.loggedUserId);s&&(o+="&status=".concat(s)),"undefined"!=typeof pll_current_language&&(o+="&lang=".concat(pll_current_language)),fetch(o,{method:"GET",headers:{"X-WP-Nonce":masterstudy_lms_settings_coming_soon.nonce,"Content-Type":"application/json"}}).then((function(t){if(!t.ok)throw new Error("There was a problem with the fetch operation");return t.json()})).then((function(s){s.posts.forEach((function(t){e.allCourses.push(t)})),s.found<=s.per_page&&(e.total=!0),e.statuses=t.statuses,e.loading=!1})).catch((function(t){console.error("There was a problem with the fetch operation:",t)})),e.courses=e.allCourses},loadCourses:function(){this.offset=this.offset+this.offset,this.getCourses()},changeFeatured:function(t){var s=this,e=stm_lms_ajaxurl+"?action=stm_lms_change_featured&nonce="+stm_lms_nonces.stm_lms_change_featured+"&post_id="+t.id;this.$set(t,"changingFeatured",!0),this.$http.get(e).then((function(e){s.$set(s,"quota",e.body),s.$set(t,"changingFeatured",!1),s.$set(t,"is_featured",e.body.featured)}))},changeStatus:function(t,s){var e=this,o="".concat(stm_lms_ajaxurl,"?action=stm_lms_change_course_status&post_id=").concat(t.id,"&status=").concat(s)+"&nonce="+stm_lms_nonces.stm_lms_change_course_status;e.$set(t,"changingStatus",!0),e.$http.get(o).then((function(s){e.$set(t,"changingStatus",!1),e.$set(t,"status",s.body)}))},filterCoursesByStatus:function(s){this.getCourses(s),t(this).toggleClass("clicked"),this.selectedStatus=s}}})}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    new Vue({
+      el: '#stm-lms-courses-grid',
+      data: {
+        vue_loaded: true,
+        courses: [],
+        allCourses: [],
+        loading: true,
+        offset: 0,
+        loggedUserId: 0,
+        total: false,
+        quota: {},
+        statuses: [],
+        selectedStatus: 'all'
+      },
+      created: function created() {
+        this.offset = parseInt(masterstudy_lms_settings_coming_soon.per_page);
+        this.loggedUserId = parseInt(masterstudy_lms_settings_coming_soon.logged_user);
+        this.statuses = masterstudy_lms_settings_coming_soon.course_statuses;
+        this.getCourses();
+      },
+      methods: {
+        getCourses: function getCourses() {
+          var _this = this;
+          var postMeta = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+          var vm = this;
+          vm.loading = true;
+          vm.allCourses = [];
+          var apiUrl = "".concat(ms_lms_resturl, "/instructor-courses?per_page=").concat(this.offset, "&user=").concat(this.loggedUserId);
+          if (postMeta) {
+            apiUrl += "&status=".concat(postMeta);
+          }
+          if (typeof pll_current_language !== 'undefined') {
+            apiUrl += "&lang=".concat(pll_current_language);
+          }
+          fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+              'X-WP-Nonce': masterstudy_lms_settings_coming_soon.nonce,
+              'Content-Type': 'application/json'
+            }
+          }).then(function (response) {
+            if (!response.ok) {
+              throw new Error('There was a problem with the fetch operation');
+            }
+            return response.json();
+          }).then(function (data) {
+            data.posts.forEach(function (course) {
+              vm.allCourses.push(course);
+            });
+            if (data.found <= data.per_page) {
+              vm.total = true;
+            }
+            vm.statuses = _this.statuses;
+            vm.loading = false;
+          })["catch"](function (error) {
+            console.error('There was a problem with the fetch operation:', error);
+          });
+          vm.courses = vm.allCourses;
+        },
+        loadCourses: function loadCourses() {
+          this.offset = this.offset + this.offset;
+          this.getCourses();
+        },
+        changeFeatured: function changeFeatured(course) {
+          var vm = this;
+          var url = stm_lms_ajaxurl + '?action=stm_lms_change_featured&nonce=' + stm_lms_nonces['stm_lms_change_featured'] + '&post_id=' + course.id;
+          this.$set(course, 'changingFeatured', true);
+          this.$http.get(url).then(function (response) {
+            vm.$set(vm, 'quota', response.body);
+            vm.$set(course, 'changingFeatured', false);
+            vm.$set(course, 'is_featured', response.body['featured']);
+          });
+        },
+        changeStatus: function changeStatus(course, status) {
+          var vm = this;
+          var url = "".concat(stm_lms_ajaxurl, "?action=stm_lms_change_course_status&post_id=").concat(course.id, "&status=").concat(status) + '&nonce=' + stm_lms_nonces['stm_lms_change_course_status'];
+          vm.$set(course, 'changingStatus', true);
+          vm.$http.get(url).then(function (response) {
+            vm.$set(course, 'changingStatus', false);
+            vm.$set(course, 'status', response.body);
+          });
+        },
+        filterCoursesByStatus: function filterCoursesByStatus(status) {
+          this.getCourses(status);
+          $(this).toggleClass("clicked");
+          this.selectedStatus = status;
+        }
+      }
+    });
+  });
+})(jQuery);
+function stmLmsGoToHash() {
+  var $ = jQuery;
+  var hash = window.location.hash;
+  if (hash) {
+    var $selector = $('.nav-tabs a[href="' + hash + '"]');
+    if (!$selector.length) return false;
+    $selector.click();
+    $([document.documentElement, document.body]).animate({
+      scrollTop: $selector.offset().top
+    }, 500);
+  }
+}

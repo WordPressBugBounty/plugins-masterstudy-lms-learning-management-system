@@ -1,1 +1,131 @@
-"use strict";function initializePagination(t,a){var e=jQuery(".masterstudy-pagination"),i=e.find(".masterstudy-pagination__wrapper"),n=e.find(".masterstudy-pagination__list"),s=e.find(".masterstudy-pagination__button-next"),r=e.find(".masterstudy-pagination__button-prev");if(void 0===o)var o={max_visible_pages:5,total_pages:a,current_page:t,is_queryable:!1,item_width:50};["max_visible_pages","total_pages","current_page","item_width"].forEach((function(t){o[t]=parseInt(o[t])}));var u=i.data("width"),d=0,_=Math.round(o.max_visible_pages/2),p=o.item_width*(a-o.max_visible_pages),l=a<=o.max_visible_pages;u&&i.css("width",u),prevNextButtonState(jQuery(".masterstudy-pagination"),t,a),d=calculateInitialPosition(t,_,a,p),n.find('[data-id="'.concat(t,'"]')).parent().addClass("masterstudy-pagination__item_current"),n.animate({left:-d+"px"},50),s.off("click").on("click",(function(e){e.preventDefault(),o.is_queryable&&t<a&&updatePageQueryParam(t+1),updateButtonState(s,r,t,a),scrollPageList(t,_,p,n),setCurrentPage(n,t,"masterstudy-pagination__item_current")})),r.off("click").on("click",(function(e){e.preventDefault(),o.is_queryable&&t>1&&updatePageQueryParam(t-1),updateButtonState(s,r,t,a),scrollPageList(t,_,p,n),setCurrentPage(n,t,"masterstudy-pagination__item_current")})),jQuery(".masterstudy-pagination__item-block").off("click").on("click",(function(){t=jQuery(this).data("id");var e=jQuery(this).closest(".masterstudy-pagination");d=calculateCurrentPosition(t,_,p,l,a),prevNextButtonState(e,t,a),jQuery(this).parent().siblings().removeClass("masterstudy-pagination__item_current"),jQuery(this).parent().addClass("masterstudy-pagination__item_current"),n.animate({left:-d+"px"},50),o.is_queryable&&updatePageQueryParam(t)}))}function calculateInitialPosition(t,a,e,i){return t<=a?0:t>e-a?i:(t-a)*pages_data.item_width}function setCurrentPage(t,a,e){t.find('[data-id="'.concat(a,'"]')).parent().siblings().removeClass(e),t.find('[data-id="'.concat(a,'"]')).parent().addClass(e)}function updateButtonState(t,a,e,i){a.toggleClass("masterstudy-pagination__button_disabled",1===e||1===i),t.toggleClass("masterstudy-pagination__button_disabled",e===i||1===i)}function scrollPageList(t,a,e,i){var n=0;n=t>a&&t<pages_data.total_pages-a+1?(t-a)*pages_data.item_width:t<=a?0:e,i.animate({left:-n+"px"},50)}function calculateCurrentPosition(t,a,e,i,n){return t<a?0:t>n-a+1?i?0:e:(t-a)*pages_data.item_width}function updatePageQueryParam(t){var a=window.location.href,e=new URLSearchParams(window.location.search),i="page";e.has(i)?e.set(i,t):e.append(i,t);var n=a.split("?")[0]+"?"+e.toString();window.history.replaceState({},document.title,n),window.location.href=n}function prevNextButtonState(t,a,e){t.find(".masterstudy-pagination__button-prev").toggleClass("masterstudy-pagination__button_disabled",1===a||1===e),t.find(".masterstudy-pagination__button-next").toggleClass("masterstudy-pagination__button_disabled",a===e||1===e)}jQuery(document).ready((function(){"undefined"!=typeof pages_data&&initializePagination(parseInt(pages_data.current_page),parseInt(pages_data.total_pages))}));
+"use strict";
+
+function initializePagination(currentPage, totalPages) {
+  var pagesContainer = jQuery(".masterstudy-pagination");
+  var pagesWrapper = pagesContainer.find(".masterstudy-pagination__wrapper");
+  var pagesList = pagesContainer.find(".masterstudy-pagination__list");
+  var scrollButtonNext = pagesContainer.find(".masterstudy-pagination__button-next");
+  var scrollButtonPrev = pagesContainer.find(".masterstudy-pagination__button-prev");
+  var numericFields = ["max_visible_pages", "total_pages", "current_page", "item_width"];
+  if (typeof pages_data === 'undefined') {
+    var pages_data = {
+      'max_visible_pages': 5,
+      'total_pages': totalPages,
+      'current_page': currentPage,
+      'is_queryable': false,
+      'item_width': 50
+    };
+  }
+  numericFields.forEach(function (field) {
+    pages_data[field] = parseInt(pages_data[field]);
+  });
+  var containerWidth = pagesWrapper.data('width'),
+    currentPosition = 0,
+    centeredPage = Math.round(pages_data.max_visible_pages / 2),
+    maxPosition = pages_data.item_width * (totalPages - pages_data.max_visible_pages),
+    noScroll = totalPages <= pages_data.max_visible_pages;
+  if (containerWidth) {
+    pagesWrapper.css("width", containerWidth);
+  }
+  prevNextButtonState(jQuery('.masterstudy-pagination'), currentPage, totalPages);
+  currentPosition = calculateInitialPosition(currentPage, centeredPage, totalPages, maxPosition);
+  pagesList.find("[data-id=\"".concat(currentPage, "\"]")).parent().addClass("masterstudy-pagination__item_current");
+  pagesList.animate({
+    left: -currentPosition + "px"
+  }, 50);
+  scrollButtonNext.off('click').on('click', function (e) {
+    e.preventDefault();
+    if (pages_data.is_queryable && currentPage < totalPages) {
+      updatePageQueryParam(currentPage + 1);
+    }
+    updateButtonState(scrollButtonNext, scrollButtonPrev, currentPage, totalPages);
+    scrollPageList(currentPage, centeredPage, maxPosition, pagesList);
+    setCurrentPage(pagesList, currentPage, 'masterstudy-pagination__item_current');
+  });
+  scrollButtonPrev.off('click').on('click', function (e) {
+    e.preventDefault();
+    if (pages_data.is_queryable && currentPage > 1) {
+      updatePageQueryParam(currentPage - 1);
+    }
+    updateButtonState(scrollButtonNext, scrollButtonPrev, currentPage, totalPages);
+    scrollPageList(currentPage, centeredPage, maxPosition, pagesList);
+    setCurrentPage(pagesList, currentPage, 'masterstudy-pagination__item_current');
+  });
+  jQuery(".masterstudy-pagination__item-block").off('click').on('click', function () {
+    currentPage = jQuery(this).data("id");
+    var container = jQuery(this).closest(".masterstudy-pagination");
+    currentPosition = calculateCurrentPosition(currentPage, centeredPage, maxPosition, noScroll, totalPages);
+    prevNextButtonState(container, currentPage, totalPages);
+    jQuery(this).parent().siblings().removeClass("masterstudy-pagination__item_current");
+    jQuery(this).parent().addClass("masterstudy-pagination__item_current");
+    pagesList.animate({
+      left: -currentPosition + "px"
+    }, 50);
+    if (pages_data.is_queryable) {
+      updatePageQueryParam(currentPage);
+    }
+  });
+}
+function calculateInitialPosition(currentPage, centeredPage, totalPages, maxPosition) {
+  if (currentPage <= centeredPage) {
+    return 0;
+  } else if (currentPage > totalPages - centeredPage) {
+    return maxPosition;
+  } else {
+    return (currentPage - centeredPage) * pages_data.item_width;
+  }
+}
+function setCurrentPage(pagesList, currentPage, className) {
+  pagesList.find("[data-id=\"".concat(currentPage, "\"]")).parent().siblings().removeClass(className);
+  pagesList.find("[data-id=\"".concat(currentPage, "\"]")).parent().addClass(className);
+}
+function updateButtonState(scrollButtonNext, scrollButtonPrev, currentPage, totalPages) {
+  scrollButtonPrev.toggleClass("masterstudy-pagination__button_disabled", currentPage === 1 || totalPages === 1);
+  scrollButtonNext.toggleClass("masterstudy-pagination__button_disabled", currentPage === totalPages || totalPages === 1);
+}
+function scrollPageList(currentPage, centeredPage, maxPosition, pagesList) {
+  var currentPosition = 0;
+  if (currentPage > centeredPage && currentPage < pages_data.total_pages - centeredPage + 1) {
+    currentPosition = (currentPage - centeredPage) * pages_data.item_width;
+  } else if (currentPage <= centeredPage) {
+    currentPosition = 0;
+  } else {
+    currentPosition = maxPosition;
+  }
+  pagesList.animate({
+    left: -currentPosition + "px"
+  }, 50);
+}
+function calculateCurrentPosition(currentPage, centeredPage, maxPosition, noScroll, totalPages) {
+  if (currentPage < centeredPage) {
+    return 0;
+  } else if (currentPage > totalPages - centeredPage + 1) {
+    return noScroll ? 0 : maxPosition;
+  } else {
+    return (currentPage - centeredPage) * pages_data.item_width;
+  }
+}
+function updatePageQueryParam(pageNumber) {
+  var currentUrl = window.location.href;
+  var urlParams = new URLSearchParams(window.location.search);
+  var queryName = "page";
+  if (urlParams.has(queryName)) {
+    urlParams.set(queryName, pageNumber);
+  } else {
+    urlParams.append(queryName, pageNumber);
+  }
+  var queryUrl = currentUrl.split("?")[0] + "?" + urlParams.toString();
+  window.history.replaceState({}, document.title, queryUrl);
+  window.location.href = queryUrl;
+}
+function prevNextButtonState(container, currentPage, totalPages) {
+  var btnClassPrev = '.masterstudy-pagination__button-prev';
+  var btnClassNext = '.masterstudy-pagination__button-next';
+  container.find(btnClassPrev).toggleClass("masterstudy-pagination__button_disabled", currentPage === 1 || totalPages === 1);
+  container.find(btnClassNext).toggleClass("masterstudy-pagination__button_disabled", currentPage === totalPages || totalPages === 1);
+}
+jQuery(document).ready(function () {
+  if (typeof pages_data !== 'undefined') {
+    initializePagination(parseInt(pages_data.current_page), parseInt(pages_data.total_pages));
+  }
+});

@@ -1,1 +1,9 @@
-"use strict";!function(i){i(document).ready((function(){i.cookie("affiliate_id",stm_lms_affiliate_user_id.id,{path:"/"})}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    $.cookie('affiliate_id', stm_lms_affiliate_user_id['id'], {
+      path: '/'
+    });
+  });
+})(jQuery);

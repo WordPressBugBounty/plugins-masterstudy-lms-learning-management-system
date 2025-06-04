@@ -1,1 +1,44 @@
-"use strict";document.addEventListener("DOMContentLoaded",(function(){document.querySelectorAll(".elementor-widget-ms_lms_slider").forEach((function(e){var t=JSON.parse(e.getAttribute("data-settings")),a=e.querySelector(".ms_lms_slider_custom"),l=e.querySelector(".ms_lms_slider_custom__navigation_next"),o=e.querySelector(".ms_lms_slider_custom__navigation_prev"),i={autoplay:!1,loop:!1};if(t&&(i={autoplay:t.autoplay,delay:t.slide_animation_speed,loop:t.loop,effect:t.slide_animation_effect}),0!==a.length){var n=new Swiper(a,{slidesPerView:1,allowTouchMove:!0,loop:i.loop,autoplay:!(!i.autoplay||!i.delay)&&{delay:i.delay},effect:i.effect,navigation:{nextEl:l,prevEl:o}});n.slides.length>1&&n.navigation.nextEl&&n.navigation.prevEl&&(n.navigation.nextEl.classList.add("lms-show-navi"),n.navigation.prevEl.classList.add("lms-show-navi"))}}))}));
+"use strict";
+
+document.addEventListener('DOMContentLoaded', function () {
+  var widgets = document.querySelectorAll('.elementor-widget-ms_lms_slider');
+  widgets.forEach(function (widget) {
+    var widgetData = JSON.parse(widget.getAttribute('data-settings')),
+      sliderContainer = widget.querySelector('.ms_lms_slider_custom'),
+      sliderButtonNext = widget.querySelector('.ms_lms_slider_custom__navigation_next'),
+      sliderButtonPrev = widget.querySelector('.ms_lms_slider_custom__navigation_prev'),
+      sliderData = {
+        'autoplay': false,
+        'loop': false
+      };
+    if (widgetData) {
+      sliderData = {
+        'autoplay': widgetData['autoplay'],
+        'delay': widgetData['slide_animation_speed'],
+        'loop': widgetData['loop'],
+        'effect': widgetData['slide_animation_effect']
+      };
+    }
+    if (sliderContainer.length !== 0) {
+      var mySwiper = new Swiper(sliderContainer, {
+        slidesPerView: 1,
+        allowTouchMove: true,
+        loop: sliderData['loop'],
+        autoplay: sliderData['autoplay'] && sliderData['delay'] ? {
+          delay: sliderData['delay']
+        } : false,
+        effect: sliderData['effect'],
+        navigation: {
+          nextEl: sliderButtonNext,
+          prevEl: sliderButtonPrev
+        }
+      });
+      if (mySwiper.slides.length > 1) {
+        if (mySwiper.navigation.nextEl && mySwiper.navigation.prevEl) {
+          mySwiper.navigation.nextEl.classList.add('lms-show-navi');
+          mySwiper.navigation.prevEl.classList.add('lms-show-navi');
+        }
+      }
+    }
+  });
+});

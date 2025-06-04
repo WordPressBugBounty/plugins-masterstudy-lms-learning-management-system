@@ -1,1 +1,62 @@
-"use strict";function getDateFrom(){return formatDateForFetch(selectedPeriod[0])}function getDateTo(){return formatDateForFetch(selectedPeriod[1])}function getDefaultDateRanges(){var e=new Date,t=[new Date,new Date],a=[new Date(e.setDate(e.getDate()-1)),new Date(e)],n=new Date(e.setDate(e.getDate()-e.getDay()+1)),r=[new Date(n),new Date],D=new Date(e.setDate(e.getDate()-e.getDay()-6)),o=new Date(e.setDate(D.getDate()+6));return{today:t,yesterday:a,this_week:r,last_week:[D,o],this_month:[new Date(e.getFullYear(),e.getMonth(),1),new Date],last_month:[new Date(e.getFullYear(),e.getMonth()-1,1),new Date(e.getFullYear(),e.getMonth(),0)],this_year:[new Date(e.getFullYear(),0,1),new Date],last_year:[new Date(e.getFullYear()-1,0,1),new Date(e.getFullYear()-1,11,31)],all_time:[new Date(0),new Date]}}function resetTime(e){var t="string"==typeof e?new Date(e):e;return new Date(t.getFullYear(),t.getMonth(),t.getDate())}function formatDate(e){return new Date(e).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"})}function formatDateForFetch(e){if(!e)return"";var t=new Date(e),a=t.getFullYear(),n=String(t.getMonth()+1).padStart(2,"0"),r=String(t.getDate()).padStart(2,"0");return"".concat(a,"-").concat(n,"-").concat(r)}
+"use strict";
+
+function getDateFrom() {
+  return formatDateForFetch(selectedPeriod[0]);
+}
+function getDateTo() {
+  return formatDateForFetch(selectedPeriod[1]);
+}
+function getDefaultDateRanges() {
+  var now = new Date();
+  var today = [new Date(), new Date()];
+  var yesterday = [new Date(now.setDate(now.getDate() - 1)), new Date(now)];
+  var startOfThisWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1));
+  var thisWeek = [new Date(startOfThisWeek), new Date()];
+  var startOfLastWeek = new Date(now.setDate(now.getDate() - now.getDay() - 6));
+  var endOfLastWeek = new Date(now.setDate(startOfLastWeek.getDate() + 6));
+  var lastWeek = [startOfLastWeek, endOfLastWeek];
+  var startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  var thisMonth = [startOfThisMonth, new Date()];
+  var startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  var endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+  var lastMonth = [startOfLastMonth, endOfLastMonth];
+  var startOfThisYear = new Date(now.getFullYear(), 0, 1);
+  var thisYear = [startOfThisYear, new Date()];
+  var startOfLastYear = new Date(now.getFullYear() - 1, 0, 1);
+  var endOfLastYear = new Date(now.getFullYear() - 1, 11, 31);
+  var lastYear = [startOfLastYear, endOfLastYear];
+  var allTime = [new Date(0), new Date()];
+  return {
+    today: today,
+    yesterday: yesterday,
+    this_week: thisWeek,
+    last_week: lastWeek,
+    this_month: thisMonth,
+    last_month: lastMonth,
+    this_year: thisYear,
+    last_year: lastYear,
+    all_time: allTime
+  };
+}
+function resetTime(date) {
+  var d = typeof date === 'string' ? new Date(date) : date;
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+function formatDate(date) {
+  var options = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  };
+  return new Date(date).toLocaleDateString('en-US', options);
+}
+function formatDateForFetch(date) {
+  if (!date) {
+    return '';
+  }
+  var d = new Date(date);
+  var year = d.getFullYear();
+  var month = String(d.getMonth() + 1).padStart(2, '0');
+  var day = String(d.getDate()).padStart(2, '0');
+  return "".concat(year, "-").concat(month, "-").concat(day);
+}

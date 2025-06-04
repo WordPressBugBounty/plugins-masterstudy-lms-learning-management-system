@@ -1,1 +1,131 @@
-"use strict";stm_lms_components.course={template:"#stm-lms-dashboard-course",props:["id"],components:{add_user:stm_lms_components.add_user,user_data_transfer:stm_lms_components.user_data_transfer,back:stm_lms_components.back},data:function(){return{id:0,origin_title:"",title:"",loading:!0,students:[],pages:0,limit:50,search:"",sort:"",sortDirection:"DESC",page:1,studentPublic:course_data.student_public}},mounted:function(){this.id=this.$route.params.id,this.getStudents()},computed:{studentsList:function(){var t=this,e=t.students.filter((function(e){return-1!==e.student.login.toLowerCase().indexOf(t.search.toLowerCase())}));""!==t.sort&&(e=e.sort(t.compare));var s=t.limit;if(s<1&&(s=50),t.pages=Math.ceil(e.length/s),1===t.page)return e.slice(0,s);var r=(t.page-1)*s,o=(t.page-1)*s+s;return e.slice(r,o)}},methods:{compare:function(t,e){var s="DESC"===this.sortDirection?-1:1,r=t.student.login,o=e.student.login;return"progress"===this.sort&&(r=t.progress_percent,o=e.progress_percent),"time"===this.sort&&(r=parseInt(t.start_time),o=parseInt(e.start_time)),"name"===this.sort&&(r=r.toLowerCase(),o=o.toLowerCase()),"email"===this.sort&&(r=t.student.email.toLowerCase(),o=e.student.email.toLowerCase()),r<o?-s:r>o?s:0},getStudents:function(){var t=this;t.loading=!0;var e=stm_lms_ajaxurl+"?action=stm_lms_dashboard_get_course_students";e+="&course_id="+t.id+"&nonce="+stm_lms_nonces.stm_lms_dashboard_get_course_students,t.$http.get(e).then((function(e){e=e.body,t.loading=!1,t.$set(t,"title",e.title),t.$set(t,"origin_title",e.origin_title),t.$set(t,"students",e.students)}))},toUser:function(t,e){this.$router.push({path:"/course/"+t+"/"+e})},deleteUserCourse:function(t,e,s){if(!confirm("Are you sure you want to delete the student? Deleting the student will also remove their course progress and all associated data."))return!1;var r=this;r.$set(e,"loading",!0);var o=stm_lms_ajaxurl+"?action=stm_lms_dashboard_delete_user_from_course";o+="&course_id="+t+"&user_id="+e.user_id+"&nonce="+stm_lms_nonces.stm_lms_dashboard_delete_user_from_course,void 0===e.user_id&&(o+="&user_email="+e.student.email),r.$http.get(o).then((function(){r.$set(e,"loading",!1),r.getStudents()}))},studentAdded:function(){this.getStudents()},sortBy:function(t){var e=this;t===e.sort&&(e.sortDirection="DESC"===e.sortDirection?"ASC":"DESC"),e.sort=t}}};
+"use strict";
+
+/**
+ *
+ * @var stm_lms_ajaxurl
+ */
+
+stm_lms_components['course'] = {
+  template: '#stm-lms-dashboard-course',
+  props: ['id'],
+  components: {
+    add_user: stm_lms_components['add_user'],
+    user_data_transfer: stm_lms_components['user_data_transfer'],
+    back: stm_lms_components['back']
+  },
+  data: function data() {
+    return {
+      id: 0,
+      origin_title: '',
+      title: '',
+      loading: true,
+      students: [],
+      pages: 0,
+      limit: 50,
+      search: '',
+      sort: '',
+      sortDirection: 'DESC',
+      page: 1,
+      studentPublic: course_data.student_public
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+    _this.id = _this.$route.params.id;
+    this.getStudents();
+  },
+  computed: {
+    studentsList: function studentsList() {
+      var _this = this;
+      var students = _this.students.filter(function (course) {
+        return course['student']['login'].toLowerCase().indexOf(_this.search.toLowerCase()) !== -1;
+      });
+
+      /*now we sort*/
+
+      if (_this.sort !== '') {
+        students = students.sort(_this.compare);
+      }
+      var limit = _this.limit;
+      if (limit < 1) limit = 50;
+      _this.pages = Math.ceil(students.length / limit);
+      if (_this.page === 1) {
+        return students.slice(0, limit);
+      } else {
+        var begin = (_this.page - 1) * limit;
+        var end = (_this.page - 1) * limit + limit;
+        return students.slice(begin, end);
+      }
+    }
+  },
+  methods: {
+    compare: function compare(a, b) {
+      var direction = this.sortDirection === 'DESC' ? -1 : 1;
+      var sortA = a['student']['login'];
+      var sortB = b['student']['login'];
+      if (this.sort === 'progress') {
+        sortA = a['progress_percent'];
+        sortB = b['progress_percent'];
+      }
+      if (this.sort === 'time') {
+        sortA = parseInt(a['start_time']);
+        sortB = parseInt(b['start_time']);
+      }
+      if (this.sort === "name") {
+        sortA = sortA.toLowerCase();
+        sortB = sortB.toLowerCase();
+      }
+      if (this.sort === "email") {
+        sortA = a["student"]["email"].toLowerCase();
+        sortB = b["student"]["email"].toLowerCase();
+      }
+      if (sortA < sortB) return -direction;
+      if (sortA > sortB) return direction;
+      return 0;
+    },
+    getStudents: function getStudents() {
+      var _this = this;
+      _this.loading = true;
+      var url = stm_lms_ajaxurl + '?action=stm_lms_dashboard_get_course_students';
+      url += '&course_id=' + _this.id + '&nonce=' + stm_lms_nonces['stm_lms_dashboard_get_course_students'];
+      _this.$http.get(url).then(function (data) {
+        data = data.body;
+        _this.loading = false;
+        _this.$set(_this, 'title', data.title);
+        _this.$set(_this, 'origin_title', data.origin_title);
+        _this.$set(_this, 'students', data.students);
+      });
+    },
+    toUser: function toUser(course_id, user_id) {
+      this.$router.push({
+        path: '/course/' + course_id + '/' + user_id
+      });
+    },
+    deleteUserCourse: function deleteUserCourse(course_id, user, key) {
+      if (!confirm('Are you sure you want to delete the student? Deleting the student will also remove their course progress and all associated data.')) return false;
+      var _this = this;
+      _this.$set(user, 'loading', true);
+      var url = stm_lms_ajaxurl + '?action=stm_lms_dashboard_delete_user_from_course';
+      url += '&course_id=' + course_id + '&user_id=' + user.user_id + '&nonce=' + stm_lms_nonces['stm_lms_dashboard_delete_user_from_course'];
+      if (user.user_id === undefined) {
+        url += '&user_email=' + user.student.email;
+      }
+      _this.$http.get(url).then(function () {
+        _this.$set(user, 'loading', false);
+        _this.getStudents();
+      });
+    },
+    studentAdded: function studentAdded() {
+      this.getStudents();
+    },
+    sortBy: function sortBy(sort) {
+      var _this = this;
+
+      /*So we need to change sort direction*/
+      if (sort === _this.sort) {
+        _this.sortDirection = _this.sortDirection === 'DESC' ? 'ASC' : 'DESC';
+      }
+      _this.sort = sort;
+    }
+  }
+};

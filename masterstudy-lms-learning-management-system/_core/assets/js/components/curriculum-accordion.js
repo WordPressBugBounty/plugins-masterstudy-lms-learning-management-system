@@ -1,1 +1,40 @@
-"use strict";!function(t){t(document).ready((function(){t(".masterstudy-curriculum-accordion__section").click((function(){var i=t(this).next();if(i.is(":visible"))i.animate({height:0},100,(function(){setTimeout((function(){i.css("display","none"),i.css("height","")}),300)})),t(this).parent().removeClass("masterstudy-curriculum-accordion__wrapper_opened");else{i.css("display","block");var s=i.height("auto").height();i.height(0).animate({height:s},100,(function(){setTimeout((function(){i.css("height","")}),300)})),t(this).parent().addClass("masterstudy-curriculum-accordion__wrapper_opened")}})),t(".masterstudy-curriculum-accordion__link_disabled").click((function(t){t.preventDefault()})),t(".masterstudy-hint").hover((function(){t(this).closest(".masterstudy-curriculum-accordion__list").css("overflow","visible")}),(function(){t(this).closest(".masterstudy-curriculum-accordion__list").css("overflow","hidden")}))}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    $('.masterstudy-curriculum-accordion__section').click(function () {
+      var content = $(this).next(),
+        isOpened = content.is(':visible');
+      if (isOpened) {
+        content.animate({
+          height: 0
+        }, 100, function () {
+          setTimeout(function () {
+            content.css('display', 'none');
+            content.css('height', '');
+          }, 300);
+        });
+        $(this).parent().removeClass('masterstudy-curriculum-accordion__wrapper_opened');
+      } else {
+        content.css('display', 'block');
+        var autoHeight = content.height('auto').height();
+        content.height(0).animate({
+          height: autoHeight
+        }, 100, function () {
+          setTimeout(function () {
+            content.css('height', '');
+          }, 300);
+        });
+        $(this).parent().addClass('masterstudy-curriculum-accordion__wrapper_opened');
+      }
+    });
+    $('.masterstudy-curriculum-accordion__link_disabled').click(function (event) {
+      event.preventDefault();
+    });
+    $('.masterstudy-hint').hover(function () {
+      $(this).closest('.masterstudy-curriculum-accordion__list').css('overflow', 'visible');
+    }, function () {
+      $(this).closest('.masterstudy-curriculum-accordion__list').css('overflow', 'hidden');
+    });
+  });
+})(jQuery);

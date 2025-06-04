@@ -1,1 +1,14 @@
-"use strict";!function(t){t(document).ready((function(){t(".btn-save-checkpoint").on("click",(function(e){e.preventDefault();var c=t(this).attr("data-course-id");t.cookie("stm_lms_course_buy",c,{path:"/"}),window.location.href=t(this).attr("href")}))}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    $('.btn-save-checkpoint').on('click', function (e) {
+      e.preventDefault();
+      var course_id = $(this).attr('data-course-id');
+      $.cookie('stm_lms_course_buy', course_id, {
+        path: '/'
+      });
+      window.location.href = $(this).attr('href');
+    });
+  });
+})(jQuery);

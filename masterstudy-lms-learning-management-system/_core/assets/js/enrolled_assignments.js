@@ -1,1 +1,67 @@
-"use strict";jQuery(document).ready((function(){!function(s){var t;s(document).ready((function(){s("body").addClass("enrolled-assignments"),new Vue({el:"#stm_lms_enrolled_assignments",data:function(){return{loading:!1,pages:window.stm_lms_enrolled_assignments.assignments.pages,assignments:window.stm_lms_enrolled_assignments.assignments,s:"",active_sort:!1,statuses:window.stm_lms_enrolled_assignments.statuses,active_status:!1,page:1}},mounted:function(){this.getAssignments()},methods:{computePage:function(s){return 1===s||s===this.pages?"first":s+2<this.page||s-2>this.page?"other":"first"},getAssignments:function(){var s=this;if(s.loading)return!1;var t=stm_lms_ajaxurl+"?action=stm_lms_get_enrolled_assignments&nonce="+stm_lms_nonces.stm_lms_get_enrolled_assingments+"&page="+s.page+"&status="+s.active_status.id+"&s="+s.s;s.$set(s,"loading",!0),this.$http.get(t).then((function(t){t=t.body,s.$set(s,"loading",!1),t&&(s.$set(s,"assignments",t),t.length>0&&(s.$set(s,"pages",t[0].pages),this.pages=t[0].pages))}))},initSearch:function(){var s=this;clearTimeout(t),t=setTimeout((function(){s.$set(s,"page",1),s.getAssignments()}),1e3)}}})}))}(jQuery)}));
+"use strict";
+
+(function ($) {
+  var myVar;
+  $(document).ready(function () {
+    (function ($) {
+      var myVar;
+      $(document).ready(function () {
+        $('body').addClass('enrolled-assignments');
+        new Vue({
+          el: '#stm_lms_enrolled_assignments',
+          data: function data() {
+            return {
+              loading: false,
+              pages: window['stm_lms_enrolled_assignments']['assignments'].pages,
+              assignments: window['stm_lms_enrolled_assignments']['assignments'],
+              s: '',
+              active_sort: false,
+              statuses: window['stm_lms_enrolled_assignments']['statuses'],
+              active_status: false,
+              page: 1
+            };
+          },
+          mounted: function mounted() {
+            this.getAssignments();
+          },
+          methods: {
+            computePage: function computePage(page) {
+              /*Always show first and last page*/
+              if (page === 1 || page === this.pages) return 'first';
+
+              /*Hide not 2 closest pages to first and last*/
+              if (page + 2 < this.page) return 'other';
+              if (page - 2 > this.page) return 'other';
+              return 'first';
+            },
+            getAssignments: function getAssignments() {
+              var vm = this;
+              if (vm.loading) return false;
+              var url = stm_lms_ajaxurl + '?action=stm_lms_get_enrolled_assignments&nonce=' + stm_lms_nonces['stm_lms_get_enrolled_assingments'] + '&page=' + vm.page + '&status=' + vm.active_status.id + '&s=' + vm.s;
+              vm.$set(vm, 'loading', true);
+              this.$http.get(url).then(function (response) {
+                response = response.body;
+                vm.$set(vm, 'loading', false);
+                if (response) {
+                  vm.$set(vm, 'assignments', response);
+                  if (response.length > 0) {
+                    vm.$set(vm, 'pages', response[0].pages);
+                    this.pages = response[0].pages;
+                  }
+                }
+              });
+            },
+            initSearch: function initSearch() {
+              var vm = this;
+              clearTimeout(myVar);
+              myVar = setTimeout(function () {
+                vm.$set(vm, 'page', 1);
+                vm.getAssignments();
+              }, 1000);
+            }
+          }
+        });
+      });
+    })(jQuery);
+  });
+})(jQuery);

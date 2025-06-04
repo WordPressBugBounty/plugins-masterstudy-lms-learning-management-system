@@ -1,1 +1,20 @@
-"use strict";function hideLoaders(e){document.querySelectorAll(e).forEach((function(e){e.querySelectorAll(".masterstudy-analytics-loader").forEach((function(e){e.style.display="none"}))}))}function showLoaders(e){document.querySelectorAll(e).forEach((function(e){e.querySelectorAll(".masterstudy-analytics-loader").forEach((function(e){e.style.display="flex"}))}))}
+"use strict";
+
+function hideLoaders(selector) {
+  var elements = document.querySelectorAll(selector);
+  elements.forEach(function (element) {
+    var loaders = element.querySelectorAll('.masterstudy-analytics-loader');
+    loaders.forEach(function (loader) {
+      loader.style.display = 'none';
+    });
+  });
+}
+function showLoaders(selector) {
+  var elements = document.querySelectorAll(selector);
+  elements.forEach(function (element) {
+    var loaders = element.querySelectorAll('.masterstudy-analytics-loader');
+    loaders.forEach(function (loader) {
+      loader.style.display = 'flex';
+    });
+  });
+}

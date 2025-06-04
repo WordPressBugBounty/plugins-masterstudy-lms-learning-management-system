@@ -1,1 +1,119 @@
-"use strict";!function(t){function a(t){r("register",authorization_settings.titles.register,t)}function i(t){r("login",authorization_settings.titles.login,t)}function r(t,a,i){i.removeClass("register"===t?"masterstudy-authorization_login":"masterstudy-authorization_register").addClass("masterstudy-authorization_".concat(t)),authorization_data.only_for_instructor||("register"===t?i.find(".masterstudy-authorization__instructor-page").removeClass("masterstudy-authorization__instructor-page_hide"):i.find(".masterstudy-authorization__instructor-page").addClass("masterstudy-authorization__instructor-page_hide")),i.find(".masterstudy-authorization__switch-lost-pass").removeClass("masterstudy-authorization__switch-lost-pass_hide"),i.find(".masterstudy-authorization__wrapper").removeClass("masterstudy-authorization__wrapper_hide"),i.find(".masterstudy-authorization__restore").removeClass("masterstudy-authorization__restore_show"),i.find("#masterstudy-authorization-restore-pass").removeClass("masterstudy-authorization__send-mail_show"),i.find("#masterstudy-authorization-confirm-email").removeClass("masterstudy-authorization__send-mail_show"),i.find(".masterstudy-authorization__switch").removeClass("masterstudy-authorization__switch_hide"),i.find(".masterstudy-authorization__header-title").text(a.main),i.find(".masterstudy-authorization__separator-title").text(a.separator),i.find(".masterstudy-authorization__switch-account-title").text(a.account),i.find(".masterstudy-authorization__form-field-error_privacy_policy").toggleClass("masterstudy-authorization__form-field-error_hide")}t(document).ready((function(){setTimeout((function(){t(".masterstudy-authorization-modal").removeAttr("style")}),1e3),t("[data-authorization-modal]").on("click",(function(r){r.preventDefault();var o=t(".masterstudy-authorization-modal"),s=o.find(".masterstudy-authorization");"register"===t(this).attr("data-authorization-modal")?a(s):i(s),o.addClass("masterstudy-authorization-modal_open"),t("body").addClass("masterstudy-authorization-body-hidden")})),t(".masterstudy-authorization-modal").on("click",(function(a){a.target===this&&(t(this).removeClass("masterstudy-authorization-modal_open"),t("body").removeClass("masterstudy-authorization-body-hidden"))})),t('.masterstudy-authorization-modal__close, [data-id="masterstudy-authorization-close-button"]').click((function(r){r.preventDefault(),t(this).closest(".masterstudy-authorization-modal").removeClass("masterstudy-authorization-modal_open"),t("body").removeClass("masterstudy-authorization-body-hidden"),setTimeout((function(){var r=t("[data-authorization-modal]"),o=t(".masterstudy-authorization-modal");r.length>0?"register"===r.attr("data-authorization-modal")?a(o):i(o):authorization_settings.register_mode?a(o):i(o)}),100)})),t(".masterstudy-authorization").each((function(){var r=t(this);r.find("#masterstudy-authorization-sign-up").click((function(t){t.preventDefault(),a(r)})),r.find("#masterstudy-authorization-sign-in").click((function(t){t.preventDefault(),i(r),r.find(".masterstudy-authorization__separator").show()})),r.find(".masterstudy-authorization__switch-lost-pass").click((function(){t(this).addClass("masterstudy-authorization__switch-lost-pass_hide"),r.find(".masterstudy-authorization__wrapper").addClass("masterstudy-authorization__wrapper_hide"),r.find(".masterstudy-authorization__restore").addClass("masterstudy-authorization__restore_show")})),r.find(".masterstudy-authorization__restore-header-back").click((function(){r.find(".masterstudy-authorization__switch-lost-pass").removeClass("masterstudy-authorization__switch-lost-pass_hide"),r.find(".masterstudy-authorization__wrapper").removeClass("masterstudy-authorization__wrapper_hide"),r.find(".masterstudy-authorization__restore").removeClass("masterstudy-authorization__restore_show")})),r.find(".masterstudy-authorization__form-show-pass").click((function(){t(this).toggleClass("masterstudy-authorization__form-show-pass_open");var a=t(this).parent().find("input");a.attr("type","password"===a.attr("type")?"text":"password")})),r.find(".masterstudy-authorization__checkbox-title").click((function(){t(this).parent().find(".masterstudy-authorization__checkbox-wrapper").trigger("click")})),r.find(".masterstudy-authorization__gdpr-text").click((function(){r.find(".masterstudy-authorization__gdpr .masterstudy-authorization__checkbox-wrapper").trigger("click")})),r.find(".masterstudy-authorization__instructor-text").click((function(){r.find(".masterstudy-authorization__instructor .masterstudy-authorization__checkbox-wrapper").trigger("click")})),r.find(".masterstudy-authorization__checkbox-wrapper").click((function(){t(this).toggleClass("masterstudy-authorization__checkbox-wrapper_checked");var a=t(this).prev(),i=a.closest("masterstudy-authorization__checkbox-group");a.prop("checked",!a.prop("checked")),"masterstudy-authorization-gdbr"===a.attr("id")&&r.find('[data-error-id="policy"]').remove(),"masterstudy-authorization-instructor"===a.attr("id")&&r.find(".masterstudy-authorization__instructor-container").toggleClass("masterstudy-authorization__instructor-container_open"),i.length>0&&i.find('[data-error-id="required"]').remove()})),r.find("input, textarea").on("input",(function(){t(this).parent().find(".masterstudy-authorization__form-field-error").remove(),t(this).parent().removeClass("masterstudy-authorization__form-field_has-error")}))}))})),t(".masterstudy-authorization__social").on("click",(function(t){var a=new Date;a.setHours(a.getHours()+1),document.cookie="social_redirect_url="+window.location.href+"; expires="+a.toUTCString()+"; path=/"}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    setTimeout(function () {
+      $('.masterstudy-authorization-modal').removeAttr('style');
+    }, 1000);
+    $('[data-authorization-modal]').on('click', function (e) {
+      e.preventDefault();
+      var modalContainer = $('.masterstudy-authorization-modal');
+      var formContainer = modalContainer.find('.masterstudy-authorization');
+      $(this).attr('data-authorization-modal') === 'register' ? open_register_form(formContainer) : open_login_form(formContainer);
+      modalContainer.addClass('masterstudy-authorization-modal_open');
+      $('body').addClass('masterstudy-authorization-body-hidden');
+    });
+    $('.masterstudy-authorization-modal').on('click', function (event) {
+      if (event.target === this) {
+        $(this).removeClass('masterstudy-authorization-modal_open');
+        $('body').removeClass('masterstudy-authorization-body-hidden');
+      }
+    });
+    $('.masterstudy-authorization-modal__close, [data-id="masterstudy-authorization-close-button"]').click(function (e) {
+      e.preventDefault();
+      $(this).closest('.masterstudy-authorization-modal').removeClass('masterstudy-authorization-modal_open');
+      $('body').removeClass('masterstudy-authorization-body-hidden');
+      setTimeout(function () {
+        var modal = $('[data-authorization-modal]'),
+          modalContainer = $('.masterstudy-authorization-modal');
+        if (modal.length > 0) {
+          modal.attr('data-authorization-modal') === 'register' ? open_register_form(modalContainer) : open_login_form(modalContainer);
+        } else {
+          authorization_settings.register_mode ? open_register_form(modalContainer) : open_login_form(modalContainer);
+        }
+      }, 100);
+    });
+    $('.masterstudy-authorization').each(function () {
+      var formContainer = $(this);
+      formContainer.find('#masterstudy-authorization-sign-up').click(function (e) {
+        e.preventDefault();
+        open_register_form(formContainer);
+      });
+      formContainer.find('#masterstudy-authorization-sign-in').click(function (e) {
+        e.preventDefault();
+        open_login_form(formContainer);
+        formContainer.find('.masterstudy-authorization__separator').show();
+      });
+      formContainer.find('.masterstudy-authorization__switch-lost-pass').click(function () {
+        $(this).addClass('masterstudy-authorization__switch-lost-pass_hide');
+        formContainer.find('.masterstudy-authorization__wrapper').addClass('masterstudy-authorization__wrapper_hide');
+        formContainer.find('.masterstudy-authorization__restore').addClass('masterstudy-authorization__restore_show');
+      });
+      formContainer.find('.masterstudy-authorization__restore-header-back').click(function () {
+        formContainer.find('.masterstudy-authorization__switch-lost-pass').removeClass('masterstudy-authorization__switch-lost-pass_hide');
+        formContainer.find('.masterstudy-authorization__wrapper').removeClass('masterstudy-authorization__wrapper_hide');
+        formContainer.find('.masterstudy-authorization__restore').removeClass('masterstudy-authorization__restore_show');
+      });
+      formContainer.find('.masterstudy-authorization__form-show-pass').click(function () {
+        $(this).toggleClass('masterstudy-authorization__form-show-pass_open');
+        var field = $(this).parent().find('input');
+        field.attr('type', field.attr('type') === 'password' ? 'text' : 'password');
+      });
+      formContainer.find('.masterstudy-authorization__checkbox-title').click(function () {
+        $(this).parent().find('.masterstudy-authorization__checkbox-wrapper').trigger('click');
+      });
+      formContainer.find('.masterstudy-authorization__gdpr-text').click(function () {
+        formContainer.find('.masterstudy-authorization__gdpr .masterstudy-authorization__checkbox-wrapper').trigger('click');
+      });
+      formContainer.find('.masterstudy-authorization__instructor-text').click(function () {
+        formContainer.find('.masterstudy-authorization__instructor .masterstudy-authorization__checkbox-wrapper').trigger('click');
+      });
+      formContainer.find('.masterstudy-authorization__checkbox-wrapper').click(function () {
+        $(this).toggleClass('masterstudy-authorization__checkbox-wrapper_checked');
+        var input = $(this).prev();
+        var container = input.closest('masterstudy-authorization__checkbox-group');
+        input.prop('checked', !input.prop('checked'));
+        if (input.attr('id') === 'masterstudy-authorization-gdbr') {
+          formContainer.find('[data-error-id="policy"]').remove();
+        }
+        if (input.attr('id') === 'masterstudy-authorization-instructor') {
+          formContainer.find('.masterstudy-authorization__instructor-container').toggleClass('masterstudy-authorization__instructor-container_open');
+        }
+        if (container.length > 0) {
+          container.find('[data-error-id="required"]').remove();
+        }
+      });
+      formContainer.find('input, textarea').on('input', function () {
+        $(this).parent().find('.masterstudy-authorization__form-field-error').remove();
+        $(this).parent().removeClass('masterstudy-authorization__form-field_has-error');
+      });
+    });
+  });
+  function open_register_form(formContainer) {
+    setFormProperties('register', authorization_settings.titles.register, formContainer);
+  }
+  function open_login_form(formContainer) {
+    setFormProperties('login', authorization_settings.titles.login, formContainer);
+  }
+  function setFormProperties(formType, titles, formContainer) {
+    formContainer.removeClass(formType === 'register' ? 'masterstudy-authorization_login' : 'masterstudy-authorization_register').addClass("masterstudy-authorization_".concat(formType));
+    if (!authorization_data.only_for_instructor) {
+      formType === 'register' ? formContainer.find('.masterstudy-authorization__instructor-page').removeClass('masterstudy-authorization__instructor-page_hide') : formContainer.find('.masterstudy-authorization__instructor-page').addClass('masterstudy-authorization__instructor-page_hide');
+    }
+    formContainer.find('.masterstudy-authorization__switch-lost-pass').removeClass('masterstudy-authorization__switch-lost-pass_hide');
+    formContainer.find('.masterstudy-authorization__wrapper').removeClass('masterstudy-authorization__wrapper_hide');
+    formContainer.find('.masterstudy-authorization__restore').removeClass('masterstudy-authorization__restore_show');
+    formContainer.find('#masterstudy-authorization-restore-pass').removeClass('masterstudy-authorization__send-mail_show');
+    formContainer.find('#masterstudy-authorization-confirm-email').removeClass('masterstudy-authorization__send-mail_show');
+    formContainer.find('.masterstudy-authorization__switch').removeClass('masterstudy-authorization__switch_hide');
+    formContainer.find('.masterstudy-authorization__header-title').text(titles.main);
+    formContainer.find('.masterstudy-authorization__separator-title').text(titles.separator);
+    formContainer.find('.masterstudy-authorization__switch-account-title').text(titles.account);
+    formContainer.find('.masterstudy-authorization__form-field-error_privacy_policy').toggleClass('masterstudy-authorization__form-field-error_hide');
+  }
+  $('.masterstudy-authorization__social').on('click', function (event) {
+    var now = new Date();
+    now.setHours(now.getHours() + 1);
+    document.cookie = 'social_redirect_url=' + window.location.href + '; expires=' + now.toUTCString() + '; path=/';
+  });
+})(jQuery);

@@ -1,1 +1,121 @@
-"use strict";function _typeof(t){return _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},_typeof(t)}function _classCallCheck(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function _defineProperties(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,_toPropertyKey(o.key),o)}}function _createClass(t,e,n){return e&&_defineProperties(t.prototype,e),n&&_defineProperties(t,n),Object.defineProperty(t,"prototype",{writable:!1}),t}function _toPropertyKey(t){var e=_toPrimitive(t,"string");return"symbol"==_typeof(e)?e:e+""}function _toPrimitive(t,e){if("object"!=_typeof(t)||!t)return t;var n=t[Symbol.toPrimitive];if(void 0!==n){var o=n.call(t,e||"default");if("object"!=_typeof(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===e?String:Number)(t)}function _inherits(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),Object.defineProperty(t,"prototype",{writable:!1}),e&&_setPrototypeOf(t,e)}function _setPrototypeOf(t,e){return _setPrototypeOf=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(t,e){return t.__proto__=e,t},_setPrototypeOf(t,e)}function _createSuper(t){var e=_isNativeReflectConstruct();return function(){var n,o=_getPrototypeOf(t);if(e){var r=_getPrototypeOf(this).constructor;n=Reflect.construct(o,arguments,r)}else n=o.apply(this,arguments);return _possibleConstructorReturn(this,n)}}function _possibleConstructorReturn(t,e){if(e&&("object"==_typeof(e)||"function"==typeof e))return e;if(void 0!==e)throw new TypeError("Derived constructors may only return object or undefined");return _assertThisInitialized(t)}function _assertThisInitialized(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}function _isNativeReflectConstruct(){try{var t=!Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){})))}catch(t){}return(_isNativeReflectConstruct=function(){return!!t})()}function _getPrototypeOf(t){return _getPrototypeOf=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(t){return t.__proto__||Object.getPrototypeOf(t)},_getPrototypeOf(t)}var CourseBuyButton=function(){_inherits(e,elementorModules.frontend.handlers.Base);var t=_createSuper(e);function e(){return _classCallCheck(this,e),t.apply(this,arguments)}return _createClass(e,[{key:"getDefaultSettings",value:function(){return{selectors:{buyButton:".masterstudy-buy-button",buyButtonDropdown:".masterstudy-buy-button_plans-dropdown",buyButtonDisabled:".masterstudy-buy-button__link_disabled",prerequisitesButton:".masterstudy-prerequisites__button",prerequisitesContainer:".masterstudy-prerequisites",explanationTitle:".masterstudy-prerequisites-list__explanation-title"}}}},{key:"getDefaultElements",value:function(){var t=this.getSettings("selectors");return{$buyButton:this.$element.find(t.buyButton),$buyButtonDropdown:this.$element.find(t.buyButtonDropdown),$buyButtonDisabled:this.$element.find(t.buyButtonDisabled),$prerequisitesButton:this.$element.find(t.prerequisitesButton),$prerequisitesContainer:this.$element.find(t.prerequisitesContainer),$explanationTitle:this.$element.find(t.explanationTitle)}}},{key:"bindEvents",value:function(){var t=this;this.elements.$buyButton.length&&this.elements.$buyButton.on("click",(function(){return t.toggleDropdown()})),this.elements.$buyButtonDropdown.length&&this.elements.$buyButtonDropdown.on("click",(function(t){return t.stopPropagation()})),this.elements.$buyButtonDisabled.length&&this.elements.$buyButtonDisabled.on("click",(function(t){return t.preventDefault()})),this.elements.$prerequisitesButton.length&&this.elements.$prerequisitesButton.on("click",(function(e){return t.togglePrerequisites(e)})),this.elements.$explanationTitle.length&&this.elements.$explanationTitle.on("click",(function(e){return t.toggleExplanation(e)})),jQuery(document).on("click",(function(e){return t.handleOutsideClick(e)}))}},{key:"toggleDropdown",value:function(){this.animationActive=!this.animationActive,this.elements.$buyButton.toggleClass("dropdown-show",this.animationActive)}},{key:"togglePrerequisites",value:function(t){t.preventDefault(),jQuery(t.currentTarget).parent().toggleClass("active")}},{key:"toggleExplanation",value:function(t){t.preventDefault(),jQuery(t.currentTarget).parent().toggleClass("active")}},{key:"handleOutsideClick",value:function(t){!jQuery(t.target).closest(".masterstudy-buy-button").length&&this.animationActive&&this.toggleDropdown(),jQuery(t.target).closest(".masterstudy-prerequisites").length||this.elements.$prerequisitesContainer.removeClass("active")}}]),e}();jQuery(window).on("elementor/frontend/init",(function(){elementorFrontend.hooks.addAction("frontend/element_ready/ms_lms_course_buy_button.default",(function(t){elementorFrontend.elementsHandler.addHandler(CourseBuyButton,{$element:t})}))}));
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+var CourseBuyButton = /*#__PURE__*/function (_elementorModules$fro) {
+  _inherits(CourseBuyButton, _elementorModules$fro);
+  var _super = _createSuper(CourseBuyButton);
+  function CourseBuyButton() {
+    _classCallCheck(this, CourseBuyButton);
+    return _super.apply(this, arguments);
+  }
+  _createClass(CourseBuyButton, [{
+    key: "getDefaultSettings",
+    value: function getDefaultSettings() {
+      return {
+        selectors: {
+          buyButton: '.masterstudy-buy-button',
+          buyButtonDropdown: '.masterstudy-buy-button_plans-dropdown',
+          buyButtonDisabled: '.masterstudy-buy-button__link_disabled',
+          prerequisitesButton: '.masterstudy-prerequisites__button',
+          prerequisitesContainer: '.masterstudy-prerequisites',
+          explanationTitle: '.masterstudy-prerequisites-list__explanation-title'
+        }
+      };
+    }
+  }, {
+    key: "getDefaultElements",
+    value: function getDefaultElements() {
+      var selectors = this.getSettings('selectors');
+      return {
+        $buyButton: this.$element.find(selectors.buyButton),
+        $buyButtonDropdown: this.$element.find(selectors.buyButtonDropdown),
+        $buyButtonDisabled: this.$element.find(selectors.buyButtonDisabled),
+        $prerequisitesButton: this.$element.find(selectors.prerequisitesButton),
+        $prerequisitesContainer: this.$element.find(selectors.prerequisitesContainer),
+        $explanationTitle: this.$element.find(selectors.explanationTitle)
+      };
+    }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      var _this = this;
+      if (this.elements.$buyButton.length) {
+        this.elements.$buyButton.on('click', function () {
+          return _this.toggleDropdown();
+        });
+      }
+      if (this.elements.$buyButtonDropdown.length) {
+        this.elements.$buyButtonDropdown.on('click', function (event) {
+          return event.stopPropagation();
+        });
+      }
+      if (this.elements.$buyButtonDisabled.length) {
+        this.elements.$buyButtonDisabled.on('click', function (event) {
+          return event.preventDefault();
+        });
+      }
+      if (this.elements.$prerequisitesButton.length) {
+        this.elements.$prerequisitesButton.on('click', function (event) {
+          return _this.togglePrerequisites(event);
+        });
+      }
+      if (this.elements.$explanationTitle.length) {
+        this.elements.$explanationTitle.on('click', function (event) {
+          return _this.toggleExplanation(event);
+        });
+      }
+      jQuery(document).on('click', function (event) {
+        return _this.handleOutsideClick(event);
+      });
+    }
+  }, {
+    key: "toggleDropdown",
+    value: function toggleDropdown() {
+      this.animationActive = !this.animationActive;
+      this.elements.$buyButton.toggleClass('dropdown-show', this.animationActive);
+    }
+  }, {
+    key: "togglePrerequisites",
+    value: function togglePrerequisites(event) {
+      event.preventDefault();
+      jQuery(event.currentTarget).parent().toggleClass('active');
+    }
+  }, {
+    key: "toggleExplanation",
+    value: function toggleExplanation(event) {
+      event.preventDefault();
+      jQuery(event.currentTarget).parent().toggleClass('active');
+    }
+  }, {
+    key: "handleOutsideClick",
+    value: function handleOutsideClick(event) {
+      if (!jQuery(event.target).closest('.masterstudy-buy-button').length && this.animationActive) {
+        this.toggleDropdown();
+      }
+      if (!jQuery(event.target).closest('.masterstudy-prerequisites').length) {
+        this.elements.$prerequisitesContainer.removeClass('active');
+      }
+    }
+  }]);
+  return CourseBuyButton;
+}(elementorModules.frontend.handlers.Base);
+jQuery(window).on('elementor/frontend/init', function () {
+  var addHandler = function addHandler($element) {
+    elementorFrontend.elementsHandler.addHandler(CourseBuyButton, {
+      $element: $element
+    });
+  };
+  elementorFrontend.hooks.addAction('frontend/element_ready/ms_lms_course_buy_button.default', addHandler);
+});

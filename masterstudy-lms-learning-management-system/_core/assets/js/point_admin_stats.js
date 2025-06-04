@@ -1,1 +1,77 @@
-"use strict";jQuery(document).ready((function(){new Vue({el:"#stm_lms_admin_point_stats",data:function(){return{loading:!1,users:stm_lms_point_stats.data.users,total_users:stm_lms_point_stats.data.total,pages:stm_lms_point_stats.data.pages,translations:stm_lms_point_stats.translation,page:1,search:""}},mounted:function(){},methods:{getUsers:function(){var t=this;t.loading=!0;var s=stm_lms_ajaxurl+"?action=stm_lms_get_point_users&nonce="+stm_lms_nonces.stm_lms_get_point_users+"&page="+t.page+"&s="+t.search;t.$http.get(s).then((function(s){var e=s.body;t.loading=!1,t.$set(t,"users",e.users),t.$set(t,"pages",e.pages)}))},loadHistory:function(t,s){var e=this;e.$set(t,"loading",!0),e.$set(t,"current_page",s);var n=stm_lms_ajaxurl+"?action=stm_lms_get_user_points_history_admin&nonce="+stm_lms_nonces.stm_lms_get_user_points_history_admin+"&page="+s+"&user_id="+t.ID;e.$http.get(n).then((function(s){var n=s.body;e.$set(t,"loading",!1),e.$set(t,"history",{}),e.$set(t.history,"pages",n.pages),e.$set(t.history,"points",n.points),e.$set(t.history,"sum",n.sum)}))},changePoints:function(t,s){var e=this;if("string"==typeof t.edit){e.$set(t,"loading",!0);var n=parseFloat(t.edit.match(/(\d+)/)[0]),o=(parseFloat(t.score.match(/(\d+)/)[0]),stm_lms_ajaxurl+"?action=stm_lms_change_points&nonce="+stm_lms_nonces.stm_lms_change_points+"&point="+n+"&user_points_id="+t.user_points_id+"&user_id="+t.user_id+"&prev_point="+t.score);e.$http.get(o).then((function(n){var o=n.body;e.$set(t,"score",o.point),e.$set(t,"editing",!1),e.$set(t,"loading",!1),e.$set(s.history,"sum",o.total),e.$set(s.data.lms_data,"points",o.total)}))}},deletePoint:function(t,s,e){if(!confirm(this.translations.delete_action))return!1;var n=this;n.$set(t,"loading",!0);var o=stm_lms_ajaxurl+"?action=stm_lms_delete_points&nonce="+stm_lms_nonces.stm_lms_delete_points+"&user_points_id="+t.user_points_id+"&user_id="+t.user_id;n.$http.get(o).then((function(o){var i=o.body;n.$set(t,"loading",!1),n.$set(e.history,"sum",i.total),e.history.points.splice(s,1)}))}}})}));
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    new Vue({
+      el: '#stm_lms_admin_point_stats',
+      data: function data() {
+        return {
+          loading: false,
+          users: stm_lms_point_stats['data']['users'],
+          total_users: stm_lms_point_stats['data']['total'],
+          pages: stm_lms_point_stats['data']['pages'],
+          translations: stm_lms_point_stats['translation'],
+          page: 1,
+          search: ''
+        };
+      },
+      mounted: function mounted() {},
+      methods: {
+        getUsers: function getUsers() {
+          var vm = this;
+          vm.loading = true;
+          var url = stm_lms_ajaxurl + '?action=stm_lms_get_point_users&nonce=' + stm_lms_nonces['stm_lms_get_point_users'] + '&page=' + vm.page + '&s=' + vm.search;
+          vm.$http.get(url).then(function (r) {
+            var res = r.body;
+            vm.loading = false;
+            vm.$set(vm, 'users', res.users);
+            vm.$set(vm, 'pages', res.pages);
+          });
+        },
+        loadHistory: function loadHistory(user, page) {
+          var vm = this;
+          vm.$set(user, 'loading', true);
+          vm.$set(user, 'current_page', page);
+          var url = stm_lms_ajaxurl + '?action=stm_lms_get_user_points_history_admin&nonce=' + stm_lms_nonces['stm_lms_get_user_points_history_admin'] + '&page=' + page + '&user_id=' + user['ID'];
+          vm.$http.get(url).then(function (r) {
+            var res = r.body;
+            vm.$set(user, 'loading', false);
+            vm.$set(user, 'history', {});
+            vm.$set(user.history, 'pages', res.pages);
+            vm.$set(user.history, 'points', res.points);
+            vm.$set(user.history, 'sum', res.sum);
+          });
+        },
+        changePoints: function changePoints(point, user) {
+          var vm = this;
+          if (typeof point.edit === 'string') {
+            vm.$set(point, 'loading', true);
+            var current_point = parseFloat(point.edit.match(/(\d+)/)[0]);
+            var point_score = parseFloat(point.score.match(/(\d+)/)[0]);
+            var url = stm_lms_ajaxurl + '?action=stm_lms_change_points&nonce=' + stm_lms_nonces['stm_lms_change_points'] + '&point=' + current_point + '&user_points_id=' + point['user_points_id'] + '&user_id=' + point['user_id'] + '&prev_point=' + point['score'];
+            vm.$http.get(url).then(function (r) {
+              var res = r.body;
+              vm.$set(point, 'score', res.point);
+              vm.$set(point, 'editing', false);
+              vm.$set(point, 'loading', false);
+              vm.$set(user.history, 'sum', res.total);
+              vm.$set(user.data['lms_data'], 'points', res.total);
+            });
+          }
+        },
+        deletePoint: function deletePoint(point, pointIndex, user) {
+          if (!confirm(this.translations['delete_action'])) return false;
+          var vm = this;
+          vm.$set(point, 'loading', true);
+          var url = stm_lms_ajaxurl + '?action=stm_lms_delete_points&nonce=' + stm_lms_nonces['stm_lms_delete_points'] + '&user_points_id=' + point['user_points_id'] + '&user_id=' + point['user_id'];
+          vm.$http.get(url).then(function (r) {
+            var res = r.body;
+            vm.$set(point, 'loading', false);
+            vm.$set(user.history, 'sum', res.total);
+            user.history.points.splice(pointIndex, 1);
+          });
+        }
+      }
+    });
+  });
+})(jQuery);

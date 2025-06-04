@@ -1,1 +1,153 @@
-"use strict";function _typeof(e){return _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},_typeof(e)}function ownKeys(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var a=Object.getOwnPropertySymbols(e);t&&(a=a.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,a)}return r}function _objectSpread(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?ownKeys(Object(r),!0).forEach((function(t){_defineProperty(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):ownKeys(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}function _defineProperty(e,t,r){return(t=_toPropertyKey(t))in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function _toPropertyKey(e){var t=_toPrimitive(e,"string");return"symbol"==_typeof(t)?t:t+""}function _toPrimitive(e,t){if("object"!=_typeof(e)||!e)return e;var r=e[Symbol.toPrimitive];if(void 0!==r){var a=r.call(e,t||"default");if("object"!=_typeof(a))return a;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===t?String:Number)(e)}function createDatepicker(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},r={inline:!0,mode:"range",monthSelectorType:"static",locale:_objectSpread(_objectSpread({},flatpickr.l10ns[stats_data.locale.current_locale]),{},{firstDayOfWeek:stats_data.locale.firstDayOfWeek})},a=Object.assign({},r,t);return flatpickr(e,a)}function closeDatepickerModal(){document.querySelector(".masterstudy-datepicker-modal").classList.remove("masterstudy-datepicker-modal_open"),document.body.classList.remove("masterstudy-datepicker-body-hidden")}function updateDates(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:null,r=arguments.length>2&&void 0!==arguments[2]&&arguments[2],a=!(arguments.length>3&&void 0!==arguments[3])||arguments[3];if(e){var o=resetTime(e[0]),d=resetTime(e[1]),i=resetTime(selectedPeriod[0]),s=resetTime(selectedPeriod[1]);if(r||o.getTime()!==i.getTime()||d.getTime()!==s.getTime()){selectedPeriod=e;var c=!1,l=null;if(document.querySelectorAll(".masterstudy-datepicker-modal__single-item").forEach((function(e){var t=e.id.replace("masterstudy-datepicker-modal-","");defaultDateRanges[t][0].toDateString()===selectedPeriod[0].toDateString()&&defaultDateRanges[t][1].toDateString()===selectedPeriod[1].toDateString()?(c=!0,l=t,e.classList.add("masterstudy-datepicker-modal__single-item_fill"),document.querySelector(".masterstudy-date-field-label")&&(document.querySelector(".masterstudy-date-field-label").textContent=e.textContent.trim())):e.classList.remove("masterstudy-datepicker-modal__single-item_fill")})),!r){var n=new CustomEvent("datesUpdated",{detail:{selectedPeriod:selectedPeriod}});document.dispatchEvent(n)}t&&t.setDate(selectedPeriod,!0),document.querySelector(".masterstudy-date-field-value")&&(document.querySelector(".masterstudy-date-field-value").textContent="".concat(formatDate(selectedPeriod[0])," - ").concat(formatDate(selectedPeriod[1])));var u="AnalyticsSelectedPeriodKey",m="AnalyticsSelectedPeriod";void 0!==stats_data.is_students&&stats_data.is_students?(u="StudentsListSelectedPeriodKey",m="StudentsListSelectedPeriod"):void 0!==stats_data.is_student&&stats_data.is_student&&(u="StudentListSelectedPeriodKey",m="StudentListSelectedPeriod"),c&&a?localStorage.setItem(u,l):(document.querySelectorAll(".masterstudy-datepicker-modal__single-item").forEach((function(e){e.classList.remove("masterstudy-datepicker-modal__single-item_fill")})),document.querySelector(".masterstudy-date-field-label")&&(document.querySelector(".masterstudy-date-field-label").textContent=stats_data.custom_period),a&&(localStorage.setItem(m,JSON.stringify(selectedPeriod)),localStorage.removeItem(u)))}}}function initializeDatepicker(e){if(document.querySelector(e)){var t=createDatepicker(e,{dateFormat:"M d, Y",defaultDate:selectedPeriod,maxDate:new Date,onClose:function(e,r,a){updateDates(e,t),closeDatepickerModal()}});selectedPeriod[0]instanceof Date||(selectedPeriod=selectedPeriod.map((function(e){return new Date(e)}))),updateDates(selectedPeriod,t,!0),document.querySelector(".masterstudy-datepicker-modal__reset").addEventListener("click",(function(){t.setDate(defaultDateRanges.this_week,!0),updateDates(defaultDateRanges.this_week,t),document.querySelector("#masterstudy-datepicker-modal-this_week").classList.add("masterstudy-datepicker-modal__single-item_fill"),Array.from(document.querySelector("#masterstudy-datepicker-modal-this_week").parentNode.children).forEach((function(e){e!==document.querySelector("#masterstudy-datepicker-modal-this_week")&&e.classList.remove("masterstudy-datepicker-modal__single-item_fill")}))})),document.querySelector(".masterstudy-datepicker-modal__close").addEventListener("click",(function(){closeDatepickerModal()})),document.querySelectorAll(".masterstudy-datepicker-modal__single-item").forEach((function(e){e.addEventListener("click",(function(){var e=this.id.replace("masterstudy-datepicker-modal-","");defaultDateRanges[e]&&(t.setDate(defaultDateRanges[e],!0),updateDates(defaultDateRanges[e],t),document.querySelector(".masterstudy-date-field-label")&&(document.querySelector(".masterstudy-date-field-label").textContent=this.textContent.trim()),closeDatepickerModal())}))})),document.querySelector(".masterstudy-date-field")&&document.querySelector(".masterstudy-date-field").addEventListener("click",(function(){document.querySelector(".masterstudy-datepicker-modal").classList.add("masterstudy-datepicker-modal_open"),document.body.classList.add("masterstudy-datepicker-body-hidden")})),document.querySelector(".masterstudy-datepicker-modal").addEventListener("click",(function(e){e.target===this&&closeDatepickerModal()}))}else console.error("Element not found for selector: ".concat(e))}
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function createDatepicker(selector) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var localeObject = flatpickr.l10ns[stats_data.locale['current_locale']];
+  var defaultOptions = {
+    inline: true,
+    mode: 'range',
+    monthSelectorType: 'static',
+    locale: _objectSpread(_objectSpread({}, localeObject), {}, {
+      firstDayOfWeek: stats_data.locale['firstDayOfWeek']
+    })
+  };
+  var finalOptions = Object.assign({}, defaultOptions, options);
+  return flatpickr(selector, finalOptions);
+}
+function closeDatepickerModal() {
+  document.querySelector('.masterstudy-datepicker-modal').classList.remove('masterstudy-datepicker-modal_open');
+  document.body.classList.remove('masterstudy-datepicker-body-hidden');
+}
+function updateDates(period) {
+  var datepicker = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var firstTime = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var saveToLocale = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+  if (!period) {
+    return;
+  }
+  var periodStart = resetTime(period[0]);
+  var periodEnd = resetTime(period[1]);
+  var selectedStart = resetTime(selectedPeriod[0]);
+  var selectedEnd = resetTime(selectedPeriod[1]);
+  if (!firstTime && periodStart.getTime() === selectedStart.getTime() && periodEnd.getTime() === selectedEnd.getTime()) {
+    return;
+  }
+  selectedPeriod = period;
+  var isDefaultPeriod = false;
+  var defaultPeriodKey = null;
+  document.querySelectorAll('.masterstudy-datepicker-modal__single-item').forEach(function (item) {
+    var periodKey = item.id.replace('masterstudy-datepicker-modal-', '');
+    if (defaultDateRanges[periodKey][0].toDateString() === selectedPeriod[0].toDateString() && defaultDateRanges[periodKey][1].toDateString() === selectedPeriod[1].toDateString()) {
+      isDefaultPeriod = true;
+      defaultPeriodKey = periodKey;
+      item.classList.add('masterstudy-datepicker-modal__single-item_fill');
+      if (document.querySelector('.masterstudy-date-field-label')) {
+        document.querySelector('.masterstudy-date-field-label').textContent = item.textContent.trim();
+      }
+    } else {
+      item.classList.remove('masterstudy-datepicker-modal__single-item_fill');
+    }
+  });
+  if (!firstTime) {
+    var event = new CustomEvent('datesUpdated', {
+      detail: {
+        selectedPeriod: selectedPeriod
+      }
+    });
+    document.dispatchEvent(event);
+  }
+  if (datepicker) {
+    datepicker.setDate(selectedPeriod, true);
+  }
+  if (document.querySelector('.masterstudy-date-field-value')) {
+    document.querySelector('.masterstudy-date-field-value').textContent = "".concat(formatDate(selectedPeriod[0]), " - ").concat(formatDate(selectedPeriod[1]));
+  }
+  var _periodKey = 'AnalyticsSelectedPeriodKey';
+  var _period = 'AnalyticsSelectedPeriod';
+  if (typeof stats_data.is_students !== "undefined" && stats_data.is_students) {
+    _periodKey = 'StudentsListSelectedPeriodKey';
+    _period = 'StudentsListSelectedPeriod';
+  } else if (typeof stats_data.is_student !== "undefined" && stats_data.is_student) {
+    _periodKey = 'StudentListSelectedPeriodKey';
+    _period = 'StudentListSelectedPeriod';
+  }
+  if (isDefaultPeriod && saveToLocale) {
+    localStorage.setItem(_periodKey, defaultPeriodKey);
+  } else {
+    document.querySelectorAll('.masterstudy-datepicker-modal__single-item').forEach(function (item) {
+      item.classList.remove('masterstudy-datepicker-modal__single-item_fill');
+    });
+    if (document.querySelector('.masterstudy-date-field-label')) {
+      document.querySelector('.masterstudy-date-field-label').textContent = stats_data.custom_period;
+    }
+    if (saveToLocale) {
+      localStorage.setItem(_period, JSON.stringify(selectedPeriod));
+      localStorage.removeItem(_periodKey);
+    }
+  }
+}
+function initializeDatepicker(selector) {
+  var datepickerElement = document.querySelector(selector);
+  if (!datepickerElement) {
+    console.error("Element not found for selector: ".concat(selector));
+    return;
+  }
+  var datepicker = createDatepicker(selector, {
+    dateFormat: 'M d, Y',
+    defaultDate: selectedPeriod,
+    maxDate: new Date(),
+    onClose: function onClose(selectedDates, dateStr, instance) {
+      updateDates(selectedDates, datepicker);
+      closeDatepickerModal();
+    }
+  });
+  if (!(selectedPeriod[0] instanceof Date)) {
+    selectedPeriod = selectedPeriod.map(function (dateStr) {
+      return new Date(dateStr);
+    });
+  }
+  updateDates(selectedPeriod, datepicker, true);
+  document.querySelector('.masterstudy-datepicker-modal__reset').addEventListener('click', function () {
+    datepicker.setDate(defaultDateRanges.this_week, true);
+    updateDates(defaultDateRanges.this_week, datepicker);
+    document.querySelector('#masterstudy-datepicker-modal-this_week').classList.add('masterstudy-datepicker-modal__single-item_fill');
+    Array.from(document.querySelector('#masterstudy-datepicker-modal-this_week').parentNode.children).forEach(function (sibling) {
+      if (sibling !== document.querySelector('#masterstudy-datepicker-modal-this_week')) {
+        sibling.classList.remove('masterstudy-datepicker-modal__single-item_fill');
+      }
+    });
+  });
+  document.querySelector('.masterstudy-datepicker-modal__close').addEventListener('click', function () {
+    closeDatepickerModal();
+  });
+  document.querySelectorAll('.masterstudy-datepicker-modal__single-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      var period = this.id.replace('masterstudy-datepicker-modal-', '');
+      if (defaultDateRanges[period]) {
+        datepicker.setDate(defaultDateRanges[period], true);
+        updateDates(defaultDateRanges[period], datepicker);
+        if (document.querySelector('.masterstudy-date-field-label')) {
+          document.querySelector('.masterstudy-date-field-label').textContent = this.textContent.trim();
+        }
+        closeDatepickerModal();
+      }
+    });
+  });
+  if (document.querySelector('.masterstudy-date-field')) {
+    document.querySelector('.masterstudy-date-field').addEventListener('click', function () {
+      document.querySelector('.masterstudy-datepicker-modal').classList.add('masterstudy-datepicker-modal_open');
+      document.body.classList.add('masterstudy-datepicker-body-hidden');
+    });
+  }
+  document.querySelector('.masterstudy-datepicker-modal').addEventListener('click', function (event) {
+    if (event.target === this) {
+      closeDatepickerModal();
+    }
+  });
+}

@@ -1,1 +1,246 @@
-"use strict";function _typeof(e){return _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},_typeof(e)}function ownKeys(e,t){var a=Object.keys(e);if(Object.getOwnPropertySymbols){var s=Object.getOwnPropertySymbols(e);t&&(s=s.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),a.push.apply(a,s)}return a}function _objectSpread(e){for(var t=1;t<arguments.length;t++){var a=null!=arguments[t]?arguments[t]:{};t%2?ownKeys(Object(a),!0).forEach((function(t){_defineProperty(e,t,a[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(a)):ownKeys(Object(a)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(a,t))}))}return e}function _defineProperty(e,t,a){return(t=_toPropertyKey(t))in e?Object.defineProperty(e,t,{value:a,enumerable:!0,configurable:!0,writable:!0}):e[t]=a,e}function _toPropertyKey(e){var t=_toPrimitive(e,"string");return"symbol"==_typeof(t)?t:t+""}function _toPrimitive(e,t){if("object"!=_typeof(e)||!e)return e;var a=e[Symbol.toPrimitive];if(void 0!==a){var s=a.call(e,t||"default");if("object"!=_typeof(s))return s;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===t?String:Number)(e)}var isDomReady=!1;function createDataTable(e,t){var a=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{},s={data:[],retrieve:!0,processing:!0,serverSide:!0,columns:t,layout:{topStart:null,topEnd:null,bottomStart:{paging:{numbers:5}},bottomEnd:{pageLength:{menu:[10,25,50]}}},language:{lengthMenu:"_MENU_"+table_data.per_page_placeholder,emptyTable:table_data.not_available,zeroRecords:table_data.not_found}},n=Object.assign({},s,a);return new DataTable(e,n)}function updateDataTable(e,t,a,s,n,o){var r=arguments.length>6&&void 0!==arguments[6]?arguments[6]:[],i=arguments.length>8&&void 0!==arguments[8]&&arguments[8],l=arguments.length>9&&void 0!==arguments[9]&&arguments[9],d=arguments.length>10&&void 0!==arguments[10]?arguments[10]:[],c=arguments.length>11&&void 0!==arguments[11]?arguments[11]:"",u=arguments.length>12&&void 0!==arguments[12]?arguments[12]:"";if(isDomReady){if(!e||arguments.length>7&&void 0!==arguments[7]&&arguments[7]){a.forEach((function(e){showLoaders(e)})),e&&(e.clear().destroy(),e=null,jQuery(t).empty());var y={order:[[0,"desc"]],ajax:{url:api.getRouteUrl(s),type:"POST",dataType:"json",beforeSend:function(e){e.setRequestHeader("X-WP-Nonce",api.getRouteNonce())},data:function(e){e.date_from=getDateFrom(),e.date_to=getDateTo(),e.search.value=c,"#masterstudy-datatable-lessons"===t&&(e.type=document.getElementById("masterstudy-analytics-course-page-types").value)},dataSrc:o,complete:function(){a.forEach((function(e){hideLoaders(e)}))}},columnDefs:r};u&&(y.order=[[u,"desc"]]),l&&(y.ajax.data=function(e){e.date_from=getDateFrom(),e.date_to=getDateTo(),e.search.value=c,document.getElementById("masterstudy-analytics-course-page-orders")&&(e.sort=document.getElementById("masterstudy-analytics-course-page-orders").value)},d.forEach((function(e){n.push({title:'<img src="'+table_data.img_route+"/assets/icons/lessons/"+e.lesson_type+'.svg" class="masterstudy-datatables-lesson-icon"></img>'+e.lesson_name,data:e.lesson_id,orderable:!1,tooltip:e.lesson_name,render:function(e,t,a,s){return"-"===e?'<div class="masterstudy-datatables-lesson-type masterstudy-datatables-lesson-type_progress">\n                                <div class="masterstudy-datatables-lesson-tooltip">'+table_data.progress_lesson+"</div></div>":"0"===e?'<div class="masterstudy-datatables-lesson-type">\n                                <div class="masterstudy-datatables-lesson-tooltip">'+table_data.not_started_lesson+"</div></div>":"1"===e?'<div class="masterstudy-datatables-lesson-type masterstudy-datatables-lesson-type_complete">\n                                <div class="masterstudy-datatables-lesson-tooltip">'+table_data.completed_lesson+"</div></div>":"-1"===e?'<div class="masterstudy-datatables-lesson-type masterstudy-datatables-lesson-type_failed">\n                                <div class="masterstudy-datatables-lesson-tooltip">'+table_data.failed_lesson+"</div></div>":void 0}})})),n.push({title:"",data:"last",orderable:!1}),y=_objectSpread(_objectSpread({},y),{},{columnDefs:[{targets:0,width:"30px",orderable:!1},{targets:1,width:"200px",orderable:!0}],headerCallback:function(e){jQuery(e).find(".masterstudy-datatables-skew").length||jQuery(e).find("th.dt-orderable-none").not('[data-dt-column="0"]').wrapInner('<div class="masterstudy-datatables-skew"><div class="masterstudy-datatables-skew__container"></div></div>')},initComplete:function(){a.forEach((function(e){hideLoaders(e)})),this.api().columns().header().to$().each((function(){jQuery(this).find(".masterstudy-datatables-skew").append('<div class="masterstudy-datatables-skew__tooltip"><span>'+jQuery(this).text()+"</span></div>")})),jQuery(".masterstudy-datatables-skew").mouseover((function(e){jQuery(this).parent().find(".masterstudy-datatables-skew__tooltip").addClass("masterstudy-datatables-skew__tooltip_active")})).mouseout((function(){jQuery(this).parent().find(".masterstudy-datatables-skew__tooltip").removeClass("masterstudy-datatables-skew__tooltip_active")}))},columns:n})),observeTableChanges(e=createDataTable(t,n,y),i)}return e}}function tablePaginationVisibility(e){var t=arguments.length>1&&void 0!==arguments[1]&&arguments[1],a=e.table().container(),s=a.querySelector(".dt-layout-cell.dt-start"),n=a.querySelector(".dt-layout-cell.dt-end");0===e.data().count()||t?(s&&(s.style.display="none"),n&&(n.style.display="none")):(s&&(s.style.display=""),n&&(n.style.display=""))}function observeTableChanges(e){var t=arguments.length>1&&void 0!==arguments[1]&&arguments[1],a=e.table().container();new MutationObserver((function(){tablePaginationVisibility(e,t)})).observe(a,{childList:!0,subtree:!0}),new IntersectionObserver((function(t){t.forEach((function(t){t.isIntersecting&&e.columns.adjust()}))}),{threshold:.1}).observe(a)}function searchFieldIntent(e){var t=new CustomEvent("intentTableSearch",{detail:{searchValue:e.value.trim(),searchTarget:e}});document.dispatchEvent(t)}document.addEventListener("DOMContentLoaded",(function(){isDomReady=!0,document.querySelectorAll('input[id*="-search"]').length&&document.querySelectorAll('input[id*="-search"]').forEach((function(e){e.addEventListener("keydown",(function(e){var t=this;window.search_field_intent_timeout&&clearTimeout(window.search_field_intent_timeout),13===e.keyCode?searchFieldIntent(t):window.search_field_intent_timeout=setTimeout((function(){searchFieldIntent(t)}),1e3)}))})),document.addEventListener("click",(function(e){if(e.target.matches('div[class*="__search-dropdown-item"]')){var t=e.target,a=t.textContent.trim(),s=t.parentNode.parentNode.querySelector("input");s&&(s.value=a),s.classList.contains("grades-search")&&(s.dataset.id=t.dataset.id),searchFieldIntent(s)}})),document.querySelectorAll('span[class*="__search-icon"]')&&document.querySelectorAll('span[class*="__search-icon"]').forEach((function(e){e.addEventListener("click",(function(e){""!==this.parentNode.querySelector("input").value&&searchFieldIntent(this.parentNode.querySelector("input"))}))}))}));
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var isDomReady = false;
+document.addEventListener('DOMContentLoaded', function () {
+  isDomReady = true;
+  if (document.querySelectorAll('input[id*="-search"]').length) {
+    document.querySelectorAll('input[id*="-search"]').forEach(function (selector) {
+      selector.addEventListener('keydown', function (e) {
+        var value = this;
+        if (window.search_field_intent_timeout) clearTimeout(window.search_field_intent_timeout);
+        if (e.keyCode === 13) {
+          searchFieldIntent(value);
+        } else {
+          window.search_field_intent_timeout = setTimeout(function () {
+            searchFieldIntent(value);
+          }, 1000);
+        }
+      });
+    });
+  }
+  document.addEventListener('click', function (event) {
+    if (event.target.matches('div[class*="__search-dropdown-item"]')) {
+      var item = event.target;
+      var value = item.textContent.trim();
+      var dropdown = item.parentNode;
+      var input = dropdown.parentNode.querySelector('input');
+      if (input) {
+        input.value = value;
+      }
+
+      // Grade Search Fields
+      if (input.classList.contains('grades-search')) {
+        input.dataset.id = item.dataset.id;
+      }
+      searchFieldIntent(input);
+    }
+  });
+  if (document.querySelectorAll('span[class*="__search-icon"]')) {
+    document.querySelectorAll('span[class*="__search-icon"]').forEach(function (selector) {
+      selector.addEventListener('click', function (e) {
+        if (this.parentNode.querySelector('input').value !== '') {
+          searchFieldIntent(this.parentNode.querySelector('input'));
+        }
+      });
+    });
+  }
+});
+function createDataTable(selector, columns) {
+  var additionalOptions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var defaultOptions = {
+    data: [],
+    retrieve: true,
+    processing: true,
+    serverSide: true,
+    columns: columns,
+    layout: {
+      topStart: null,
+      topEnd: null,
+      bottomStart: {
+        paging: {
+          numbers: 5
+        }
+      },
+      bottomEnd: {
+        pageLength: {
+          menu: [10, 25, 50]
+        }
+      }
+    },
+    language: {
+      lengthMenu: '_MENU_' + table_data.per_page_placeholder,
+      emptyTable: table_data.not_available,
+      zeroRecords: table_data.not_found
+    }
+  };
+  var options = Object.assign({}, defaultOptions, additionalOptions);
+  return new DataTable(selector, options);
+}
+function updateDataTable(table, selector, loaders, currentRoute, pageData, dataSrcCallback) {
+  var columnDefs = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : [];
+  var reloadTable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  var hidePagination = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
+  var isLessonsTable = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
+  var lessonsData = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : [];
+  var searchFieldValue = arguments.length > 11 && arguments[11] !== undefined ? arguments[11] : '';
+  var orderIndex = arguments.length > 12 && arguments[12] !== undefined ? arguments[12] : '';
+  if (!isDomReady) return;
+  if (!table || reloadTable) {
+    loaders.forEach(function (loader) {
+      showLoaders(loader);
+    });
+    if (table) {
+      table.clear().destroy();
+      table = null;
+      jQuery(selector).empty();
+    }
+    var additionalOptions = {
+      order: [[0, 'desc']],
+      ajax: {
+        url: api.getRouteUrl(currentRoute),
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: function beforeSend(xhr) {
+          xhr.setRequestHeader('X-WP-Nonce', api.getRouteNonce());
+        },
+        data: function data(d) {
+          d.date_from = getDateFrom();
+          d.date_to = getDateTo();
+          d.search.value = searchFieldValue;
+          if (selector === '#masterstudy-datatable-lessons') {
+            d.type = document.getElementById('masterstudy-analytics-course-page-types').value;
+          }
+        },
+        dataSrc: dataSrcCallback,
+        complete: function complete() {
+          loaders.forEach(function (loader) {
+            hideLoaders(loader);
+          });
+        }
+      },
+      columnDefs: columnDefs
+    };
+    if (orderIndex) {
+      additionalOptions.order = [[orderIndex, 'desc']];
+    }
+    if (isLessonsTable) {
+      additionalOptions.ajax.data = function (d) {
+        d.date_from = getDateFrom();
+        d.date_to = getDateTo();
+        d.search.value = searchFieldValue;
+        if (document.getElementById('masterstudy-analytics-course-page-orders')) {
+          d.sort = document.getElementById('masterstudy-analytics-course-page-orders').value;
+        }
+      };
+      lessonsData.forEach(function (item) {
+        pageData.push({
+          title: '<img src="' + table_data.img_route + '/assets/icons/lessons/' + item.lesson_type + '.svg' + '" class="masterstudy-datatables-lesson-icon"></img>' + item.lesson_name,
+          data: item.lesson_id,
+          orderable: false,
+          tooltip: item.lesson_name,
+          render: function render(data, type, row, meta) {
+            if (data === '-') {
+              return "<div class=\"masterstudy-datatables-lesson-type masterstudy-datatables-lesson-type_progress\">\n                                <div class=\"masterstudy-datatables-lesson-tooltip\">" + table_data.progress_lesson + "</div></div>";
+            } else if (data === '0') {
+              return "<div class=\"masterstudy-datatables-lesson-type\">\n                                <div class=\"masterstudy-datatables-lesson-tooltip\">" + table_data.not_started_lesson + "</div></div>";
+            } else if (data === '1') {
+              return "<div class=\"masterstudy-datatables-lesson-type masterstudy-datatables-lesson-type_complete\">\n                                <div class=\"masterstudy-datatables-lesson-tooltip\">" + table_data.completed_lesson + "</div></div>";
+            } else if (data === '-1') {
+              return "<div class=\"masterstudy-datatables-lesson-type masterstudy-datatables-lesson-type_failed\">\n                                <div class=\"masterstudy-datatables-lesson-tooltip\">" + table_data.failed_lesson + "</div></div>";
+            }
+          }
+        });
+      });
+      pageData.push({
+        title: '',
+        data: 'last',
+        orderable: false
+      });
+      additionalOptions = _objectSpread(_objectSpread({}, additionalOptions), {}, {
+        columnDefs: [{
+          targets: 0,
+          width: '30px',
+          orderable: false
+        }, {
+          targets: 1,
+          width: '200px',
+          orderable: true
+        }],
+        headerCallback: function headerCallback(nHead) {
+          if (!jQuery(nHead).find('.masterstudy-datatables-skew').length) {
+            jQuery(nHead).find('th.dt-orderable-none').not('[data-dt-column="0"]').wrapInner('<div class="masterstudy-datatables-skew"><div class="masterstudy-datatables-skew__container"></div></div>');
+          }
+        },
+        initComplete: function initComplete() {
+          loaders.forEach(function (loader) {
+            hideLoaders(loader);
+          });
+          this.api().columns().header().to$().each(function () {
+            jQuery(this).find('.masterstudy-datatables-skew').append('<div class="masterstudy-datatables-skew__tooltip"><span>' + jQuery(this).text() + '</span></div>');
+          });
+          jQuery('.masterstudy-datatables-skew').mouseover(function (event) {
+            jQuery(this).parent().find('.masterstudy-datatables-skew__tooltip').addClass('masterstudy-datatables-skew__tooltip_active');
+          }).mouseout(function () {
+            jQuery(this).parent().find('.masterstudy-datatables-skew__tooltip').removeClass('masterstudy-datatables-skew__tooltip_active');
+          });
+        },
+        columns: pageData
+      });
+    }
+
+    // Initialize the DataTable
+    table = createDataTable(selector, pageData, additionalOptions);
+    observeTableChanges(table, hidePagination);
+  }
+  return table;
+}
+function tablePaginationVisibility(table) {
+  var hide = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var tableWrapper = table.table().container();
+  var paginationStart = tableWrapper.querySelector('.dt-layout-cell.dt-start');
+  var paginationEnd = tableWrapper.querySelector('.dt-layout-cell.dt-end');
+  if (table.data().count() === 0 || hide) {
+    if (paginationStart) paginationStart.style.display = 'none';
+    if (paginationEnd) paginationEnd.style.display = 'none';
+  } else {
+    if (paginationStart) paginationStart.style.display = '';
+    if (paginationEnd) paginationEnd.style.display = '';
+  }
+}
+function observeTableChanges(table) {
+  var hide = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var tableWrapper = table.table().container();
+  var observer = new MutationObserver(function () {
+    tablePaginationVisibility(table, hide);
+  });
+  observer.observe(tableWrapper, {
+    childList: true,
+    subtree: true
+  });
+  var intersectionObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        table.columns.adjust();
+      }
+    });
+  }, {
+    threshold: 0.1
+  });
+  intersectionObserver.observe(tableWrapper);
+}
+function searchFieldIntent(target) {
+  // Dispatch a custom event with the search value
+  var searchEvent = new CustomEvent('intentTableSearch', {
+    detail: {
+      searchValue: target.value.trim(),
+      searchTarget: target
+    }
+  });
+  document.dispatchEvent(searchEvent);
+}

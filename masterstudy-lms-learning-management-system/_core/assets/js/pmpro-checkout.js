@@ -1,1 +1,9 @@
-"use strict";!function(e){e(document).ready((function(){e("select").each((function(){e(this).select2()}))}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    $('select').each(function () {
+      $(this).select2();
+    });
+  });
+})(jQuery);

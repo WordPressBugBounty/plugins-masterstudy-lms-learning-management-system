@@ -1,1 +1,48 @@
-"use strict";!function(n){n(document).ready((function(){var a,o=JSON.parse(null===(a=stm_lms_addons)||void 0===a?void 0:a.enabled_addons),s=n("#addons-search");function e(a){n(".stm-lms-addon").each((function(o,s){n(s).toggle(-1!==n(s).find(".addon-name").text().toLowerCase().indexOf(a))})),n("#wpbody").resize()}n(".addon-install .addon-checkbox__label").on("click",(function(){var a=n(this).data("key"),s=n(this),e=n(this).closest(".addon-install").find(".addon-settings");o[a]=void 0===o[a]||""===o[a]?"on":"",n.ajax({url:stm_lms_ajaxurl,method:"POST",data:{action:"stm_lms_pro_save_addons",nonce:stm_lms_pro_nonces.stm_lms_pro_save_addons,addons:JSON.stringify(o)},beforeSend:function(){n(s).parents(".stm-lms-addon").addClass("loading")},success:function(){n(s).find(".addon-checkbox__wrapper").toggleClass("addon-checkbox__wrapper_active"),e.toggleClass("active")},complete:function(){n(s).parents(".stm-lms-addon").removeClass("loading")}})})),s.on("input",(function(n){e(n.target.value.toLowerCase())})),s.val().length>0&&e(s.val().toLowerCase())}))}(jQuery);
+"use strict";
+
+(function ($) {
+  "use strict";
+
+  $(document).ready(function () {
+    var _stm_lms_addons;
+    var addons = JSON.parse((_stm_lms_addons = stm_lms_addons) === null || _stm_lms_addons === void 0 ? void 0 : _stm_lms_addons.enabled_addons),
+      $addons_search = $('#addons-search');
+    $('.addon-install .addon-checkbox__label').on('click', function () {
+      var addon = $(this).data('key');
+      var addon_item = $(this);
+      var addon_settings = $(this).closest('.addon-install').find('.addon-settings');
+      addons[addon] = typeof addons[addon] === 'undefined' || addons[addon] === '' ? 'on' : '';
+      $.ajax({
+        url: stm_lms_ajaxurl,
+        method: 'POST',
+        data: {
+          action: 'stm_lms_pro_save_addons',
+          nonce: stm_lms_pro_nonces['stm_lms_pro_save_addons'],
+          addons: JSON.stringify(addons)
+        },
+        beforeSend: function beforeSend() {
+          $(addon_item).parents('.stm-lms-addon').addClass('loading');
+        },
+        success: function success() {
+          $(addon_item).find('.addon-checkbox__wrapper').toggleClass('addon-checkbox__wrapper_active');
+          addon_settings.toggleClass('active');
+        },
+        complete: function complete() {
+          $(addon_item).parents('.stm-lms-addon').removeClass('loading');
+        }
+      });
+    });
+    $addons_search.on('input', function (e) {
+      filter_addons(e.target.value.toLowerCase());
+    });
+    if ($addons_search.val().length > 0) {
+      filter_addons($addons_search.val().toLowerCase());
+    }
+    function filter_addons(search) {
+      $('.stm-lms-addon').each(function (i, item) {
+        $(item).toggle($(item).find('.addon-name').text().toLowerCase().indexOf(search) !== -1);
+      });
+      $('#wpbody').resize();
+    }
+  });
+})(jQuery);

@@ -1,1 +1,35 @@
-"use strict";function startTimer(t,a){var r=t;setInterval((function(){var t=Math.floor(r/24/60/60),o=Math.floor(r-86400*t),n=Math.floor(o/3600),c=Math.floor(o-3600*n),e=Math.floor(c/60),i=r%60;function s(t){return t<10?"0"+t:t}var m="".concat(s(n),":").concat(s(e),":").concat(s(i));0===r?location.reload():a.text("".concat(m)),r-=1}),1e3)}function stmLmsStartTimers(){jQuery((function(t){t(document).ready((function(){t("[data-lms-timer]").each((function(){var a=t(this);startTimer(a.data("lms-timer"),a)}))}))}))}stmLmsStartTimers();
+"use strict";
+
+function startTimer(duration, display) {
+  var seconds = duration;
+  setInterval(function () {
+    var days = Math.floor(seconds / 24 / 60 / 60);
+    var hoursLeft = Math.floor(seconds - days * 86400);
+    var hours = Math.floor(hoursLeft / 3600);
+    var minutesLeft = Math.floor(hoursLeft - hours * 3600);
+    var minutes = Math.floor(minutesLeft / 60);
+    var remainingSeconds = seconds % 60;
+    function pad(n) {
+      return n < 10 ? "0" + n : n;
+    }
+    var display_text = "".concat(pad(hours), ":").concat(pad(minutes), ":").concat(pad(remainingSeconds));
+    if (seconds === 0) {
+      location.reload();
+    } else {
+      display.text("".concat(display_text));
+    }
+    seconds -= 1;
+  }, 1000);
+}
+stmLmsStartTimers();
+function stmLmsStartTimers() {
+  jQuery(function ($) {
+    $(document).ready(function () {
+      $('[data-lms-timer]').each(function () {
+        var $this = $(this);
+        var timer = $this.data('lms-timer');
+        startTimer(timer, $this);
+      });
+    });
+  });
+}

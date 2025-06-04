@@ -1,1 +1,14 @@
-"use strict";!function(e){e(document).ready((function(){e(".all_requirements").on("click",(function(n){n.preventDefault(),e(this).toggleClass("active"),e(".assignment-task").slideToggle()})),e(".assignment-comment .stmlms-chevron-down").on("click",(function(n){e(".assignment-comment-content .teacher_review").slideToggle()}))}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    $('.all_requirements').on('click', function (e) {
+      e.preventDefault();
+      $(this).toggleClass('active');
+      $('.assignment-task').slideToggle();
+    });
+    $('.assignment-comment .stmlms-chevron-down').on('click', function (e) {
+      $('.assignment-comment-content .teacher_review').slideToggle();
+    });
+  });
+})(jQuery);

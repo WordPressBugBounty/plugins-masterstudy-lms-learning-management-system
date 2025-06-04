@@ -1,1 +1,112 @@
-"use strict";function _typeof(e){return _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},_typeof(e)}function _classCallCheck(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function _defineProperties(e,t){for(var r=0;r<t.length;r++){var o=t[r];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,_toPropertyKey(o.key),o)}}function _createClass(e,t,r){return t&&_defineProperties(e.prototype,t),r&&_defineProperties(e,r),Object.defineProperty(e,"prototype",{writable:!1}),e}function _toPropertyKey(e){var t=_toPrimitive(e,"string");return"symbol"==_typeof(t)?t:t+""}function _toPrimitive(e,t){if("object"!=_typeof(e)||!e)return e;var r=e[Symbol.toPrimitive];if(void 0!==r){var o=r.call(e,t||"default");if("object"!=_typeof(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===t?String:Number)(e)}function _inherits(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),Object.defineProperty(e,"prototype",{writable:!1}),t&&_setPrototypeOf(e,t)}function _setPrototypeOf(e,t){return _setPrototypeOf=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},_setPrototypeOf(e,t)}function _createSuper(e){var t=_isNativeReflectConstruct();return function(){var r,o=_getPrototypeOf(e);if(t){var n=_getPrototypeOf(this).constructor;r=Reflect.construct(o,arguments,n)}else r=o.apply(this,arguments);return _possibleConstructorReturn(this,r)}}function _possibleConstructorReturn(e,t){if(t&&("object"==_typeof(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return _assertThisInitialized(e)}function _assertThisInitialized(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function _isNativeReflectConstruct(){try{var e=!Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){})))}catch(e){}return(_isNativeReflectConstruct=function(){return!!e})()}function _getPrototypeOf(e){return _getPrototypeOf=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},_getPrototypeOf(e)}var MsLmsInstructorsCarousel=function(){_inherits(t,elementorModules.frontend.handlers.Base);var e=_createSuper(t);function t(){return _classCallCheck(this,t),e.apply(this,arguments)}return _createClass(t,[{key:"getDefaultSettings",value:function(){return{selectors:{carousel:".ms_lms_instructors_carousel__content"}}}},{key:"getDefaultElements",value:function(){var e=this.getSettings("selectors"),t=this.getElementSettings();return{$sliderContainer:this.$element.find(e.carousel),$slidesOptions:{"100%":1,"50%":2,"33.333333%":3,"25%":4,"20%":5,"16.666666%":6},$sliderData:{slides_per_view:t.slides_per_view,slides_per_view_tablet:t.slides_per_view_tablet,slides_per_view_mobile:t.slides_per_view_mobile,autoplay:t.autoplay,loop:t.loop}}}},{key:"bindEvents",value:function(){jQuery(document).ready(this.sliderInit.bind(this))}},{key:"sliderInit",value:function(){if(void 0===ms_lms_instructors_carousel_mode.editor){var e=this,t=!1,r=e.elements.$sliderContainer.closest(".elementor-widget-ms_lms_instructors_carousel").data("id"),o=document.querySelector('[data-id="'.concat(r,'"] .ms_lms_instructors_carousel__content')),n=document.querySelector('[data-id="'.concat(r,'"] .ms_lms_instructors_carousel__navigation_next')),i=document.querySelector('[data-id="'.concat(r,'"] .ms_lms_instructors_carousel__navigation_prev'));if(e.elements.$sliderData.autoplay&&(t={delay:2e3}),0!==e.elements.$sliderContainer.length&&"undefined"==typeof edit_mode)new Swiper(o,{slidesPerView:e.elements.$slidesOptions[e.elements.$sliderData.slides_per_view],watchSlidesProgress:!0,breakpoints:{360:{slidesPerView:e.elements.$slidesOptions[e.elements.$sliderData.slides_per_view_mobile]},768:{slidesPerView:e.elements.$slidesOptions[e.elements.$sliderData.slides_per_view_tablet]},1025:{slidesPerView:e.elements.$slidesOptions[e.elements.$sliderData.slides_per_view]}},loop:e.elements.$sliderData.loop,autoplay:t,navigation:{nextEl:n,prevEl:i}})}}}]),t}();jQuery(window).on("elementor/frontend/init",(function(){elementorFrontend.hooks.addAction("frontend/element_ready/ms_lms_instructors_carousel.default",(function(e){elementorFrontend.elementsHandler.addHandler(MsLmsInstructorsCarousel,{$element:e})}))}));
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+var MsLmsInstructorsCarousel = /*#__PURE__*/function (_elementorModules$fro) {
+  _inherits(MsLmsInstructorsCarousel, _elementorModules$fro);
+  var _super = _createSuper(MsLmsInstructorsCarousel);
+  function MsLmsInstructorsCarousel() {
+    _classCallCheck(this, MsLmsInstructorsCarousel);
+    return _super.apply(this, arguments);
+  }
+  _createClass(MsLmsInstructorsCarousel, [{
+    key: "getDefaultSettings",
+    value: function getDefaultSettings() {
+      return {
+        selectors: {
+          carousel: '.ms_lms_instructors_carousel__content'
+        }
+      };
+    }
+  }, {
+    key: "getDefaultElements",
+    value: function getDefaultElements() {
+      var selectors = this.getSettings('selectors');
+      var elementSettings = this.getElementSettings();
+      return {
+        $sliderContainer: this.$element.find(selectors.carousel),
+        $slidesOptions: {
+          '100%': 1,
+          '50%': 2,
+          '33.333333%': 3,
+          '25%': 4,
+          '20%': 5,
+          '16.666666%': 6
+        },
+        $sliderData: {
+          'slides_per_view': elementSettings['slides_per_view'],
+          'slides_per_view_tablet': elementSettings['slides_per_view_tablet'],
+          'slides_per_view_mobile': elementSettings['slides_per_view_mobile'],
+          'autoplay': elementSettings['autoplay'],
+          'loop': elementSettings['loop']
+        }
+      };
+    }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      jQuery(document).ready(this.sliderInit.bind(this));
+    }
+  }, {
+    key: "sliderInit",
+    value: function sliderInit() {
+      if (typeof ms_lms_instructors_carousel_mode.editor !== 'undefined') {
+        return;
+      }
+      var _this = this,
+        autoplayData = false,
+        widgetID = _this.elements.$sliderContainer.closest('.elementor-widget-ms_lms_instructors_carousel').data('id'),
+        sliderContainer = document.querySelector("[data-id=\"".concat(widgetID, "\"] .ms_lms_instructors_carousel__content")),
+        sliderButtonNext = document.querySelector("[data-id=\"".concat(widgetID, "\"] .ms_lms_instructors_carousel__navigation_next")),
+        sliderButtonPrev = document.querySelector("[data-id=\"".concat(widgetID, "\"] .ms_lms_instructors_carousel__navigation_prev"));
+      if (_this.elements.$sliderData['autoplay']) {
+        autoplayData = {
+          delay: 2000
+        };
+      }
+      if (_this.elements.$sliderContainer.length !== 0 && typeof edit_mode === 'undefined') {
+        var mySwiper = new Swiper(sliderContainer, {
+          slidesPerView: _this.elements.$slidesOptions[_this.elements.$sliderData['slides_per_view']],
+          watchSlidesProgress: true,
+          breakpoints: {
+            360: {
+              slidesPerView: _this.elements.$slidesOptions[_this.elements.$sliderData['slides_per_view_mobile']]
+            },
+            768: {
+              slidesPerView: _this.elements.$slidesOptions[_this.elements.$sliderData['slides_per_view_tablet']]
+            },
+            1025: {
+              slidesPerView: _this.elements.$slidesOptions[_this.elements.$sliderData['slides_per_view']]
+            }
+          },
+          loop: _this.elements.$sliderData['loop'],
+          autoplay: autoplayData,
+          navigation: {
+            nextEl: sliderButtonNext,
+            prevEl: sliderButtonPrev
+          }
+        });
+      }
+    }
+  }]);
+  return MsLmsInstructorsCarousel;
+}(elementorModules.frontend.handlers.Base);
+jQuery(window).on('elementor/frontend/init', function () {
+  var addHandler = function addHandler($element) {
+    elementorFrontend.elementsHandler.addHandler(MsLmsInstructorsCarousel, {
+      $element: $element
+    });
+  };
+  elementorFrontend.hooks.addAction('frontend/element_ready/ms_lms_instructors_carousel.default', addHandler);
+});

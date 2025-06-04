@@ -1,1 +1,30 @@
-"use strict";!function(e){e(document).ready((function(){var t=e(".masterstudy-course-player-lesson"),s=e('[data-id="masterstudy-course-player-lesson-submit"]');if(t.length>0&&0===t.find(".masterstudy-course-player-lesson-video").length&&0===t.find(".masterstudy-course-player-audio-lesson-type").length){s.attr("disabled",1),s.addClass("masterstudy-button_disabled"),o();var n=e(window).width()<1025?window:".masterstudy-course-player-content__wrapper";e(n).on("scroll touchmove",(function(){o()}))}function o(){var t,n,o,r,d=e(".masterstudy-course-player-lesson__submit-trigger");o=null==(t=d)||null===(n=t[0])||void 0===n?void 0:n.getBoundingClientRect(),r=window.innerHeight||document.documentElement.clientHeight,o.top>=0&&o.bottom-40<=r&&(s.removeAttr("disabled"),s.removeClass("masterstudy-button_disabled"))}}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    var container = $('.masterstudy-course-player-lesson'),
+      submit_button = $('[data-id="masterstudy-course-player-lesson-submit"]');
+    if (container.length > 0 && container.find('.masterstudy-course-player-lesson-video').length === 0 && container.find('.masterstudy-course-player-audio-lesson-type').length === 0) {
+      submit_button.attr('disabled', 1);
+      submit_button.addClass('masterstudy-button_disabled');
+      checkVisibility();
+      var parent = $(window).width() < 1025 ? window : '.masterstudy-course-player-content__wrapper';
+      $(parent).on('scroll touchmove', function () {
+        checkVisibility();
+      });
+    }
+    function checkVisibility() {
+      var submitButton = $(".masterstudy-course-player-lesson__submit-trigger");
+      if (isElementVisible(submitButton)) {
+        submit_button.removeAttr('disabled');
+        submit_button.removeClass('masterstudy-button_disabled');
+      }
+    }
+    function isElementVisible(el) {
+      var _el$;
+      var rect = el === null || el === void 0 || (_el$ = el[0]) === null || _el$ === void 0 ? void 0 : _el$.getBoundingClientRect();
+      var windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      return rect.top >= 0 && rect.bottom - 40 <= windowHeight;
+    }
+  });
+})(jQuery);

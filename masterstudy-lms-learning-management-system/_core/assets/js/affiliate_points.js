@@ -1,1 +1,29 @@
-"use strict";!function(e){var t;e(document).ready((function(){e(".affiliate_points").on("click",(function(){var o,c,i=e(this).data("copy");o=i=void 0!==i?"#"+i:"#text_to_copy",c=e("<input>"),e("body").append(c),c.val(e(o).text()).select(),document.execCommand("copy"),c.remove();var a=e(this);a.addClass("url_copied"),clearTimeout(t),t=setTimeout((function(){a.removeClass("url_copied")}),3e3)}))}))}(jQuery);
+"use strict";
+
+(function ($) {
+  var copyTimeout;
+  $(document).ready(function () {
+    $('.affiliate_points').on('click', function () {
+      var selector = $(this).data('copy');
+      selector = typeof selector !== 'undefined' ? '#' + selector : '#text_to_copy';
+
+      /*Copy text*/
+      copyToClipboard(selector);
+
+      /*Visual*/
+      var $this = $(this);
+      $this.addClass('url_copied');
+      clearTimeout(copyTimeout);
+      copyTimeout = setTimeout(function () {
+        $this.removeClass('url_copied');
+      }, 3000);
+    });
+  });
+  function copyToClipboard(element) {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(element).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+  }
+})(jQuery);

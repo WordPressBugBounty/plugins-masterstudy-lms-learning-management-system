@@ -1,1 +1,239 @@
-"use strict";function _typeof(t){return _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},_typeof(t)}function _regeneratorRuntime(){/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */_regeneratorRuntime=function(){return e};var t,e={},r=Object.prototype,n=r.hasOwnProperty,o=Object.defineProperty||function(t,e,r){t[e]=r.value},a="function"==typeof Symbol?Symbol:{},i=a.iterator||"@@iterator",s=a.asyncIterator||"@@asyncIterator",c=a.toStringTag||"@@toStringTag";function u(t,e,r){return Object.defineProperty(t,e,{value:r,enumerable:!0,configurable:!0,writable:!0}),t[e]}try{u({},"")}catch(t){u=function(t,e,r){return t[e]=r}}function d(t,e,r,n){var a=e&&e.prototype instanceof _?e:_,i=Object.create(a.prototype),s=new G(n||[]);return o(i,"_invoke",{value:k(t,r,s)}),i}function l(t,e,r){try{return{type:"normal",arg:t.call(e,r)}}catch(t){return{type:"throw",arg:t}}}e.wrap=d;var f="suspendedStart",p="suspendedYield",m="executing",h="completed",y={};function _(){}function v(){}function g(){}var b={};u(b,i,(function(){return this}));var w=Object.getPrototypeOf,x=w&&w(w(P([])));x&&x!==r&&n.call(x,i)&&(b=x);var E=g.prototype=_.prototype=Object.create(b);function L(t){["next","throw","return"].forEach((function(e){u(t,e,(function(t){return this._invoke(e,t)}))}))}function j(t,e){function r(o,a,i,s){var c=l(t[o],t,a);if("throw"!==c.type){var u=c.arg,d=u.value;return d&&"object"==_typeof(d)&&n.call(d,"__await")?e.resolve(d.__await).then((function(t){r("next",t,i,s)}),(function(t){r("throw",t,i,s)})):e.resolve(d).then((function(t){u.value=t,i(u)}),(function(t){return r("throw",t,i,s)}))}s(c.arg)}var a;o(this,"_invoke",{value:function(t,n){function o(){return new e((function(e,o){r(t,n,e,o)}))}return a=a?a.then(o,o):o()}})}function k(e,r,n){var o=f;return function(a,i){if(o===m)throw Error("Generator is already running");if(o===h){if("throw"===a)throw i;return{value:t,done:!0}}for(n.method=a,n.arg=i;;){var s=n.delegate;if(s){var c=O(s,n);if(c){if(c===y)continue;return c}}if("next"===n.method)n.sent=n._sent=n.arg;else if("throw"===n.method){if(o===f)throw o=h,n.arg;n.dispatchException(n.arg)}else"return"===n.method&&n.abrupt("return",n.arg);o=m;var u=l(e,r,n);if("normal"===u.type){if(o=n.done?h:p,u.arg===y)continue;return{value:u.arg,done:n.done}}"throw"===u.type&&(o=h,n.method="throw",n.arg=u.arg)}}}function O(e,r){var n=r.method,o=e.iterator[n];if(o===t)return r.delegate=null,"throw"===n&&e.iterator.return&&(r.method="return",r.arg=t,O(e,r),"throw"===r.method)||"return"!==n&&(r.method="throw",r.arg=new TypeError("The iterator does not provide a '"+n+"' method")),y;var a=l(o,e.iterator,r.arg);if("throw"===a.type)return r.method="throw",r.arg=a.arg,r.delegate=null,y;var i=a.arg;return i?i.done?(r[e.resultName]=i.value,r.next=e.nextLoc,"return"!==r.method&&(r.method="next",r.arg=t),r.delegate=null,y):i:(r.method="throw",r.arg=new TypeError("iterator result is not an object"),r.delegate=null,y)}function N(t){var e={tryLoc:t[0]};1 in t&&(e.catchLoc=t[1]),2 in t&&(e.finallyLoc=t[2],e.afterLoc=t[3]),this.tryEntries.push(e)}function S(t){var e=t.completion||{};e.type="normal",delete e.arg,t.completion=e}function G(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(N,this),this.reset(!0)}function P(e){if(e||""===e){var r=e[i];if(r)return r.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length)){var o=-1,a=function r(){for(;++o<e.length;)if(n.call(e,o))return r.value=e[o],r.done=!1,r;return r.value=t,r.done=!0,r};return a.next=a}}throw new TypeError(_typeof(e)+" is not iterable")}return v.prototype=g,o(E,"constructor",{value:g,configurable:!0}),o(g,"constructor",{value:v,configurable:!0}),v.displayName=u(g,c,"GeneratorFunction"),e.isGeneratorFunction=function(t){var e="function"==typeof t&&t.constructor;return!!e&&(e===v||"GeneratorFunction"===(e.displayName||e.name))},e.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,g):(t.__proto__=g,u(t,c,"GeneratorFunction")),t.prototype=Object.create(E),t},e.awrap=function(t){return{__await:t}},L(j.prototype),u(j.prototype,s,(function(){return this})),e.AsyncIterator=j,e.async=function(t,r,n,o,a){void 0===a&&(a=Promise);var i=new j(d(t,r,n,o),a);return e.isGeneratorFunction(r)?i:i.next().then((function(t){return t.done?t.value:i.next()}))},L(E),u(E,c,"Generator"),u(E,i,(function(){return this})),u(E,"toString",(function(){return"[object Generator]"})),e.keys=function(t){var e=Object(t),r=[];for(var n in e)r.push(n);return r.reverse(),function t(){for(;r.length;){var n=r.pop();if(n in e)return t.value=n,t.done=!1,t}return t.done=!0,t}},e.values=P,G.prototype={constructor:G,reset:function(e){if(this.prev=0,this.next=0,this.sent=this._sent=t,this.done=!1,this.delegate=null,this.method="next",this.arg=t,this.tryEntries.forEach(S),!e)for(var r in this)"t"===r.charAt(0)&&n.call(this,r)&&!isNaN(+r.slice(1))&&(this[r]=t)},stop:function(){this.done=!0;var t=this.tryEntries[0].completion;if("throw"===t.type)throw t.arg;return this.rval},dispatchException:function(e){if(this.done)throw e;var r=this;function o(n,o){return s.type="throw",s.arg=e,r.next=n,o&&(r.method="next",r.arg=t),!!o}for(var a=this.tryEntries.length-1;a>=0;--a){var i=this.tryEntries[a],s=i.completion;if("root"===i.tryLoc)return o("end");if(i.tryLoc<=this.prev){var c=n.call(i,"catchLoc"),u=n.call(i,"finallyLoc");if(c&&u){if(this.prev<i.catchLoc)return o(i.catchLoc,!0);if(this.prev<i.finallyLoc)return o(i.finallyLoc)}else if(c){if(this.prev<i.catchLoc)return o(i.catchLoc,!0)}else{if(!u)throw Error("try statement without catch or finally");if(this.prev<i.finallyLoc)return o(i.finallyLoc)}}}},abrupt:function(t,e){for(var r=this.tryEntries.length-1;r>=0;--r){var o=this.tryEntries[r];if(o.tryLoc<=this.prev&&n.call(o,"finallyLoc")&&this.prev<o.finallyLoc){var a=o;break}}a&&("break"===t||"continue"===t)&&a.tryLoc<=e&&e<=a.finallyLoc&&(a=null);var i=a?a.completion:{};return i.type=t,i.arg=e,a?(this.method="next",this.next=a.finallyLoc,y):this.complete(i)},complete:function(t,e){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&e&&(this.next=e),y},finish:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var r=this.tryEntries[e];if(r.finallyLoc===t)return this.complete(r.completion,r.afterLoc),S(r),y}},catch:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var r=this.tryEntries[e];if(r.tryLoc===t){var n=r.completion;if("throw"===n.type){var o=n.arg;S(r)}return o}}throw Error("illegal catch attempt")},delegateYield:function(e,r,n){return this.delegate={iterator:P(e),resultName:r,nextLoc:n},"next"===this.method&&(this.arg=t),y}},e}function asyncGeneratorStep(t,e,r,n,o,a,i){try{var s=t[a](i),c=s.value}catch(t){return void r(t)}s.done?e(c):Promise.resolve(c).then(n,o)}function _asyncToGenerator(t){return function(){var e=this,r=arguments;return new Promise((function(n,o){var a=t.apply(e,r);function i(t){asyncGeneratorStep(a,n,o,i,s,"next",t)}function s(t){asyncGeneratorStep(a,n,o,i,s,"throw",t)}i(void 0)}))}}!function(t){function e(t){return r.apply(this,arguments)}function r(){return r=_asyncToGenerator(_regeneratorRuntime().mark((function e(r){var o,a,i,s,c,u,d,l,f=arguments;return _regeneratorRuntime().wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return o=f.length>1&&void 0!==f[1]?f[1]:1,a="undefined"!=typeof masterstudy_woocommerce_orders?"".concat(ms_lms_resturl,"/orders/woocommerce-orders"):"".concat(ms_lms_resturl,"/orders"),i=[],void 0!==r&&i.push("per_page=".concat(r)),void 0!==o&&i.push("current_page=".concat(o)),i.length>0&&(a+="?"+i.join("&")),(s=t(".masterstudy-orders-container")).addClass("orders-loading"),e.prev=8,e.next=11,fetch(a,{method:"GET",headers:{"X-WP-Nonce":ms_lms_nonce,"Content-Type":"application/json"}});case 11:if((c=e.sent).ok){e.next=14;break}throw new Error("HTTP error! status: ".concat(c.status));case 14:return e.next=16,c.json();case 16:u=e.sent,s.css("height","auto").removeClass("orders-loading"),t(".masterstudy-orders .stm_lms_user_info_top h3").html((function(t,e){return e.replace(/<span>.*<\/span>/,"")+" <span>"+u.total_orders+"</span>"})),n(u.pages,o),(d=u.orders)&&d.length>0?Array.isArray(d)&&d.forEach((function(e){var r=document.getElementById("masterstudy-order-template").content.cloneNode(!0);t(r).find("[data-order-id]").text("#".concat(e.id)),t(r).find("[data-order-status]").text(e.status_name||e.status).addClass("".concat(e.status)),t(r).find("[data-order-date]").text("".concat(e.date_formatted)),t(r).find("[data-order-payment]").text("wire_transfer"===e.payment_code?"Wire transfer":e.payment_code);var n=function(){if(e.cart_items.hasOwnProperty(o)){var n=e.cart_items[o],a=e.items.find((function(t){return Number(t.item_id)===Number(n.item_id)||Number(t.enterprise_id)===Number(n.enterprise_id)})),i="";a&&(a.enterprise&&"0"!==a.enterprise||a.enterprise_id&&"0"!==a.enterprise_id?i='<span class="order-status">enterprise</span>':(a.bundle&&"0"!==a.bundle||n.bundle_courses_count>0)&&a.bundle_id&&"0"!==a.bundle_id&&(i='<span class="order-status">bundle</span>'));var s='\n              <div class="masterstudy-orders-table__body-row">\n                <div class="masterstudy-orders-course-info">\n                  <div class="masterstudy-orders-course-info__image">'.concat(n.image?'<a href="'.concat(n.link,'">').concat(n.image,"</a>"):'<img src="'.concat(n.placeholder,'" alt="').concat(n.title,'">'),'</div>\n                  <div class="masterstudy-orders-course-info__common">\n                    <div class="masterstudy-orders-course-info__title">').concat(n.title?'<a href="'.concat(n.link,'">').concat(n.title,"</a>"):"<em>N/A</em>"," ").concat(i,'</div>\n                    <div class="masterstudy-orders-course-info__category">\n                    ').concat(n.enterprise_name?"".concat(e.i18n.enterprise," ").concat(n.enterprise_name):" ".concat(n.terms.join(", ")),"\n                    ").concat(n.bundle_courses_count>0?"".concat(n.bundle_courses_count," ").concat(e.i18n.bundle):"",'\n                    </div>\n                  </div>\n                  <div class="masterstudy-orders-course-info__price">').concat(n.price_formatted,"</div>\n                </div>\n              </div>");t(r).find(".masterstudy-orders-table__body").append(s)}};for(var o in e.cart_items)n();t(r).find("[data-order-total]").text("".concat(e.total));var a=t(r).find(".masterstudy-orders-course-info__details").find(".masterstudy-button");if(a.length>0){var i="".concat(window.location.origin).concat(window.location.pathname.split("/").slice(0,2).join("/"));a.attr("href","".concat(i,"/woocommerce-order-details/").concat(e.id))}t(".masterstudy-orders-container").append(r)})):(l='\n              <div class="masterstudy-orders-no-found__info">\n                <div class="masterstudy-orders-no-found__info-icon"><span class="stmlms-order"></span></div>\n                <div class="masterstudy-orders-no-found__info-title">'.concat(masterstudy_orders.no_order_title,'</div>\n                <div class="masterstudy-orders-no-found__info-description">').concat(masterstudy_orders.no_order_description,"</div>\n            </div>"),t(".masterstudy-orders").append("".concat(l)).addClass("masterstudy-orders-no-found")),e.next=28;break;case 24:e.prev=24,e.t0=e.catch(8),console.error("Error fetching orders:",e.t0),s.css("height","auto").removeClass("orders-loading");case 28:case"end":return e.stop()}}),e,null,[[8,24]])}))),r.apply(this,arguments)}function n(r,a){var i="undefined"!=typeof masterstudy_woocommerce_orders?masterstudy_woocommerce_orders:masterstudy_orders;t.ajax({url:i.ajaxurl,method:"POST",data:{action:"get_pagination",total_pages:r,current_page:a,_ajax_nonce:i.nonce},success:function(i){i.success?(t(".masterstudy-orders-table-navigation__pagination").toggle(r>1),t(".masterstudy-orders-table-navigation__pagination").html(i.data.pagination),function(r){t(".masterstudy-pagination__item-block").on("click",(function(){o();var a=t(this).data("id");t(".masterstudy-orders-container .masterstudy-orders-table").remove();var i=t("#orders-per-page").val();n(r,a),e(i,a)})),t(".masterstudy-pagination__button-prev").on("click",(function(){o();var a=t(".masterstudy-pagination__item_current .masterstudy-pagination__item-block");if(a.length){var i=parseInt(a.data("id"));if((i-=1)>=1){t(".masterstudy-orders-container .masterstudy-orders-table").remove();var s=t("#orders-per-page").val();n(r,i),e(s,i)}}})),t(".masterstudy-pagination__button-next").on("click",(function(){o();var r=t(".masterstudy-pagination__item_current .masterstudy-pagination__item-block");if(r.length){var a=parseInt(r.data("id"));a+=1;var i=t(".masterstudy-pagination__item-block").length;if(a<=i){t(".masterstudy-orders-container .masterstudy-orders-table").remove();var s=t("#orders-per-page").val();n(i,a),e(s,a)}}}))}(r),t(".masterstudy-pagination__button-next").toggleClass("masterstudy-pagination__button_disabled",a>=r),t(".masterstudy-pagination__button-prev").toggleClass("masterstudy-pagination__button_disabled",a<=1),function(e,r){t(".masterstudy-pagination__item").hide();var n=Math.max(1,r-1),o=Math.min(e,r+1);1===r||1===n?o=Math.min(e,n+2):r!==e&&o!==e||(n=Math.max(1,o-2));for(var a=n;a<=o;a++)t('.masterstudy-pagination__item:has([data-id="'.concat(a,'"])')).show();t(".masterstudy-pagination__button-next").toggle(r<e),t(".masterstudy-pagination__button-prev").toggle(r>1)}(r,a)):console.error("Error updating pagination:",i.data)},error:function(t){console.error("AJAX error:",t)}})}function o(){var e=t(".masterstudy-orders-container"),r=e.height();e.css("height",r),e.removeClass("orders-loading")}t(document).ready((function(){t(".masterstudy-select__option, .masterstudy-select__clear").on("click",(function(){t(".masterstudy-orders-container .masterstudy-orders-table").remove(),e(t(this).data("value"))})),e()}))}(jQuery);
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+(function ($) {
+  $(document).ready(function () {
+    perPageOrders();
+    fetchOrders();
+  });
+
+  //Function to retrieve data via API
+  function fetchOrders(_x) {
+    return _fetchOrders.apply(this, arguments);
+  } //Function to update the page count request
+  function _fetchOrders() {
+    _fetchOrders = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(perPage) {
+      var currentPage,
+        apiUrl,
+        queryParams,
+        ordersContainer,
+        response,
+        data,
+        orders,
+        orderHtml,
+        _args = arguments;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            currentPage = _args.length > 1 && _args[1] !== undefined ? _args[1] : 1;
+            apiUrl = typeof masterstudy_woocommerce_orders !== "undefined" ? "".concat(ms_lms_resturl, "/orders/woocommerce-orders") : "".concat(ms_lms_resturl, "/orders");
+            queryParams = [];
+            if (perPage !== undefined) {
+              queryParams.push("per_page=".concat(perPage));
+            }
+            if (currentPage !== undefined) {
+              queryParams.push("current_page=".concat(currentPage));
+            }
+            if (queryParams.length > 0) {
+              apiUrl += '?' + queryParams.join('&');
+            }
+
+            //Add animation for container
+            ordersContainer = $(".masterstudy-orders-container");
+            ordersContainer.addClass("orders-loading");
+            _context.prev = 8;
+            _context.next = 11;
+            return fetch(apiUrl, {
+              method: "GET",
+              headers: {
+                "X-WP-Nonce": ms_lms_nonce,
+                "Content-Type": "application/json"
+              }
+            });
+          case 11:
+            response = _context.sent;
+            if (response.ok) {
+              _context.next = 14;
+              break;
+            }
+            throw new Error("HTTP error! status: ".concat(response.status));
+          case 14:
+            _context.next = 16;
+            return response.json();
+          case 16:
+            data = _context.sent;
+            //Remove animation for container
+            ordersContainer.css("height", "auto").removeClass("orders-loading");
+            $(".masterstudy-orders .stm_lms_user_info_top h3").html(function (_, currentHtml) {
+              return currentHtml.replace(/<span>.*<\/span>/, "") + " <span>" + data.total_orders + "</span>";
+            });
+
+            //Update pagination data
+            updatePagination(data.pages, currentPage);
+            orders = data.orders;
+            if (orders && orders.length > 0) {
+              if (Array.isArray(orders)) {
+                orders.forEach(function (order) {
+                  var template = document.getElementById("masterstudy-order-template");
+                  var clone = template.content.cloneNode(true);
+                  $(clone).find("[data-order-id]").text("#".concat(order.id));
+                  $(clone).find("[data-order-status]").text(order.status_name || order.status).addClass("".concat(order.status));
+                  $(clone).find("[data-order-date]").text("".concat(order.date_formatted));
+                  $(clone).find("[data-order-payment]").text(order.payment_code === 'wire_transfer' ? 'Wire transfer' : order.payment_code);
+                  var _loop = function _loop() {
+                    if (order.cart_items.hasOwnProperty(key)) {
+                      var item = order.cart_items[key];
+                      var matchingItem = order.items.find(function (i) {
+                        return Number(i.item_id) === Number(item.item_id) || Number(i.enterprise_id) === Number(item.enterprise_id);
+                      });
+                      var additionalInfo = "";
+                      if (matchingItem) {
+                        if (matchingItem.enterprise && matchingItem.enterprise !== "0" || matchingItem.enterprise_id && matchingItem.enterprise_id !== "0") {
+                          additionalInfo = "<span class=\"order-status\">enterprise</span>";
+                        } else if ((matchingItem.bundle && matchingItem.bundle !== "0" || item.bundle_courses_count > 0) && matchingItem.bundle_id && matchingItem.bundle_id !== "0") {
+                          additionalInfo = "<span class=\"order-status\">bundle</span>";
+                        }
+                      }
+                      var orderHtml = "\n              <div class=\"masterstudy-orders-table__body-row\">\n                <div class=\"masterstudy-orders-course-info\">\n                  <div class=\"masterstudy-orders-course-info__image\">".concat(item.image ? "<a href=\"".concat(item.link, "\">").concat(item.image, "</a>") : "<img src=\"".concat(item.placeholder, "\" alt=\"").concat(item.title, "\">"), "</div>\n                  <div class=\"masterstudy-orders-course-info__common\">\n                    <div class=\"masterstudy-orders-course-info__title\">").concat(item.title ? "<a href=\"".concat(item.link, "\">").concat(item.title, "</a>") : "<em>N/A</em>", " ").concat(additionalInfo, "</div>\n                    <div class=\"masterstudy-orders-course-info__category\">\n                    ").concat(item.enterprise_name ? "".concat(order.i18n.enterprise, " ").concat(item.enterprise_name) : " ".concat(item.terms.join(", ")), "\n                    ").concat(item.bundle_courses_count > 0 ? "".concat(item.bundle_courses_count, " ").concat(order.i18n.bundle) : "", "\n                    </div>\n                  </div>\n                  <div class=\"masterstudy-orders-course-info__price\">").concat(item.price_formatted, "</div>\n                </div>\n              </div>");
+                      $(clone).find(".masterstudy-orders-table__body").append(orderHtml);
+                    }
+                  };
+                  for (var key in order.cart_items) {
+                    _loop();
+                  }
+                  $(clone).find("[data-order-total]").text("".concat(order.total));
+                  var detailsContainer = $(clone).find(".masterstudy-orders-course-info__details");
+                  var button = detailsContainer.find(".masterstudy-button");
+                  if (button.length > 0) {
+                    var baseUrl = "".concat(window.location.origin).concat(window.location.pathname.split('/').slice(0, 2).join('/'));
+                    button.attr("href", "".concat(baseUrl, "/woocommerce-order-details/").concat(order.id));
+                  }
+                  $(".masterstudy-orders-container").append(clone);
+                });
+              }
+            } else {
+              orderHtml = "\n              <div class=\"masterstudy-orders-no-found__info\">\n                <div class=\"masterstudy-orders-no-found__info-icon\"><span class=\"stmlms-order\"></span></div>\n                <div class=\"masterstudy-orders-no-found__info-title\">".concat(masterstudy_orders.no_order_title, "</div>\n                <div class=\"masterstudy-orders-no-found__info-description\">").concat(masterstudy_orders.no_order_description, "</div>\n            </div>");
+              $(".masterstudy-orders").append("".concat(orderHtml)).addClass("masterstudy-orders-no-found");
+            }
+            _context.next = 28;
+            break;
+          case 24:
+            _context.prev = 24;
+            _context.t0 = _context["catch"](8);
+            console.error("Error fetching orders:", _context.t0);
+            ordersContainer.css("height", "auto").removeClass("orders-loading");
+          case 28:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee, null, [[8, 24]]);
+    }));
+    return _fetchOrders.apply(this, arguments);
+  }
+  function perPageOrders(perPage) {
+    $(".masterstudy-select__option, .masterstudy-select__clear").on("click", function () {
+      $(".masterstudy-orders-container .masterstudy-orders-table").remove();
+      var perPage = $(this).data("value");
+      fetchOrders(perPage);
+    });
+  }
+
+  //Function to update API data for pagination
+  function updatePagination(totalPages, currentPage) {
+    var prefix = typeof masterstudy_woocommerce_orders !== "undefined" ? masterstudy_woocommerce_orders : masterstudy_orders;
+    $.ajax({
+      url: prefix.ajaxurl,
+      method: "POST",
+      data: {
+        action: "get_pagination",
+        total_pages: totalPages,
+        current_page: currentPage,
+        _ajax_nonce: prefix.nonce
+      },
+      success: function success(response) {
+        if (response.success) {
+          $(".masterstudy-orders-table-navigation__pagination").toggle(totalPages > 1);
+          $(".masterstudy-orders-table-navigation__pagination").html(response.data.pagination);
+          attachPaginationClickHandlers(totalPages);
+          $(".masterstudy-pagination__button-next").toggleClass("masterstudy-pagination__button_disabled", currentPage >= totalPages);
+          $(".masterstudy-pagination__button-prev").toggleClass("masterstudy-pagination__button_disabled", currentPage <= 1);
+          updatePaginationView(totalPages, currentPage);
+        } else {
+          console.error("Error updating pagination:", response.data);
+        }
+      },
+      error: function error(_error) {
+        console.error("AJAX error:", _error);
+      }
+    });
+  }
+
+  //Function to update the page
+  function attachPaginationClickHandlers(totalPages) {
+    $(".masterstudy-pagination__item-block").on("click", function () {
+      tableHeight();
+      var currentPage = $(this).data("id");
+      $(".masterstudy-orders-container .masterstudy-orders-table").remove();
+      var perPage = $("#orders-per-page").val();
+      updatePagination(totalPages, currentPage);
+      fetchOrders(perPage, currentPage);
+    });
+    $(".masterstudy-pagination__button-prev").on("click", function () {
+      tableHeight();
+      var currentPageElement = $(".masterstudy-pagination__item_current .masterstudy-pagination__item-block");
+      if (currentPageElement.length) {
+        var currentPage = parseInt(currentPageElement.data("id"));
+        currentPage -= 1;
+        if (currentPage >= 1) {
+          $(".masterstudy-orders-container .masterstudy-orders-table").remove();
+          var perPage = $("#orders-per-page").val();
+          updatePagination(totalPages, currentPage);
+          fetchOrders(perPage, currentPage);
+        }
+      }
+    });
+    $(".masterstudy-pagination__button-next").on("click", function () {
+      tableHeight();
+      var currentPageElement = $(".masterstudy-pagination__item_current .masterstudy-pagination__item-block");
+      if (currentPageElement.length) {
+        var currentPage = parseInt(currentPageElement.data("id"));
+        currentPage += 1;
+        var _totalPages = $(".masterstudy-pagination__item-block").length;
+        if (currentPage <= _totalPages) {
+          $(".masterstudy-orders-container .masterstudy-orders-table").remove();
+          var perPage = $("#orders-per-page").val();
+          updatePagination(_totalPages, currentPage);
+          fetchOrders(perPage, currentPage);
+        }
+      }
+    });
+  }
+
+  //Animation when switching pagination
+  function updatePaginationView(totalPages, currentPage) {
+    $(".masterstudy-pagination__item").hide();
+    var startPage = Math.max(1, currentPage - 1);
+    var endPage = Math.min(totalPages, currentPage + 1);
+    if (currentPage === 1 || startPage === 1) {
+      endPage = Math.min(totalPages, startPage + 2);
+    } else if (currentPage === totalPages || endPage === totalPages) {
+      startPage = Math.max(1, endPage - 2);
+    }
+    for (var i = startPage; i <= endPage; i++) {
+      $(".masterstudy-pagination__item:has([data-id=\"".concat(i, "\"])")).show();
+    }
+    $(".masterstudy-pagination__button-next").toggle(currentPage < totalPages);
+    $(".masterstudy-pagination__button-prev").toggle(currentPage > 1);
+  }
+
+  //Function animation for container
+  function tableHeight() {
+    var ordersContainer = $(".masterstudy-orders-container");
+    var containerHeight = ordersContainer.height();
+    ordersContainer.css("height", containerHeight);
+    ordersContainer.removeClass("orders-loading");
+  }
+})(jQuery);

@@ -1,1 +1,71 @@
-"use strict";!function(s){s(document).ready((function(){if(jQuery(".masterstudy-countdown").each((function(){0===jQuery(this).find(".countDays").length&&jQuery(this).countdown({timestamp:jQuery(this).data("timer")})})),!s(".courses_filters").length)return!0;var t=s(".courses_filters .stm_lms_courses_grid__sort select"),e=t.closest(".stm_lms_courses_wrapper").find(".stm_lms_courses__archive"),a=e.find(".stm_lms_load_more_courses"),r=a.attr("data-args");t.on("change",(function(o){var n=a.attr("data-url"),i=t.val();if(a.attr("data-args",r.replace("}",',"sort":"'+i+'"}')),a.hasClass("loading"))return!1;s.ajax({url:stm_lms_ajaxurl+n,dataType:"json",context:this,data:{offset:0,sort:i,args:r,action:"stm_lms_load_content",nonce:stm_lms_nonces.load_content},beforeSend:function(){a.addClass("loading"),e.addClass("loading")},complete:function(s){s=s.responseJSON,jQuery(".masterstudy-countdown").each((function(){0===jQuery(this).find(".countDays").length&&jQuery(this).countdown({timestamp:jQuery(this).data("timer")})})),a.removeClass("loading"),e.removeClass("loading");var t=a.closest(".stm_lms_courses").find("[data-pages]");t.html(s.content),t.attr("data-pages",s.pages),a.attr("data-offset",1),hide_button(a,1)}})})),s(".courses_filters__switcher i").on("click",(function(){var t=s(this).attr("data-view");s(".courses_filters__switcher i").removeClass("active"),s(this).addClass("active"),"grid"===t?s(".stm_lms_courses_wrapper").removeClass("stm_lms_courses_list_view").addClass("stm_lms_courses_grid_view"):s(".stm_lms_courses_wrapper").removeClass("stm_lms_courses_grid_view").addClass("stm_lms_courses_list_view")}))}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    jQuery('.masterstudy-countdown').each(function () {
+      if (jQuery(this).find('.countDays').length === 0) {
+        jQuery(this).countdown({
+          timestamp: jQuery(this).data('timer')
+        });
+      }
+    });
+    if (!$('.courses_filters').length) return true;
+    var $sort = $('.courses_filters .stm_lms_courses_grid__sort select');
+    var $container = $sort.closest('.stm_lms_courses_wrapper').find('.stm_lms_courses__archive');
+    var $btn = $container.find('.stm_lms_load_more_courses');
+    var offset = 0;
+    var args = $btn.attr('data-args');
+    $sort.on('change', function (e) {
+      var suburl = $btn.attr('data-url');
+      var sort_value = $sort.val();
+      $btn.attr('data-args', args.replace('}', ',"sort":"' + sort_value + '"}'));
+      if ($btn.hasClass('loading')) return false;
+      $.ajax({
+        url: stm_lms_ajaxurl + suburl,
+        dataType: 'json',
+        context: this,
+        data: {
+          offset: offset,
+          sort: sort_value,
+          args: args,
+          action: 'stm_lms_load_content',
+          nonce: stm_lms_nonces['load_content']
+        },
+        beforeSend: function beforeSend() {
+          $btn.addClass('loading');
+          $container.addClass('loading');
+        },
+        complete: function complete(data) {
+          data = data['responseJSON'];
+          jQuery('.masterstudy-countdown').each(function () {
+            if (jQuery(this).find('.countDays').length === 0) {
+              jQuery(this).countdown({
+                timestamp: jQuery(this).data('timer')
+              });
+            }
+          });
+          $btn.removeClass('loading');
+          $container.removeClass('loading');
+          var $pages = $btn.closest('.stm_lms_courses').find('[data-pages]');
+          $pages.html(data['content']);
+          $pages.attr('data-pages', data['pages']);
+          $btn.attr('data-offset', 1);
+          hide_button($btn, 1);
+        }
+      });
+    });
+    course_switcher();
+  });
+  function course_switcher() {
+    $('.courses_filters__switcher i').on('click', function () {
+      var view = $(this).attr('data-view');
+      $('.courses_filters__switcher i').removeClass('active');
+      $(this).addClass('active');
+      if (view === 'grid') {
+        $('.stm_lms_courses_wrapper').removeClass('stm_lms_courses_list_view').addClass('stm_lms_courses_grid_view');
+      } else {
+        $('.stm_lms_courses_wrapper').removeClass('stm_lms_courses_grid_view').addClass('stm_lms_courses_list_view');
+      }
+    });
+  }
+})(jQuery);

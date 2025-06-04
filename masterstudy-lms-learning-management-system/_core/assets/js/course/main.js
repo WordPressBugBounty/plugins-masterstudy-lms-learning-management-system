@@ -1,1 +1,10 @@
-"use strict";!function(e){e(document).ready((function(){window.matchMedia("(max-width: 1023.98px)").matches&&(e(".masterstudy-single-course__sidebar").children().appendTo(".masterstudy-single-course__main"),e(".masterstudy-single-course__sidebar").remove())}))}(jQuery);
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    if (window.matchMedia('(max-width: 1023.98px)').matches) {
+      $('.masterstudy-single-course__sidebar').children().appendTo('.masterstudy-single-course__main');
+      $('.masterstudy-single-course__sidebar').remove();
+    }
+  });
+})(jQuery);

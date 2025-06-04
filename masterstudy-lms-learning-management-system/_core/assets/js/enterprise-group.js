@@ -1,1 +1,86 @@
-"use strict";jQuery(document).ready((function(){new Vue({el:"#stm_lms_enterprise_group",data:function(){return{loading:!1,group_id:window.stm_lms_group.id,translations:window.stm_lms_group.translate,group:[]}},mounted:function(){this.fetchGroup()},computed:{},methods:{fetchGroup:function(){var s=this,t=stm_lms_ajaxurl+"?action=stm_lms_get_enterprise_group&group_id="+s.group_id+"&nonce="+stm_lms_nonces.stm_lms_get_enterprise_group;s.loading=!0,this.$http.get(t).then((function(t){s.$set(s,"group",t.body),s.loading=!1}))},openUser:function(s){void 0===s.courses?this.getUserCourses(s):this.$set(s,"active",!s.active)},getUserCourses:function(s){var t=this,e=stm_lms_ajaxurl+"?action=stm_lms_get_user_ent_courses&user_id="+s.id+"&group_id="+t.group_id+"&nonce="+stm_lms_nonces.stm_lms_get_user_ent_courses;t.$set(s,"loading",!0),t.$set(s,"active",!0),this.$http.get(e).then((function(e){t.$set(s,"courses",e.body),t.$set(s,"loading",!1)}))},deleteUserCourse:function(s,t){var e=this,n=stm_lms_ajaxurl+"?action=stm_lms_delete_user_ent_courses&user_id="+s.id+"&group_id="+t.group_id+"&course_id="+t.course_id+"&nonce="+stm_lms_nonces.stm_lms_delete_user_ent_courses;e.$set(t,"loading",!0),this.$http.get(n).then((function(s){e.$set(t,"added",!1),e.$set(t,"loading",!1)}))},addUserCourse:function(s,t){var e=this,n=stm_lms_ajaxurl+"?action=stm_lms_add_user_ent_courses&user_id="+s.id+"&group_id="+t.group_id+"&course_id="+t.course_id+"&nonce="+stm_lms_nonces.stm_lms_add_user_ent_courses;e.$set(t,"loading",!0),this.$http.get(n).then((function(s){e.$set(t,"added",!0),e.$set(t,"loading",!1)}))},changeAdmin:function(s){var t=this;if(!confirm(t.translations.admin_notice))return!1;var e=stm_lms_ajaxurl+"?action=stm_lms_change_ent_group_admin&user_id="+s.id+"&group_id="+t.group_id+"&nonce="+stm_lms_nonces.stm_lms_change_ent_group_admin;t.$set(s,"loading",!0),this.$http.get(e).then((function(s){window.location.replace(s.body)}))},removeFromGroup:function(s,t){var e=this;if(!confirm(e.translations.remove_notice))return!1;var n=stm_lms_ajaxurl+"?action=stm_lms_delete_user_from_group&user_id="+s.id+"&user_email="+s.email+"&group_id="+e.group_id+"&nonce="+stm_lms_nonces.stm_lms_delete_user_from_group;e.$set(s,"loading",!0),this.$http.get(n).then((function(s){e.group.users.splice(t,1)}))}}})}));
+"use strict";
+
+(function ($) {
+  $(document).ready(function () {
+    new Vue({
+      el: '#stm_lms_enterprise_group',
+      data: function data() {
+        return {
+          loading: false,
+          group_id: window['stm_lms_group']['id'],
+          translations: window['stm_lms_group']['translate'],
+          group: []
+        };
+      },
+      mounted: function mounted() {
+        this.fetchGroup();
+      },
+      computed: {},
+      methods: {
+        fetchGroup: function fetchGroup() {
+          var vm = this;
+          var url = stm_lms_ajaxurl + '?action=stm_lms_get_enterprise_group&group_id=' + vm.group_id + '&nonce=' + stm_lms_nonces['stm_lms_get_enterprise_group'];
+          vm.loading = true;
+          this.$http.get(url).then(function (response) {
+            vm.$set(vm, 'group', response.body);
+            vm.loading = false;
+          });
+        },
+        openUser: function openUser(user) {
+          var vm = this;
+          if (typeof user.courses === 'undefined') {
+            vm.getUserCourses(user);
+          } else {
+            vm.$set(user, 'active', !user.active);
+          }
+        },
+        getUserCourses: function getUserCourses(user) {
+          var vm = this;
+          var url = stm_lms_ajaxurl + '?action=stm_lms_get_user_ent_courses&user_id=' + user.id + '&group_id=' + vm.group_id + '&nonce=' + stm_lms_nonces['stm_lms_get_user_ent_courses'];
+          vm.$set(user, 'loading', true);
+          vm.$set(user, 'active', true);
+          this.$http.get(url).then(function (response) {
+            vm.$set(user, 'courses', response.body);
+            vm.$set(user, 'loading', false);
+          });
+        },
+        deleteUserCourse: function deleteUserCourse(user, course) {
+          var vm = this;
+          var url = stm_lms_ajaxurl + '?action=stm_lms_delete_user_ent_courses&user_id=' + user.id + '&group_id=' + course.group_id + '&course_id=' + course.course_id + '&nonce=' + stm_lms_nonces['stm_lms_delete_user_ent_courses'];
+          vm.$set(course, 'loading', true);
+          this.$http.get(url).then(function (response) {
+            vm.$set(course, 'added', false);
+            vm.$set(course, 'loading', false);
+          });
+        },
+        addUserCourse: function addUserCourse(user, course) {
+          var vm = this;
+          var url = stm_lms_ajaxurl + '?action=stm_lms_add_user_ent_courses&user_id=' + user.id + '&group_id=' + course.group_id + '&course_id=' + course.course_id + '&nonce=' + stm_lms_nonces['stm_lms_add_user_ent_courses'];
+          vm.$set(course, 'loading', true);
+          this.$http.get(url).then(function (response) {
+            vm.$set(course, 'added', true);
+            vm.$set(course, 'loading', false);
+          });
+        },
+        changeAdmin: function changeAdmin(user) {
+          var vm = this;
+          if (!confirm(vm.translations['admin_notice'])) return false;
+          var url = stm_lms_ajaxurl + '?action=stm_lms_change_ent_group_admin&user_id=' + user.id + '&group_id=' + vm.group_id + '&nonce=' + stm_lms_nonces['stm_lms_change_ent_group_admin'];
+          vm.$set(user, 'loading', true);
+          this.$http.get(url).then(function (response) {
+            window.location.replace(response.body);
+          });
+        },
+        removeFromGroup: function removeFromGroup(user, index) {
+          var vm = this;
+          if (!confirm(vm.translations['remove_notice'])) return false;
+          var url = stm_lms_ajaxurl + '?action=stm_lms_delete_user_from_group&user_id=' + user.id + '&user_email=' + user.email + '&group_id=' + vm.group_id + '&nonce=' + stm_lms_nonces['stm_lms_delete_user_from_group'];
+          vm.$set(user, 'loading', true);
+          this.$http.get(url).then(function (response) {
+            vm.group.users.splice(index, 1);
+          });
+        }
+      }
+    });
+  });
+})(jQuery);

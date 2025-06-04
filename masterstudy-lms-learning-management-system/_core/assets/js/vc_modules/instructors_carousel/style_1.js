@@ -1,1 +1,67 @@
-"use strict";!function(t){t(document).ready((function(){!function(){var s=!1;t("body").hasClass("rtl")&&(s=!0);t(".stm_lms_instructors_carousel").each((function(){var e=t(this).find(".stm_lms_instructors__grid"),r=t(this).attr("data-items"),i=t(this).attr("data-items-md"),o=t(this).attr("data-items-sm"),a=t(this).attr("data-items-xs"),n="enable"===t(this).attr("data-pagination");t(this).on("initialized.owl.carousel",(function(s){var e=s.item.count,r=s.page.size,i=t(this).closest(".stm_lms_instructors_carousel").find(".stm_lms_courses_carousel__buttons");e>r?i.removeClass("hidden"):i.addClass("hidden")})),e.imagesLoaded((function(){e.owlCarousel({rtl:s,dots:n,items:r,autoplay:!1,loop:!1,slideBy:1,mouseDrag:!1,smartSpeed:400,responsive:{0:{items:a},500:{items:o},1024:{items:i},1500:{items:r}}})})),e.closest(".stm_lms_instructors_carousel_wrapper").find(".stm_lms_courses_carousel__button_prev").on("click",(function(t){t.preventDefault(),e.trigger("prev.owl.carousel")})),e.closest(".stm_lms_instructors_carousel_wrapper").find(".stm_lms_courses_carousel__button_next").on("click",(function(t){t.preventDefault(),e.trigger("next.owl.carousel")}))}))}()}))}(jQuery);
+"use strict";
+
+(function ($) {
+  "use strict";
+
+  $(document).ready(function () {
+    courses_carousel();
+  });
+  function courses_carousel() {
+    var owlRtl = false;
+    if ($('body').hasClass('rtl')) {
+      owlRtl = true;
+    }
+    $('.stm_lms_instructors_carousel').each(function () {
+      var $this = $(this).find('.stm_lms_instructors__grid');
+      var per_row = $(this).attr('data-items');
+      var per_row_md = $(this).attr('data-items-md');
+      var per_row_sm = $(this).attr('data-items-sm');
+      var per_row_xs = $(this).attr('data-items-xs');
+      var dots = $(this).attr('data-pagination') === 'enable';
+      $(this).on('initialized.owl.carousel', function (event) {
+        var totalItems = event.item.count;
+        var visibleItems = event.page.size;
+        var $buttons = $(this).closest('.stm_lms_instructors_carousel').find('.stm_lms_courses_carousel__buttons');
+        if (totalItems > visibleItems) {
+          $buttons.removeClass('hidden');
+        } else {
+          $buttons.addClass('hidden');
+        }
+      });
+      $this.imagesLoaded(function () {
+        $this.owlCarousel({
+          rtl: owlRtl,
+          dots: dots,
+          items: per_row,
+          autoplay: false,
+          loop: false,
+          slideBy: 1,
+          mouseDrag: false,
+          smartSpeed: 400,
+          responsive: {
+            0: {
+              items: per_row_xs
+            },
+            500: {
+              items: per_row_sm
+            },
+            1024: {
+              items: per_row_md
+            },
+            1500: {
+              items: per_row
+            }
+          }
+        });
+      });
+      $this.closest('.stm_lms_instructors_carousel_wrapper').find('.stm_lms_courses_carousel__button_prev').on('click', function (e) {
+        e.preventDefault();
+        $this.trigger('prev.owl.carousel');
+      });
+      $this.closest('.stm_lms_instructors_carousel_wrapper').find('.stm_lms_courses_carousel__button_next').on('click', function (e) {
+        e.preventDefault();
+        $this.trigger('next.owl.carousel');
+      });
+    });
+  }
+})(jQuery);
