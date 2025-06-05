@@ -19,7 +19,7 @@ function stm_lms_user_answers() {
 		course_id int(11) NOT NULL,
 		quiz_id int(11) NOT NULL,
 		question_id int(11) NOT NULL,
-		user_answer TEXT NOT NULL DEFAULT '',	
+		user_answer TEXT NOT NULL,
 		correct_answer tinyint(1) NOT NULL,
 		attempt_number mediumint(9) NOT NULL,
 		PRIMARY KEY  (user_answer_id)

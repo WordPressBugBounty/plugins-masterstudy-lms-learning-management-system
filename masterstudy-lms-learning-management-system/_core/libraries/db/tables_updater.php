@@ -20,7 +20,7 @@ function stm_lms_tables_update() {
 	stm_lms_user_courses();
 	stm_lms_user_lessons();
 	stm_lms_lesson_marker_questions();
-	stm_lms_user_marker_answers();
+	stm_lms_lesson_marker_user_answers();
 	stm_lms_user_quizzes();
 	stm_lms_user_quizzes_times();
 	stm_lms_user_searches();

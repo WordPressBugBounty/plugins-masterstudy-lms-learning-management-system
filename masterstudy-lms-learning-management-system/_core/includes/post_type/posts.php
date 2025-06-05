@@ -199,7 +199,7 @@ if ( ! class_exists( 'STM_Lms_Post_Type' ) ) {
 		}
 
 		public function post_types_labels( $singular, $plural ) {
-			$admin_bar_name = ( ! empty( $admin_bar_name ) ) ? $admin_bar_name : $plural;
+			$admin_bar_name = ! empty( $admin_bar_name ) ? $admin_bar_name : $plural;
 
 			return array(
 				/* translators: %s: Post Type Label */
@@ -217,7 +217,7 @@ if ( ! class_exists( 'STM_Lms_Post_Type' ) ) {
 				/* translators: %s: Post Type Label for adding a new singular item */
 				'add_new_item'       => sprintf( __( 'Add New %s', 'masterstudy-lms-learning-management-system' ), $singular ),
 				/* translators: %s: Label for adding a new item */
-				'add_new'       => sprintf( __( 'Add New %s', 'masterstudy-lms-learning-management-system' ), $singular ),
+				'add_new'            => sprintf( __( 'Add New %s', 'masterstudy-lms-learning-management-system' ), $singular ),
 				/* translators: %s: Post Type Label */
 				'new_item'           => sprintf( __( 'New %s', 'masterstudy-lms-learning-management-system' ), $singular ),
 				/* translators: %s: Post Type Label */

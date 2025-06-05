@@ -266,8 +266,6 @@ class STM_LMS_Instructor extends STM_LMS_User {
 	public static function meta_cap( $caps, $cap, $user_id, $args ) {
 		remove_filter( 'map_meta_cap', array( self::class, 'meta_cap' ) );
 
-		global $post, $post_type;
-
 		if ( ! self::is_instructor() ) {
 			return $caps;
 		}
