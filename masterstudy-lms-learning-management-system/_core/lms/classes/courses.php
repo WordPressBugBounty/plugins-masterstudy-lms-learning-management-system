@@ -1,4 +1,6 @@
 <?php
+use MasterStudy\Lms\Plugin\PostType;
+
 new STM_LMS_Courses();
 
 class STM_LMS_Courses {
@@ -89,8 +91,19 @@ class STM_LMS_Courses {
 	public static function get_all_courses_for_options() {
 		global $wpdb;
 
+		$post_type = PostType::COURSE;
+		$user_id   = get_current_user_id();
+
 		$results = $wpdb->get_results(
-			"SELECT ID, post_title FROM {$wpdb->posts} WHERE post_type = 'stm-courses' AND post_status = 'publish'",
+			$wpdb->prepare(
+				"SELECT ID, post_title FROM {$wpdb->posts} 
+				WHERE post_type = %s 
+				AND post_status = 'publish'
+				AND post_author = %d
+				ORDER BY post_date DESC",
+				$post_type,
+				$user_id
+			),
 			ARRAY_A
 		);
 

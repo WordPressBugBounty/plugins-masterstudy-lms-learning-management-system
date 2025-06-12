@@ -24,8 +24,9 @@ class GetSettingsController {
 	}
 
 	public function __invoke( $course_id, WP_REST_Request $request ): \WP_REST_Response {
-		$course        = $this->course_repository->find( $course_id );
-		$drip_settings = class_exists( '\STM_LMS_Sequential_Drip_Content' ) && method_exists( '\STM_LMS_Sequential_Drip_Content', 'stm_lms_get_settings' )
+		$course           = $this->course_repository->find( $course_id );
+		$elementor_active = class_exists( '\Elementor\Plugin' );
+		$drip_settings    = class_exists( '\STM_LMS_Sequential_Drip_Content' ) && method_exists( '\STM_LMS_Sequential_Drip_Content', 'stm_lms_get_settings' )
 		? \STM_LMS_Sequential_Drip_Content::stm_lms_get_settings()
 		: array();
 
@@ -39,6 +40,11 @@ class GetSettingsController {
 				'featured_quota'   => \STM_LMS_Subscriptions::get_featured_quota(),
 				'coming_soon'      => ( new ComingSoonRepository() )->find_by_course( $course_id ),
 				'course_style'     => ms_plugin_get_course_page_style( $course_id ),
+				'course_templates' => array(
+					'native_templates' => masterstudy_lms_get_native_templates(),
+					'my_templates'     => masterstudy_lms_get_my_templates(),
+					'template_library' => masterstudy_lms_get_template_library(),
+				),
 				'custom_fields'    => ( new CustomFieldsSerializer() )->collectionToArray(
 					$course_id,
 					apply_filters( 'masterstudy_lms_course_custom_fields', array() )

@@ -99,6 +99,9 @@ class STM_LMS_Templates {
 
 	public static function single_course() {
 		if ( isset( $_GET['course_style'] ) ) {
+			if ( 'default' === $_GET['course_style'] ) {
+				self::show_lms_template( 'course' );
+			}
 			self::show_lms_template( 'course/' . sanitize_text_field( wp_unslash( $_GET['course_style'] ) ) );
 			return;
 		}

@@ -177,6 +177,14 @@ function stm_lms_get_demo_curriculum() {
 					'title' => 'Quiz: Mobile / Native Apps',
 					'order' => 3,
 				),
+				array(
+					'title' => 'Uploaded Lesson Material',
+					'order' => 4,
+				),
+				array(
+					'title' => 'Sample Text Lesson',
+					'order' => 5,
+				),
 			),
 		),
 		array(

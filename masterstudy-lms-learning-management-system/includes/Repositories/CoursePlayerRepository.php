@@ -294,7 +294,7 @@ final class CoursePlayerRepository {
 		);
 
 		if ( empty( $this->data ) ) {
-			$user_id    = ! empty( $user_id ) ? $user_id : get_current_user_id();
+			$user_id    = apply_filters( 'user_answers__user_id', ! empty( $user_id ) ? $user_id : get_current_user_id() );
 			$last_quiz  = stm_lms_get_user_last_quiz( $user_id, $quiz_id, array(), $course_id );
 			$this->data = array(
 				'user_id'          => $user_id,

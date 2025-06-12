@@ -270,37 +270,51 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			return $caps;
 		}
 
-		if ( 'edit_stm_lms_post' === $cap || 'delete_stm_lms_post' === $cap || 'read_stm_lms_post' === $cap ) {
-			$post      = get_post( $args[0] );
-			$post_type = get_post_type_object( $post->post_type );
+		$post      = null;
+		$post_type = null;
 
+		if ( isset( $args[0] ) && $args[0] ) {
+			$post = get_post( $args[0] );
+			if ( $post ) {
+				$post_type = get_post_type_object( $post->post_type );
+			}
+		}
+
+		if ( $post && in_array( $cap, array( 'edit_stm_lms_post', 'delete_stm_lms_post', 'read_stm_lms_post' ), true ) ) {
 			$caps = array();
-		}
 
-		if ( 'edit_stm_lms_post' === $cap ) {
-			if ( strval( $user_id ) === strval( $post->post_author ) ) {
-				$caps[] = $post_type->cap->edit_posts;
-			} else {
-				$caps[] = $post_type->cap->edit_others_posts;
+			if ( 'edit_stm_lms_post' === $cap ) {
+				$caps[] = ( strval( $user_id ) === strval( $post->post_author ) )
+					? $post_type->cap->edit_posts
+					: $post_type->cap->edit_others_posts;
+			}
+
+			if ( 'delete_stm_lms_post' === $cap ) {
+				$caps[] = ( strval( $user_id ) === strval( $post->post_author ) )
+					? $post_type->cap->delete_posts
+					: $post_type->cap->delete_others_posts;
+			}
+
+			if ( 'read_stm_lms_post' === $cap ) {
+				if ( 'private' !== $post->post_status || $user_id === (int) $post->post_author ) {
+					$caps[] = 'read';
+				} else {
+					$caps[] = $post_type->cap->read_private_posts;
+				}
 			}
 		}
 
-		if ( 'delete_stm_lms_post' === $cap ) {
-			if ( strval( $user_id ) === strval( $post->post_author ) ) {
-				$caps[] = $post_type->cap->delete_posts;
-			} else {
-				$caps[] = $post_type->cap->delete_others_posts;
+		if ( $post && 'elementor_library' === $post->post_type ) {
+			if ( 'edit_post' === $cap ) {
+				$caps = array( ( $user_id === (int) $post->post_author ) ? 'edit_elementor_libraries' : 'do_not_allow' );
 			}
-		}
 
-		if ( 'read_stm_lms_post' === $cap ) {
+			if ( 'delete_post' === $cap ) {
+				$caps = array( ( $user_id === (int) $post->post_author ) ? 'delete_elementor_libraries' : 'do_not_allow' );
+			}
 
-			if ( 'private' !== $post->post_status ) {
-				$caps[] = 'read';
-			} elseif ( $user_id === $post->post_author ) {
-				$caps[] = 'read';
-			} else {
-				$caps[] = $post_type->cap->read_private_posts;
+			if ( 'read_post' === $cap ) {
+				$caps = array( ( 'private' !== $post->post_status || $user_id === (int) $post->post_author ) ? 'read_elementor_libraries' : 'do_not_allow' );
 			}
 		}
 

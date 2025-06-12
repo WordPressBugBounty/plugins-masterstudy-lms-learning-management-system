@@ -7,6 +7,7 @@ use Elementor\Group_Control_Background;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Border;
+use Elementor\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -44,6 +45,7 @@ class MsLmsCourseReviews extends Widget_Base {
 
 	protected function register_controls() {
 		$courses = \STM_LMS_Courses::get_all_courses_for_options();
+		$context = masterstudy_lms_get_elementor_page_context( get_the_ID() );
 
 		$this->start_controls_section(
 			'section',
@@ -60,10 +62,21 @@ class MsLmsCourseReviews extends Widget_Base {
 				'label_block'        => true,
 				'multiple'           => false,
 				'options'            => $courses,
-				'default'            => ! empty( $courses ) ? key( $courses ) : '',
 				'frontend_available' => true,
+				'default'            => ! empty( $context['course_for_page'] ) && isset( $courses[ $context['course_for_page'] ] )
+					? $context['course_for_page']
+					: ( ! empty( $courses ) ? key( $courses ) : '' ),
 			)
 		);
+		if ( $context['is_course_template'] ) {
+			$this->add_control(
+				'course_note',
+				array(
+					'type' => \Elementor\Controls_Manager::RAW_HTML,
+					'raw'  => \STM_LMS_Templates::load_lms_template( 'elementor-widgets/course-note' ),
+				)
+			);
+		}
 		$this->add_control(
 			'preset',
 			array(
@@ -1011,6 +1024,51 @@ class MsLmsCourseReviews extends Widget_Base {
 		);
 		$this->end_controls_section();
 		$this->start_controls_section(
+			'container_section',
+			array(
+				'label' => esc_html__( 'Review Box', 'masterstudy-lms-learning-management-system' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			array(
+				'name'     => 'container_background',
+				'types'    => array( 'classic', 'gradient' ),
+				'selector' => '{{WRAPPER}} .masterstudy-single-course-reviews__item',
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'     => 'border',
+				'selector' => '{{WRAPPER}} .masterstudy-single-course-reviews__item',
+			)
+		);
+		$this->add_control(
+			'container_border_radius',
+			array(
+				'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .masterstudy-single-course-reviews__item' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'container_padding',
+			array(
+				'label'      => esc_html__( 'Padding', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .masterstudy-single-course-reviews__item' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_section();
+		$this->start_controls_section(
 			'load_button_section',
 			array(
 				'label' => esc_html__( 'Load More Button', 'masterstudy-lms-learning-management-system' ),
@@ -1360,12 +1418,18 @@ class MsLmsCourseReviews extends Widget_Base {
 	}
 
 	protected function render() {
+		global $masterstudy_single_page_course_id;
+
 		$settings    = $this->get_settings_for_display();
-		$course_id   = $settings['course'] ?? null;
+		$course_id   = ! empty( $masterstudy_single_page_course_id ) ? $masterstudy_single_page_course_id : $settings['course'] ?? null;
 		$course_data = masterstudy_get_elementor_course_data( intval( $course_id ) );
 
 		if ( empty( $course_data ) || ! isset( $course_data['course'] ) ) {
 			return;
+		}
+
+		if ( Plugin::$instance->editor->is_edit_mode() ) {
+			masterstudy_get_elementor_content_banner( 'reviews' );
 		}
 
 		wp_enqueue_script( 'masterstudy-single-course-components', STM_LMS_URL . '/assets/js/components/course/main.js', array( 'jquery', 'jquery.cookie' ), MS_LMS_VERSION, true );

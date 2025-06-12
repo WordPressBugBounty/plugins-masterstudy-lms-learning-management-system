@@ -29,8 +29,6 @@ class UpdateQuestionsController {
 
 		$data = $validator->get_validated();
 
-		$data['questions'] = QuestionUtility::filter_allow_access( get_current_user_id(), $data['questions'] );
-
 		$repo->update_questions( $quiz_id, $data['questions'] );
 
 		return WpResponseFactory::ok();

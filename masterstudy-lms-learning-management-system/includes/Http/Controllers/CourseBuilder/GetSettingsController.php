@@ -4,6 +4,7 @@ namespace MasterStudy\Lms\Http\Controllers\CourseBuilder;
 
 use MasterStudy\Lms\Enums\LessonType;
 use MasterStudy\Lms\Plugin\Addons;
+include_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 final class GetSettingsController {
 	public function __invoke(): \WP_REST_Response {
@@ -20,7 +21,7 @@ final class GetSettingsController {
 				'course_allow_intended_audience' => \STM_LMS_Options::get_option( 'course_allow_intended_audience', false ),
 				'question_category_allowed'      => \STM_LMS_Options::get_option( 'course_allow_new_question_categories', false ),
 				'course_premoderation'           => \STM_LMS_Options::get_option( 'course_premoderation', false ),
-				'course_page_urls'               => STM_LMS_URL . '/assets/img/course/',
+				'course_page_urls'               => STM_LMS_URL . '/assets/img/course',
 				'currency_symbol'                => \STM_LMS_Options::get_option( 'currency_symbol', '$' ),
 				'decimals_num'                   => \STM_LMS_Options::get_option( 'decimals_num', '2' ),
 				'currency_thousands'             => \STM_LMS_Options::get_option( 'currency_thousands', ' ' ),
@@ -28,6 +29,7 @@ final class GetSettingsController {
 				'quiz_attempts'                  => \STM_LMS_Options::get_option( 'quiz_attempts', false ),
 				'grades_table'                   => \STM_LMS_Options::get_option( 'grades_table', stm_lms_settings_grades_default_values() ),
 				'presto_player_allowed'          => apply_filters( 'ms_plugin_presto_player_allowed', false ),
+				'deny_instructor_admin'          => \STM_LMS_Options::get_option( 'deny_instructor_admin', false ),
 				'course_builder_fonts'           => \STM_LMS_Options::get_option( 'course_builder_fonts', null ),
 			)
 		);
@@ -39,12 +41,14 @@ final class GetSettingsController {
 			array(
 				'addons'              => Addons::enabled_addons(),
 				'plugins'             => array(
-					'lms_pro'       => \STM_LMS_Helpers::is_pro(),
-					'lms_pro_plus'  => \STM_LMS_Helpers::is_pro_plus(),
-					'presto_player' => defined( 'PRESTO_PLAYER_PLUGIN_FILE' ),
-					'vdocipher'     => defined( 'VDOCIPHER_PLUGIN_VERSION' ),
-					'pmpro'         => defined( 'PMPRO_VERSION' ),
-					'eroom'         => defined( 'STM_ZOOM_VERSION' ),
+					'lms_pro'             => \STM_LMS_Helpers::is_pro(),
+					'lms_pro_plus'        => \STM_LMS_Helpers::is_pro_plus(),
+					'presto_player'       => defined( 'PRESTO_PLAYER_PLUGIN_FILE' ),
+					'vdocipher'           => defined( 'VDOCIPHER_PLUGIN_VERSION' ),
+					'pmpro'               => defined( 'PMPRO_VERSION' ),
+					'eroom'               => defined( 'STM_ZOOM_VERSION' ),
+					'elementor_installed' => file_exists( WP_PLUGIN_DIR . '/elementor/elementor.php' ),
+					'elementor_active'    => is_plugin_active( 'elementor/elementor.php' ),
 				),
 				'options'             => $options,
 				'urls'                => array(

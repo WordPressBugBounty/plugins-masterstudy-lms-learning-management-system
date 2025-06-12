@@ -23,7 +23,14 @@ $tabs_classes .= " masterstudy-tabs_style-$style";
 <ul class="<?php echo esc_attr( $tabs_classes ); ?>">
 	<?php foreach ( $items as $index => $item ) { ?>
 		<li class="masterstudy-tabs__item <?php echo $active_tab_index === $index ? 'masterstudy-tabs__item_active' : ''; ?>" data-id="<?php echo esc_attr( $item['id'] ); ?>">
-			<?php echo esc_html( $item['title'] ); ?>
+			<?php
+			echo esc_html( $item['title'] );
+			if ( isset( $item['hint'] ) ) {
+				?>
+				<span class="masterstudy-tabs__item-hint"><?php echo esc_html( $item['hint'] ); ?></span>
+				<?php
+			}
+			?>
 		</li>
 	<?php } ?>
 </ul>

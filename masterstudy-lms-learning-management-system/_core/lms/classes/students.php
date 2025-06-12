@@ -22,7 +22,7 @@ class STM_LMS_Students {
 			'menu_title'   => esc_html__( 'Students', 'masterstudy-lms-learning-management-system' ),
 			'menu_icon'    => 'fa-user',
 			'menu_url'     => ms_plugin_user_account_url( 'enrolled-students' ),
-			'menu_place'   => 'learning',
+			'menu_place'   => 'main',
 		);
 
 		return $menus;

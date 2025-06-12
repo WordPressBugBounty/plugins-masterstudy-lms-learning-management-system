@@ -145,11 +145,13 @@ wp_enqueue_style( 'masterstudy-membership-levels' );
 								<span class="stm_lms_levels__items_icon">
 									<?php
 									if ( isset( $level_items_icons ) && ! empty( $level_items_icons ) ) {
-										\Elementor\Icons_Manager::render_icon( $level_items_icons, array( 'aria-hidden' => 'true' ) );
-									} else {
-										?>
-										<i class="fas fa-check-circle"></i>
-										<?php
+										if ( 'svg' === $level_items_icons['library'] ) {
+											echo wp_kses_post( $level_items_icons['value'] );
+										} else {
+											?>
+											<i class="<?php echo esc_attr( $level_items_icons['value'] ); ?>"></i>
+											<?php
+										}
 									}
 									?>
 								</span>
@@ -164,11 +166,13 @@ wp_enqueue_style( 'masterstudy-membership-levels' );
 								<span class="stm_lms_levels__items_icon">
 									<?php
 									if ( isset( $level_items_icons ) && ! empty( $level_items_icons ) ) {
-										\Elementor\Icons_Manager::render_icon( $level_items_icons, array( 'aria-hidden' => 'true' ) );
-									} else {
-										?>
-										<i class="fas fa-check-circle"></i>
-										<?php
+										if ( 'svg' === $level_items_icons['library'] ) {
+											echo wp_kses_post( $level_items_icons['value'] );
+										} else {
+											?>
+											<i class="<?php echo esc_attr( $level_items_icons['value'] ); ?>"></i>
+											<?php
+										}
 									}
 									?>
 								</span>

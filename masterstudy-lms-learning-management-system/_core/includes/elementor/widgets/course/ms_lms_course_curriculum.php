@@ -38,6 +38,7 @@ class MsLmsCourseCurriculum extends Widget_Base {
 
 	protected function register_controls() {
 		$courses = \STM_LMS_Courses::get_all_courses_for_options();
+		$context = masterstudy_lms_get_elementor_page_context( get_the_ID() );
 
 		$this->start_controls_section(
 			'section',
@@ -54,10 +55,21 @@ class MsLmsCourseCurriculum extends Widget_Base {
 				'label_block'        => true,
 				'multiple'           => false,
 				'options'            => $courses,
-				'default'            => ! empty( $courses ) ? key( $courses ) : '',
 				'frontend_available' => true,
+				'default'            => ! empty( $context['course_for_page'] ) && isset( $courses[ $context['course_for_page'] ] )
+					? $context['course_for_page']
+					: ( ! empty( $courses ) ? key( $courses ) : '' ),
 			)
 		);
+		if ( $context['is_course_template'] ) {
+			$this->add_control(
+				'course_note',
+				array(
+					'type' => \Elementor\Controls_Manager::RAW_HTML,
+					'raw'  => \STM_LMS_Templates::load_lms_template( 'elementor-widgets/course-note' ),
+				)
+			);
+		}
 		$this->add_control(
 			'preset',
 			array(
@@ -85,11 +97,22 @@ class MsLmsCourseCurriculum extends Widget_Base {
 		$this->add_control(
 			'section_to_show',
 			array(
-				'label' => esc_html__( 'Number of Sections', 'masterstudy-lms-learning-management-system' ),
+				'label' => esc_html__( 'Number of Section', 'masterstudy-lms-learning-management-system' ),
 				'type'  => Controls_Manager::NUMBER,
 				'min'   => 1,
 				'max'   => 500,
 				'step'  => 1,
+			)
+		);
+		$this->add_control(
+			'show_lesson_order',
+			array(
+				'label'        => esc_html__( 'Lesson Order', 'masterstudy-lms-learning-management-system' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
+				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
 			)
 		);
 		$this->end_controls_section();
@@ -530,8 +553,10 @@ class MsLmsCourseCurriculum extends Widget_Base {
 	}
 
 	protected function render() {
+		global $masterstudy_single_page_course_id;
+
 		$settings    = $this->get_settings_for_display();
-		$course_id   = $settings['course'] ?? null;
+		$course_id   = ! empty( $masterstudy_single_page_course_id ) ? $masterstudy_single_page_course_id : $settings['course'] ?? null;
 		$course_data = masterstudy_get_elementor_course_data( intval( $course_id ) );
 
 		if ( empty( $course_data ) || ! isset( $course_data['course'] ) ) {
@@ -545,6 +570,7 @@ class MsLmsCourseCurriculum extends Widget_Base {
 				'style'              => $settings['preset'] ?? 'default',
 				'show_section_title' => $settings['show_section_title'],
 				'section_to_show'    => ! empty( $settings['section_to_show'] ) ? $settings['section_to_show'] : 'all',
+				'show_lesson_order'  => $settings['show_lesson_order'],
 			)
 		);
 	}

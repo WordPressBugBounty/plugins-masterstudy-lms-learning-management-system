@@ -5,6 +5,7 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Background;
 use Elementor\Group_Control_Typography;
+use Elementor\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -36,6 +37,7 @@ class MsLmsCourseCurrentStudents extends Widget_Base {
 
 	protected function register_controls() {
 		$courses = \STM_LMS_Courses::get_all_courses_for_options();
+		$context = masterstudy_lms_get_elementor_page_context( get_the_ID() );
 
 		$this->start_controls_section(
 			'section',
@@ -52,10 +54,21 @@ class MsLmsCourseCurrentStudents extends Widget_Base {
 				'label_block'        => true,
 				'multiple'           => false,
 				'options'            => $courses,
-				'default'            => ! empty( $courses ) ? key( $courses ) : '',
 				'frontend_available' => true,
+				'default'            => ! empty( $context['course_for_page'] ) && isset( $courses[ $context['course_for_page'] ] )
+					? $context['course_for_page']
+					: ( ! empty( $courses ) ? key( $courses ) : '' ),
 			)
 		);
+		if ( $context['is_course_template'] ) {
+			$this->add_control(
+				'course_note',
+				array(
+					'type' => \Elementor\Controls_Manager::RAW_HTML,
+					'raw'  => \STM_LMS_Templates::load_lms_template( 'elementor-widgets/course-note' ),
+				)
+			);
+		}
 		$this->add_control(
 			'preset',
 			array(
@@ -64,8 +77,8 @@ class MsLmsCourseCurrentStudents extends Widget_Base {
 				'default'            => 'default',
 				'frontend_available' => true,
 				'options'            => array(
-					'default'   => esc_html__( 'Default', 'masterstudy-lms-learning-management-system' ),
-					'with_icon' => esc_html__( 'With Icon', 'masterstudy-lms-learning-management-system' ),
+					'default'   => esc_html__( 'Classic', 'masterstudy-lms-learning-management-system' ),
+					'with_icon' => esc_html__( 'Classic with icon', 'masterstudy-lms-learning-management-system' ),
 				),
 			)
 		);
@@ -190,12 +203,18 @@ class MsLmsCourseCurrentStudents extends Widget_Base {
 	}
 
 	protected function render() {
+		global $masterstudy_single_page_course_id;
+
 		$settings    = $this->get_settings_for_display();
-		$course_id   = $settings['course'] ?? null;
+		$course_id   = ! empty( $masterstudy_single_page_course_id ) ? $masterstudy_single_page_course_id : $settings['course'] ?? null;
 		$course_data = masterstudy_get_elementor_course_data( intval( $course_id ) );
 
 		if ( empty( $course_data ) || ! isset( $course_data['course'] ) ) {
 			return;
+		}
+
+		if ( Plugin::$instance->editor->is_edit_mode() && empty( $course_data['course']->current_students ) ) {
+			masterstudy_get_elementor_content_banner( 'students' );
 		}
 
 		if ( ! empty( $course_data['course']->current_students ) ) {

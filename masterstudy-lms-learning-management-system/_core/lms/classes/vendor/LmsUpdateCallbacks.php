@@ -321,9 +321,9 @@ abstract class LmsUpdateCallbacks {
 		foreach ( $courses as $course_id ) {
 			if ( get_post_meta( $course_id, 'udemy_course_id', true ) ) {
 				/* Needs translations from Pro version */
-				update_post_meta( $course_id, 'price_info', esc_html__( '30-Day Money-Back Guarantee', 'masterstudy-lms-learning-management-system-pro' ) );
-				update_post_meta( $course_id, 'access_duration', esc_html__( 'Full lifetime access', 'masterstudy-lms-learning-management-system-pro' ) );
-				update_post_meta( $course_id, 'access_devices', esc_html__( 'Access on mobile and TV', 'masterstudy-lms-learning-management-system-pro' ) );
+				update_post_meta( $course_id, 'price_info', esc_html__( '30-Day Money-Back Guarantee', 'masterstudy-lms-learning-management-system' ) );
+				update_post_meta( $course_id, 'access_duration', esc_html__( 'Full lifetime access', 'masterstudy-lms-learning-management-system' ) );
+				update_post_meta( $course_id, 'access_devices', esc_html__( 'Access on mobile and TV', 'masterstudy-lms-learning-management-system' ) );
 			}
 		}
 	}
@@ -457,6 +457,10 @@ abstract class LmsUpdateCallbacks {
 		stm_lms_lesson_marker_user_answers();
 
 		update_option( 'stm_lms_db_version', STM_LMS_DB_VERSION );
+	}
+
+	public static function lms_update_elementor_templates() {
+		masterstudy_lms_import_elementor_templates();
 	}
 
 	public static function lms_update_grades() {

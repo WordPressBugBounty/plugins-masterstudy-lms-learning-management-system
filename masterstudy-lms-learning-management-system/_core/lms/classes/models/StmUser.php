@@ -62,6 +62,17 @@ class StmUser extends StmBaseModelUser {
 			->find();
 	}
 
+	public function get_first_course() {
+		$courses = StmLmsCourse::query()
+			->asTable( 'course' )
+			->where_in( 'course.`post_type`', array( 'stm-courses', 'stm-course-bundles' ) )
+			->where( 'course.`post_author`', intval( $this->ID ) )
+			->limit( 1 )
+			->find();
+
+		return ! empty( $courses ) ? $courses[0] : null;
+	}
+
 	public static function save_paypal_email( $email = '' ) {
 		$result = array(
 			'success' => false,

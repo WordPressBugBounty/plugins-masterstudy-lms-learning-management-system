@@ -1629,14 +1629,14 @@ class STM_LMS_User {
 			$date    = date( 'Y-m-d H:i:s' );
 			$subject = esc_html__( 'Enterprise Request', 'masterstudy-lms-learning-management-system' );
 
-			$message = esc_html__( 'You have received a new enterprise inquiry', 'masterstudy-lms-learning-management-system-pro' ) . ' <br/>' . // phpcs:disable
-				esc_html__( 'from the "For Enterprise" form.', 'masterstudy-lms-learning-management-system-pro' ) . ' <br/>' .
-				esc_html__( 'Here are the details:', 'masterstudy-lms-learning-management-system-pro' ) . ' <br/> ' .
-				'<b>' . esc_html__( 'Name: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $name . ' <br>' .
-				'<b>' . esc_html__( 'Email: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $email . ' <br>' .
-				'<b>' . esc_html__( 'Message: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $text . ' <br>' .
-				'<b>' . esc_html__( 'Submission Date: ', 'masterstudy-lms-learning-management-system-pro' ) . '</b>' . $date . ' <br><br/>' .
-				esc_html__( 'Please review this inquiry and follow up as needed.', 'masterstudy-lms-learning-management-system-pro' ) . '</a> <br/>'; // phpcs:enable
+			$message = esc_html__( 'You have received a new enterprise inquiry', 'masterstudy-lms-learning-management-system' ) . ' <br/>' . // phpcs:disable
+				esc_html__( 'from the "For Enterprise" form.', 'masterstudy-lms-learning-management-system' ) . ' <br/>' .
+				esc_html__( 'Here are the details:', 'masterstudy-lms-learning-management-system' ) . ' <br/> ' .
+				'<b>' . esc_html__( 'Name: ', 'masterstudy-lms-learning-management-system' ) . '</b>' . $name . ' <br>' .
+				'<b>' . esc_html__( 'Email: ', 'masterstudy-lms-learning-management-system' ) . '</b>' . $email . ' <br>' .
+				'<b>' . esc_html__( 'Message: ', 'masterstudy-lms-learning-management-system' ) . '</b>' . $text . ' <br>' .
+				'<b>' . esc_html__( 'Submission Date: ', 'masterstudy-lms-learning-management-system' ) . '</b>' . $date . ' <br><br/>' .
+				esc_html__( 'Please review this inquiry and follow up as needed.', 'masterstudy-lms-learning-management-system' ) . '</a> <br/>'; // phpcs:enable
 
 			STM_LMS_Helpers::send_email(
 				'',

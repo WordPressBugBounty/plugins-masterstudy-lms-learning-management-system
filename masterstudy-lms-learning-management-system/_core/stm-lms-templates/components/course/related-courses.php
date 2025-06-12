@@ -3,11 +3,13 @@
  * @var object $course
  * @var integer $courses_per_page
  * @var string $style
+ * @var boolean $show_title
  */
 
 use MasterStudy\Lms\Repositories\CourseRepository;
 
-$style             = isset( $style ) ? $style : '';
+$style             = $style ?? '';
+$show_title        = $show_title ?? true;
 $courses_per_page  = isset( $courses_per_page ) ? $courses_per_page : 3;
 $related_option    = STM_LMS_Options::get_option( 'related_option', 'by_category' );
 $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
@@ -53,9 +55,11 @@ $stars      = range( 1, 5 );
 
 if ( ! empty( $course_ids ) ) { ?>
 	<div class="masterstudy-related-courses <?php echo esc_attr( 'vertical' === $style ? 'masterstudy-related-courses_vertical' : '' ); ?>">
-		<span class="masterstudy-related-courses__title">
-			<?php echo esc_html__( 'Related courses', 'masterstudy-lms-learning-management-system' ); ?>
-		</span>
+		<?php if ( $show_title ) { ?>
+			<span class="masterstudy-related-courses__title">
+				<?php echo esc_html__( 'Related courses', 'masterstudy-lms-learning-management-system' ); ?>
+			</span>
+		<?php } ?>
 		<ul class="masterstudy-related-courses__list">
 			<?php
 			foreach ( $course_ids as $course_id ) {

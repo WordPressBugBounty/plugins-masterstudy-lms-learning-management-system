@@ -532,6 +532,7 @@ class STM_LMS_User_Menu {
 			'enrolled-students',
 			'sales',
 			'grades',
+			'students',
 		);
 
 		return array_values(

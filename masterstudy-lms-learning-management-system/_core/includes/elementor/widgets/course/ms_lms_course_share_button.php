@@ -42,6 +42,7 @@ class MsLmsCourseShareButton extends Widget_Base {
 
 	protected function register_controls() {
 		$courses = \STM_LMS_Courses::get_all_courses_for_options();
+		$context = masterstudy_lms_get_elementor_page_context( get_the_ID() );
 
 		$this->start_controls_section(
 			'section',
@@ -58,8 +59,32 @@ class MsLmsCourseShareButton extends Widget_Base {
 				'label_block'        => true,
 				'multiple'           => false,
 				'options'            => $courses,
-				'default'            => ! empty( $courses ) ? key( $courses ) : '',
 				'frontend_available' => true,
+				'default'            => ! empty( $context['course_for_page'] ) && isset( $courses[ $context['course_for_page'] ] )
+					? $context['course_for_page']
+					: ( ! empty( $courses ) ? key( $courses ) : '' ),
+			)
+		);
+		if ( $context['is_course_template'] ) {
+			$this->add_control(
+				'course_note',
+				array(
+					'type' => \Elementor\Controls_Manager::RAW_HTML,
+					'raw'  => \STM_LMS_Templates::load_lms_template( 'elementor-widgets/course-note' ),
+				)
+			);
+		}
+		$this->add_control(
+			'preset',
+			array(
+				'label'              => esc_html__( 'Preset', 'masterstudy-lms-learning-management-system' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'default',
+				'frontend_available' => true,
+				'options'            => array(
+					'default' => esc_html__( 'Standard', 'masterstudy-lms-learning-management-system' ),
+					'row'     => esc_html__( 'Extended', 'masterstudy-lms-learning-management-system' ),
+				),
 			)
 		);
 		$this->end_controls_section();
@@ -101,8 +126,17 @@ class MsLmsCourseShareButton extends Widget_Base {
 		$this->start_controls_section(
 			'icon_section',
 			array(
-				'label' => esc_html__( 'Icon', 'masterstudy-lms-learning-management-system' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label'      => esc_html__( 'Icon', 'masterstudy-lms-learning-management-system' ),
+				'tab'        => Controls_Manager::TAB_STYLE,
+				'conditions' => array(
+					'terms' => array(
+						array(
+							'name'     => 'preset',
+							'operator' => '===',
+							'value'    => 'default',
+						),
+					),
+				),
 			)
 		);
 		$this->add_control(
@@ -151,8 +185,17 @@ class MsLmsCourseShareButton extends Widget_Base {
 		$this->start_controls_section(
 			'modal_section',
 			array(
-				'label' => esc_html__( 'Popup', 'masterstudy-lms-learning-management-system' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label'      => esc_html__( 'Popup', 'masterstudy-lms-learning-management-system' ),
+				'tab'        => Controls_Manager::TAB_STYLE,
+				'conditions' => array(
+					'terms' => array(
+						array(
+							'name'     => 'preset',
+							'operator' => '===',
+							'value'    => 'default',
+						),
+					),
+				),
 			)
 		);
 		$this->add_group_control(
@@ -192,8 +235,17 @@ class MsLmsCourseShareButton extends Widget_Base {
 		$this->start_controls_section(
 			'modal_title_section',
 			array(
-				'label' => esc_html__( 'Popup Title', 'masterstudy-lms-learning-management-system' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label'      => esc_html__( 'Popup Title', 'masterstudy-lms-learning-management-system' ),
+				'tab'        => Controls_Manager::TAB_STYLE,
+				'conditions' => array(
+					'terms' => array(
+						array(
+							'name'     => 'preset',
+							'operator' => '===',
+							'value'    => 'default',
+						),
+					),
+				),
 			)
 		);
 		$this->add_control(
@@ -217,8 +269,17 @@ class MsLmsCourseShareButton extends Widget_Base {
 		$this->start_controls_section(
 			'modal_close_section',
 			array(
-				'label' => esc_html__( 'Popup Close Button', 'masterstudy-lms-learning-management-system' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label'      => esc_html__( 'Popup Close Button', 'masterstudy-lms-learning-management-system' ),
+				'tab'        => Controls_Manager::TAB_STYLE,
+				'conditions' => array(
+					'terms' => array(
+						array(
+							'name'     => 'preset',
+							'operator' => '===',
+							'value'    => 'default',
+						),
+					),
+				),
 			)
 		);
 		$this->add_control(
@@ -294,8 +355,17 @@ class MsLmsCourseShareButton extends Widget_Base {
 		$this->start_controls_section(
 			'social_links_section',
 			array(
-				'label' => esc_html__( 'Popup Social Links', 'masterstudy-lms-learning-management-system' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label'      => esc_html__( 'Popup Social Links', 'masterstudy-lms-learning-management-system' ),
+				'tab'        => Controls_Manager::TAB_STYLE,
+				'conditions' => array(
+					'terms' => array(
+						array(
+							'name'     => 'preset',
+							'operator' => '===',
+							'value'    => 'default',
+						),
+					),
+				),
 			)
 		);
 		$this->add_group_control(
@@ -338,8 +408,17 @@ class MsLmsCourseShareButton extends Widget_Base {
 		$this->start_controls_section(
 			'copy_link_section',
 			array(
-				'label' => esc_html__( 'Popup Copy Link', 'masterstudy-lms-learning-management-system' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label'      => esc_html__( 'Popup Copy Link', 'masterstudy-lms-learning-management-system' ),
+				'tab'        => Controls_Manager::TAB_STYLE,
+				'conditions' => array(
+					'terms' => array(
+						array(
+							'name'     => 'preset',
+							'operator' => '===',
+							'value'    => 'default',
+						),
+					),
+				),
 			)
 		);
 		$this->add_group_control(
@@ -451,11 +530,63 @@ class MsLmsCourseShareButton extends Widget_Base {
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 		$this->end_controls_section();
+		$this->start_controls_section(
+			'social_links_button_section',
+			array(
+				'label'      => esc_html__( 'Buttons', 'masterstudy-lms-learning-management-system' ),
+				'tab'        => Controls_Manager::TAB_STYLE,
+				'conditions' => array(
+					'terms' => array(
+						array(
+							'name'     => 'preset',
+							'operator' => '===',
+							'value'    => 'row',
+						),
+					),
+				),
+			)
+		);
+		$this->add_control(
+			'social_links_button_size',
+			array(
+				'label'      => esc_html__( 'Icon Size', 'masterstudy-lms-learning-management-system' ),
+				'type'       => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => array( 'px' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .masterstudy-single-course-share-button_row a.masterstudy-single-course-share-button__link::before' => 'font-size: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'social_links_button_padding',
+			array(
+				'label'      => esc_html__( 'Padding', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .masterstudy-single-course-share-button_row a.masterstudy-single-course-share-button__link' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_control(
+			'social_links_button_border_radius',
+			array(
+				'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .masterstudy-single-course-share-button_row a.masterstudy-single-course-share-button__link' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_section();
 	}
 
 	protected function render() {
+		global $masterstudy_single_page_course_id;
+
 		$settings    = $this->get_settings_for_display();
-		$course_id   = $settings['course'] ?? null;
+		$course_id   = ! empty( $masterstudy_single_page_course_id ) ? $masterstudy_single_page_course_id : $settings['course'] ?? null;
 		$course_data = masterstudy_get_elementor_course_data( intval( $course_id ) );
 
 		if ( empty( $course_data ) || ! isset( $course_data['course'] ) ) {
@@ -468,6 +599,7 @@ class MsLmsCourseShareButton extends Widget_Base {
 			'components/course/share-button',
 			array(
 				'course' => $course_data['course'],
+				'style'  => $settings['preset'],
 			)
 		);
 	}

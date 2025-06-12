@@ -4,6 +4,7 @@
  * @var string $style
  * @var boolean $show_section_title
  * @var integer $section_to_show
+ * @var string $show_lesson_order
  * @var boolean $dark_mode
  *
  * masterstudy-curriculum-list_dark-mode - for dark mode
@@ -34,6 +35,7 @@ if ( empty( $curriculum ) ) {
 			'curriculum'         => $curriculum,
 			'show_section_title' => $show_section_title ?? true,
 			'section_to_show'    => $section_to_show ?? 'all',
+			'show_lesson_order'  => $show_lesson_order ?? 'yes',
 			'dark_mode'          => $dark_mode,
 		)
 	);

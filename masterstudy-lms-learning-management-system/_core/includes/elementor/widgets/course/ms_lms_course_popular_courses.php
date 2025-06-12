@@ -38,6 +38,7 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 
 	protected function register_controls() {
 		$courses = \STM_LMS_Courses::get_all_courses_for_options();
+		$context = masterstudy_lms_get_elementor_page_context( get_the_ID() );
 
 		$this->start_controls_section(
 			'section',
@@ -54,10 +55,21 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 				'label_block'        => true,
 				'multiple'           => false,
 				'options'            => $courses,
-				'default'            => ! empty( $courses ) ? key( $courses ) : '',
 				'frontend_available' => true,
+				'default'            => ! empty( $context['course_for_page'] ) && isset( $courses[ $context['course_for_page'] ] )
+					? $context['course_for_page']
+					: ( ! empty( $courses ) ? key( $courses ) : '' ),
 			)
 		);
+		if ( $context['is_course_template'] ) {
+			$this->add_control(
+				'course_note',
+				array(
+					'type' => \Elementor\Controls_Manager::RAW_HTML,
+					'raw'  => \STM_LMS_Templates::load_lms_template( 'elementor-widgets/course-note' ),
+				)
+			);
+		}
 		$this->add_control(
 			'preset',
 			array(
@@ -69,6 +81,17 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 					'horizontal' => esc_html__( 'Horizontal', 'masterstudy-lms-learning-management-system' ),
 					'vertical'   => esc_html__( 'Vertical', 'masterstudy-lms-learning-management-system' ),
 				),
+			)
+		);
+		$this->add_control(
+			'show_title',
+			array(
+				'label'        => esc_html__( 'Title', 'masterstudy-lms-learning-management-system' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
+				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
 			)
 		);
 		$this->add_control(
@@ -86,8 +109,17 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 		$this->start_controls_section(
 			'title_section',
 			array(
-				'label' => esc_html__( 'Title', 'masterstudy-lms-learning-management-system' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label'      => esc_html__( 'Title', 'masterstudy-lms-learning-management-system' ),
+				'tab'        => Controls_Manager::TAB_STYLE,
+				'conditions' => array(
+					'terms' => array(
+						array(
+							'name'     => 'show_title',
+							'operator' => '===',
+							'value'    => 'yes',
+						),
+					),
+				),
 			)
 		);
 		$this->add_group_control(
@@ -541,8 +573,10 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 	}
 
 	protected function render() {
+		global $masterstudy_single_page_course_id;
+
 		$settings         = $this->get_settings_for_display();
-		$course_id        = $settings['course'] ?? null;
+		$course_id        = ! empty( $masterstudy_single_page_course_id ) ? $masterstudy_single_page_course_id : $settings['course'] ?? null;
 		$courses_per_page = $settings['courses_per_page'] ?? 4;
 		$course_data      = masterstudy_get_elementor_course_data( intval( $course_id ) );
 
@@ -556,6 +590,7 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 				'course'           => $course_data['course'],
 				'courses_per_page' => $courses_per_page,
 				'style'            => $settings['preset'] ?? '',
+				'show_title'       => 'yes' === $settings['show_title'],
 			)
 		);
 	}

@@ -71,9 +71,11 @@ foreach ( $curriculum as $section ) {
 				}
 				?>
 					class="masterstudy-curriculum-list__link <?php echo esc_attr( $material['lesson_locked_by_drip'] || ( ! $has_access && ! $is_preview && ( ! $is_trial || ! $guest_trial_enabled ) ) ? 'masterstudy-curriculum-list__link_disabled' : '' ); ?>">
-						<div class="masterstudy-curriculum-list__order">
-							<?php echo esc_html( $material_index ); ?>
-						</div>
+						<?php if ( 'yes' === $show_lesson_order ) { ?>
+							<div class="masterstudy-curriculum-list__order">
+								<?php echo esc_html( $material_index ); ?>
+							</div>
+						<?php } ?>
 						<img src="<?php echo esc_url( STM_LMS_URL . "/assets/icons/lessons/{$material['icon']}.svg" ); ?>" class="masterstudy-curriculum-list__image">
 						<div class="masterstudy-curriculum-list__container">
 							<div class="masterstudy-curriculum-list__container-wrapper">

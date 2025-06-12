@@ -1569,3 +1569,94 @@ function masterstudy_lms_course_free_status( $single_sale, $price ) {
 		'zero_price' => empty( $price ) || 0.0 === floatval( $price ),
 	);
 }
+
+function masterstudy_lms_show_course_templates_modal() {
+	$screen = get_current_screen();
+
+	if (
+		( 'edit-page' === $screen->id ) ||
+		( 'edit-stm_lms_course_taxonomy' === $screen->id ) ||
+		( 'toplevel_page_stm-lms-settings' === $screen->id )
+	) {
+		$single_page = 'edit-page' === $screen->id ? true : false;
+		STM_LMS_Templates::show_lms_template( 'components/course-templates', array( 'single_page' => $single_page ) );
+	}
+}
+add_action( 'admin_footer', 'masterstudy_lms_show_course_templates_modal' );
+
+function masterstudy_lms_get_native_templates() {
+	$is_pro      = STM_LMS_Helpers::is_pro();
+	$is_pro_plus = STM_LMS_Helpers::is_pro_plus();
+
+	return array(
+		array(
+			'name'     => 'default',
+			'title'    => esc_html__( 'Default', 'masterstudy-lms-learning-management-system' ),
+			'disabled' => false,
+		),
+		array(
+			'name'     => 'classic',
+			'title'    => esc_html__( 'Classic', 'masterstudy-lms-learning-management-system' ),
+			'disabled' => ! $is_pro,
+		),
+		array(
+			'name'     => 'modern',
+			'title'    => esc_html__( 'Industrial', 'masterstudy-lms-learning-management-system' ),
+			'disabled' => ! $is_pro,
+		),
+		array(
+			'name'     => 'timeless',
+			'title'    => esc_html__( 'Timeless', 'masterstudy-lms-learning-management-system' ),
+			'disabled' => ! $is_pro_plus,
+		),
+		array(
+			'name'     => 'sleek-sidebar',
+			'title'    => esc_html__( 'Sleek with Sidebar', 'masterstudy-lms-learning-management-system' ),
+			'disabled' => ! $is_pro_plus,
+		),
+		array(
+			'name'     => 'minimalistic',
+			'title'    => esc_html__( 'Minimalistic', 'masterstudy-lms-learning-management-system' ),
+			'disabled' => ! $is_pro_plus,
+		),
+		array(
+			'name'     => 'dynamic',
+			'title'    => esc_html__( 'Dynamic', 'masterstudy-lms-learning-management-system' ),
+			'disabled' => ! $is_pro_plus,
+		),
+		array(
+			'name'     => 'modern-curriculum',
+			'title'    => esc_html__( 'Modern with Curriculum', 'masterstudy-lms-learning-management-system' ),
+			'disabled' => ! $is_pro_plus,
+		),
+		array(
+			'name'     => 'dynamic-sidebar',
+			'title'    => esc_html__( 'Dynamic with Short Sidebar', 'masterstudy-lms-learning-management-system' ),
+			'disabled' => ! $is_pro_plus,
+		),
+		array(
+			'name'     => 'full-width',
+			'title'    => esc_html__( 'Bold with Full Width Cover', 'masterstudy-lms-learning-management-system' ),
+			'disabled' => ! $is_pro_plus,
+		),
+	);
+}
+
+function masterstudy_lms_get_user_enrolled_date( $course_id, $user_id ) {
+	if ( empty( $course_id ) || empty( $user_id ) ) {
+		return;
+	}
+
+	global $wpdb;
+
+	$table_name = $wpdb->prefix . 'stm_lms_user_courses';
+
+	return $wpdb->get_var(
+		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT start_time FROM {$table_name} WHERE user_id = %d AND course_id = %d LIMIT 1",
+			$user_id,
+			$course_id
+		)
+	);
+}

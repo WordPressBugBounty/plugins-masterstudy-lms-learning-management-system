@@ -3,11 +3,13 @@
  * @var object $course
  * @var integer $courses_per_page
  * @var string $style
+ * @var boolean $show_title
  */
 
 use MasterStudy\Lms\Repositories\CourseRepository;
 
-$style            = isset( $style ) ? $style : '';
+$style            = $style ?? '';
+$show_title       = $show_title ?? true;
 $courses_per_page = isset( $courses_per_page ) ? $courses_per_page : 4;
 $query_args       = array(
 	'posts_per_page' => $courses_per_page,
@@ -28,9 +30,11 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 
 <?php if ( ! empty( $course_ids ) ) { ?>
 	<div class="masterstudy-popular-courses <?php echo esc_attr( 'horizontal' === $style ? 'masterstudy-popular-courses_horizontal' : '' ); ?>">
-		<span class="masterstudy-popular-courses__title">
-			<?php echo esc_html__( 'Popular courses', 'masterstudy-lms-learning-management-system' ); ?>
-		</span>
+		<?php if ( $show_title ) { ?>
+			<span class="masterstudy-popular-courses__title">
+				<?php echo esc_html__( 'Popular courses', 'masterstudy-lms-learning-management-system' ); ?>
+			</span>
+		<?php } ?>
 		<ul class="masterstudy-popular-courses__list">
 			<?php
 			foreach ( $course_ids as $course_id ) {

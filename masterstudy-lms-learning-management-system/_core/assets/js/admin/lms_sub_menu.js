@@ -45,39 +45,38 @@
         $('.toplevel_page_stm-lms-settings').addClass('wp-has-current-submenu').removeClass('wp-not-current-submenu');
       }
     };
-    var initUnlockSlider = function initUnlockSlider() {
-      var $holder = $('#unlock-slider-slide-holder');
-      var $slides = $holder.children('div');
-      var numSlides = $slides.length;
-      if (!numSlides) return;
-      $holder.css('width', "".concat(numSlides * 100, "%"));
-      $slides.css('width', "".concat(100 / numSlides, "%"));
-      var $nav = $('#unlock-slider-slide-nav');
-      for (var i = 0; i < numSlides; i++) {
-        $nav.append("<a href=\"javascript:void(0)\" class=\"unlock-slider-slide-nav-bt".concat(i === 0 ? ' active' : '', "\"></a>"));
+
+    // unlock banner slider
+    var slidePosition = 0;
+    var numOfSlide = $("#unlock-slider-slide-holder > div").size();
+    $("#unlock-slider-slide-holder").css("width", numOfSlide * 100 + "%");
+    $(".unlock-slider-slide").css("width", 100 / numOfSlide + "%");
+    for (var a = 0; a < numOfSlide; a++) {
+      $('#unlock-slider-slide-nav').append(' <a href="javascript: void(0)" class="unlock-slider-slide-nav-bt' + (a === 0 ? ' active' : '') + '">  </a> ');
+    }
+    $('body').on('click', '.unlock-slider-slide-nav-bt', function () {
+      moveSlide($(this));
+      clearInterval(autoPlaySlideInter);
+    });
+    function moveSlide(thisa) {
+      var thisindex = $('#unlock-slider-slide-nav a').index(thisa);
+      $('#unlock-slider-slide-holder').css("margin-left", '-' + thisindex + '00%');
+      $('#unlock-slider-slide-nav a').removeClass('active');
+      thisa.addClass('active');
+    }
+    function autoPlaySlide() {
+      slidePosition++;
+      if (slidePosition == numOfSlide) {
+        slidePosition = 0;
       }
-      var current = 0;
-      var moveSlide = function moveSlide(index) {
-        $holder.css('margin-left', "-".concat(index * 100, "%"));
-        $nav.children().removeClass('active').eq(index).addClass('active');
-      };
-      var autoSlide = function autoSlide() {
-        current = (current + 1) % numSlides;
-        moveSlide(current);
-      };
-      var interval = setInterval(autoSlide, 4000);
-      $('body').on('click', '.unlock-slider-slide-nav-bt', function () {
-        current = $nav.children().index(this);
-        moveSlide(current);
-        clearInterval(interval);
-      });
-    };
+      moveSlide($("#unlock-slider-slide-nav").children(".unlock-slider-slide-nav-bt:eq(" + slidePosition + ")"));
+    }
+    var autoPlaySlideInter = setInterval(autoPlaySlide, 4000);
     setupSettingsMenu();
     setupUsersMenu();
     setupTemplatesMenu();
     updateDemoLink();
     highlightMenu();
-    initUnlockSlider();
   });
   $(window).on('load', function () {
     if (!$('body').hasClass('post-type-stm-questions')) return;

@@ -20,9 +20,11 @@ if ( $course->is_udemy_course ) {
 
 <div class="masterstudy-single-course-rating masterstudy-single-course-rating_<?php echo esc_attr( $style ); ?>">
 	<div class="masterstudy-single-course-rating__wrapper">
-		<?php foreach ( $stars as $star ) { ?>
-			<span class="masterstudy-single-course-rating__star <?php echo esc_attr( $star <= floor( $rate ) ? 'masterstudy-single-course-rating__star_filled ' : '' ); ?>"></span>
-		<?php } ?>
+		<div class="masterstudy-single-course-rating__star-wrapper">
+			<?php foreach ( $stars as $star ) { ?>
+				<span class="masterstudy-single-course-rating__star <?php echo esc_attr( $star <= floor( $rate ) ? 'masterstudy-single-course-rating__star_filled ' : '' ); ?>"></span>
+			<?php } ?>
+		</div>
 		<div class="masterstudy-single-course-rating__count">
 			<?php echo (float) $rate === (int) $rate ? (int) $rate : esc_html( $rate ); ?>
 		</div>

@@ -336,6 +336,7 @@ final class StudentsRepository {
 		if ( empty( $student_ids ) ) {
 			return;
 		}
+		do_action( 'masterstudy_lms_delete_students_demo_mode' );
 
 		$response = stm_lms_delete_users_in_courses( $student_ids )['data'];
 

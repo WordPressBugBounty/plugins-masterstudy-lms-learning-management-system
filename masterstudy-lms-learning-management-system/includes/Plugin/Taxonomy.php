@@ -174,45 +174,85 @@ class Taxonomy {
 	}
 
 	public static function add_stm_lms_course_taxonomy_fields( $taxonomy ) {
-		$page_styles = \STM_LMS_Helpers::get_course_page_styles();
-		$nonce       = wp_create_nonce( 'course_page_style_nonce' );
+		$nonce = wp_create_nonce( 'course_page_style_nonce' );
 		?>
 		<div class="form-field term-group">
-			<label for="course_page_style"><?php esc_html_e( 'Course Page Style', 'masterstudy-lms-learning-management-system' ); ?></label>
-			<select id="course_page_style" name="course_page_style">
-				<option value="none">
+			<label class="masterstudy-templates-choose-label" for="course_page_style">
+				<?php echo esc_html__( 'Course Page Style', 'masterstudy-lms-learning-management-system' ); ?>
+			</label>
+			<div class="masterstudy-templates-choose-button" data-id="new_category" data-current-style>
+				<span class="masterstudy-templates-choose-button__title">
 					<?php echo esc_html__( 'None', 'masterstudy-lms-learning-management-system' ); ?>
-				</option>
-				<?php foreach ( $page_styles as $value => $label ) { ?>
-					<option value="<?php echo esc_attr( $value ); ?>"><?php echo esc_html( $label ); ?></option>
-				<?php } ?>
-			</select>
+				</span>
+			</div>
+			<div data-id="new_category" class="masterstudy-templates-reset-button">
+				<div class="masterstudy-hint">
+					<div class="masterstudy-hint__popup">
+						<div class="masterstudy-hint__text">
+							<?php echo esc_html__( 'Reset', 'masterstudy-lms-learning-management-system' ); ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" id="course_page_style" name="course_page_style" />
 			<input type="hidden" name="course_page_style_nonce" value="<?php echo esc_html( $nonce ); ?>">
 		</div>
 		<?php
 	}
 
 	public static function edit_stm_lms_course_taxonomy_fields( $term, $taxonomy ) {
-		$field_value = get_term_meta( $term->term_id, 'course_page_style', true );
-		$field_value = ! empty( $field_value ) ? $field_value : 'none';
-		$page_styles = \STM_LMS_Helpers::get_course_page_styles();
-		$nonce       = wp_create_nonce( 'course_page_style_nonce' );
+		$current_style = get_term_meta( $term->term_id, 'course_page_style', true );
+		$my_templates  = class_exists( '\Elementor\Plugin' ) ? masterstudy_lms_get_my_templates() : array();
+		$page_styles   = array_merge(
+			masterstudy_lms_get_native_templates(),
+			$my_templates,
+		);
+		$style_label   = __( 'None', 'masterstudy-lms-learning-management-system' );
+		$nonce         = wp_create_nonce( 'course_page_style_nonce' );
+
+		if ( ! empty( $current_style ) && ! empty( $page_styles ) ) {
+			$matched = array_filter(
+				$page_styles,
+				function( $style ) use ( $current_style ) {
+					return isset( $style['name'] ) && $style['name'] === $current_style;
+				}
+			);
+
+			if ( ! empty( $matched ) ) {
+				$style = reset( $matched );
+				if ( isset( $style['title'] ) ) {
+					$style_label = esc_html( $style['title'] );
+				}
+			}
+		}
 		?>
 		<tr class="form-field term-group-wrap">
 			<th scope="row">
 				<label for="course_page_style"><?php echo esc_html__( 'Course Page Style', 'masterstudy-lms-learning-management-system' ); ?></label>
 			</th>
 			<td>
-				<select id="course_page_style" name="course_page_style">
-					<option value="none" <?php selected( $field_value, 'none' ); ?>>
-						<?php echo esc_html__( 'None', 'masterstudy-lms-learning-management-system' ); ?>
-					</option>
-					<?php foreach ( $page_styles as $value => $label ) { ?>
-						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $field_value, $value ); ?>>
-							<?php echo esc_html( $label ); ?>
-						</option>
-					<?php } ?>
-				</select>
+				<div class="masterstudy-templates-choose-button" data-id="edit_category_inside" data-term-id="<?php echo esc_attr( $term->term_id ); ?>" data-current-style="<?php echo esc_attr( $current_style ); ?>">
+					<span class="masterstudy-templates-choose-button__title">
+						<?php echo esc_html( $style_label ); ?>
+					</span>
+					<div class="masterstudy-hint">
+						<div class="masterstudy-hint__popup">
+							<div class="masterstudy-hint__text">
+								<?php echo esc_html( $style_label ); ?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div data-id="edit_category_inside" class="masterstudy-templates-reset-button">
+					<div class="masterstudy-hint">
+						<div class="masterstudy-hint__popup">
+							<div class="masterstudy-hint__text">
+								<?php echo esc_html__( 'Reset', 'masterstudy-lms-learning-management-system' ); ?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" id="course_page_style" name="course_page_style" value="<?php echo esc_attr( $current_style ); ?>" />
 				<input type="hidden" name="course_page_style_nonce" value="<?php echo esc_html( $nonce ); ?>">
 			</td>
 		</tr>
@@ -245,9 +285,56 @@ class Taxonomy {
 
 	public static function fill_columns( $content, $column_name, $term_id, $taxonomy ) {
 		if ( 'course_page_style' === $column_name && 'stm_lms_course_taxonomy' === $taxonomy ) {
-			$page_styles   = \STM_LMS_Helpers::get_course_page_styles();
+			$my_templates  = class_exists( '\Elementor\Plugin' ) ? masterstudy_lms_get_my_templates() : array();
+			$page_styles   = array_merge(
+				masterstudy_lms_get_native_templates(),
+				$my_templates,
+			);
 			$current_style = get_term_meta( $term_id, 'course_page_style', true );
-			$content       = isset( $page_styles[ $current_style ] ) ? esc_html( $page_styles[ $current_style ] ) : '—';
+			$style_label   = __( 'None', 'masterstudy-lms-learning-management-system' );
+
+			if ( ! empty( $current_style ) && ! empty( $page_styles ) ) {
+				$matched = array_filter(
+					$page_styles,
+					function( $style ) use ( $current_style ) {
+						return isset( $style['name'] ) && $style['name'] === $current_style;
+					}
+				);
+
+				if ( ! empty( $matched ) ) {
+					$style = reset( $matched );
+					if ( isset( $style['title'] ) ) {
+						$style_label = esc_html( $style['title'] );
+					}
+				}
+			}
+
+			$content = sprintf(
+				'<div class="masterstudy-templates-choose-button" data-id="edit_category" data-term-id="%d" data-current-style="%s">
+					<span class="masterstudy-templates-choose-button__title">%s</span>
+					<div class="masterstudy-hint">
+						<div class="masterstudy-hint__popup">
+							<div class="masterstudy-hint__text">
+								%s
+							</div>
+						</div>
+					</div>
+				</div><div data-id="edit_category" data-term-id="%d" class="masterstudy-templates-reset-button">
+					<div class="masterstudy-hint">
+						<div class="masterstudy-hint__popup">
+							<div class="masterstudy-hint__text">
+								%s
+							</div>
+						</div>
+					</div>
+				</div>',
+				$term_id,
+				esc_attr( $current_style ),
+				esc_html( $style_label ),
+				esc_html( $style_label ),
+				$term_id,
+				esc_html__( 'Reset', 'masterstudy-lms-learning-management-system' ),
+			);
 		}
 
 		if ( in_array( $column_name, array( 'masterstudy_courses_count', 'masterstudy_questions_count' ), true ) ) {
@@ -285,7 +372,7 @@ class Taxonomy {
 	}
 
 	public static function query_columns( $query, $taxonomy ) {
-		if ( ! isset( $query->query_vars['taxonomy'] ) || ! in_array( $taxonomy, $query->query_vars['taxonomy'] ) ) {
+		if ( ! isset( $query->query_vars['taxonomy'] ) || ! in_array( $taxonomy, $query->query_vars['taxonomy'], true ) ) {
 			return;
 		}
 
@@ -298,4 +385,5 @@ class Taxonomy {
 			$query->query_vars['order']   = $order;
 		}
 	}
+
 }

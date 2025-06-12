@@ -4,6 +4,7 @@ namespace StmLmsElementor\Widgets;
 
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
+use Elementor\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -72,6 +73,18 @@ class StmLmsMembershipLevels extends Widget_Base {
 	}
 
 	protected function register_controls() {
+		if ( ! defined( 'PMPRO_VERSION' ) ) {
+			$this->start_controls_section(
+				'section_content',
+				array(
+					'label' => __( 'Content', 'masterstudy-lms-learning-management-system' ),
+					'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+				)
+			);
+			$this->end_controls_section();
+
+			return;
+		}
 		$this->start_controls_section(
 			'section_content_button',
 			array(
@@ -190,7 +203,7 @@ class StmLmsMembershipLevels extends Widget_Base {
 				'label'   => esc_html__( 'Plan items icons', 'masterstudy-lms-learning-management-system' ),
 				'type'    => \Elementor\Controls_Manager::ICONS,
 				'default' => array(
-					'value'   => 'far fa-check-circle',
+					'value'   => 'fas fa-check-circle',
 					'library' => 'fa-solid',
 				),
 			)
@@ -959,14 +972,40 @@ class StmLmsMembershipLevels extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function render() {
-		$settings = $this->get_settings_for_display();
-		$atts     = array(
-			'level_items_icons' => $settings['level_items_icons'],
-			'button_position'   => $settings['button_position'],
-			'level_mark_list'   => $settings['level_mark_list'],
+
+	protected function get_upsale_data(): array {
+		return array(
+			'condition' => ! defined( 'PMPRO_VERSION' ),
+			'title'     => esc_html__( 'You need to activate the Paid Memberships Pro plugin to display this widget.', 'masterstudy-lms-learning-management-system' ),
 		);
-		\STM_LMS_Templates::show_lms_template( 'shortcodes/stm_membership_levels', $atts );
+	}
+
+	protected function render() {
+		$settings     = $this->get_settings_for_display();
+		$pmpro_exists = defined( 'PMPRO_VERSION' );
+		$atts         = array(
+			'button_position'   => $settings['button_position'] ?? 'before_level_items',
+			'level_mark_list'   => $settings['level_mark_list'],
+			'level_items_icons' => $settings['level_items_icons'] ?? array(
+				'value'   => 'fas fa-check-circle',
+				'library' => 'fa-solid',
+			),
+		);
+
+		if ( $pmpro_exists ) {
+			\STM_LMS_Templates::show_lms_template( 'shortcodes/stm_membership_levels', $atts );
+		}
+
+		if ( Plugin::$instance->editor->is_edit_mode() ) {
+			if ( $pmpro_exists ) {
+				$pmpro_levels = function_exists( 'pmpro_getAllLevels' ) ? pmpro_getAllLevels( false, true ) : 0;
+				if ( empty( $pmpro_levels ) ) {
+					masterstudy_get_elementor_content_banner( 'membership' );
+				}
+			} else {
+				masterstudy_get_elementor_content_banner( 'membership_off' );
+			}
+		}
 	}
 
 	/**

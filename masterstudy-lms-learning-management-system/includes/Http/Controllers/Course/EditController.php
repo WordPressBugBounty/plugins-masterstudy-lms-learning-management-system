@@ -42,6 +42,7 @@ class EditController {
 				'quiz_attempts'                  => \STM_LMS_Options::get_option( 'quiz_attempts', false ),
 				'grades_table'                   => \STM_LMS_Options::get_option( 'grades_table', stm_lms_settings_grades_default_values() ),
 				'presto_player_allowed'          => apply_filters( 'ms_plugin_presto_player_allowed', false ),
+				'deny_instructor_admin'          => \STM_LMS_Options::get_option( 'deny_instructor_admin', false ),
 				'course_builder_fonts'           => \STM_LMS_Options::get_option( 'course_builder_fonts', null ),
 			)
 		);

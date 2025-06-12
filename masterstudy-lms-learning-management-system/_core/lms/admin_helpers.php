@@ -71,9 +71,16 @@ function stm_lms_add_theme_caps() {
 			if ( empty( $user ) ) {
 				continue;
 			}
+
 			foreach ( array( 'publish', 'delete', 'delete_others', 'delete_private', 'delete_published', 'edit', 'edit_others', 'edit_private', 'edit_published', 'read_private' ) as $cap ) {
 				$user->add_cap( "{$cap}_stm_lms_posts" );
 			}
+
+			$user->add_cap( 'edit_elementor_libraries' );
+			$user->add_cap( 'edit_others_elementor_libraries' );
+			$user->add_cap( 'delete_elementor_libraries' );
+			$user->add_cap( 'delete_others_elementor_libraries' );
+			$user->add_cap( 'read_elementor_libraries' );
 		}
 	}
 
@@ -86,6 +93,10 @@ function stm_lms_add_theme_caps() {
 				$user->add_cap( 'edit_posts' );
 				$user->add_cap( "{$cap}_stm_lms_posts" );
 			}
+
+			$user->add_cap( 'edit_elementor_libraries' );
+			$user->add_cap( 'delete_elementor_libraries' );
+			$user->add_cap( 'read_elementor_libraries' );
 		}
 	}
 

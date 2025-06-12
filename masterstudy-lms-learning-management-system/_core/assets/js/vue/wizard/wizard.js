@@ -49,6 +49,9 @@ new Vue({
       course_tab_faq: true,
       course_tab_announcement: true,
       course_tab_reviews: true,
+      course_allow_basic_info: true,
+      course_allow_requirements_info: true,
+      course_allow_intended_audience: true,
       /*curriculum*/
       lesson_style: 'default',
       quiz_style: 'default',

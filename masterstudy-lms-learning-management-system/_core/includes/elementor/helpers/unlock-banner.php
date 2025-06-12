@@ -56,3 +56,23 @@ function masterstudy_get_elementor_unlock_banner( $addon = '' ) {
 	</div>
 	<?php
 }
+
+function masterstudy_get_elementor_content_banner( $widget ) {
+	$text = array(
+		'basic_info'        => __( 'No basic information has been added for this course yet.', 'masterstudy-lms-learning-management-system' ),
+		'requirements_info' => __( 'Course requirements have not been added for this course yet.', 'masterstudy-lms-learning-management-system' ),
+		'intended_audience' => __( 'Intended audience details have not been added for this course yet.', 'masterstudy-lms-learning-management-system' ),
+		'reviews'           => __( 'No reviews have been added for this course yet.', 'masterstudy-lms-learning-management-system' ),
+		'excerpt'           => __( 'A course excerpt has not been added yet.', 'masterstudy-lms-learning-management-system' ),
+		'membership'        => __( 'No membership levels have been added yet.', 'masterstudy-lms-learning-management-system' ),
+		'membership_off'    => __( 'You need to activate the Paid Memberships Pro plugin to display this widget.', 'masterstudy-lms-learning-management-system' ),
+		'students'          => __( 'No students have enrolled in this course yet.', 'masterstudy-lms-learning-management-system' ),
+		'faq'               => __( 'No questions have been added for this course yet.', 'masterstudy-lms-learning-management-system' ),
+		'materials'         => __( 'No course materials have been added for this course yet.', 'masterstudy-lms-learning-management-system' ),
+	);
+	?>
+	<div class="masterstudy-elementor-need-content-banner <?php echo esc_attr( 'reviews' === $widget ? 'masterstudy-elementor-need-content-banner_reviews' : '' ); ?>">
+		<?php echo esc_html( $text[ $widget ] ); ?>
+	</div>
+	<?php
+}

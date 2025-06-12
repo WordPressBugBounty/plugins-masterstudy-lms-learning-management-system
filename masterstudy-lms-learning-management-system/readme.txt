@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.4
+Stable tag: 3.6.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,11 +309,22 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.5 - 2025-06-11 =
+- **Improvement:** Added 3 new Elementor widgets: Countdown, - Instructors Grid, and Icon Box
+- **Improvement:** Restyled the Single Course style selector in plugin settings and in the Courses Category section
+- **Improvement:** Added 3 new Single Course styles built entirely with Elementor and fully customizable (PRO)
+- **Improvement:** Updated the style selection interface for courses in Course Builder
+- **Improvement:** You can now assign any Elementor-built page as the Single Course page for a specific course (PRO)
+- **Improvement:** You can now create your own course page styles using Elementor (PRO)
+- **Fixed:** Questions disappearing from a Quiz when a co-instructor refreshed the Quiz page in the Course Builder.
+- **Fixed:** Quiz embedded via the “Online Testing” Add-on was showing the same attempt result to all guests; now each guest sees their own results (PRO).
+- **Fixed:** User answers in Quizzes not appearing under Manage Students when a student failed to reach the passing score.
+
 = 3.6.4 - 2025-06-05 =
-- **Fixes:** Minor bug fixes.
+- **Fixed:** Minor bug fixes.
 
 = 3.6.3 - 2025-06-04 =
-- **Fixes:** Minor bug fixes.
+- **Fixed:** Minor bug fixes.
 
 = 3.6.2 - 2025-06-04 =
 - **Improvement:** Added a font size control for text editors in Course Builder.
@@ -329,8 +340,8 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Improvement:** Added an option to hide the Video Questions block in video lessons.
 - **Improvement:** Question cards in Questions Library now show category and type; spacing between cards improved.
 - **Improvement:** Added a page to view all current students in the Admin Dashboard and in the instructor’s profile.
-- **Fix:** Fixed random lesson order changes after reordering lessons in the Curriculum section of Course Builder.
-- **Fix:** Vimeo videos now display correctly in the Questions & Markers area of video lessons.
+- **Fixed:** Fixed random lesson order changes after reordering lessons in the Curriculum section of Course Builder.
+- **Fixed:** Vimeo videos now display correctly in the Questions & Markers area of video lessons.
 
 = 3.6.1 - 2025-05-27 =
 - **Improvement:** The single-question creation and editing page has been restyled to match the Course Builder
@@ -349,12 +360,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fixed:** Math formulas now display correctly in Matching questions when using the MathJax LaTeX plugin
 - **Fixed:** Fixed a fatal error in the Courses Categories widget when Style 6 is selected
 - **Fixed:** Result emojis now display correctly when users switch between attempts in a quiz
-
-= 3.6.0 - 2025-05-21 =
-- **New AI Lab add-on:** a powerful AI tool for generating complete courses, lessons, quizzes, thumbnails, and more. (PRO)
-- **Fixed:** Graded Student Assignments now appear as completed in the "Curriculum" sidebar of the Course Player  (PRO)
-
-= 3.5.36 - 2025-05-20 =
-- **Fixes:** Minor bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

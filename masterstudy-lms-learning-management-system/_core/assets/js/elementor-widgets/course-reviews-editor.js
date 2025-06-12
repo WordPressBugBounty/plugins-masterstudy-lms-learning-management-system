@@ -31,7 +31,8 @@ var ReviewsComponent = /*#__PURE__*/function (_elementorModules$fro) {
           closeButton: '.masterstudy-single-course-reviews__form-close',
           reviewForm: '.masterstudy-single-course-reviews__form',
           reviewFormStars: '.masterstudy-single-course-reviews__star',
-          errorMessageBlock: '.masterstudy-single-course-reviews__form-message'
+          errorMessageBlock: '.masterstudy-single-course-reviews__form-message',
+          needContentBanner: '.masterstudy-elementor-need-content-banner_reviews'
         }
       };
     }
@@ -46,7 +47,8 @@ var ReviewsComponent = /*#__PURE__*/function (_elementorModules$fro) {
         $closeButton: this.$element.find(selectors.closeButton),
         $reviewForm: this.$element.find(selectors.reviewForm),
         $reviewFormStars: this.$element.find(selectors.reviewFormStars),
-        $errorMessageBlock: this.$element.find(selectors.errorMessageBlock)
+        $errorMessageBlock: this.$element.find(selectors.errorMessageBlock),
+        $needContentBanner: this.$element.find(selectors.needContentBanner)
       };
     }
   }, {
@@ -96,7 +98,7 @@ var ReviewsComponent = /*#__PURE__*/function (_elementorModules$fro) {
     value: function getReviews() {
       var _this = this;
       var preset = this.getElementSettings('preset');
-      var pp = preset === 'grid' ? 9 : 5;
+      var pp = preset === 'grid' ? 6 : 5;
       var getReviewsUrl = "".concat(stm_lms_ajaxurl, "?action=stm_lms_get_reviews&nonce=").concat(stm_lms_nonces['stm_lms_get_reviews'], "&offset=").concat(this.offset, "&pp=").concat(pp) + (this.courseId ? "&post_id=".concat(this.courseId) : '');
       var reviewHtml = '';
       this.elements.$loadMoreButton.addClass('masterstudy-button_loading');
@@ -108,6 +110,8 @@ var ReviewsComponent = /*#__PURE__*/function (_elementorModules$fro) {
           _this.elements.$reviewsList.html(_this.elements.$reviewsList.html() + reviewHtml);
           _this.offset++;
           _this.total = response.total;
+        } else {
+          _this.elements.$needContentBanner.show();
         }
         _this.elements.$loadMoreButton.removeClass('masterstudy-button_loading');
         _this.total ? _this.elements.$loadMoreButton.parent().hide() : _this.elements.$loadMoreButton.parent().show();

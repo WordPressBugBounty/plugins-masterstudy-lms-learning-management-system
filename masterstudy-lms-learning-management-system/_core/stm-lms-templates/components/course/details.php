@@ -62,7 +62,7 @@ if ( ! empty( $quizzes ) ) {
 }
 
 if ( ! empty( $course->level ) ) {
-	$levels = STM_LMS_Helpers::get_course_levels();
+	$levels               = STM_LMS_Helpers::get_course_levels();
 	$meta_fields['level'] = array(
 		'label'      => esc_html__( 'Level', 'masterstudy-lms-learning-management-system' ),
 		'text'       => $levels[ $course->level ],
@@ -126,16 +126,20 @@ if ( ! empty( $meta_fields ) ) {
 		</span>
 		<?php foreach ( $meta_fields as $meta_field_key => $meta_field ) { ?>
 			<div class="masterstudy-single-course-details__item">
-				<span class="masterstudy-single-course-details__icon <?php echo esc_attr( $meta_field['icon_class'] ); ?>"></span>
-				<span class="masterstudy-single-course-details__name">
-					<?php echo esc_html( $meta_field['label'] ); ?>
-				</span>
-				<?php if ( 'row' === $style && ! in_array( $meta_field_key, $extra_fields ) ) { ?>
-					<span class="masterstudy-single-course-details__separator">:</span>
-				<?php } ?>
-				<span class="masterstudy-single-course-details__quantity">
-					<?php echo esc_html( $meta_field['text'] ); ?>
-				</span>
+				<div class="masterstudy-single-course-details__icon-wrapper">
+					<span class="masterstudy-single-course-details__icon <?php echo esc_attr( $meta_field['icon_class'] ); ?>"></span>
+				</div>
+				<div class="masterstudy-single-course-details__info">
+					<span class="masterstudy-single-course-details__name">
+						<?php echo esc_html( $meta_field['label'] ); ?>
+					</span>
+					<?php if ( 'row' === $style && ! in_array( $meta_field_key, $extra_fields, true ) ) { ?>
+						<span class="masterstudy-single-course-details__separator">:</span>
+					<?php } ?>
+					<span class="masterstudy-single-course-details__quantity">
+						<?php echo esc_html( $meta_field['text'] ); ?>
+					</span>
+				</div>
 			</div>
 		<?php } ?>
 	</div>

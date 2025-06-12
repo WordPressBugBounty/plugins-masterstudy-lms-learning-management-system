@@ -178,16 +178,19 @@ function stm_lms_settings_course_section() {
 			'type'        => 'checkbox',
 			'label'       => esc_html__( 'Allow adding Basic info section', 'masterstudy-lms-learning-management-system' ),
 			'description' => esc_html__( 'Let instructors add a section for basic info about the course', 'masterstudy-lms-learning-management-system' ),
+			'value'       => true,
 		),
 		'course_allow_requirements_info'       => array(
 			'type'        => 'checkbox',
 			'label'       => esc_html__( 'Allow adding Course requirements section', 'masterstudy-lms-learning-management-system' ),
 			'description' => esc_html__( 'Let instructors add a section for course requirements', 'masterstudy-lms-learning-management-system' ),
+			'value'       => true,
 		),
 		'course_allow_intended_audience'       => array(
 			'type'        => 'checkbox',
 			'label'       => esc_html__( 'Allow adding Intended audience section', 'masterstudy-lms-learning-management-system' ),
 			'description' => esc_html__( 'Let instructors add a section for who the course is for', 'masterstudy-lms-learning-management-system' ),
+			'value'       => true,
 		),
 		'course_lesson_video_types'            => array(
 			'group'       => 'started',
@@ -429,107 +432,21 @@ function stm_lms_settings_course_section() {
 	);
 
 	if ( STM_LMS_Helpers::is_pro() ) {
-		$hint_text      = esc_html__( 'Available in Pro Plus', 'masterstudy-lms-learning-management-system' );
-		$preview_label  = esc_html__( 'Demo preview', 'masterstudy-lms-learning-management-system' );
-		$preview_url    = 'https://masterstudy.stylemixthemes.com/lms-plugin/courses-page/basics-of-masterstudy/';
-		$layout_options = array(
-			array(
-				'value'         => 'default',
-				'alt'           => esc_html__( 'Default', 'masterstudy-lms-learning-management-system' ),
-				'img'           => STM_LMS_URL . '/assets/img/course/default.png',
-				'preview_url'   => $preview_url,
-				'preview_label' => $preview_label,
-				'disabled'      => false,
-			),
-			array(
-				'value'         => 'classic',
-				'alt'           => esc_html__( 'Classic', 'masterstudy-lms-learning-management-system' ),
-				'img'           => STM_LMS_URL . '/assets/img/course/classic.png',
-				'preview_url'   => $preview_url . '?course_style=classic',
-				'preview_label' => $preview_label,
-				'disabled'      => false,
-			),
-			array(
-				'value'         => 'modern',
-				'alt'           => esc_html__( 'Industrial', 'masterstudy-lms-learning-management-system' ),
-				'img'           => STM_LMS_URL . '/assets/img/course/modern.png',
-				'preview_url'   => $preview_url . '?course_style=modern',
-				'preview_label' => $preview_label,
-				'disabled'      => false,
-			),
-			array(
-				'value'         => 'timeless',
-				'alt'           => esc_html__( 'Timeless', 'masterstudy-lms-learning-management-system' ),
-				'img'           => STM_LMS_URL . '/assets/img/course/timeless.png',
-				'preview_url'   => $preview_url . '?course_style=timeless',
-				'preview_label' => $preview_label,
-				'disabled_hint' => $hint_text,
-				'disabled'      => ! $is_pro_plus,
-			),
-			array(
-				'value'         => 'sleek-sidebar',
-				'alt'           => esc_html__( 'Sleek with Sidebar', 'masterstudy-lms-learning-management-system' ),
-				'img'           => STM_LMS_URL . '/assets/img/course/sleek-sidebar.png',
-				'preview_url'   => $preview_url . '?course_style=sleek-sidebar',
-				'preview_label' => $preview_label,
-				'disabled_hint' => $hint_text,
-				'disabled'      => ! $is_pro_plus,
-			),
-			array(
-				'value'         => 'minimalistic',
-				'alt'           => esc_html__( 'Minimalistic', 'masterstudy-lms-learning-management-system' ),
-				'img'           => STM_LMS_URL . '/assets/img/course/minimalistic.png',
-				'preview_url'   => $preview_url . '?course_style=minimalistic',
-				'preview_label' => $preview_label,
-				'disabled_hint' => $hint_text,
-				'disabled'      => ! $is_pro_plus,
-			),
-			array(
-				'value'         => 'dynamic',
-				'alt'           => esc_html__( 'Dynamic', 'masterstudy-lms-learning-management-system' ),
-				'img'           => STM_LMS_URL . '/assets/img/course/dynamic.png',
-				'preview_url'   => $preview_url . '?course_style=dynamic',
-				'preview_label' => $preview_label,
-				'disabled_hint' => $hint_text,
-				'disabled'      => ! $is_pro_plus,
-			),
-			array(
-				'value'         => 'modern-curriculum',
-				'alt'           => esc_html__( 'Modern with Curriculum', 'masterstudy-lms-learning-management-system' ),
-				'img'           => STM_LMS_URL . '/assets/img/course/modern-curriculum.png',
-				'preview_url'   => $preview_url . '?course_style=modern-curriculum',
-				'preview_label' => $preview_label,
-				'disabled_hint' => $hint_text,
-				'disabled'      => ! $is_pro_plus,
-			),
-			array(
-				'value'         => 'dynamic-sidebar',
-				'alt'           => esc_html__( 'Dynamic with Short Sidebar', 'masterstudy-lms-learning-management-system' ),
-				'img'           => STM_LMS_URL . '/assets/img/course/dynamic-sidebar.png',
-				'preview_url'   => $preview_url . '?course_style=dynamic-sidebar',
-				'preview_label' => $preview_label,
-				'disabled_hint' => $hint_text,
-				'disabled'      => ! $is_pro_plus,
-			),
-			array(
-				'value'         => 'full-width',
-				'alt'           => esc_html__( 'Bold with Full Width Cover', 'masterstudy-lms-learning-management-system' ),
-				'img'           => STM_LMS_URL . '/assets/img/course/full-width.png',
-				'preview_url'   => $preview_url . '?course_style=full-width',
-				'preview_label' => $preview_label,
-				'disabled_hint' => $hint_text,
-				'disabled'      => ! $is_pro_plus,
-			),
+		$my_templates     = class_exists( '\Elementor\Plugin' ) ? masterstudy_lms_get_my_templates() : array();
+		$template_options = array_merge(
+			masterstudy_lms_get_native_templates(),
+			$my_templates,
 		);
 
 		$course_style_field = array(
 			'course_style' => array(
-				'type'    => 'data_select',
-				'label'   => esc_html__( 'Choose a style for your Course page', 'masterstudy-lms-learning-management-system' ),
-				'options' => $layout_options,
-				'value'   => 'default',
-				'pro'     => true,
-				'pro_url' => admin_url( 'admin.php?page=stm-lms-go-pro&source=course-page-style-course-settings' ),
+				'type'        => 'course_templates',
+				'label'       => esc_html__( 'Choose a style for your Course page', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Select the style that will match your branding.', 'masterstudy-lms-learning-management-system' ),
+				'value'       => 'default',
+				'options'     => $template_options,
+				'pro'         => true,
+				'pro_url'     => admin_url( 'admin.php?page=stm-lms-go-pro&source=course-page-style-course-settings' ),
 			),
 		);
 

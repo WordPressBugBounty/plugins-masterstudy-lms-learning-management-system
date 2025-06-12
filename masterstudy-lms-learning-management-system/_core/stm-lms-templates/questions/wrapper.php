@@ -27,7 +27,7 @@ if ( ! empty( $question_view_type ) ) {
 	$stm_lms_vars['question_view_type'] = $question_view_type;
 }
 
-$question_template = ( STM_LMS_Quiz::show_answers( $item_id ) ) ? 'questions/answers/' . $type : 'questions/' . $type;
+$question_template = ( STM_LMS_Quiz::show_answers( $item_id, true ) ) ? 'questions/answers/' . $type : 'questions/' . $type;
 $number            = ( ! empty( $number ) ) ? $number : 1;
 
 $image    = ( isset( $stm_lms_vars['image'] ) ) ? $stm_lms_vars['image'] : array();

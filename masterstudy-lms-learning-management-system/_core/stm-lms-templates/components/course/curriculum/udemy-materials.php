@@ -44,9 +44,11 @@ foreach ( $curriculum as $section ) {
 				<li class="masterstudy-curriculum-list__item">
 					<a href="#"
 						class="masterstudy-curriculum-list__link masterstudy-curriculum-list__link_disabled">
-						<div class="masterstudy-curriculum-list__order">
-							<?php echo esc_html( $material_number ); ?>
-						</div>
+						<?php if ( 'yes' === $show_lesson_order ) { ?>
+							<div class="masterstudy-curriculum-list__order">
+								<?php echo esc_html( $material_number ); ?>
+							</div>
+						<?php } ?>
 						<img src="<?php echo esc_url( STM_LMS_URL . "/assets/icons/lessons/{$icon}.svg" ); ?>" class="masterstudy-curriculum-list__image">
 						<div class="masterstudy-curriculum-list__container">
 							<div class="masterstudy-curriculum-list__container-wrapper">

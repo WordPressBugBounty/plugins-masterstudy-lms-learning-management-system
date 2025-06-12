@@ -41,7 +41,7 @@
       var total = true;
       var reviewText = '';
       var userMark = '';
-      var pp = reviews_data.style === 'grid' ? 9 : 5;
+      var pp = reviews_data.style === 'grid' ? 6 : 5;
       var editors = {};
       var reviewContainer = $(this);
       var courseId = reviewContainer.data('course-id');
@@ -382,5 +382,16 @@
     setTimeout(function () {
       _this.text(originalButtonText);
     }, 2000);
+  });
+  $('.masterstudy-single-course-share-button__link_copy').click(function (event) {
+    event.preventDefault();
+    var tempInput = document.createElement("input");
+    tempInput.style.position = "absolute";
+    tempInput.style.left = "-9999px";
+    tempInput.value = $(this).data('url');
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
   });
 })(jQuery);

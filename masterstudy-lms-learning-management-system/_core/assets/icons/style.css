@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'stmlms';
-  src:  url('fonts/stmlms.eot?7qi3j5');
-  src:  url('fonts/stmlms.eot?7qi3j5#iefix') format('embedded-opentype'),
-    url('fonts/stmlms.ttf?7qi3j5') format('truetype'),
-    url('fonts/stmlms.woff?7qi3j5') format('woff'),
-    url('fonts/stmlms.svg?7qi3j5#stmlms') format('svg');
+  src:  url('fonts/stmlms.eot?erewpf');
+  src:  url('fonts/stmlms.eot?erewpf#iefix') format('embedded-opentype'),
+    url('fonts/stmlms.ttf?erewpf') format('truetype'),
+    url('fonts/stmlms.woff?erewpf') format('woff'),
+    url('fonts/stmlms.svg?erewpf#stmlms') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,28 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.stmlms-instructors-grid:before {
+  content: "\ea14";
+}
+.stmlms-iconbox:before {
+  content: "\ea15";
+}
+.stmlms-countdown-widget:before {
+  content: "\ea16";
+}
+.stmlms-elementor:before {
+  content: "\ea10";
+  color: #fff;
+}
+.stmlms-delete:before {
+  content: "\ea11";
+}
+.stmlms-target:before {
+  content: "\ea12";
+}
+.stmlms-copy:before {
+  content: "\ea13";
+}
 .stmlms-table-trash:before {
   content: "\ea0f";
 }

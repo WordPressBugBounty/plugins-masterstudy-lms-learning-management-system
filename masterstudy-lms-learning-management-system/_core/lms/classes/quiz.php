@@ -451,11 +451,11 @@ class STM_LMS_Quiz {
 		return add_query_arg( 'show_answers', '1', STM_LMS_Helpers::get_current_url() );
 	}
 
-	public static function show_answers( $quiz_id ) {
-		if ( ! self::can_watch_answers( $quiz_id ) ) {
+	public static function show_answers( $quiz_id, $admin = false ) {
+		if ( ! self::can_watch_answers( $quiz_id ) && ! $admin ) {
 			return false;
 		}
-		if ( self::quiz_passed( $quiz_id ) ) {
+		if ( self::quiz_passed( $quiz_id ) || $admin ) {
 			return true;
 		}
 

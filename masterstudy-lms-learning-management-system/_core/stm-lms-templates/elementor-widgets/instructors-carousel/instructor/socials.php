@@ -14,9 +14,9 @@
 			<i class="fab fa-twitter"></i>
 		</a>
 	<?php } ?>
-	<?php if ( ! empty( $user['meta']['google-plus'] ) ) { ?>
-		<a href="<?php echo esc_url( $user['meta']['google-plus'] ); ?>" class="ms_lms_instructors_carousel__item_socials_link">
-			<i class="fab fa-google-plus-g"></i>
+	<?php if ( ! empty( $user['meta']['linkedin'] ) ) { ?>
+		<a href="<?php echo esc_url( $user['meta']['linkedin'] ); ?>" class="ms_lms_instructors_carousel__item_socials_link">
+			<i class="fab fa-linkedin"></i>
 		</a>
 	<?php } ?>
 </div>

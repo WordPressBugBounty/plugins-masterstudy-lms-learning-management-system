@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once STM_LMS_PATH . '/lms/enqueue.php';
 require_once STM_LMS_PATH . '/lms/helpers.php';
-
+require_once STM_LMS_PATH . '/includes/elementor/helpers/helpers.php';
 require_once STM_LMS_PATH . '/lms/classes/Validation.php';
 require_once STM_LMS_PATH . '/lms/classes/subscriptions.php';
 require_once STM_LMS_PATH . '/lms/classes/helpers.php';
