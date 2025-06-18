@@ -1013,8 +1013,31 @@ class STM_LMS_Instructor extends STM_LMS_User {
 						'role' => 'stm_lms_instructor',
 					)
 				);
-				$message = esc_html__( 'Your submission has been approved', 'masterstudy-lms-learning-management-system' );
-				$subject = esc_html__( 'Instructor submission', 'masterstudy-lms-learning-management-system' );
+
+				$email_data_approve = array(
+					'instructor_name' => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
+					'site_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+					'login_url'       => STM_LMS_Helpers::masterstudy_lms_get_login_url(),
+				);
+
+				$template = wp_kses_post(
+					'Hi {{instructor_name}},<br>
+					Congratulations! Your application to become an instructor on {{site_name}} has been approved.<br>
+					You can now log in to your instructor account using the following link:<br>
+					Login URL: <a href="{{login_url}}" target="_blank">Login URL</a> <br>
+					We are excited to have you on board and look forward to your contributions!'
+				);
+
+				$search  = array( '{{instructor_name}}', '{{site_name}}', '{{login_url}}' );
+				$replace = array(
+					$email_data_approve['instructor_name'],
+					$email_data_approve['site_name'],
+					$email_data_approve['login_url'],
+				);
+
+				$message = str_replace( $search, $replace, $template );
+
+				$subject = esc_html__( 'Instructor application approved', 'masterstudy-lms-learning-management-system' );
 				if ( ! empty( $admin_message ) ) {
 					$message .= '<br>' . sanitize_text_field( $admin_message );
 				}
@@ -1023,12 +1046,35 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					$user_email,
 					$subject,
 					$message,
-					'stm_lms_update_user_status_approved',
-					$email_data
+					'stm_lms_email_update_user_status_approved',
+					$email_data_approve
 				);
 			} else {
-				$message = esc_html__( 'Your submission has been rejected', 'masterstudy-lms-learning-management-system' );
-				$subject = esc_html__( 'Instructor submission', 'masterstudy-lms-learning-management-system' );
+
+				$email_data_reject = array(
+					'user_login' => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
+					'site_name'  => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				);
+
+				$template = wp_kses_post(
+					'Hi {{user_login}},<br>
+					Thank you for your interest in becoming an instructor on {{site_name}} <br>
+					After careful review, we regret to inform you that your application has not been approved at this time.
+					We appreciate the time and effort you put into your submission.
+					You\'re welcome to update your application and reapply in the future.
+					If you have any questions or would like feedback, feel free to reach out to our team.<br>
+					Best regards.'
+				);
+
+				$search  = array( '{{user_login}}', '{{site_name}}' );
+				$replace = array(
+					$email_data_reject['user_login'],
+					$email_data_reject['site_name'],
+				);
+
+				$message = str_replace( $search, $replace, $template );
+				$subject = esc_html__( 'Update on Your Instructor Application', 'masterstudy-lms-learning-management-system' );
+
 				if ( ! empty( $admin_message ) ) {
 					$message .= '<br>' . sanitize_text_field( $admin_message );
 				}
@@ -1036,8 +1082,8 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					$user_email,
 					$subject,
 					$message,
-					'stm_lms_update_user_status_rejected',
-					$email_data
+					'stm_lms_email_update_user_status_rejected',
+					$email_data_reject
 				);
 			}
 			$submission_info = array(

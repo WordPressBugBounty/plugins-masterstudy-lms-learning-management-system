@@ -106,13 +106,24 @@ wp_localize_script(
 			}
 			?>
 			<div class="masterstudy-course-player-lesson-video__wrapper" style="<?php echo esc_attr( ! empty( $video_width ) ? $video_width : '' ); ?>">
-				<video class="masterstudy-plyr-video-player" data-id="<?php echo esc_attr( $id ); ?>"
-					data-poster="<?php echo esc_url( $lesson['video_poster']['url'] ?? '' ); ?>"
-					controls
-					controlsList="nodownload">
-					<source src="<?php echo esc_url( $uploaded_video ); ?>"
-						type='video/<?php echo esc_attr( $video_format ); ?>'>
-				</video>
+				<?php
+				if ( strpos( $uploaded_video, 'videopress.com' ) !== false ) {
+					?>
+					<iframe src="<?php echo esc_url( $uploaded_video ); ?>" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+					<?php
+				} else {
+					?>
+					<video class="masterstudy-plyr-video-player" data-id="<?php echo esc_attr( $id ); ?>"
+						data-poster="<?php echo esc_url( $lesson['video_poster']['url'] ?? '' ); ?>"
+						controls
+						controlsList="nodownload">
+						<source
+							src="<?php echo esc_url( $uploaded_video ); ?>"
+							type='video/<?php echo esc_attr( $video_format ); ?>'>
+					</video>
+					<?php
+				}
+				?>
 			</div>
 			<?php
 		} elseif ( in_array( $lesson['video_type'], array( LessonVideoType::YOUTUBE, LessonVideoType::VIMEO ), true ) ) {

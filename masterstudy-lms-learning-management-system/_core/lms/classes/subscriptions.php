@@ -136,24 +136,27 @@ class STM_LMS_Subscriptions {
 
 			$r['sub'] = $sub;
 
-			if ( ! empty( $membership_id ) ) {
-				$sub  = object;
-				$subs = self::user_subscription_levels();
+			$subs = self::user_subscription_levels();
 
-				if ( ! empty( $subs ) ) {
-					foreach ( $subs as $subscription ) {
-						if ( $subscription->subscription_id === $membership_id && $subscription->quotas_left ) {
-							$sub = $subscription;
-						}
+			$sub = null;
+			if ( ! empty( $membership_id ) && ! empty( $subs ) ) {
+				foreach ( $subs as $subscription ) {
+					if ( intval( $subscription->ID ) === intval( $membership_id ) ) {
+						$sub = $subscription;
+						break;
 					}
 				}
 			}
 
-			if ( ! empty( $sub->quotas_left ) ) {
+			if ( is_null( $sub ) && ! empty( $subs ) ) {
+				$sub = reset( $subs );
+			}
+
+			if ( $sub instanceof stdClass && ! empty( $sub->quotas_left ) ) {
 				$progress_percent          = 0;
 				$current_lesson_id         = 0;
 				$status                    = 'enrolled';
-				$subscription_id           = $sub->subscription_id;
+				$subscription_id           = $membership_id;
 				$user_course               = compact( 'user_id', 'course_id', 'current_lesson_id', 'status', 'progress_percent', 'subscription_id' );
 				$user_course['start_time'] = time();
 
@@ -690,13 +693,58 @@ class STM_LMS_Subscriptions {
 		return self::default_featured_quota() + self::pmpro_plan_quota() - self::get_user_featured_count();
 	}
 
-	public static function get_membership_status( $user_id ) {
-		global $wpdb;
-		$result   = $wpdb->get_row( $wpdb->prepare( "SELECT status FROM {$wpdb->pmpro_memberships_users} WHERE user_id = %d ORDER BY id DESC LIMIT 1", $user_id ), ARRAY_A );
-		$inactive = 'inactive';
+	public static function get_membership_status_by_course( $user_id, $course_subscription_id ) {
+		$membership_status   = false;
+		$membership_expired  = false;
+		$membership_inactive = true;
 
-		return ! empty( $result['status'] ) ? $result['status'] : 'inactive';
+		global $wpdb;
+		$table = $wpdb->prefix . 'pmpro_memberships_users'; // phpcs:disable
+
+		$table_exists = $wpdb->get_var(
+			$wpdb->prepare(
+				'SHOW TABLES LIKE %s',
+				$table
+			)
+		);
+
+		if ( $table_exists === $table ) {
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT id, status FROM {$table} WHERE user_id = %d",
+					$user_id
+				),
+				ARRAY_A
+			);
+		} else {
+			$results = array();
+		} // phpcs:enable
+
+		foreach ( $results as $membership ) {
+			if ( $membership['id'] === $course_subscription_id ) {
+				$membership_status = $membership['status'];
+
+				if ( 'active' === $membership_status || 'changed' === $membership_status ) {
+					$membership_inactive = false;
+				} elseif ( 'expired' === $membership_status ) {
+					$membership_expired  = true;
+					$membership_inactive = false;
+				} elseif ( 'cancelled' === $membership_status ) {
+					$membership_inactive = true;
+				}
+
+				break;
+			}
+		}
+
+		return array(
+			'membership_status'   => $membership_status,
+			'membership_expired'  => $membership_expired,
+			'membership_inactive' => $membership_inactive,
+		);
 	}
+
+
 	public static function membership_plan_available() {
 		global $wpdb;
 		$result = $wpdb->get_row( "SELECT * FROM {$wpdb->pmpro_membership_levels}", ARRAY_A );

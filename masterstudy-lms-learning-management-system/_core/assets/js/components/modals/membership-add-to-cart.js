@@ -11,7 +11,8 @@
       data: {
         action: 'stm_lms_use_membership',
         nonce: stm_lms_nonces['stm_lms_use_membership'],
-        course_id: $(this).attr('data-id')
+        course_id: $(this).attr('data-id'),
+        membership_id: $(this).data('membership-id')
       },
       beforeSend: function beforeSend() {
         $(this).addClass('masterstudy-button_loading');

@@ -142,7 +142,11 @@ var jsPDF = window.jspdf.jsPDF;
         return;
       } else {
         element = document.createElement('div');
-        element.textContent = field.content;
+        if (field.type === 'grades') {
+          element.innerHTML = renderGradesHtml(field.content).prop('outerHTML');
+        } else {
+          element.textContent = field.content;
+        }
         element.style.fontSize = field.styles.fontSize || '16px';
         element.style.color = field.styles.color.hex || '#000';
         element.style.textAlign = field.styles.textAlign || 'left';
@@ -224,7 +228,7 @@ var jsPDF = window.jspdf.jsPDF;
   }
   function injectGoogleFonts(_x) {
     return _injectGoogleFonts.apply(this, arguments);
-  } //Convert image to PDF
+  }
   function _injectGoogleFonts() {
     _injectGoogleFonts = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(fontsList) {
       var fontsToLoad, fontUrl, existingLink, link;
@@ -281,6 +285,31 @@ var jsPDF = window.jspdf.jsPDF;
     }));
     return _injectGoogleFonts.apply(this, arguments);
   }
+  function renderGradesHtml(content) {
+    var $container = $('<div class="masterstudy-grades-certificate"></div>');
+    var $main = $("\n            <div class=\"masterstudy-grades-certificate__main\">\n            <div class=\"masterstudy-grades-certificate__badge\">\n                <div class=\"masterstudy-grades-certificate__badge-value\">".concat(content.grade.badge, "</div>\n                <div class=\"masterstudy-grades-certificate__badge-label\">").concat(content.main_data.grade_title, "</div>\n            </div>\n            <div class=\"masterstudy-grades-certificate__points\">\n                <div class=\"masterstudy-grades-certificate__points-value\">").concat(content.grade.current, "</div>\n                <div class=\"masterstudy-grades-certificate__points-label\">").concat(content.main_data.point_title, "</div>\n            </div>\n            <div class=\"masterstudy-grades-certificate__range\">\n                <div class=\"masterstudy-grades-certificate__range-value\">").concat(content.grade.range, "%</div>\n                <div class=\"masterstudy-grades-certificate__range-label\">").concat(content.main_data.range_title, "</div>\n            </div>\n            </div>\n        "));
+    var $examsSection = $("\n            <div class=\"masterstudy-grades-certificate__exams\">\n            <div class=\"masterstudy-grades-certificate__exams-title\">".concat(content.main_data.exams_title, ":</div>\n            <table class=\"masterstudy-grades-certificate__exams-table\">\n                <tbody></tbody>\n            </table>\n            </div>\n        "));
+    var $tbody = $examsSection.find('tbody');
+    content.exams.forEach(function (exam) {
+      var $row = $("<tr class=\"masterstudy-grades-certificate__exams-row masterstudy-grades-certificate__exams-row-".concat(exam.type, "\"></tr>"));
+      var $labelCell = $("\n            <td class=\"masterstudy-grades-certificate__exams-label\">\n                <div class=\"masterstudy-grades-certificate__exams-icon\"></div>\n                ".concat(exam.title, "\n            </td>\n            "));
+      $row.append($labelCell);
+      if (exam.attempts < 1) {
+        var $notStarted = $("\n                <td colspan=\"3\" class=\"masterstudy-grades-certificate__exams-not-started\">".concat(content.main_data.attempt_title, "</td>\n            "));
+        $row.append($notStarted);
+      } else {
+        var $grade = $("\n                <td class=\"masterstudy-grades-certificate__exams-grade\">\n                <span class=\"masterstudy-grades-certificate__exams-badge\" style=\"background:".concat(exam.grade.color, "\">\n                    ").concat(exam.grade.badge, "\n                </span>\n                </td>\n            "));
+        var $value = $("\n                <td class=\"masterstudy-grades-certificate__exams-value\">\n                ".concat(exam.grade.current).concat(content.main_data.separator).concat(exam.grade.max_point, "\n                </td>\n            "));
+        var $percent = $("\n                <td class=\"masterstudy-grades-certificate__exams-percent\">\n                ".concat(exam.grade.range, "%\n                </td>\n            "));
+        $row.append($grade, $value, $percent);
+      }
+      $tbody.append($row);
+    });
+    $container.append($main, $examsSection);
+    return $container;
+  }
+
+  //Convert image to PDF
   function convertToPDF(element, preview, orientation) {
     html2canvas(element, {
       scale: 3,

@@ -68,11 +68,11 @@ if ( ! empty( $user_approval['status'] ) && in_array( $user_approval['status'], 
 				course_id: course_id,
 			};
 
-			var membership_id = $(this).attr('data-membership-id');
-
-			if(typeof membership_id !== 'undefined') {
-				data['membership_id'] = membership_id;
+			var membership_id = $(this).data('membership-id');
+			if ( membership_id ) {
+				data.membership_id = membership_id;
 			}
+
 			$.ajax({
 				url: stm_lms_ajaxurl,
 				dataType: 'json',

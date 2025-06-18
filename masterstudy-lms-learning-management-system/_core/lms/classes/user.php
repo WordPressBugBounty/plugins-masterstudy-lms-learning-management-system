@@ -616,7 +616,38 @@ class STM_LMS_User {
 			$email_data
 		);
 
-		wp_new_user_notification( $user );
+		$email_new_user_to_admin = array(
+			'user_login'        => $user_login,
+			'user_email'        => $user_email,
+			'registration_date' => date( 'Y-m-d H:i:s' ),
+		);
+
+		$template = wp_kses_post(
+			'A new user has just registered on the site. <br> Here are the details: <br>
+		Name: {{user_login}} <br>
+		Email: {{user_email}} <br>
+		Registration Date: {{registration_date}} <br>
+		Please welcome our new member!'
+		);
+
+		$search  = array( '{{user_login}}', '{{user_email}}', '{{registration_date}}' );
+		$replace = array(
+			$email_new_user_to_admin['user_login'],
+			$email_new_user_to_admin['user_email'],
+			$email_new_user_to_admin['registration_date'],
+		);
+
+		$message = str_replace( $search, $replace, $template );
+		$subject = esc_html__( 'New User Registered', 'masterstudy-lms-learning-management-system' );
+
+		STM_LMS_Helpers::send_email(
+			'',
+			$subject,
+			$message,
+			'stm_lms_new_user_register_on_site',
+			$email_new_user_to_admin
+		);
+
 	}
 
 	public static function stm_lms_set_user_role( $user, $data ) {
@@ -791,21 +822,7 @@ class STM_LMS_User {
 
 				$current_lesson = ( ! empty( $course['current_lesson_id'] ) ) ? $course['current_lesson_id'] : STM_LMS_Lesson::get_first_lesson( $id );
 
-				/* Check membership status*/
-				$subscription_enabled = STM_LMS_Subscriptions::subscription_enabled();
-				$in_enterprise        = STM_LMS_Order::is_purchased_by_enterprise( $course, $user_id );
-				$my_course            = ( intval( get_post_field( 'post_author', $id ) ) === intval( $user_id ) );
-				$is_free              = ( get_post_meta( $id, 'single_sale', true ) && empty( STM_LMS_Course::get_course_price( $id ) ) );
-				$is_bought            = STM_LMS_Order::has_purchased_courses( $user_id, $id );
-				$in_bundle            = ! empty( $course['bundle_id'] );
-				$bought_by_membership = ! empty( $course['subscription_id'] );
-				$for_points           = ! empty( $course['for_points'] );
-				$not_in_membership    = get_post_meta( $id, 'not_membership', true );
-				$only_for_membership  = ! $not_in_membership && ! $is_bought && ! $is_free && ! $in_enterprise && ! $in_bundle && ! $for_points;
-				$membership_level     = $subscription_enabled && STM_LMS_Subscriptions::user_has_subscription( $user_id );
-				$membership_status    = ( $subscription_enabled ) ? STM_LMS_Subscriptions::get_membership_status( get_current_user_id() ) : 'inactive';
-				$membership_expired   = $subscription_enabled && 'expired' === $membership_status && $only_for_membership && ! $my_course && $bought_by_membership;
-				$membership_inactive  = $subscription_enabled && ! $membership_level && 'active' !== $membership_status && 'expired' !== $membership_status && $only_for_membership && ! $my_course && $bought_by_membership;
+				$membership_info = STM_LMS_Helpers::masterstudy_lms_check_membership_status( $user_id, $course, $id, false );
 
 				ob_start();
 				STM_LMS_Templates::show_lms_template(
@@ -842,9 +859,9 @@ class STM_LMS_User {
 					'duration'            => get_post_meta( $id, 'duration_info', true ),
 					'expiration'          => $expiration,
 					'is_expired'          => STM_LMS_Course::is_course_time_expired( get_current_user_id(), $id ),
-					'membership_expired'  => $membership_expired,
-					'membership_inactive' => $membership_inactive,
-					'no_membership_plan'  => $subscription_enabled && ! $membership_level && $only_for_membership && ! $my_course && $bought_by_membership,
+					'membership_expired'  => $membership_info['membership_expired'],
+					'membership_inactive' => $membership_info['membership_inactive'],
+					'no_membership_plan'  => $membership_info['no_membership_plan'],
 				);
 
 				/* Check course complete status*/
@@ -934,21 +951,9 @@ class STM_LMS_User {
 		$columns = array( 'user_course_id', 'enterprise_id', 'subscription_id', 'bundle_id', 'for_points' );
 		$course  = stm_lms_get_user_course( $user_id, $course_id, $columns );
 
-		/*Check membership status*/
-		$subscription_enabled = STM_LMS_Subscriptions::subscription_enabled();
-		$in_enterprise        = isset( $course[0] ) && STM_LMS_Order::is_purchased_by_enterprise( $course[0], $user_id );
-		$my_course            = intval( $author_id ) === intval( $user_id );
-		$is_free              = ( get_post_meta( $course_id, 'single_sale', true ) && empty( STM_LMS_Course::get_course_price( $course_id ) ) );
-		$is_bought            = STM_LMS_Order::has_purchased_courses( $user_id, $course_id );
-		$bought_by_membership = ! empty( $course[0]['subscription_id'] );
-		$not_in_membership    = get_post_meta( $course_id, 'not_membership', true );
-		$only_for_membership  = ! $not_in_membership && ! $is_bought && ! $is_free && ! $in_enterprise && empty( $course[0]['bundle_id'] ) && empty( $course[0]['for_points'] );
-		$membership_level     = STM_LMS_Subscriptions::user_has_subscription( $user_id );
-		$membership_status    = ( $subscription_enabled ) ? STM_LMS_Subscriptions::get_membership_status( $user_id ) : 'inactive';
-		$membership_expired   = $subscription_enabled && 'expired' === $membership_status && $only_for_membership && ! $my_course && $bought_by_membership;
-		$membership_inactive  = $subscription_enabled && ! $membership_level && 'active' !== $membership_status && 'expired' !== $membership_status && $only_for_membership && ! $my_course && $bought_by_membership;
+		$membership_info = STM_LMS_Helpers::masterstudy_lms_check_membership_status( $user_id, $course, $course_id, true );
 
-		if ( $membership_expired || $membership_inactive ) {
+		if ( $membership_info['membership_expired'] || $membership_info['membership_inactive'] ) {
 			return apply_filters( 'stm_lms_has_course_access', 0, $course_id, $item_id );
 		}
 
@@ -958,7 +963,7 @@ class STM_LMS_User {
 			if ( class_exists( 'STM_LMS_Prerequisites' ) ) {
 				$prerequisite_passed = STM_LMS_Prerequisites::is_prerequisite( true, $course_id );
 			}
-			if ( $is_free && $prerequisite_passed && $add ) {
+			if ( $membership_info['is_free'] && $prerequisite_passed && $add ) {
 				$auto_enroll = STM_LMS_Options::get_option( 'course_user_auto_enroll', false );
 				if ( $auto_enroll || ! is_single() ) {
 					STM_LMS_Course::add_user_course( $course_id, $user_id, STM_LMS_Lesson::get_lesson_url( $course_id, '' ), 0 );
@@ -1714,32 +1719,39 @@ class STM_LMS_User {
 		update_user_meta( $user_data->ID, 'restore_password_token', $token );
 		$reset_url = add_query_arg( 'restore_password', $token, self::login_page_url() );
 
-		$message = __( 'Someone has requested a password reset for the following account:', 'masterstudy-lms-learning-management-system' ) . '<br><br>';
-		/* translators: %s: site name */
-		$message .= sprintf( __( 'Site Name: %s', 'masterstudy-lms-learning-management-system' ), $site_name ) . '<br><br>';
-		/* translators: %s: user login */
-		$message .= sprintf( __( 'Username: %s', 'masterstudy-lms-learning-management-system' ), $user_login ) . '<br><br>';
-		$message .= __( 'If this was a mistake, just ignore this email and nothing will happen.', 'masterstudy-lms-learning-management-system' ) . '<br><br>';
-		$message .= __( 'To reset your password, visit the following address:', 'masterstudy-lms-learning-management-system' ) . '<br><br>';
-		$message .= sprintf( '<a href="%s">%s</a><br>', esc_url( $reset_url ), esc_url( $reset_url ) );
+		$email_reset_data = array(
+			'user_login' => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_data->ID ),
+			'reset_link' => $reset_url,
+			'site_name'  => $site_name,
+		);
 
-		/* translators: Password reset notification email subject. %s: Site title */
-		$title = sprintf( __( '[%s] Password Reset' ), $site_name );
+		$template = wp_kses_post(
+			'Dear  {{user_login}},<br> There has been a request to reset your password for your account on {{site_name}}.
+					<br> To reset your password and set a new one, click on the link below: <br>
+					<a href="{{reset_link}}" target="_blank">Reset url</a>
+					<br>If you did not request this change, please ignore this email.'
+		);
 
-		$title   = apply_filters( 'retrieve_password_title', $title, $user_login, $user_data );
-		$message = apply_filters( 'retrieve_password_message', stripslashes( $message ), $key, $user_login, $user_data );
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+		$search  = array( '{{user_login}}', '{{site_name}}', '{{reset_link}}' );
+		$replace = array(
+			$email_reset_data['user_login'],
+			$email_reset_data['site_name'],
+			$email_reset_data['reset_link'],
+		);
 
-		if ( $message && ! wp_mail( $user_email, wp_specialchars_decode( $title ), $message, $headers ) ) {
-			$response['errors'][] = array(
-				'id'    => 'send_failed',
-				'field' => 'restore_user_login',
-				'text'  => __( "Can't send E-mail", 'masterstudy-lms-learning-management-system' ),
-			);
-			$response['status']   = 'error';
+		$message = str_replace( $search, $replace, $template );
+		$subject = esc_html__( 'Password Reset Request', 'masterstudy-lms-learning-management-system' );
 
-			return wp_send_json( $response );
+		if ( ! empty( $admin_message ) ) {
+			$message .= '<br>' . sanitize_text_field( $admin_message );
 		}
+		STM_LMS_Helpers::send_email(
+			$user_email,
+			$subject,
+			$message,
+			'stm_lms_email_user_reset_password',
+			$email_reset_data
+		);
 
 		return wp_send_json( $response );
 	}

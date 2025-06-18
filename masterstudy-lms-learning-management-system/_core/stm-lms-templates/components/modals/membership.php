@@ -39,16 +39,17 @@ wp_enqueue_script( 'masterstudy-membership-add-to-cart' );
 				</div>
 				<?php
 				if ( $data['subscription']['quotas_left'] && ! $data['needs_approval'] ) :
-					STM_LMS_Templates::show_lms_template(
-						'components/button',
-						array(
-							'title' => __( 'Enroll with Membership', 'masterstudy-lms-learning-management-system' ),
-							'link'  => '#',
-							'style' => 'primary',
-							'size'  => 'sm',
-							'id'    => intval( $data['subscription']['course_id'] ),
-						)
-					);
+					?>
+					<a href="#"
+						class="masterstudy-button masterstudy-button_style-primary masterstudy-button_size-sm"
+						data-lms-usemembership
+						data-lms-course="<?php echo intval( $data['post_id'] ); ?>"
+						data-id="<?php echo intval( $data['post_id'] ); ?>"
+						data-membership-id="<?php echo intval( $data['subscription']['id'] ); ?>">
+						<span class="masterstudy-button__title"><?php esc_html_e( 'Enroll with Membership', 'masterstudy-lms-learning-management-system' ); ?></span>
+					</a>
+
+					<?php
 				elseif ( $data['subscription']['quotas_left'] && $data['needs_approval'] ) :
 					?>
 					<div class="masterstudy-membership__message"><?php esc_html_e( 'You will be able to enroll courses after your membership has been approved.', 'masterstudy-lms-learning-management-system' ); ?></div>

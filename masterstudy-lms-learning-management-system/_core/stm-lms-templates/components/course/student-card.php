@@ -14,6 +14,10 @@ if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
 	wp_register_script( 'html2canvas', STM_LMS_PRO_URL . '/assets/js/certificate-builder/html2canvas.min.js', array(), STM_LMS_PRO_VERSION, false );
 	wp_enqueue_script( 'masterstudy_generate_certificate', STM_LMS_URL . '/assets/js/course-player/generate-certificate.js', array( 'jspdf', 'qrcode', 'html2canvas' ), MS_LMS_VERSION, true );
 
+	if ( is_ms_lms_addon_enabled( 'grades' ) ) {
+		wp_enqueue_style( 'masterstudy-grades-certificate' );
+	}
+
 	$shapes = method_exists( CertificateRepository::class, 'get_shapes' ) ? ( new CertificateRepository() )->get_shapes() : array();
 
 	wp_localize_script(

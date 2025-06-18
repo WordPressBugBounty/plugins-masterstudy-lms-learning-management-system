@@ -1,5 +1,8 @@
 <?php
 
+use MasterStudy\Lms\Pro\AddonsPlus\Grades\Services\GradeCalculator;
+use MasterStudy\Lms\Repositories\CoursePlayerRepository;
+
 STM_LMS_Quiz::init();
 
 class STM_LMS_Quiz {
@@ -111,11 +114,11 @@ class STM_LMS_Quiz {
 			wp_die();
 		}
 
-		$total_questions = \MasterStudy\Lms\Repositories\CoursePlayerRepository::masterstudy_lms_get_question_bank_total_items( $quiz_id );
+		$total_questions = CoursePlayerRepository::masterstudy_lms_get_question_bank_total_items( $quiz_id );
 
 		$score_per_question = 100 / $total_questions;
 		$cutting_rate       = ! empty( $quiz_info['re_take_cut'] ) ? ( 100 - $quiz_info['re_take_cut'] ) / 100 : 1;
-		$passing_grade      = intval( $quiz_info['passing_grade'] ?? 0 );
+		$passing_grade      = get_post_meta( $quiz_id, 'passing_grade', true );
 		$user_answer_id     = 0;
 		$attempt_number     = stm_lms_get_user_quizzes( $user_id, $quiz_id, $course_id, array(), true ) + 1;
 
@@ -165,9 +168,12 @@ class STM_LMS_Quiz {
 			$course_title = get_the_title( $course_id );
 			$quiz_name    = get_the_title( $quiz_id );
 
+			$progress      = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $progress ) : round( $progress, 1 ) . '%';
+			$passing_grade = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $passing_grade ) : round( $passing_grade, 1 ) . '%';
+
 			$message = sprintf(
 				/* translators: %1$s login, %2$s quiz title, %3$s course title, %4$s passing grade, %5$s result */
-				esc_html__( '%1$s completed the %2$s on the course %3$s with a Passing grade of %4$s%% and a result of %5$s%%', 'masterstudy-lms-learning-management-system' ),
+				esc_html__( '%1$s completed the %2$s on the course %3$s with a Passing grade of %4$s and a result of %5$s', 'masterstudy-lms-learning-management-system' ),
 				$user_login,
 				$quiz_name,
 				$course_title,

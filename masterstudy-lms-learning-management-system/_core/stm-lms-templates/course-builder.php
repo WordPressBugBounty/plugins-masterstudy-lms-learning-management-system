@@ -11,7 +11,7 @@ $additional_scripts = apply_filters( 'ms_lms_course_builder_additional_scripts',
 
 wp_register_style( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_css', MS_LMS_URL . 'assets/course-builder/css/main.css' ), array(), MS_LMS_VERSION );
 wp_register_script( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_js', MS_LMS_URL . 'assets/course-builder/js/main.js' ), array(), MS_LMS_VERSION, true );
-wp_register_script( 'ms-lms-course-builder-tinymce', MS_LMS_URL . '_core/assets/tinymce/hugerte.min.js', array(), MS_LMS_VERSION, true );
+wp_register_script( 'ms-lms-course-builder-tinymce', MS_LMS_URL . '/assets/course-builder/tinymce/hugerte.min.js', array(), MS_LMS_VERSION, true );
 
 wp_set_script_translations( 'ms-lms-course-builder', 'masterstudy-lms-learning-management-system', $translations_path );
 

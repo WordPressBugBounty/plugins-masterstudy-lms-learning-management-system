@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.5
+Stable tag: 3.6.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,26 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.6 - 2025-06-18 =
+- **Improvement:** Added editable email template for new user registration sent to the admin (PRO)
+- **Improvement:** Added editable email template sent to a student when they are removed from a course (PRO)
+- **Improvement:** Added editable password-reset email template for all users (PRO)
+- **Improvement:** Added 2 editable email templates for approving or rejecting Become Instructor requests (PRO)
+- **Improvement:** Added new Grade element to Certificate Builder to show grades for courses, quizzes, and assignments on certificates (PRO)
+- **Improvement:** Added editable email template for removing a user from a group (PRO)
+- **Improvement:** AI Lab now generates more accurate content for Title, Content, and Full Article fields (PRO)
+- **Improvement:** Redesigned the variable insertion panel in email templates (PRO)
+- **Improvement:** Variables can now be added to email Subjects (PRO)
+- **Improvement:** Made quiz question overview more user-friendly by allowing questions to collapse
+- **Improvement:** Added collapse/expand buttons for questions inside quizzes
+- **Improvement:** Redesigned drag & drop and delete panel for questions in Course Builder
+- **Improvement:** Optimized question creation speed on the standalone Quiz page and within Course Builder
+- **Updated:** Added compatibility with subscription groups
+- **Fixed:** Passing Grade now shows the actual value in the Quiz Completed email (PRO).
+- **Fixed:** Quiz Completed email can now display grades in Points and Grades as well as percentages (PRO)
+- **Fixed:** Public videos inserted as external VideoPress links now display correctly in video lessons
+- **Fixed:** Fixed issue where course lessons could disappear after upgrading from version 2.x.x to 3.x.x if course status was Draft, Private, or Pending Review
+
 = 3.6.5 - 2025-06-11 =
 - **Improvement:** Added 3 new Elementor widgets: Countdown, - Instructors Grid, and Icon Box
 - **Improvement:** Restyled the Single Course style selector in plugin settings and in the Courses Category section
@@ -342,23 +362,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Improvement:** Added a page to view all current students in the Admin Dashboard and in the instructor’s profile.
 - **Fixed:** Fixed random lesson order changes after reordering lessons in the Curriculum section of Course Builder.
 - **Fixed:** Vimeo videos now display correctly in the Questions & Markers area of video lessons.
-
-= 3.6.1 - 2025-05-27 =
-- **Improvement:** The single-question creation and editing page has been restyled to match the Course Builder
-- **Improvement:** Added clear tooltips for the Lesson Preview and Points Price settings in the Course Builder
-- **Improvement:** The Course Builder now shows the total number of questions while you create or edit a quiz
-- **Improvement:** The Elementor Courses Carousel widget can now display courses from selected categories
-- **Fixed:** Co-instructors can no longer access Course Builder tabs other than Curriculum in courses they do not own
-- **Fixed:** Removed the animation that moved a lesson back to the materials section when creating Drip Content links
-- **Fixed:** Apostrophes now display correctly in the Course Builder instead of Unicode codes
-- **Fixed:** Renaming a file in Course Materials or Lesson Materials now shows a success or error notification in the Course Builder
-- **Fixed:** Icons for .docx .doc .mp3 .pptx and .xlsx files now appear in Course Materials and Lesson Materials
-- **Fixed:** The Pricing section in the Course Builder now accepts prices with more than two decimal places
-- **Fixed:** The current course is now excluded from the Prerequisites list in the Course Builder
-- **Fixed:** You can now clear the Level field in the Course Builder
-- **Fixed:** Resolved several issues when creating or editing questions in the Course Builder
-- **Fixed:** Math formulas now display correctly in Matching questions when using the MathJax LaTeX plugin
-- **Fixed:** Fixed a fatal error in the Courses Categories widget when Style 6 is selected
-- **Fixed:** Result emojis now display correctly when users switch between attempts in a quiz
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

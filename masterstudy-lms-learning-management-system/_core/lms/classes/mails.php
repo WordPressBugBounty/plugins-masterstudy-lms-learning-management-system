@@ -48,12 +48,28 @@ class STM_LMS_Mails {
 		}
 	}
 
+	public static function masterstudy_lms_order_subject_renderer( $text, $user_login ) {
+		$email_data_orders = array(
+			'site_url'   => \STM_LMS_Helpers::masterstudy_lms_get_site_url(),
+			'user_login' => $user_login,
+		);
+		$search            = array( '{{site_url}}', '{{user_login}}' );
+		$replace           = array(
+			'<a href="' . esc_url( $email_data_orders['site_url'] ) . '" target="_blank">' . esc_url( $email_data_orders['site_url'] ) . '</a>',
+			esc_html( $email_data_orders['user_login'] ),
+		);
+
+		return str_replace( $search, $replace, $text );
+	}
 	public static function process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_emails, $email, $settings, $send_test_mode ) {
 		$message = str_replace(
 			array( '{{user_login}}', '{{site_url}}' ),
 			array( $user_login, '<a href="' . site_url() . '" target="_blank">' . get_bloginfo( 'name' ) . '</a>' ),
 			$settings['stm_lms_new_order_instructor'] ?? 'You made a Sale'
 		);
+
+		$order_title   = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_instructor_title'], $user_login );
+		$order_subject = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_instructor_subject'], $user_login );
 
 		$context = \STM_LMS_Templates::load_lms_template(
 			$template_name,
@@ -64,13 +80,13 @@ class STM_LMS_Mails {
 				'is_instructor'    => true,
 				'settings'         => $settings,
 				'instructor_items' => $instructor_emails, // Items specific to the instructor
-				'title'            => $settings['stm_lms_new_order_instructor_title'] ?? '',
+				'title'            => $order_title,
 				'customer_section' => true,
 			)
 		);
 
 		add_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
-		wp_mail( $email, $settings['stm_lms_new_order_instructor_subject'] ?? 'You made a Sale!', $context );
+		wp_mail( $email, $order_subject ?? 'You made a Sale!', $context );
 		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
 	}
 
@@ -80,6 +96,10 @@ class STM_LMS_Mails {
 			array( $user_login, '<a href="' . site_url() . '" target="_blank">' . get_bloginfo( 'name' ) . '</a>' ),
 			$settings['stm_lms_new_order'] ?? 'New Order'
 		);
+
+		$order_title   = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_title'], $user_login );
+		$order_subject = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_subject'], $user_login );
+
 		$context = \STM_LMS_Templates::load_lms_template(
 			$template_name,
 			array(
@@ -89,7 +109,7 @@ class STM_LMS_Mails {
 				'instructor_items' => array(),
 				'settings'         => $settings,
 				'is_instructor'    => false,
-				'title'            => $settings['stm_lms_new_order_title'] ?? '',
+				'title'            => $order_title ?? '',
 				'customer_section' => true,
 			)
 		);
@@ -97,7 +117,7 @@ class STM_LMS_Mails {
 		// Assume admin email is set in settings
 		$admin_email = $settings['admin_email'] ?? get_option( 'admin_email' );
 		add_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
-		wp_mail( $admin_email, $settings['stm_lms_new_order_subject'] ?? 'New Order Received', $context );
+		wp_mail( $admin_email, $order_subject ?? 'New Order Received', $context );
 		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
 	}
 
@@ -113,6 +133,9 @@ class STM_LMS_Mails {
 			$settings['stm_lms_new_order_accepted'] ?? 'Your Order has been Accepted.'
 		);
 
+		$order_title   = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_accepted_title'], $user_value );
+		$order_subject = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_accepted_subject'], $user_value );
+
 		$context = \STM_LMS_Templates::load_lms_template(
 			$template_name,
 			array(
@@ -122,13 +145,13 @@ class STM_LMS_Mails {
 				'is_instructor'    => false,
 				'settings'         => $settings,
 				'message'          => $message,
-				'title'            => $settings['stm_lms_new_order_accepted_title'] ?? 'Order Confirmation',
+				'title'            => $order_title ?? 'Order Confirmation',
 				'customer_section' => false,
 			)
 		);
 
 		add_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
-		wp_mail( $user_email, $settings['stm_lms_new_order_accepted_subject'] ?? 'Order Accepted', $context );
+		wp_mail( $user_email, $order_subject ?? 'Order Accepted', $context );
 		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
 	}
 

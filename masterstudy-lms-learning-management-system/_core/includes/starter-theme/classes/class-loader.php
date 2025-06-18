@@ -16,7 +16,7 @@ class Loader {
 	public $starter_theme_version    = '1.0.0';
 	public $starter_theme_slug       = 'masterstudy-starter-options';
 	public $child_starter_theme_slug = 'ms-lms-starter-theme-child';
-	private $ms_lms_themes           = array( 'smarty', 'masterstudy', 'globalstudy', 'betop', 'starter-text-domain' );
+	private $ms_lms_themes           = array( 'masterstudy', 'globalstudy', 'betop', 'starter-text-domain' );
 
 	protected function get_current_theme_text_domain() {
 		$current_theme = wp_get_theme();

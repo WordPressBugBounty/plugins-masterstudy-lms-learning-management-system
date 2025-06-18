@@ -28,12 +28,13 @@
 			?>
 		</p>
 	<?php endif; ?>
-	
+
 	<?php if ( $subscription['quotas_left'] && ! $needs_approval ) : ?>
 		<a href="#"
-		   class="btn btn-default"
-		   data-lms-usemembership=""
-		   data-lms-course="<?php echo intval( $subscription['course_id'] ); ?>">
+			class="btn btn-default"
+			data-lms-usemembership=""
+			data-lms-course="<?php echo intval( $subscription['course_id'] ); ?>"
+			data-membership-id="<?php echo intval( $subscription['id'] ); ?>">
 			<span>
 				<?php esc_html_e( 'Enroll with membership', 'masterstudy-lms-learning-management-system' ); ?>
 			</span>
@@ -44,7 +45,7 @@
 		</span>
 	<?php else : ?>
 		<a href="<?php echo esc_url( STM_LMS_Subscriptions::level_url() ); ?>"
-		   class="btn btn-default">
+			class="btn btn-default">
 			<span>
 				<?php esc_html_e( 'Buy Membership', 'masterstudy-lms-learning-management-system' ); ?>
 			</span>

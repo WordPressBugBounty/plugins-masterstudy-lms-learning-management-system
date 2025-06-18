@@ -17,7 +17,6 @@ add_action(
 			'starter-text-domain',
 			'masterstudy',
 			'globalstudy',
-			'smarty',
 		);
 
 		$start_theme_notice = get_transient( 'stm_starter_theme_notice_setting' );

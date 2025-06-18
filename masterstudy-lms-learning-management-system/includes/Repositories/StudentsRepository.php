@@ -330,6 +330,27 @@ final class StudentsRepository {
 				update_post_meta( $course_id, 'coming_soon_student_emails', array_values( $filtered ) );
 			}
 		}
+
+		if ( class_exists( 'STM_LMS_Mails' ) ) {
+			$user            = \STM_LMS_User::get_current_user( $student_id );
+			$user_login      = $user['login'];
+			$course_title    = get_the_title( $course_id );
+			$instructor_name = \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( \STM_LMS_User::get_current_user()['id'] );
+			$message         = sprintf(
+			/* translators: %1$s Course Title, %2$s User Login */
+				esc_html__( 'Dear %1$s, %2$s has removed you from the course - %3$s. Now you don’t have access to the course content.', 'masterstudy-lms-learning-management-system' ),
+				$user_login,
+				$instructor_name,
+				$course_title
+			);
+			\STM_LMS_Helpers::send_email(
+				$user['email'],
+				esc_html__( 'Your Enrollment Has Been Cancelled', 'masterstudy-lms-learning-management-system' ),
+				$message,
+				'stm_lms_email_remove_student_from_course',
+				compact( 'user_login', 'instructor_name', 'course_title' )
+			);
+		}
 	}
 
 	public function delete_student( array $student_ids ): void {

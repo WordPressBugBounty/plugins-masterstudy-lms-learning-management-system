@@ -436,7 +436,7 @@ class STM_LMS_Helpers {
 		}
 
 		if ( ! isset( $data['enabled'] ) || ( isset( $data['enabled'] ) && $data['enabled'] ) ) {
-			wp_mail( $to, $subject, $data['message'] );
+			wp_mail( $to, $data['subject'], $data['message'] );
 		}
 
 		remove_filter( 'wp_mail_content_type', 'STM_LMS_Helpers::set_html_content_type' );
@@ -712,9 +712,105 @@ class STM_LMS_Helpers {
 			'starter-text-domain',
 			'masterstudy',
 			'globalstudy',
-			'smarty',
 		);
 
 		return in_array( $active_theme, $themes, true );
+	}
+
+	public static function masterstudy_lms_check_membership_status( $user_id, $course, $course_id, $isMultiple ) {
+		$course                 = $isMultiple ? ( is_array( $course ) && ! empty( $course ) ? $course[0] : $course ) : $course;
+		$author_id              = get_post_field( 'post_author', $course_id );
+		$subscription_enabled   = STM_LMS_Subscriptions::subscription_enabled();
+		$in_enterprise          = STM_LMS_Order::is_purchased_by_enterprise( $course, $user_id );
+		$my_course              = intval( $author_id ) === intval( $user_id );
+		$is_free                = ( get_post_meta( $course_id, 'single_sale', true ) && empty( STM_LMS_Course::get_course_price( $course_id ) ) );
+		$is_bought              = STM_LMS_Order::has_purchased_courses( $user_id, $course_id );
+		$in_bundle              = ! empty( $course['bundle_id'] );
+		$for_points             = ! empty( $course['for_points'] );
+		$bought_by_membership   = ! empty( $course['subscription_id'] );
+		$not_in_membership      = get_post_meta( $course_id, 'not_membership', true );
+		$only_for_membership    = ! $not_in_membership && ! $is_bought && ! $is_free && ! $in_enterprise && ! $in_bundle && ! $for_points;
+		$membership_level       = $subscription_enabled && STM_LMS_Subscriptions::user_has_subscription( $user_id );
+		$no_membership_plan     = $subscription_enabled && ! $membership_level && $only_for_membership && ! $my_course && $bought_by_membership;
+		$course_subscription_id = $course['subscription_id'] ?? 0;
+		$membership_info        = STM_LMS_Subscriptions::get_membership_status_by_course( $user_id, $course_subscription_id );
+
+		$with_membership     = $only_for_membership && ! $my_course && $bought_by_membership;
+		$membership_expired  = $subscription_enabled && $membership_info['membership_expired'] && $with_membership;
+		$membership_inactive = $subscription_enabled && $membership_info['membership_inactive'] && $with_membership;
+
+		return array(
+			'membership_expired'  => $membership_expired,
+			'membership_inactive' => $membership_inactive,
+			'only_for_membership' => $only_for_membership,
+			'membership_level'    => $membership_level,
+			'is_bought'           => $is_bought,
+			'is_free'             => $is_free,
+			'no_membership_plan'  => $no_membership_plan,
+		);
+	}
+	public static function masterstudy_lms_get_site_url() {
+		if ( function_exists( 'get_site_url' ) ) {
+			// For multisite, get_site_url( $blog_id ) will work correctly
+			return get_site_url();
+		}
+
+		// Fallback, should not normally be needed
+		$protocol = ( is_ssl() ? 'https://' : 'http://' );
+		$host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
+		$request_uri = $_SERVER['REQUEST_URI'] ?? '/';
+		return $protocol . $host . $request_uri;
+	}
+
+	public static function masterstudy_lms_get_user_full_name_or_login( $user_id ) {
+		if ( ! $user_id || ! is_numeric( $user_id ) ) {
+			return '';
+		}
+
+		$user = get_userdata( $user_id );
+
+		if ( ! $user ) {
+			return '';
+		}
+
+		$first_name = trim( get_user_meta( $user_id, 'first_name', true ) );
+		$last_name  = trim( get_user_meta( $user_id, 'last_name', true ) );
+
+		if ( $first_name || $last_name ) {
+			return trim( $first_name . ' ' . $last_name );
+		}
+
+		return $user->user_login;
+	}
+
+	public static function masterstudy_lms_get_site_name() {
+		if ( is_multisite() ) {
+			$site_name = get_network()->site_name;
+		} else {
+			$site_name = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+		}
+
+		return $site_name;
+	}
+
+	public static function masterstudy_lms_get_login_url() {
+		return esc_url( site_url() . '/' . get_post_field( 'post_name', STM_LMS_Options::get_option( 'user_url', true ) ) );
+	}
+
+	public static function masterstudy_lms_get_email_branding_footer_copyright_tags( $footer_copyrights ) {
+		$email_data_footer_copyrights = array(
+			'site_url'  => self::masterstudy_lms_get_site_url(),
+			'blog_name' => self::masterstudy_lms_get_site_name(),
+			'year'      => gmdate( 'Y' ),
+		);
+
+		$search  = array( '{{site_url}}', '{{blog_name}}', '{{year}}' );
+		$replace = array(
+			esc_url( $email_data_footer_copyrights['site_url'] ),
+			esc_html( $email_data_footer_copyrights['blog_name'] ),
+			esc_html( $email_data_footer_copyrights['year'] ),
+		);
+
+		return str_replace( $search, $replace, $footer_copyrights );
 	}
 }

@@ -109,23 +109,27 @@ abstract class LmsUpdateCallbacks {
 
 		$courses = get_posts(
 			array(
-				'post_type'      => 'stm-courses',
-				'posts_per_page' => -1,
+				'post_type'              => PostType::COURSE,
+				'posts_per_page'         => -1,
+				'post_status'            => 'any',
+				'fields'                 => 'ids',
+				'no_found_rows'          => true,
+				'update_post_term_cache' => false,
 			)
 		);
 
-		foreach ( $courses as $course ) {
+		foreach ( $courses as $course_id ) {
 			// Course Files Migration
-			self::migrate_file_materials( $course->ID, 'course' );
+			self::migrate_file_materials( $course_id, 'course' );
 
 			// One Time Purchase Migration
-			$not_single_sale = metadata_exists( 'post', $course->ID, 'not_single_sale' )
-				? get_post_meta( $course->ID, 'not_single_sale', true )
+			$not_single_sale = metadata_exists( 'post', $course_id, 'not_single_sale' )
+				? get_post_meta( $course_id, 'not_single_sale', true )
 				: false;
-			update_post_meta( $course->ID, 'single_sale', '' === $not_single_sale ? 'on' : '' );
+			update_post_meta( $course_id, 'single_sale', '' === $not_single_sale ? 'on' : '' );
 
 			// Curriculum Migration
-			$curriculum       = get_post_meta( $course->ID, 'curriculum', true );
+			$curriculum       = get_post_meta( $course_id, 'curriculum', true );
 			$curriculum_items = explode( ',', $curriculum );
 			$current_section  = false;
 			$section_order    = 1;
@@ -154,13 +158,13 @@ abstract class LmsUpdateCallbacks {
 							}
 						}
 					} else {
-						$current_section = ( new CurriculumSection() )->query()->where( 'course_id', $course->ID )->where( 'title', urldecode( $curriculum_item ) )->findOne();
+						$current_section = ( new CurriculumSection() )->query()->where( 'course_id', $course_id )->where( 'title', urldecode( $curriculum_item ) )->findOne();
 
 						if ( ! $current_section ) {
 							$current_section = $section_repository->create(
 								array(
 									'title'     => urldecode( $curriculum_item ),
-									'course_id' => $course->ID,
+									'course_id' => $course_id,
 									'order'     => $section_order,
 								)
 							);

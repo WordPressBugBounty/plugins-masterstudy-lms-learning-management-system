@@ -11,6 +11,10 @@ $completed = stm_lms_get_user_completed_courses( $current_user['id'], array( 'us
 stm_lms_register_script( 'affiliate_points' );
 stm_lms_register_style( 'affiliate_points' );
 
+if ( is_ms_lms_addon_enabled( 'grades' ) ) {
+	wp_enqueue_style( 'masterstudy-grades-certificate' );
+}
+
 if ( ! empty( $completed ) ) { ?>
 	<?php
 	if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
