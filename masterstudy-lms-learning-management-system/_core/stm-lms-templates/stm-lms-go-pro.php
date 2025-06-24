@@ -186,8 +186,8 @@ function get_freemius_info() {
 
 $freemius_info = get_freemius_info();
 
-$start_date   = new DateTime( '2025-04-16 00:00:00' );
-$deadline     = new DateTime( '2025-04-21 23:59:00' );
+$start_date   = new DateTime( '2025-06-23 00:00:00' );
+$deadline     = new DateTime( '2025-07-01 23:59:00' );
 $current_time = time();
 $is_promotion = $current_time >= $start_date->format( 'U' ) && $current_time < $deadline->format( 'U' );
 
@@ -224,7 +224,7 @@ if ( $is_promotion ) {
 					<?php endif; ?>
 				</p>
 				<?php if ( $is_promotion ) : ?>
-				<div class="stm-discount"><a href="https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=gopro&utm_campaign=easter25" target="_blank"></a></div>
+				<div class="stm-discount"><a href="https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=push&utm_campaign=masterstudy&utm_content=gopro&utm_term=midsummersale2025" target="_blank"></a></div>
 				<?php endif; ?>
 			</div>
 			<?php if ( isset( $freemius_info['plan'] ) ) : ?>
@@ -252,11 +252,11 @@ if ( $is_promotion ) {
 										?>
 										<sup>$</sup>
 										<span class="stm_price__value"
-											data-price-annual="<?php echo esc_attr( number_format( $plan->annual_price * 0.75, 0, '.', '' ) ); ?>"
-											data-price-lifetime="<?php echo esc_attr( number_format( $plan->lifetime_price * 0.75, 0, '.', '' ) ); ?>"
+											data-price-annual="<?php echo esc_attr( number_format( $plan->annual_price * 0.70, 0, '.', '' ) ); ?>"
+											data-price-lifetime="<?php echo esc_attr( number_format( $plan->lifetime_price * 0.70, 0, '.', '' ) ); ?>"
 											data-price-old-annual="<?php echo esc_attr( $plan->annual_price ); ?>"
 											data-price-old-lifetime="<?php echo esc_attr( $plan->lifetime_price ); ?>">
-											<?php echo esc_html( number_format( $plan->annual_price * 0.75, 0, '.', '' ) ); ?>
+											<?php echo esc_html( number_format( $plan->annual_price * 0.70, 0, '.', '' ) ); ?>
 										</span>
 										<div class="discount">
 											<sup>$</sup>
@@ -324,7 +324,7 @@ if ( $is_promotion ) {
 									$annual_url = $base_url . '&utm_medium=' . $utm_medium . '&billing_cycle=annual';
 
 									if ( $is_promotion ) {
-										$annual_url = $annual_url . '&plugin_coupon=SPW30';
+										$annual_url = $annual_url . '&plugin_coupon=MIDSUMMER25';
 									}
 
 									$lifetime_url = $base_url . '&utm_medium=' . $utm_medium . '&billing_cycle=lifetime';
