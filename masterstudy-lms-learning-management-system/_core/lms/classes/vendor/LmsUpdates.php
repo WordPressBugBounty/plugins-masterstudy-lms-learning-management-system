@@ -49,6 +49,7 @@ abstract class LmsUpdates {
 		'3.5.26' => array( 'lms_update_lesson_video_markers' ), //Update Database Tables
 		'3.5.30' => array( 'update_table_lms_user_quizzes' ),
 		'3.6.5'  => array( 'lms_update_elementor_templates' ),
+		'3.6.6'  => array( 'lms_update_media_library_ext_types_vtt' ), // Update default media library extensions to include vtt
 	);
 
 	/**

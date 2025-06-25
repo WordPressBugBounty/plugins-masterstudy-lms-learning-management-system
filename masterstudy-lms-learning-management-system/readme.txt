@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.7
+Stable tag: 3.6.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,15 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.9 - 2025-06-25 =
+- **Fixed:** Minor bug fixes.
+
+= 3.6.8 - 2025-06-25 =
+- **Improvement:** You can now search for images and videos in the Course Builder File Manager with integrated Unsplash, Pexels, and Pixabay support (Pro)
+- **Improvement:** Subtitles can now be added to video lessons using the HTML or External link source types (Pro)
+- **Improvement:** Video files in the File Manager now display a preview thumbnail instead of an icon and are marked with a "Video" badge (Pro)
+- **Improvement:** When generating a full course using the AI Lab add-on, images can now be automatically generated for Text Lessons and Assignments during Curriculum creation (Pro)
+
 = 3.6.7 - 2025-06-24 =
 - **Fixed:** Minor bug fixes.
 
@@ -342,28 +351,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fixed:** Questions disappearing from a Quiz when a co-instructor refreshed the Quiz page in the Course Builder.
 - **Fixed:** Quiz embedded via the “Online Testing” Add-on was showing the same attempt result to all guests; now each guest sees their own results (PRO).
 - **Fixed:** User answers in Quizzes not appearing under Manage Students when a student failed to reach the passing score.
-
-= 3.6.4 - 2025-06-05 =
-- **Fixed:** Minor bug fixes.
-
-= 3.6.3 - 2025-06-04 =
-- **Fixed:** Minor bug fixes.
-
-= 3.6.2 - 2025-06-04 =
-- **Improvement:** Added a font size control for text editors in Course Builder.
-- **Improvement:** Added an image resize preview when uploading images in the Course Builder text editor.
-- **Improvement:** Added a full-width text option in the Course Builder text editor.
-- **Improvement:** Upgraded the TinyMCE editor in Course Builder to version 6.
-- **Improvement:** Questions Library now marks questions already included in the quiz.
-- **Improvement:** Added collapse/expand all lessons button in the Curriculum section.
-- **Improvement:** Added a Load More button to the Questions Library list.
-- **Improvement:** Course Builder now supports RTL layouts.
-- **Improvement:** You can now choose a custom font for Course Builder in MasterStudy settings.
-- **Improvement:** Added settings to rename the Lesson Materials and Video Questions sections.
-- **Improvement:** Added an option to hide the Video Questions block in video lessons.
-- **Improvement:** Question cards in Questions Library now show category and type; spacing between cards improved.
-- **Improvement:** Added a page to view all current students in the Admin Dashboard and in the instructor’s profile.
-- **Fixed:** Fixed random lesson order changes after reordering lessons in the Curriculum section of Course Builder.
-- **Fixed:** Vimeo videos now display correctly in the Questions & Markers area of video lessons.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

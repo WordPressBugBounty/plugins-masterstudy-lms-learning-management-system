@@ -327,7 +327,7 @@ class STMMailChimpBase {
 
 	}
 
-	public static function subscribeUserFromFrontend( $email, $name = '' ) {
+	public static function subscribeUserFromFrontend( $email, $name = '', $pluginSlug = '' ) {
 		if ( ! is_email( $email ) ) {
 			return new WP_Error( 'invalid_email' );
 		}
@@ -338,7 +338,7 @@ class STMMailChimpBase {
 
 		$member = array(
 			'action'   => 'add',
-			'plugin'   => sanitize_text_field( self::$pluginSlug ),
+			'plugin'   => sanitize_text_field( ! empty( $pluginSlug ) ? $pluginSlug : self::$pluginSlug ),
 			'email'    => sanitize_email( $email ),
 			'language' => sanitize_text_field( $language ),
 			'ip'       => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( $_SERVER['REMOTE_ADDR'] ) : '',

@@ -26,6 +26,7 @@ final class LessonRepository extends AbstractRepository {
 		'video_type'              => 'video_type',
 		'audio_type'              => 'audio_type',
 		'audio_required_progress' => 'audio_required_progress',
+		'video_captions_ids'      => 'video_captions_ids',
 	);
 
 	protected static array $casts = array(
@@ -37,6 +38,7 @@ final class LessonRepository extends AbstractRepository {
 	);
 
 	public function create( array $data ): int {
+		$this->set_video_captions_ids( $data );
 		$post       = $this->post_data( $data );
 		$post['ID'] = 0;
 
@@ -48,8 +50,8 @@ final class LessonRepository extends AbstractRepository {
 
 		if ( $post_id ) {
 			$this->update_meta( $post_id, $data );
-			$this->get_file_repository()->save_files( $data['files'] ?? array(), $post_id, self::$post_type );
-
+			$files_merged = array_merge( $data['files'] ?? array(), $data['video_captions'] ?? array() );
+			$this->get_file_repository()->save_files( $files_merged ?? array(), $post_id, self::$post_type );
 		}
 
 		// needed for compatibility with old addons' code
@@ -74,12 +76,14 @@ final class LessonRepository extends AbstractRepository {
 	}
 
 	public function save( array $data ): void {
+		$this->set_video_captions_ids( $data );
 		$post = $this->post_data( $data );
 
 		wp_update_post( $post );
 
 		$this->update_meta( $post['ID'], $data );
-		$this->get_file_repository()->save_files( $data['files'] ?? array(), $post['ID'], self::$post_type );
+		$files_merged = array_merge( $data['files'] ?? array(), $data['video_captions'] ?? array() );
+		$this->get_file_repository()->save_files( $files_merged ?? array(), $post['ID'], self::$post_type );
 
 		// needed for compatibility with old addons' code
 		$data = array_merge(
@@ -125,13 +129,25 @@ final class LessonRepository extends AbstractRepository {
 	}
 
 	private function hydrate( \WP_Post $post ) {
-		$meta = get_post_meta( $post->ID );
+		$meta               = get_post_meta( $post->ID );
+		$repository_files   = $this->get_file_repository()->get_files( $meta['lesson_files'][0] ?? null, true );
+		$files              = array();
+		$video_captions     = array();
+		$video_captions_ids = ! empty( $meta['video_captions_ids'] ) ? maybe_unserialize( $meta['video_captions_ids'][0] ) : array();
+		foreach ( $repository_files as $file ) {
+			if ( in_array( $file['id'], $video_captions_ids, true ) ) {
+				$video_captions[] = $file;
+			} else {
+				$files[] = $file;
+			}
+		}
 
 		$lesson = array(
-			'id'      => $post->ID,
-			'title'   => $post->post_title,
-			'content' => $post->post_content,
-			'files'   => $this->get_file_repository()->get_files( $meta['lesson_files'][0] ?? null, true ),
+			'id'             => $post->ID,
+			'title'          => $post->post_title,
+			'content'        => $post->post_content,
+			'files'          => $files,
+			'video_captions' => $video_captions,
 		);
 
 		foreach ( $this->get_fields_mapping() as $prop => $meta_key ) {
@@ -156,5 +172,19 @@ final class LessonRepository extends AbstractRepository {
 
 	private function get_file_repository(): FileMaterialRepository {
 		return new FileMaterialRepository();
+	}
+
+	/**
+	 * @param $data array
+	 *
+	 * @return void
+	 */
+	private function set_video_captions_ids( &$data ) {
+		$data['video_captions_ids'] = array();
+		if ( ! empty( $data['video_captions'] ) ) {
+			foreach ( $data['video_captions'] as $file ) {
+				$data['video_captions_ids'][] = $file['id'];
+			}
+		}
 	}
 }

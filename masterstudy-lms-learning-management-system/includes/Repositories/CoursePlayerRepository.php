@@ -23,6 +23,7 @@ final class CoursePlayerRepository {
 		$settings         = get_option( 'stm_lms_settings' );
 		$lesson_post_type = get_post_type( $lesson_id );
 		$lesson_files     = get_post_meta( $lesson_id, 'lesson_files', true );
+		$lesson           = get_post_meta( $lesson_id );
 		$curriculum       = ( new CurriculumRepository() )->get_curriculum( $post_id, true );
 		$course_materials = array_reduce(
 			$curriculum,
@@ -32,6 +33,16 @@ final class CoursePlayerRepository {
 			array()
 		);
 		$material_ids     = array_column( $course_materials, 'post_id' );
+
+		$repository_files   = ( new FileMaterialRepository() )->get_files( $lesson_files );
+		$files              = array();
+		$video_captions_ids = ! empty( $lesson['video_captions_ids'] ) ? maybe_unserialize( $lesson['video_captions_ids'][0] ) : array();
+
+		foreach ( $repository_files as $file ) {
+			if ( ! in_array( $file->ID, $video_captions_ids, true ) ) {
+				$files[] = $file;
+			}
+		}
 
 		$this->data = array(
 			'post_id'                  => $post_id,
@@ -46,7 +57,7 @@ final class CoursePlayerRepository {
 			'has_access'               => \STM_LMS_User::has_course_access( $post_id, $lesson_id ),
 			'has_preview'              => \STM_LMS_Lesson::lesson_has_preview( $lesson_id ),
 			'is_trial_course'          => get_post_meta( $post_id, 'shareware', true ),
-			'lesson_attachments'       => ( new FileMaterialRepository() )->get_files( $lesson_files ),
+			'lesson_attachments'       => $files,
 			'trial_lesson_count'       => 0,
 			'has_trial_access'         => false,
 			'is_enrolled'              => false,
@@ -85,12 +96,13 @@ final class CoursePlayerRepository {
 					$this->data['video_questions'],
 					function ( $stats, $question ) {
 						if ( ! empty( $question['is_answered'] ) ) {
-							$stats['answered']++;
-							$stats['completed']++;
+							$stats['answered'] ++;
+							$stats['completed'] ++;
 						}
 						if ( ! empty( $question['type'] ) ) {
-							$stats['total']++;
+							$stats['total'] ++;
 						}
+
 						return $stats;
 					},
 					array(
@@ -339,7 +351,7 @@ final class CoursePlayerRepository {
 				$quiz_data['questions_for_nav']  = count( $quiz_data['questions'] );
 				$sequence                        = ! empty( $quiz_data['last_quiz'] ) ? json_decode( $quiz_data['last_quiz']['sequency'], true ) : array();
 
-				foreach ( $quiz_data['questions']  as &$question ) {
+				foreach ( $quiz_data['questions'] as &$question ) {
 					$question['title']   = $question['question'];
 					$question['content'] = str_replace( '../../', site_url() . '/', stm_lms_filtered_output( $question['content'] ) );
 
@@ -373,7 +385,7 @@ final class CoursePlayerRepository {
 								$bank_args = array(
 									'post_type'      => 'stm-questions',
 									'post__in'       => $sequence[ $question['id'] ],
-									'posts_per_page' => -1,
+									'posts_per_page' => - 1,
 									'orderby'        => 'post__in',
 								);
 							}
@@ -432,7 +444,7 @@ final class CoursePlayerRepository {
 		$output    = array();
 
 		foreach ( $quizzes as $attempt => $quiz ) {
-			++$attempt;
+			++ $attempt;
 			$quiz_data['attempt']      = $attempt;
 			$quiz_data['progress']     = $quiz['progress'];
 			$quiz_data['created_at']   = \STM_LMS_Helpers::format_date( $quiz['created_at'] );

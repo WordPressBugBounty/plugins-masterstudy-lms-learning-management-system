@@ -47,6 +47,7 @@ class UpdateController {
 			'video_required_progress' => 'nullable|integer|min,0|max,100',
 			'vimeo_url'               => 'nullable|string',
 			'file'                    => 'nullable|integer',
+			'video_captions'          => 'array',
 			'files'                   => 'array',
 			'custom_fields'           => 'array',
 		);

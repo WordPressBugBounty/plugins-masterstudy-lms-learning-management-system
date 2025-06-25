@@ -62,6 +62,9 @@ trait VideoTrait {
 		} else {
 			unset( $post['video_type'] );
 		}
+
+		unset( $post['video_captions_ids'] );
+
 		return $post;
 	}
 

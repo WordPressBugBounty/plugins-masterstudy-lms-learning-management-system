@@ -803,4 +803,23 @@ abstract class LmsUpdateCallbacks {
 			stm_lms_user_quizzes();
 		}
 	}
+
+	public static function lms_update_media_library_ext_types_vtt() {
+		if ( ! \STM_LMS_Helpers::is_pro_plus() ) {
+			return;
+		}
+
+		$settings = get_option( 'stm_lms_media_library_settings' );
+
+		if ( empty( $settings ) ) {
+			return;
+		}
+
+		$files_ext = trim( $settings['files_ext'] );
+		if ( ! str_contains( $files_ext, 'vtt' ) ) {
+			$settings['files_ext'] = str_ends_with( $files_ext, ',' ) ? $files_ext . 'vtt' : $files_ext . ',vtt';
+		}
+
+		update_option( 'stm_lms_media_library_settings', $settings );
+	}
 }

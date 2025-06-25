@@ -21,5 +21,6 @@ class Media {
 		'xlsx'            => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 		'pot|pps|ppt'     => 'application/vnd.ms-powerpoint',
 		'pptx'            => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+		'vtt'             => 'text/vtt',
 	);
 }

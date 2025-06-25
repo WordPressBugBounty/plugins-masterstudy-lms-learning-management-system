@@ -30,11 +30,13 @@ $course_id                 = isset( $course_id ) ? $course_id : '';
 $lesson_completed          = isset( $lesson_completed ) ? $lesson_completed : false;
 $user_progress             = ! empty( $user_id ) && ! empty( $course_id ) ? masterstudy_lms_get_user_lesson_progress( $user_id, $course_id, $id ) ?? 0 : 0;
 $video_strict_mode         = $settings['course_player_video_strict_mode'] ?? false;
+$video_captions            = $lesson['video_captions'] ?? array();
+$is_pro_plus               = STM_LMS_Helpers::is_pro_plus();
 
 if ( $is_pro_plus && ! empty( $video_questions ) ) {
 	$questions_must_done = get_post_meta( $id, 'video_marker_questions_locked', true );
 	$plyr_markers        = array_map(
-		function( $marker ) {
+		function ( $marker ) {
 			return array(
 				'time'  => (int) $marker['marker'],
 				'label' => $marker['caption'],
@@ -45,7 +47,7 @@ if ( $is_pro_plus && ! empty( $video_questions ) ) {
 	$filtered_questions  = array_values(
 		array_filter(
 			$video_questions,
-			function( $question ) {
+			function ( $question ) {
 				return ! empty( $question['type'] );
 			}
 		)
@@ -120,6 +122,16 @@ wp_localize_script(
 						<source
 							src="<?php echo esc_url( $uploaded_video ); ?>"
 							type='video/<?php echo esc_attr( $video_format ); ?>'>
+						<?php if ( ! empty( $video_captions ) && $is_pro_plus ) : ?>
+							<?php foreach ( $video_captions as $caption ) : ?>
+								<track
+									kind="captions"
+									label="<?php echo esc_attr( str_replace( '.vtt', '', $caption['label'] ) ); ?>"
+									src="<?php echo esc_attr( $caption['url'] ); ?>"
+									srclang="<?php echo esc_attr( strtolower( substr( $caption['label'], 0, 2 ) ) ); ?>"
+								>
+							<?php endforeach; ?>
+						<?php endif; ?>
 					</video>
 					<?php
 				}
