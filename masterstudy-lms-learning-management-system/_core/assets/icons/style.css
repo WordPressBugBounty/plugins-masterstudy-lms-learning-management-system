@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'stmlms';
-  src:  url('fonts/stmlms.eot?erewpf');
-  src:  url('fonts/stmlms.eot?erewpf#iefix') format('embedded-opentype'),
-    url('fonts/stmlms.ttf?erewpf') format('truetype'),
-    url('fonts/stmlms.woff?erewpf') format('woff'),
-    url('fonts/stmlms.svg?erewpf#stmlms') format('svg');
+  src:  url('fonts/stmlms.eot?am4ag7');
+  src:  url('fonts/stmlms.eot?am4ag7#iefix') format('embedded-opentype'),
+    url('fonts/stmlms.ttf?am4ag7') format('truetype'),
+    url('fonts/stmlms.woff?am4ag7') format('woff'),
+    url('fonts/stmlms.svg?am4ag7#stmlms') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.stmlms-description:before {
+  content: "\ea17";
+}
 .stmlms-instructors-grid:before {
   content: "\ea14";
 }

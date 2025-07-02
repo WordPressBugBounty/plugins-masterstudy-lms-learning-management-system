@@ -25,7 +25,7 @@ class UpdateCertificateSettingsController {
 		$validator = new Validator(
 			$request->get_json_params(),
 			array(
-				'certificate_id' => 'required|nullable|integer',
+				'certificate_id' => 'nullable|string',
 			)
 		);
 
@@ -34,6 +34,10 @@ class UpdateCertificateSettingsController {
 		}
 
 		$data = $validator->get_validated();
+
+		if ( 'none' !== $data['certificate_id'] ) {
+			$data['certificate_id'] = intval( $data['certificate_id'] );
+		}
 
 		$this->course_repository->update_certificate( $course_id, $data['certificate_id'] );
 

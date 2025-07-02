@@ -65,7 +65,7 @@ if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
 			</div>
 		</div>
 		<?php
-		if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
+		if ( is_ms_lms_addon_enabled( 'certificate_builder' ) && masterstudy_lms_course_has_certificate( $course['course_id'] ) ) {
 			STM_LMS_Templates::show_lms_template(
 				'components/button',
 				array(

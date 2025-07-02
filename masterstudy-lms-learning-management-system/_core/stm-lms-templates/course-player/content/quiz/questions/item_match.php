@@ -15,6 +15,7 @@ if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 } elseif ( empty( $data['last_answers'] ) && $data['is_correct'] ) {
 	$user_answers = $data['answers'];
 }
+
 ?>
 
 <div class="masterstudy-course-player-item-match <?php echo esc_attr( $show_answers ? 'masterstudy-course-player-item-match_not-drag' : '' ); ?>">
@@ -72,13 +73,13 @@ if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 									<div class="masterstudy-course-player-item-match__answer-item-content">
 										<?php echo wp_kses_post( trim( is_array( $user_answer ) ? $user_answer['text'] : $user_answer ) ); ?>
 									</div>
-									<?php if ( ! empty( $user_answer['explain'] ) && $show_answers && ! empty( $last_quiz ) ) { ?>
+									<?php if ( ! empty( $answer['explain'] ) && $show_answers && ! empty( $last_quiz ) ) { ?>
 										<div class="masterstudy-course-player-item-match__answer-item-hint">
 											<?php
 											STM_LMS_Templates::show_lms_template(
 												'components/hint',
 												array(
-													'content' => $user_answer['explain'],
+													'content' => $answer['explain'],
 													'side' => 'right',
 													'dark_mode' => $dark_mode,
 												)

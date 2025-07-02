@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.9
+Stable tag: 3.6.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,19 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.10 - 2025-07-02 =
+- **Improvement:** Added a new "Description" widget for Elementor in the MasterStudy Course widgets group
+- **Improvement:** Added a "Go to Public Account" button and a "Share Public Profile" button to student and instructor profiles
+- **Improvement:** Added two new editable email templates for course completion — one for the instructor and one for the student (Pro)
+- **Improvement:** Added new smart tags to the "Announcement from the Instructor" email for showing course name, student username, and instructor name (Pro)
+- **Improvement:** Added new smart tags to the "You made a Sale!" email to include the student’s email and purchase date in the message body (Pro)
+- **Improvement:** Added a new editable "Student Enrolled in Course" email template sent to instructors (Pro)
+- **Improvement:** Added a new editable "Quiz Completed" email template sent to instructors upon quiz completion (Pro)
+- **Improvement:** You can now disable certificates for any selected course (Pro)
+- **Improvement:** Global certificates can now be selected in Course Builder — previously only custom certificates were available (Pro)
+- **Improvement:** Added the ability to re-generate course content when creating a full course if generation was interrupted or incomplete due to unexpected errors (Pro)
+- **Fixed:** In Matching question type, identical answer texts now correctly display their respective Explanations — previously, explanations were duplicated for matching answers with the same text
+
 = 3.6.9 - 2025-06-25 =
 - **Fixed:** Minor bug fixes.
 
@@ -340,16 +353,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fixed:** Quiz Completed email can now display grades in Points and Grades as well as percentages (PRO)
 - **Fixed:** Public videos inserted as external VideoPress links now display correctly in video lessons
 - **Fixed:** Fixed issue where course lessons could disappear after upgrading from version 2.x.x to 3.x.x if course status was Draft, Private, or Pending Review
-
-= 3.6.5 - 2025-06-11 =
-- **Improvement:** Added 3 new Elementor widgets: Countdown, - Instructors Grid, and Icon Box
-- **Improvement:** Restyled the Single Course style selector in plugin settings and in the Courses Category section
-- **Improvement:** Added 3 new Single Course styles built entirely with Elementor and fully customizable (PRO)
-- **Improvement:** Updated the style selection interface for courses in Course Builder
-- **Improvement:** You can now assign any Elementor-built page as the Single Course page for a specific course (PRO)
-- **Improvement:** You can now create your own course page styles using Elementor (PRO)
-- **Fixed:** Questions disappearing from a Quiz when a co-instructor refreshed the Quiz page in the Course Builder.
-- **Fixed:** Quiz embedded via the “Online Testing” Add-on was showing the same attempt result to all guests; now each guest sees their own results (PRO).
-- **Fixed:** User answers in Quizzes not appearing under Manage Students when a student failed to reach the passing score.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

@@ -53,6 +53,7 @@ use StmLmsElementor\Widgets\Course\MsLmsCourseExpired;
 use StmLmsElementor\Widgets\Course\MsLmsCourseGrades;
 use StmLmsElementor\Widgets\Course\MsLmsCourseBuyButton;
 use StmLmsElementor\Widgets\Course\MsLmsCourseComingSoon;
+use StmLmsElementor\Widgets\Course\MsLmsCourseDescription;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -277,6 +278,7 @@ final class Plugin {
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_announcement.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_current_students.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_excerpt.php';
+		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_description.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_faq.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_instructor.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_materials.php';
@@ -351,6 +353,7 @@ final class Plugin {
 		$widgets_manager->register( new MsLmsCourseBuyButton() );
 		$widgets_manager->register( new MsLmsCourseGrades() );
 		$widgets_manager->register( new MsLmsCourseComingSoon() );
+		$widgets_manager->register( new MsLmsCourseDescription() );
 		$widgets_manager->register( new StmLmsMembershipLevels() );
 
 		if ( defined( 'MC4WP_VERSION' ) ) {

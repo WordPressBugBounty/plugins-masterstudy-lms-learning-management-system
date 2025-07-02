@@ -631,7 +631,7 @@ final class CourseRepository extends AbstractRepository {
 		$course->access_status        = $post->post_status;
 		$course->owner                = $this->find_user( $post->post_author );
 		$course->category             = wp_get_post_terms( $post->ID, Taxonomy::COURSE_CATEGORY, array( 'fields' => 'ids' ) );
-		$course->certificate_id       = intval( $meta['course_certificate'][0] ?? null );
+		$course->certificate_id       = ( $meta['course_certificate'][0] ?? null ) === 'none' ? $meta['course_certificate'][0] : intval( $meta['course_certificate'][0] ?? null );
 		$course->course_page_style    = $meta['page_style'][0] ?? null;
 		$course->co_instructor        = isset( $meta['co_instructor'][0] )
 			? $this->find_user( $meta['co_instructor'][0] )

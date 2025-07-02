@@ -55,6 +55,10 @@ class STM_LMS_User_Manager_Course_User {
 		stm_lms_reset_user_answers( $course_id, $student_id );
 		stm_lms_reset_marker_answers( $course_id, $student_id );
 
+		$flag_key = 'masterstudy_lms_email_sent_' . (int) $course_id . '_' . (int) $student_id;
+
+		update_option( $flag_key, 0 );
+
 		STM_LMS_Course::update_course_progress( $student_id, $course_id, true );
 
 		wp_send_json( self::_student_progress( $course_id, $student_id ) );

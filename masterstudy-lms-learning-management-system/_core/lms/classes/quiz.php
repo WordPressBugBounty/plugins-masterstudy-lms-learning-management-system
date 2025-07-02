@@ -171,24 +171,87 @@ class STM_LMS_Quiz {
 			$progress      = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $progress ) : round( $progress, 1 ) . '%';
 			$passing_grade = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $passing_grade ) : round( $passing_grade, 1 ) . '%';
 
-			$message = sprintf(
-				/* translators: %1$s login, %2$s quiz title, %3$s course title, %4$s passing grade, %5$s result */
-				esc_html__( '%1$s completed the %2$s on the course %3$s with a Passing grade of %4$s and a result of %5$s', 'masterstudy-lms-learning-management-system' ),
-				$user_login,
-				$quiz_name,
-				$course_title,
-				$passing_grade,
-				$progress
+			$email_data_quiz_completed = array(
+				'user_login'   => $user_login,
+				'quiz_name'    => $quiz_name,
+				'course_title' => $course_title,
+				'quiz_result'  => $progress,
+				'quiz_passing_grade'  => $passing_grade,
+				'quiz_completion_date'  => gmdate( 'Y-m-d H:i:s' ),
 			);
-
-			$subject = esc_html__( 'Quiz Completed', 'masterstudy-lms-learning-management-system' );
+			$template = wp_kses_post(
+				'Hi {{user_login}}, <br>
+				You’ve just completed the quiz "{{quiz_name}}" in the course "{{course_title}}". Great work!<br>
+				<b>Here’s a summary of your attempt:</b><br>
+				<ul style="text-align: left;">
+					<li> <b>Course:</b> {{course_title}}  </li>
+					<li> <b>Quiz:</b> {{quiz_name}}  </li>
+					<li> <b>Your Result:</b> {{quiz_result}}  </li>
+					<li> <b>Passing Grade:</b> {{quiz_passing_grade}}  </li>
+					<li> <b>Completion Date:</b> {{quiz_completion_date}}  </li>
+				</ul>
+				Keep it up - each step brings you closer to your learning goals!'
+			);
+			$search  = array( '{{user_login}}', '{{quiz_name}}', '{{course_title}}', '{{quiz_result}}', '{{quiz_passing_grade}}', '{{quiz_completion_date}}' );
+			$replace = array(
+				$email_data_quiz_completed['user_login'],
+				$email_data_quiz_completed['quiz_name'],
+				$email_data_quiz_completed['course_title'],
+				$email_data_quiz_completed['quiz_result'],
+				$email_data_quiz_completed['quiz_passing_grade'],
+				$email_data_quiz_completed['quiz_completion_date'],
+			);
+			$message = str_replace( $search, $replace, $template );
+			$subject = esc_html__( 'You’ve Completed the Quiz in {{course_title}}', 'masterstudy-lms-learning-management-system' );
 
 			if ( class_exists( 'STM_LMS_Email_Manager' ) ) {
 				$email_manager = STM_LMS_Email_Manager::stm_lms_get_settings();
 				$subject       = $email_manager['stm_lms_course_quiz_completed_for_user_subject'] ?? $subject;
 			}
 
-			STM_LMS_Helpers::send_email( $user['email'], $subject, $message, 'stm_lms_course_quiz_completed_for_user', compact( 'user_login', 'course_title', 'quiz_name', 'passing_grade', 'progress' ) );
+			$subject = str_replace( $search, $replace, $subject );
+
+			STM_LMS_Helpers::send_email( $user['email'], $subject, $message, 'stm_lms_course_quiz_completed_for_user', $email_data_quiz_completed );
+
+			//email about quiz completed to instructor by student
+			$email_data_quiz_completed_instructor = array(
+				'user_login'           => $user_login,
+				'quiz_name'            => $quiz_name,
+				'course_title'         => $course_title,
+				'quiz_result'          => $progress,
+				'quiz_completion_date' => gmdate( 'Y-m-d H:i:s' ),
+			);
+			$template                             = wp_kses_post(
+				'We\'re pleased to inform you that {{user_login}} has completed the quiz "{{quiz_name}}" in the course {{course_title}}.<br>
+			Quiz Result: {{quiz_result}}<br>
+			Completion Date: {{quiz_completion_date}} <br>'
+			);
+			$search                               = array(
+				'{{user_login}}',
+				'{{quiz_name}}',
+				'{{course_title}}',
+				'{{quiz_result}}',
+				'{{quiz_completion_date}}',
+			);
+			$replace                              = array(
+				$email_data_quiz_completed_instructor['user_login'],
+				$email_data_quiz_completed_instructor['quiz_name'],
+				$email_data_quiz_completed_instructor['course_title'],
+				$email_data_quiz_completed_instructor['quiz_result'],
+				$email_data_quiz_completed_instructor['quiz_completion_date'],
+			);
+			$message                              = str_replace( $search, $replace, $template );
+			$subject                              = esc_html__( '{{user_login}} has completed the quiz {{quiz_name}} in {{course_title}}', 'masterstudy-lms-learning-management-system' );
+
+			if ( class_exists( 'STM_LMS_Email_Manager' ) ) {
+				$email_manager = STM_LMS_Email_Manager::stm_lms_get_settings();
+				$subject       = $email_manager['stm_lms_course_quiz_completed_for_instructor_subject'] ?? $subject;
+			}
+
+			$subject = str_replace( $search, $replace, $subject );
+
+			STM_LMS_Helpers::send_email( \STM_LMS_Helpers::masterstudy_lms_get_post_author_email_by_post_id( $course_id ), $subject, $message, 'stm_lms_course_quiz_completed_for_instructor', $email_data_quiz_completed );
+
 		}
 
 		$user_quiz['user_answer_id'] = $user_answer_id;

@@ -7,7 +7,8 @@ use WP_User;
 class Course {
 	public string $access_status;
 	public array $category = array();
-	public ?int $certificate_id;
+	/** @var string|int|null */
+	public $certificate_id;
 	public ?WP_User $co_instructor;
 	public ?string $content;
 	public ?int $current_students;

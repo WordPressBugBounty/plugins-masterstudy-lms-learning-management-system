@@ -661,6 +661,10 @@ final class StudentsRepository {
 
 			$course_certificate = get_post_meta( $course['course_id'], 'course_certificate', true );
 
+			if ( 'none' === $course_certificate ) {
+				$certificates[ $course['course_id'] ] = false;
+			}
+
 			$certificates[ $course['course_id'] ] = ! empty( $course_certificate ) || ! empty( $certificate_ids );
 		}
 

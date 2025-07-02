@@ -783,6 +783,84 @@ class STM_LMS_Helpers {
 		return $user->user_login;
 	}
 
+	public static function masterstudy_lms_get_user_email( $user_id ) {
+		if ( ! $user_id || ! is_numeric( $user_id ) ) {
+			return '';
+		}
+
+		$user = get_userdata( $user_id );
+		if ( $user instanceof WP_User ) {
+			return $user->user_email;
+		}
+
+		return false;
+	}
+
+	public static function masterstudy_lms_send_course_email_once( $course_id, $user_id ) {
+		$flag_key = 'masterstudy_lms_email_sent_' . (int) $course_id . '_' . (int) $user_id;
+
+		// Check if already sent.
+		if ( get_option( $flag_key ) ) {
+			return false;
+		}
+
+		// Mark as sent.
+		update_option( $flag_key, 1, false );
+
+		return true;
+	}
+
+	public static function masterstudy_lms_get_post_author_email_by_post_id( $post_id ) {
+		if ( ! $post_id || ! is_numeric( $post_id ) ) {
+			return '';
+		}
+
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return false;
+		}
+
+		$author_id = $post->post_author;
+		$user      = get_userdata( $author_id );
+		if ( $user instanceof WP_User ) {
+			return $user->user_email;
+		}
+
+		return false;
+	}
+
+	public static function masterstudy_lms_is_admin_by_email( $email ) {
+		if ( empty( $email ) || ! is_email( $email ) ) {
+			return false;
+		}
+
+		$user = get_user_by( 'email', $email );
+		if ( $user instanceof WP_User ) {
+			return in_array( 'administrator', (array) $user->roles, true );
+		}
+
+		return false;
+	}
+
+	public static function masterstudy_lms_is_post_author_stm_lms_instructor( $post_id ) {
+		if ( ! $post_id || ! is_numeric( $post_id ) ) {
+			return false;
+		}
+
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return false;
+		}
+
+		$author_id = $post->post_author;
+		$user      = get_userdata( $author_id );
+		if ( $user instanceof WP_User ) {
+			return in_array( 'stm_lms_instructor', $user->roles, true ) || in_array( 'administrator', $user->roles, true );
+		}
+
+		return false;
+	}
+
 	public static function masterstudy_lms_get_site_name() {
 		if ( is_multisite() ) {
 			$site_name = get_network()->site_name;

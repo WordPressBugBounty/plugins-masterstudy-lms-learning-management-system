@@ -1463,9 +1463,15 @@ add_action( 'install_plugins_pre_masterstudy_addons', 'masterstudy_addons_plugin
 
 function masterstudy_lms_course_has_certificate( $course_id ) {
 	global $wpdb;
+
+	$course_certificate = get_post_meta( $course_id, 'course_certificate', true );
+
+	if ( 'none' === $course_certificate ) {
+		return false;
+	}
+
 	$course_terms    = wp_get_post_terms( $course_id, 'stm_lms_course_taxonomy', array( 'fields' => 'ids' ) );
 	$categories_list = implode( ',', array_map( 'intval', $course_terms ) );
-
 	$certificate_ids = $wpdb->get_col(
 		$wpdb->prepare(
 			"
@@ -1485,8 +1491,6 @@ function masterstudy_lms_course_has_certificate( $course_id ) {
 	if ( empty( $certificate_ids ) ) {
 		$certificate_ids = get_option( 'stm_default_certificate', '' );
 	}
-
-	$course_certificate = get_post_meta( $course_id, 'course_certificate', true );
 
 	return ! empty( $course_certificate ) || ! empty( $certificate_ids );
 }

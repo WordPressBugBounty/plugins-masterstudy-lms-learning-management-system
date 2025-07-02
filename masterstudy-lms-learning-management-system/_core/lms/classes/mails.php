@@ -13,12 +13,12 @@ class STM_LMS_Mails {
 		return 'text/html';
 	}
 
-	public static function send_email_to_instructor( $cart_items, $user_login, $order_id, $settings, $template_name, $send_test_mode = false ) {
+	public static function send_email_to_instructor( $cart_items, $user_login, $order_id, $settings, $template_name, $user_id, $send_test_mode = false ) {
 		$instructor_items  = array();
 		$instructor_emails = array();
 
 		if ( $send_test_mode ) {
-			self::process_instructor_order_mail( $template_name, $user_login, $order_id, array(), get_option( 'admin_email' ), $settings, $send_test_mode );
+			self::process_instructor_order_mail( $template_name, $user_login, $order_id, array(), get_option( 'admin_email' ), $settings, $user_id, $send_test_mode );
 			die;
 		}
 
@@ -43,7 +43,7 @@ class STM_LMS_Mails {
 		}
 		foreach ( $instructor_emails as $email ) {
 			if ( ! empty( $instructor_items[ $email ] ) ) {
-				self::process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_items[ $email ], $email, $settings, $send_test_mode );
+				self::process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_items[ $email ], $email, $settings, $user_id, $send_test_mode );
 			}
 		}
 	}
@@ -61,7 +61,8 @@ class STM_LMS_Mails {
 
 		return str_replace( $search, $replace, $text );
 	}
-	public static function process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_emails, $email, $settings, $send_test_mode ) {
+
+	public static function process_instructor_order_mail( $template_name, $user_login, $order_id, $instructor_emails, $email, $settings, $user_id, $send_test_mode ) {
 		$message = str_replace(
 			array( '{{user_login}}', '{{site_url}}' ),
 			array( $user_login, '<a href="' . site_url() . '" target="_blank">' . get_bloginfo( 'name' ) . '</a>' ),
@@ -70,6 +71,37 @@ class STM_LMS_Mails {
 
 		$order_title   = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_instructor_title'], $user_login );
 		$order_subject = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_instructor_subject'], $user_login );
+
+		if ( empty( $order_subject ) && ! is_ms_lms_addon_enabled( 'email_manager' ) ) {
+			$order_subject = 'You made a Sale';
+		}
+		if ( empty( $order_title ) && ! is_ms_lms_addon_enabled( 'email_manager' ) ) {
+			$order_title = 'You made a Sale';
+		}
+
+		$email_data = array(
+			'user_login'    => $user_login,
+			'student_email' => STM_LMS_Helpers::masterstudy_lms_get_user_email( $user_id ),
+			'site_url'      => STM_LMS_Helpers::masterstudy_lms_get_site_url(),
+			'purchase_date' => gmdate( 'Y-m-d H:i:s' ),
+		);
+
+		$search               = array(
+			'{{user_login}}',
+			'{{student_email}}',
+			'{{site_url}}',
+			'{{purchase_date}}',
+		);
+		$replace              = array(
+			$email_data['user_login'],
+			$email_data['student_email'],
+			$email_data['site_url'],
+			$email_data['purchase_date'],
+		);
+
+		$message       = str_replace( $search, $replace, $message );
+		$order_title   = str_replace( $search, $replace, $order_title );
+		$order_subject = str_replace( $search, $replace, $order_subject );
 
 		$context = \STM_LMS_Templates::load_lms_template(
 			$template_name,
@@ -99,6 +131,13 @@ class STM_LMS_Mails {
 
 		$order_title   = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_title'], $user_login );
 		$order_subject = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_subject'], $user_login );
+
+		if ( empty( $order_subject ) && ! is_ms_lms_addon_enabled( 'email_manager' ) ) {
+			$order_subject = 'New Order';
+		}
+		if ( empty( $order_title ) && ! is_ms_lms_addon_enabled( 'email_manager' ) ) {
+			$order_title = 'New Order';
+		}
 
 		$context = \STM_LMS_Templates::load_lms_template(
 			$template_name,
@@ -136,6 +175,13 @@ class STM_LMS_Mails {
 		$order_title   = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_accepted_title'], $user_value );
 		$order_subject = self::masterstudy_lms_order_subject_renderer( $settings['stm_lms_new_order_accepted_subject'], $user_value );
 
+		if ( empty( $order_subject ) && ! is_ms_lms_addon_enabled( 'email_manager' ) ) {
+			$order_subject = 'Thank you for purchase!';
+		}
+		if ( empty( $order_title ) && ! is_ms_lms_addon_enabled( 'email_manager' ) ) {
+			$order_title = 'Thank you for purchase!';
+		}
+
 		$context = \STM_LMS_Templates::load_lms_template(
 			$template_name,
 			array(
@@ -171,7 +217,7 @@ class STM_LMS_Mails {
 		$send_student    = $settings['stm_lms_new_order_accepted_enable'] ?? true;
 
 		if ( $send_instructor ) {
-			self::send_email_to_instructor( $cart_items, $user_login, $order_id, $settings, $template_name );
+			self::send_email_to_instructor( $cart_items, $user_login, $order_id, $settings, $template_name, $user['id'], false );
 		}
 
 		if ( $send_admin ) {
@@ -229,6 +275,37 @@ class STM_LMS_Mails {
 		);
 
 		self::send_email( 'Course added.', $message, $user['email'], array(), 'stm_lms_course_available_for_user', compact( 'course_title' ) );
+
+		$template = wp_kses_post(
+			'Great news! <br>
+				{{user_login}} has just enrolled in your course {{course_title}} on {{purchase_date}}.<br>
+				Thank you for your valuable contribution to our platform. Keep up the fantastic work!'
+		);
+
+		$email_data_enrollment = array(
+			'user_login'    => $login,
+			'course_title'  => $course_title,
+			'purchase_date' => gmdate( 'Y-m-d H:i:s' ),
+		);
+		$search                = array( '{{user_login}}', '{{course_title}}', '{{purchase_date}}' );
+		$replace               = array(
+			$email_data_enrollment['user_login'],
+			$email_data_enrollment['course_title'],
+			$email_data_enrollment['purchase_date'],
+		);
+		$subject               = esc_html__( 'New Enrollment in {{course_title}}!', 'masterstudy-lms-learning-management-system' );
+
+		$message = str_replace( $search, $replace, $template );
+		$subject = str_replace( $search, $replace, $subject );
+
+		STM_LMS_Helpers::send_email(
+			\STM_LMS_Helpers::masterstudy_lms_get_post_author_email_by_post_id( $course_id ),
+			$subject,
+			$message,
+			'stm_lms_student_enrollment_in_course_to_author',
+			$email_data_enrollment,
+		);
+
 	}
 
 	public static function course_saved( $post_id, $course ) {

@@ -348,6 +348,64 @@ class STM_LMS_Lesson {
 		$data['course_completed'] = intval( $threshold ) <= intval( $data['course']['progress_percent'] );
 		$data['certificate_url']  = STM_LMS_Course::certificates_page_url( $course_id );
 
+		if ( $data['course_completed'] && \STM_LMS_Helpers::masterstudy_lms_send_course_email_once( $course_id, $user_id ) ) {
+
+			// email course completation to student
+			$template = wp_kses_post(
+				'We want to congratulate you on successfully completing the <b>{{course_title}}</b>!
+			<br> The link to course: <a href="{{course_url}}" target="_blank">{{course_url}}</a>
+			<br> We wish you all the best in your future endeavors.'
+			);
+
+			$email_data_student = array(
+				'user_login'   => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
+				'course_url'   => get_permalink( $course_id ),
+				'course_title' => get_the_title( $course_id ),
+			);
+			$search             = array(
+				'{{user_login}}',
+				'{{course_url}}',
+				'{{course_title}}',
+			);
+			$replace            = array(
+				$email_data_student['user_login'],
+				$email_data_student['course_url'],
+				$email_data_student['course_title'],
+			);
+			$subject            = esc_html__( 'Congratulations on completing {{user_login}}!', 'masterstudy-lms-learning-management-system' );
+
+			$message = str_replace( $search, $replace, $template );
+			$subject = str_replace( $search, $replace, $subject );
+
+			STM_LMS_Helpers::send_email(
+				\STM_LMS_Helpers::masterstudy_lms_get_user_email( $user_id ),
+				$subject,
+				$message,
+				'stm_lms_course_completed_for_user',
+				$email_data_student
+			);
+
+			// email course completation to instructor
+			$template = wp_kses_post(
+				'{{user_login}} has successfully completed your {{course_title}} with great dedication and achievement.
+			<br> The link to course: <a href="{{course_url}}" target="_blank">{{course_url}}</a>
+			<br> Your support has made all the difference. Thank you for your dedication to student’s success.'
+			);
+
+			$subject = esc_html__( 'Congratulations! {{user_login}} Completed {{course_title}}!', 'masterstudy-lms-learning-management-system' );
+
+			$message = str_replace( $search, $replace, $template );
+			$subject = str_replace( $search, $replace, $subject );
+
+			STM_LMS_Helpers::send_email(
+				\STM_LMS_Helpers::masterstudy_lms_get_post_author_email_by_post_id( $course_id ),
+				$subject,
+				$message,
+				'stm_lms_course_completed_for_instructor',
+				$email_data_student
+			);
+		}
+
 		return $data;
 	}
 
