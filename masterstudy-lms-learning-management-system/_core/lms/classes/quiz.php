@@ -168,17 +168,24 @@ class STM_LMS_Quiz {
 			$course_title = get_the_title( $course_id );
 			$quiz_name    = get_the_title( $quiz_id );
 
-			$progress      = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $progress ) : round( $progress, 1 ) . '%';
-			$passing_grade = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $passing_grade ) : round( $passing_grade, 1 ) . '%';
+			$progress        = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $progress ) : round( $progress, 1 ) . '%';
+			$passing_grade   = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $passing_grade ) : round( $passing_grade, 1 ) . '%';
+			$attempt_details = stm_lms_get_quiz_last_attempt( $user_id, $course_id, $quiz_id );
 
 			$email_data_quiz_completed = array(
-				'user_login'   => $user_login,
-				'quiz_name'    => $quiz_name,
-				'course_title' => $course_title,
-				'quiz_result'  => $progress,
-				'quiz_passing_grade'  => $passing_grade,
-				'quiz_completion_date'  => gmdate( 'Y-m-d H:i:s' ),
+				'user_login'           => $user_login,
+				'quiz_name'            => $quiz_name,
+				'course_title'         => $course_title,
+				'quiz_result'          => $progress,
+				'quiz_passing_grade'   => $passing_grade,
+				'quiz_completion_date' => gmdate( 'Y-m-d H:i:s' ),
+				'blog_name'            => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				'site_url'             => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'quiz_url'             => \MS_LMS_Email_Template_Helpers::link( STM_LMS_Lesson::get_lesson_url( $course_id, $quiz_id ) ),
+				'attempt_url'          => \MS_LMS_Email_Template_Helpers::link( ms_plugin_user_account_url() . 'enrolled-quiz-attempts/' . $course_id . '/' . $quiz_id . '/' . $attempt_details['user_quiz_id'] . '/' ),
+				'attempt_number'       => $attempt_details['attempt_number'],
 			);
+
 			$template = wp_kses_post(
 				'Hi {{user_login}}, <br>
 				You’ve just completed the quiz "{{quiz_name}}" in the course "{{course_title}}". Great work!<br>
@@ -192,16 +199,8 @@ class STM_LMS_Quiz {
 				</ul>
 				Keep it up - each step brings you closer to your learning goals!'
 			);
-			$search  = array( '{{user_login}}', '{{quiz_name}}', '{{course_title}}', '{{quiz_result}}', '{{quiz_passing_grade}}', '{{quiz_completion_date}}' );
-			$replace = array(
-				$email_data_quiz_completed['user_login'],
-				$email_data_quiz_completed['quiz_name'],
-				$email_data_quiz_completed['course_title'],
-				$email_data_quiz_completed['quiz_result'],
-				$email_data_quiz_completed['quiz_passing_grade'],
-				$email_data_quiz_completed['quiz_completion_date'],
-			);
-			$message = str_replace( $search, $replace, $template );
+
+			$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data_quiz_completed );
 			$subject = esc_html__( 'You’ve Completed the Quiz in {{course_title}}', 'masterstudy-lms-learning-management-system' );
 
 			if ( class_exists( 'STM_LMS_Email_Manager' ) ) {
@@ -209,7 +208,7 @@ class STM_LMS_Quiz {
 				$subject       = $email_manager['stm_lms_course_quiz_completed_for_user_subject'] ?? $subject;
 			}
 
-			$subject = str_replace( $search, $replace, $subject );
+			$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data_quiz_completed );
 
 			STM_LMS_Helpers::send_email( $user['email'], $subject, $message, 'stm_lms_course_quiz_completed_for_user', $email_data_quiz_completed );
 
@@ -220,38 +219,26 @@ class STM_LMS_Quiz {
 				'course_title'         => $course_title,
 				'quiz_result'          => $progress,
 				'quiz_completion_date' => gmdate( 'Y-m-d H:i:s' ),
+				'blog_name'            => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				'site_url'             => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'quiz_url'             => \MS_LMS_Email_Template_Helpers::link( STM_LMS_Lesson::get_lesson_url( $course_id, $quiz_id ) ),
 			);
 			$template                             = wp_kses_post(
 				'We\'re pleased to inform you that {{user_login}} has completed the quiz "{{quiz_name}}" in the course {{course_title}}.<br>
 			Quiz Result: {{quiz_result}}<br>
 			Completion Date: {{quiz_completion_date}} <br>'
 			);
-			$search                               = array(
-				'{{user_login}}',
-				'{{quiz_name}}',
-				'{{course_title}}',
-				'{{quiz_result}}',
-				'{{quiz_completion_date}}',
-			);
-			$replace                              = array(
-				$email_data_quiz_completed_instructor['user_login'],
-				$email_data_quiz_completed_instructor['quiz_name'],
-				$email_data_quiz_completed_instructor['course_title'],
-				$email_data_quiz_completed_instructor['quiz_result'],
-				$email_data_quiz_completed_instructor['quiz_completion_date'],
-			);
-			$message                              = str_replace( $search, $replace, $template );
-			$subject                              = esc_html__( '{{user_login}} has completed the quiz {{quiz_name}} in {{course_title}}', 'masterstudy-lms-learning-management-system' );
+
+			$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data_quiz_completed_instructor );
+			$subject = esc_html__( '{{user_login}} has completed the quiz {{quiz_name}} in {{course_title}}', 'masterstudy-lms-learning-management-system' );
 
 			if ( class_exists( 'STM_LMS_Email_Manager' ) ) {
 				$email_manager = STM_LMS_Email_Manager::stm_lms_get_settings();
 				$subject       = $email_manager['stm_lms_course_quiz_completed_for_instructor_subject'] ?? $subject;
 			}
-
-			$subject = str_replace( $search, $replace, $subject );
+			$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data_quiz_completed_instructor );
 
 			STM_LMS_Helpers::send_email( \STM_LMS_Helpers::masterstudy_lms_get_post_author_email_by_post_id( $course_id ), $subject, $message, 'stm_lms_course_quiz_completed_for_instructor', $email_data_quiz_completed );
-
 		}
 
 		$user_quiz['user_answer_id'] = $user_answer_id;

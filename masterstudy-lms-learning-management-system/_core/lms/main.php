@@ -10,6 +10,7 @@ require_once STM_LMS_PATH . '/includes/elementor/helpers/helpers.php';
 require_once STM_LMS_PATH . '/lms/classes/Validation.php';
 require_once STM_LMS_PATH . '/lms/classes/subscriptions.php';
 require_once STM_LMS_PATH . '/lms/classes/helpers.php';
+require_once STM_LMS_PATH . '/lms/classes/email_template_helpers.php';
 require_once STM_LMS_PATH . '/lms/classes/templates.php';
 require_once STM_LMS_PATH . '/lms/classes/options.php';
 require_once STM_LMS_PATH . '/lms/classes/reviews.php';

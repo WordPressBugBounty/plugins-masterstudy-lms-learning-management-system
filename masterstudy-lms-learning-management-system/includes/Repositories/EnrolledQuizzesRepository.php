@@ -126,7 +126,7 @@ final class EnrolledQuizzesRepository {
 
 			$attempts[] = array(
 				'number'     => sprintf( '№%d', esc_html( $quiz_attempt['attempt_number'] ) ),
-				'url'        => esc_url( ms_plugin_user_account_url( 'enrolled-quiz-attempts/' . $quiz_attempt['course_id'] . '/' . $quiz_attempt['quiz_id'] . '/' . $quiz_attempt['user_quiz_id'] ) ),
+				'url'        => esc_url( ms_plugin_user_account_url( 'enrolled-quiz-attempt/' . $quiz_attempt['course_id'] . '/' . $quiz_attempt['quiz_id'] . '/' . $quiz_attempt['user_quiz_id'] ) ),
 				'progress'   => esc_html( $progress ),
 				'grade'      => esc_html( $this->format_grade( $progress ) ),
 				'created_at' => $this->format_created_at( $quiz_attempt['created_at'], esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' ) ),

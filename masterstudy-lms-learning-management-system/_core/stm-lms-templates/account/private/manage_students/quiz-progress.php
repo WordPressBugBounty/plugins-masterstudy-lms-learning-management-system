@@ -11,7 +11,7 @@ use MasterStudy\Lms\Repositories\CoursePlayerRepository;
 if ( 'quiz' === $material['type'] ) {
 	do_action( 'masterstudy_lms_course_player_register_assets' );
 	$quiz_id   = $material['post_id'];
-	$quiz_data = ( new CoursePlayerRepository() )->get_quiz_data( $quiz_id );
+	$quiz_data = ( new CoursePlayerRepository() )->get_quiz_data( $quiz_id, $student_id );
 	?>
 
 	<div class="masterstudy-student-progress-list__item-content<?php echo esc_attr( ! empty( $quiz_data ) ? ' masterstudy-student-progress-list__item-content_completed' : '' ); ?>">

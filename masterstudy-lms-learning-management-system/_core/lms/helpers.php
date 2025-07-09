@@ -1142,7 +1142,7 @@ function ms_plugin_get_youtube_id( $url ) {
 		return false;
 	}
 
-	preg_match( '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match );
+	preg_match( '%(?:youtube(?:-nocookie)?\.com/[live]*/*(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match );
 
 	if ( isset( $match[1] ) ) {
 		$youtube_id = $match[1];

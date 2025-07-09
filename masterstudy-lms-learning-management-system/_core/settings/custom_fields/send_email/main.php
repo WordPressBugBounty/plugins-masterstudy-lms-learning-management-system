@@ -38,7 +38,7 @@ function stm_lms_send_test_email_ajax() {
 		$settings      = class_exists( 'STM_LMS_Email_Manager' ) ? STM_LMS_Email_Manager::stm_lms_get_settings() : array();
 
 		if ( 'stm_lms_new_order' === $email_id ) {
-			STM_LMS_Mails::send_email_to_admin( 'John doe', 0, $settings, $template_name, true );
+			STM_LMS_Mails::send_email_to_admin( 'John doe', 0, $settings, $template_name, 0, true );
 			wp_send_json_success();
 		}
 		if ( 'stm_lms_new_order_instructor' === $email_id ) {

@@ -164,31 +164,36 @@ class STM_LMS_Comments {
 			$course_title    = ( ! empty( $course_id ) ) ? get_the_title( $course_id ) : '';
 			$parent_comment  = get_comment( $parent );
 
+			$email_new_lesson_comment = array(
+				'user_login'      => $user_login,
+				'comment_content' => $comment_content,
+				'lesson_title'    => $lesson_title,
+				'course_title'    => $course_title,
+				'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'date'            => gmdate( 'Y-m-d H:i:s' ),
+				'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_the_permalink( $course_id ) ),
+			);
+
 			if ( $parent_comment && intval( $parent_comment->comment_post_ID ) === $lesson_id ) {
 				/*Send message to user who has been answered in Q&A*/
 				$user_email = $parent_comment->comment_author_email;
 				$filter     = 'stm_lms_lesson_qeustion_ask_answer';
 				$subject    = esc_html__( 'New lesson comment', 'masterstudy-lms-learning-management-system' );
-				$message    = sprintf(
-					esc_html__( '%s has replied - "%s" to your question on the lesson %s in the %s', 'masterstudy-lms-learning-management-system' ), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment, WordPress.WP.I18n.UnorderedPlaceholdersText
-					$user_login,
-					$comment_content,
-					$lesson_title,
-					$course_title
-				);
+				$message    = esc_html__( '{{user_login}} has replied - "{{comment_content}}" to your question on the lesson {{lesson_title}} in the {{course_title}}', 'masterstudy-lms-learning-management-system' );
+
+				$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_new_lesson_comment );
+				$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_new_lesson_comment );
 			} else {
 				/*Send message to instructor*/
 				$author_data = get_userdata( get_post_field( 'post_author', $lesson_id ) );
 				$user_email  = $author_data->user_email;
 				$filter      = 'stm_lms_lesson_comment';
 				$subject     = esc_html__( 'New lesson comment', 'masterstudy-lms-learning-management-system' );
-				$message     = sprintf(
-					esc_html__( '%s commented - "%s" on lesson %s in the course %s', 'masterstudy-lms-learning-management-system' ), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment, WordPress.WP.I18n.UnorderedPlaceholdersText
-					$user_login,
-					$comment_content,
-					$lesson_title,
-					$course_title
-				);
+				$template    = esc_html__( '{{user_login}} commented - "{{comment_content}}" on lesson {{lesson_title}} in the course {{course_title}}', 'masterstudy-lms-learning-management-system' );
+
+				$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_new_lesson_comment );
+				$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_new_lesson_comment );
 			}
 
 			STM_LMS_Helpers::send_email(
@@ -196,7 +201,7 @@ class STM_LMS_Comments {
 				$subject,
 				$message,
 				$filter,
-				compact( 'user_login', 'comment_content', 'lesson_title', 'course_title' )
+				$email_new_lesson_comment
 			);
 
 		}

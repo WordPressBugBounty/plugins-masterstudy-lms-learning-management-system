@@ -783,6 +783,19 @@ class STM_LMS_Helpers {
 		return $user->user_login;
 	}
 
+	public static function masterstudy_lms_get_user_email_by_user_id( $user_id ) {
+		if ( ! $user_id || ! is_numeric( $user_id ) ) {
+			return '';
+		}
+
+		$user = get_userdata( $user_id );
+		if ( $user instanceof WP_User ) {
+			return $user->user_email;
+		}
+
+		return false;
+	}
+
 	public static function masterstudy_lms_get_user_email( $user_id ) {
 		if ( ! $user_id || ! is_numeric( $user_id ) ) {
 			return '';
@@ -859,6 +872,37 @@ class STM_LMS_Helpers {
 		}
 
 		return false;
+	}
+
+
+	public static function masterstudy_lms_get_user_by_email( $email ) {
+		if ( is_array( $email ) && isset( $email['email'] ) ) {
+			$email = $email['email'];
+		}
+
+		if ( ! is_string( $email ) ) {
+			return false;
+		}
+
+		$user = get_user_by( 'email', $email );
+		if ( $user ) {
+			return $user->ID;
+		}
+
+		return false;
+	}
+
+	public static function masterstudy_lms_get_post_author_id_by_post_id( $post_id ) {
+		if ( ! $post_id || ! is_numeric( $post_id ) ) {
+			return false;
+		}
+
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return false;
+		}
+
+		return (int) $post->post_author;
 	}
 
 	public static function masterstudy_lms_get_site_name() {

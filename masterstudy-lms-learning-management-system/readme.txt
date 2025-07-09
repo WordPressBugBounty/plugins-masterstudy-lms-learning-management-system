@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.10
+Stable tag: 3.6.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,16 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.11 - 2025-07-10 =
+- **Improvement:** Added new smart-tags to all existing email templates (Pro)
+- **Improvement:** When adding multiple elements in Certificate Builder, each new element now shifts to the right for easier placement (Pro)
+- **Fixed:** The Price field no longer remains visible when using the "Affiliate this course" option if "One-time purchase" is disabled in Course Builder (Pro)
+- **Fixed:** Fixed a deprecated warning in Certificate Builder when using PHP 8.2 (Pro)
+- **Fixed:** Student registration dates now display correctly in the "Students" section and follow the date/time format from WordPress settings (Pro)
+- **Fixed:** When adding the same course multiple times to the cart using "WooCommerce Checkout," a checkout error occurred (Pro)
+- **Fixed:** Quiz attempt results were not showing when instructors viewed student attempt details (Pro)
+- **Fixed:** Fixed broken Quiz Details link on the Enrolled Quizzes page
+
 = 3.6.10 - 2025-07-02 =
 - **Improvement:** Added a new "Description" widget for Elementor in the MasterStudy Course widgets group
 - **Improvement:** Added a "Go to Public Account" button and a "Share Public Profile" button to student and instructor profiles
@@ -330,28 +340,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Improvement:** Subtitles can now be added to video lessons using the HTML or External link source types (Pro)
 - **Improvement:** Video files in the File Manager now display a preview thumbnail instead of an icon and are marked with a "Video" badge (Pro)
 - **Improvement:** When generating a full course using the AI Lab add-on, images can now be automatically generated for Text Lessons and Assignments during Curriculum creation (Pro)
-
-= 3.6.7 - 2025-06-24 =
-- **Fixed:** Minor bug fixes.
-
-= 3.6.6 - 2025-06-18 =
-- **Improvement:** Added editable email template for new user registration sent to the admin (PRO)
-- **Improvement:** Added editable email template sent to a student when they are removed from a course (PRO)
-- **Improvement:** Added editable password-reset email template for all users (PRO)
-- **Improvement:** Added 2 editable email templates for approving or rejecting Become Instructor requests (PRO)
-- **Improvement:** Added new Grade element to Certificate Builder to show grades for courses, quizzes, and assignments on certificates (PRO)
-- **Improvement:** Added editable email template for removing a user from a group (PRO)
-- **Improvement:** AI Lab now generates more accurate content for Title, Content, and Full Article fields (PRO)
-- **Improvement:** Redesigned the variable insertion panel in email templates (PRO)
-- **Improvement:** Variables can now be added to email Subjects (PRO)
-- **Improvement:** Made quiz question overview more user-friendly by allowing questions to collapse
-- **Improvement:** Added collapse/expand buttons for questions inside quizzes
-- **Improvement:** Redesigned drag & drop and delete panel for questions in Course Builder
-- **Improvement:** Optimized question creation speed on the standalone Quiz page and within Course Builder
-- **Updated:** Added compatibility with subscription groups
-- **Fixed:** Passing Grade now shows the actual value in the Quiz Completed email (PRO).
-- **Fixed:** Quiz Completed email can now display grades in Points and Grades as well as percentages (PRO)
-- **Fixed:** Public videos inserted as external VideoPress links now display correctly in video lessons
-- **Fixed:** Fixed issue where course lessons could disappear after upgrading from version 2.x.x to 3.x.x if course status was Draft, Private, or Pending Review
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

@@ -469,21 +469,31 @@ class STM_LMS_User {
 			$reset_url = '<a href="' . $reset_url . '">' . $reset_url . '</a>';
 		}
 
-		/* translators: %s: User login. */
-		$message = sprintf( esc_html__( 'Hi %s', 'masterstudy-lms-learning-management-system' ), $user_login ) . '<br>';
-		/* translators: %s: Site title. */
-		$message .= sprintf( esc_html__( 'Welcome to %s ', 'masterstudy-lms-learning-management-system' ), $blog_name );
-		$message .= esc_html__( 'To start using your account, please activate it by clicking the link below:', 'masterstudy-lms-learning-management-system' ) . '<br>';
-		/* translators: %s: Login URL. */
-		$message .= sprintf( esc_html__( 'Activation Link: %s ', 'masterstudy-lms-learning-management-system' ), $reset_url ) . '<br><br>';
-		$message .= sprintf( esc_html__( 'We look forward to seeing you on %s!', 'masterstudy-lms-learning-management-system' ), $blog_name ) . '<br><br>';
+		$template = wp_kses_post(
+			'Hi {{user_login}}, <br>
+					Welcome to {{blog_name}} <br>
+					To start using your account, please activate it by clicking the link below: <br>
+					Activation Link: {{reset_url}} <br>
+					We look forward to seeing you on {{blog_name}} <br>'
+		);
+
+		$email_data_account_premoderation = array(
+			'user_login' => $user_login,
+			'blog_name'  => $blog_name,
+			'reset_url'  => $reset_url,
+			'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+			'date'       => gmdate( 'Y-m-d H:i:s' ),
+		);
+
+		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data_account_premoderation );
+		$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data_account_premoderation );
 
 		STM_LMS_Helpers::send_email(
 			$user_email,
 			$subject,
 			$message,
 			'stm_lms_account_premoderation',
-			compact( 'reset_url', 'user_login', 'blog_name' )
+			$email_data_account_premoderation
 		);
 	}
 
@@ -572,21 +582,25 @@ class STM_LMS_User {
 
 		$subject = esc_html__( 'You have successfully registered on the website.', 'masterstudy-lms-learning-management-system' );
 
-		/* translators: %s: User login. */
-		$message = sprintf( esc_html__( 'Hi %s', 'masterstudy-lms-learning-management-system' ), $user_login ) . '<br>';
-		/* translators: %s: Site title. */
-		$message .= sprintf( esc_html__( 'Welcome to %s ', 'masterstudy-lms-learning-management-system' ), $blog_name );
-		$message .= esc_html__( 'Your registration was successful.', 'masterstudy-lms-learning-management-system' ) . '<br>';
-		$message .= esc_html__( 'You can now log in to your account using the following link:', 'masterstudy-lms-learning-management-system' ) . '<br>';
-		/* translators: %s: Login URL. */
-		$message .= sprintf( esc_html__( 'Login URL: %s', 'masterstudy-lms-learning-management-system' ), $login_url ) . '<br><br>';
-		$message .= esc_html__( 'We are thrilled to have you on board!', 'masterstudy-lms-learning-management-system' ) . "\r\n";
+		$template = wp_kses_post(
+			'Hi {{user_login}}, <br>
+					Welcome to {{blog_name}} <br>
+					Your registration was successful. <br>
+					You can now log in to your account using the following link: <br>
+					Login URL: {{login_url}}<br>
+					We are thrilled to have you on board!<br>'
+		);
 
-		$email_data = array(
+		$email_data_register = array(
 			'blog_name'  => $blog_name,
 			'user_login' => $user_login,
 			'login_url'  => $login_url,
+			'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+			'date'       => gmdate( 'Y-m-d H:i:s' ),
+			'user_id'    => $user,
 		);
+
+		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data_register );
 
 		if ( ! empty( $data['additional'] ) ) {
 			foreach ( $data['additional'] as $field ) {
@@ -599,7 +613,7 @@ class STM_LMS_User {
 					$label = $field['field_name'];
 				}
 				if ( ! empty( $field['slug'] ) ) {
-					$email_data[ $field['slug'] ] = $field['value'];
+					$email_data_register[ $field['slug'] ] = $field['value'];
 				}
 				if ( isset( $field['value'] ) && in_array( $field['id'], array_column( $default_fields, 'id' ) ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					update_user_meta( $user, $field['id'], $field['value'] );
@@ -613,13 +627,7 @@ class STM_LMS_User {
 			$subject,
 			$message,
 			'stm_lms_user_registered_on_site',
-			$email_data
-		);
-
-		$email_new_user_to_admin = array(
-			'user_login'        => $user_login,
-			'user_email'        => $user_email,
-			'registration_date' => date( 'Y-m-d H:i:s' ),
+			$email_data_register
 		);
 
 		$template = wp_kses_post(
@@ -630,22 +638,24 @@ class STM_LMS_User {
 		Please welcome our new member!'
 		);
 
-		$search  = array( '{{user_login}}', '{{user_email}}', '{{registration_date}}' );
-		$replace = array(
-			$email_new_user_to_admin['user_login'],
-			$email_new_user_to_admin['user_email'],
-			$email_new_user_to_admin['registration_date'],
+		$subject = esc_html__( 'New User Registered', 'masterstudy-lms-learning-management-system' );
+
+		$email_data = array(
+			'user_login'        => $user_login,
+			'user_email'        => $user_email,
+			'registration_date' => gmdate( 'Y-m-d H:i:s' ),
+			'blog_name'         => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+			'site_url'          => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
 		);
 
-		$message = str_replace( $search, $replace, $template );
-		$subject = esc_html__( 'New User Registered', 'masterstudy-lms-learning-management-system' );
+		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );
 
 		STM_LMS_Helpers::send_email(
 			'',
 			$subject,
 			$message,
 			'stm_lms_new_user_register_on_site',
-			$email_new_user_to_admin
+			$email_data
 		);
 
 	}
@@ -1394,11 +1404,20 @@ class STM_LMS_User {
 
 			$subject = esc_html__( 'Password change', 'masterstudy-lms-learning-management-system' );
 			$message = esc_html__( 'Password changed successfully.', 'masterstudy-lms-learning-management-system' );
+
+			$email_data = array(
+				'blog_name'  => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'date'       => gmdate( 'Y-m-d H:i:s' ),
+				'user_login' => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
+			);
+
 			STM_LMS_Helpers::send_email(
 				$user['email'],
 				$subject,
 				$message,
-				'stm_lms_password_change'
+				'stm_lms_password_change',
+				$email_data
 			);
 
 			wp_set_password( $new_pass, $user_id );
@@ -1574,7 +1593,9 @@ class STM_LMS_User {
 			$message   = '';
 			$subject   = esc_html__( 'Enterprise Request', 'masterstudy-lms-learning-management-system' );
 			$user_data = array(
-				'date' => date( 'Y-m-d H:i:s' ),
+				'date'      => date( 'Y-m-d H:i:s' ),
+				'site_url'  => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'blog_name' => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 			);
 
 			foreach ( $data['fields'] as $field ) {
@@ -1631,7 +1652,7 @@ class STM_LMS_User {
 			$name    = $data['fields']['enterprise_name'];
 			$email   = $data['fields']['enterprise_email'];
 			$text    = $data['fields']['enterprise_text'];
-			$date    = date( 'Y-m-d H:i:s' );
+			$date    = gmdate( 'Y-m-d H:i:s' );
 			$subject = esc_html__( 'Enterprise Request', 'masterstudy-lms-learning-management-system' );
 
 			$message = esc_html__( 'You have received a new enterprise inquiry', 'masterstudy-lms-learning-management-system' ) . ' <br/>' . // phpcs:disable
@@ -1643,12 +1664,21 @@ class STM_LMS_User {
 				'<b>' . esc_html__( 'Submission Date: ', 'masterstudy-lms-learning-management-system' ) . '</b>' . $date . ' <br><br/>' .
 				esc_html__( 'Please review this inquiry and follow up as needed.', 'masterstudy-lms-learning-management-system' ) . '</a> <br/>'; // phpcs:enable
 
+			$email_data = array(
+				'name'      => $name,
+				'email'     => $email,
+				'text'      => $text,
+				'blog_name' => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				'site_url'  => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'date'      => gmdate( 'Y-m-d H:i:s' ),
+			);
+
 			STM_LMS_Helpers::send_email(
 				'',
 				$subject,
 				$message,
 				'stm_lms_enterprise',
-				compact( 'name', 'email', 'text', 'date' )
+				$email_data
 			);
 		}
 
@@ -1719,27 +1749,22 @@ class STM_LMS_User {
 		update_user_meta( $user_data->ID, 'restore_password_token', $token );
 		$reset_url = add_query_arg( 'restore_password', $token, self::login_page_url() );
 
-		$email_reset_data = array(
-			'user_login' => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_data->ID ),
-			'reset_link' => $reset_url,
-			'site_name'  => $site_name,
-		);
-
 		$template = wp_kses_post(
-			'Dear  {{user_login}},<br> There has been a request to reset your password for your account on {{site_name}}.
+			'Dear  {{user_login}},<br> There has been a request to reset your password for your account on {{blog_name}}.
 					<br> To reset your password and set a new one, click on the link below: <br>
-					<a href="{{reset_link}}" target="_blank">Reset url</a>
+					<a href="{{reset_url}}" target="_blank">Reset url</a>
 					<br>If you did not request this change, please ignore this email.'
 		);
 
-		$search  = array( '{{user_login}}', '{{site_name}}', '{{reset_link}}' );
-		$replace = array(
-			$email_reset_data['user_login'],
-			$email_reset_data['site_name'],
-			$email_reset_data['reset_link'],
+		$email_data = array(
+			'user_login' => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_data->ID ),
+			'reset_url'  => $reset_url,
+			'blog_name'  => $site_name,
+			'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+			'date'       => gmdate( 'Y-m-d H:i:s' ),
 		);
 
-		$message = str_replace( $search, $replace, $template );
+		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );
 		$subject = esc_html__( 'Password Reset Request', 'masterstudy-lms-learning-management-system' );
 
 		if ( ! empty( $admin_message ) ) {
@@ -1750,7 +1775,7 @@ class STM_LMS_User {
 			$subject,
 			$message,
 			'stm_lms_email_user_reset_password',
-			$email_reset_data
+			$email_data
 		);
 
 		return wp_send_json( $response );

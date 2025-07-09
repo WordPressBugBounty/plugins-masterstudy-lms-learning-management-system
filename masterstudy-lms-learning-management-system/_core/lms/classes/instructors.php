@@ -62,13 +62,29 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 			$user    = STM_LMS_User::get_current_user( $author_id );
 			$subject = esc_html__( 'Course published', 'masterstudy-lms-learning-management-system' );
-			$message = sprintf(
-				/* translators: %1$s Course Title, %2$s User Login */
-				esc_html__( 'Your course - %1$s was approved, and is now live on the website', 'masterstudy-lms-learning-management-system' ),
-				$course_title,
+
+			$email_data = array(
+				'course_title'    => $course_title,
+				'blog_name'       => \STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'date'            => gmdate( 'Y-m-d H:i:s' ),
+				'course_edit_url' => \MS_LMS_Email_Template_Helpers::link( ms_plugin_manage_course_url( $post_id ) ),
+				'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_permalink( $post_id ) ),
 			);
 
-			STM_LMS_Helpers::send_email( $user['email'], $subject, $message, 'stm_lms_course_published', compact( 'course_title' ) );
+			$template = wp_kses_post(
+				'Your course - {{course_title}} was approved, and is now live on the website'
+			);
+
+			$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );
+
+			if ( class_exists( 'STM_LMS_Email_Manager' ) ) {
+				$email_manager = STM_LMS_Email_Manager::stm_lms_get_settings();
+				$subject       = $email_manager['stm_lms_course_published_subject'] ?? esc_html__( 'Course published', 'masterstudy-lms-learning-management-system' );
+			}
+			$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
+
+			STM_LMS_Helpers::send_email( $user['email'], $subject, $message, 'stm_lms_course_published', $email_data );
 		}
 	}
 
@@ -738,12 +754,23 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					update_user_meta( $user_id, 'submission_status', 'approved' );
 				}
 
+				$email_data = array(
+					'user_login' => $user_login,
+					'user_id'    => $user_id,
+					'user_email' => $user_email,
+					'date'       => $date,
+					'degree'     => $degree,
+					'expertize'  => $expertize,
+					'blog_name'  => \STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+					'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				);
+
 				STM_LMS_Helpers::send_email(
 					'',
 					$subject,
 					$message,
 					'stm_lms_become_instructor_email',
-					compact( 'user_login', 'user_id', 'user_email', 'date', 'degree', 'expertize' )
+					$email_data
 				);
 			}
 		}
@@ -863,21 +890,27 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			/*Create User*/
 			$username = sanitize_title( $email );
 			$password = wp_generate_password();
+			$user_id  = wp_create_user( $username, $password, $email );
+			$subject  = esc_html__( 'You have been registered on the website', 'masterstudy-lms-learning-management-system' );
 
-			$user_id = wp_create_user( $username, $password, $email );
-
-			$subject = esc_html__( 'You have been registered on the website', 'masterstudy-lms-learning-management-system' );
-
-			$site_url = get_bloginfo( 'url' );
-			$message  = sprintf(
-				/* translators: %s Username, Password, Site URL */
-				esc_html__( 'Login: %1$s Password: %2$s Site URL: %3$s', 'masterstudy-lms-learning-management-system' ),
-				$username,
-				$password,
-				$site_url
+			$template = wp_kses_post(
+				'Login: {{username}}, <br>
+					Password: {{password}} <br>
+					Site URL:: {{site_url}} <br>'
 			);
 
-			STM_LMS_Helpers::send_email( $email, $subject, $message, 'stm_lms_user_added_via_manage_students', compact( 'username', 'password', 'site_url' ) );
+			$email_data = array(
+				'username'  => $username,
+				'password'  => $password,
+				'site_url'  => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'blog_name' => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				'date'      => gmdate( 'Y-m-d H:i:s' ),
+				'login_url' => \MS_LMS_Email_Template_Helpers::link( STM_LMS_Helpers::masterstudy_lms_get_login_url() ),
+			);
+
+			$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );
+
+			STM_LMS_Helpers::send_email( $email, $subject, $message, 'stm_lms_user_added_via_manage_students', $email_data );
 
 			if ( ! is_wp_error( $user_id ) ) {
 				$users[] = $user_id;
@@ -1016,26 +1049,22 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 				$email_data_approve = array(
 					'instructor_name' => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
-					'site_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+					'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 					'login_url'       => STM_LMS_Helpers::masterstudy_lms_get_login_url(),
+					'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+					'date'            => gmdate( 'Y-m-d H:i:s' ),
+					'admin_comment'   => $admin_message,
 				);
 
 				$template = wp_kses_post(
 					'Hi {{instructor_name}},<br>
-					Congratulations! Your application to become an instructor on {{site_name}} has been approved.<br>
+					Congratulations! Your application to become an instructor on {{blog_name}} has been approved.<br>
 					You can now log in to your instructor account using the following link:<br>
 					Login URL: <a href="{{login_url}}" target="_blank">Login URL</a> <br>
 					We are excited to have you on board and look forward to your contributions!'
 				);
 
-				$search  = array( '{{instructor_name}}', '{{site_name}}', '{{login_url}}' );
-				$replace = array(
-					$email_data_approve['instructor_name'],
-					$email_data_approve['site_name'],
-					$email_data_approve['login_url'],
-				);
-
-				$message = str_replace( $search, $replace, $template );
+				$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data_approve );
 
 				$subject = esc_html__( 'Instructor application approved', 'masterstudy-lms-learning-management-system' );
 				if ( ! empty( $admin_message ) ) {
@@ -1050,15 +1079,17 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					$email_data_approve
 				);
 			} else {
-
 				$email_data_reject = array(
-					'user_login' => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
-					'site_name'  => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+					'user_login'    => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
+					'blog_name'     => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+					'site_url'      => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+					'date'          => gmdate( 'Y-m-d H:i:s' ),
+					'admin_comment' => $admin_message,
 				);
 
 				$template = wp_kses_post(
 					'Hi {{user_login}},<br>
-					Thank you for your interest in becoming an instructor on {{site_name}} <br>
+					Thank you for your interest in becoming an instructor on {{blog_name}} <br>
 					After careful review, we regret to inform you that your application has not been approved at this time.
 					We appreciate the time and effort you put into your submission.
 					You\'re welcome to update your application and reapply in the future.
@@ -1066,13 +1097,8 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					Best regards.'
 				);
 
-				$search  = array( '{{user_login}}', '{{site_name}}' );
-				$replace = array(
-					$email_data_reject['user_login'],
-					$email_data_reject['site_name'],
-				);
+				$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data_reject );
 
-				$message = str_replace( $search, $replace, $template );
 				$subject = esc_html__( 'Update on Your Instructor Application', 'masterstudy-lms-learning-management-system' );
 
 				if ( ! empty( $admin_message ) ) {

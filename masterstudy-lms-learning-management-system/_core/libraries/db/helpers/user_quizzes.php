@@ -312,6 +312,34 @@ function stm_lms_get_course_all_quizzes( $user_id, $search = '', $limit = '', $o
 	return $result;
 }
 
+function stm_lms_get_quiz_last_attempt( $user_id, $course_id, $quiz_id ) {
+	if ( ! $user_id || ! $course_id || ! $quiz_id ) {
+		return false;
+	}
+
+	global $wpdb;
+
+	$quizzes = stm_lms_user_quizzes_name( $wpdb );
+	$answers = stm_lms_user_answers_name( $wpdb );
+
+	$attempts_subquery = "SELECT q1.*, ( SELECT COUNT(*) FROM {$quizzes} q2
+		WHERE q2.user_id = q1.user_id AND q2.course_id = q1.course_id AND q2.quiz_id = q1.quiz_id AND q2.user_quiz_id <= q1.user_quiz_id ) AS attempt_number
+		FROM {$quizzes} q1 WHERE q1.user_id = %d AND q1.course_id = %d AND q1.quiz_id = %d";
+
+	$sql = "SELECT attempts.*, COALESCE(SUM(CASE WHEN a.correct_answer = 1 THEN 1 ELSE 0 END), 0) AS correct, COALESCE(SUM(CASE WHEN a.correct_answer = 0 THEN 1 ELSE 0 END), 0) AS incorrect
+	FROM ( {$attempts_subquery} ) AS attempts
+	LEFT JOIN {$answers} a ON a.user_id = attempts.user_id AND a.course_id = attempts.course_id AND a.quiz_id = attempts.quiz_id AND a.attempt_number = attempts.attempt_number
+	GROUP BY attempts.user_quiz_id
+	ORDER BY attempts.user_quiz_id DESC
+	LIMIT 1";
+
+	$params = array( $user_id, $course_id, $quiz_id );
+
+	$result = $wpdb->get_row( $wpdb->prepare( $sql, ...$params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+	return $result ? $result : false;
+}
+
 function stm_lms_get_quiz_all_attempts( $user_id, $course_id, $quiz_id, $limit = '', $offset = '', $get_total = false ) {
 	if ( ! $user_id || ! $course_id || ! $quiz_id ) {
 		return array();

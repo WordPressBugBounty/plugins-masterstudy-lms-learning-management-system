@@ -343,12 +343,22 @@ final class StudentsRepository {
 				$instructor_name,
 				$course_title
 			);
+
+			$email_data = array(
+				'user_login'      => $user_login,
+				'instructor_name' => $instructor_name,
+				'course_title'    => $course_title,
+				'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'date'            => gmdate( 'Y-m-d H:i:s' ),
+			);
+
 			\STM_LMS_Helpers::send_email(
 				$user['email'],
 				esc_html__( 'Your Enrollment Has Been Cancelled', 'masterstudy-lms-learning-management-system' ),
 				$message,
 				'stm_lms_email_remove_student_from_course',
-				compact( 'user_login', 'instructor_name', 'course_title' )
+				$email_data
 			);
 		}
 	}

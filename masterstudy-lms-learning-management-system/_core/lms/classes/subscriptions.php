@@ -177,6 +177,17 @@ class STM_LMS_Subscriptions {
 				$course_title    = get_the_title( $course_id );
 				$membership_plan = $sub->name;
 
+				$email_data = array(
+					'membership_plan' => $membership_plan,
+					'course_title'    => $course_title,
+					'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+					'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+					'date'            => gmdate( 'Y-m-d H:i:s' ),
+					'login'           => $login,
+					'user_login'      => $login,
+					'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_permalink( $course_id ) ),
+				);
+
 				$message = sprintf(
 				/* translators: %1$s Course Title, %2$s User Login */
 					esc_html__( 'Course %1$s was added to %2$s. with %3$s', 'masterstudy-lms-learning-management-system' ),
@@ -184,7 +195,7 @@ class STM_LMS_Subscriptions {
 					$login,
 					$membership_plan
 				);
-				STM_LMS_Helpers::send_email( '', 'Course added.', $message, 'stm_lms_membership_course_available_for_admin', compact( 'course_title', 'login', 'membership_plan' ) );
+				STM_LMS_Helpers::send_email( '', 'Course added.', $message, 'stm_lms_membership_course_available_for_admin', $email_data );
 
 				$message = sprintf(
 				/* translators: %1$s Course Title, %2$s User Login */
@@ -192,7 +203,7 @@ class STM_LMS_Subscriptions {
 					$course_title,
 					$membership_plan
 				);
-				STM_LMS_Helpers::send_email( $user['email'], 'Course added to User', $message, 'stm_lms_membership_course_available_for_user', compact( 'course_title', 'membership_plan' ) );
+				STM_LMS_Helpers::send_email( $user['email'], 'Course added to User', $message, 'stm_lms_membership_course_available_for_user', $email_data );
 			}
 		}
 

@@ -17,19 +17,42 @@ if ( isset( $data['notices'] ) && is_array( $data['notices'] ) ) {
 
 $promo_item = array();
 
-if ( ! empty( $first_notice ) ) {
+$promo_notice = null;
+
+if ( isset( $data['notices'] ) && is_array( $data['notices'] ) ) {
+	$notices = $data['notices'];
+
+	foreach ( $notices as $notice ) {
+		if ( isset( $notice['post_terms']['type_category'] ) ) {
+			$has_promo = array_filter( $notice['post_terms']['type_category'], function( $cat ) {
+				return isset( $cat['slug'] ) && 'promo' === $cat['slug'];
+			} );
+			
+			if ( ! empty( $has_promo ) ) {
+				$promo_notice = $notice;
+				break;
+			}
+		}
+	}
+
+	if ( $promo_notice === null ) {
+		$promo_notice = reset( $notices );
+	}
+}
+
+if ( ! empty( $promo_notice ) ) {
 	$promo_item = array(
 		'class'        => 'help-item-full-width help-item-promo',
-		'title'        => isset( $first_notice['post_title'] ) ? $first_notice['post_title'] : '',
-		'description'  => isset( $first_notice['post_content'] ) ? $first_notice['post_content'] : '',
+		'title'        => isset( $promo_notice['post_title'] ) ? $promo_notice['post_title'] : '',
+		'description'  => isset( $promo_notice['post_content'] ) ? $promo_notice['post_content'] : '',
 		'buttons'      => array(
 			array(
-				'label' => isset( $first_notice['button_text_post'] ) ? $first_notice['button_text_post'] : __( 'Learn More', 'support-page' ),
-				'href'  => isset( $first_notice['button_url_post'] ) ? $first_notice['button_url_post'] : '#',
+				'label' => isset( $promo_notice['button_text_post'] ) ? $promo_notice['button_text_post'] : __( 'Learn More', 'support-page' ),
+				'href'  => isset( $promo_notice['button_url_post'] ) ? $promo_notice['button_url_post'] : '#',
 				'type'  => 'primary',
 			),
 		),
-		'image'        => isset( $first_notice['thumbnail_url'] ) ? $first_notice['thumbnail_url'] : '',
+		'image'        => isset( $promo_notice['thumbnail_url'] ) ? $promo_notice['thumbnail_url'] : '',
 		'image-width'  => '338',
 		'image-height' => '338',
 	);
@@ -58,7 +81,7 @@ return array(
 		'ticket'        => array(
 			'icon'           => 'support-page-icon-ticket',
 			'title'          => __( 'Have a problem?', 'support-page' ),
-			'description'    => __( 'Submit a support ticket and we’ll assist you as soon as possible.', 'support-page' ),
+			'description'    => __( 'Submit a support ticket and we\'ll assist you as soon as possible.', 'support-page' ),
 			'buttons'        => array(
 				array(
 					'label' => __( 'Create Ticket', 'support-page' ),
@@ -108,7 +131,7 @@ return array(
 		'customization' => array(
 			'icon'        => 'support-page-icon-code',
 			'title'       => __( 'Customization', 'support-page' ),
-			'description' => __( 'Get custom changes and improvements done to suit your website’s needs.', 'support-page' ),
+			'description' => __( 'Get custom changes and improvements done to suit your website\'s needs.', 'support-page' ),
 			'buttons'     => array(
 				array(
 					'label' => __( 'Get Quotes', 'support-page' ),
@@ -145,9 +168,9 @@ return array(
 			'title'        => __( 'Expert Setup & Optimization', 'support-page' ),
 			'description'  => __( 'Get expert help to get started, customize, and improve your website for the best results.', 'support-page' ),
 			'list'         => array(
-				__( 'Get a custom setup that’s perfectly tailored to your specific needs.', 'support-page' ),
+				__( 'Get a custom setup that\'s perfectly tailored to your specific needs.', 'support-page' ),
 				__( 'Enjoy personalized assistance to ensure smooth operation and support.', 'support-page' ),
-				__( 'Optimize performance by boosting your platform’s speed and user experience.', 'support-page' ),
+				__( 'Optimize performance by boosting your platform\'s speed and user experience.', 'support-page' ),
 				__( 'Make your platform stand out with unique features and design changes.', 'support-page' ),
 			),
 			'buttons'      => array(
@@ -177,7 +200,7 @@ return array(
 		// 'onboarding'    => array(
 		// 	'icon'        => 'support-page-icon-onboarding',
 		// 	'title'       => __( 'Onboarding', 'support-page' ),
-		// 	'description' => __( 'Book a quick call with us. We’ll answer your questions and guide you in the right direction.', 'support-page' ),
+		// 	'description' => __( 'Book a quick call with us. We'll answer your questions and guide you in the right direction.', 'support-page' ),
 		// 	'buttons'     => array(
 		// 		array(
 		// 			'label' => __( 'Book a Call', 'support-page' ),
@@ -191,7 +214,7 @@ return array(
 		'review_form' => array(
 			'class'       => 'help-item-full-width help-item-review',
 			'title'       => __( 'Leave Review', 'support-page' ),
-			'description' => __( 'We’d love to hear your experience with our tools and services', 'support-page' ),
+			'description' => __( 'We\'d love to hear your experience with our tools and services', 'support-page' ),
 			'buttons'     => array(
 				array(
 					'label' => __( 'Write Review', 'support-page' ),

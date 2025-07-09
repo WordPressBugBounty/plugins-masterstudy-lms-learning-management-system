@@ -225,20 +225,13 @@ class STM_LMS_Page_Router {
 						'template'  => 'stm-lms-user-quiz-attempts',
 						'protected' => true,
 						'url'       => 'enrolled-quiz-attempts',
-						'vars'      => array(
-							'course_id' => 2,
-							'quiz_id'   => 3,
-						),
+						'vars'      => array( 'course_id', 'quiz_id' ),
 					),
 					'enrolled_quiz_attempt_url'  => array(
 						'template'  => 'stm-lms-user-quiz-attempt',
 						'protected' => true,
-						'url'       => 'enrolled-quiz-attempts',
-						'vars'      => array(
-							'course_id'  => 2,
-							'quiz_id'    => 3,
-							'attempt_id' => 4,
-						),
+						'url'       => 'enrolled-quiz-attempt',
+						'vars'      => array( 'course_id', 'quiz_id', 'attempt_id' ),
 					),
 					'my_orders_url'              => array(
 						'template'  => 'stm-lms-user-orders',
@@ -296,10 +289,7 @@ class STM_LMS_Page_Router {
 						'protected'        => true,
 						'instructors_only' => true,
 						'url'              => 'enrolled-students-progress',
-						'vars'             => array(
-							'student_id' => 2,
-							'course_id'  => 3,
-						),
+						'vars'             => array( 'student_id', 'course_id' ),
 					),
 					'announcement'               => array(
 						'template'         => 'stm-lms-instructor-announcement',
@@ -559,23 +549,29 @@ class STM_LMS_Page_Router {
 					'top'
 				);
 			} elseif ( ! empty( $route['vars'] ) ) {
-				$query = 'index.php?lms_page_path=$matches[1]';
-				$base .= '/([^/]+)/';
+				add_rewrite_tag( '%lms_template%', '([^&]+)' );
+				add_rewrite_tag( '%lms_page_path%', '([^&]+)' );
 
-				foreach ( $route['vars'] as $var => $match ) {
-					add_rewrite_tag( "%{$var}%", '([0-9]+)' );
-					$query .= "&{$var}" . '=$matches[' . ( $match ?? 2 ) . ']';
-					$base  .= '([0-9]+)/';
+				$match = $route['match'] ?? 1;
+				$base .= '/' . $route['url'];
+				$query = "index.php?lms_page_path={$route['url']}";
+
+				$match_index = 1;
+
+				foreach ( $route['vars'] as $var ) {
+					add_rewrite_tag( "%{$var}%", '([^/]+)' );
+					$query .= "&{$var}=\$matches[{$match_index}]";
+					$base  .= '/([^/]+)';
+					$match_index++;
 				}
 
 				$query .= '&lms_template=' . $route['template'] . "&lang={$lang}";
-				$base  .= '?$';
+				$base  .= '/?$';
 
 				if ( ! empty( $route['type'] ) ) {
 					$query = self::modify_post_type_query( $query );
 				}
 
-				// Polylang support for Subpages
 				if ( $is_polylang && ! empty( $route['lang'] ) ) {
 					$base = "{$route['lang']}/$base";
 				}
