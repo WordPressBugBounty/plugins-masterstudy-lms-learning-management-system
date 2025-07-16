@@ -14,6 +14,7 @@ require_once STM_LMS_LIBRARY . '/db/helpers/user_answers.php';
 require_once STM_LMS_LIBRARY . '/db/helpers/user_cart.php';
 require_once STM_LMS_LIBRARY . '/db/helpers/user_chat.php';
 require_once STM_LMS_LIBRARY . '/db/helpers/user_searches.php';
+require_once STM_LMS_LIBRARY . '/db/helpers/user_bookmarks.php';
 
 if ( is_admin() ) {
 	require_once STM_LMS_LIBRARY . '/db/tables_updater.php';
@@ -30,6 +31,7 @@ if ( is_admin() ) {
 	require_once STM_LMS_LIBRARY . '/db/tables/curriculum_sections.table.php';
 	require_once STM_LMS_LIBRARY . '/db/tables/curriculum_materials.table.php';
 	require_once STM_LMS_LIBRARY . '/db/tables/order_items.table.php';
+	require_once STM_LMS_LIBRARY . '/db/tables/user_bookmarks.table.php';
 }
 
 // Load LMS Pro tables

@@ -32,6 +32,7 @@ trait VideoTrait {
 			'shortcode' => 'lesson_shortcode',
 		),
 		LessonVideoType::VIMEO         => array(
+			'video_poster'            => 'lesson_video_poster',
 			'vimeo_url'               => 'lesson_vimeo_url',
 			'video_required_progress' => 'video_required_progress',
 		),
@@ -39,6 +40,7 @@ trait VideoTrait {
 			'file' => 'file',
 		),
 		LessonVideoType::YOUTUBE       => array(
+			'video_poster'            => 'lesson_video_poster',
 			'youtube_url'             => 'lesson_youtube_url',
 			'video_required_progress' => 'video_required_progress',
 		),

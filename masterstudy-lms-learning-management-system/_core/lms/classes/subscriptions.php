@@ -710,41 +710,52 @@ class STM_LMS_Subscriptions {
 		$membership_inactive = true;
 
 		global $wpdb;
-		$table = $wpdb->prefix . 'pmpro_memberships_users'; // phpcs:disable
+		$table = $wpdb->prefix . 'pmpro_memberships_users';
 
+		// Check if the table exists
 		$table_exists = $wpdb->get_var(
 			$wpdb->prepare(
 				'SHOW TABLES LIKE %s',
-				$table
+				$wpdb->esc_like( $table )
 			)
 		);
 
-		if ( $table_exists === $table ) {
-			$results = $wpdb->get_results(
+		if ( $table_exists !== $table ) {
+			return array(
+				'membership_status'   => false,
+				'membership_expired'  => false,
+				'membership_inactive' => true,
+			);
+		} // phpcs:disable
+		$membership_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT membership_id FROM {$table} WHERE id = %d",
+				$course_subscription_id
+			)
+		);
+
+		$rows = array();
+
+		if ( $membership_id ) {
+			$rows = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT id, status FROM {$table} WHERE user_id = %d",
-					$user_id
+					"SELECT * FROM {$table} WHERE membership_id = %d ORDER BY id ASC",
+					$membership_id
 				),
 				ARRAY_A
 			);
-		} else {
-			$results = array();
 		} // phpcs:enable
+		foreach ( $rows as $membership ) {
+			$membership_status = $membership['status'];
 
-		foreach ( $results as $membership ) {
-			if ( $membership['id'] === $course_subscription_id ) {
-				$membership_status = $membership['status'];
-
-				if ( 'active' === $membership_status || 'changed' === $membership_status ) {
-					$membership_inactive = false;
-				} elseif ( 'expired' === $membership_status ) {
-					$membership_expired  = true;
-					$membership_inactive = false;
-				} elseif ( 'cancelled' === $membership_status ) {
-					$membership_inactive = true;
-				}
-
+			if ( 'active' === $membership_status || 'changed' === $membership_status ) {
+				$membership_inactive = false;
 				break;
+			} elseif ( 'expired' === $membership_status ) {
+				$membership_expired  = true;
+				$membership_inactive = false;
+			} elseif ( 'cancelled' === $membership_status ) {
+				$membership_inactive = true;
 			}
 		}
 

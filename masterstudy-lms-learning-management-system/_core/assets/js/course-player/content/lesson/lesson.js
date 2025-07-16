@@ -4,7 +4,7 @@
   $(document).ready(function () {
     var container = $('.masterstudy-course-player-lesson'),
       submit_button = $('[data-id="masterstudy-course-player-lesson-submit"]');
-    if (container.length > 0 && container.find('.masterstudy-course-player-lesson-video').length === 0 && container.find('.masterstudy-course-player-audio-lesson-type').length === 0) {
+    if (container.length > 0 && container.find('.masterstudy-course-player-lesson-video').length === 0 && container.find('.masterstudy-course-player-audio-lesson-type').length === 0 && container.find('.masterstudy-course-player-pdf-lesson').length === 0) {
       submit_button.attr('disabled', 1);
       submit_button.addClass('masterstudy-button_disabled');
       checkVisibility();

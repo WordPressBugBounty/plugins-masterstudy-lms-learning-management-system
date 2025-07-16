@@ -159,6 +159,7 @@ $grade         = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_inst
 			if ( ! $data['passed'] || STM_LMS_Options::get_option( 'retry_after_passing', false ) || $is_single_quiz ) {
 				?>
 				<input type="hidden" name="question_ids" value="<?php echo esc_attr( implode( ',', array_column( $data['questions'], 'id' ) ) ); ?>"/>
+				<input type="hidden" name="required_answer_ids" value="<?php echo esc_attr( implode( ',', $data['required_answers_ids'] ) ); ?>"/>
 				<input type="hidden" name="action" value="stm_lms_user_answers"/>
 				<input type="hidden" name="quiz_id" value="<?php echo intval( $item_id ); ?>"/>
 				<input type="hidden" name="course_id" value="<?php echo intval( $post_id ); ?>"/>

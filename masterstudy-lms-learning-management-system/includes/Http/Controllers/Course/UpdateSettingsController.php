@@ -108,6 +108,7 @@ class UpdateSettingsController {
 		$course->status_date_start = $data['status_date_start'] ?? null;
 		$course->title             = $data['title'];
 		$course->video_duration    = $data['video_duration'] ?? null;
+		$course->video_poster      = $data['video_poster'] ?? null;
 		$course->views             = $data['views'] ?? null;
 		$course->access_duration   = $data['access_duration'] ?? null;
 		$course->access_devices    = $data['access_devices'] ?? null;

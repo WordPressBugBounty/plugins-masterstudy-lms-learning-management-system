@@ -30,6 +30,7 @@ require_once STM_LMS_PATH . '/lms/classes/mails.php';
 require_once STM_LMS_PATH . '/lms/classes/guest_checkout.php';
 require_once STM_LMS_PATH . '/lms/classes/admin_menu.php';
 require_once STM_LMS_PATH . '/lms/classes/user_menu.php';
+require_once STM_LMS_PATH . '/lms/classes/bookmarks.php';
 
 if ( is_admin() ) {
 	require_once STM_LMS_PATH . '/lms/classes/addons.php';

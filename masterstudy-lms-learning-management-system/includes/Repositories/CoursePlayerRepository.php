@@ -24,6 +24,7 @@ final class CoursePlayerRepository {
 		$lesson_post_type = get_post_type( $lesson_id );
 		$lesson_files     = get_post_meta( $lesson_id, 'lesson_files', true );
 		$lesson           = get_post_meta( $lesson_id );
+		$attachments      = $this->get_only_attachments( $lesson, $lesson_files );
 		$curriculum       = ( new CurriculumRepository() )->get_curriculum( $post_id, true );
 		$course_materials = array_reduce(
 			$curriculum,
@@ -33,16 +34,6 @@ final class CoursePlayerRepository {
 			array()
 		);
 		$material_ids     = array_column( $course_materials, 'post_id' );
-
-		$repository_files   = ( new FileMaterialRepository() )->get_files( $lesson_files );
-		$files              = array();
-		$video_captions_ids = ! empty( $lesson['video_captions_ids'] ) ? maybe_unserialize( $lesson['video_captions_ids'][0] ) : array();
-
-		foreach ( $repository_files as $file ) {
-			if ( ! in_array( $file->ID, $video_captions_ids, true ) ) {
-				$files[] = $file;
-			}
-		}
 
 		$this->data = array(
 			'post_id'                  => $post_id,
@@ -57,7 +48,7 @@ final class CoursePlayerRepository {
 			'has_access'               => \STM_LMS_User::has_course_access( $post_id, $lesson_id ),
 			'has_preview'              => \STM_LMS_Lesson::lesson_has_preview( $lesson_id ),
 			'is_trial_course'          => get_post_meta( $post_id, 'shareware', true ),
-			'lesson_attachments'       => $files,
+			'lesson_attachments'       => $attachments,
 			'trial_lesson_count'       => 0,
 			'has_trial_access'         => false,
 			'is_enrolled'              => false,
@@ -75,10 +66,11 @@ final class CoursePlayerRepository {
 			'show_attempts_history'    => $settings['course_player_theme_mode'] ?? false,
 		);
 
-		$lesson_types_labels             = $this->get_lesson_labels();
-		$this->data['lesson_type']       = 'lesson' === $this->data['content_type']
+		$lesson_types_labels       = $this->get_lesson_labels();
+		$this->data['lesson_type'] = 'lesson' === $this->data['content_type']
 			? get_post_meta( $lesson_id, 'type', true )
 			: $this->data['content_type'];
+
 		$this->data['lesson_type_label'] = $lesson_types_labels[ $this->data['lesson_type'] ] ?? '';
 
 		if ( LessonType::VIDEO === $this->data['lesson_type'] ) {
@@ -96,11 +88,11 @@ final class CoursePlayerRepository {
 					$this->data['video_questions'],
 					function ( $stats, $question ) {
 						if ( ! empty( $question['is_answered'] ) ) {
-							$stats['answered'] ++;
-							$stats['completed'] ++;
+							$stats['answered']++;
+							$stats['completed']++;
 						}
 						if ( ! empty( $question['type'] ) ) {
-							$stats['total'] ++;
+							$stats['total']++;
 						}
 
 						return $stats;
@@ -115,6 +107,10 @@ final class CoursePlayerRepository {
 		} elseif ( 'audio' === $this->data['lesson_type'] ) {
 			$this->data['audio_type']              = get_post_meta( $lesson_id, 'audio_type', true );
 			$this->data['audio_required_progress'] = get_post_meta( $lesson_id, 'audio_required_progress', true );
+		} elseif ( 'pdf' === $this->data['lesson_type'] ) {
+			$this->data['pdf_file']     = get_post_meta( $lesson_id, 'pdf_file', true );
+			$this->data['bookmarks']    = get_post_meta( $lesson_id, 'bookmarks', true );
+			$this->data['pdf_read_all'] = get_post_meta( $lesson_id, 'pdf_read_all', true );
 		}
 
 		if ( is_user_logged_in() ) {
@@ -204,6 +200,7 @@ final class CoursePlayerRepository {
 			'text'            => esc_html__( 'Text lesson', 'masterstudy-lms-learning-management-system' ),
 			'audio'           => esc_html__( 'Audio lesson', 'masterstudy-lms-learning-management-system' ),
 			'video'           => esc_html__( 'Video lesson', 'masterstudy-lms-learning-management-system' ),
+			'pdf'             => esc_html__( 'PDF lesson', 'masterstudy-lms-learning-management-system' ),
 			'quiz'            => esc_html__( 'Quiz', 'masterstudy-lms-learning-management-system' ),
 			'assignments'     => esc_html__( 'Assignment', 'masterstudy-lms-learning-management-system' ),
 			'stream'          => esc_html__( 'Stream lesson', 'masterstudy-lms-learning-management-system' ),
@@ -238,7 +235,7 @@ final class CoursePlayerRepository {
 			if ( 'question_bank' === $type ) {
 				$bank_ids[] = $qid;
 			} else {
-				$total_questions ++;
+				++$total_questions;
 			}
 		}
 
@@ -444,7 +441,7 @@ final class CoursePlayerRepository {
 		$output    = array();
 
 		foreach ( $quizzes as $attempt => $quiz ) {
-			++ $attempt;
+			++$attempt;
 			$quiz_data['attempt']      = $attempt;
 			$quiz_data['progress']     = $quiz['progress'];
 			$quiz_data['created_at']   = \STM_LMS_Helpers::format_date( $quiz['created_at'] );
@@ -469,5 +466,28 @@ final class CoursePlayerRepository {
 		}
 
 		return $output;
+	}
+
+	/**
+	 * @param $lesson array lesson meta
+	 * @param $lesson_files string lesson files
+	 *
+	 * @return array
+	 */
+	private function get_only_attachments( array $lesson, string $lesson_files ): array {
+		$repository_files = ( new FileMaterialRepository() )->get_files( $lesson_files );
+
+		$exclude_ids = array_merge(
+			! empty( $lesson['video_captions_ids'] ) ? maybe_unserialize( $lesson['video_captions_ids'][0] ) : array(),
+			! empty( $lesson['pdf_file_ids'] ) ? maybe_unserialize( $lesson['pdf_file_ids'][0] ) : array()
+		);
+		$exclude_ids = array_flip( $exclude_ids );
+
+		return array_values(
+			array_filter(
+				$repository_files,
+				static fn( $file ) => ! isset( $exclude_ids[ $file->ID ] )
+			)
+		);
 	}
 }

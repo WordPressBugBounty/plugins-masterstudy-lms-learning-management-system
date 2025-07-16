@@ -27,6 +27,8 @@ final class LessonRepository extends AbstractRepository {
 		'audio_type'              => 'audio_type',
 		'audio_required_progress' => 'audio_required_progress',
 		'video_captions_ids'      => 'video_captions_ids',
+		'pdf_file_ids'            => 'pdf_file_ids',
+		'pdf_read_all'            => 'pdf_read_all',
 	);
 
 	protected static array $casts = array(
@@ -35,10 +37,13 @@ final class LessonRepository extends AbstractRepository {
 		'presto_player_idx'       => 'int',
 		'audio_required_progress' => 'int',
 		'video_required_progress' => 'int',
+		'pdf_read_all'            => 'bool',
 	);
 
 	public function create( array $data ): int {
-		$this->set_video_captions_ids( $data );
+		$data = $this->set_video_captions_ids( $data );
+		$data = $this->set_pdf_file_ids( $data );
+
 		$post       = $this->post_data( $data );
 		$post['ID'] = 0;
 
@@ -50,8 +55,7 @@ final class LessonRepository extends AbstractRepository {
 
 		if ( $post_id ) {
 			$this->update_meta( $post_id, $data );
-			$files_merged = array_merge( $data['files'] ?? array(), $data['video_captions'] ?? array() );
-			$this->get_file_repository()->save_files( $files_merged ?? array(), $post_id, self::$post_type );
+			$this->get_file_repository()->save_files( $this->merge_files( $data ), $post_id, self::$post_type );
 		}
 
 		// needed for compatibility with old addons' code
@@ -76,14 +80,14 @@ final class LessonRepository extends AbstractRepository {
 	}
 
 	public function save( array $data ): void {
-		$this->set_video_captions_ids( $data );
+		$data = $this->set_pdf_file_ids( $data );
+		$data = $this->set_video_captions_ids( $data );
 		$post = $this->post_data( $data );
 
 		wp_update_post( $post );
 
 		$this->update_meta( $post['ID'], $data );
-		$files_merged = array_merge( $data['files'] ?? array(), $data['video_captions'] ?? array() );
-		$this->get_file_repository()->save_files( $files_merged ?? array(), $post['ID'], self::$post_type );
+		$this->get_file_repository()->save_files( $this->merge_files( $data ), $post['ID'], self::$post_type );
 
 		// needed for compatibility with old addons' code
 		$data = array_merge(
@@ -129,25 +133,17 @@ final class LessonRepository extends AbstractRepository {
 	}
 
 	private function hydrate( \WP_Post $post ) {
-		$meta               = get_post_meta( $post->ID );
-		$repository_files   = $this->get_file_repository()->get_files( $meta['lesson_files'][0] ?? null, true );
-		$files              = array();
-		$video_captions     = array();
-		$video_captions_ids = ! empty( $meta['video_captions_ids'] ) ? maybe_unserialize( $meta['video_captions_ids'][0] ) : array();
-		foreach ( $repository_files as $file ) {
-			if ( in_array( $file['id'], $video_captions_ids, true ) ) {
-				$video_captions[] = $file;
-			} else {
-				$files[] = $file;
-			}
-		}
+		$meta             = get_post_meta( $post->ID );
+		$repository_files = $this->get_file_repository()->get_files( $meta['lesson_files'][0] ?? null, true );
+		$files            = $this->get_files( $repository_files, $meta );
 
 		$lesson = array(
 			'id'             => $post->ID,
 			'title'          => $post->post_title,
 			'content'        => $post->post_content,
-			'files'          => $files,
-			'video_captions' => $video_captions,
+			'files'          => $files['files'],
+			'video_captions' => $files['video_captions'],
+			'pdf_file'       => $files['pdf_file'],
 		);
 
 		foreach ( $this->get_fields_mapping() as $prop => $meta_key ) {
@@ -177,14 +173,75 @@ final class LessonRepository extends AbstractRepository {
 	/**
 	 * @param $data array
 	 *
-	 * @return void
+	 * @return array
 	 */
-	private function set_video_captions_ids( &$data ) {
+	private function set_pdf_file_ids( $data ) {
+		$data['pdf_file_ids'] = array();
+		if ( ! empty( $data['pdf_file'] ) ) {
+			foreach ( $data['pdf_file'] as $file ) {
+				$data['pdf_file_ids'][] = $file['id'];
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * @param $repository_files array
+	 * @param $meta array
+	 *
+	 * @return array
+	 */
+	private function get_files( $repository_files, $meta ): array {
+		$files              = array();
+		$video_captions     = array();
+		$pdf_file           = array();
+		$video_captions_ids = ! empty( $meta['video_captions_ids'] ) ? maybe_unserialize( $meta['video_captions_ids'][0] ) : array();
+		$pdf_file_ids       = ! empty( $meta['pdf_file_ids'] ) ? maybe_unserialize( $meta['pdf_file_ids'][0] ) : array();
+
+		foreach ( $repository_files as $file ) {
+			if ( in_array( $file['id'], $video_captions_ids, true ) ) {
+				$video_captions[] = $file;
+			} elseif ( in_array( $file['id'], $pdf_file_ids, true ) ) {
+				$pdf_file[] = $file;
+			} else {
+				$files[] = $file;
+			}
+		}
+
+		return array(
+			'files'          => $files,
+			'video_captions' => $video_captions,
+			'pdf_file'       => $pdf_file,
+		);
+	}
+
+	/**
+	 * @param $data
+	 *
+	 * @return array Merged files
+	 */
+	private function merge_files( $data ): array {
+		return array_merge(
+			$data['files'] ?? array(),
+			$data['video_captions'] ?? array(),
+			$data['pdf_file'] ?? array()
+		);
+	}
+
+	/**
+	 * @param $data array
+	 *
+	 * @return array
+	 */
+	private function set_video_captions_ids( $data ) {
 		$data['video_captions_ids'] = array();
 		if ( ! empty( $data['video_captions'] ) ) {
 			foreach ( $data['video_captions'] as $file ) {
 				$data['video_captions_ids'][] = $file['id'];
 			}
 		}
+
+		return $data;
 	}
 }

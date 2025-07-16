@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_action(
 	'wp_head',
-	function() {
+	function () {
 		wp_enqueue_style( 'masterstudy-loader' );
 	}
 );
@@ -241,6 +241,7 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 						'lesson_locked_by_drip'    => $data['lesson_locked_by_drip'],
 						'video_questions_stats'    => $data['video_questions_stats'] ?? array(),
 						'dark_mode'                => $data['dark_mode'],
+						'pdf_read_all'             => $data['pdf_read_all'] ?? null,
 					)
 				);
 			}

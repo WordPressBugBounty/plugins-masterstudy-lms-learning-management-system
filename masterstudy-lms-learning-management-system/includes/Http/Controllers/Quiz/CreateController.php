@@ -16,18 +16,19 @@ class CreateController {
 		$validator = new Validator(
 			$request->get_params(),
 			array(
-				'content'          => 'nullable|string',
-				'correct_answer'   => 'required|boolean',
-				'duration'         => 'nullable|integer',
-				'duration_measure' => 'nullable|string|contains_list,' . implode( ';', array_map( 'strval', DurationMeasure::cases() ) ),
-				'excerpt'          => 'string',
-				'passing_grade'    => 'nullable|integer',
-				'random_questions' => 'required|boolean',
-				're_take_cut'      => 'nullable|numeric',
-				'style'            => 'required|contains_list,' . implode( ';', array_map( 'strval', QuizStyle::cases() ) ),
-				'title'            => 'required|string',
-				'questions'        => 'array',
-				'custom_fields'    => 'array',
+				'content'              => 'nullable|string',
+				'correct_answer'       => 'required|boolean',
+				'duration'             => 'nullable|integer',
+				'duration_measure'     => 'nullable|string|contains_list,' . implode( ';', array_map( 'strval', DurationMeasure::cases() ) ),
+				'excerpt'              => 'string',
+				'passing_grade'        => 'nullable|integer',
+				'random_questions'     => 'required|boolean',
+				're_take_cut'          => 'nullable|numeric',
+				'style'                => 'required|contains_list,' . implode( ';', array_map( 'strval', QuizStyle::cases() ) ),
+				'title'                => 'required|string',
+				'required_answers_ids' => 'array',
+				'questions'            => 'array',
+				'custom_fields'        => 'array',
 			)
 		);
 

@@ -25,7 +25,7 @@ class CurriculumMaterial extends Field {
 		),
 		'lesson_type' => array(
 			'type' => 'string',
-			'enum' => array( 'text', 'video', 'stream', 'zoom_conference' ),
+			'enum' => array( 'text', 'video', 'stream', 'zoom_conference', 'pdf' ),
 		),
 		'section_id'  => array(
 			'type' => 'integer',

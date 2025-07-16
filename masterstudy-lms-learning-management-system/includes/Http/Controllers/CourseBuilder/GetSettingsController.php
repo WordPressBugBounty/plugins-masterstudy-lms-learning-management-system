@@ -4,7 +4,7 @@ namespace MasterStudy\Lms\Http\Controllers\CourseBuilder;
 
 use MasterStudy\Lms\Enums\LessonType;
 use MasterStudy\Lms\Plugin\Addons;
-include_once ABSPATH . 'wp-admin/includes/plugin.php';
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 final class GetSettingsController {
 	public function __invoke(): \WP_REST_Response {

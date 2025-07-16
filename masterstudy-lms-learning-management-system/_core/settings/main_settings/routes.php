@@ -66,7 +66,7 @@ function stm_lms_settings_route_section() {
 				'dependency'      => array(
 					'key'     => 'wocommerce_checkout',
 					'value'   => 'not_empty',
-					'section' => 'section_1',
+					'section' => 'section_ecommerce',
 				),
 				'dependency_mode' => 'disabled',
 			),

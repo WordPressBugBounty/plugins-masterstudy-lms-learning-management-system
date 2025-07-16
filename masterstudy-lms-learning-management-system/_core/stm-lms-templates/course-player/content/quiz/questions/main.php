@@ -17,6 +17,12 @@ use MasterStudy\Lms\Repositories\QuestionRepository;
 wp_enqueue_style( 'masterstudy-course-player-question' );
 wp_enqueue_script( 'masterstudy-course-player-question' );
 
+$settings    = get_option( 'stm_lms_settings' );
+$theme_fonts = $settings['course_player_theme_fonts'] ?? false;
+if ( ! empty( $theme_fonts ) ) {
+	wp_enqueue_style( 'masterstudy-course-player-question-fonts' );
+}
+
 global $ms_question_number;
 
 $data['type']                = empty( $data['type'] ) ? 'single_choice' : $data['type'];
@@ -57,6 +63,7 @@ $content_classes = implode(
 if ( ! empty( $data['answers'] ) ) {
 	?>
 	<div class="masterstudy-course-player-question <?php echo esc_attr( $classes ); ?>"
+		data-question-id="<?php echo esc_attr( $data['id'] ); ?>"
 		data-number-question="<?php echo esc_attr( 'question_bank' !== $data['type'] ? $ms_question_number : '' ); ?>">
 		<?php if ( 'question_bank' !== $data['type'] ) { ?>
 			<div class="masterstudy-course-player-question__header">
@@ -142,5 +149,5 @@ if ( ! empty( $data['answers'] ) ) {
 		</div>
 	</div>
 	<?php
-	$ms_question_number++;
+	++$ms_question_number;
 }

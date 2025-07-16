@@ -202,8 +202,11 @@ function stm_lms_enqueue_component_scripts( $hook_suffix ) {
 	wp_register_script( 'masterstudy-course-templates', STM_LMS_URL . 'assets/js/components/course-templates.js', array( 'jquery', 'masterstudy-select2' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-share', STM_LMS_URL . 'assets/js/components/share.js', array( 'jquery' ), MS_LMS_VERSION, true );
 
-	wp_register_style( 'masterstudy-course-player-video-plyr', STM_LMS_URL . 'assets/css/course-player/content/lesson/plyr.css', null, MS_LMS_VERSION );
+	/*Single Course Video*/
+	wp_register_style( 'masterstudy-single-course-video-plyr', STM_LMS_URL . 'assets/css/components/course/plyr.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-single-course-video', STM_LMS_URL . 'assets/css/components/course/video.css', null, MS_LMS_VERSION );
 	wp_register_script( 'plyr', STM_LMS_URL . '/assets/vendors/plyr/plyr.js', array(), MS_LMS_VERSION, false );
+	wp_register_script( 'masterstudy-single-course-video', STM_LMS_URL . '/assets/js/components/course/video.js', array( 'jquery', 'plyr' ), MS_LMS_VERSION, true );
 
 	/*Single Course styles & scripts registration*/
 	wp_register_style( 'masterstudy-single-course-default', STM_LMS_URL . 'assets/css/course/main.css', array(), MS_LMS_VERSION );

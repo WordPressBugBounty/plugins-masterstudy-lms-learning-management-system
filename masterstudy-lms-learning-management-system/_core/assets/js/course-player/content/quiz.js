@@ -1,5 +1,8 @@
 "use strict";
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 (function ($) {
   $(document).ready(function () {
     // h5p quiz integration
@@ -36,39 +39,7 @@
         }
       });
     }
-
-    // start quiz
-    $("[data-id='start-quiz']").click(function (e) {
-      e.preventDefault();
-      $('.masterstudy-course-player-quiz__form').removeClass('masterstudy-course-player-quiz__form_hide');
-      $('.masterstudy-course-player-navigation__submit-quiz').removeClass('masterstudy-course-player-navigation__submit-quiz_hide');
-      $('.masterstudy-course-player-content__header').hide();
-      $('.masterstudy-course-player-quiz__content').hide();
-      $('.masterstudy-course-player-quiz__content-meta').hide();
-      $('.masterstudy-course-player-quiz__start-quiz').hide();
-      $('.masterstudy-course-player-header__navigation-quiz').addClass('masterstudy-course-player-header__navigation-quiz_show');
-      $('.masterstudy-course-player-quiz__navigation-tabs').addClass('masterstudy-course-player-quiz__navigation-tabs_show');
-      if ($('.masterstudy-course-player-question__content').find('.masterstudy-course-player-item-match').length > 0) {
-        initializeItemMatch();
-      }
-      if ($('.masterstudy-course-player-question__content').find('.masterstudy-course-player-image-match').length > 0) {
-        initializeImageMatch();
-      }
-      startQuiz();
-    });
-
-    // quiz alert
-    $("[data-id='submit-quiz']").click(function (e) {
-      e.preventDefault();
-      $("[data-id='quiz_alert']").addClass('masterstudy-alert_open');
-    });
-
-    // submit quiz
-    $("[data-id='quiz_alert']").find("[data-id='submit']").click(function (e) {
-      e.preventDefault();
-      submitQuiz();
-    });
-    function submitQuiz() {
+    function getFormData() {
       var data = {};
       var question_ids = [];
       $('.masterstudy-course-player-quiz__form').serializeArray().forEach(function (item) {
@@ -104,6 +75,106 @@
           });
         }
       });
+      return {
+        data: data,
+        question_ids: question_ids
+      };
+    }
+
+    // start quiz
+    $("[data-id='start-quiz']").click(function (e) {
+      e.preventDefault();
+      $('.masterstudy-course-player-quiz__form').removeClass('masterstudy-course-player-quiz__form_hide');
+      $('.masterstudy-course-player-navigation__submit-quiz').removeClass('masterstudy-course-player-navigation__submit-quiz_hide');
+      $('.masterstudy-course-player-content__header').hide();
+      $('.masterstudy-course-player-quiz__content').hide();
+      $('.masterstudy-course-player-quiz__content-meta').hide();
+      $('.masterstudy-course-player-quiz__start-quiz').hide();
+      $('.masterstudy-course-player-header__navigation-quiz').addClass('masterstudy-course-player-header__navigation-quiz_show');
+      $('.masterstudy-course-player-quiz__navigation-tabs').addClass('masterstudy-course-player-quiz__navigation-tabs_show');
+      if ($('.masterstudy-course-player-question__content').find('.masterstudy-course-player-item-match').length > 0) {
+        initializeItemMatch();
+      }
+      if ($('.masterstudy-course-player-question__content').find('.masterstudy-course-player-image-match').length > 0) {
+        initializeImageMatch();
+      }
+      startQuiz();
+    });
+    function handleEvent(el, cb) {
+      function onChange() {
+        if (!$('.masterstudy-course-player-quiz').hasClass('masterstudy-course-player-quiz_show-answers')) {
+          cb();
+        }
+      }
+      $(el).on('click', '.masterstudy-course-player-answer', onChange);
+      $(el).on('keyup', '.masterstudy-course-player-quiz-keywords__keyword-to-fill', cb);
+      $(el).on('change', '.masterstudy-course-player-item-match__input', onChange);
+      $(el).on('change', '.masterstudy-course-player-image-match__input', onChange);
+      $(el).on('change', '.masterstudy-course-player-fill-the-gap__questions input', onChange);
+    }
+
+    // quiz alert
+    $("[data-id='submit-quiz']").click(function (e) {
+      var _data$required_answer, _data$required_answer2;
+      e.preventDefault();
+      var _getFormData = getFormData(),
+        data = _getFormData.data;
+      var requiredAnswers = (_data$required_answer = (_data$required_answer2 = data['required_answer_ids']) === null || _data$required_answer2 === void 0 ? void 0 : _data$required_answer2.split(',')) !== null && _data$required_answer !== void 0 ? _data$required_answer : [];
+      var notAnsweredQuestions = [];
+      var _iterator = _createForOfIteratorHelper(requiredAnswers),
+        _step;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var _data$reqAnswer$;
+          var reqAnswer = _step.value;
+          var fillTheGapVariant = reqAnswer + '[0]';
+          if (data[fillTheGapVariant] !== undefined) {
+            if (data[fillTheGapVariant] === '') {
+              notAnsweredQuestions.push(reqAnswer);
+            }
+          } else if (data[reqAnswer] !== undefined && !((_data$reqAnswer$ = data[reqAnswer][0]) !== null && _data$reqAnswer$ !== void 0 && _data$reqAnswer$.length)) {
+            notAnsweredQuestions.push(reqAnswer);
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+      var listOfElements = Array.from($(".masterstudy-course-player-question"));
+      var isScrolled = false;
+      var _loop = function _loop() {
+        var el = _listOfElements[_i];
+        if (notAnsweredQuestions.includes(el.dataset.questionId)) {
+          var onChange = function onChange() {
+            el.classList.remove('masterstudy-course-player-question_required');
+          };
+          if (!isScrolled) {
+            el.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+            isScrolled = true;
+          }
+          el.classList.add('masterstudy-course-player-question_required');
+          handleEvent(el, onChange);
+        }
+      };
+      for (var _i = 0, _listOfElements = listOfElements; _i < _listOfElements.length; _i++) {
+        _loop();
+      }
+      if (isScrolled) return;
+      $("[data-id='quiz_alert']").addClass('masterstudy-alert_open');
+    });
+
+    // submit quiz
+    $("[data-id='quiz_alert']").find("[data-id='submit']").click(function (e) {
+      e.preventDefault();
+      submitQuiz();
+    });
+    function submitQuiz() {
+      var _getFormData2 = getFormData(),
+        data = _getFormData2.data;
       $.ajax({
         type: 'POST',
         url: quiz_data.ajax_url + '?nonce=' + quiz_data.submit_nonce,
@@ -355,7 +426,7 @@
                 }
                 items.push(item);
                 var item_match_val = '[stm_lms_item_match]' + items.join('[stm_lms_sep]');
-                input_parent.val(item_match_val);
+                input_parent.val(item_match_val).trigger('change');
               });
             }
           }
@@ -457,7 +528,7 @@
                 }
                 items.push(item);
                 var image_match_val = '[stm_lms_image_match]' + items.join('[stm_lms_sep]');
-                input_parent.val(image_match_val);
+                input_parent.val(image_match_val).trigger('change');
               });
             }
           }

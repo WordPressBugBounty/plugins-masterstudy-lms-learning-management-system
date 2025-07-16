@@ -10,87 +10,125 @@
 			return {
 				payment_values : {},
 				payments: {
-					cash: {
+					stripe: {
 						enabled: '',
-						name: "<?php esc_html_e( 'Offline payment', 'masterstudy-lms-learning-management-system' ); ?>",
+						displayShow: false,
+						name: '<?php esc_html_e( 'Stripe', 'masterstudy-lms-learning-management-system' ); ?>',
+						img: 'stripe.svg',
+						payment_description: '',
 						fields: {
-							description: {
-								type: 'textarea',
-								placeholder: '<?php esc_html_e( 'Payment method description', 'masterstudy-lms-learning-management-system' ); ?>'
-							},
-						},
-					},
-					wire_transfer: {
-						enabled: '',
-						name: "<?php esc_html_e( 'Wire Transfer', 'masterstudy-lms-learning-management-system' ); ?>",
-						fields: {
-							account_number: {
+							stripe_public_api_key: {
 								type: 'text',
-								placeholder: '<?php esc_html_e( 'Account number', 'masterstudy-lms-learning-management-system' ); ?>'
+								placeholder: '<?php esc_html_e( 'Enter publishable key', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Publishable key', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php echo wp_kses_post( __( 'Enter your Stripe publishable key. Find it in your Stripe dashboard under <strong>Developers → API Keys.</strong>', 'masterstudy-lms-learning-management-system' ) ); ?>',
 							},
-							holder_name: {
+							secret_key: {
 								type: 'text',
-								placeholder: '<?php esc_html_e( 'Holder name', 'masterstudy-lms-learning-management-system' ); ?>'
-							},
-							bank_name: {
-								type: 'text',
-								placeholder: '<?php esc_html_e( 'Bank name', 'masterstudy-lms-learning-management-system' ); ?>'
-							},
-							swift: {
-								type: 'text',
-								placeholder: '<?php esc_html_e( 'Swift', 'masterstudy-lms-learning-management-system' ); ?>'
+								placeholder: '<?php esc_html_e( 'Enter secret key', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Secret key', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php echo wp_kses_post( __( 'Enter your secret key from the <strong>API Keys</strong> section in your Stripe dashboard for secure payments.', 'masterstudy-lms-learning-management-system' ) ); ?>',
 							},
 							description: {
 								type: 'textarea',
-								placeholder: '<?php esc_html_e( 'Payment method description', 'masterstudy-lms-learning-management-system' ); ?>'
+								placeholder: '<?php esc_html_e( 'Enter payment method description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Checkout description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Shown to users during checkout. Add a short message (e.g. “Pay securely with Stripe”).', 'masterstudy-lms-learning-management-system' ); ?>',
+							},
+							currency: {
+								type: 'text',
+								placeholder: '<?php esc_html_e( 'Enter Stripe currency code', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Stripe currency code', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php echo wp_kses_post( __( 'Set the currency for this payment method (e.g. USD, EUR, GBP). Use the standard 3-letter <a href="https://docs.stripe.com/currencies">ISO code</a>.', 'masterstudy-lms-learning-management-system' ) ); ?>',
 							},
 						},
 					},
 					paypal: {
 						enabled: '',
-						name: "<?php esc_html_e( 'Paypal', 'masterstudy-lms-learning-management-system' ); ?>",
+						displayShow: false,
+						name: "<?php esc_html_e( 'PayPal', 'masterstudy-lms-learning-management-system' ); ?>",
+						img: 'paypal.svg',
+						payment_description: '',
 						fields: {
 							paypal_email: {
 								type: 'text',
-								placeholder: '<?php esc_html_e( 'PayPal Email', 'masterstudy-lms-learning-management-system' ); ?>'
+								placeholder: '<?php esc_html_e( 'Enter PayPal email', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'PayPal business email', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Enter the PayPal email address where you want to receive payments.', 'masterstudy-lms-learning-management-system' ); ?>',
 							},
 							currency_code: {
 								type: 'select',
 								source: 'codes',
 								value : 'USD',
-								placeholder: '<?php esc_html_e( 'Currency code', 'masterstudy-lms-learning-management-system' ); ?>'
+								placeholder: '<?php esc_html_e( 'Select currency code', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Currency', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Choose the currency for this payment method.', 'masterstudy-lms-learning-management-system' ); ?>',
 							},
 							paypal_mode: {
 								type: 'select',
 								source: 'modes',
 								value : 'sandbox',
-								placeholder: '<?php esc_html_e( 'PayPal mode', 'masterstudy-lms-learning-management-system' ); ?>'
+								placeholder: '<?php esc_html_e( 'Select PayPal mode', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Payment mode', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Choose Live to accept real payments or Sandbox to test.', 'masterstudy-lms-learning-management-system' ); ?>',
 							},
 							description: {
 								type: 'textarea',
-								placeholder: '<?php esc_html_e( 'Payment method description', 'masterstudy-lms-learning-management-system' ); ?>'
+								placeholder: '<?php esc_html_e( 'Enter payment method description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Checkout description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'This will appear as the PayPal payment option title at checkout.', 'masterstudy-lms-learning-management-system' ); ?>',
 							},
 						},
 					},
-					stripe: {
+					wire_transfer: {
 						enabled: '',
-						name: "<?php esc_html_e( 'Stripe', 'masterstudy-lms-learning-management-system' ); ?>",
+						displayShow: false,
+						name: "<?php esc_html_e( 'Wire Transfer', 'masterstudy-lms-learning-management-system' ); ?>",
+						img: 'wire-transfer.svg',
 						fields: {
-							stripe_public_api_key: {
+							account_number: {
 								type: 'text',
-								placeholder: '<?php esc_html_e( 'Publishable key', 'masterstudy-lms-learning-management-system' ); ?>'
+								placeholder: '<?php esc_html_e( 'Enter account number', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Account number', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Provide your bank account number for payments.', 'masterstudy-lms-learning-management-system' ); ?>',
 							},
-							secret_key: {
+							holder_name: {
 								type: 'text',
-								placeholder: '<?php esc_html_e( 'Secret key', 'masterstudy-lms-learning-management-system' ); ?>'
+								placeholder: '<?php esc_html_e( 'Enter holder name', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Account holder name', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Enter the full name of the account owner.', 'masterstudy-lms-learning-management-system' ); ?>',
+							},
+							bank_name: {
+								type: 'text',
+								placeholder: '<?php esc_html_e( 'Enter bank name', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Bank name', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Enter your bank’s official name.', 'masterstudy-lms-learning-management-system' ); ?>',
+							},
+							swift: {
+								type: 'text',
+								placeholder: '<?php esc_html_e( 'Enter SWIFT/BIC code', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'SWIFT/BIC code', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Enter the SWIFT or BIC code for international transfers.', 'masterstudy-lms-learning-management-system' ); ?>',
 							},
 							description: {
 								type: 'textarea',
-								placeholder: '<?php esc_html_e( 'Payment method description', 'masterstudy-lms-learning-management-system' ); ?>'
+								placeholder: '<?php esc_html_e( 'Enter payment method description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Checkout description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'This will appear as the wire transfer option at checkout.', 'masterstudy-lms-learning-management-system' ); ?>',
 							},
-							currency: {
-								type: 'text',
-								placeholder: '<?php esc_html_e( 'Stripe currency code', 'masterstudy-lms-learning-management-system' ); ?>'
+						},
+					},
+					cash: {
+						enabled: '',
+						displayShow: false,
+						name: "<?php esc_html_e( 'Offline Payment', 'masterstudy-lms-learning-management-system' ); ?>",
+						img: 'offline.svg',
+						fields: {
+							description: {
+								type: 'textarea',
+								placeholder: '<?php esc_html_e( 'Enter payment method description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Offline payment processing', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Accept payments offline. Orders will be created and stored in the system for your manual approval.', 'masterstudy-lms-learning-management-system' ); ?>',
 							},
 						},
 					},
@@ -168,6 +206,9 @@
 				}
 
 				this.$emit('update-payments', vm.payment_values);
+			},
+			togglePayment(paymentKey, event) {
+				this.payments[paymentKey].displayShow = !this.payments[paymentKey].displayShow;
 			}
 		},
 		watch: {

@@ -11,6 +11,6 @@ class LessonType extends Field {
 	public static array $properties = array(
 		'type'        => 'string',
 		'description' => 'Lesson type',
-		'enum'        => array( 'text', 'video', 'steam', 'zoom_conference' ),
+		'enum'        => array( 'text', 'video', 'steam', 'zoom_conference', 'pdf' ),
 	);
 }

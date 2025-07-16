@@ -17,13 +17,12 @@ $mode       = $mode ?? '';
 			alt="<?php echo esc_html( $course->full_image['title'] ); ?>">
 		<?php
 	} elseif ( ! empty( $course_preview['video_type'] ) && $with_image || 'full_width' === $mode ) {
-		wp_enqueue_style( 'masterstudy-single-course-video-preview' );
 		STM_LMS_Templates::show_lms_template(
-			'components/video-media',
+			'components/course/video',
 			array(
-				'lesson' => (array) $course_preview ?? '',
-				'id'     => $course->id,
-				'mode'   => true,
+				'course'    => (array) $course_preview ?? '',
+				'course_id' => $course->id,
+				'mode'      => true,
 			)
 		);
 	}

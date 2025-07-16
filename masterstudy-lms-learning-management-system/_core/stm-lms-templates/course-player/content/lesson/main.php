@@ -10,6 +10,7 @@
  * @var boolean $dark_mode
  */
 
+use MasterStudy\Lms\Enums\LessonType;
 use MasterStudy\Lms\Plugin\PostType;
 
 wp_enqueue_style( 'video.js' );
@@ -41,10 +42,20 @@ if ( $post instanceof \WP_Post && PostType::LESSON === $post->post_type ) {
 					'lesson_completed'      => $lesson_completed,
 				),
 			);
-		}
-		if ( 'audio' === $lesson_type ) {
+		} elseif ( 'audio' === $lesson_type ) {
 			STM_LMS_Templates::show_lms_template(
 				'course-player/content/lesson/audio',
+				array(
+					'item_id'          => $item_id,
+					'user_id'          => $user_id,
+					'course_id'        => $post_id,
+					'lesson_completed' => $lesson_completed,
+					'dark_mode'        => $dark_mode,
+				)
+			);
+		} elseif ( LessonType::PDF === $lesson_type ) {
+			STM_LMS_Templates::show_lms_template(
+				'course-player/content/lesson/pdf',
 				array(
 					'item_id'          => $item_id,
 					'user_id'          => $user_id,

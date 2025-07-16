@@ -34,6 +34,7 @@
 							<h4 class="section_item__title">
 								<img v-if="item.type==='lesson' && item.post_type!=='stm-google-meets'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/text.svg' ); ?>">
 								<img v-if="item.type==='quiz'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/quiz.svg' ); ?>">
+								<img v-if="item.type==='pdf'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/pdf.svg' ); ?>">
 								<img v-if="item.type==='audio'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/audio.svg' ); ?>">
 								<img v-if="item.type==='video'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/video.svg' ); ?>">
 								<img v-if="item.type==='text'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/text.svg' ); ?>">

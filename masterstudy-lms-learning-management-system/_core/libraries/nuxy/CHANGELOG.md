@@ -1,3 +1,7 @@
+## 4.4.41
+- **New:** Added 'format' option to color field.
+## 4.4.40
+- **New:** Added new submenu support title
 ## 4.4.39
 - **New:** Added new 'vars' attribute to fields. (alternative hints option)
 ## 4.4.38

@@ -27,6 +27,7 @@ function stm_lms_tables_update() {
 	stm_lms_curriculum_sections();
 	stm_lms_curriculum_materials();
 	stm_lms_order_items();
+	stm_lms_user_bookmarks();
 
 	if ( function_exists( 'stm_lms_user_subscriptions' ) ) {
 		stm_lms_user_subscriptions();

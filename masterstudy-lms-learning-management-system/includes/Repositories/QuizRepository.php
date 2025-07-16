@@ -8,15 +8,16 @@ use WP_Post;
 
 class QuizRepository {
 	private static $fields_meta_map = array(
-		'correct_answer'   => 'correct_answer',
-		'duration'         => 'duration',
-		'duration_measure' => 'duration_measure',
-		'excerpt'          => 'lesson_excerpt',
-		'attempts'         => 'attempts',
-		'passing_grade'    => 'passing_grade',
-		'random_questions' => 'random_questions',
-		're_take_cut'      => 're_take_cut',
-		'style'            => 'quiz_style',
+		'correct_answer'       => 'correct_answer',
+		'duration'             => 'duration',
+		'duration_measure'     => 'duration_measure',
+		'excerpt'              => 'lesson_excerpt',
+		'attempts'             => 'attempts',
+		'passing_grade'        => 'passing_grade',
+		'random_questions'     => 'random_questions',
+		'required_answers_ids' => 'required_answers_ids',
+		're_take_cut'          => 're_take_cut',
+		'style'                => 'quiz_style',
 	);
 
 	private static $casts = array(

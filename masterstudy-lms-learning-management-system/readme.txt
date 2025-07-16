@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.11
+Stable tag: 3.6.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,15 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.12 - 2025-07-16 =
+- **Improvement:** Added “Required Question” option in quizzes — students won’t be able to finish an attempt without answering required questions
+- **Improvement:** You can now restrict student access to the WordPress Dashboard using the “Restrict WordPress Dashboard access for instructors and students” setting — previously, this only worked for instructors
+- **Improvement:** All course-selling related settings are now grouped into a single eCommerce section in LMS Settings
+- **Improvement:** Optimized Video Preview loading speed on the Single Course page — videos now load only on playback, reducing page load time (Pro)
+- **Improvement:** Added AI-based duration estimation for the Lesson Duration field via the AI Lab add-on (Pro)
+- **Improvement:** Added a new lesson type — PDF Lesson (Pro)
+- **Fixed:** When re-purchasing an expired Paid Membership plan, access to previously purchased courses was not restored
+
 = 3.6.11 - 2025-07-10 =
 - **Improvement:** Added new smart-tags to all existing email templates (Pro)
 - **Improvement:** When adding multiple elements in Certificate Builder, each new element now shifts to the right for easier placement (Pro)
@@ -331,14 +340,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Improvement:** Global certificates can now be selected in Course Builder — previously only custom certificates were available (Pro)
 - **Improvement:** Added the ability to re-generate course content when creating a full course if generation was interrupted or incomplete due to unexpected errors (Pro)
 - **Fixed:** In Matching question type, identical answer texts now correctly display their respective Explanations — previously, explanations were duplicated for matching answers with the same text
-
-= 3.6.9 - 2025-06-25 =
-- **Fixed:** Minor bug fixes.
-
-= 3.6.8 - 2025-06-25 =
-- **Improvement:** You can now search for images and videos in the Course Builder File Manager with integrated Unsplash, Pexels, and Pixabay support (Pro)
-- **Improvement:** Subtitles can now be added to video lessons using the HTML or External link source types (Pro)
-- **Improvement:** Video files in the File Manager now display a preview thumbnail instead of an icon and are marked with a "Video" badge (Pro)
-- **Improvement:** When generating a full course using the AI Lab add-on, images can now be automatically generated for Text Lessons and Assignments during Curriculum creation (Pro)
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

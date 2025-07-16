@@ -71,3 +71,7 @@ function stm_lms_order_items_name( $wpdb ) {
 function stm_lms_get_wc_orders( $wpdb ) {
 	return $wpdb->prefix . 'wc_orders';
 }
+
+function stm_lms_user_bookmarks_name( $wpdb ) {
+	return $wpdb->prefix . 'stm_lms_user_bookmarks';
+}

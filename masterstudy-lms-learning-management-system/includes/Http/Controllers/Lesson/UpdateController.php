@@ -50,6 +50,8 @@ class UpdateController {
 			'video_captions'          => 'array',
 			'files'                   => 'array',
 			'custom_fields'           => 'array',
+			'pdf_file'                => 'nullable|array',
+			'pdf_read_all'            => 'boolean',
 		);
 
 		$rules = apply_filters( 'masterstudy_lms_lesson_validation_rules', $rules );
@@ -66,6 +68,10 @@ class UpdateController {
 		$data       = $validator->get_validated();
 		$data['id'] = $lesson_id;
 		$lesson_repository->save( $data );
+
+		if ( LessonType::PDF === $data['type'] && ! \STM_LMS_Helpers::is_pro_plus() ) {
+			return WpResponseFactory::forbidden();
+		}
 
 		if ( ! empty( $data['custom_fields'] ) ) {
 			$custom_fields = new UpdateCustomFieldsController();

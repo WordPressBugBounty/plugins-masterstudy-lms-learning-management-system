@@ -45,6 +45,8 @@ class CreateController {
 			'video_captions'          => 'array',
 			'files'                   => 'array',
 			'custom_fields'           => 'array',
+			'pdf_file'                => 'array',
+			'pdf_read_all'            => 'boolean',
 		);
 
 		$rules = apply_filters( 'masterstudy_lms_lesson_validation_rules', $rules );
@@ -61,6 +63,10 @@ class CreateController {
 		$lesson_repository = new LessonRepository();
 		$data              = $validator->get_validated();
 		$lesson_id         = $lesson_repository->create( $data );
+
+		if ( LessonType::PDF === $data['type'] && ! \STM_LMS_Helpers::is_pro_plus() ) {
+			return WpResponseFactory::forbidden();
+		}
 
 		if ( ! empty( $data['custom_fields'] ) ) {
 			$response = ( new UpdateCustomFieldsController() )->update( $lesson_id, $data['custom_fields'] );

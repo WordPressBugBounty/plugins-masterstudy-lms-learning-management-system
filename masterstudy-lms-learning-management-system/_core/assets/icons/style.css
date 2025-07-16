@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'stmlms';
-  src:  url('fonts/stmlms.eot?am4ag7');
-  src:  url('fonts/stmlms.eot?am4ag7#iefix') format('embedded-opentype'),
-    url('fonts/stmlms.ttf?am4ag7') format('truetype'),
-    url('fonts/stmlms.woff?am4ag7') format('woff'),
-    url('fonts/stmlms.svg?am4ag7#stmlms') format('svg');
+  src:  url('fonts/stmlms.eot?9mr1nn');
+  src:  url('fonts/stmlms.eot?9mr1nn#iefix') format('embedded-opentype'),
+    url('fonts/stmlms.ttf?9mr1nn') format('truetype'),
+    url('fonts/stmlms.woff?9mr1nn') format('woff'),
+    url('fonts/stmlms.svg?9mr1nn#stmlms') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,7 +25,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.stmlms-description:before {
+.stmlms-maximize:before {
+  content: "\ea18";
+}
+.stmlms-print:before {
+  content: "\ea1b";
+}
+.stmlms-open-new-tab:before {
+  content: "\ea1c";
+}
+.stmlms-minimize:before {
+  content: "\ea1a";
+}
+.stmlms-download:before {
+  content: "\ea19";
+}
+.stmlms-arrow-left:before {
   content: "\ea17";
 }
 .stmlms-instructors-grid:before {
@@ -151,7 +166,7 @@
   content: "\e9fb";
   color: #ff3945;
 }
-.stmlms-print:before {
+.stmlms-print1:before {
   content: "\e9f9";
 }
 .stmlms-list-check:before {
@@ -489,7 +504,7 @@
 .stmlms-chevron-right:before {
   content: "\e99d";
 }
-.stmlms-arrow-left:before {
+.stmlms-arrow-left1:before {
   content: "\e99e";
 }
 .stmlms-arrow-right:before {
@@ -761,7 +776,7 @@
   content: "\e949";
   color: #4d5e6f;
 }
-.stmlms-download:before {
+.stmlms-download1:before {
   content: "\e941";
   color: #227aff;
 }
@@ -884,7 +899,7 @@
 .stmlms-instructors-carousel:before {
   content: "\e925";
 }
-.stmlms-arrow-left1:before {
+.stmlms-arrow-left11:before {
   content: "\e920";
   color: #fff;
 }

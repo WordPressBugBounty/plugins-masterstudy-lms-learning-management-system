@@ -86,6 +86,17 @@ function stm_lms_settings_course_player_section() {
 				'description' => esc_html__( 'Allows you to hide or show the questions block in video lessons.', 'masterstudy-lms-learning-management-system' ),
 				'value'       => true,
 			),
+			'course_allow_students_bookmarks' => array(
+				'type'  => 'checkbox',
+				'label' => esc_html__( 'Allow students to create bookmarks in PDF lessons', 'masterstudy-lms-learning-management-system' ),
+				'hint'  => esc_html__( 'Let students add bookmarks in PDF lessons to quickly revisit important pages.', 'masterstudy-lms-learning-management-system' ),
+			),
+			'pdf_bookmarks_section_title'     => array(
+				'type'        => 'text',
+				'label'       => esc_html__( 'Bookmarks Section Title', 'masterstudy-lms-learning-management-system' ),
+				'value'       => esc_html__( 'Bookmarks', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Set the title for the bookmarks section in the Course Player.', 'masterstudy-lms-learning-management-system' ),
+			),
 		);
 
 		$course_player_settings['fields'] = array_merge( $course_player_primary_fields, $course_player_pro_fields );

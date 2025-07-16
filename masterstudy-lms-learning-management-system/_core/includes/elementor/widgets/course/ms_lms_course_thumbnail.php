@@ -33,8 +33,8 @@ class MsLmsCourseThumbnail extends Widget_Base {
 	public function get_style_depends() {
 		return array(
 			'masterstudy-single-course-components',
-			'masterstudy-course-player-video-plyr',
-			'masterstudy-single-course-video-preview',
+			'masterstudy-single-course-video-plyr',
+			'masterstudy-single-course-video',
 		);
 	}
 
@@ -91,7 +91,7 @@ class MsLmsCourseThumbnail extends Widget_Base {
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
-					'{{WRAPPER}} img.masterstudy-single-course-thumbnail, {{WRAPPER}} .masterstudy-course-player-lesson-video' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} img.masterstudy-single-course-thumbnail, {{WRAPPER}} .masterstudy-single-course-video' => 'width: {{SIZE}}{{UNIT}};',
 				),
 			)
 		);
@@ -102,7 +102,7 @@ class MsLmsCourseThumbnail extends Widget_Base {
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
-					'{{WRAPPER}} img.masterstudy-single-course-thumbnail, {{WRAPPER}} .masterstudy-course-player-lesson-video' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} img.masterstudy-single-course-thumbnail, {{WRAPPER}} .masterstudy-single-course-video' => 'height: {{SIZE}}{{UNIT}};',
 				),
 			)
 		);
@@ -110,7 +110,7 @@ class MsLmsCourseThumbnail extends Widget_Base {
 			Group_Control_Border::get_type(),
 			array(
 				'name'     => 'border',
-				'selector' => '{{WRAPPER}} img.masterstudy-single-course-thumbnail, {{WRAPPER}} .masterstudy-course-player-lesson-video .plyr, {{WRAPPER}} .masterstudy-course-player-lesson-video iframe',
+				'selector' => '{{WRAPPER}} img.masterstudy-single-course-thumbnail, {{WRAPPER}} .masterstudy-single-course-video .plyr, {{WRAPPER}} .masterstudy-single-course-video iframe',
 			)
 		);
 		$this->add_control(
@@ -120,7 +120,7 @@ class MsLmsCourseThumbnail extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%' ),
 				'selectors'  => array(
-					'{{WRAPPER}} img.masterstudy-single-course-thumbnail, {{WRAPPER}} .masterstudy-course-player-lesson-video .plyr, {{WRAPPER}} .masterstudy-course-player-lesson-video iframe' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} img.masterstudy-single-course-thumbnail, {{WRAPPER}} .masterstudy-single-course-video .plyr, {{WRAPPER}} .masterstudy-single-course-video iframe' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
@@ -137,7 +137,6 @@ class MsLmsCourseThumbnail extends Widget_Base {
 		if ( empty( $course_data ) || ! isset( $course_data['course'] ) ) {
 			return;
 		}
-
 		\STM_LMS_Templates::show_lms_template(
 			'components/course/thumbnail',
 			array(

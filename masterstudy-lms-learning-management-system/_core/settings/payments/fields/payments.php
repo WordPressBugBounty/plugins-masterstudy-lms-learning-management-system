@@ -8,8 +8,10 @@
 
 $field_key = "data['{$section_name}']['fields']['{$field_name}']";
 
-include STM_LMS_PATH .'/settings/payments/components_js/payments.php';
+require STM_LMS_PATH . '/settings/payments/components_js/payments.php';
+wp_enqueue_style( 'stm-payments-hidden-css', STM_LMS_URL . '/settings/payments/components_css/payments.css', null, get_bloginfo( 'version' ), 'all' );
+
 ?>
 
-<stm-payments v-on:update-payments="<?php echo esc_attr($field_key) ?>['value'] = $event"
-              v-bind:saved_payments="<?php echo esc_attr($field_key); ?>['value']"></stm-payments>
+<stm-payments v-on:update-payments="<?php echo esc_attr( $field_key ); ?>['value'] = $event" v-bind:saved_payments="<?php echo esc_attr( $field_key ); ?>['value']">
+</stm-payments>

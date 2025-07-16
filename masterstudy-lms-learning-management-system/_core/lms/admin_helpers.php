@@ -130,18 +130,13 @@ add_action(
 );
 
 function stm_lms_deny_instructor_admin() {
-	if ( ! wp_doing_ajax() && ! empty( STM_LMS_Options::get_option( 'deny_instructor_admin', '' ) ) ) {
-
+	if ( ! wp_doing_ajax() && ! empty( STM_LMS_Options::get_option( 'deny_instructor_admin', '' ) && ! current_user_can( 'manage_options' ) ) ) {
 		if ( isset( $_GET['page'] ) && 'certificate_builder' === $_GET['page'] ) {
 			return;
 		}
 
-		$user = wp_get_current_user();
-		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-		if ( in_array( 'stm_lms_instructor', (array) $user->roles ) ) {
-			wp_safe_redirect( STM_LMS_User::user_page_url() );
-			die();
-		}
+		wp_safe_redirect( STM_LMS_User::user_page_url() );
+		die();
 	}
 }
 add_action( 'admin_init', 'stm_lms_deny_instructor_admin' );

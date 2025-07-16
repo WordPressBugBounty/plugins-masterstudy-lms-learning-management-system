@@ -17,7 +17,10 @@ function masterstudy_lms_course_player_register_assets() {
 	wp_register_style( 'masterstudy-course-player-quiz', STM_LMS_URL . 'assets/css/course-player/content/quiz.css', null, MS_LMS_VERSION );
 	wp_register_style( 'masterstudy-course-player-quiz-history', STM_LMS_URL . 'assets/css/course-player/content/quiz-history.css', null, MS_LMS_VERSION );
 	wp_register_style( 'masterstudy-course-player-question', STM_LMS_URL . 'assets/css/course-player/content/questions.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-course-player-question-fonts', STM_LMS_URL . 'assets/css/course-player/content/questions-fonts.css', null, MS_LMS_VERSION );
 	wp_register_style( 'masterstudy-course-player-locked', STM_LMS_URL . 'assets/css/course-player/locked.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-course-player-pdf-lesson', STM_LMS_URL . '/assets/css/course-player/content/lesson/lesson-pdf.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-course-player-pdf-lesson-fonts', STM_LMS_URL . '/assets/css/course-player/content/lesson/lesson-pdf-fonts.css', null, MS_LMS_VERSION );
 
 	wp_register_script( 'plyr', STM_LMS_URL . '/assets/vendors/plyr/plyr.js', array(), MS_LMS_VERSION, false );
 	wp_register_script( 'youtube-iframe-api', 'https://www.youtube.com/iframe_api', array(), MS_LMS_VERSION, false );
@@ -37,5 +40,6 @@ function masterstudy_lms_course_player_register_assets() {
 	wp_register_script( 'masterstudy-course-player-question', STM_LMS_URL . '/assets/js/course-player/content/questions.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'jspdf', STM_LMS_URL . '/assets/vendors/jspdf.umd.js', array(), MS_LMS_VERSION, false );
 	wp_register_script( 'masterstudy-course-player-certificate', STM_LMS_URL . '/assets/js/course-player/generate-certificate.js', array( 'jspdf' ), MS_LMS_VERSION, false );
+	wp_register_script( 'masterstudy-course-player-pdf-lesson', STM_LMS_URL . '/assets/js/course-player/content/lesson/lesson-pdf.js', array( 'jquery', 'pdfjs', 'pdfjs_worker' ), MS_LMS_VERSION, true );
 }
 add_action( 'masterstudy_lms_course_player_register_assets', 'masterstudy_lms_course_player_register_assets' );

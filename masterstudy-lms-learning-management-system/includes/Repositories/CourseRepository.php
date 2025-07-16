@@ -354,6 +354,12 @@ final class CourseRepository extends AbstractRepository {
 			set_post_thumbnail( $post['ID'], $course->image['id'] );
 		}
 
+		if ( null === $course->video_poster ) {
+			delete_post_meta( $post['ID'], 'video_poster' );
+		} else {
+			update_post_meta( $post['ID'], 'video_poster', $course->video_poster );
+		}
+
 		do_action( 'masterstudy_lms_course_saved', $post['ID'], (array) $course );
 	}
 

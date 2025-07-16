@@ -63,6 +63,7 @@ class Course {
 	public bool $single_sale;
 	public bool $not_in_membership;
 	public ?string $video_duration;
+	public ?int $video_poster;
 	public ?int $views;
 	public ?string $access_duration;
 	public ?string $access_devices;
