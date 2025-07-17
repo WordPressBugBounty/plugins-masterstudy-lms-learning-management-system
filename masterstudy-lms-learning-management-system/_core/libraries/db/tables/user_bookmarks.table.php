@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-register_activation_hook( MS_LMS_FILE, 'stm_lms_user_pdf_bookmarks' );
+register_activation_hook( MS_LMS_FILE, 'stm_lms_user_bookmarks' );
 
 function stm_lms_user_bookmarks() {
 	global $wpdb;

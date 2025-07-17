@@ -364,11 +364,11 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
   expandBtnRef.on('click', function () {
     if (isExpanded) {
       scale = IS_MOBILE ? 0.5 : 1;
-      expandBtnRef.classList.remove('masterstudy-toolbar__expand-btn_expanded');
+      expandBtnRef.addClass('masterstudy-toolbar__expand-btn_expanded');
     } else {
       var clientWidth = contentWrapper.clientWidth - CLIENT_WIDTH_OFFSET_CHECK;
       scale = Math.round(clientWidth / initialViewport.width);
-      expandBtnRef.classList.add('masterstudy-toolbar__expand-btn_expanded');
+      expandBtnRef.removeClass('masterstudy-toolbar__expand-btn_expanded');
     }
     isExpanded = !isExpanded;
     updateScale();
