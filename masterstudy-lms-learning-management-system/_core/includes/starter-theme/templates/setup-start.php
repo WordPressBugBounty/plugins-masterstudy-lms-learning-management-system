@@ -9,7 +9,7 @@
 
 		<div class="stm-lms-pro-starter-theme-content step-1">
 			<div class="stm-lms-theme-preview">
-				<img src="<?php echo esc_url( STM_LMS_URL . '/assets/img/starter_cover.png' ); ?>">
+				<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/starter_cover.png' ); ?>">
 			</div>
 			<div class="stm-lms-theme-pre-install-info">
 				<ul>

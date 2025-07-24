@@ -9,7 +9,7 @@
 $field_key = "data['{$section_name}']['fields']['{$field_name}']";
 
 require STM_LMS_PATH . '/settings/payments/components_js/payments.php';
-wp_enqueue_style( 'stm-payments-hidden-css', STM_LMS_URL . '/settings/payments/components_css/payments.css', null, get_bloginfo( 'version' ), 'all' );
+wp_enqueue_style( 'stm-payments-hidden-css', STM_LMS_URL . 'settings/payments/components_css/payments.css', null, get_bloginfo( 'version' ), 'all' );
 
 ?>
 

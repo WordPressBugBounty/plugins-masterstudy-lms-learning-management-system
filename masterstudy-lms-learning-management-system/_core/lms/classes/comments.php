@@ -165,9 +165,10 @@ class STM_LMS_Comments {
 			$parent_comment  = get_comment( $parent );
 
 			$email_new_lesson_comment = array(
-				'user_login'      => $user_login,
+				'user_login'      => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user['id'] ),
 				'comment_content' => $comment_content,
 				'lesson_title'    => $lesson_title,
+				'lesson_url'      => \MS_LMS_Email_Template_Helpers::link( STM_LMS_Lesson::get_lesson_url( $course_id, $lesson_id ) ),
 				'course_title'    => $course_title,
 				'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 				'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
@@ -179,8 +180,14 @@ class STM_LMS_Comments {
 				/*Send message to user who has been answered in Q&A*/
 				$user_email = $parent_comment->comment_author_email;
 				$filter     = 'stm_lms_lesson_qeustion_ask_answer';
-				$subject    = esc_html__( 'New lesson comment', 'masterstudy-lms-learning-management-system' );
-				$message    = esc_html__( '{{user_login}} has replied - "{{comment_content}}" to your question on the lesson {{lesson_title}} in the {{course_title}}', 'masterstudy-lms-learning-management-system' );
+				$subject    = 'New Reply to Your Comment in {{lesson_title}}';
+				$message    = wp_kses_post(
+					'Hi {{user_login}} <br>
+				You have received a new reply to your comment in the lesson {{lesson_title}} of the course {{course_title}}.<br>
+				{{comment_content}}<br>
+				You can view the full conversation and reply here: <a href="{{lesson_url}}">Lesson URL</a>. <br>
+				Keep the discussion going!'
+				);
 
 				$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_new_lesson_comment );
 				$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_new_lesson_comment );

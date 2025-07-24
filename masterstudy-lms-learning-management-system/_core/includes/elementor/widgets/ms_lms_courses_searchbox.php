@@ -18,7 +18,7 @@ class MsLmsCoursesSearchbox extends Widget_Base {
 
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
-		wp_register_style( 'ms_lms_courses_searchbox', STM_LMS_URL . '/assets/css/elementor-widgets/course-search-box/course-search-box.css', null, MS_LMS_VERSION, false );
+		wp_register_style( 'ms_lms_courses_searchbox', STM_LMS_URL . 'assets/css/elementor-widgets/course-search-box/course-search-box.css', null, MS_LMS_VERSION, false );
 	}
 
 	public function get_name() {
@@ -1635,8 +1635,8 @@ class MsLmsCoursesSearchbox extends Widget_Base {
 		wp_enqueue_style( 'ms_lms_courses_searchbox' );
 
 		if ( ! Plugin::$instance->editor->is_edit_mode() ) {
-			wp_enqueue_script( 'vue2-autocomplete', STM_LMS_URL . '/assets/vendors/vue2-autocomplete.js', array(), STM_LMS_VERSION, true );
-			wp_enqueue_script( 'ms_lms_courses_searchbox', STM_LMS_URL . '/assets/js/elementor-widgets/course-search-box/course-search-box.js', array( 'jquery' ), STM_LMS_VERSION, true );
+			wp_enqueue_script( 'vue2-autocomplete', STM_LMS_URL . 'assets/vendors/vue2-autocomplete.js', array(), STM_LMS_VERSION, true );
+			wp_enqueue_script( 'ms_lms_courses_searchbox', STM_LMS_URL . 'assets/js/elementor-widgets/course-search-box/course-search-box.js', array( 'jquery' ), STM_LMS_VERSION, true );
 		}
 
 		/* options for templates */

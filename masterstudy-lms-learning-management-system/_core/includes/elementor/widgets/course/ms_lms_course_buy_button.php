@@ -930,7 +930,7 @@ class MsLmsCourseBuyButton extends Widget_Base {
 			return;
 		}
 
-		wp_enqueue_script( 'masterstudy-buy-button', STM_LMS_URL . '/assets/js/components/buy-button.js', array( 'jquery' ), MS_LMS_VERSION, true );
+		wp_enqueue_script( 'masterstudy-buy-button', STM_LMS_URL . 'assets/js/components/buy-button.js', array( 'jquery' ), MS_LMS_VERSION, true );
 		wp_localize_script(
 			'masterstudy-buy-button',
 			'masterstudy_buy_button_data',

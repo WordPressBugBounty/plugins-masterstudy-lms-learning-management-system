@@ -16,7 +16,7 @@ if ( $social_addon_fb || $social_addon_google ) {
 	<div id="masterstudy-authorization-social-login" class="masterstudy-authorization__social <?php echo esc_attr( 'bottom' === $social_position ? 'masterstudy-authorization__social_bottom' : '' ); ?>">
 		<?php if ( $social_addon_google ) { ?>
 			<a href="<?php echo esc_url( $social_addon_google_auth_url ); ?>" id="masterstudy-authorization-google-login" class="masterstudy-authorization__social-google">
-				<img src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/social/google.svg' ); ?>">
+				<img src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/social/google.svg' ); ?>">
 				<?php echo esc_html__( 'Google', 'masterstudy-lms-learning-management-system' ); ?>
 			</a>
 				<?php
@@ -24,7 +24,7 @@ if ( $social_addon_fb || $social_addon_google ) {
 		if ( $social_addon_fb ) {
 			?>
 			<a href="<?php echo esc_url( $social_addon_fb_auth_url ); ?>" id="masterstudy-authorization-fb-login" class="masterstudy-authorization__social-facebook">
-				<img src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/social/fb.svg' ); ?>">
+				<img src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/social/fb.svg' ); ?>">
 				<?php echo esc_html__( 'Facebook', 'masterstudy-lms-learning-management-system' ); ?>
 			</a>
 			<?php } ?>
@@ -32,7 +32,7 @@ if ( $social_addon_fb || $social_addon_google ) {
 	<div id="masterstudy-authorization-social-register" class="masterstudy-authorization__social <?php echo esc_attr( 'bottom' === $social_position ? 'masterstudy-authorization__social_bottom' : '' ); ?>">
 		<?php if ( $social_addon_google ) { ?>
 			<a href="<?php echo esc_url( $social_addon_google_auth_url ); ?>" id="masterstudy-authorization-google-register" class="masterstudy-authorization__social-google">
-				<img src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/social/google.svg' ); ?>">
+				<img src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/social/google.svg' ); ?>">
 				<?php echo esc_html__( 'Google', 'masterstudy-lms-learning-management-system' ); ?>
 			</a>
 			<?php
@@ -40,7 +40,7 @@ if ( $social_addon_fb || $social_addon_google ) {
 		if ( $social_addon_fb ) {
 			?>
 			<a href="<?php echo esc_url( $social_addon_fb_auth_url ); ?>" id="masterstudy-authorization-fb-register" class="masterstudy-authorization__social-facebook">
-				<img src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/social/fb.svg' ); ?>">
+				<img src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/social/fb.svg' ); ?>">
 				<?php echo esc_html__( 'Facebook', 'masterstudy-lms-learning-management-system' ); ?>
 			</a>
 		<?php } ?>

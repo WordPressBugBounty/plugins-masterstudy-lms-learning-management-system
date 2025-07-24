@@ -40,7 +40,7 @@ class STM_LMS_Course {
 
 			if ( ! $single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership ) {
 				ob_start();
-				$subscription_image = STM_LMS_URL . '/assets/img/members_only.svg';
+				$subscription_image = STM_LMS_URL . 'assets/img/members_only.svg';
 				?>
 				<div class="course_available_only_in_subscription">
 					<div class="course_available_only_in_subscription__image">
@@ -177,6 +177,45 @@ class STM_LMS_Course {
 		if ( empty( $course_duration ) || empty( $user_course ) ) {
 			return false;
 		} elseif ( time() > intval( $user_course['start_time'] ) + $course_duration ) {
+
+			$meta_key     = '_stm_lms_course_expiration_email_sent_' . $course_id;
+			$already_sent = get_user_meta( $user_id, $meta_key, true );
+
+			if ( ! $already_sent ) {
+				$subject  = esc_html__(
+					'Your Access to {{course_title}} Has Ended',
+					'masterstudy-lms-learning-management-system-pro'
+				);
+				$template = wp_kses_post(
+					'Hi {{user_login}},<br>
+				We hope you enjoyed learning with us! Unfortunately, your access to the {{course_title}} course ended on {{course_expiration_date}}.
+				Happy learning,<br>
+				{{blog_name}}<br>
+				{{site_url}}'
+				);
+
+				$email_course_expiration_data = array(
+					'user_login'             => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
+					'blog_name'              => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+					'course_title'           => get_the_title( $course_id ),
+					'site_url'               => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+					'course_url'             => \MS_LMS_Email_Template_Helpers::link( get_the_permalink( $course_id ) ),
+					'course_expiration_date' => gmdate( 'Y-m-d H:i:s', ( intval( $user_course['start_time'] ) + $course_duration ) ),
+				);
+
+				$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_course_expiration_data );
+				$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_course_expiration_data );
+
+				STM_LMS_Helpers::send_email(
+					STM_LMS_Helpers::masterstudy_lms_get_user_email( $user_id ),
+					$subject,
+					$message,
+					'stm_lms_course_expiration_for_students',
+					$email_course_expiration_data
+				);
+				update_user_meta( $user_id, $meta_key, 1 );
+
+			}
 			return true;
 		}
 
@@ -712,7 +751,7 @@ class STM_LMS_Course {
 					}
 				}
 				$response['course_preview'] = $course_preview ?? '';
-				wp_register_script( 'plyr', STM_LMS_URL . '/assets/vendors/plyr/plyr.js', array(), MS_LMS_VERSION, false );
+				wp_register_script( 'plyr', STM_LMS_URL . 'assets/vendors/plyr/plyr.js', array(), MS_LMS_VERSION, false );
 			}
 		}
 

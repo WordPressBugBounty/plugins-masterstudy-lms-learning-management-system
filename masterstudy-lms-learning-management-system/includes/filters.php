@@ -148,7 +148,7 @@ function masterstudy_lms_pre_get_document_title( $title ) {
 add_filter( 'pre_get_document_title', 'masterstudy_lms_pre_get_document_title', 100 );
 
 function masterstudy_lms_capture_textdomain_path( $mofile, $domain ) {
-	if ( 'masterstudy-lms-learning-management-system' === $domain ) {
+	if ( 'masterstudy-lms-learning-management-system' === $domain && is_readable( $mofile ) ) {
 		global $ms_lms_loaded_textdomain_path;
 		$ms_lms_loaded_textdomain_path = dirname( $mofile );
 	}

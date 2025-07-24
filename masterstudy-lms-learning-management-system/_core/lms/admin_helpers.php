@@ -10,7 +10,7 @@ add_action(
 		stm_lms_register_script( 'admin/lms_sub_menu' );
 		/** enqueue styles **/
 		wp_enqueue_style( 'stm_lms_starter_theme', STM_LMS_URL . 'includes/starter-theme/assets/main.css', array( 'wp-admin' ), $version );
-		wp_enqueue_style( 'font-awesome-min', STM_LMS_URL . '/assets/vendors/font-awesome.min.css', null, $version, 'all' );
+		wp_enqueue_style( 'font-awesome-min', STM_LMS_URL . 'assets/vendors/font-awesome.min.css', null, $version, 'all' );
 
 		/** enqueue javascript **/
 		wp_enqueue_script( 'stm_lms_starter_theme', STM_LMS_URL . 'includes/starter-theme/assets/main.js', array( 'jquery-core' ), $version, true );
@@ -43,17 +43,17 @@ add_action(
 
 		stm_lms_register_style( 'nuxy/main' );
 
-		wp_register_script( 'masterstudy-vue', STM_LMS_URL . '/assets/js/vendors/vue.js', array(), $version, true );
-		wp_register_script( 'masterstudy-vue-resource', STM_LMS_URL . '/assets/js/vendors/vue-resource.js', array( 'masterstudy-vue' ), $version, true );
-		wp_register_script( 'masterstudy-vue-range-slider', STM_LMS_URL . '/assets/js/vendors/vue-range-slider.js', array( 'masterstudy-vue' ), $version, true );
+		wp_register_script( 'masterstudy-vue', STM_LMS_URL . 'assets/js/vendors/vue.js', array(), $version, true );
+		wp_register_script( 'masterstudy-vue-resource', STM_LMS_URL . 'assets/js/vendors/vue-resource.js', array( 'masterstudy-vue' ), $version, true );
+		wp_register_script( 'masterstudy-vue-range-slider', STM_LMS_URL . 'assets/js/vendors/vue-range-slider.js', array( 'masterstudy-vue' ), $version, true );
 	}
 );
 
 /** Add icons for gutenberg blocks */
 function stm_lms_gutenberg_block_styles() {
 	wp_enqueue_style( 'stm_lms_icons', STM_LMS_URL . 'assets/icons/style.css', null, STM_LMS_VERSION );
-	wp_enqueue_style( 'font-awesome-min', STM_LMS_URL . '/assets/vendors/font-awesome.min.css', null, STM_LMS_VERSION, 'all' );
-	wp_enqueue_style( 'linear', STM_LMS_URL . '/libraries/nuxy/taxonomy_meta/assets/linearicons/linear.css', null, STM_LMS_VERSION, 'all' );
+	wp_enqueue_style( 'font-awesome-min', STM_LMS_URL . 'assets/vendors/font-awesome.min.css', null, STM_LMS_VERSION, 'all' );
+	wp_enqueue_style( 'linear', STM_LMS_URL . 'libraries/nuxy/taxonomy_meta/assets/linearicons/linear.css', null, STM_LMS_VERSION, 'all' );
 }
 
 add_action( 'enqueue_block_assets', 'stm_lms_gutenberg_block_styles' );
@@ -247,7 +247,7 @@ add_action(
 		<div id="ms-lms-course-builder">
 		<?php if ( home_url( '/' ) === $edit_url ) { ?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=stm-lms-settings#section_routes' ) ); ?>">
-				<img src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/global/file-not-found.png' ); ?>">
+				<img src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/global/file-not-found.png' ); ?>">
 				<p><?php echo esc_html__( 'You can make changes within Course Builder only if you set up the User Account page', 'masterstudy-lms-learning-management-system' ); ?></p>
 				<div class="button button-primary button-hero button-edit-course-builder">
 					<?php echo esc_html__( 'Go to settings', 'masterstudy-lms-learning-management-system' ); ?>
@@ -309,7 +309,7 @@ add_action( 'trashed_post', 'stm_lms_route_trash_page_handler' );
 
 function masterstudy_plugin_escape_question_title( $title, $post_id ) {
 	if ( is_admin() && PostType::QUESTION === get_post_type( $post_id ) ) {
-		return strip_tags( $title );
+		return wp_strip_all_tags( $title );
 	}
 
 	return $title;

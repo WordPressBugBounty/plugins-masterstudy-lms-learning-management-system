@@ -95,7 +95,7 @@ stm_lms_register_script( 'manage_students/import-modal' );
 			</div>
 			<div class="masterstudy-manage-students-import__file-attachment">
 				<div class="masterstudy-manage-students-import__file-attachment__info">
-					<img src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/files/new/excel.svg' ); ?>" class="masterstudy-manage-students-import__file-attachment__image">
+					<img src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/files/new/excel.svg' ); ?>" class="masterstudy-manage-students-import__file-attachment__image">
 					<div class="masterstudy-manage-students-import__file-attachment__wrapper">
 						<span class="masterstudy-manage-students-import__file-attachment__title"></span>
 						<span class="masterstudy-manage-students-import__file-attachment__size"></span>

@@ -2,34 +2,39 @@
 # This file is distributed under the same license as the MasterStudy LMS WordPress Plugin – for Online Courses and Education plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.6.6\n"
+"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.6.14\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/masterstudy-lms-learning-management-system\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-18T11:16:04+00:00\n"
+"POT-Creation-Date: 2025-08-03T11:28:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.12.0\n"
 
 #. Plugin Name of the plugin
+#: masterstudy-lms-learning-management-system.php
 msgid "MasterStudy LMS WordPress Plugin – for Online Courses and Education"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: masterstudy-lms-learning-management-system.php
 msgid "http://masterstudy.stylemixthemes.com/lms-plugin/"
 msgstr ""
 
 #. Description of the plugin
+#: masterstudy-lms-learning-management-system.php
 msgid "Create brilliant lessons with videos, graphs, images, slides and any other attachments thanks to flexible and user-friendly lesson management tool powered by WYSIWYG editor."
 msgstr ""
 
 #. Author of the plugin
+#: masterstudy-lms-learning-management-system.php
 msgid "StylemixThemes"
 msgstr ""
 
 #. Author URI of the plugin
+#: masterstudy-lms-learning-management-system.php
 msgid "https://stylemixthemes.com/"
 msgstr ""
 
@@ -137,7 +142,7 @@ msgid "Revenue"
 msgstr ""
 
 #: includes/actions.php:155
-#: _core/lms/classes/instructors.php:214
+#: _core/lms/classes/instructors.php:230
 #: _core/stm-lms-templates/account/private/instructor_parts/grid.php:104
 msgid "Analytics"
 msgstr ""
@@ -237,7 +242,7 @@ msgstr ""
 
 #: includes/Plugin/Addons.php:114
 #: _core/includes/elementor/widgets/course/ms_lms_course_grades.php:23
-#: _core/lms/classes/instructors.php:221
+#: _core/lms/classes/instructors.php:237
 #: _core/settings/main_settings/grades.php:58
 #: _core/settings/main_settings/grades.php:125
 #: _core/settings/main_settings/grades.php:131
@@ -633,32 +638,38 @@ msgstr ""
 msgid "Count"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:169
+#: includes/Repositories/CoursePlayerRepository.php:177
 #: _core/stm-lms-templates/account/private/manage_students/student-progress.php:97
 msgid "completed"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:192
+#: includes/Repositories/CoursePlayerRepository.php:200
 #: _core/stm-lms-templates/components/course/curriculum/udemy-materials.php:36
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Text lesson"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:193
+#: includes/Repositories/CoursePlayerRepository.php:201
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Audio lesson"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:194
+#: includes/Repositories/CoursePlayerRepository.php:202
 #: _core/stm-lms-templates/components/course/curriculum/udemy-materials.php:40
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Video lesson"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:195
+#: includes/Repositories/CoursePlayerRepository.php:203
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "PDF lesson"
+msgstr ""
+
+#: includes/Repositories/CoursePlayerRepository.php:204
 #: _core/includes/post_type/posts.php:130
 #: _core/includes/wizard/main.php:72
 #: _core/settings/main_settings/quiz.php:33
@@ -669,25 +680,25 @@ msgstr ""
 msgid "Quiz"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:196
+#: includes/Repositories/CoursePlayerRepository.php:205
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Assignment"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:197
+#: includes/Repositories/CoursePlayerRepository.php:206
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Stream lesson"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:198
+#: includes/Repositories/CoursePlayerRepository.php:207
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Zoom lesson"
 msgstr ""
 
-#: includes/Repositories/CoursePlayerRepository.php:199
+#: includes/Repositories/CoursePlayerRepository.php:208
 msgid "Google Meet webinar"
 msgstr ""
 
@@ -697,14 +708,15 @@ msgstr ""
 
 #. translators: %d count attempts
 #: includes/Repositories/EnrolledQuizzesRepository.php:78
+#, php-format
 msgid "%d attempts"
 msgstr ""
 
 #: includes/Repositories/EnrolledQuizzesRepository.php:132
-#: _core/lms/classes/instructors.php:677
-#: _core/lms/classes/instructors.php:678
-#: _core/lms/classes/instructors.php:937
-#: _core/lms/classes/instructors.php:939
+#: _core/lms/classes/instructors.php:708
+#: _core/lms/classes/instructors.php:709
+#: _core/lms/classes/instructors.php:985
+#: _core/lms/classes/instructors.php:987
 #: _core/stm-lms-templates/checkout/thankyou.php:85
 #: _core/stm-lms-templates/stm-lms-user-pmp.php:200
 msgid "N/A"
@@ -714,6 +726,7 @@ msgstr ""
 #. translators: %d: number
 #: includes/Repositories/EnrolledQuizzesRepository.php:224
 #: _core/stm-lms-templates/course-player/content/quiz/result.php:118
+#, php-format
 msgid "<strong>%2$d</strong> out of <strong>%1$d</strong> questions answered correctly"
 msgstr ""
 
@@ -721,13 +734,15 @@ msgstr ""
 #. translators: %d: number
 #: includes/Repositories/EnrolledQuizzesRepository.php:226
 #: _core/stm-lms-templates/course-player/content/quiz/result.php:121
+#, php-format
 msgid "<strong>%1$d</strong> out of <strong>%2$d</strong> questions answered correctly"
 msgstr ""
 
 #. translators: %s: count of questions
 #. translators: %s: Count of Questions
 #: includes/Repositories/EnrolledQuizzesRepository.php:271
-#: _core/includes/user_manager/UserManager.CourseUser.php:279
+#: _core/includes/user_manager/UserManager.CourseUser.php:283
+#, php-format
 msgid "%s question"
 msgid_plural "%s questions"
 msgstr[0] ""
@@ -739,7 +754,7 @@ msgstr ""
 
 #: includes/Repositories/EnrolledQuizzesRepository.php:285
 #: _core/lms/classes/order.php:408
-#: _core/lms/enqueue.php:543
+#: _core/lms/enqueue.php:555
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:170
 msgid "Failed"
 msgstr ""
@@ -752,11 +767,12 @@ msgstr ""
 #. translators: %1$s Course Title, %2$s User Login
 #: includes/Repositories/StudentsRepository.php:341
 #: _core/includes/user_manager/UserManager.Course.php:159
+#, php-format
 msgid "Dear %1$s, %2$s has removed you from the course - %3$s. Now you don’t have access to the course content."
 msgstr ""
 
-#: includes/Repositories/StudentsRepository.php:348
-#: _core/includes/user_manager/UserManager.Course.php:166
+#: includes/Repositories/StudentsRepository.php:358
+#: _core/includes/user_manager/UserManager.Course.php:176
 msgid "Your Enrollment Has Been Cancelled"
 msgstr ""
 
@@ -1412,6 +1428,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/course/ms_lms_course_complete.php:59
 #: _core/includes/elementor/widgets/course/ms_lms_course_current_students.php:52
 #: _core/includes/elementor/widgets/course/ms_lms_course_curriculum.php:53
+#: _core/includes/elementor/widgets/course/ms_lms_course_description.php:52
 #: _core/includes/elementor/widgets/course/ms_lms_course_details.php:53
 #: _core/includes/elementor/widgets/course/ms_lms_course_enrolled.php:51
 #: _core/includes/elementor/widgets/course/ms_lms_course_excerpt.php:52
@@ -1433,10 +1450,10 @@ msgstr ""
 #: _core/includes/elementor/widgets/course/ms_lms_course_updated.php:51
 #: _core/includes/elementor/widgets/course/ms_lms_course_wishlist.php:53
 #: _core/includes/post_type/posts.php:65
-#: _core/lms/classes/instructors.php:832
+#: _core/lms/classes/instructors.php:874
 #: _core/lms/classes/models/admin/StmStatisticsListTable.php:435
-#: _core/lms/classes/page_routes.php:378
-#: _core/lms/views/payout/meta-box-payout-data.php:143
+#: _core/lms/classes/page_routes.php:368
+#: _core/lms/views/payout/meta-box-payout-data.php:150
 #: _core/settings/main_settings/course.php:428
 #: _core/stm-lms-templates/account/private/parts/certificate-list.php:50
 #: _core/stm-lms-templates/course-player/header.php:110
@@ -1508,8 +1525,8 @@ msgid "with"
 msgstr ""
 
 #: _core/includes/elementor/helpers/unlock-banner.php:29
-#: _core/includes/elementor/StmLmsElementor.php:104
-#: _core/settings/main_settings.php:124
+#: _core/includes/elementor/StmLmsElementor.php:105
+#: _core/settings/main_settings.php:123
 #: _core/stm-lms-templates/analytics-preview.php:33
 #: _core/stm-lms-templates/components/course-templates.php:327
 #: _core/stm-lms-templates/journey/unlock-banner-component.php:101
@@ -1559,32 +1576,32 @@ msgstr ""
 msgid "No course materials have been added for this course yet."
 msgstr ""
 
-#: _core/includes/elementor/StmLmsElementor.php:96
+#: _core/includes/elementor/StmLmsElementor.php:97
 msgid "This template is read-only. Please create a copy if you want to make changes."
 msgstr ""
 
-#: _core/includes/elementor/StmLmsElementor.php:107
+#: _core/includes/elementor/StmLmsElementor.php:108
 msgid "MasterStudy Course"
 msgstr ""
 
-#: _core/includes/elementor/StmLmsElementor.php:110
+#: _core/includes/elementor/StmLmsElementor.php:111
 msgid "MasterStudy Old"
 msgstr ""
 
-#: _core/includes/elementor/StmLmsElementor.php:190
+#: _core/includes/elementor/StmLmsElementor.php:191
 #: _core/stm-lms-templates/components/course/reviews.php:17
 msgid "by"
 msgstr ""
 
-#: _core/includes/elementor/StmLmsElementor.php:201
+#: _core/includes/elementor/StmLmsElementor.php:202
 msgid "attempts"
 msgstr ""
 
-#: _core/includes/elementor/StmLmsElementor.php:203
+#: _core/includes/elementor/StmLmsElementor.php:204
 msgid "Not finished"
 msgstr ""
 
-#: _core/includes/elementor/StmLmsElementor.php:224
+#: _core/includes/elementor/StmLmsElementor.php:225
 #: _core/includes/elementor/widgets/course/ms_lms_course_excerpt.php:204
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:305
 #: _core/stm-lms-templates/components/course/excerpt.php:8
@@ -1594,7 +1611,7 @@ msgstr ""
 msgid "Show more"
 msgstr ""
 
-#: _core/includes/elementor/StmLmsElementor.php:225
+#: _core/includes/elementor/StmLmsElementor.php:226
 #: _core/stm-lms-templates/components/course/excerpt.php:9
 msgid "Show less"
 msgstr ""
@@ -1615,6 +1632,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/course/ms_lms_course_complete.php:52
 #: _core/includes/elementor/widgets/course/ms_lms_course_current_students.php:45
 #: _core/includes/elementor/widgets/course/ms_lms_course_curriculum.php:46
+#: _core/includes/elementor/widgets/course/ms_lms_course_description.php:45
 #: _core/includes/elementor/widgets/course/ms_lms_course_details.php:46
 #: _core/includes/elementor/widgets/course/ms_lms_course_enrolled.php:44
 #: _core/includes/elementor/widgets/course/ms_lms_course_excerpt.php:45
@@ -1661,6 +1679,8 @@ msgstr ""
 #: _core/includes/visual_composer/modules/stm_lms_recent_courses.php:17
 #: _core/includes/visual_composer/modules/stm_lms_single_course_carousel.php:27
 #: _core/lms/classes/helpers.php:639
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
 msgid "Content"
 msgstr ""
 
@@ -2674,7 +2694,9 @@ msgstr ""
 #: _core/includes/elementor/widgets/course/ms_lms_course_categories.php:20
 #: _core/includes/elementor/widgets/ms_lms_courses_searchbox.php:145
 #: _core/stm-lms-templates/account/float_menu/logged_out.php:25
+#: assets/course-builder/js/main.js:1
 #: assets/gutenberg/blocks/course-search/container/index.js:1
+#: react/build/static/js/main.js:1
 msgid "Categories"
 msgstr ""
 
@@ -2760,12 +2782,14 @@ msgstr ""
 #: _core/includes/visual_composer/modules/stm_lms_instructors_carousel.php:27
 #: _core/includes/visual_composer/modules/stm_lms_membership_levels.php:43
 #: _core/lms/classes/helpers.php:636
+#: assets/course-builder/js/main.js:1
 #: assets/gutenberg/blocks/course-carousel/index.js:1
 #: assets/gutenberg/blocks/courses/preset/index.js:1
 #: assets/gutenberg/blocks/iconbox/index.js:1
 #: assets/gutenberg/blocks/instructors-carousel/index.js:1
 #: gutenberg/blocks/iconbox/edit.js:60
 #: gutenberg/blocks/iconbox/edit.js:115
+#: react/build/static/js/main.js:1
 msgid "Title"
 msgstr ""
 
@@ -2849,6 +2873,7 @@ msgid "Size"
 msgstr ""
 
 #: _core/includes/elementor/widgets/course/ms_lms_course_categories.php:206
+#: _core/includes/elementor/widgets/course/ms_lms_course_description.php:21
 #: _core/includes/elementor/widgets/course/ms_lms_course_grades.php:290
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:156
 #: _core/includes/elementor/widgets/ms_lms_instructors_carousel.php:562
@@ -2857,7 +2882,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/slider/content/slide.php:364
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:466
 #: _core/lms/classes/cart.php:301
-#: _core/lms/classes/course.php:721
+#: _core/lms/classes/course.php:760
 #: _core/settings/main_settings/course.php:23
 #: _core/stm-lms-templates/components/course/tabs.php:19
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:47
@@ -3129,13 +3154,13 @@ msgid "Notification Modal Button"
 msgstr ""
 
 #: _core/includes/elementor/widgets/course/ms_lms_course_complete.php:23
-#: _core/lms/enqueue.php:544
+#: _core/lms/enqueue.php:556
 #: _core/settings/demo_import/tpls/field.php:31
 #: _core/stm-lms-templates/account/private/manage_students/student-progress.php:104
-#: _core/stm-lms-templates/course-player/navigation.php:246
-#: _core/stm-lms-templates/dashboard/components/course_user.php:60
-#: _core/stm-lms-templates/dashboard/components/course_user.php:68
-#: _core/stm-lms-templates/dashboard/components/course_user.php:74
+#: _core/stm-lms-templates/course-player/navigation.php:253
+#: _core/stm-lms-templates/dashboard/components/course_user.php:61
+#: _core/stm-lms-templates/dashboard/components/course_user.php:69
+#: _core/stm-lms-templates/dashboard/components/course_user.php:75
 msgid "Complete"
 msgstr ""
 
@@ -3237,7 +3262,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/ms_lms_blog.php:66
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:83
 #: _core/lms/classes/helpers.php:682
-#: _core/lms/helpers.php:1599
+#: _core/lms/helpers.php:1603
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:102
 #: assets/gutenberg/blocks/course-categories/container/index.js:1
 #: assets/gutenberg/blocks/courses/preset/index.js:1
@@ -3249,7 +3274,7 @@ msgid "Student Count"
 msgstr ""
 
 #: _core/includes/elementor/widgets/course/ms_lms_course_curriculum.php:22
-#: _core/lms/classes/course.php:722
+#: _core/lms/classes/course.php:761
 #: _core/lms/classes/helpers.php:640
 #: _core/settings/main_settings/course.php:24
 #: _core/stm-lms-templates/components/course/tabs.php:20
@@ -3401,7 +3426,9 @@ msgstr ""
 #: _core/includes/elementor/widgets/course/ms_lms_course_excerpt.php:21
 #: _core/includes/elementor/widgets/courses/content/card.php:201
 #: _core/includes/elementor/widgets/courses/content/popup.php:38
+#: assets/course-builder/js/main.js:1
 #: assets/gutenberg/blocks/courses/preset/index.js:1
+#: react/build/static/js/main.js:1
 msgid "Excerpt"
 msgstr ""
 
@@ -3482,7 +3509,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:537
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:614
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:875
-#: _core/settings/main_settings/general.php:78
+#: _core/settings/main_settings/ecommerce.php:27
 #: _core/settings/main_settings/profiles.php:177
 #: assets/gutenberg/blocks/adaptive-box/index.js:1
 #: assets/gutenberg/blocks/button/index.js:1
@@ -3615,7 +3642,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:622
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:883
 #: _core/settings/main_settings/courses.php:95
-#: _core/settings/main_settings/general.php:79
+#: _core/settings/main_settings/ecommerce.php:28
 #: _core/settings/main_settings/profiles.php:178
 #: assets/gutenberg/blocks/adaptive-box/index.js:1
 #: assets/gutenberg/blocks/button/index.js:1
@@ -3667,7 +3694,7 @@ msgid "Expiration Box"
 msgstr ""
 
 #: _core/includes/elementor/widgets/course/ms_lms_course_faq.php:23
-#: _core/lms/classes/course.php:723
+#: _core/lms/classes/course.php:762
 #: _core/stm-lms-templates/components/course/tabs.php:21
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:61
 #: assets/course-builder/js/main.js:1
@@ -3782,7 +3809,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/course/ms_lms_course_instructor.php:22
 #: _core/includes/elementor/widgets/courses/content/instructor.php:7
 #: _core/includes/elementor/widgets/deprecated/stm_lms_featured_teacher.php:117
-#: _core/lms/classes/comments.php:309
+#: _core/lms/classes/comments.php:321
 #: _core/lms/helpers.php:181
 #: _core/settings/main_settings/sortable_menu.php:18
 #: _core/stm-lms-templates/account/float_menu/user.php:10
@@ -3947,6 +3974,7 @@ msgid "Divider Line"
 msgstr ""
 
 #: _core/includes/elementor/widgets/course/ms_lms_course_price_info.php:22
+#: _core/stm-lms-templates/components/pricing/one-time.php:48
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Price info"
@@ -3993,8 +4021,8 @@ msgstr ""
 #: _core/includes/elementor/widgets/ms_lms_instructors_grid.php:268
 #: _core/includes/elementor/widgets/stm_lms_testimonials_carousel.php:433
 #: _core/includes/post_type/posts.php:177
-#: _core/lms/classes/course.php:725
-#: _core/lms/classes/instructors.php:601
+#: _core/lms/classes/course.php:764
+#: _core/lms/classes/instructors.php:632
 #: _core/settings/main_settings/course.php:30
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:73
 #: _core/stm-lms-templates/components/course/tabs.php:23
@@ -4163,7 +4191,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/courses/ms_lms_courses.php:158
 #: _core/lms/classes/models/StmLmsPayout.php:146
 #: _core/lms/classes/order.php:405
-#: _core/lms/views/payout/meta-box-payout-data.php:63
+#: _core/lms/views/payout/meta-box-payout-data.php:69
 #: _core/settings/manage_users/main.php:97
 #: _core/stm-lms-templates/courses/advanced_filters/filters/status.php:17
 #: _core/stm-lms-templates/pmpro/pages/invoice.php:33
@@ -4187,7 +4215,7 @@ msgid "Updated"
 msgstr ""
 
 #: _core/includes/elementor/widgets/course/ms_lms_course_wishlist.php:22
-#: _core/lms/classes/page_routes.php:408
+#: _core/lms/classes/page_routes.php:398
 #: _core/lms/classes/user_menu.php:282
 #: _core/settings/main_settings/routes.php:56
 #: _core/settings/page_generator/api/get.php:6
@@ -4270,7 +4298,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/courses/content/card.php:46
 #: _core/includes/elementor/widgets/ms_lms_instructors_grid.php:204
 #: _core/lms/classes/models/admin/StmStatisticsListTable.php:436
-#: _core/lms/views/payout/meta-box-payout-data.php:145
+#: _core/lms/views/payout/meta-box-payout-data.php:152
 #: assets/gutenberg/blocks/instructors/grid/index.js:1
 msgid "Quantity"
 msgstr ""
@@ -4458,7 +4486,8 @@ msgstr ""
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:409
 #: _core/lms/classes/models/admin/StmStatisticsListTable.php:156
 #: _core/lms/classes/models/admin/StmStatisticsListTable.php:437
-#: _core/lms/views/payout/meta-box-payout-data.php:146
+#: _core/lms/views/payout/meta-box-payout-data.php:153
+#: _core/stm-lms-templates/components/pricing/one-time.php:29
 #: _core/stm-lms-templates/courses/advanced_filters/filters/price.php:16
 #: _core/stm-lms-templates/dashboard/components/courses.php:25
 #: assets/course-builder/js/main.js:1
@@ -4710,7 +4739,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/ms_lms_instructors_grid.php:245
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:99
 #: _core/includes/elementor/widgets/stm_lms_membership_levels.php:172
-#: _core/lms/classes/user.php:1138
+#: _core/lms/classes/user.php:1148
 #: _core/stm-lms-templates/account/private/edit_account/position.php:5
 #: assets/gutenberg/blocks/course-categories/container/index.js:1
 #: assets/gutenberg/blocks/course-search/container/index.js:1
@@ -4730,8 +4759,8 @@ msgstr ""
 
 #: _core/includes/elementor/widgets/courses/content/filter.php:39
 #: _core/includes/elementor/widgets/courses/ms_lms_courses.php:168
-#: _core/lms/classes/instructors.php:893
-#: _core/lms/classes/instructors.php:894
+#: _core/lms/classes/instructors.php:941
+#: _core/lms/classes/instructors.php:942
 #: _core/lms/classes/templates.php:73
 #: _core/stm-lms-templates/components/course/instructor.php:35
 #: _core/stm-lms-templates/courses/advanced_filters/filters/instructor.php:20
@@ -5934,7 +5963,7 @@ msgstr ""
 #: _core/includes/visual_composer/modules/stm_lms_featured_teacher.php:68
 #: _core/includes/visual_composer/modules/stm_lms_recent_courses.php:25
 #: _core/lms/classes/helpers.php:675
-#: _core/lms/helpers.php:1594
+#: _core/lms/helpers.php:1598
 #: _core/settings/main_settings/courses.php:82
 #: _core/settings/payout/fields/payout.php:60
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:98
@@ -6807,7 +6836,7 @@ msgid "Field"
 msgstr ""
 
 #: _core/includes/elementor/widgets/ms_lms_mailchimp.php:308
-#: _core/lms/classes/user.php:1563
+#: _core/lms/classes/user.php:1582
 #: _core/settings/manage_users/main.php:73
 #: _core/settings/manage_users/main.php:98
 #: _core/stm-lms-templates/account/public/instructor_parts/fast_message.php:23
@@ -7259,8 +7288,8 @@ msgid "Questions"
 msgstr ""
 
 #: _core/includes/post_type/posts.php:176
-#: _core/lms/classes/instructors.php:539
-#: _core/lms/classes/instructors.php:601
+#: _core/lms/classes/instructors.php:570
+#: _core/lms/classes/instructors.php:632
 msgid "Review"
 msgid_plural "Reviews"
 msgstr[0] ""
@@ -7279,12 +7308,14 @@ msgid "Orders"
 msgstr ""
 
 #: _core/includes/post_type/posts.php:210
+#, php-format
 msgctxt "post type singular name"
 msgid "%s"
 msgstr ""
 
 #: _core/includes/post_type/posts.php:216
 #: _core/includes/post_type/posts.php:229
+#, php-format
 msgctxt "Admin bar "
 msgid "%s"
 msgstr ""
@@ -7293,41 +7324,49 @@ msgstr ""
 #. translators: %s: Label for adding a new item
 #: _core/includes/post_type/posts.php:218
 #: _core/includes/post_type/posts.php:220
+#, php-format
 msgid "Add New %s"
 msgstr ""
 
 #. translators: %s: Post Type Label
 #: _core/includes/post_type/posts.php:222
+#, php-format
 msgid "New %s"
 msgstr ""
 
 #. translators: %s: Post Type Label
 #: _core/includes/post_type/posts.php:224
+#, php-format
 msgid "Edit %s"
 msgstr ""
 
 #. translators: %s: Post Type Label
 #: _core/includes/post_type/posts.php:226
+#, php-format
 msgid "View %s"
 msgstr ""
 
 #. translators: %s: Post Type Label
 #: _core/includes/post_type/posts.php:231
+#, php-format
 msgid "Search %s"
 msgstr ""
 
 #. translators: %s: Post Type Label
 #: _core/includes/post_type/posts.php:233
+#, php-format
 msgid "Parent %s:"
 msgstr ""
 
 #. translators: %s: Post Type Label
 #: _core/includes/post_type/posts.php:235
+#, php-format
 msgid "No %s found."
 msgstr ""
 
 #. translators: %s: Post Type Label
 #: _core/includes/post_type/posts.php:237
+#, php-format
 msgid "No %s found in Trash."
 msgstr ""
 
@@ -7428,6 +7467,7 @@ msgstr ""
 #: _core/includes/shortcodes/partials/courses_categories/style_1.php:72
 #: _core/includes/shortcodes/partials/courses_categories/style_2.php:77
 #: _core/includes/shortcodes/partials/courses_categories/style_5.php:72
+#, php-format
 msgid "%s Courses"
 msgstr ""
 
@@ -7464,6 +7504,7 @@ msgstr ""
 
 #. translators: %s: Course ID
 #: _core/includes/user_manager/UserManager.Course.php:74
+#, php-format
 msgid "Students of %s"
 msgstr ""
 
@@ -7471,11 +7512,11 @@ msgstr ""
 msgid "Deleted user"
 msgstr ""
 
-#: _core/includes/user_manager/UserManager.CourseUser.php:236
+#: _core/includes/user_manager/UserManager.CourseUser.php:240
 msgid "Approved by admin"
 msgstr ""
 
-#: _core/includes/user_manager/UserManager.CourseUser.php:237
+#: _core/includes/user_manager/UserManager.CourseUser.php:241
 msgid "Declined by admin"
 msgstr ""
 
@@ -7662,6 +7703,7 @@ msgstr ""
 
 #. translators: %s: Plugin Version
 #: _core/libraries/announcement/main.php:115
+#, php-format
 msgid "Version: %s"
 msgstr ""
 
@@ -7686,6 +7728,7 @@ msgid "Update Needed for MasterStudy Ecosystem"
 msgstr ""
 
 #: _core/libraries/compatibility/bulk-update.php:16
+#, php-format
 msgid "There have been updates in MasterStudy ecosystem. To make sure everything works correctly, click %s to update the following:"
 msgstr ""
 
@@ -7738,6 +7781,7 @@ msgstr ""
 
 #. translators: %s: string
 #: _core/libraries/compatibility/main.php:137
+#, php-format
 msgid "4-in-1 %s widgets"
 msgstr ""
 
@@ -7813,7 +7857,7 @@ msgid "The legacy course creation process will be switched to the new Course Bui
 msgstr ""
 
 #: _core/libraries/compatibility/notices.php:126
-#: _core/libraries/support-page/config/default.php:134
+#: _core/libraries/support-page/config/default.php:157
 #: _core/settings/main_settings/profiles.php:363
 #: _core/settings/main_settings/profiles.php:380
 #: _core/settings/main_settings/profiles.php:420
@@ -7834,6 +7878,7 @@ msgstr ""
 
 #. translators: %s title
 #: _core/libraries/db/fix_rating.php:40
+#, php-format
 msgid "<p>Rating for course \"%s\" refreshed</p>"
 msgstr ""
 
@@ -7849,11 +7894,11 @@ msgstr ""
 msgid "Refresh ratings"
 msgstr ""
 
-#: _core/libraries/db/tables_updater.php:62
+#: _core/libraries/db/tables_updater.php:63
 msgid "Success!"
 msgstr ""
 
-#: _core/libraries/db/tables_updater.php:63
+#: _core/libraries/db/tables_updater.php:64
 msgid "Updating database..."
 msgstr ""
 
@@ -7894,7 +7939,8 @@ msgstr ""
 
 #: _core/libraries/paypal/includes/admin/views/settings/index.php:84
 #: _core/lms/classes/cart.php:302
-#: _core/settings/main_settings/general.php:70
+#: _core/settings/main_settings/ecommerce.php:8
+#: _core/settings/payments/components_js/payments.php:64
 msgid "Currency"
 msgstr ""
 
@@ -7911,12 +7957,12 @@ msgid "Save Settings"
 msgstr ""
 
 #: _core/libraries/paypal/includes/classes/PayPal.php:135
-#: _core/settings/payments/components_js/payments.php:128
+#: _core/settings/payments/components_js/payments.php:166
 msgid "Sandbox"
 msgstr ""
 
 #: _core/libraries/paypal/includes/classes/PayPal.php:136
-#: _core/settings/payments/components_js/payments.php:129
+#: _core/settings/payments/components_js/payments.php:167
 msgid "Live"
 msgstr ""
 
@@ -8025,6 +8071,7 @@ msgid "Opt Out"
 msgstr ""
 
 #: _core/libraries/stm-mailchimp-integration/classes/STMMailChimpBase.php:268
+#, php-format
 msgid "Want to help make %1$s even more awesome? Allow %1$s to collect non-sensitive diagnostic data and usage information."
 msgstr ""
 
@@ -8048,177 +8095,177 @@ msgstr ""
 msgid "Upgrade now and access a world of pro features, advanced addons, and limitless possibilities for your journey. Turbocharge your courses and make your e-learning platform truly outstanding!"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:27
+#: _core/libraries/support-page/config/default.php:50
 msgid "Learn More"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:42
-#: _core/libraries/support-page/config/default.php:210
+#: _core/libraries/support-page/config/default.php:65
+#: _core/libraries/support-page/config/default.php:233
 msgid "Find instant help with all resources in one place."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:48
+#: _core/libraries/support-page/config/default.php:71
 msgid "Documentation"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:49
+#: _core/libraries/support-page/config/default.php:72
 msgid "Explore in-depth guides and resources to help you navigate and maximize our products."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:52
+#: _core/libraries/support-page/config/default.php:75
 msgid "Read Docs"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:60
+#: _core/libraries/support-page/config/default.php:83
 msgid "Have a problem?"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:61
-msgid "Submit a support ticket and we’ll assist you as soon as possible."
+#: _core/libraries/support-page/config/default.php:84
+msgid "Submit a support ticket and we'll assist you as soon as possible."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:64
+#: _core/libraries/support-page/config/default.php:87
 msgid "Create Ticket"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:69
+#: _core/libraries/support-page/config/default.php:92
 msgid "Only for pro users"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:73
+#: _core/libraries/support-page/config/default.php:96
 msgid "Video Guides"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:74
+#: _core/libraries/support-page/config/default.php:97
 msgid "Watch step-by-step tutorials on how to use features and get the best results."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:77
+#: _core/libraries/support-page/config/default.php:100
 msgid "Watch Guides"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:85
+#: _core/libraries/support-page/config/default.php:108
 msgid "Feature Requests"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:86
+#: _core/libraries/support-page/config/default.php:109
 msgid "Submit your ideas, vote on what matters most, and help us shape future updates."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:89
+#: _core/libraries/support-page/config/default.php:112
 msgid "Request Feature"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:97
+#: _core/libraries/support-page/config/default.php:120
 msgid "Community"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:98
+#: _core/libraries/support-page/config/default.php:121
 msgid "Connect with fellow users, ask questions, and share experiences in a collaborative space."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:101
+#: _core/libraries/support-page/config/default.php:124
 msgid "Join Community"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:110
+#: _core/libraries/support-page/config/default.php:133
 #: _core/stm-lms-templates/wizard/views/steps/finish.php:80
 msgid "Customization"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:111
-msgid "Get custom changes and improvements done to suit your website’s needs."
+#: _core/libraries/support-page/config/default.php:134
+msgid "Get custom changes and improvements done to suit your website's needs."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:114
+#: _core/libraries/support-page/config/default.php:137
 msgid "Get Quotes"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:127
+#: _core/libraries/support-page/config/default.php:150
 msgid "Get PRO"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:128
+#: _core/libraries/support-page/config/default.php:151
 msgid "Get PRO PLUS"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:145
+#: _core/libraries/support-page/config/default.php:168
 msgid "Expert Setup & Optimization"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:146
+#: _core/libraries/support-page/config/default.php:169
 msgid "Get expert help to get started, customize, and improve your website for the best results."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:148
-msgid "Get a custom setup that’s perfectly tailored to your specific needs."
+#: _core/libraries/support-page/config/default.php:171
+msgid "Get a custom setup that's perfectly tailored to your specific needs."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:149
+#: _core/libraries/support-page/config/default.php:172
 msgid "Enjoy personalized assistance to ensure smooth operation and support."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:150
-msgid "Optimize performance by boosting your platform’s speed and user experience."
+#: _core/libraries/support-page/config/default.php:173
+msgid "Optimize performance by boosting your platform's speed and user experience."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:151
+#: _core/libraries/support-page/config/default.php:174
 msgid "Make your platform stand out with unique features and design changes."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:155
+#: _core/libraries/support-page/config/default.php:178
 msgid "Start a Project"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:166
+#: _core/libraries/support-page/config/default.php:189
 msgid "Affiliate"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:167
+#: _core/libraries/support-page/config/default.php:190
 msgid "Join our affiliate program and earn 30% for each sale you make. Start promoting and earning today!"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:170
+#: _core/libraries/support-page/config/default.php:193
 msgid "Become an Affiliate"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:193
+#: _core/libraries/support-page/config/default.php:216
 msgid "Leave Review"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:194
-msgid "We’d love to hear your experience with our tools and services"
+#: _core/libraries/support-page/config/default.php:217
+msgid "We'd love to hear your experience with our tools and services"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:197
+#: _core/libraries/support-page/config/default.php:220
 msgid "Write Review"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:209
+#: _core/libraries/support-page/config/default.php:232
 msgid "From Our Blog"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:213
+#: _core/libraries/support-page/config/default.php:236
 msgid "More Posts"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:224
+#: _core/libraries/support-page/config/default.php:247
 msgid "<span>Get all the latest news & updates</span> delivered straight to your inbox."
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:225
+#: _core/libraries/support-page/config/default.php:248
 msgid "Enter your email here"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:226
+#: _core/libraries/support-page/config/default.php:249
 msgid "I agree with storage and handling of my data by this website"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:228
+#: _core/libraries/support-page/config/default.php:251
 msgid "Thank you, your sign-up request was successful!"
 msgstr ""
 
-#: _core/libraries/support-page/config/default.php:229
+#: _core/libraries/support-page/config/default.php:252
 msgid "Please check your email inbox to confirm."
 msgstr ""
 
@@ -8234,18 +8281,18 @@ msgstr ""
 msgid "Thanks for review!"
 msgstr ""
 
-#: _core/lms/admin_helpers.php:256
+#: _core/lms/admin_helpers.php:251
 msgid "You can make changes within Course Builder only if you set up the User Account page"
 msgstr ""
 
-#: _core/lms/admin_helpers.php:258
+#: _core/lms/admin_helpers.php:253
 msgid "Go to settings"
 msgstr ""
 
-#: _core/lms/admin_helpers.php:265
-#: _core/lms/admin_helpers.php:288
-#: _core/lms/admin_helpers.php:289
-#: _core/lms/helpers.php:1504
+#: _core/lms/admin_helpers.php:260
+#: _core/lms/admin_helpers.php:283
+#: _core/lms/admin_helpers.php:284
+#: _core/lms/helpers.php:1508
 msgid "Edit with Course Builder"
 msgstr ""
 
@@ -8291,6 +8338,7 @@ msgid "Order created, redirecting to PayPal"
 msgstr ""
 
 #: _core/lms/classes/cart.php:235
+#, php-format
 msgid "%1$s. Order key: %2$s"
 msgstr ""
 
@@ -8311,6 +8359,7 @@ msgid "Order created, redirecting"
 msgstr ""
 
 #: _core/lms/classes/cart.php:293
+#: _core/settings/payments/components_js/payments.php:124
 msgid "Offline Payment"
 msgstr ""
 
@@ -8319,12 +8368,11 @@ msgid "Wire transfer"
 msgstr ""
 
 #: _core/lms/classes/cart.php:295
-#: _core/settings/payments/components_js/payments.php:51
 msgid "Paypal"
 msgstr ""
 
 #: _core/lms/classes/cart.php:296
-#: _core/settings/payments/components_js/payments.php:77
+#: _core/settings/payments/components_js/payments.php:16
 msgid "Stripe"
 msgstr ""
 
@@ -8334,19 +8382,17 @@ msgid "Account Number"
 msgstr ""
 
 #: _core/lms/classes/cart.php:298
-#: _core/settings/payments/components_js/payments.php:33
 msgid "Holder name"
 msgstr ""
 
 #: _core/lms/classes/cart.php:299
-#: _core/settings/payments/components_js/payments.php:37
+#: _core/settings/payments/components_js/payments.php:104
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Bank name"
 msgstr ""
 
 #: _core/lms/classes/cart.php:300
-#: _core/settings/payments/components_js/payments.php:41
 msgid "Swift"
 msgstr ""
 
@@ -8390,30 +8436,26 @@ msgstr ""
 
 #. translators: %s: number
 #: _core/lms/classes/comments.php:150
-#: _core/lms/classes/comments.php:290
+#: _core/lms/classes/comments.php:302
+#, php-format
 msgid "%s reply"
 msgid_plural "%s replies"
 msgstr[0] ""
 msgstr[1] ""
 
-#: _core/lms/classes/comments.php:171
-#: _core/lms/classes/comments.php:184
+#: _core/lms/classes/comments.php:199
 msgid "New lesson comment"
 msgstr ""
 
-#: _core/lms/classes/comments.php:173
-msgid "%s has replied - \"%s\" to your question on the lesson %s in the %s"
+#: _core/lms/classes/comments.php:200
+msgid "{{user_login}} commented - \"{{comment_content}}\" on lesson {{lesson_title}} in the course {{course_title}}"
 msgstr ""
 
-#: _core/lms/classes/comments.php:186
-msgid "%s commented - \"%s\" on lesson %s in the course %s"
-msgstr ""
-
-#: _core/lms/classes/comments.php:265
+#: _core/lms/classes/comments.php:277
 msgid "No comments here"
 msgstr ""
 
-#: _core/lms/classes/comments.php:267
+#: _core/lms/classes/comments.php:279
 msgid "Comments not found"
 msgstr ""
 
@@ -8429,7 +8471,11 @@ msgstr ""
 msgid "Members only"
 msgstr ""
 
-#: _core/lms/classes/course.php:391
+#: _core/lms/classes/course.php:185
+msgid "Your Access to {{course_title}} Has Ended"
+msgstr ""
+
+#: _core/lms/classes/course.php:430
 #: _core/stm-lms-templates/courses/advanced_filters/filters/status.php:7
 #: assets/course-builder/js/main.js:1
 #: assets/gutenberg/blocks/courses/filter/status/index.js:1
@@ -8437,7 +8483,7 @@ msgstr ""
 msgid "Hot"
 msgstr ""
 
-#: _core/lms/classes/course.php:392
+#: _core/lms/classes/course.php:431
 #: _core/stm-lms-templates/courses/advanced_filters/filters/status.php:8
 #: assets/course-builder/js/main.js:1
 #: assets/gutenberg/blocks/courses/filter/status/index.js:1
@@ -8445,7 +8491,7 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: _core/lms/classes/course.php:393
+#: _core/lms/classes/course.php:432
 #: _core/stm-lms-templates/courses/advanced_filters/filters/status.php:9
 #: assets/course-builder/js/main.js:1
 #: assets/gutenberg/blocks/courses/filter/status/index.js:1
@@ -8453,11 +8499,11 @@ msgstr ""
 msgid "Special"
 msgstr ""
 
-#: _core/lms/classes/course.php:724
+#: _core/lms/classes/course.php:763
 msgid "Announcement"
 msgstr ""
 
-#: _core/lms/classes/course.php:729
+#: _core/lms/classes/course.php:768
 #: _core/settings/main_settings/course.php:37
 #: _core/settings/main_settings/grades.php:66
 #: _core/stm-lms-templates/components/course/tabs.php:27
@@ -8475,9 +8521,9 @@ msgstr ""
 #: _core/lms/classes/user.php:288
 #: _core/lms/classes/user.php:310
 #: _core/lms/classes/user.php:322
-#: _core/lms/classes/user.php:1524
-#: _core/lms/classes/user.php:1585
-#: _core/lms/classes/user.php:1613
+#: _core/lms/classes/user.php:1543
+#: _core/lms/classes/user.php:1606
+#: _core/lms/classes/user.php:1634
 #: _core/settings/custom_fields/grades_table/field.php:18
 #: _core/stm-lms-templates/components/course-templates-modal.php:32
 msgid "Field is required"
@@ -8490,22 +8536,22 @@ msgstr ""
 
 #: _core/lms/classes/guest_checkout.php:144
 #: _core/lms/classes/user.php:375
-#: _core/lms/classes/user.php:1362
-#: _core/lms/classes/user.php:2005
+#: _core/lms/classes/user.php:1372
+#: _core/lms/classes/user.php:2030
 msgid "Password must have at least 8 characters"
 msgstr ""
 
 #: _core/lms/classes/guest_checkout.php:152
 #: _core/lms/classes/user.php:383
-#: _core/lms/classes/user.php:1371
-#: _core/lms/classes/user.php:2013
+#: _core/lms/classes/user.php:1381
+#: _core/lms/classes/user.php:2038
 msgid "Password must include at least one lowercase letter!"
 msgstr ""
 
 #: _core/lms/classes/guest_checkout.php:160
 #: _core/lms/classes/user.php:391
-#: _core/lms/classes/user.php:1380
-#: _core/lms/classes/user.php:2021
+#: _core/lms/classes/user.php:1390
+#: _core/lms/classes/user.php:2046
 msgid "Password must include at least one number!"
 msgstr ""
 
@@ -8524,6 +8570,7 @@ msgstr ""
 
 #. translators: %d Showed & Data Total
 #: _core/lms/classes/helpers.php:395
+#, php-format
 msgid "Showing: <span class=\"lms-courses-search-result-shown\">%1$d</span> courses out of <span class=\"lms-courses-search-result-total\">%2$d</span>"
 msgstr ""
 
@@ -8568,92 +8615,88 @@ msgid "Advanced"
 msgstr ""
 
 #: _core/lms/classes/helpers.php:683
-#: _core/lms/helpers.php:1604
+#: _core/lms/helpers.php:1608
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:106
 msgid "Industrial"
 msgstr ""
 
 #: _core/lms/classes/helpers.php:690
-#: _core/lms/helpers.php:1609
+#: _core/lms/helpers.php:1613
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:116
 msgid "Timeless"
 msgstr ""
 
 #: _core/lms/classes/helpers.php:691
-#: _core/lms/helpers.php:1614
+#: _core/lms/helpers.php:1618
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:120
 msgid "Sleek with Sidebar"
 msgstr ""
 
 #: _core/lms/classes/helpers.php:692
-#: _core/lms/helpers.php:1619
+#: _core/lms/helpers.php:1623
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:124
 msgid "Minimalistic"
 msgstr ""
 
 #: _core/lms/classes/helpers.php:693
-#: _core/lms/helpers.php:1624
+#: _core/lms/helpers.php:1628
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:128
 #: assets/gutenberg/blocks/course-categories/container/index.js:1
 msgid "Dynamic"
 msgstr ""
 
 #: _core/lms/classes/helpers.php:694
-#: _core/lms/helpers.php:1629
+#: _core/lms/helpers.php:1633
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:132
 msgid "Modern with Curriculum"
 msgstr ""
 
 #: _core/lms/classes/helpers.php:695
-#: _core/lms/helpers.php:1634
+#: _core/lms/helpers.php:1638
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:136
 msgid "Dynamic with Short Sidebar"
 msgstr ""
 
 #: _core/lms/classes/helpers.php:696
-#: _core/lms/helpers.php:1639
+#: _core/lms/helpers.php:1643
 #: _core/stm-lms-templates/wizard/views/steps/single_course.php:140
 msgid "Bold with Full Width Cover"
 msgstr ""
 
 #: _core/lms/classes/instructors.php:64
+#: _core/lms/classes/instructors.php:83
 msgid "Course published"
 msgstr ""
 
-#. translators: %1$s Course Title, %2$s User Login
-#: _core/lms/classes/instructors.php:67
-msgid "Your course - %1$s was approved, and is now live on the website"
-msgstr ""
-
-#: _core/lms/classes/instructors.php:157
+#: _core/lms/classes/instructors.php:173
 msgid "Course Students"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:159
+#: _core/lms/classes/instructors.php:175
 msgid "Course Author"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:167
+#: _core/lms/classes/instructors.php:183
 msgid "Lesson Author"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:175
+#: _core/lms/classes/instructors.php:191
 msgid "Quiz Author"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:203
+#: _core/lms/classes/instructors.php:219
 msgid "Change Author"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:210
+#: _core/lms/classes/instructors.php:226
 msgid "Manage students"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:256
+#: _core/lms/classes/instructors.php:272
 msgid "After changing the course's author, the author of all lessons, quizzes and assignments related to this course will be changed automatically. Do you really want to change the author of the course?"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:449
+#: _core/lms/classes/instructors.php:480
 #: _core/stm-lms-templates/account/private/instructor_parts/courses.php:12
 #: _core/stm-lms-templates/account/private/instructor_parts/grid.php:79
 #: assets/course-builder/js/main.js:1
@@ -8661,99 +8704,105 @@ msgstr ""
 msgid "Published"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:452
+#: _core/lms/classes/instructors.php:483
 #: _core/lms/classes/order.php:406
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:185
 #: _core/stm-lms-templates/stm-lms-user-pmp.php:188
 msgid "Pending"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:455
+#: _core/lms/classes/instructors.php:486
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Draft"
 msgstr ""
 
 #. translators: %s Last Updated
-#: _core/lms/classes/instructors.php:470
+#: _core/lms/classes/instructors.php:501
+#, php-format
 msgid "Last updated: %s"
 msgstr ""
 
 #. translators: %s Total Reviews, Label
-#: _core/lms/classes/instructors.php:542
+#: _core/lms/classes/instructors.php:573
+#, php-format
 msgctxt "\"1 Review\" or \"2 Reviews\""
 msgid "%1$s %2$s"
 msgstr ""
 
 #. translators: %s: Review  %s: Reviews
-#: _core/lms/classes/instructors.php:604
+#: _core/lms/classes/instructors.php:635
+#, php-format
 msgid "%1$s %2$s."
 msgstr ""
 
-#: _core/lms/classes/instructors.php:622
-#: _core/lms/classes/instructors.php:680
+#: _core/lms/classes/instructors.php:653
+#: _core/lms/classes/instructors.php:711
 msgid "New Instructor Application"
 msgstr ""
 
 #. translators: %s User Login, User ID
-#: _core/lms/classes/instructors.php:647
+#: _core/lms/classes/instructors.php:678
+#, php-format
 msgid "User %1$s with id - %2$s, wants to become an Instructor."
 msgstr ""
 
 #. translators: %s User Login, User ID
-#: _core/lms/classes/instructors.php:661
+#: _core/lms/classes/instructors.php:692
+#, php-format
 msgid "User %1$s with id - %2$s, registered as Instructor."
 msgstr ""
 
-#: _core/lms/classes/instructors.php:713
+#: _core/lms/classes/instructors.php:744
 msgid "You have received a new instructor application from "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:714
-#: _core/lms/classes/user.php:1639
+#: _core/lms/classes/instructors.php:745
+#: _core/lms/classes/user.php:1660
 msgid "Here are the details:"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:715
-#: _core/lms/classes/user.php:1640
+#: _core/lms/classes/instructors.php:746
+#: _core/lms/classes/user.php:1661
 msgid "Name: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:716
+#: _core/lms/classes/instructors.php:747
 msgid "ID: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:717
-#: _core/lms/classes/user.php:1641
+#: _core/lms/classes/instructors.php:748
+#: _core/lms/classes/user.php:1662
 msgid "Email: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:718
+#: _core/lms/classes/instructors.php:749
 msgid "Degree: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:719
+#: _core/lms/classes/instructors.php:750
 msgid "Expertize: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:720
+#: _core/lms/classes/instructors.php:751
 msgid "Application Date: "
 msgstr ""
 
-#: _core/lms/classes/instructors.php:721
+#: _core/lms/classes/instructors.php:752
 msgid "Please review the application at your earliest convenience."
 msgstr ""
 
 #. translators: %s User Login, User ID, Degree, Expertize
-#: _core/lms/classes/instructors.php:732
+#: _core/lms/classes/instructors.php:763
+#, php-format
 msgid "User %1$s with id - %2$s, registered as Instructor. Degree - %3$s. Expertize - %4$s"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:788
+#: _core/lms/classes/instructors.php:830
 msgid "Student added to course"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:833
+#: _core/lms/classes/instructors.php:875
 #: _core/settings/main_settings/sortable_menu.php:22
 #: _core/stm-lms-templates/account/float_menu/user.php:13
 #: _core/stm-lms-templates/account/private/parts/info.php:14
@@ -8766,71 +8815,83 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s Students Count, Courses Count
-#: _core/lms/classes/instructors.php:835
+#: _core/lms/classes/instructors.php:877
+#, php-format
 msgid "%1$s added to %2$s"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:869
+#: _core/lms/classes/instructors.php:909
 msgid "You have been registered on the website"
 msgstr ""
 
-#. translators: %s Username, Password, Site URL
-#: _core/lms/classes/instructors.php:874
-msgid "Login: %1$s Password: %2$s Site URL: %3$s"
-msgstr ""
-
-#: _core/lms/classes/instructors.php:1040
+#: _core/lms/classes/instructors.php:1084
 msgid "Instructor application approved"
 msgstr ""
 
-#: _core/lms/classes/instructors.php:1076
+#: _core/lms/classes/instructors.php:1117
 msgid "Update on Your Instructor Application"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:106
-#: _core/lms/classes/lesson.php:281
-msgid "Section 1"
-msgstr ""
-
-#: _core/lms/classes/lesson.php:121
-#: _core/lms/classes/lesson.php:291
-msgid "Lecture %s"
+#: _core/lms/classes/lesson.php:105
+msgid "{{user_login}} Has Completed a Lesson in {{course_title}}"
 msgstr ""
 
 #: _core/lms/classes/lesson.php:125
-#: _core/lms/classes/lesson.php:295
+#: _core/lms/classes/lesson.php:300
+msgid "Section 1"
+msgstr ""
+
+#: _core/lms/classes/lesson.php:140
+#: _core/lms/classes/lesson.php:310
+#, php-format
+msgid "Lecture %s"
+msgstr ""
+
+#: _core/lms/classes/lesson.php:144
+#: _core/lms/classes/lesson.php:314
+#, php-format
 msgid "Assignment %s"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:129
-#: _core/lms/classes/lesson.php:299
+#: _core/lms/classes/lesson.php:148
+#: _core/lms/classes/lesson.php:318
+#, php-format
 msgid "Quiz %s"
 msgstr ""
 
+#: _core/lms/classes/lesson.php:394
+msgid "Congratulations on completing {{user_login}}!"
+msgstr ""
+
+#: _core/lms/classes/lesson.php:414
+msgid "Congratulations! {{user_login}} Completed {{course_title}}!"
+msgstr ""
+
 #. translators: %1$s Course Title, %2$s User Login
-#: _core/lms/classes/mails.php:216
+#: _core/lms/classes/mails.php:280
+#, php-format
 msgid "Course %1$s was added to %2$s."
 msgstr ""
 
 #. translators: %s Course Title
-#: _core/lms/classes/mails.php:227
+#: _core/lms/classes/mails.php:301
+#, php-format
 msgid "Course %s is now available to learn."
 msgstr ""
 
-#: _core/lms/classes/mails.php:236
+#: _core/lms/classes/mails.php:324
+msgid "New Enrollment in {{course_title}}!"
+msgstr ""
+
+#: _core/lms/classes/mails.php:341
 msgid "updated"
 msgstr ""
 
-#: _core/lms/classes/mails.php:237
+#: _core/lms/classes/mails.php:342
 msgid "created"
 msgstr ""
 
-#. translators: %s: course info
-#: _core/lms/classes/mails.php:242
-msgid "Course %1$s %2$s by instructor (%3$s). Please review this information from the Dashboard."
-msgstr ""
-
-#: _core/lms/classes/mails.php:249
+#: _core/lms/classes/mails.php:366
 msgid "Course added/updated"
 msgstr ""
 
@@ -8889,22 +8950,23 @@ msgstr ""
 
 #: _core/lms/classes/models/admin/StmStatisticsListTable.php:439
 #: _core/lms/classes/models/StmLmsPayout.php:207
+#: _core/settings/main_settings/ecommerce.php:11
 #: _core/settings/main_settings/payout.php:5
 msgid "Payout"
 msgstr ""
 
 #: _core/lms/classes/models/StmLmsPayout.php:147
-#: _core/lms/views/payout/meta-box-payout-data.php:72
+#: _core/lms/views/payout/meta-box-payout-data.php:78
 msgid "Payout to"
 msgstr ""
 
 #: _core/lms/classes/models/StmLmsPayout.php:148
-#: _core/lms/views/payout/meta-box-payout-data.php:86
+#: _core/lms/views/payout/meta-box-payout-data.php:92
 msgid "Transaction"
 msgstr ""
 
 #: _core/lms/classes/models/StmLmsPayout.php:149
-#: _core/lms/views/payout/meta-box-payout-data.php:116
+#: _core/lms/views/payout/meta-box-payout-data.php:123
 #: _core/lms/views/statistics/statistics.php:70
 #: _core/stm-lms-templates/wizard/views/steps/courses.php:219
 msgid "Admin commission"
@@ -8915,6 +8977,9 @@ msgid "Instructor Earnings"
 msgstr ""
 
 #: _core/lms/classes/models/StmLmsPayout.php:208
+#: _core/settings/main_settings/ecommerce.php:223
+#: _core/settings/main_settings/ecommerce.php:245
+#: _core/settings/main_settings/ecommerce.php:251
 #: _core/settings/main_settings/payout.php:11
 msgid "Payouts"
 msgstr ""
@@ -8933,7 +8998,7 @@ msgid "Statistics"
 msgstr ""
 
 #: _core/lms/classes/models/StmUser.php:107
-#: _core/lms/classes/user.php:1471
+#: _core/lms/classes/user.php:1490
 msgid "Successfully saved"
 msgstr ""
 
@@ -8963,7 +9028,7 @@ msgstr ""
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:138
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:247
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:267
-#: _core/stm-lms-templates/course-player/navigation.php:89
+#: _core/stm-lms-templates/course-player/navigation.php:96
 msgid "Completed"
 msgstr ""
 
@@ -9019,15 +9084,16 @@ msgstr ""
 msgid "Private account"
 msgstr ""
 
-#: _core/lms/classes/page_routes.php:390
+#: _core/lms/classes/page_routes.php:380
 msgid "Instructor account"
 msgstr ""
 
-#: _core/lms/classes/page_routes.php:399
+#: _core/lms/classes/page_routes.php:389
 msgid "Student account"
 msgstr ""
 
-#: _core/lms/classes/page_routes.php:412
+#: _core/lms/classes/page_routes.php:402
+#: _core/settings/main_settings/ecommerce.php:9
 #: _core/settings/main_settings/routes.php:64
 #: _core/settings/page_generator/api/get.php:7
 #: _core/stm-lms-templates/checkout/guest-checkout.php:18
@@ -9036,16 +9102,15 @@ msgstr ""
 msgid "Checkout"
 msgstr ""
 
-#. translators: %1$s login, %2$s quiz title, %3$s course title, %4$s passing grade, %5$s result
-#: _core/lms/classes/quiz.php:176
-msgid "%1$s completed the %2$s on the course %3$s with a Passing grade of %4$s and a result of %5$s"
+#: _core/lms/classes/quiz.php:204
+msgid "You’ve Completed the Quiz in {{course_title}}"
 msgstr ""
 
-#: _core/lms/classes/quiz.php:184
-msgid "Quiz Completed"
+#: _core/lms/classes/quiz.php:233
+msgid "{{user_login}} has completed the quiz {{quiz_name}} in {{course_title}}"
 msgstr ""
 
-#: _core/lms/classes/quiz.php:197
+#: _core/lms/classes/quiz.php:247
 #: _core/stm-lms-templates/account/private/manage_students/import-modal.php:184
 #: _core/stm-lms-templates/account/private/manage_students/import-modal.php:214
 #: _core/stm-lms-templates/components/analytics/datepicker-modal.php:35
@@ -9079,6 +9144,7 @@ msgstr ""
 
 #. translators: %s: string
 #: _core/lms/classes/reviews.php:290
+#, php-format
 msgid "Review on %1$s by %2$s"
 msgstr ""
 
@@ -9088,12 +9154,14 @@ msgstr ""
 
 #. translators: %s: string
 #: _core/lms/classes/reviews.php:319
+#, php-format
 msgid "Check out new review on course %1$s by %2$s"
 msgstr ""
 
 #. translators: %s: leave review
 #: _core/lms/classes/reviews.php:344
 #: _core/stm-lms-templates/components/course/reviews.php:143
+#, php-format
 msgid "Please, <a href=\"%s\" class=\"masterstudy-single-course-reviews__login-link\" target=\"_blank\">login</a> to leave a review"
 msgstr ""
 
@@ -9127,72 +9195,74 @@ msgid "All courses in the selected categories are enabled."
 msgstr ""
 
 #. translators: %1$s Course Title, %2$s User Login
-#: _core/lms/classes/subscriptions.php:182
+#: _core/lms/classes/subscriptions.php:193
+#, php-format
 msgid "Course %1$s was added to %2$s. with %3$s"
 msgstr ""
 
 #. translators: %1$s Course Title, %2$s User Login
-#: _core/lms/classes/subscriptions.php:191
+#: _core/lms/classes/subscriptions.php:202
+#, php-format
 msgid "Course %1$s is now available to learn with %2$s"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:388
+#: _core/lms/classes/subscriptions.php:399
 msgid "STM LMS Settings"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:393
+#: _core/lms/classes/subscriptions.php:404
 msgid "Number of available courses in subscription"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:397
+#: _core/lms/classes/subscriptions.php:408
 msgid "User can enroll several courses after subscription. Enter \"unlim\" to grant access to an unlimited number of courses"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:403
+#: _core/lms/classes/subscriptions.php:414
 msgid "Number of featured courses quote in subscription"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:407
+#: _core/lms/classes/subscriptions.php:418
 msgid "Instructors can mark their courses as featured"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:413
+#: _core/lms/classes/subscriptions.php:424
 msgid "Plan tab name"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:417
+#: _core/lms/classes/subscriptions.php:428
 msgid "Show plans under the different tabs (tabs with the same name will be displayed together)"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:425
+#: _core/lms/classes/subscriptions.php:436
 msgid "Private category"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:431
+#: _core/lms/classes/subscriptions.php:442
 msgid "Courses category available for this plan"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:457
+#: _core/lms/classes/subscriptions.php:468
 msgid "User can enroll several courses from chosen category after subscription"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:458
+#: _core/lms/classes/subscriptions.php:469
 msgid "You need to select courses category for this plan!"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:467
+#: _core/lms/classes/subscriptions.php:478
 msgid "Disable/Enable one-time purchase on courses in category - "
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:475
+#: _core/lms/classes/subscriptions.php:486
 msgid "Disable for all"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:478
+#: _core/lms/classes/subscriptions.php:489
 msgid "Enable for all"
 msgstr ""
 
-#: _core/lms/classes/subscriptions.php:484
+#: _core/lms/classes/subscriptions.php:495
 msgid "Do not reload the page..."
 msgstr ""
 
@@ -9220,7 +9290,7 @@ msgid "Username"
 msgstr ""
 
 #: _core/lms/classes/user.php:252
-#: _core/lms/classes/user.php:1559
+#: _core/lms/classes/user.php:1578
 msgid "E-mail"
 msgstr ""
 
@@ -9244,12 +9314,12 @@ msgid "You must agree to our Privacy Policy"
 msgstr ""
 
 #: _core/lms/classes/user.php:298
-#: _core/lms/classes/user.php:1621
+#: _core/lms/classes/user.php:1642
 msgid "Please enter a valid email"
 msgstr ""
 
 #: _core/lms/classes/user.php:298
-#: _core/lms/classes/user.php:1621
+#: _core/lms/classes/user.php:1642
 msgid "Please enter valid value"
 msgstr ""
 
@@ -9266,13 +9336,13 @@ msgid "User with this username already exists"
 msgstr ""
 
 #: _core/lms/classes/user.php:399
-#: _core/lms/classes/user.php:1389
-#: _core/lms/classes/user.php:2029
+#: _core/lms/classes/user.php:1399
+#: _core/lms/classes/user.php:2054
 msgid "Password must include at least one capital letter!"
 msgstr ""
 
 #: _core/lms/classes/user.php:408
-#: _core/lms/classes/user.php:2038
+#: _core/lms/classes/user.php:2063
 msgid "Passwords do not match"
 msgstr ""
 
@@ -9285,50 +9355,8 @@ msgstr ""
 msgid "Activate your account"
 msgstr ""
 
-#. translators: %s: User login.
-#: _core/lms/classes/user.php:473
-#: _core/lms/classes/user.php:576
-msgid "Hi %s"
-msgstr ""
-
-#. translators: %s: Site title.
-#: _core/lms/classes/user.php:475
-#: _core/lms/classes/user.php:578
-msgid "Welcome to %s "
-msgstr ""
-
-#: _core/lms/classes/user.php:476
-msgid "To start using your account, please activate it by clicking the link below:"
-msgstr ""
-
-#. translators: %s: Login URL.
-#: _core/lms/classes/user.php:478
-msgid "Activation Link: %s "
-msgstr ""
-
-#: _core/lms/classes/user.php:479
-msgid "We look forward to seeing you on %s!"
-msgstr ""
-
-#: _core/lms/classes/user.php:573
-msgid "You have successfully registered on the website."
-msgstr ""
-
-#: _core/lms/classes/user.php:579
-msgid "Your registration was successful."
-msgstr ""
-
-#: _core/lms/classes/user.php:580
-msgid "You can now log in to your account using the following link:"
-msgstr ""
-
-#. translators: %s: Login URL.
-#: _core/lms/classes/user.php:582
-msgid "Login URL: %s"
-msgstr ""
-
 #: _core/lms/classes/user.php:583
-msgid "We are thrilled to have you on board!"
+msgid "You have successfully registered on the website."
 msgstr ""
 
 #: _core/lms/classes/user.php:641
@@ -9336,185 +9364,191 @@ msgid "New User Registered"
 msgstr ""
 
 #. translators: %s: course complete
-#: _core/lms/classes/user.php:853
+#: _core/lms/classes/user.php:863
+#, php-format
 msgid "%s%% Complete"
 msgstr ""
 
 #. translators: %s: start time
-#: _core/lms/classes/user.php:858
+#: _core/lms/classes/user.php:868
+#, php-format
 msgid "Started %s"
 msgstr ""
 
-#: _core/lms/classes/user.php:1054
+#: _core/lms/classes/user.php:1064
 #: _core/stm-lms-templates/components/course/wishlist.php:33
 #: _core/stm-lms-templates/components/course/wishlist.php:45
 msgid "Add to wishlist"
 msgstr ""
 
-#: _core/lms/classes/user.php:1066
+#: _core/lms/classes/user.php:1076
 #: _core/stm-lms-templates/components/course/wishlist.php:25
 msgid "Remove from wishlist"
 msgstr ""
 
-#: _core/lms/classes/user.php:1122
+#: _core/lms/classes/user.php:1132
 #: _core/settings/main_settings/profiles.php:406
 #: _core/stm-lms-templates/account/private/edit_account/socials.php:12
 #: _core/stm-lms-templates/components/authorization/social.php:28
 #: _core/stm-lms-templates/components/authorization/social.php:44
 #: _core/stm-lms-templates/components/course/share-button.php:63
+#: _core/stm-lms-templates/components/share.php:37
 msgid "Facebook"
 msgstr ""
 
-#: _core/lms/classes/user.php:1126
+#: _core/lms/classes/user.php:1136
 #: _core/stm-lms-templates/components/course/share-button.php:68
+#: _core/stm-lms-templates/components/share.php:42
 msgid "Twitter"
 msgstr ""
 
-#: _core/lms/classes/user.php:1130
+#: _core/lms/classes/user.php:1140
 #: _core/stm-lms-templates/account/private/edit_account/socials.php:38
 msgid "Instagram"
 msgstr ""
 
-#: _core/lms/classes/user.php:1134
+#: _core/lms/classes/user.php:1144
 #: _core/stm-lms-templates/account/private/edit_account/socials.php:20
 msgid "LinkedIn"
 msgstr ""
 
-#: _core/lms/classes/user.php:1141
+#: _core/lms/classes/user.php:1151
 msgid "Email Notifications"
 msgstr ""
 
-#: _core/lms/classes/user.php:1151
+#: _core/lms/classes/user.php:1161
 #: _core/stm-lms-templates/account/private/edit_account/bio.php:7
 msgid "Bio"
 msgstr ""
 
-#: _core/lms/classes/user.php:1154
+#: _core/lms/classes/user.php:1164
 msgid "First name"
 msgstr ""
 
-#: _core/lms/classes/user.php:1157
+#: _core/lms/classes/user.php:1167
 msgid "Last name"
 msgstr ""
 
-#: _core/lms/classes/user.php:1168
+#: _core/lms/classes/user.php:1178
 msgid "Summary rating"
 msgstr ""
 
-#: _core/lms/classes/user.php:1171
+#: _core/lms/classes/user.php:1181
 msgid "Total Reviews"
 msgstr ""
 
-#: _core/lms/classes/user.php:1180
+#: _core/lms/classes/user.php:1190
 msgid "Extra profile information"
 msgstr ""
 
-#: _core/lms/classes/user.php:1202
+#: _core/lms/classes/user.php:1212
 msgid "Rating information"
 msgstr ""
 
-#: _core/lms/classes/user.php:1241
+#: _core/lms/classes/user.php:1251
 msgid "Zoom.us settings"
 msgstr ""
 
-#: _core/lms/classes/user.php:1245
+#: _core/lms/classes/user.php:1255
 msgid "Meeting Host"
 msgstr ""
 
-#: _core/lms/classes/user.php:1249
+#: _core/lms/classes/user.php:1259
 msgid "Select host"
 msgstr ""
 
-#: _core/lms/classes/user.php:1275
+#: _core/lms/classes/user.php:1285
 msgid "Google Classroom auditory"
 msgstr ""
 
-#: _core/lms/classes/user.php:1281
+#: _core/lms/classes/user.php:1291
 msgid "Select auditory"
 msgstr ""
 
-#: _core/lms/classes/user.php:1352
+#: _core/lms/classes/user.php:1362
 msgid "New password do not match"
 msgstr ""
 
-#: _core/lms/classes/user.php:1395
+#: _core/lms/classes/user.php:1405
 msgid "Password change"
 msgstr ""
 
-#: _core/lms/classes/user.php:1396
+#: _core/lms/classes/user.php:1406
 msgid "Password changed successfully."
 msgstr ""
 
-#: _core/lms/classes/user.php:1409
+#: _core/lms/classes/user.php:1428
 msgid "Password Changed. Re-login now"
 msgstr ""
 
 #. translators: %s: field name
-#: _core/lms/classes/user.php:1425
+#: _core/lms/classes/user.php:1444
+#, php-format
 msgid "Please fill %s field"
 msgstr ""
 
-#: _core/lms/classes/user.php:1505
+#: _core/lms/classes/user.php:1524
 msgid "Sorry, it seems that your account has been temporarily blocked from taking this action. Please contact the website administrator for more information."
 msgstr ""
 
-#: _core/lms/classes/user.php:1555
+#: _core/lms/classes/user.php:1574
 #: _core/stm-lms-templates/account/private/edit_account/name.php:4
 msgid "Name"
 msgstr ""
 
-#: _core/lms/classes/user.php:1575
-#: _core/lms/classes/user.php:1635
+#: _core/lms/classes/user.php:1594
+#: _core/lms/classes/user.php:1656
 msgid "Enterprise Request"
 msgstr ""
 
-#: _core/lms/classes/user.php:1637
+#: _core/lms/classes/user.php:1658
 msgid "You have received a new enterprise inquiry"
 msgstr ""
 
-#: _core/lms/classes/user.php:1638
+#: _core/lms/classes/user.php:1659
 msgid "from the \"For Enterprise\" form."
 msgstr ""
 
-#: _core/lms/classes/user.php:1642
+#: _core/lms/classes/user.php:1663
 msgid "Message: "
 msgstr ""
 
-#: _core/lms/classes/user.php:1643
+#: _core/lms/classes/user.php:1664
 msgid "Submission Date: "
 msgstr ""
 
-#: _core/lms/classes/user.php:1644
+#: _core/lms/classes/user.php:1665
 msgid "Please review this inquiry and follow up as needed."
 msgstr ""
 
-#: _core/lms/classes/user.php:1675
+#: _core/lms/classes/user.php:1705
 msgid "Please fill email field"
 msgstr ""
 
-#: _core/lms/classes/user.php:1691
-#: _core/lms/classes/user.php:1706
+#: _core/lms/classes/user.php:1721
+#: _core/lms/classes/user.php:1736
 msgid "There is no account with that username or email address."
 msgstr ""
 
-#: _core/lms/classes/user.php:1743
+#: _core/lms/classes/user.php:1768
 msgid "Password Reset Request"
 msgstr ""
 
 #. translators: %s string
-#: _core/lms/classes/user.php:1894
+#: _core/lms/classes/user.php:1919
+#, php-format
 msgid "Field can only have one of the following extensions: %s"
 msgstr ""
 
-#: _core/lms/classes/user.php:1934
+#: _core/lms/classes/user.php:1959
 msgid "Something went wrong"
 msgstr ""
 
-#: _core/lms/classes/user.php:1992
+#: _core/lms/classes/user.php:2017
 msgid "Your token expired, try again"
 msgstr ""
 
-#: _core/lms/classes/user.php:2072
+#: _core/lms/classes/user.php:2097
 msgid "User not found"
 msgstr ""
 
@@ -9536,11 +9570,11 @@ msgid "Enrolled Courses"
 msgstr ""
 
 #: _core/lms/classes/user_menu.php:256
-#: _core/lms/helpers.php:1523
-#: _core/lms/helpers.php:1526
+#: _core/lms/helpers.php:1527
+#: _core/lms/helpers.php:1530
 #: _core/settings/main_settings.php:12
 #: _core/settings/main_settings.php:16
-#: _core/settings/main_settings.php:104
+#: _core/settings/main_settings.php:103
 #: _core/stm-lms-templates/account/private/parts/settings_button.php:13
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
@@ -9627,27 +9661,27 @@ msgstr ""
 msgid "Hard"
 msgstr ""
 
-#: _core/lms/enqueue.php:324
+#: _core/lms/enqueue.php:336
 msgid "Date range"
 msgstr ""
 
-#: _core/lms/enqueue.php:539
+#: _core/lms/enqueue.php:551
 msgid "per page"
 msgstr ""
 
-#: _core/lms/enqueue.php:540
+#: _core/lms/enqueue.php:552
 msgid "No matching items found"
 msgstr ""
 
-#: _core/lms/enqueue.php:541
+#: _core/lms/enqueue.php:553
 msgid "No data to display"
 msgstr ""
 
-#: _core/lms/enqueue.php:542
+#: _core/lms/enqueue.php:554
 msgid "Not Started"
 msgstr ""
 
-#: _core/lms/enqueue.php:545
+#: _core/lms/enqueue.php:557
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:153
 msgid "In progress"
 msgstr ""
@@ -9682,6 +9716,7 @@ msgstr ""
 
 #. translators: %s: nubmer
 #: _core/lms/helpers.php:73
+#, php-format
 msgid "%s ago"
 msgstr ""
 
@@ -9691,6 +9726,7 @@ msgstr ""
 
 #. translators: %s: nubmer
 #: _core/lms/helpers.php:84
+#, php-format
 msgid "%s year"
 msgid_plural "%s years"
 msgstr[0] ""
@@ -9698,6 +9734,7 @@ msgstr[1] ""
 
 #. translators: %s: nubmer
 #: _core/lms/helpers.php:88
+#, php-format
 msgid "%s month"
 msgid_plural "%s months"
 msgstr[0] ""
@@ -9705,6 +9742,7 @@ msgstr[1] ""
 
 #. translators: %s: nubmer
 #: _core/lms/helpers.php:92
+#, php-format
 msgid "%s week"
 msgid_plural "%s weeks"
 msgstr[0] ""
@@ -9712,6 +9750,7 @@ msgstr[1] ""
 
 #. translators: %s: nubmer
 #: _core/lms/helpers.php:97
+#, php-format
 msgid "%s day"
 msgid_plural "%s days"
 msgstr[0] ""
@@ -9719,6 +9758,7 @@ msgstr[1] ""
 
 #. translators: %s: nubmer
 #: _core/lms/helpers.php:102
+#, php-format
 msgid "%s hour"
 msgid_plural "%s hours"
 msgstr[0] ""
@@ -9726,6 +9766,7 @@ msgstr[1] ""
 
 #. translators: %s: nubmer
 #: _core/lms/helpers.php:107
+#, php-format
 msgid "%s minute"
 msgid_plural "%s minutes"
 msgstr[0] ""
@@ -9733,6 +9774,7 @@ msgstr[1] ""
 
 #. translators: %s: nubmer
 #: _core/lms/helpers.php:111
+#, php-format
 msgid "%s second"
 msgid_plural "%s seconds"
 msgstr[0] ""
@@ -9908,36 +9950,36 @@ msgstr ""
 msgid "How it works"
 msgstr ""
 
-#: _core/lms/views/payout/meta-box-payout-data.php:39
+#: _core/lms/views/payout/meta-box-payout-data.php:43
 msgid "Payout data"
 msgstr ""
 
-#: _core/lms/views/payout/meta-box-payout-data.php:47
+#: _core/lms/views/payout/meta-box-payout-data.php:52
 msgid "Process Payment Now"
 msgstr ""
 
-#: _core/lms/views/payout/meta-box-payout-data.php:48
+#: _core/lms/views/payout/meta-box-payout-data.php:54
 msgid "Change Status to PAID"
 msgstr ""
 
-#: _core/lms/views/payout/meta-box-payout-data.php:102
+#: _core/lms/views/payout/meta-box-payout-data.php:109
 #: _core/lms/views/statistics/statistics.php:82
 msgid "Instructor earnings"
 msgstr ""
 
-#: _core/lms/views/payout/meta-box-payout-data.php:142
+#: _core/lms/views/payout/meta-box-payout-data.php:149
 msgid "ID"
 msgstr ""
 
-#: _core/lms/views/payout/meta-box-payout-data.php:144
+#: _core/lms/views/payout/meta-box-payout-data.php:151
 msgid "Order ID"
 msgstr ""
 
-#: _core/lms/views/payout/meta-box-payout-data.php:147
+#: _core/lms/views/payout/meta-box-payout-data.php:154
 msgid "Total Price"
 msgstr ""
 
-#: _core/lms/views/payout/meta-box-payout-data.php:186
+#: _core/lms/views/payout/meta-box-payout-data.php:196
 msgid "Total Amounts"
 msgstr ""
 
@@ -9974,6 +10016,7 @@ msgstr ""
 #: _core/lms/widgets/popular.widget.php:119
 #: _core/stm-lms-templates/components/course/popular-courses.php:125
 #: _core/stm-lms-templates/components/course/related-courses.php:150
+#, php-format
 msgid "By %s"
 msgstr ""
 
@@ -10062,6 +10105,9 @@ msgstr ""
 #: _core/stm-lms-templates/components/discussions.php:65
 #: _core/stm-lms-templates/components/modals/become-instructor.php:101
 #: _core/stm-lms-templates/components/modals/enterprise.php:100
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:42
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:106
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:171
 #: _core/stm-lms-templates/course-player/content/quiz/main.php:41
 #: _core/stm-lms-templates/pmpro/pages/billing.php:375
 #: _core/stm-lms-templates/pmpro/pages/cancel.php:99
@@ -10111,14 +10157,17 @@ msgid "Remember to update the passwords and roles of imported users."
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:172
+#, php-format
 msgid "The export file could not be found at <code>%s</code>. It is likely that this was caused by a permissions problem."
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:188
+#, php-format
 msgid "This WXR file (version %s) may not be supported by this version of the importer. Please consider updating."
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:213
+#, php-format
 msgid "Failed to import author %s. Their posts will be attributed to the current user."
 msgstr ""
 
@@ -10131,6 +10180,7 @@ msgid "To make it simpler for you to edit and save the imported content, you may
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:244
+#, php-format
 msgid "If a new user is created by WordPress, a new password will be randomly generated and the new user&#8217;s role will be set as %s. Manually changing the new user&#8217;s details will be necessary."
 msgstr ""
 
@@ -10144,8 +10194,8 @@ msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:261
 #: _core/stm-lms-templates/course-player/content/quiz/main.php:40
-#: _core/stm-lms-templates/course-player/navigation.php:102
-#: _core/stm-lms-templates/course-player/navigation.php:135
+#: _core/stm-lms-templates/course-player/navigation.php:109
+#: _core/stm-lms-templates/course-player/navigation.php:142
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Submit"
@@ -10176,35 +10226,42 @@ msgid "- Select -"
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:373
+#, php-format
 msgid "Failed to create new user for %s. Their posts will be attributed to the current user."
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:432
+#, php-format
 msgid "Failed to import category %s"
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:483
+#, php-format
 msgid "Failed to import post tag %s"
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:544
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:796
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import.php:360
+#, php-format
 msgid "Failed to import %1$s %2$s"
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:639
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import.php:203
+#, php-format
 msgid "Failed to import &#8220;%1$s&#8221;: Invalid post type %2$s"
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:680
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import.php:244
+#, php-format
 msgid "%1$s &#8220;%2$s&#8221; already exists."
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:757
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import.php:321
+#, php-format
 msgid "Failed to import %1$s &#8220;%2$s&#8221;"
 msgstr ""
 
@@ -10215,6 +10272,7 @@ msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:950
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import.php:65
+#, php-format
 msgid "Menu item skipped due to invalid menu slug: %s"
 msgstr ""
 
@@ -10234,11 +10292,13 @@ msgstr ""
 
 #. translators: 1: The WordPress error message. 2: The WordPress error code.
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:1097
+#, php-format
 msgid "Request failed due to an error: %1$s (%2$s)"
 msgstr ""
 
 #. translators: 1: The HTTP error message. 2: The HTTP error code.
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:1113
+#, php-format
 msgid "Remote server returned the following unexpected result: %1$s (%2$s)"
 msgstr ""
 
@@ -10255,6 +10315,7 @@ msgid "Downloaded file has incorrect size"
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:1143
+#, php-format
 msgid "Remote file is too large, limit is %s"
 msgstr ""
 
@@ -10271,6 +10332,7 @@ msgid "Import WordPress"
 msgstr ""
 
 #: _core/settings/demo_import/wordpress-importer/class-stm-wp-import-base.php:1319
+#, php-format
 msgid "A new version of this importer is available. Please update to version %s to ensure compatibility with newer export files."
 msgstr ""
 
@@ -10361,29 +10423,29 @@ msgstr ""
 msgid "by StylemixThemes"
 msgstr ""
 
+#: _core/settings/main_settings.php:110
 #: _core/settings/main_settings.php:111
-#: _core/settings/main_settings.php:112
 msgid "Help Center"
 msgstr ""
 
-#: _core/settings/main_settings.php:123
+#: _core/settings/main_settings.php:122
 msgid "MasterStudy templates"
 msgstr ""
 
-#: _core/settings/main_settings.php:124
+#: _core/settings/main_settings.php:123
 msgid "Templates"
 msgstr ""
 
-#: _core/settings/main_settings.php:140
+#: _core/settings/main_settings.php:139
 #: _core/stm-lms-templates/account/private/instructor_parts/courses.php:128
 msgid "Upgrade"
 msgstr ""
 
-#: _core/settings/main_settings.php:141
+#: _core/settings/main_settings.php:140
 msgid "Unlock PRO"
 msgstr ""
 
-#: _core/settings/main_settings.php:219
+#: _core/settings/main_settings.php:218
 msgid "Create a roadmap with us:<br>Vote for next feature"
 msgstr ""
 
@@ -10398,6 +10460,7 @@ msgstr ""
 
 #. Translators: %1$s: Open Link for account api key, %2$s: Close Link for account api key
 #: _core/settings/main_settings/ai_lab.php:19
+#, php-format
 msgid "You can obtain your API key from your %1$sOpenAI Account%2$s."
 msgstr ""
 
@@ -10635,6 +10698,26 @@ msgstr ""
 
 #: _core/settings/main_settings/course-player.php:86
 msgid "Allows you to hide or show the questions block in video lessons."
+msgstr ""
+
+#: _core/settings/main_settings/course-player.php:91
+msgid "Allow students to create bookmarks in PDF lessons"
+msgstr ""
+
+#: _core/settings/main_settings/course-player.php:92
+msgid "Let students add bookmarks in PDF lessons to quickly revisit important pages."
+msgstr ""
+
+#: _core/settings/main_settings/course-player.php:96
+msgid "Bookmarks Section Title"
+msgstr ""
+
+#: _core/settings/main_settings/course-player.php:97
+msgid "Bookmarks"
+msgstr ""
+
+#: _core/settings/main_settings/course-player.php:98
+msgid "Set the title for the bookmarks section in the Course Player."
 msgstr ""
 
 #: _core/settings/main_settings/course.php:7
@@ -11064,6 +11147,7 @@ msgstr ""
 
 #. translators: Card display information.
 #: _core/settings/main_settings/courses.php:117
+#, php-format
 msgid "These settings only apply if you use the <a href=\"%1$s\" target=\"_blank\">Archive</a> page for your Course Catalog. If you use WPBakery or Elementor, set these up in the LMS widgets <a href=\"%2$s\" target=\"_blank\">Learn more</a>"
 msgstr ""
 
@@ -11180,6 +11264,147 @@ msgstr ""
 msgid "Courses  Let users filter courses by availability for completion"
 msgstr ""
 
+#: _core/settings/main_settings/ecommerce.php:10
+#: _core/settings/main_settings/ecommerce.php:193
+#: _core/settings/main_settings/payments.php:6
+#: _core/settings/main_settings/payments.php:12
+msgid "Payment Methods"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:16
+msgid "Currency symbol"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:18
+msgid "The symbol for money that shows up on your site (like $ for dollars)"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:24
+msgid "Currency position"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:31
+msgid "Decide if the money symbol goes before or after the number"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:36
+msgid "Thousands separator"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:39
+msgid "The symbol to split large numbers into groups, like 1,000"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:44
+msgid "Decimals separator"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:47
+msgid "The symbol to show the decimal point, like 12.45"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:52
+msgid "Number of fractional numbers allowed"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:55
+msgid "Define how many numbers can be after the decimal point, like 2 in 7.49"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:62
+#: _core/stm-lms-templates/wizard/views/steps/courses.php:175
+msgid "WooCommerce Checkout"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:63
+msgid "Turn this on to use WooCommerce to buy courses. You need to have WooCommerce, Cart and Checkout Pages set up first"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:70
+msgid "Woocommerce Checkout"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:72
+msgid "Upgrade to Pro now and streamline your checkout process to boost your online course sales."
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:77
+msgid "Guest checkout"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:78
+msgid "Allow guests to register an account during checkout"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:83
+msgid "Required to enable guest checkout in WooCommerce"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:99
+msgid "Redirect to checkout after adding to cart"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:100
+#: _core/settings/main_settings/ecommerce.php:105
+msgid "The feature is not available when WooCommerce checkout is enabled"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:114
+msgid "Display courses on WooCommerce shop page"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:115
+msgid "Enable this setting if you want to show courses in the product catalog of WooCommerce shop page"
+msgstr ""
+
+#. translators: %s link to plugin
+#: _core/settings/main_settings/ecommerce.php:128
+#, php-format
+msgid "If price filtering doesn’t work for courses and products, try regenerating `Product lookup tables` in %s."
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:129
+msgid "WooCommerce settings"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:204
+msgid "Admin Comission (%)"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:208
+msgid "Put the percentage admin will get from sales"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:213
+msgid "Instructor earnings (%)"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:217
+msgid "Put the percentage instructors will get from sales"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:225
+#: _core/settings/main_settings/ecommerce.php:247
+#: _core/settings/main_settings/payout.php:13
+msgid "Make paying instructors easier with automated payouts to ensure timely and hassle-free earnings."
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:226
+#: _core/settings/main_settings/ecommerce.php:248
+#: _core/settings/main_settings/payout.php:14
+msgid "Automate"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:236
+#: _core/settings/main_settings/payout.php:24
+msgid "Masterstudy LMS PRO Payout"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:261
+#: _core/settings/main_settings/ecommerce.php:262
+msgid "Ecommerce"
+msgstr ""
+
 #: _core/settings/main_settings/gdpr.php:9
 msgid "Privacy Policy Settings"
 msgstr ""
@@ -11268,142 +11493,39 @@ msgstr ""
 msgid "* These colors will be applied to Course Player pages, Authorization pages and popups. In future updates, they will be applied to all pages and Accent color will replace Main color."
 msgstr ""
 
-#: _core/settings/main_settings/general.php:68
-msgid "Currency symbol"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:71
-msgid "The symbol for money that shows up on your site (like $ for dollars)"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:75
-msgid "Currency position"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:82
-msgid "Decide if the money symbol goes before or after the number"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:86
-msgid "Thousands separator"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:89
-msgid "The symbol to split large numbers into groups, like 1,000"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:93
-msgid "Decimals separator"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:96
-msgid "The symbol to show the decimal point, like 12.45"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:101
-msgid "Number of fractional numbers allowed"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:104
-msgid "Define how many numbers can be after the decimal point, like 2 in 7.49"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:109
+#: _core/settings/main_settings/general.php:66
 msgid "Logo Upload"
 msgstr ""
 
-#: _core/settings/main_settings/general.php:110
+#: _core/settings/main_settings/general.php:67
 msgid "Upload your brand's logo image for the print page"
 msgstr ""
 
-#: _core/settings/main_settings/general.php:116
-#: _core/stm-lms-templates/wizard/views/steps/courses.php:175
-msgid "WooCommerce Checkout"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:117
-msgid "Turn this on to use WooCommerce to buy courses. You need to have WooCommerce, Cart and Checkout Pages set up first"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:123
-msgid "Display courses on WooCommerce shop page"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:124
-msgid "Enable this setting if you want to show courses in the product catalog of WooCommerce shop page"
-msgstr ""
-
-#. translators: %s link to plugin
-#: _core/settings/main_settings/general.php:136
-msgid "If price filtering doesn’t work for courses and products, try regenerating `Product lookup tables` in %s."
-msgstr ""
-
-#: _core/settings/main_settings/general.php:137
-msgid "WooCommerce settings"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:153
-msgid "Guest checkout"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:154
-msgid "Allow guests to register an account during checkout"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:158
-msgid "Woocommerce Checkout"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:160
-msgid "Upgrade to Pro now and streamline your checkout process to boost your online course sales."
-msgstr ""
-
-#: _core/settings/main_settings/general.php:165
-msgid "Required to enable guest checkout in WooCommerce"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:180
-msgid "Redirect to checkout after adding to cart"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:181
-#: _core/settings/main_settings/general.php:185
-msgid "The feature is not available when WooCommerce checkout is enabled"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:193
-msgid "Instructor earnings (%)"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:197
-msgid "Put the percentage instructors will get from sales"
-msgstr ""
-
-#: _core/settings/main_settings/general.php:201
+#: _core/settings/main_settings/general.php:73
 msgid "Number of featured courses"
 msgstr ""
 
-#: _core/settings/main_settings/general.php:202
+#: _core/settings/main_settings/general.php:74
 msgid "Define how many courses you want to highlight as special"
 msgstr ""
 
-#: _core/settings/main_settings/general.php:209
-msgid "Restrict instructors from accessing the admin panel"
+#: _core/settings/main_settings/general.php:81
+msgid "Restrict WordPress Dashboard access for instructors and students"
 msgstr ""
 
-#: _core/settings/main_settings/general.php:210
-msgid "Enable this to prevent instructors from using the admin panel. They will be redirected to their account pages"
+#: _core/settings/main_settings/general.php:82
+msgid "Instructors and students will be prevented from accessing the WordPress dashboard. Instead, they will be redirected to their personal account dashboards."
 msgstr ""
 
-#: _core/settings/main_settings/general.php:214
+#: _core/settings/main_settings/general.php:86
 msgid "Course Builder Font Family"
 msgstr ""
 
-#: _core/settings/main_settings/general.php:231
+#: _core/settings/main_settings/general.php:103
 msgid "Loading animation"
 msgstr ""
 
-#: _core/settings/main_settings/general.php:232
+#: _core/settings/main_settings/general.php:104
 msgid "An animation that shows when something is loading"
 msgstr ""
 
@@ -11501,29 +11623,12 @@ msgstr ""
 msgid "Evaluate students, grade assignments and quizzes, and give individual feedback. Check their progress at a glance with all scores organized in one place."
 msgstr ""
 
-#: _core/settings/main_settings/payments.php:6
-#: _core/settings/main_settings/payments.php:12
-msgid "Payment Methods"
-msgstr ""
-
 #: _core/settings/main_settings/payments.php:7
 msgid "Payment Methods Settings"
 msgstr ""
 
 #: _core/settings/main_settings/payout.php:6
 msgid "Payout Settings"
-msgstr ""
-
-#: _core/settings/main_settings/payout.php:13
-msgid "Make paying instructors easier with automated payouts to ensure timely and hassle-free earnings."
-msgstr ""
-
-#: _core/settings/main_settings/payout.php:14
-msgid "Automate"
-msgstr ""
-
-#: _core/settings/main_settings/payout.php:24
-msgid "Masterstudy LMS PRO Payout"
 msgstr ""
 
 #: _core/settings/main_settings/profiles.php:5
@@ -12198,6 +12303,7 @@ msgstr ""
 
 #. translators: %s: link
 #: _core/settings/order/components/order.php:6
+#, php-format
 msgid "Woocommerce Checkout enabled. Get order information here - %s"
 msgstr ""
 
@@ -12249,150 +12355,262 @@ msgstr ""
 msgid "Generate pages"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:15
-msgid "Offline payment"
+#: _core/settings/payments/components_js/payments.php:22
+msgid "Enter publishable key"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:19
-#: _core/settings/payments/components_js/payments.php:45
-#: _core/settings/payments/components_js/payments.php:71
-#: _core/settings/payments/components_js/payments.php:89
-msgid "Payment method description"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:25
-msgid "Wire Transfer"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:29
-msgid "Account number"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:55
-msgid "PayPal Email"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:61
-msgid "Currency code"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:67
-msgid "PayPal mode"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:81
+#: _core/settings/payments/components_js/payments.php:23
 msgid "Publishable key"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:85
+#: _core/settings/payments/components_js/payments.php:24
+msgid "Enter your Stripe publishable key. Find it in your Stripe dashboard under <strong>Developers → API Keys.</strong>"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:28
+msgid "Enter secret key"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:29
 msgid "Secret key"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:93
+#: _core/settings/payments/components_js/payments.php:30
+msgid "Enter your secret key from the <strong>API Keys</strong> section in your Stripe dashboard for secure payments."
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:34
+#: _core/settings/payments/components_js/payments.php:77
+#: _core/settings/payments/components_js/payments.php:115
+#: _core/settings/payments/components_js/payments.php:129
+msgid "Enter payment method description"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:35
+#: _core/settings/payments/components_js/payments.php:78
+#: _core/settings/payments/components_js/payments.php:116
+msgid "Checkout description"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:36
+msgid "Shown to users during checkout. Add a short message (e.g. “Pay securely with Stripe”)."
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:40
+msgid "Enter Stripe currency code"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:41
 msgid "Stripe currency code"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:100
-msgid "Select Currency code"
+#: _core/settings/payments/components_js/payments.php:42
+msgid "Set the currency for this payment method (e.g. USD, EUR, GBP). Use the standard 3-letter <a href=\"https://docs.stripe.com/currencies\">ISO code</a>."
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:101
-msgid "Australian dollar"
+#: _core/settings/payments/components_js/payments.php:49
+msgid "PayPal"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:102
-msgid "Brazilian real"
+#: _core/settings/payments/components_js/payments.php:55
+msgid "Enter PayPal email"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:56
+msgid "PayPal business email"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:57
+msgid "Enter the PayPal email address where you want to receive payments."
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:63
+msgid "Select currency code"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:65
+msgid "Choose the currency for this payment method."
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:71
+msgid "Select PayPal mode"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:72
+msgid "Payment mode"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:73
+msgid "Choose Live to accept real payments or Sandbox to test."
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:79
+msgid "This will appear as the PayPal payment option title at checkout."
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:86
+msgid "Wire Transfer"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:91
+msgid "Enter account number"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:92
+msgid "Account number"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:93
+msgid "Provide your bank account number for payments."
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:97
+msgid "Enter holder name"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:98
+msgid "Account holder name"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:99
+msgid "Enter the full name of the account owner."
 msgstr ""
 
 #: _core/settings/payments/components_js/payments.php:103
-msgid "Canadian dollar"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:104
-msgid "Czech koruna"
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Enter bank name"
 msgstr ""
 
 #: _core/settings/payments/components_js/payments.php:105
-msgid "Danish krone"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:106
-msgid "Euro"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:107
-msgid "Hong Kong dollar"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:108
-msgid "Hungarian forint 1"
+msgid "Enter your bank’s official name."
 msgstr ""
 
 #: _core/settings/payments/components_js/payments.php:109
-msgid "Indian rupee"
+msgid "Enter SWIFT/BIC code"
 msgstr ""
 
 #: _core/settings/payments/components_js/payments.php:110
-msgid "Israeli new shekel"
+msgid "SWIFT/BIC code"
 msgstr ""
 
 #: _core/settings/payments/components_js/payments.php:111
-msgid "Japanese yen 1"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:112
-msgid "Malaysian ringgit 2\t"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:113
-msgid "Mexican peso"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:114
-msgid "New Taiwan dollar 1"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:115
-msgid "New Zealand dollar"
-msgstr ""
-
-#: _core/settings/payments/components_js/payments.php:116
-msgid "Norwegian krone"
+msgid "Enter the SWIFT or BIC code for international transfers."
 msgstr ""
 
 #: _core/settings/payments/components_js/payments.php:117
+msgid "This will appear as the wire transfer option at checkout."
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:130
+msgid "Offline payment processing"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:131
+msgid "Accept payments offline. Orders will be created and stored in the system for your manual approval."
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:138
+msgid "Select Currency code"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:139
+msgid "Australian dollar"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:140
+msgid "Brazilian real"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:141
+msgid "Canadian dollar"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:142
+msgid "Czech koruna"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:143
+msgid "Danish krone"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:144
+msgid "Euro"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:145
+msgid "Hong Kong dollar"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:146
+msgid "Hungarian forint 1"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:147
+msgid "Indian rupee"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:148
+msgid "Israeli new shekel"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:149
+msgid "Japanese yen 1"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:150
+msgid "Malaysian ringgit 2\t"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:151
+msgid "Mexican peso"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:152
+msgid "New Taiwan dollar 1"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:153
+msgid "New Zealand dollar"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:154
+msgid "Norwegian krone"
+msgstr ""
+
+#: _core/settings/payments/components_js/payments.php:155
 msgid "Philippine peso"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:118
+#: _core/settings/payments/components_js/payments.php:156
 msgid "Polish złoty"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:119
+#: _core/settings/payments/components_js/payments.php:157
 msgid "Pound sterling"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:120
+#: _core/settings/payments/components_js/payments.php:158
 msgid "Russian ruble"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:121
+#: _core/settings/payments/components_js/payments.php:159
 msgid "Singapore dollar"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:122
+#: _core/settings/payments/components_js/payments.php:160
 msgid "Swedish krona"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:123
+#: _core/settings/payments/components_js/payments.php:161
 msgid "Swiss franc"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:124
+#: _core/settings/payments/components_js/payments.php:162
 msgid "Thai baht"
 msgstr ""
 
-#: _core/settings/payments/components_js/payments.php:125
+#: _core/settings/payments/components_js/payments.php:163
 msgid "United States dollar"
 msgstr ""
 
@@ -12940,7 +13158,7 @@ msgid "Profile settings"
 msgstr ""
 
 #: _core/stm-lms-templates/account/private/instructor_parts/top_info.php:15
-#: _core/stm-lms-templates/account/private/parts/top_info.php:12
+#: _core/stm-lms-templates/account/private/parts/top_info.php:15
 #: _core/stm-lms-templates/account/public/instructor_parts/top_info.php:15
 msgid "My profile"
 msgstr ""
@@ -13179,6 +13397,7 @@ msgstr ""
 
 #. translators: user progress.
 #: _core/stm-lms-templates/account/private/manage_students/student-progress.php:37
+#, php-format
 msgid "%s progress for"
 msgstr ""
 
@@ -13251,6 +13470,7 @@ msgstr ""
 #: _core/stm-lms-templates/account/private/parts/certificate-list.php:78
 #: _core/stm-lms-templates/components/file-attachment.php:60
 #: _core/stm-lms-templates/components/file-upload.php:65
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:91
 msgid "Download"
 msgstr ""
 
@@ -13473,6 +13693,7 @@ msgid "Send Message"
 msgstr ""
 
 #: _core/stm-lms-templates/account/public/instructor_parts/fast_message.php:20
+#, php-format
 msgid "To: <span>%s</span>"
 msgstr ""
 
@@ -13513,6 +13734,7 @@ msgstr ""
 #. translators: %s: membership name
 #: _core/stm-lms-templates/account/v1/use_membership.php:15
 #: _core/stm-lms-templates/components/modals/membership.php:22
+#, php-format
 msgid "Your current membership is \"%s\""
 msgstr ""
 
@@ -13520,6 +13742,7 @@ msgstr ""
 #. translators: %s: Number of plans
 #: _core/stm-lms-templates/account/v1/use_membership.php:25
 #: _core/stm-lms-templates/components/modals/membership.php:35
+#, php-format
 msgid "Membership quotas left: <strong>%s</strong>"
 msgstr ""
 
@@ -13542,6 +13765,7 @@ msgid "Enroll course via Membership"
 msgstr ""
 
 #: _core/stm-lms-templates/account/v1/use_membership_multiply.php:38
+#, php-format
 msgid "Quotas left: %s"
 msgstr ""
 
@@ -13591,10 +13815,12 @@ msgid "Please configure payment methods"
 msgstr ""
 
 #: _core/stm-lms-templates/checkout/not-logged-in.php:2
+#, php-format
 msgid "Please, <a href=\"%s\">log in</a>"
 msgstr ""
 
 #: _core/stm-lms-templates/checkout/payment.php:13
+#, php-format
 msgid "Total: %s"
 msgstr ""
 
@@ -14026,6 +14252,8 @@ msgid "Select Course Template"
 msgstr ""
 
 #: _core/stm-lms-templates/components/course-templates.php:119
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:37
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:165
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Save"
@@ -14086,6 +14314,7 @@ msgstr ""
 
 #. translators: %s: number
 #: _core/stm-lms-templates/components/course/card/global/lectures.php:13
+#, php-format
 msgid "%s Lecture"
 msgid_plural "%s Lectures"
 msgstr[0] ""
@@ -14206,6 +14435,7 @@ msgstr ""
 #. translators: %s: number
 #: _core/stm-lms-templates/components/course/curriculum/materials.php:117
 #: _core/stm-lms-templates/components/curriculum-accordion.php:103
+#, php-format
 msgid "%d questions"
 msgstr ""
 
@@ -14229,6 +14459,7 @@ msgstr ""
 #: _core/stm-lms-templates/components/course/expired.php:46
 #: _core/stm-lms-templates/components/course/expired.php:96
 #: _core/stm-lms-templates/expiration/info.php:14
+#, php-format
 msgid "Course available for <strong>%s day</strong>"
 msgid_plural "Course available for <strong>%s days</strong>"
 msgstr[0] ""
@@ -14237,12 +14468,14 @@ msgstr[1] ""
 #. translators: %s Time Left
 #: _core/stm-lms-templates/components/course/expired.php:69
 #: _core/stm-lms-templates/expiration/not_expired.php:20
+#, php-format
 msgid "Course expires in: %s"
 msgstr ""
 
 #. translators: %s Course available days
 #: _core/stm-lms-templates/components/course/expired.php:76
 #: _core/stm-lms-templates/expiration/not_expired.php:27
+#, php-format
 msgid "Course expires in: <strong>%s day</strong>"
 msgid_plural "Course expires in: <strong>%s days</strong>"
 msgstr[0] ""
@@ -14251,6 +14484,7 @@ msgstr[1] ""
 #. translators: %s Date of expiry
 #: _core/stm-lms-templates/components/course/expired.php:124
 #: _core/stm-lms-templates/expiration/expired.php:45
+#, php-format
 msgid "Date of expiry: %s"
 msgstr ""
 
@@ -14263,6 +14497,7 @@ msgstr ""
 #. translators: %d number
 #: _core/stm-lms-templates/components/course/materials.php:25
 #: _core/stm-lms-templates/course-player/content/lesson/materials.php:40
+#, php-format
 msgid "%d items"
 msgstr ""
 
@@ -14274,6 +14509,7 @@ msgstr ""
 #. translators: %d integer marks
 #: _core/stm-lms-templates/components/course/rating.php:40
 #: _core/stm-lms-templates/components/course/reviews.php:110
+#, php-format
 msgid "%s review"
 msgid_plural "%s reviews"
 msgstr[0] ""
@@ -14297,10 +14533,12 @@ msgstr ""
 
 #. translators: %s Marks
 #: _core/stm-lms-templates/components/course/reviews.php:158
+#, php-format
 msgid "Stars %s"
 msgstr ""
 
 #: _core/stm-lms-templates/components/course/share-button.php:14
+#: _core/stm-lms-templates/components/share.php:13
 msgid "Copied to clipboard!"
 msgstr ""
 
@@ -14310,18 +14548,22 @@ msgstr ""
 
 #: _core/stm-lms-templates/components/course/share-button.php:47
 #: _core/stm-lms-templates/components/course/share-button.php:55
+#: _core/stm-lms-templates/components/share.php:17
 msgid "Share"
 msgstr ""
 
 #: _core/stm-lms-templates/components/course/share-button.php:73
+#: _core/stm-lms-templates/components/share.php:47
 msgid "Linkedin"
 msgstr ""
 
 #: _core/stm-lms-templates/components/course/share-button.php:78
+#: _core/stm-lms-templates/components/share.php:52
 msgid "Telegram"
 msgstr ""
 
 #: _core/stm-lms-templates/components/course/share-button.php:83
+#: _core/stm-lms-templates/components/share.php:57
 msgid "Copy link"
 msgstr ""
 
@@ -14348,6 +14590,10 @@ msgstr ""
 
 #: _core/stm-lms-templates/components/course/student-card.php:72
 msgid "View Certificate"
+msgstr ""
+
+#: _core/stm-lms-templates/components/course/video.php:112
+msgid "Video source is missing or invalid."
 msgstr ""
 
 #: _core/stm-lms-templates/components/discussions.php:25
@@ -14383,21 +14629,26 @@ msgid "files"
 msgstr ""
 
 #: _core/stm-lms-templates/components/file-upload.php:92
+#: _core/stm-lms-templates/components/image-upload.php:52
 msgid "file"
 msgstr ""
 
 #. translators: %s string
 #: _core/stm-lms-templates/components/file-upload.php:96
+#: _core/stm-lms-templates/components/image-upload.php:56
+#, php-format
 msgid "Drag %s here or click the button."
 msgstr ""
 
 #: _core/stm-lms-templates/components/file-upload.php:116
+#: _core/stm-lms-templates/components/image-upload.php:76
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Supported file formats"
 msgstr ""
 
 #: _core/stm-lms-templates/components/file-upload.php:125
+#: _core/stm-lms-templates/components/image-upload.php:85
 msgid "Max file size: "
 msgstr ""
 
@@ -14406,11 +14657,25 @@ msgid "Max files limit: "
 msgstr ""
 
 #: _core/stm-lms-templates/components/file-upload.php:144
+#: _core/stm-lms-templates/components/image-upload.php:95
 msgid "File dimensions: "
 msgstr ""
 
 #: _core/stm-lms-templates/components/file-upload.php:160
+#: _core/stm-lms-templates/components/image-upload.php:111
 msgid "Uploading..."
+msgstr ""
+
+#: _core/stm-lms-templates/components/image-upload.php:24
+msgid "File too large"
+msgstr ""
+
+#: _core/stm-lms-templates/components/image-upload.php:25
+msgid "File type not allowed"
+msgstr ""
+
+#: _core/stm-lms-templates/components/image-upload.php:47
+msgid "Upload image"
 msgstr ""
 
 #: _core/stm-lms-templates/components/modals/become-instructor.php:41
@@ -14454,6 +14719,39 @@ msgstr ""
 msgid "You need to write a message"
 msgstr ""
 
+#: _core/stm-lms-templates/components/pricing/one-time.php:22
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "One-time purchase"
+msgstr ""
+
+#: _core/stm-lms-templates/components/pricing/one-time.php:38
+#: _core/stm-lms-templates/components/pricing/points.php:35
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Enter price"
+msgstr ""
+
+#: _core/stm-lms-templates/components/pricing/points.php:22
+msgid "Buy with points"
+msgstr ""
+
+#: _core/stm-lms-templates/components/pricing/points.php:28
+msgid "Points price"
+msgstr ""
+
+#: _core/stm-lms-templates/components/pricing/points.php:45
+msgid "Points info"
+msgstr ""
+
+#: _core/stm-lms-templates/components/public-page-block.php:14
+msgid "View Public Profile"
+msgstr ""
+
+#: _core/stm-lms-templates/components/public-page-block.php:21
+msgid "Share Public Profile"
+msgstr ""
+
 #: _core/stm-lms-templates/components/review-card.php:50
 msgid "In course"
 msgstr ""
@@ -14462,20 +14760,25 @@ msgstr ""
 msgid "Select an item"
 msgstr ""
 
+#: _core/stm-lms-templates/components/share.php:30
+msgid "Share link"
+msgstr ""
+
 #: _core/stm-lms-templates/components/statistics-block.php:13
 msgid "Courses completed"
 msgstr ""
 
-#: _core/stm-lms-templates/components/video-media.php:177
+#: _core/stm-lms-templates/components/video-media.php:189
 msgid "Lesson video progress"
 msgstr ""
 
-#: _core/stm-lms-templates/components/video-media.php:182
+#: _core/stm-lms-templates/components/video-media.php:194
 #: _core/stm-lms-templates/course-player/content/lesson/audio.php:91
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:78
 msgid "of"
 msgstr ""
 
-#: _core/stm-lms-templates/components/video-media.php:197
+#: _core/stm-lms-templates/components/video-media.php:209
 msgid "Lesson questions progress"
 msgstr ""
 
@@ -14483,7 +14786,7 @@ msgstr ""
 msgid "Start record"
 msgstr ""
 
-#: _core/stm-lms-templates/components/wp-editor.php:25
+#: _core/stm-lms-templates/components/wp-editor.php:28
 msgid "words"
 msgstr ""
 
@@ -14503,6 +14806,39 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Lesson materials"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:38
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:156
+msgid "Page Number"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:39
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:76
+#: _core/stm-lms-templates/dashboard/components/course.php:149
+msgid "Page"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:40
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:162
+msgid "Note"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:41
+msgid "Enter your bookmark note"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:97
+#: _core/stm-lms-templates/pmpro/pages/confirmation.php:64
+msgid "Print"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:102
+msgid "Open in new tab"
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:191
+msgid "New bookmark"
 msgstr ""
 
 #: _core/stm-lms-templates/course-player/content/quiz/history.php:28
@@ -14533,6 +14869,7 @@ msgstr ""
 #. translators: %s attempt number
 #: _core/stm-lms-templates/course-player/content/quiz/history.php:61
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:85
+#, php-format
 msgid "Attempt %s"
 msgstr ""
 
@@ -14589,11 +14926,11 @@ msgid "Number of allowed attempts"
 msgstr ""
 
 #: _core/stm-lms-templates/course-player/content/quiz/questions/image_match.php:95
-#: _core/stm-lms-templates/course-player/content/quiz/questions/item_match.php:94
+#: _core/stm-lms-templates/course-player/content/quiz/questions/item_match.php:95
 msgid "Drag answer here"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/quiz/questions/item_match.php:56
+#: _core/stm-lms-templates/course-player/content/quiz/questions/item_match.php:57
 #: _core/stm-lms-templates/questions/item_match.php:28
 msgid "The question was not set"
 msgstr ""
@@ -14611,6 +14948,7 @@ msgstr ""
 #: _core/stm-lms-templates/course-player/content/quiz/questions/keywords.php:59
 #: _core/stm-lms-templates/questions/answers/keywords.php:35
 #: _core/stm-lms-templates/questions/keywords.php:32
+#, php-format
 msgid "Keyword #%s"
 msgstr ""
 
@@ -14637,6 +14975,7 @@ msgstr ""
 #. translators: %d attempt index
 #: _core/stm-lms-templates/course-player/content/quiz/result.php:69
 #: _core/stm-lms-templates/course-player/content/quiz/result.php:80
+#, php-format
 msgid "Attempt %d"
 msgstr ""
 
@@ -14647,11 +14986,13 @@ msgstr ""
 
 #. translators: %d: number
 #: _core/stm-lms-templates/course-player/content/quiz/result.php:129
+#, php-format
 msgid "Passing grade <strong>%s</strong>"
 msgstr ""
 
 #. translators: %d: number
 #: _core/stm-lms-templates/course-player/content/quiz/result.php:137
+#, php-format
 msgid "<strong>%d</strong> attempt left"
 msgid_plural "<strong>%d</strong> attempts left"
 msgstr[0] ""
@@ -14679,38 +15020,44 @@ msgid "All of the most interesting lessons further. In order to continue you jus
 msgstr ""
 
 #. translators: %s: video required progress
-#: _core/stm-lms-templates/course-player/navigation.php:39
+#: _core/stm-lms-templates/course-player/navigation.php:42
+#, php-format
 msgid "You must watch at least %s%% of the video to complete the lesson"
 msgstr ""
 
 #. translators: %s: video required progress
-#: _core/stm-lms-templates/course-player/navigation.php:44
+#: _core/stm-lms-templates/course-player/navigation.php:47
+#, php-format
 msgid "You must listen at least %s%% of the audio to complete the lesson"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/navigation.php:49
+#: _core/stm-lms-templates/course-player/navigation.php:52
+msgid "You must read at least 100% of the PDF document to complete the lesson."
+msgstr ""
+
+#: _core/stm-lms-templates/course-player/navigation.php:56
 msgid "and you must answer all questions."
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/navigation.php:52
+#: _core/stm-lms-templates/course-player/navigation.php:59
 msgid "You must answer all questions to complete the lesson"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/navigation.php:76
+#: _core/stm-lms-templates/course-player/navigation.php:83
 #: _core/stm-lms-templates/wizard/views/footer.php:13
 msgid "Previous"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/navigation.php:123
+#: _core/stm-lms-templates/course-player/navigation.php:130
 msgid "Save as draft"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/navigation.php:151
+#: _core/stm-lms-templates/course-player/navigation.php:158
 msgid "Complete & Next"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/navigation.php:161
-#: _core/stm-lms-templates/course-player/navigation.php:271
+#: _core/stm-lms-templates/course-player/navigation.php:168
+#: _core/stm-lms-templates/course-player/navigation.php:278
 #: _core/stm-lms-templates/elementor-widgets/blog/pagination.php:12
 #: _core/stm-lms-templates/elementor-widgets/courses/courses-archive/pagination/pagination-style-2.php:13
 #: _core/stm-lms-templates/elementor-widgets/courses/courses-grid/pagination/pagination-style-2.php:13
@@ -14769,6 +15116,7 @@ msgid "No courses found."
 msgstr ""
 
 #: _core/stm-lms-templates/courses/parts/meta.php:20
+#, php-format
 msgid "%s Lectures"
 msgstr ""
 
@@ -14785,6 +15133,8 @@ msgid "Enter student email"
 msgstr ""
 
 #: _core/stm-lms-templates/dashboard/components/back.php:4
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
 msgid "Back"
 msgstr ""
 
@@ -14798,10 +15148,6 @@ msgstr ""
 
 #: _core/stm-lms-templates/dashboard/components/course.php:139
 msgid "Show on page"
-msgstr ""
-
-#: _core/stm-lms-templates/dashboard/components/course.php:149
-msgid "Page"
 msgstr ""
 
 #: _core/stm-lms-templates/dashboard/components/course.php:159
@@ -14922,6 +15268,7 @@ msgid "View Order"
 msgstr ""
 
 #: _core/stm-lms-templates/global/account-dropdown.php:29
+#, php-format
 msgid "Hey, %s"
 msgstr ""
 
@@ -15002,6 +15349,7 @@ msgid " MasterStudy"
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/checkout-warning.php:17
+#, php-format
 msgid "Please select the previously added courses to delete, because the new chosen plan allows you to have only %s courses"
 msgstr ""
 
@@ -15018,10 +15366,12 @@ msgid "Membership Fee"
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/pages/billing.php:31
+#, php-format
 msgid "%1$s every %2$d %3$s."
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/pages/billing.php:33
+#, php-format
 msgid "%1$s per %2$s."
 msgstr ""
 
@@ -15102,6 +15452,7 @@ msgid "Credit Card Information"
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/pages/billing.php:252
+#, php-format
 msgid "We accept %s"
 msgstr ""
 
@@ -15143,6 +15494,7 @@ msgstr ""
 
 #. translators: %s Level Name
 #: _core/stm-lms-templates/pmpro/pages/cancel.php:52
+#, php-format
 msgid "Are you sure you want to cancel your %s membership?"
 msgid_plural "Are you sure you want to cancel your %s memberships?"
 msgstr[0] ""
@@ -15210,6 +15562,7 @@ msgid "log out now"
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/pages/checkout.php:226
+#, php-format
 msgid "You are logged in as <strong>%1$s</strong>. If you would like to use a different account for this membership, <a href=\"%2$s\">%3$s.</a>"
 msgstr ""
 
@@ -15260,6 +15613,7 @@ msgid "Discount Code"
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/pages/checkout.php:693
+#, php-format
 msgid "I agree to the %s"
 msgstr ""
 
@@ -15287,14 +15641,17 @@ msgid "Membership Plan"
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/pages/checkout.php:779
+#, php-format
 msgid "/ per %1$d %2$s"
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/pages/checkout.php:781
+#, php-format
 msgid "/ per %s"
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/pages/checkout.php:794
+#, php-format
 msgid "The <strong>%s</strong> code has been applied to your order."
 msgstr ""
 
@@ -15303,10 +15660,12 @@ msgstr ""
 #: _core/stm-lms-templates/pmpro/pages/checkout.php:800
 #: _core/stm-lms-templates/pmpro/pages/levels.php:91
 #: _core/stm-lms-templates/shortcodes/stm_membership_levels.php:160
+#, php-format
 msgid "Courses included: %s"
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/pages/checkout.php:806
+#, php-format
 msgid "Featured courses quote included: %d"
 msgstr ""
 
@@ -15317,12 +15676,14 @@ msgstr ""
 #. translators: %s: number
 #: _core/stm-lms-templates/pmpro/pages/checkout.php:823
 #: _core/stm-lms-templates/shortcodes/stm_membership_levels.php:95
+#, php-format
 msgid " / per %1$d %2$s*"
 msgstr ""
 
 #. translators: %s: number
 #: _core/stm-lms-templates/pmpro/pages/checkout.php:825
 #: _core/stm-lms-templates/shortcodes/stm_membership_levels.php:98
+#, php-format
 msgid " / per %s*"
 msgstr ""
 
@@ -15356,22 +15717,21 @@ msgstr ""
 
 #. translators: %s Level Name
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:25
+#, php-format
 msgid "Thank you for your membership to %1$s. Your <span>%2$s</span> membership is now active."
 msgstr ""
 
 #. translators: %s User Email
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:40
+#, php-format
 msgid "Below are details about your membership account and a receipt for your initial membership invoice. A welcome email with a copy of your initial membership invoice has been sent to <span>%s</span>."
 msgstr ""
 
 #. translators: %s Datetime
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:61
 #: _core/stm-lms-templates/pmpro/pages/invoice.php:27
+#, php-format
 msgid "Invoice #%1$s on %2$s"
-msgstr ""
-
-#: _core/stm-lms-templates/pmpro/pages/confirmation.php:64
-msgid "Print"
 msgstr ""
 
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:77
@@ -15394,6 +15754,7 @@ msgstr ""
 
 #. translators: %s User Email
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:163
+#, php-format
 msgid "Below are details about your membership account. A welcome email has been sent to %s."
 msgstr ""
 
@@ -15454,6 +15815,7 @@ msgstr ""
 
 #. translators: %s: string
 #: _core/stm-lms-templates/pmpro/pages/levels.php:80
+#, php-format
 msgid "per %s"
 msgstr ""
 
@@ -15461,11 +15823,13 @@ msgstr ""
 #. translators: %s: number
 #: _core/stm-lms-templates/pmpro/pages/levels.php:99
 #: _core/stm-lms-templates/shortcodes/stm_membership_levels.php:181
+#, php-format
 msgid "Featured courses quote included: %s"
 msgstr ""
 
 #. translators: %1$s - first word, %2$s - second word (to be bold)
 #: _core/stm-lms-templates/premium-templates/banners/banner-templates.php:14
+#, php-format
 msgid "%1$s <strong>%2$s</strong>"
 msgstr ""
 
@@ -15502,6 +15866,7 @@ msgid "Show answers"
 msgstr ""
 
 #: _core/stm-lms-templates/quiz/results.php:35
+#, php-format
 msgid "Passing grade - %s%%"
 msgstr ""
 
@@ -15511,6 +15876,7 @@ msgid "Submit Quiz"
 msgstr ""
 
 #: _core/stm-lms-templates/quiz/timer.php:34
+#, php-format
 msgid "answered <strong>%s</strong>/<label>%s</label>"
 msgstr ""
 
@@ -15528,6 +15894,7 @@ msgstr ""
 
 #. translators: %s Posts Total
 #: _core/stm-lms-templates/shortcodes/stm_lms_courses_grid.php:60
+#, php-format
 msgid "Total: <strong>%s Courses</strong>"
 msgstr ""
 
@@ -15561,6 +15928,7 @@ msgid "{username}"
 msgstr ""
 
 #: _core/stm-lms-templates/stm-lms-certificates-generator.php:59
+#, php-format
 msgid "To qualify for a Certificate, you must get a passing grade of %s in the overall weighting."
 msgstr ""
 
@@ -15667,6 +16035,7 @@ msgstr ""
 
 #. translators: %s: string
 #: _core/stm-lms-templates/stm-lms-go-pro.php:350
+#, php-format
 msgid "You get <a href=\"%1$s\"><span class=\"stm_terms_content_support\" data-support-lifetime=\"%2$s\" data-support-annual=\"%3$s\">1 year</span> updates and support</a> from the date of purchase. We offer 14 days Money Back Guarantee based on <a href=\"%1$s\">Refund Policy</a>."
 msgstr ""
 
@@ -15773,16 +16142,19 @@ msgstr ""
 
 #. translators: %s URL
 #: _core/stm-lms-templates/stm-lms-user-pmp.php:67
+#, php-format
 msgid "Your membership is not active. <a href='%s'>Renew now.</a>"
 msgstr ""
 
 #. translators: %s URL
 #: _core/stm-lms-templates/stm-lms-user-pmp.php:73
+#, php-format
 msgid "You do not have an active membership. <a href='%s'>Register here.</a>"
 msgstr ""
 
 #. translators: %s URL
 #: _core/stm-lms-templates/stm-lms-user-pmp.php:79
+#, php-format
 msgid "You do not have an active membership. <a href='%s'>Choose a membership level.</a>"
 msgstr ""
 
@@ -15810,6 +16182,7 @@ msgstr ""
 #. translators: %s Course name
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempt.php:40
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:47
+#, php-format
 msgid "Course: %s"
 msgstr ""
 
@@ -16167,6 +16540,11 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
+msgid "Subtitles"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
 msgid "by name"
 msgstr ""
 
@@ -16198,6 +16576,11 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Failed to remove file"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "NEW"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -16377,6 +16760,11 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
+msgid "Number of images per lesson - for text lessons and assignments"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
 msgid "Preferred lesson types"
 msgstr ""
 
@@ -16487,6 +16875,7 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
+#, js-format
 msgid "Maximum file size: %s"
 msgstr ""
 
@@ -16518,7 +16907,37 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
+msgid "Enter keywords to find relevant materials..."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Image Preview"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Video Preview"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Add this Image"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Add this Video"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
 msgid "File Manager"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Explore"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -16529,11 +16948,6 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "AI Generate"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-#: react/build/static/js/main.js:1
-msgid "NEW"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -16559,6 +16973,26 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Browse audio files"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Drag & drop subtitle files here or browse it from your computer"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Browse subtitle files"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Drag & drop a PDF file here or browse it from your computer"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Browse PDF files"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -16654,6 +17088,21 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Are you sure you want to close this modal?"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Failed to generate duration"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Lesson duration"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Example: 2h 45m"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -16799,6 +17248,11 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Failed to save certificate"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Issue a certificate upon completion of the course"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -17288,6 +17742,31 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
+msgid "PDF Lessons available with Pro Plus"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Enjoy a sleek and user-friendly layout designed for effortless PDF reading. Provide learners with a smooth, focused experience right inside the lesson."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Upgrade to Pro Plus"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "PDF Lessons available with Pro"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
 msgid "Question Media addon disabled"
 msgstr ""
 
@@ -17319,6 +17798,16 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Google meet lesson"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "You can upload subtitle files in .vtt format to the field above."
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Once uploaded, subtitles will automatically appear in the course player during video playback."
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -17498,6 +17987,7 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
+#, js-format
 msgid "Import %d materials to Section %d"
 msgstr ""
 
@@ -17574,6 +18064,11 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Google meet addon disabled"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Enjoy a sleek, user-friendly layout and navigation that makes PDF reading smooth and focused right inside the lesson."
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -17968,6 +18463,16 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
+msgid "PDF file"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Prevent complete the lesson until PDF is fully read"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
 msgid "Link specific parts of the video to text with timecodes. Just add the time in brackets, like"
 msgstr ""
 
@@ -18029,16 +18534,6 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Select end time"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-#: react/build/static/js/main.js:1
-msgid "Lesson duration"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-#: react/build/static/js/main.js:1
-msgid "Example: 2h 45m"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -18348,6 +18843,7 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
+#, js-format
 msgid "Add %s %s"
 msgstr ""
 
@@ -18553,6 +19049,11 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
+msgid "Required Question"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
 msgid "Expand"
 msgstr ""
 
@@ -18594,11 +19095,6 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Enter your keyword"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-#: react/build/static/js/main.js:1
-msgid "Enter bank name"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -18648,6 +19144,16 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
+msgid "Quiz successfully saved"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Failed to save quiz"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
 msgid "Are you sure you want to delete this question?"
 msgstr ""
 
@@ -18664,16 +19170,6 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Click on Create before adding questions to the quiz."
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-#: react/build/static/js/main.js:1
-msgid "Quiz successfully saved"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-#: react/build/static/js/main.js:1
-msgid "Failed to save quiz"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -18945,16 +19441,6 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
-msgid "One-time purchase"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-#: react/build/static/js/main.js:1
-msgid "Enter price"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-#: react/build/static/js/main.js:1
 msgid "Sale price"
 msgstr ""
 
@@ -19090,22 +19576,12 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
-msgid "Unable to generate course"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-#: react/build/static/js/main.js:1
 msgid "Course is generating. Do you want to leave this page?"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Section"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
-#: react/build/static/js/main.js:1
-msgid "Failed to generate curriculum"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -19135,7 +19611,7 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
-msgid "Course description"
+msgid "Basic info, requirements, intended audience"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -19151,6 +19627,11 @@ msgstr ""
 #: assets/course-builder/js/main.js:1
 #: react/build/static/js/main.js:1
 msgid "Course cover"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+#: react/build/static/js/main.js:1
+msgid "Course description"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -20879,6 +21360,7 @@ msgstr ""
 #. translators: %d is replaced with the number of courses
 #: assets/gutenberg/blocks/courses/bundles/cards/index.js:2
 #: assets/gutenberg/blocks/courses/bundles/container/view.js:2
+#, js-format
 msgid "%d courses"
 msgstr ""
 
@@ -21430,6 +21912,7 @@ msgstr ""
 #: assets/gutenberg/blocks/courses/presets/price-accent/view.js:2
 #: assets/gutenberg/blocks/courses/presets/price-button/index.js:2
 #: assets/gutenberg/blocks/courses/presets/price-button/view.js:2
+#, js-format
 msgid "%d lectures"
 msgstr ""
 

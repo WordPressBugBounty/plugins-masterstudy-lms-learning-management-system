@@ -69,7 +69,7 @@ class Stm_Lms_Popular_Courses extends WP_Widget {
 					$content            = '';
 					if ( ! $single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership ) {
 						ob_start();
-						$subscription_image = STM_LMS_URL . '/assets/img/members_only.svg';
+						$subscription_image = STM_LMS_URL . 'assets/img/members_only.svg';
 						?>
 						<div class="course_available_only_in_subscription">
 							<div class="course_available_only_in_subscription__image">

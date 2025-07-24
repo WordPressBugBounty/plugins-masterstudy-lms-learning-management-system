@@ -457,7 +457,7 @@ class STM_LMS_User {
 		require_once ABSPATH . 'wp-admin/includes/ms.php';
 
 		$reset_url  = self::login_page_url() . '?user_token=' . $token;
-		$user_login = get_userdata( $user )->user_login;
+		$user_login = get_userdata( $user )->ID;
 		$blog_name  = get_bloginfo( 'name' );
 
 		wp_delete_user( $user );
@@ -478,7 +478,7 @@ class STM_LMS_User {
 		);
 
 		$email_data_account_premoderation = array(
-			'user_login' => $user_login,
+			'user_login' => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_login ),
 			'blog_name'  => $blog_name,
 			'reset_url'  => $reset_url,
 			'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
@@ -593,7 +593,7 @@ class STM_LMS_User {
 
 		$email_data_register = array(
 			'blog_name'  => $blog_name,
-			'user_login' => $user_login,
+			'user_login' => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user ),
 			'login_url'  => $login_url,
 			'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
 			'date'       => gmdate( 'Y-m-d H:i:s' ),
@@ -641,7 +641,7 @@ class STM_LMS_User {
 		$subject = esc_html__( 'New User Registered', 'masterstudy-lms-learning-management-system' );
 
 		$email_data = array(
-			'user_login'        => $user_login,
+			'user_login'        => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user ),
 			'user_email'        => $user_email,
 			'registration_date' => gmdate( 'Y-m-d H:i:s' ),
 			'blog_name'         => STM_LMS_Helpers::masterstudy_lms_get_site_name(),

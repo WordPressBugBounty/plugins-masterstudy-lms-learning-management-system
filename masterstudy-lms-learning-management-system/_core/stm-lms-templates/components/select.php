@@ -24,7 +24,7 @@ $select_width = ! empty( $select_width ) ? 'style=min-width:' . $select_width : 
 $default      = $default ?? '';
 $queryable    = ( $is_queryable ?? false ) ? 'true' : 'false';
 
-wp_enqueue_style( 'masterstudy-select', STM_LMS_URL . '/assets/css/components/select.css', null, MS_LMS_VERSION );
+wp_enqueue_style( 'masterstudy-select', STM_LMS_URL . 'assets/css/components/select.css', null, MS_LMS_VERSION );
 wp_enqueue_script( 'masterstudy-select', STM_LMS_URL . 'assets/js/components/select.js', array(), MS_LMS_VERSION, true );
 ?>
 <div class="masterstudy-select<?php echo esc_attr( $dark_mode ? ' masterstudy-select_dark-mode' : '' ); ?>" <?php echo esc_attr( $select_width ); ?> data-queryable="<?php echo esc_attr( $queryable ); ?>" data-id="<?php echo esc_attr( $select_id ); ?>">

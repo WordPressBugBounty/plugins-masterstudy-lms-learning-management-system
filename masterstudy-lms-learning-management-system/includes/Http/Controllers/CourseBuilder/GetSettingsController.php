@@ -21,7 +21,7 @@ final class GetSettingsController {
 				'course_allow_intended_audience' => \STM_LMS_Options::get_option( 'course_allow_intended_audience', false ),
 				'question_category_allowed'      => \STM_LMS_Options::get_option( 'course_allow_new_question_categories', false ),
 				'course_premoderation'           => \STM_LMS_Options::get_option( 'course_premoderation', false ),
-				'course_page_urls'               => STM_LMS_URL . '/assets/img/course',
+				'course_page_urls'               => STM_LMS_URL . 'assets/img/course',
 				'currency_symbol'                => \STM_LMS_Options::get_option( 'currency_symbol', '$' ),
 				'decimals_num'                   => \STM_LMS_Options::get_option( 'decimals_num', '2' ),
 				'currency_thousands'             => \STM_LMS_Options::get_option( 'currency_thousands', ' ' ),

@@ -4,6 +4,7 @@
  * @var int $id
  * @var object $content
  * @var array $settings
+ * @var bool $words_off
  * @var boolean $dark_mode
  */
 
@@ -12,6 +13,7 @@ wp_enqueue_script( 'masterstudy-wp-editor' );
 
 $options     = get_option( 'stm_lms_settings' );
 $theme_fonts = isset( $theme_fonts ) ? $options['course_player_theme_fonts'] ?? false : false;
+$words_off   = isset( $words_off ) ? $words_off : false;
 $dark_mode   = isset( $dark_mode ) ? $dark_mode : false;
 
 wp_localize_script(
@@ -21,6 +23,7 @@ wp_localize_script(
 		'editor_id'   => $id,
 		'dark_mode'   => $dark_mode,
 		'theme_fonts' => $theme_fonts,
+		'words_off'   => $words_off,
 		'translate'   => array(
 			'word' => esc_html__( 'words', 'masterstudy-lms-learning-management-system' ),
 		),

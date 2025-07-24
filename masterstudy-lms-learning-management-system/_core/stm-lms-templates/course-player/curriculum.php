@@ -20,7 +20,7 @@ wp_enqueue_script( 'masterstudy-course-player-curriculum' );
 	<div class="masterstudy-course-player-curriculum__wrapper">
 		<div class="masterstudy-course-player-curriculum__mobile-header">
 			<h3 class="masterstudy-course-player-curriculum__mobile-title">
-				<?php echo esc_html__( 'Curriculum', 'masterstudy-learning-management-system' ); ?>
+				<?php echo esc_html__( 'Curriculum', 'masterstudy-lms-learning-management-system' ); ?>
 			</h3>
 			<span class="masterstudy-course-player-curriculum__mobile-close"></span>
 		</div>

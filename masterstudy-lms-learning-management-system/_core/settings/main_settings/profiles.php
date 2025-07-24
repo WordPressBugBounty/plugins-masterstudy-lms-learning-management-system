@@ -11,7 +11,7 @@ function stm_lms_settings_profiles_section() {
 		array(
 			'value'         => 'compact',
 			'alt'           => esc_html__( 'Compact', 'masterstudy-lms-learning-management-system' ),
-			'img'           => STM_LMS_URL . '/assets/img/instructor-compact.png',
+			'img'           => STM_LMS_URL . 'assets/img/instructor-compact.png',
 			'preview_url'   => 'https://masterstudy.stylemixthemes.com/lms-plugin/instructor-public-account/3139/?public=compact',
 			'preview_label' => $layout_preview_label,
 			'disabled'      => false,
@@ -19,7 +19,7 @@ function stm_lms_settings_profiles_section() {
 		array(
 			'value'         => 'extended',
 			'alt'           => esc_html__( 'Extended', 'masterstudy-lms-learning-management-system' ),
-			'img'           => STM_LMS_URL . '/assets/img/instructor-expanded.png',
+			'img'           => STM_LMS_URL . 'assets/img/instructor-expanded.png',
 			'preview_url'   => 'https://masterstudy.stylemixthemes.com/lms-plugin/instructor-public-account/3139/?public=extended',
 			'preview_label' => $layout_preview_label,
 			'disabled'      => false,
@@ -29,7 +29,7 @@ function stm_lms_settings_profiles_section() {
 		array(
 			'value'         => 'compact',
 			'alt'           => esc_html__( 'Compact', 'masterstudy-lms-learning-management-system' ),
-			'img'           => STM_LMS_URL . '/assets/img/student-compact.png',
+			'img'           => STM_LMS_URL . 'assets/img/student-compact.png',
 			'preview_url'   => 'https://masterstudy.stylemixthemes.com/lms-plugin/student-public-account/3394/?public=compact',
 			'preview_label' => $layout_preview_label,
 			'disabled'      => false,
@@ -37,7 +37,7 @@ function stm_lms_settings_profiles_section() {
 		array(
 			'value'         => 'extended',
 			'alt'           => esc_html__( 'Extended', 'masterstudy-lms-learning-management-system' ),
-			'img'           => STM_LMS_URL . '/assets/img/student-expanded.png',
+			'img'           => STM_LMS_URL . 'assets/img/student-expanded.png',
 			'preview_url'   => 'https://masterstudy.stylemixthemes.com/lms-plugin/student-public-account/3394/?public=extended',
 			'preview_label' => $layout_preview_label,
 			'disabled'      => false,

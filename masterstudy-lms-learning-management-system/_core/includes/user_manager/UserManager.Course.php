@@ -163,7 +163,7 @@ class STM_LMS_User_Manager_Course {
 			);
 
 			$email_data = array(
-				'user_login'      => $user_login,
+				'user_login'      => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 				'instructor_name' => $instructor_name,
 				'course_title'    => $course_title,
 				'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),

@@ -18,7 +18,7 @@ class MsLmsInstructorsGrid extends Widget_Base {
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
 		wp_register_style( 'masterstudy-fonts', STM_LMS_URL . 'assets/css/variables/fonts.css', array(), STM_LMS_VERSION, false );
-		wp_register_style( 'ms_lms_instructors_grid', STM_LMS_URL . '/assets/css/elementor-widgets/instructors-grid.css', array(), STM_LMS_VERSION, false );
+		wp_register_style( 'ms_lms_instructors_grid', STM_LMS_URL . 'assets/css/elementor-widgets/instructors-grid.css', array(), STM_LMS_VERSION, false );
 	}
 
 	public function get_name() {

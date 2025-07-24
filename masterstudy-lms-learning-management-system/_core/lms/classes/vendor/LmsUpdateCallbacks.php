@@ -822,4 +822,16 @@ abstract class LmsUpdateCallbacks {
 
 		update_option( 'stm_lms_media_library_settings', $settings );
 	}
+
+	public static function lms_create_bookmarks_table() {
+		require_once STM_LMS_LIBRARY . '/db/tables.php';
+
+		if ( ! function_exists( 'stm_lms_tables_update' ) ) {
+			return;
+		}
+
+		stm_lms_user_bookmarks();
+
+		update_option( 'stm_lms_db_version', STM_LMS_DB_VERSION );
+	}
 }

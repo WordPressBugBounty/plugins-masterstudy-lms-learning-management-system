@@ -173,7 +173,7 @@ class STM_LMS_Quiz {
 			$attempt_details = stm_lms_get_quiz_last_attempt( $user_id, $course_id, $quiz_id );
 
 			$email_data_quiz_completed = array(
-				'user_login'           => $user_login,
+				'user_login'           => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 				'quiz_name'            => $quiz_name,
 				'course_title'         => $course_title,
 				'quiz_result'          => $progress,
@@ -214,7 +214,7 @@ class STM_LMS_Quiz {
 
 			//email about quiz completed to instructor by student
 			$email_data_quiz_completed_instructor = array(
-				'user_login'           => $user_login,
+				'user_login'           => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 				'quiz_name'            => $quiz_name,
 				'course_title'         => $course_title,
 				'quiz_result'          => $progress,

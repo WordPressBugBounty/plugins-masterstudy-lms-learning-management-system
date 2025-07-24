@@ -29,7 +29,7 @@ final class CertificateSerializer extends AbstractSerializer {
 		$preview_certificate = get_post_meta( $ID, 'certificate_preview', true );
 
 		if ( empty( $preview_certificate ) ) {
-			$preview_certificate = STM_LMS_URL . '/assets/img/pro-features/certifiacate_placeholder.png';
+			$preview_certificate = STM_LMS_URL . 'assets/img/pro-features/certifiacate_placeholder.png';
 		}
 
 		return $preview_certificate;

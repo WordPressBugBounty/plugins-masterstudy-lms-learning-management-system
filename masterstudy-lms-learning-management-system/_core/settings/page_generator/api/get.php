@@ -232,14 +232,14 @@ function stm_lms_generate_archive_pages() {
 				$page_meta['courses_page_type']      = 'elementor';
 				$page_meta['elementor_courses_page'] = 'yes';
 				$page_meta['_elementor_edit_mode']   = 'builder';
-				$page_meta['_elementor_data']        = json_decode( wp_remote_retrieve_body( wp_remote_get( STM_LMS_URL . '/settings/demo_import/sample_data/archive_elementor.json' ) ), true );
+				$page_meta['_elementor_data']        = json_decode( wp_remote_retrieve_body( wp_remote_get( STM_LMS_URL . 'settings/demo_import/sample_data/archive_elementor.json' ) ), true );
 			} elseif ( 'courses_page_gutenberg' === $page_key ) {
 				$page_meta['courses_page_type']      = 'gutenberg';
 				$page_meta['gutenberg_courses_page'] = 'yes';
 				wp_update_post(
 					array(
 						'ID'           => $page_id,
-						'post_content' => wp_remote_retrieve_body( wp_remote_get( STM_LMS_URL . '/settings/demo_import/sample_data/archive_gutenberg.xml' ) ),
+						'post_content' => wp_remote_retrieve_body( wp_remote_get( STM_LMS_URL . 'settings/demo_import/sample_data/archive_gutenberg.xml' ) ),
 					)
 				);
 			}

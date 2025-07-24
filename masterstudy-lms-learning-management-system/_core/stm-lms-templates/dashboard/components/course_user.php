@@ -32,16 +32,16 @@
 						<div class="section_item" v-for="item in data.materials.filter(item => item.section_id === section.id)"
 							v-bind:class="[item.loading ? 'loading' : '', item.type, 'opened_' + item.opened]">
 							<h4 class="section_item__title">
-								<img v-if="item.type==='lesson' && item.post_type!=='stm-google-meets'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/text.svg' ); ?>">
-								<img v-if="item.type==='quiz'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/quiz.svg' ); ?>">
-								<img v-if="item.type==='pdf'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/pdf.svg' ); ?>">
-								<img v-if="item.type==='audio'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/audio.svg' ); ?>">
-								<img v-if="item.type==='video'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/video.svg' ); ?>">
-								<img v-if="item.type==='text'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/text.svg' ); ?>">
-								<img v-if="item.type==='stream'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/stream.svg' ); ?>">
-								<img v-if="item.type==='assignment'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/assignments.svg' ); ?>">
-								<img v-if="item.type==='zoom_conference'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/zoom_conference.svg' ); ?>">
-								<img v-if="item.post_type==='stm-google-meets'" src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/lessons/google-meet.svg' ); ?>">
+								<img v-if="item.type==='lesson' && item.post_type!=='stm-google-meets'" src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/lessons/text.svg' ); ?>">
+								<img v-if="item.type==='quiz'" src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/lessons/quiz.svg' ); ?>">
+								<img v-if="item.type==='pdf'" src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/lessons/pdf.svg' ); ?>">
+								<img v-if="item.type==='audio'" src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/lessons/audio.svg' ); ?>">
+								<img v-if="item.type==='video'" src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/lessons/video.svg' ); ?>">
+								<img v-if="item.type==='text'" src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/lessons/text.svg' ); ?>">
+								<img v-if="item.type==='stream'" src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/lessons/stream.svg' ); ?>">
+								<img v-if="item.type==='assignment'" src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/lessons/assignments.svg' ); ?>">
+								<img v-if="item.type==='zoom_conference'" src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/lessons/zoom_conference.svg' ); ?>">
+								<img v-if="item.post_type==='stm-google-meets'" src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/lessons/google-meet.svg' ); ?>">
 								<strong v-html="item.title"></strong>
 								<div class="section_item__toggle"
 									v-if="item.type==='assignment' || item.type==='quiz'"

@@ -4,7 +4,9 @@
   $(document).ready(function () {
     if (typeof tinyMCE !== 'undefined') {
       editorCustomStyles();
-      updateEditorWordCount();
+      if (!data.words_off) {
+        updateEditorWordCount();
+      }
     }
     function editorCustomStyles() {
       var editor = tinyMCE.get(data.editor_id);
@@ -55,7 +57,9 @@
       });
       wpEditor.off('input keydown');
       wpEditor.on('input keydown', function () {
-        updateEditorWordCount();
+        if (!data.words_off) {
+          updateEditorWordCount();
+        }
       });
     }
   });

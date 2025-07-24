@@ -37,7 +37,7 @@ wp_localize_script(
 		'file_upload_action' => $file_upload_action,
 		'file_delete_action' => $file_delete_action,
 		'full_image_view'    => $full_image_view,
-		'icon_url'           => STM_LMS_URL . '/assets/icons/files/new/',
+		'icon_url'           => STM_LMS_URL . 'assets/icons/files/new/',
 		'only_one_file'      => __( 'Only one file allowed', 'masterstudy-lms-learning-management-system' ),
 	)
 );

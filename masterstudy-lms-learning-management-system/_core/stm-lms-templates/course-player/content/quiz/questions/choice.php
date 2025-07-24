@@ -62,7 +62,7 @@ foreach ( $data['answers'] as $answer ) {
 			<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $data['id'] ); ?><?php echo 'multi' === $choice ? '[]' : ''; ?>" value="<?php echo wp_kses_post( htmlspecialchars( $full_answer ?? '' ) ); ?>"/>
 			<span class="masterstudy-course-player-answer__<?php echo esc_attr( $input_type ); ?> <?php echo esc_attr( ( $correctly || $wrongly ) ? "masterstudy-course-player-answer__{$input_type}_checked" : '' ); ?>"></span>
 			<?php if ( $data['has_image_question'] ) { ?>
-				<img src="<?php echo esc_url( ! empty( $answer['text_image']['url'] ) ? $answer['text_image']['url'] : STM_LMS_URL . '/assets/img/image_not_found.png' ); ?>" class="masterstudy-course-player-answer__image"/>
+				<img src="<?php echo esc_url( ! empty( $answer['text_image']['url'] ) ? $answer['text_image']['url'] : STM_LMS_URL . 'assets/img/image_not_found.png' ); ?>" class="masterstudy-course-player-answer__image"/>
 				<?php
 				if ( ! empty( $answer['explain'] ) && $show_answers && ! empty( $last_quiz ) ) {
 					?>

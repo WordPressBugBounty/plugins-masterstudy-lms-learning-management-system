@@ -39,7 +39,7 @@ wp_enqueue_script( 'masterstudy-curriculum-accordion' );
 				if ( ! isset( $section_material['lesson_completed'] ) ) {
 					if ( PostType::QUIZ === $section_material['post_type'] ) {
 						$section_material['lesson_completed'] = isset( $passed_quizzes[ $section_material['post_id'] ] ) ? 'completed' : '';
-					} else if ( PostType::ASSIGNMENT === $section_material['post_type'] ) {
+					} elseif ( PostType::ASSIGNMENT === $section_material['post_type'] ) {
 						$section_material['lesson_completed'] = \STM_LMS_Lesson::is_lesson_completed( $user_id, $course_id, $section_material['post_id'] );
 					} else {
 						$section_material['lesson_completed'] = isset( $completed_lessons[ $section_material['post_id'] ] ) ? 'completed' : '';
@@ -57,7 +57,7 @@ wp_enqueue_script( 'masterstudy-curriculum-accordion' );
 				<h4 class="masterstudy-curriculum-accordion__section-title"><?php echo esc_html( $section['title'] ); ?></h4>
 				<span class="masterstudy-curriculum-accordion__section-count"><?php echo esc_html( $completed_count . '/' . count( $section['materials'] ) ); ?></span>
 				<span class="masterstudy-curriculum-accordion__toggler">
-				<img src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/files/new/chevron_up.svg' ); ?>" class="masterstudy-curriculum-accordion__toggler-icon">
+				<img src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/files/new/chevron_up.svg' ); ?>" class="masterstudy-curriculum-accordion__toggler-icon">
 				</span>
 			</div>
 			<ul class="masterstudy-curriculum-accordion__list" style="<?php echo esc_attr( $opened ? 'display:flex' : 'display:none' ); ?>">

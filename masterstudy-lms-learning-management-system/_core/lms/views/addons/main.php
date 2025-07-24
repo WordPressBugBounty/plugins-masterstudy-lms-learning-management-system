@@ -24,7 +24,7 @@ use \MasterStudy\Lms\Plugin\Addons;
 				<li>
 					<div class="stm-lms-addon-banner__wrapper">
 						<div class="stm-lms-addon-banner__image">
-							<img class="stm-lms-addon-banner__addons" src="<?php echo esc_url( STM_LMS_URL . '/assets/addons/addons.svg' ); ?>" alt="">
+							<img class="stm-lms-addon-banner__addons" src="<?php echo esc_url( STM_LMS_URL . 'assets/addons/addons.svg' ); ?>" alt="">
 						</div>
 						<?php echo esc_html__( '20+ Premium addons', 'masterstudy-lms-learning-management-system' ); ?>
 					</div>
@@ -32,7 +32,7 @@ use \MasterStudy\Lms\Plugin\Addons;
 				<li>
 					<div class="stm-lms-addon-banner__wrapper">
 						<div class="stm-lms-addon-banner__image">
-							<img class="stm-lms-addon-banner__support" src="<?php echo esc_url( STM_LMS_URL . '/assets/addons/support.svg' ); ?>" alt="">
+							<img class="stm-lms-addon-banner__support" src="<?php echo esc_url( STM_LMS_URL . 'assets/addons/support.svg' ); ?>" alt="">
 						</div>
 						<?php echo esc_html__( 'Priority ticket support', 'masterstudy-lms-learning-management-system' ); ?>
 					</div>
@@ -40,7 +40,7 @@ use \MasterStudy\Lms\Plugin\Addons;
 				<li>
 					<div class="stm-lms-addon-banner__wrapper">
 						<div class="stm-lms-addon-banner__image">
-							<img class="stm-lms-addon-banner__updates" src="<?php echo esc_url( STM_LMS_URL . '/assets/addons/updates.svg' ); ?>" alt="">
+							<img class="stm-lms-addon-banner__updates" src="<?php echo esc_url( STM_LMS_URL . 'assets/addons/updates.svg' ); ?>" alt="">
 						</div>
 						<?php echo esc_html__( 'Frequent updates', 'masterstudy-lms-learning-management-system' ); ?>
 					</div>
@@ -48,7 +48,7 @@ use \MasterStudy\Lms\Plugin\Addons;
 				<li>
 					<div class="stm-lms-addon-banner__wrapper">
 						<div class="stm-lms-addon-banner__image">
-							<img class="stm-lms-addon-banner__starter" src="<?php echo esc_url( STM_LMS_URL . '/assets/addons/starter_theme.svg' ); ?>" alt="">
+							<img class="stm-lms-addon-banner__starter" src="<?php echo esc_url( STM_LMS_URL . 'assets/addons/starter_theme.svg' ); ?>" alt="">
 						</div>
 						<?php echo esc_html__( 'Starter theme', 'masterstudy-lms-learning-management-system' ); ?>
 					</div>
@@ -86,7 +86,7 @@ use \MasterStudy\Lms\Plugin\Addons;
 						if ( ! empty( $addon['settings'] ) ) {
 							?>
 							<a href="<?php echo esc_url( $addon['settings'] ); ?>" class="addon-settings <?php echo $addon_enabled ? 'active' : ''; ?>" target="_blank">
-								<img src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/global/settings.svg' ); ?>">
+								<img src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/global/settings.svg' ); ?>">
 							</a>
 							<?php
 						}
@@ -117,7 +117,7 @@ use \MasterStudy\Lms\Plugin\Addons;
 						</div>
 						<?php if ( ! $is_pro ) { ?>
 							<div class="addon-checkbox__locked">
-								<img src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/global/locked.svg' ); ?>" class="addon-checkbox__locked-img">
+								<img src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/global/locked.svg' ); ?>" class="addon-checkbox__locked-img">
 								<div class="addon-checkbox__locked-dropdown">
 									<?php esc_html_e( 'This addon available in Pro version', 'masterstudy-lms-learning-management-system' ); ?>
 								</div>

@@ -21,7 +21,7 @@ class StmLmsProTestimonials extends Widget_Base {
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
 		wp_register_style( 'swiper-bundle', STM_LMS_URL . 'assets/vendors/swiper-bundle.min.css', array(), STM_LMS_VERSION, false );
-		wp_register_style( 'lms-testimonials-carousel', STM_LMS_URL . '/assets/css/elementor-widgets/testimonials-carousel.css', array(), STM_LMS_VERSION, false );
+		wp_register_style( 'lms-testimonials-carousel', STM_LMS_URL . 'assets/css/elementor-widgets/testimonials-carousel.css', array(), STM_LMS_VERSION, false );
 	}
 
 	public function get_name() {
@@ -972,7 +972,7 @@ class StmLmsProTestimonials extends Widget_Base {
 	protected function render() {
 		if ( ! Plugin::$instance->editor->is_edit_mode() ) {
 			wp_enqueue_script( 'swiper-bundle', STM_LMS_URL . 'assets/vendors/swiper-bundle.min.js', array(), STM_LMS_VERSION, true );
-			wp_enqueue_script( 'lms-testimonials-carousel', STM_LMS_URL . '/assets/js/elementor-widgets/testimonials_carousel.js', array(), STM_LMS_VERSION, true );
+			wp_enqueue_script( 'lms-testimonials-carousel', STM_LMS_URL . 'assets/js/elementor-widgets/testimonials_carousel.js', array(), STM_LMS_VERSION, true );
 		}
 
 		$settings              = $this->get_settings_for_display();

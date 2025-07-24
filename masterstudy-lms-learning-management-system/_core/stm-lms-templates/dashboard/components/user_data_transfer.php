@@ -79,7 +79,7 @@
 					</div>
 					<div class="user-data-transfer__file-attachment" v-if="importStep==1">
 						<div class="user-data-transfer__file-attachment__info">
-							<img src="<?php echo esc_url( STM_LMS_URL . '/assets/icons/files/new/excel.svg' ); ?>" class="user-data-transfer__file-attachment__image">
+							<img src="<?php echo esc_url( STM_LMS_URL . 'assets/icons/files/new/excel.svg' ); ?>" class="user-data-transfer__file-attachment__image">
 							<div class="user-data-transfer__file-attachment__wrapper">
 								<span class="user-data-transfer__file-attachment__title">
 									{{userDataFileName}}

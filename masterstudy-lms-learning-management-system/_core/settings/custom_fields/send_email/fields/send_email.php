@@ -11,9 +11,9 @@
 
 $field = "data['{$section_name}']['fields']['{$field_name}']";
 
-wp_enqueue_style( 'stm-hidden-css', STM_LMS_URL . '/settings/custom_fields/send_email/components_css/send-email.css', null, get_bloginfo( 'version' ), 'all' );
+wp_enqueue_style( 'stm-hidden-css', STM_LMS_URL . 'settings/custom_fields/send_email/components_css/send-email.css', null, get_bloginfo( 'version' ), 'all' );
 
-include STM_LMS_PATH . '/settings/custom_fields/send_email/components_js/send_email.php';
+require STM_LMS_PATH . '/settings/custom_fields/send_email/components_js/send_email.php';
 
 ?>
 

@@ -22,7 +22,7 @@ class PayPal extends StmPaymentGateway {
 		$this->id                 = self::ID;
 		$this->title              = 'PayPal';
 		$this->description        = 'PayPal payment method allows you to accept payments for Subscription Pricing Plans';
-		$this->icon               = STM_LMS_URL . '/assets/img/paypal.jpg';
+		$this->icon               = STM_LMS_URL . 'assets/img/paypal.jpg';
 		$this->method_title       = 'PayPal';
 		$this->method_description = 'PayPal payment method allows you to accept payments for Subscription Pricing Plans';
 		$this->supports           = apply_filters( 'stm_lms_paypal_supports', array( 'one_time_payment' ) );

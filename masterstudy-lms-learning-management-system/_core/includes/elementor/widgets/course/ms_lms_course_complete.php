@@ -927,7 +927,7 @@ class MsLmsCourseComplete extends Widget_Base {
 			return;
 		}
 
-		wp_enqueue_script( 'masterstudy-single-course-complete', STM_LMS_URL . '/assets/js/components/course/complete.js', array( 'jquery' ), MS_LMS_VERSION, true );
+		wp_enqueue_script( 'masterstudy-single-course-complete', STM_LMS_URL . 'assets/js/components/course/complete.js', array( 'jquery' ), MS_LMS_VERSION, true );
 
 		\STM_LMS_Templates::show_lms_template(
 			'components/course/complete',

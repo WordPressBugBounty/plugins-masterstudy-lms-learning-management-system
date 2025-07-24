@@ -84,7 +84,7 @@ $classes = implode(
 	if ( ! empty( $settings['course_player_brand_icon_navigation'] ) ) {
 		$logo_url = ! empty( $settings['course_player_brand_icon_navigation_image'] )
 			? wp_get_attachment_image_url( $settings['course_player_brand_icon_navigation_image'] )
-			: STM_LMS_URL . '/assets/img/image_not_found.png';
+			: STM_LMS_URL . 'assets/img/image_not_found.png';
 		?>
 		<div class="masterstudy-course-player-header__logo">
 			<img src="<?php echo esc_url( $logo_url ); ?>" alt="">

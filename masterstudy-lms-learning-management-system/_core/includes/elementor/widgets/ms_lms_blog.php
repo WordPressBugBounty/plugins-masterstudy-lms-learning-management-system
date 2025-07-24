@@ -16,7 +16,7 @@ class MsLmsBlog extends Widget_Base {
 
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
-		wp_register_style( 'lms-blog', STM_LMS_URL . '/assets/css/elementor-widgets/blog.css', array(), STM_LMS_VERSION, false );
+		wp_register_style( 'lms-blog', STM_LMS_URL . 'assets/css/elementor-widgets/blog.css', array(), STM_LMS_VERSION, false );
 	}
 
 	public function get_name() {

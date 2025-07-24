@@ -710,7 +710,7 @@ function stm_lms_available_addons() {
 	$available_addons = array(
 		'udemy'                   => array(
 			'name'          => esc_html__( 'Udemy Importer', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/udemy.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/udemy.png' ),
 			'settings'      => admin_url( 'admin.php?page=stm-lms-udemy-settings' ),
 			'description'   => esc_html__( 'Import courses from Udemy and display them on your website. Use ready-made courses on your platform and earn commissions.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-udemy&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -718,14 +718,14 @@ function stm_lms_available_addons() {
 		),
 		'prerequisite'            => array(
 			'name'          => esc_html__( 'Prerequisites', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/msp.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/msp.png' ),
 			'description'   => esc_html__( 'Set the requirements students must complete before they are able to enroll in the next course of a higher level.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-prerequisites&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'prerequisites',
 		),
 		'online_testing'          => array(
 			'name'          => esc_html__( 'Online Testing', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/mst.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/mst.png' ),
 			'settings'      => admin_url( 'admin.php?page=stm-lms-online-testing' ),
 			'description'   => esc_html__( 'Easily paste any quizzes through the shortcode to any page and check the quizzes’ performance.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-onlinetestings&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -733,7 +733,7 @@ function stm_lms_available_addons() {
 		),
 		'statistics'              => array(
 			'name'          => esc_html__( 'Statistics and Payout', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/statistics.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/statistics.png' ),
 			'settings'      => admin_url( 'admin.php?page=stm_lms_statistics' ),
 			'description'   => esc_html__( 'Manage all payments and track affiliated statistics for the sold courses, such as Total Profit, Total Payments, and manage authors fee.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-payouts&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -741,7 +741,7 @@ function stm_lms_available_addons() {
 		),
 		'shareware'               => array(
 			'name'          => esc_html__( 'Trial Courses', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/trial_courses.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/trial_courses.png' ),
 			'settings'      => admin_url( 'admin.php?page=stm-lms-shareware' ),
 			'description'   => esc_html__( 'Enable free trial lessons, so that your students could try some of the modules before taking the course.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-trial&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -749,7 +749,7 @@ function stm_lms_available_addons() {
 		),
 		'sequential_drip_content' => array(
 			'name'          => esc_html__( 'Drip Content', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/sequential.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/sequential.png' ),
 			'settings'      => admin_url( 'admin.php?page=sequential_drip_content' ),
 			'description'   => esc_html__( 'Use this tool to provide a proper flow of the education process, regulate the sequence of the lessons, in order, by date or in your own sequence.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-dripcontent&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -757,21 +757,21 @@ function stm_lms_available_addons() {
 		),
 		'gradebook'               => array(
 			'name'          => esc_html__( 'The Gradebook', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/gradebook.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/gradebook.png' ),
 			'description'   => esc_html__( 'Collect statistics of your students’ progress, check their performance, and keep track of their grades.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-gradebook&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'the-gradebook',
 		),
 		'live_streams'            => array(
 			'name'          => esc_html__( 'Live Streaming', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/live-stream.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/live-stream.png' ),
 			'description'   => esc_html__( 'Stream in online mode and interact with your students in real-time answering their questions and giving feedback immediately.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-livestream&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'live-streaming',
 		),
 		'enterprise_courses'      => array(
 			'name'          => esc_html__( 'Group Courses', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/enterprise-groups.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/enterprise-groups.png' ),
 			'settings'      => admin_url( 'admin.php?page=enterprise_courses' ),
 			'description'   => esc_html__( 'Distribute courses to a group of people. You can sell them to enterprises, or to a group of company employees.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-groupcourses&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -779,7 +779,7 @@ function stm_lms_available_addons() {
 		),
 		'assignments'             => array(
 			'name'          => esc_html__( 'Assignments', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/assignment.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/assignment.png' ),
 			'settings'      => admin_url( 'admin.php?page=assignments_settings' ),
 			'description'   => esc_html__( 'Use assignments to test your students, create interesting tasks for them, ask them to upload essays.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-assignments&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -787,7 +787,7 @@ function stm_lms_available_addons() {
 		),
 		'point_system'            => array(
 			'name'          => esc_html__( 'Point system', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/points.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/points.png' ),
 			'settings'      => admin_url( 'admin.php?page=point_system_settings' ),
 			'description'   => esc_html__( 'Motivate and engage students by awarding them points for their progress and activity on the website.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-points&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -795,7 +795,7 @@ function stm_lms_available_addons() {
 		),
 		'course_bundle'           => array(
 			'name'          => esc_html__( 'Course Bundle', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/bundle.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/bundle.png' ),
 			'settings'      => admin_url( 'admin.php?page=course_bundle_settings' ),
 			'description'   => esc_html__( 'Add similar or related courses to the one bundle and sell them as a package at a discount price.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-bundles&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -803,14 +803,14 @@ function stm_lms_available_addons() {
 		),
 		'multi_instructors'       => array(
 			'name'          => esc_html__( 'Multi-instructors', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/multi_instructors.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/multi_instructors.png' ),
 			'description'   => esc_html__( 'Use the help of a colleague and assign one more instructor to the same course to share responsibilities.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-multi-instructor&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'multi-instructors',
 		),
 		'google_classrooms'       => array(
 			'name'          => esc_html__( 'Google Classrooms', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/google_classroom.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/google_classroom.png' ),
 			'settings'      => admin_url( 'admin.php?page=google_classrooms' ),
 			'description'   => esc_html__( 'Ease the process of structuring the workflow by connecting your Google Classroom account with your website and import the needed classes.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-gclassroom&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -818,7 +818,7 @@ function stm_lms_available_addons() {
 		),
 		'zoom_conference'         => array(
 			'name'          => esc_html__( 'Zoom Conference', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/zoom_conference.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/zoom_conference.png' ),
 			'settings'      => admin_url( 'admin.php?page=stm_lms_zoom_conference' ),
 			'description'   => esc_html__( 'Enjoy the new type of lesson — connect Zoom Video Conferencing with your website and interact with your students in real-time.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-zoom&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -826,7 +826,7 @@ function stm_lms_available_addons() {
 		),
 		'scorm'                   => array(
 			'name'          => esc_html__( 'Scorm', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/scorm.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/scorm.png' ),
 			'settings'      => admin_url( 'admin.php?page=scorm_settings' ),
 			'description'   => esc_html__( 'Easily upload to your LMS any course that was created with the help of different content authoring tools.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-scorm&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -834,7 +834,7 @@ function stm_lms_available_addons() {
 		),
 		'email_manager'           => array(
 			'name'          => esc_html__( 'Email Manager', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/email_manager.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/email_manager.png' ),
 			'settings'      => admin_url( 'admin.php?page=email_manager_settings' ),
 			'description'   => esc_html__( 'Adjust your email templates for different types of notifications and make your messages look good and clear.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-emailmanager&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -842,7 +842,7 @@ function stm_lms_available_addons() {
 		),
 		'email_branding'          => array(
 			'name'          => esc_html__( 'Email Branding', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/email_branding.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/email_branding.png' ),
 			'settings'      => admin_url( 'admin.php?page=email_manager_settings#email_template' ),
 			'description'   => esc_html__( 'Adjust your email templates for different types of notifications and make your messages look good and clear.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-emailbranding&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -852,7 +852,7 @@ function stm_lms_available_addons() {
 		),
 		'certificate_builder'     => array(
 			'name'          => esc_html__( 'Certificate Builder', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/certtificate_builder.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/certtificate_builder.png' ),
 			'settings'      => admin_url( 'admin.php?page=certificate_builder' ),
 			'description'   => esc_html__( 'Сreate and design your own certificates to award them to students after the course completion.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-certificatebuilder&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -860,7 +860,7 @@ function stm_lms_available_addons() {
 		),
 		'form_builder'            => array(
 			'name'          => esc_html__( 'LMS Forms Editor', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/custom_fields.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/custom_fields.png' ),
 			'settings'      => admin_url( 'admin.php?page=form_builder' ),
 			'description'   => esc_html__( 'LMS Forms Editor is an addon that allows you to customize the profile (incl. registration) form, Become Instructor request form and Enterprise form of the MasterStudy LMS', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-formbuilder&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
@@ -868,7 +868,7 @@ function stm_lms_available_addons() {
 		),
 		'media_library'           => array(
 			'name'          => esc_html__( 'Media File Manager', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/media_library.jpg' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/media_library.jpg' ),
 			'description'   => esc_html__( 'Manage, keep and load files of various formats while creating e-learning content in the front-end.', 'masterstudy-lms-learning-management-system' ),
 			'documentation' => 'media-file-manager',
 			'settings'      => admin_url( 'admin.php?page=media_library_settings' ),
@@ -876,7 +876,7 @@ function stm_lms_available_addons() {
 		),
 		'google_meet'             => array(
 			'name'          => esc_html__( 'Google Meet', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . '/assets/addons/google_meet.png' ),
+			'url'           => esc_url( STM_LMS_URL . 'assets/addons/google_meet.png' ),
 			'settings'      => admin_url( 'admin.php?page=google_meet_settings' ),
 			'description'   => esc_html__( 'Connect MasterStudy LMS with Google Meet to host live online classes. Students can attend live classes right from the lesson page.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-googlemeet&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',

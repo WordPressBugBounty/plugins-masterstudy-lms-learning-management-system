@@ -46,7 +46,7 @@ class STM_LMS_Wizard_Interface {
 	public function scripts( $hook ) {
 		if ( 'tools_page_stm-lms-wizard' === $hook ) {
 
-			wp_register_style( 'vue-range-slider', STM_LMS_URL . '/assets/vendors/vue-range-slider.css', array(), STM_LMS_VERSION );
+			wp_register_style( 'vue-range-slider', STM_LMS_URL . 'assets/vendors/vue-range-slider.css', array(), STM_LMS_VERSION );
 
 			stm_lms_register_style( 'wizard/wizard', array( 'vue-range-slider' ) );
 

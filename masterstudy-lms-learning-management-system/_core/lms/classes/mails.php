@@ -214,6 +214,24 @@ class STM_LMS_Mails {
 
 		if ( $send_student ) {
 			self::send_email_to_student( $user, $order_id, $settings, $template_name );
+
+			$user_id = $user['id'];
+
+			if ( ! empty( $cart_items ) && is_array( $cart_items ) ) {
+				foreach ( $cart_items as $item ) {
+					if ( ! empty( $item['item_id'] ) ) {
+						$course_id = intval( $item['item_id'] );
+						$meta_key  = '_stm_lms_course_expiration_email_sent_' . $course_id;
+
+						$already_sent = get_user_meta( $user_id, $meta_key, true );
+
+						if ( ! empty( $already_sent ) ) {
+							// Reset the flag
+							delete_user_meta( $user_id, $meta_key );
+						}
+					}
+				}
+			}
 		}
 
 	}
@@ -223,6 +241,18 @@ class STM_LMS_Mails {
 		$authors = array();
 
 		if ( ! empty( $course_id ) ) {
+			if ( function_exists( 'icl_object_id' ) ) {
+				$post_type         = get_post_type( $course_id );
+				$default_lang      = apply_filters( 'wpml_default_language', null );
+				$default_course_id = apply_filters( 'wpml_object_id', $course_id, $post_type, false, $default_lang );
+
+				if ( did_action( 'stm_lms_user_course_added_' . $default_course_id . '_' . $user_id ) ) {
+					return;
+				}
+				do_action( 'stm_lms_user_course_added_' . $default_course_id . '_' . $user_id );
+				$course_id = apply_filters( 'wpml_object_id', $course_id, 'post' );
+			}
+
 			$post_author   = get_post_field( 'post_author', $course_id );
 			$co_instructor = get_post_meta( $course_id, 'co_instructor', true );
 
@@ -281,7 +311,7 @@ class STM_LMS_Mails {
 		);
 
 		$email_data_enrollment = array(
-			'user_login'    => $login,
+			'user_login'    => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 			'course_title'  => $course_title,
 			'date' => gmdate( 'Y-m-d H:i:s' ),
 		);

@@ -9,7 +9,7 @@ $class   = ( 'pending' === $status ) ? 'disabled' : '';
 <div class="stm_lms_become_instructor">
 
 	<div class="stm_lms_become_instructor__top">
-		<img class="stm_lms_become_instructor__image" src="<?php echo esc_url( STM_LMS_URL . '/assets/img/account/become_instructor.svg' ); ?>"/>
+		<img class="stm_lms_become_instructor__image" src="<?php echo esc_url( STM_LMS_URL . 'assets/img/account/become_instructor.svg' ); ?>"/>
 		<h3><?php esc_html_e( 'Become an Instructor?', 'masterstudy-lms-learning-management-system' ); ?></h3>
 	</div>
 

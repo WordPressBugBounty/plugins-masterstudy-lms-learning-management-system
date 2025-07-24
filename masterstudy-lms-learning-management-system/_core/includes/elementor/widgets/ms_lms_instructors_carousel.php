@@ -19,7 +19,7 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 		parent::__construct( $data, $args );
 		wp_register_style( 'masterstudy-fonts', STM_LMS_URL . 'assets/css/variables/fonts.css', array(), STM_LMS_VERSION, false );
 		wp_register_style( 'ms_lms_instructors_carousel_slider', STM_LMS_URL . 'assets/vendors/swiper-bundle.min.css', array(), STM_LMS_VERSION, false );
-		wp_register_style( 'ms_lms_instructors_carousel', STM_LMS_URL . '/assets/css/elementor-widgets/instructors-carousel/instructors-carousel.css', array(), STM_LMS_VERSION, false );
+		wp_register_style( 'ms_lms_instructors_carousel', STM_LMS_URL . 'assets/css/elementor-widgets/instructors-carousel/instructors-carousel.css', array(), STM_LMS_VERSION, false );
 	}
 
 	public function get_name() {
@@ -1710,7 +1710,7 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 
 		if ( ! Plugin::$instance->editor->is_edit_mode() ) {
 			wp_enqueue_script( 'swiper-bundle', STM_LMS_URL . 'assets/vendors/swiper-bundle.min.js', array(), STM_LMS_VERSION, true );
-			wp_enqueue_script( 'ms_lms_instructors_carousel', STM_LMS_URL . '/assets/js/elementor-widgets/instructors-carousel/instructors-carousel.js', array(), STM_LMS_VERSION, true );
+			wp_enqueue_script( 'ms_lms_instructors_carousel', STM_LMS_URL . 'assets/js/elementor-widgets/instructors-carousel/instructors-carousel.js', array(), STM_LMS_VERSION, true );
 		}
 
 		$sort_args = array();

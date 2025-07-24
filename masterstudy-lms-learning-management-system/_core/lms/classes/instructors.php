@@ -414,6 +414,21 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			$args['post_status'] = sanitize_text_field( $_GET['status'] );
 		}
 
+		if ( ! empty( $_GET['coming_soon_bundle'] ) ) {
+			$args['meta_query'][] = array(
+				'relation' => 'OR',
+				array(
+					'key'     => 'coming_soon_status',
+					'value'   => '',
+					'compare' => '=',
+				),
+				array(
+					'key'     => 'coming_soon_status',
+					'compare' => 'NOT EXISTS',
+				),
+			);
+		}
+
 		if ( $return ) {
 			return self::masterstudy_lms_get_instructor_courses( $args, $offset, $pp );
 		}
@@ -640,7 +655,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					$user_login = $user['login'];
 
 					$email_data = array(
-						'user_login' => $user_login,
+						'user_login' => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 						'user_id'    => $user_id,
 						'date'       => gmdate( 'Y-m-d H:i:s' ),
 					);
@@ -755,7 +770,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				}
 
 				$email_data = array(
-					'user_login' => $user_login,
+					'user_login' => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 					'user_id'    => $user_id,
 					'user_email' => $user_email,
 					'date'       => $date,
@@ -1020,7 +1035,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			update_user_meta( $user_id, 'submission_status', sanitize_text_field( $status ) );
 			$date_format = 'M j, Y - H:i';
 			$email_data  = array(
-				'user_login'    => $user_login,
+				'user_login'    => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 				'user_id'       => $user_id,
 				'admin_message' => $admin_message,
 			);

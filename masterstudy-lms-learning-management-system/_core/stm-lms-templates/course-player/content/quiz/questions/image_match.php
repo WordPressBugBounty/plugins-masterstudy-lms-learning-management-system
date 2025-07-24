@@ -38,7 +38,7 @@ if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 		<div class="masterstudy-course-player-image-match__question <?php echo esc_attr( $data['answer_class'] ?? '' ); ?>">
 			<div class="masterstudy-course-player-image-match__question-wrapper">
 				<div class="masterstudy-course-player-image-match__question-content">
-					<img src="<?php echo esc_url( ! empty( $answer['question_image']['url'] ) ? $answer['question_image']['url'] : STM_LMS_URL . '/assets/img/image_not_found.png' ); ?>"/>
+					<img src="<?php echo esc_url( ! empty( $answer['question_image']['url'] ) ? $answer['question_image']['url'] : STM_LMS_URL . 'assets/img/image_not_found.png' ); ?>"/>
 					<?php if ( ! empty( $answer['question'] ) ) { ?>
 						<div class="masterstudy-course-player-image-match__question-text">
 							<?php echo wp_kses_post( $answer['question'] ); ?>
@@ -58,7 +58,7 @@ if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 												<span class="masterstudy-wrongly"></span>
 											<?php } ?>
 										</div>
-										<img src="<?php echo esc_url( ! empty( $user_answers[ $i ]['text_image']['url'] ) ? $user_answers[ $i ]['text_image']['url'] : STM_LMS_URL . '/assets/img/image_not_found.png' ); ?>"/>
+										<img src="<?php echo esc_url( ! empty( $user_answers[ $i ]['text_image']['url'] ) ? $user_answers[ $i ]['text_image']['url'] : STM_LMS_URL . 'assets/img/image_not_found.png' ); ?>"/>
 									</div>
 									<div class="masterstudy-course-player-image-match__answer-item-text-wrapper">
 										<?php if ( ! empty( $user_answers[ $i ]['text'] ) ) { ?>
@@ -107,7 +107,7 @@ if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 			<div class="masterstudy-course-player-image-match__answer-item">
 				<div class="masterstudy-course-player-image-match__answer-item-content">
 					<div class="masterstudy-course-player-image-match__answer-item-image">
-						<img src="<?php echo esc_url( ! empty( $answer['text_image']['url'] ) ? $answer['text_image']['url'] : STM_LMS_URL . '/assets/img/image_not_found.png' ); ?>"/>
+						<img src="<?php echo esc_url( ! empty( $answer['text_image']['url'] ) ? $answer['text_image']['url'] : STM_LMS_URL . 'assets/img/image_not_found.png' ); ?>"/>
 					</div>
 					<div class="masterstudy-course-player-image-match__answer-item-container <?php echo esc_attr( empty( $answer['text'] ) ? 'masterstudy-course-player-image-match__answer-item-container_hide' : '' ); ?>">
 						<div class="masterstudy-course-player-image-match__answer-item-drag"></div>

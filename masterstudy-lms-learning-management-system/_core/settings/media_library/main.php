@@ -1,8 +1,8 @@
 <?php
-wp_enqueue_script( 'stm-lms-media_library', STM_LMS_URL . '/settings/media_library/js/media_library.js', null, array() );
-wp_enqueue_script( 'stm-lms-media_library-input', STM_LMS_URL . '/settings/media_library/js/media_library_input.js', null, array() );
-wp_enqueue_script( 'stm-lms-media_library-file', STM_LMS_URL . '/settings/media_library/js/media_library_file.js', null, array() );
-wp_enqueue_style( 'stm-lms-media_library-style', STM_LMS_URL . '/assets/css/parts/stm-media-library.css', null, array() );
+wp_enqueue_script( 'stm-lms-media_library', STM_LMS_URL . 'settings/media_library/js/media_library.js', null, array(), true );
+wp_enqueue_script( 'stm-lms-media_library-input', STM_LMS_URL . 'settings/media_library/js/media_library_input.js', null, array(), true );
+wp_enqueue_script( 'stm-lms-media_library-file', STM_LMS_URL . 'settings/media_library/js/media_library_file.js', null, array(), true );
+wp_enqueue_style( 'stm-lms-media_library-style', STM_LMS_URL . 'assets/css/parts/stm-media-library.css', null, array() );
 
 ?>
 

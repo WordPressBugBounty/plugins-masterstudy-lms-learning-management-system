@@ -8,7 +8,7 @@
 		<div v-if="!loading">
 			<div @click="$emit('checkFile', file)" class="stm-lms-upload-file__body" :style="[file.type === 'image' ? { 'background-image': 'url(' + file.url + ')' } : {'background': '#F7FAFB'}]">
 				<div class="stm-lms-upload-file__icon" v-if="file.type !== 'image'">
-					<img :src="'<?php echo esc_url( STM_LMS_URL . '/assets/icons/files/' ); ?>' + file.type + '-file.svg'">
+					<img :src="'<?php echo esc_url( STM_LMS_URL . 'assets/icons/files/' ); ?>' + file.type + '-file.svg'">
 				</div>
 				<div class="stm-lms-upload-file__title">{{ fileName }}</div>
 			</div>

@@ -218,7 +218,7 @@ class MsLmsCourseWishlist extends Widget_Base {
 			return;
 		}
 
-		wp_enqueue_script( 'masterstudy-single-course-components', STM_LMS_URL . '/assets/js/components/course/main.js', array( 'jquery', 'jquery.cookie' ), MS_LMS_VERSION, true );
+		wp_enqueue_script( 'masterstudy-single-course-components', STM_LMS_URL . 'assets/js/components/course/main.js', array( 'jquery', 'jquery.cookie' ), MS_LMS_VERSION, true );
 
 		\STM_LMS_Templates::show_lms_template(
 			'components/course/wishlist',

@@ -1432,7 +1432,7 @@ class MsLmsCourseReviews extends Widget_Base {
 			masterstudy_get_elementor_content_banner( 'reviews' );
 		}
 
-		wp_enqueue_script( 'masterstudy-single-course-components', STM_LMS_URL . '/assets/js/components/course/main.js', array( 'jquery', 'jquery.cookie' ), MS_LMS_VERSION, true );
+		wp_enqueue_script( 'masterstudy-single-course-components', STM_LMS_URL . 'assets/js/components/course/main.js', array( 'jquery', 'jquery.cookie' ), MS_LMS_VERSION, true );
 		wp_enqueue_script( 'masterstudy-wp-editor', STM_LMS_URL . 'assets/js/components/wp-editor.js', array( 'jquery' ), MS_LMS_VERSION, true );
 
 		\STM_LMS_Templates::show_lms_template(

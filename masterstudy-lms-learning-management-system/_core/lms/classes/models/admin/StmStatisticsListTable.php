@@ -46,7 +46,7 @@ class StmStatisticsListTable extends WP_List_Table {
 		$orders_ids = wp_list_pluck( $all_items, 'post_id' );
 		$total      = 0;
 		foreach ( $orders_ids as $order_id ) {
-			$order       = wc_get_order( $order_id );
+			$order       = class_exists( 'WooCommerce' ) ? wc_get_order( $order_id ) : null;
 			$order_items = ( ! empty( $order ) ) ? $order->get_items( apply_filters( 'woocommerce_purchase_order_item_types', 'line_item' ) ) : null;
 			$status      = get_post_meta( $order_id, 'status', true );
 

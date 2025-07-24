@@ -5,14 +5,15 @@
  * @var string $class
  * @var string $title
  * @var string $link
- * @var string $icon
+ * @var string $icon_name
+ * @var string $icon_position
  * @var string $style
  * @var string $size
  * @var string $target
  * @var string $download
  * @var bool $login
  *
- * masterstudy-button_icon-prev|next - for icon direction
+ * masterstudy-button_icon-left|right - for icon direction
  * masterstudy-button_style-primary|secondary|tertiary|outline|danger - for style change
  * masterstudy-button_size-sm|md - for size change
  * masterstudy-button_loading - for loading animation

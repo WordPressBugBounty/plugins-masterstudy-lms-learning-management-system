@@ -9,6 +9,15 @@
       var poster = wrapper.data('poster');
       var extraRaw = wrapper.data('extra');
       var extra = {};
+      function isIOS() {
+        var ua = window.navigator.userAgent || '';
+        var platform = window.navigator.platform || '';
+        var iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+        var isModernIpad = platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+        var isLegacyIOS = /iPad|iPhone|iPod/.test(ua);
+        return iosPlatforms.includes(platform) || isModernIpad || isLegacyIOS;
+      }
+      var isMuted = isIOS();
       try {
         extra = extraRaw ? JSON.parse(extraRaw) : {};
       } catch (e) {}
@@ -23,7 +32,7 @@
         var videoElement;
         if (videoType === 'youtube') {
           videoElement = $('<div class="plyr__video-embed"></div>').append($('<iframe>', {
-            src: "https://www.youtube.com/embed/".concat(videoId, "?autoplay=1&iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1"),
+            src: "https://www.youtube.com/embed/".concat(videoId, "?autoplay=1&iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1&mute=").concat(isMuted),
             allow: 'autoplay; fullscreen',
             allowfullscreen: true,
             frameborder: 0
@@ -49,18 +58,17 @@
           }));
         }
         wrapper.append(videoElement);
-        setTimeout(function () {
-          var playerEl = wrapper.find('.plyr__video-embed, video').get(0);
-          if (playerEl) {
-            var plyrInstance = new Plyr(playerEl, {
-              invertTime: true
-            });
-            plyrInstance.on('play', function () {
-              wrapper.find('.masterstudy-single-course-video__poster, .masterstudy-single-course-video__play-button').remove();
-              wrapper.find('.masterstudy-single-course-video__loader').removeClass('masterstudy-single-course-video__loader_show');
-            });
-          }
-        }, 10);
+        var playerEl = wrapper.find('.plyr__video-embed, video').get(0);
+        if (playerEl) {
+          var plyrInstance = new Plyr(playerEl, {
+            muted: isMuted,
+            invertTime: true
+          });
+          plyrInstance.on('play', function () {
+            wrapper.find('.masterstudy-single-course-video__poster, .masterstudy-single-course-video__play-button').remove();
+            wrapper.find('.masterstudy-single-course-video__loader').removeClass('masterstudy-single-course-video__loader_show');
+          });
+        }
       });
     });
   });

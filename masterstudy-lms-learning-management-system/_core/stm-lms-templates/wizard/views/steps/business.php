@@ -8,7 +8,7 @@
 			@click="changeType('individual')"
 		>
 			<div class="stm_lms_splash_wizard__business_type_one__wrapper">
-				<img src="<?php echo esc_url( STM_LMS_URL . '/assets/img/wizard/individual.png' ); ?>"/>
+				<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/wizard/individual.png' ); ?>"/>
 				<div class="stm_lms_splash_wizard__business_type_label">
 				<label class="stm_lms_wizard__radio">
 					<?php esc_html_e( 'Individual', 'masterstudy-lms-learning-management-system' ); ?>
@@ -41,7 +41,7 @@
 			@click="changeType('marketplace')"
 		>
 			<div class="stm_lms_splash_wizard__business_type_one__wrapper">
-				<img src="<?php echo esc_url( STM_LMS_URL . '/assets/img/wizard/marketplace.png' ); ?>"/>
+				<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/wizard/marketplace.png' ); ?>"/>
 				<div class="stm_lms_splash_wizard__business_type_label">
 					<label class="stm_lms_wizard__radio">
 						<?php esc_html_e( 'Marketplace', 'masterstudy-lms-learning-management-system' ); ?>

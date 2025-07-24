@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.13
+Stable tag: 3.6.14
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,20 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+
+= 3.6.14 - 2025-07-24 =
+- **Fixed:** The word "Curriculum" was not translated in the mobile version of the Course Player
+- **Fixed:** On multilingual sites, course enrollment triggered email notifications from all translated course copies
+- **Fixed:** The "Lost Password?" text on the login page caused layout issues when translated into longer phrases
+- **Fixed:** Video in video lessons was getting cropped on wide monitors
+- **Fixed:** Video Preview didn’t work on iOS devices on the Single Course page (Pro)
+- **Improvement:** Redesigned the Bundle creation page (Pro)
+- **Improvement:** Bundles can now be sold using Points (Pro)
+- **Improvement:** Bundle cards now show the price in Points (Pro)
+- **Improvement:** Added a new email template and trigger for Course Expiration Notification for Students (Pro)
+- **Improvement:** Added 5 new smart-tags to the Assignment Status Change email: {{assignment_result}}, {{assignment_comment}}, {{assignment_mark}}, {{assignment_url}}, {{instructor_name}} (Pro)
+- **Improvement:** Added a new email template and trigger for Lesson completion notification sent to instructors (Pro)
+- **Fixed:** The Assignment Status Changed email was sent to students even when the assignment wasn’t reviewed or the status hadn’t changed (Pro)
 
 = 3.6.13 - 2025-07-17 =
 - **Fixed:** Minor bug fixes.

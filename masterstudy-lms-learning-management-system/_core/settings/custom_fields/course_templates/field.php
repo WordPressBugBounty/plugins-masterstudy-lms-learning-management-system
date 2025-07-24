@@ -14,7 +14,7 @@ wp_localize_script(
 	array(
 		'preview_url' => 'https://masterstudy.stylemixthemes.com/lms-plugin/courses-page/basics-of-masterstudy/?course_style=',
 		'edit_url'    => esc_url( admin_url() . 'post.php?post=' ),
-		'img_url'     => STM_LMS_URL . '/assets/img/course/',
+		'img_url'     => STM_LMS_URL . 'assets/img/course/',
 		'preview'     => esc_html__( 'Preview', 'masterstudy-lms-learning-management-system' ),
 		'change'      => esc_html__( 'Change Template', 'masterstudy-lms-learning-management-system' ),
 		'edit'        => esc_html__( 'Edit Template', 'masterstudy-lms-learning-management-system' ),

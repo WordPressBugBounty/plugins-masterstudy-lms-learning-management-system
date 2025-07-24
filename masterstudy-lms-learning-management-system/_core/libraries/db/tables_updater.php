@@ -53,7 +53,7 @@ function stm_lms_tables_update() {
 add_action( 'wp_ajax_stm_lms_tables_update', 'stm_lms_tables_update' );
 
 function stm_lms_table_update_scripts() {
-	wp_enqueue_script( 'stm_lms_table_update_scripts', STM_LMS_URL . '/assets/js/table_update.js', array( 'jquery' ), time(), true );
+	wp_enqueue_script( 'stm_lms_table_update_scripts', STM_LMS_URL . 'assets/js/table_update.js', array( 'jquery' ), time(), true );
 	wp_localize_script(
 		'stm_lms_table_update_scripts',
 		'stm_lms_table_data',

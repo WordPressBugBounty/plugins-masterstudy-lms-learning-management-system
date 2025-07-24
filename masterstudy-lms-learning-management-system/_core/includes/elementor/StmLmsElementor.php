@@ -155,10 +155,10 @@ final class Plugin {
 			)
 		);
 		/* course search box widget scripts */
-		wp_enqueue_script( 'ms_lms_courses_searchbox_editor_autocomplete', STM_LMS_URL . '/assets/vendors/vue2-autocomplete.js', array( 'elementor-frontend' ), MS_LMS_VERSION, true );
-		wp_enqueue_script( 'ms_lms_courses_searchbox_editor', STM_LMS_URL . '/assets/js/elementor-widgets/course-search-box/course-search-box-editor.js', array( 'jquery', 'elementor-frontend' ), MS_LMS_VERSION, true );
+		wp_enqueue_script( 'ms_lms_courses_searchbox_editor_autocomplete', STM_LMS_URL . 'assets/vendors/vue2-autocomplete.js', array( 'elementor-frontend' ), MS_LMS_VERSION, true );
+		wp_enqueue_script( 'ms_lms_courses_searchbox_editor', STM_LMS_URL . 'assets/js/elementor-widgets/course-search-box/course-search-box-editor.js', array( 'jquery', 'elementor-frontend' ), MS_LMS_VERSION, true );
 		/* instructors carousel widget scripts */
-		wp_enqueue_script( 'ms_lms_instructors_carousel_editor', STM_LMS_URL . '/assets/js/elementor-widgets/instructors-carousel/instructors-carousel-editor.js', array( 'elementor-frontend' ), MS_LMS_VERSION, true );
+		wp_enqueue_script( 'ms_lms_instructors_carousel_editor', STM_LMS_URL . 'assets/js/elementor-widgets/instructors-carousel/instructors-carousel-editor.js', array( 'elementor-frontend' ), MS_LMS_VERSION, true );
 		wp_localize_script(
 			'ms_lms_instructors_carousel_editor',
 			'ms_lms_instructors_carousel_mode',
@@ -179,11 +179,11 @@ final class Plugin {
 		}
 
 		/* testimonials carousel widget scripts */
-		wp_enqueue_script( 'lms-testimonials-carousel-editor', STM_LMS_URL . '/assets/js/elementor-widgets/testimonials_carousel_editor.js', array( 'elementor-frontend' ), MS_LMS_VERSION, true );
+		wp_enqueue_script( 'lms-testimonials-carousel-editor', STM_LMS_URL . 'assets/js/elementor-widgets/testimonials_carousel_editor.js', array( 'elementor-frontend' ), MS_LMS_VERSION, true );
 
-		wp_register_script( 'plyr', STM_LMS_URL . '/assets/vendors/plyr/plyr.js', array(), MS_LMS_VERSION, false );
-		wp_register_script( 'masterstudy-video-media-editor', STM_LMS_URL . '/assets/js/elementor-widgets/video-media-editor.js', array( 'elementor-frontend', 'jquery', 'plyr' ), MS_LMS_VERSION, true );
-		wp_register_script( 'masterstudy-course-reviews-editor', STM_LMS_URL . '/assets/js/elementor-widgets/course-reviews-editor.js', array( 'elementor-frontend', 'jquery' ), MS_LMS_VERSION, true );
+		wp_register_script( 'plyr', STM_LMS_URL . 'assets/vendors/plyr/plyr.js', array(), MS_LMS_VERSION, false );
+		wp_register_script( 'masterstudy-video-media-editor', STM_LMS_URL . 'assets/js/elementor-widgets/video-media-editor.js', array( 'elementor-frontend', 'jquery', 'plyr' ), MS_LMS_VERSION, true );
+		wp_register_script( 'masterstudy-course-reviews-editor', STM_LMS_URL . 'assets/js/elementor-widgets/course-reviews-editor.js', array( 'elementor-frontend', 'jquery' ), MS_LMS_VERSION, true );
 		wp_localize_script(
 			'masterstudy-course-reviews-editor',
 			'reviews_data',
@@ -194,7 +194,7 @@ final class Plugin {
 				'student_public_profile' => \STM_LMS_Options::get_option( 'student_public_profile', true ),
 			)
 		);
-		wp_register_script( 'masterstudy-course-grades-editor', STM_LMS_URL . '/assets/js/elementor-widgets/course-grades-editor.js', array( 'elementor-frontend', 'jquery', 'masterstudy-api-provider' ), MS_LMS_VERSION, true );
+		wp_register_script( 'masterstudy-course-grades-editor', STM_LMS_URL . 'assets/js/elementor-widgets/course-grades-editor.js', array( 'elementor-frontend', 'jquery', 'masterstudy-api-provider' ), MS_LMS_VERSION, true );
 		wp_localize_script(
 			'masterstudy-course-grades-editor',
 			'course_grade',
@@ -204,7 +204,7 @@ final class Plugin {
 				'not_started'     => esc_html__( 'Not finished', 'masterstudy-lms-learning-management-system' ),
 			)
 		);
-		wp_register_script( 'masterstudy-course-coming-soon-editor', STM_LMS_URL . '/assets/js/elementor-widgets/course-coming-soon-editor.js', array( 'elementor-frontend', 'jquery', 'jquery-ui-resizable', 'jquery.countdown', 'js.countdown' ), MS_LMS_VERSION, true );
+		wp_register_script( 'masterstudy-course-coming-soon-editor', STM_LMS_URL . 'assets/js/elementor-widgets/course-coming-soon-editor.js', array( 'elementor-frontend', 'jquery', 'jquery-ui-resizable', 'jquery.countdown', 'js.countdown' ), MS_LMS_VERSION, true );
 		wp_localize_script(
 			'masterstudy-course-coming-soon-editor',
 			'coming_soon',
@@ -214,8 +214,8 @@ final class Plugin {
 				'nonce'     => wp_create_nonce( 'masterstudy-lms-coming-soon-nonce' ),
 			)
 		);
-		wp_register_script( 'masterstudy-course-buy-button-editor', STM_LMS_URL . '/assets/js/elementor-widgets/course-buy-button-editor.js', array( 'elementor-frontend', 'jquery' ), MS_LMS_VERSION, true );
-		wp_register_script( 'masterstudy-course-components-editor', STM_LMS_URL . '/assets/js/elementor-widgets/course-components-editor.js', array( 'elementor-frontend', 'jquery' ), MS_LMS_VERSION, true );
+		wp_register_script( 'masterstudy-course-buy-button-editor', STM_LMS_URL . 'assets/js/elementor-widgets/course-buy-button-editor.js', array( 'elementor-frontend', 'jquery' ), MS_LMS_VERSION, true );
+		wp_register_script( 'masterstudy-course-components-editor', STM_LMS_URL . 'assets/js/elementor-widgets/course-components-editor.js', array( 'elementor-frontend', 'jquery' ), MS_LMS_VERSION, true );
 		wp_localize_script(
 			'masterstudy-course-components-editor',
 			'components_data',

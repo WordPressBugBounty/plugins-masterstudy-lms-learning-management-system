@@ -79,11 +79,11 @@ class STM_LMS_User_Manager_User_Quiz {
 
 		ob_start(); ?>
 
-		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . '/assets/css/parts/quiz.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
-		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . '/assets/css/parts/keywords_question.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
-		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . '/assets/css/parts/item_match_question.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
-		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . '/assets/css/parts/image_match_question.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
-		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . '/assets/css/parts/fill_the_gap.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
+		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/quiz.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
+		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/keywords_question.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
+		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/item_match_question.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
+		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/image_match_question.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
+		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/fill_the_gap.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
 
 		<?php
 		if ( $q->have_posts() ) {

@@ -94,7 +94,7 @@ if ( ! empty( $course_ids ) ) { ?>
 							<div class="masterstudy-related-courses__item-block">
 								<?php if ( ! $related_course->single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $related_course->not_in_membership ) { ?>
 									<div class="masterstudy-related-courses__subscription">
-										<img class="masterstudy-related-courses__subscription-image" src="<?php echo esc_url( STM_LMS_URL . '/assets/img/members_only.svg' ); ?>" alt="<?php esc_attr_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>"/>
+										<img class="masterstudy-related-courses__subscription-image" src="<?php echo esc_url( STM_LMS_URL . 'assets/img/members_only.svg' ); ?>" alt="<?php esc_attr_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>"/>
 										<div class="masterstudy-related-courses__subscription-title">
 											<?php esc_html_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>
 										</div>

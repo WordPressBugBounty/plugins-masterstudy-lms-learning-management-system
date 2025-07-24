@@ -69,7 +69,7 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 							<div class="masterstudy-popular-courses__item-block">
 								<?php if ( ! $popular_course->single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $popular_course->not_in_membership ) { ?>
 									<div class="masterstudy-popular-courses__subscription">
-										<img class="masterstudy-popular-courses__subscription-image" src="<?php echo esc_url( STM_LMS_URL . '/assets/img/members_only.svg' ); ?>" alt="<?php esc_attr_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>"/>
+										<img class="masterstudy-popular-courses__subscription-image" src="<?php echo esc_url( STM_LMS_URL . 'assets/img/members_only.svg' ); ?>" alt="<?php esc_attr_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>"/>
 										<div class="masterstudy-popular-courses__subscription-title">
 											<?php esc_html_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>
 										</div>

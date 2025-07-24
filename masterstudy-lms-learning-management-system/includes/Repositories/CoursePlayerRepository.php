@@ -24,7 +24,7 @@ final class CoursePlayerRepository {
 		$lesson_post_type = get_post_type( $lesson_id );
 		$lesson_files     = get_post_meta( $lesson_id, 'lesson_files', true );
 		$lesson           = get_post_meta( $lesson_id );
-		$attachments      = $this->get_only_attachments( $lesson, $lesson_files );
+		$attachments      = $this->get_only_attachments( is_array( $lesson ) ? $lesson : array(), $lesson_files );
 		$curriculum       = ( new CurriculumRepository() )->get_curriculum( $post_id, true );
 		$course_materials = array_reduce(
 			$curriculum,

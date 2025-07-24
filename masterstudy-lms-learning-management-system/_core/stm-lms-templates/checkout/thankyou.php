@@ -74,7 +74,7 @@ if ( ! empty( $order_info ) ) :
 									<?php if ( ! empty( $item['image'] ) ) : ?>
 										<a href="<?php echo esc_url( $item['link'] ); ?>"><?php echo wp_kses_post( $item['image'] ); ?></a>
 									<?php else : ?>
-										<img src="<?php echo esc_url( STM_LMS_URL . '/assets/img/image_not_found.png' ); ?>" alt="<?php echo esc_html( $item['title'] ); ?>">
+										<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/image_not_found.png' ); ?>" alt="<?php echo esc_html( $item['title'] ); ?>">
 									<?php endif; ?>
 								</div>
 								<div class="masterstudy-orders-course-info__common">
