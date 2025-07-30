@@ -105,6 +105,7 @@ function ms_lms_courses_grid_sorting() {
 	$sort_by           = ( isset( $_POST['sort_by'] ) ) ? sanitize_text_field( wp_unslash( $_POST['sort_by'] ) ) : '';
 	$sort_by_cat       = ( isset( $_POST['sort_by_cat'] ) ) ? sanitize_text_field( wp_unslash( $_POST['sort_by_cat'] ) ) : '';
 	$sort_by_default   = ( isset( $_POST['sort_by_default'] ) ) ? sanitize_text_field( wp_unslash( $_POST['sort_by_default'] ) ) : '';
+	$cards_categories  = isset( $_POST['cards_categories'] ) && is_array( $_POST['cards_categories'] ) ? array_map( 'intval', $_POST['cards_categories'] ) : array();
 	$widget_type       = ( isset( $_POST['widget_type'] ) ) ? sanitize_text_field( wp_unslash( $_POST['widget_type'] ) ) : '';
 
 	/* query courses */
@@ -142,6 +143,15 @@ function ms_lms_courses_grid_sorting() {
 		);
 		$sort_by                   = $sort_by_default;
 	}
+
+	if ( ! empty( $cards_categories ) ) {
+		$default_args['tax_query'][] = array(
+			'taxonomy' => 'stm_lms_course_taxonomy',
+			'field'    => 'term_id',
+			'terms'    => $cards_categories,
+		);
+	}
+
 	if ( 'all' === $sort_by ) {
 		$sort_by = $sort_by_default;
 	}

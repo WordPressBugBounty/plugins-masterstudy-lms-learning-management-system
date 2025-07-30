@@ -21,11 +21,12 @@ class STM_LMS_Helpers {
 		$time_format     = get_option( 'time_format', 'H:i:s' );
 		$datetime_format = trim( $date_format . ' ' . $time_format );
 
-		$datetime = \DateTime::createFromFormat( $datetime_format, $date );
+		$timezone = wp_timezone();
+		$datetime = \DateTime::createFromFormat( $datetime_format, $date, $timezone );
 
 		if ( ! $datetime || $datetime->format( $datetime_format ) !== $date ) {
 			try {
-				$datetime = new \DateTime( $date );
+				$datetime = new \DateTime( $date, $timezone );
 			} catch ( \Exception $e ) {
 				return array();
 			}
@@ -33,8 +34,8 @@ class STM_LMS_Helpers {
 
 		if ( $datetime->getTimestamp() > 0 ) {
 			return array(
-				'date' => wp_date( $date_format, $datetime->getTimestamp() ),
-				'time' => wp_date( $time_format, $datetime->getTimestamp() ),
+				'date' => wp_date( $date_format, $datetime->getTimestamp(), $timezone ),
+				'time' => wp_date( $time_format, $datetime->getTimestamp(), $timezone ),
 			);
 		}
 

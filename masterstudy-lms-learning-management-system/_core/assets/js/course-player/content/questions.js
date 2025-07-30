@@ -114,20 +114,23 @@
       clearTimeout(timeout);
       var $input = $(this);
       var $parent = $input.closest('.masterstudy-course-player-quiz-keywords');
+      var $keywordField = $parent.find('.masterstudy-course-player-quiz-keywords__keyword-to-fill');
       var answers = window[$parent.attr('data-quiz-keywords')];
       var userAnswer = $input.val().toLowerCase();
       $parent.find('.masterstudy-course-player-quiz-keywords__input').removeAttr('required');
       timeout = setTimeout(function () {
+        var matched = false;
         answers.forEach(function (answer, answerIndex) {
           if (userAnswer.includes(answer)) {
+            matched = true;
             $input.val('').focus();
             var $insertTo = $parent.find('.masterstudy-course-player-quiz-keywords__answer_' + answerIndex + ' .masterstudy-course-player-quiz-keywords__value');
             var $flying = $parent.find('.masterstudy-course-player-quiz-keywords__flying-word').text(answer);
             var childPos = $insertTo.offset();
             var parentPos = $insertTo.closest('.masterstudy-course-player-quiz-keywords').offset();
             $flying.addClass('visible').css({
-              top: childPos.top - parentPos.top + 0,
-              left: childPos.left - parentPos.left + 0
+              top: childPos.top - parentPos.top,
+              left: childPos.left - parentPos.left
             });
             setTimeout(function () {
               $insertTo.text(answer);
@@ -136,12 +139,27 @@
                 top: '20px',
                 left: '14px'
               }).removeClass('visible');
+              $keywordField.removeClass('masterstudy-course-player-quiz-keywords__keyword-to-fill_invalid');
+              $keywordField.removeClass('masterstudy-course-player-quiz-keywords__keyword-to-fill_shake');
               addAnswer();
             }, 500);
           }
         });
+        if (!matched && userAnswer.trim() !== '') {
+          $keywordField.addClass('masterstudy-course-player-quiz-keywords__keyword-to-fill_invalid');
+          $keywordField.removeClass('masterstudy-course-player-quiz-keywords__keyword-to-fill_shake');
+          void $keywordField[0].offsetWidth;
+          $keywordField.addClass('masterstudy-course-player-quiz-keywords__keyword-to-fill_shake');
+        }
       }, 300);
     }
+    $(document).on('input', '.masterstudy-course-player-quiz-keywords__keyword-to-fill', function () {
+      var $input = $(this);
+      if ($input.val().trim() === '') {
+        $input.removeClass('masterstudy-course-player-quiz-keywords__keyword-to-fill_invalid');
+        $input.removeClass('masterstudy-course-player-quiz-keywords__keyword-to-fill_shake');
+      }
+    });
     $('.masterstudy-course-player-quiz-keywords__keyword-to-fill').on('keyup', handleKeywordInput);
     function addAnswer() {
       $('.masterstudy-course-player-quiz-keywords').each(function () {

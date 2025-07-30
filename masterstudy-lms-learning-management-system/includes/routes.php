@@ -379,6 +379,12 @@ $router->group(
 			\MasterStudy\Lms\Http\Controllers\Media\DeleteController::class,
 			\MasterStudy\Lms\Routing\Swagger\Routes\Media\Delete::class
 		);
+
+		$router->post(
+			'/media/from-url',
+			\MasterStudy\Lms\Http\Controllers\Media\UploadFromUrlController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Media\UploadFromUrl::class,
+		);
 	}
 );
 

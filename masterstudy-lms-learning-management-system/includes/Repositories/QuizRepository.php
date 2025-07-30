@@ -22,11 +22,11 @@ class QuizRepository {
 
 	private static $casts = array(
 		'correct_answer'   => 'bool',
-		'duration'         => 'int',
-		'attempts'         => 'int',
-		'passing_grade'    => 'float',
+		'duration'         => 'int|nullable',
+		'attempts'         => 'int|nullable',
+		'passing_grade'    => 'float|nullable',
 		'random_questions' => 'bool',
-		're_take_cut'      => 'float',
+		're_take_cut'      => 'float|nullable',
 	);
 
 	public function create( array $data ): int {
@@ -112,7 +112,7 @@ class QuizRepository {
 
 	private function update_meta( $id, $data ): void {
 		foreach ( self::$fields_meta_map as $field => $meta ) {
-			if ( isset( $data[ $field ] ) ) {
+			if ( array_key_exists( $field, $data ) ) {
 				update_post_meta( $id, $meta, $this->convert_to_meta( $field, $data[ $field ] ) );
 			}
 		}
@@ -150,8 +150,12 @@ class QuizRepository {
 				return 'on' === $value;
 			case 'int':
 				return (int) $value;
+			case 'int|nullable':
+				return '' === $value ? null : (int) $value;
 			case 'float':
 				return (float) $value;
+			case 'float|nullable':
+				return '' === $value ? null : (float) $value;
 			default:
 				return $value;
 		}

@@ -48,8 +48,12 @@ final class StudentsRepository {
 			WHERE {$course_table}.course_id = %d";
 
 		if ( ! empty( $params['s'] ) ) {
-			$search_term   = '%' . strtolower( $params['s'] ) . '%';
-			$search_string = $wpdb->prepare( ' AND LOWER(display_name) LIKE %s', $search_term );
+			$search_term = '%' . strtolower( $params['s'] ) . '%';
+			$search_string = $wpdb->prepare(
+				' AND (LOWER(display_name) LIKE %s OR LOWER(user_email) LIKE %s)',
+				$search_term,
+				$search_term
+			);
 			$filtering    .= $search_string;
 			$total_query  .= $search_string;
 		}

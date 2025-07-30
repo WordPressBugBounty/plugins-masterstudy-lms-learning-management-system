@@ -98,6 +98,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       if ($('.masterstudy-course-player-question__content').find('.masterstudy-course-player-image-match').length > 0) {
         initializeImageMatch();
       }
+      $('.masterstudy-course-player-content__wrapper').scrollTop(0);
       startQuiz();
     });
     function handleEvent(el, cb) {

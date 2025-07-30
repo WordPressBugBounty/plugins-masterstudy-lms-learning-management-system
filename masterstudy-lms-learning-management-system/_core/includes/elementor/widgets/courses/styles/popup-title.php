@@ -33,6 +33,16 @@ $this->add_control(
 		),
 	)
 );
+$this->add_control(
+	'style_popup_title_color_hover',
+	array(
+		'label'     => esc_html__( 'Hover Color', 'masterstudy-lms-learning-management-system' ),
+		'type'      => Controls_Manager::COLOR,
+		'selectors' => array(
+			'{{WRAPPER}} .ms_lms_courses_card_item_popup_title h3:hover' => 'color: {{VALUE}}',
+		),
+	)
+);
 $this->add_responsive_control(
 	'style_popup_title_padding',
 	array(

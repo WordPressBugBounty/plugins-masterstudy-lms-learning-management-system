@@ -97,6 +97,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           'sortByCat': widgetData['sort_by_cat'],
           'sortBy': sortBy,
           'categories': widgetData['carousel_taxonomy'],
+          'cards_taxonomy': widgetData['cards_taxonomy'],
           'widgetType': widgetType,
           'sliderContainer': sliderContainer
         },
@@ -529,6 +530,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         cards_to_show: filterArgs['cardsToShow'],
         course_image_size: filterArgs['courseImageSize'],
         meta_slots: filterArgs['metaSlots'],
+        cards_categories: filterArgs['cards_taxonomy'],
         card_data: filterArgs['cardData'],
         popup_data: filterArgs['popupData'],
         widget_type: filterArgs['widgetType'],

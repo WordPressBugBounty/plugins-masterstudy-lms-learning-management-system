@@ -38,7 +38,11 @@ stm_lms_components['course'] = {
     studentsList: function studentsList() {
       var _this = this;
       var students = _this.students.filter(function (course) {
-        return course['student']['login'].toLowerCase().indexOf(_this.search.toLowerCase()) !== -1;
+        var _course$student$login, _course$student$email;
+        var login = ((_course$student$login = course['student']['login']) === null || _course$student$login === void 0 ? void 0 : _course$student$login.toLowerCase()) || '';
+        var email = ((_course$student$email = course['student']['email']) === null || _course$student$email === void 0 ? void 0 : _course$student$email.toLowerCase()) || '';
+        var search = _this.search.toLowerCase();
+        return login.indexOf(search) !== -1 || email.indexOf(search) !== -1;
       });
 
       /*now we sort*/

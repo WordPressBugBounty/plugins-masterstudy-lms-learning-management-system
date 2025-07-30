@@ -187,6 +187,8 @@ abstract class AbstractRepository {
 				return 'on' === $value;
 			case 'int':
 				return (int) $value;
+			case 'int|nullable':
+				return '' === $value ? null : (int) $value;
 			case 'float':
 				return (float) $value;
 			case 'list':

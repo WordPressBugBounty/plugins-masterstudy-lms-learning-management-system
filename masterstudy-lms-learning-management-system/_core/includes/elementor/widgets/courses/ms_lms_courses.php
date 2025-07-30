@@ -384,6 +384,18 @@ class MsLmsCourses extends Widget_Base {
 
 		$settings = $this->get_settings_for_display();
 
+		/* taxonomy options */
+		$categories = $settings['cards_taxonomy'] ?? array();
+		$tax_query  = array();
+
+		if ( ! empty( $categories ) ) {
+			$tax_query[] = array(
+				'taxonomy' => 'stm_lms_course_taxonomy',
+				'field'    => 'term_id',
+				'terms'    => $categories,
+			);
+		}
+
 		/* sorting options */
 		$sort_options = array();
 		if ( ! empty( $settings['sort_by_cat'] ) ) {
@@ -425,7 +437,13 @@ class MsLmsCourses extends Widget_Base {
 				),
 			),
 		);
-		$featured_args  = apply_filters( 'stm_lms_filter_courses', $featured_args, array(), array(), $settings['sort_by'] );
+
+		if ( ! empty( $tax_query ) ) {
+			$default_args['tax_query']  = $tax_query;
+			$featured_args['tax_query'] = $tax_query;
+		}
+
+		$featured_args = apply_filters( 'stm_lms_filter_courses', $featured_args, array(), array(), $settings['sort_by'] );
 		if ( 0 !== $pp_featured ) {
 			$featured_courses = \STM_LMS_Courses::get_all_courses( $featured_args );
 		}
@@ -584,12 +602,29 @@ class MsLmsCourses extends Widget_Base {
 
 		$settings = $this->get_settings_for_display();
 
+		/* taxonomy options */
+		$categories = $settings['cards_taxonomy'] ?? array();
+		$tax_query  = array();
+
+		if ( ! empty( $categories ) ) {
+			$tax_query[] = array(
+				'taxonomy' => 'stm_lms_course_taxonomy',
+				'field'    => 'term_id',
+				'terms'    => $categories,
+			);
+		}
+
 		/* courses query */
 		$posts_per_page = ( empty( $settings['cards_to_show_choice'] ) || 'all' === $settings['cards_to_show_choice'] ) ? -1 : intval( $settings['cards_to_show'] );
 		$default_args   = array(
 			'posts_per_page' => $posts_per_page,
 			'author__in'     => array( $settings['instructor_choice'] ),
 		);
+
+		if ( ! empty( $tax_query ) ) {
+			$default_args['tax_query'] = $tax_query;
+		}
+
 		$default_args   = apply_filters( 'stm_lms_filter_courses', $default_args, array(), array(), $settings['sort_by'] );
 		if ( 0 !== $posts_per_page ) {
 			$courses = \STM_LMS_Courses::get_all_courses( $default_args );

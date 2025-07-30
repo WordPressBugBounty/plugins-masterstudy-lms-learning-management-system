@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.14
+Stable tag: 3.6.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,19 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.15 - 2025-07-30 =
+- **Improvement:** Added an option to change the hover color of course titles in the Elementor "Courses" widget
+- **Improvement:** Added email-based student search in the "Manage Students" section
+- **Improvement:** Added the ability to display courses by specific categories in the Elementor "Courses" widget (Grid layout)
+- **Improvement:** Implemented visual validation for incorrect answers in Keywords questions — incorrect input is highlighted in red with an animation
+- **Improvement:** Enabled copy and paste functionality in Course Builder text editors using the cursor only
+- **Improvement:** Support for creating "Image Matching" and "Image Choice" quiz questions added to the AI Lab add-on (Pro)
+- **Fixed:** Year input fields in Course Builder now restrict input to four digits
+- **Fixed:** Switching a question from Multiple Choice to Single Choice now clears multiple selected answers
+- **Fixed:** Removed automatic page scrolling when starting a quiz with a long description
+- **Fixed:** Corrected time display in Quiz Attempt History
+- **Fixed:** Fixed incorrect page navigation direction in PDF Lessons in RTL layout (Pro)
+
 = 3.6.14 - 2025-07-24 =
 - **Fixed:** The word "Curriculum" was not translated in the mobile version of the Course Player
 - **Fixed:** On multilingual sites, course enrollment triggered email notifications from all translated course copies
@@ -344,18 +357,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fixed:** When adding the same course multiple times to the cart using "WooCommerce Checkout," a checkout error occurred (Pro)
 - **Fixed:** Quiz attempt results were not showing when instructors viewed student attempt details (Pro)
 - **Fixed:** Fixed broken Quiz Details link on the Enrolled Quizzes page
-
-= 3.6.10 - 2025-07-02 =
-- **Improvement:** Added a new "Description" widget for Elementor in the MasterStudy Course widgets group
-- **Improvement:** Added a "Go to Public Account" button and a "Share Public Profile" button to student and instructor profiles
-- **Improvement:** Added two new editable email templates for course completion — one for the instructor and one for the student (Pro)
-- **Improvement:** Added new smart tags to the "Announcement from the Instructor" email for showing course name, student username, and instructor name (Pro)
-- **Improvement:** Added new smart tags to the "You made a Sale!" email to include the student’s email and purchase date in the message body (Pro)
-- **Improvement:** Added a new editable "Student Enrolled in Course" email template sent to instructors (Pro)
-- **Improvement:** Added a new editable "Quiz Completed" email template sent to instructors upon quiz completion (Pro)
-- **Improvement:** You can now disable certificates for any selected course (Pro)
-- **Improvement:** Global certificates can now be selected in Course Builder — previously only custom certificates were available (Pro)
-- **Improvement:** Added the ability to re-generate course content when creating a full course if generation was interrupted or incomplete due to unexpected errors (Pro)
-- **Fixed:** In Matching question type, identical answer texts now correctly display their respective Explanations — previously, explanations were duplicated for matching answers with the same text
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

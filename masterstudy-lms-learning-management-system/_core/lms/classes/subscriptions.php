@@ -739,8 +739,9 @@ class STM_LMS_Subscriptions {
 		if ( $membership_id ) {
 			$rows = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$table} WHERE membership_id = %d ORDER BY id ASC",
-					$membership_id
+					"SELECT * FROM {$table} WHERE membership_id = %d AND user_id = %d ORDER BY id ASC",
+					$membership_id,
+					$user_id
 				),
 				ARRAY_A
 			);

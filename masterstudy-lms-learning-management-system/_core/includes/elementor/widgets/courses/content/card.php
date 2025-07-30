@@ -41,6 +41,18 @@ $this->add_control(
 	)
 );
 $this->add_control(
+	'cards_taxonomy',
+	array(
+		'label'              => __( 'Show Courses From Categories', 'masterstudy-lms-learning-management-system' ),
+		'type'               => Controls_Manager::SELECT2,
+		'label_block'        => true,
+		'multiple'           => true,
+		'options'            => stm_lms_elementor_autocomplete_terms( 'stm_lms_course_taxonomy' ),
+		'frontend_available' => true,
+		'conditions'         => $this->add_widget_type_conditions( array( 'courses-grid', 'featured-teacher' ) ),
+	)
+);
+$this->add_control(
 	'cards_to_show',
 	array(
 		'label'              => esc_html__( 'Quantity', 'masterstudy-lms-learning-management-system' ),
