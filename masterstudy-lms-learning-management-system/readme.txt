@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.15
+Stable tag: 3.6.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,9 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.16 - 2025-08-05 =
+- **Fixed:** Minor bug fixes.
+
 = 3.6.15 - 2025-07-30 =
 - **Improvement:** Added an option to change the hover color of course titles in the Elementor "Courses" widget
 - **Improvement:** Added email-based student search in the "Manage Students" section
@@ -347,15 +350,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Improvement:** Added AI-based duration estimation for the Lesson Duration field via the AI Lab add-on (Pro)
 - **Improvement:** Added a new lesson type — PDF Lesson (Pro)
 - **Fixed:** When re-purchasing an expired Paid Membership plan, access to previously purchased courses was not restored
-
-= 3.6.11 - 2025-07-10 =
-- **Improvement:** Added new smart-tags to all existing email templates (Pro)
-- **Improvement:** When adding multiple elements in Certificate Builder, each new element now shifts to the right for easier placement (Pro)
-- **Fixed:** The Price field no longer remains visible when using the "Affiliate this course" option if "One-time purchase" is disabled in Course Builder (Pro)
-- **Fixed:** Fixed a deprecated warning in Certificate Builder when using PHP 8.2 (Pro)
-- **Fixed:** Student registration dates now display correctly in the "Students" section and follow the date/time format from WordPress settings (Pro)
-- **Fixed:** When adding the same course multiple times to the cart using "WooCommerce Checkout," a checkout error occurred (Pro)
-- **Fixed:** Quiz attempt results were not showing when instructors viewed student attempt details (Pro)
-- **Fixed:** Fixed broken Quiz Details link on the Enrolled Quizzes page
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

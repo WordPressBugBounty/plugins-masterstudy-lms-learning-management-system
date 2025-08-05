@@ -1016,11 +1016,19 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 	public static function update_user_status() {
 		check_ajax_referer( 'stm_lms_update_user_status', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array( 'message' => 'Forbidden' ),
+				403
+			);
+		}
+
 		$r = array();
 		if ( ! empty( $_GET['user_id'] ) && ! empty( $_GET['status'] ) ) {
 			$user_id       = intval( $_GET['user_id'] );
-			$status        = esc_html( $_GET['status'] );
-			$admin_message = ! empty( $_GET['message'] ) ? esc_html( $_GET['message'] ) : '';
+			$status        = sanitize_text_field( $_GET['status'] );
+			$admin_message = sanitize_text_field( $_GET['message'] ?? '' );
 
 			$submission_history = get_user_meta( $user_id, 'submission_history', true );
 			if ( empty( $submission_history ) || ! is_array( $submission_history ) ) {
@@ -1039,6 +1047,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				'user_id'       => $user_id,
 				'admin_message' => $admin_message,
 			);
+
 			foreach ( $custom_fields as $field ) {
 				if ( empty( $field['value'] ) ) {
 					continue;
@@ -1054,6 +1063,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				}
 				$email_data[ $label ] = $field['value'];
 			}
+
 			if ( 'approved' === $status ) {
 				wp_update_user(
 					array(
@@ -1127,6 +1137,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					$email_data_reject
 				);
 			}
+
 			$submission_info = array(
 				'request_date'         => $submission_date,
 				'request_display_date' => gmdate( $date_format, $submission_date ),
@@ -1136,8 +1147,10 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				'answer_display_date'  => gmdate( $date_format, time() ),
 				'viewed'               => '',
 			);
+
 			array_unshift( $submission_history, $submission_info );
 			update_user_meta( $user_id, 'submission_history', $submission_history );
+
 			$r = $submission_history;
 		}
 
@@ -1146,6 +1159,13 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 	public static function ban_user(): void {
 		check_admin_referer( 'stm_lms_ban_user', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array( 'message' => 'Forbidden' ),
+				403
+			);
+		}
 
 		$user_id = absint( $_GET['user_id'] ?? 0 );
 		if ( ! $user_id || ! get_userdata( $user_id ) || ! current_user_can( 'manage_options' ) ) {
@@ -1161,6 +1181,13 @@ class STM_LMS_Instructor extends STM_LMS_User {
 	public static function toggle_user_ai_access() {
 		check_ajax_referer( 'stm_lms_ban_user', 'nonce' );
 
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array( 'message' => 'Forbidden' ),
+				403
+			);
+		}
+
 		if ( ! empty( $_GET['user_id'] ) ) {
 			$ai_enabled = ! empty( $_GET['ai_enabled'] ) && 'true' === $_GET['ai_enabled'];
 			update_user_meta( intval( $_GET['user_id'] ), 'stm_lms_ai_enabled', $ai_enabled );
@@ -1171,6 +1198,13 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 	public static function toggle_users_ai_access() {
 		check_ajax_referer( 'stm_lms_ban_user', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array( 'message' => 'Forbidden' ),
+				403
+			);
+		}
 
 		$ai_enabled = ! empty( $_GET['ai_enabled'] ) && 'true' === $_GET['ai_enabled'];
 
