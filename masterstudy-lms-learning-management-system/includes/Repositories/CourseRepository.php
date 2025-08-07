@@ -218,7 +218,9 @@ final class CourseRepository extends AbstractRepository {
 	 */
 	public function get_all( array $request = array() ): array {
 		$args = array(
-			'post_type'      => PostType::COURSE,
+			'post_type'      => ! empty( $request['post_type'] ) && in_array( $request['post_type'], array( PostType::COURSE, PostType::COURSE_BUNDLES ), true )
+				? $request['post_type']
+				: PostType::COURSE,
 			'posts_per_page' => ! empty( $request['per_page'] )
 				? intval( $request['per_page'] )
 				: \STM_LMS_Options::get_option( 'courses_per_page', get_option( 'posts_per_page' ) ),
@@ -265,6 +267,15 @@ final class CourseRepository extends AbstractRepository {
 			if ( ! empty( $request[ $key ] ) && ! empty( $meta_query[ $request[ $key ] ] ) ) {
 				$args['meta_query'][] = $meta_query[ $request[ $key ] ];
 			}
+		}
+
+		if ( ! empty( $request['paid_only'] ) ) {
+			$args['meta_query'][] = array(
+				'key'     => 'price',
+				'value'   => 0,
+				'compare' => '>',
+				'type'    => 'NUMERIC',
+			);
 		}
 
 		if ( ! empty( $request['sort'] ) && ! empty( self::SORT_MAPPING[ $request['sort'] ] ) ) {
@@ -354,7 +365,7 @@ final class CourseRepository extends AbstractRepository {
 			set_post_thumbnail( $post['ID'], $course->image['id'] );
 		}
 
-		if ( null === $course->video_poster ) {
+		if ( ! isset( $course->video_poster ) ) {
 			delete_post_meta( $post['ID'], 'video_poster' );
 		} else {
 			update_post_meta( $post['ID'], 'video_poster', $course->video_poster );

@@ -57,7 +57,6 @@ add_action(
 			'stm-google-meets',
 			'stm-user-assignment',
 			'stm-reviews',
-			'stm-orders',
 			'stm-ent-groups',
 		);
 		if ( class_exists( 'Stm_Lms_Statistics' ) ) {

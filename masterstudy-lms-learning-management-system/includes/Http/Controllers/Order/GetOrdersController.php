@@ -2,6 +2,9 @@
 
 namespace MasterStudy\Lms\Http\Controllers\Order;
 
+use MasterStudy\Lms\Enums\OrderStatus;
+use MasterStudy\Lms\Http\Serializers\OrderListSerializer;
+use MasterStudy\Lms\Http\Serializers\OrderSerializer;
 use WP_REST_Request;
 use WP_REST_Response;
 use MasterStudy\Lms\Repositories\OrderRepository;
@@ -13,8 +16,12 @@ final class GetOrdersController {
 		$validator = new Validator(
 			$request->get_params(),
 			array(
-				'per_page'     => 'nullable|integer',
-				'current_page' => 'nullable|integer',
+				'per_page'   => 'nullable|integer',
+				'page'       => 'nullable|integer',
+				'search'     => 'nullable|string',
+				'status'     => 'nullable|string|contains_list,' . implode( ';', OrderStatus::cases() ),
+				'date_range' => 'nullable|string',
+				'sort'       => 'nullable|string',
 			)
 		);
 
@@ -22,15 +29,9 @@ final class GetOrdersController {
 			return WpResponseFactory::validation_failed( $validator->get_errors_array() );
 		}
 
-		$params     = $validator->get_validated();
-		$repository = new OrderRepository();
+		$data           = ( new OrderRepository() )->get_all_orders( $validator->get_validated() );
+		$data['orders'] = ( new OrderListSerializer() )->collectionToArray( $data['orders'] );
 
-		$data = $repository->get_all( $params );
-
-		if ( $data['success'] ) {
-			return new WP_REST_Response( $data );
-		}
-
-		return WpResponseFactory::create( $data['status'], $data );
+		return new WP_REST_Response( $data );
 	}
 }

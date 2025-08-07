@@ -259,3 +259,17 @@ add_action(
 	10,
 	1
 );
+
+function masterstudy_add_orders_page() {
+	add_submenu_page(
+		'stm-lms-settings',
+		esc_html__( 'Orders', 'masterstudy-lms-learning-management-system' ),
+		'<span class="stm-lms-students-menu-title"><span class="stm-lms-menu-text">' . esc_html__( 'Orders', 'masterstudy-lms-learning-management-system' ) . '</span><span class="stm-lms-menu-status">' . esc_html__( 'new', 'masterstudy-lms-learning-management-system' ) . '</span></span>',
+		'manage_options',
+		'manage_orders',
+		fn () => STM_LMS_Templates::show_lms_template( 'orders' ),
+		8
+	);
+}
+
+add_action( 'admin_menu', 'masterstudy_add_orders_page', 100001 );

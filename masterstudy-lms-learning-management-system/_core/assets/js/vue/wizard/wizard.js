@@ -33,7 +33,7 @@ new Vue({
     default_wizard: stm_lms_splash_wizard['settings'] || {},
     wizard: {
       /*General*/
-      wocommerce_checkout: false,
+      ecommerce_engine: 'native',
       guest_checkout: false,
       author_fee: 10,
       /*Courses*/

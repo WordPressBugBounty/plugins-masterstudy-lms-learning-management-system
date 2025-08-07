@@ -23,6 +23,8 @@ class STM_LMS_Order {
 
 		add_action( 'wp_ajax_stm_lms_get_order_info', 'STM_LMS_Order::ajax_get_order_info' );
 
+		add_action( 'wp_ajax_stm_lms_save_order', 'STM_LMS_Order::ajax_save_order' );
+
 		add_action( 'wp_ajax_stm_lms_get_user_orders', 'STM_LMS_Order::user_orders' );
 
 		add_action( 'save_post', 'STM_LMS_Order::save_order', 20 );
@@ -376,6 +378,7 @@ class STM_LMS_Order {
 			'status'          => 'pending',
 			'payment_code'    => $data['payment_code'],
 			'order_key'       => uniqid( $data['user_id'] . time() ),
+			'order_note'      => '',
 			'_order_total'    => $data['_order_total'],
 			'_order_currency' => $data['_order_currency'],
 		);
@@ -421,13 +424,44 @@ class STM_LMS_Order {
 		);
 	}
 
-	public static function save_order( $post_id ) {
+	public static function ajax_save_order() {
+		check_ajax_referer( 'save_order', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) && ! STM_LMS_Instructor::is_instructor() ) {
+			wp_send_json_error(
+				array(
+					'message' => 'Not enough permissions',
+				)
+			);
+
+			return;
+		}
+
+		if ( empty( $_POST['order_id'] ) ) {
+			wp_send_json_error(
+				array(
+					'message' => 'No order id provided',
+				)
+			);
+
+			return;
+		}
+
+		$order_note = wp_kses_post( wp_unslash( $_POST['order_note'] ?? '' ) );
+
+		self::save_order( intval( $_POST['order_id'] ), null, $order_note );
+
+		wp_send_json( array( 'success' => true ) );
+	}
+
+	public static function save_order( $post_id, $order_status = null, $order_note = null ) {
 		if ( ! is_user_logged_in() || 'stm-orders' !== get_post_type( $post_id ) ) {
 			return;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$status          = sanitize_text_field( $_POST['order_status'] ?? '' );
+		$status = sanitize_text_field( $order_status ?? $_POST['order_status'] ?? '' );
+
 		$user_id         = get_post_meta( $post_id, 'user_id', true );
 		$previous_status = get_post_meta( $post_id, 'status', true );
 
@@ -442,6 +476,10 @@ class STM_LMS_Order {
 			} else {
 				update_post_meta( $post_id, 'status', $status );
 			}
+		}
+
+		if ( null !== $order_note ) {
+			update_post_meta( $post_id, 'order_note', $order_note );
 		}
 	}
 

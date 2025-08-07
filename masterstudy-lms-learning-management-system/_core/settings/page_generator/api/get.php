@@ -95,7 +95,7 @@ function stm_lms_has_generated_archive_pages( $pages ) {
 
 function stm_lms_get_generated_pages( $pages ) {
 	$disabled_pages = array(
-		'checkout_url' => 'wocommerce_checkout',
+		'checkout_url' => 'woocommerce_checkout',
 	);
 
 	$generated_pages = array();

@@ -56,21 +56,28 @@ function stm_lms_settings_ecommerce_section() {
 			'submenu'     => $submenu_currency,
 		),
 	);
+
 	$checkout_fields = array(
-		'wocommerce_checkout'                  => array(
-			'type'    => 'checkbox',
-			'label'   => esc_html__( 'WooCommerce Checkout', 'masterstudy-lms-learning-management-system' ),
-			'hint'    => esc_html__( 'Turn this on to use WooCommerce to buy courses. You need to have WooCommerce, Cart and Checkout Pages set up first', 'masterstudy-lms-learning-management-system' ),
-			'pro'     => true,
-			'pro_url' => admin_url( 'admin.php?page=stm-lms-go-pro&source=wocommerce-checkout-settings' ),
-			'submenu' => $submenu_checkout,
+		'ecommerce_engine'                     => array(
+			'type'        => 'select',
+			'label'       => esc_html__( 'Select eCommerce Engine', 'masterstudy-lms-learning-management-system' ),
+			'value'       => 'native',
+			'options'     => array(
+				'native'      => esc_html__( 'Native', 'masterstudy-lms-learning-management-system' ),
+				'woocommerce' => esc_html__( 'WooCommerce Checkout', 'masterstudy-lms-learning-management-system' ),
+			),
+			'columns'     => '50',
+			'description' => esc_html__( 'eCommerce engine to manage payments. Native uses MasterStudy’s built-in payment methods, while WooCommerce requires its plugin and setup accordingly.', 'masterstudy-lms-learning-management-system' ),
+			'submenu'     => $submenu_checkout,
+			'pro'         => true,
 		),
 		'pro_banner_woo'                       => array(
-			'type'  => 'pro_banner',
-			'label' => esc_html__( 'Woocommerce Checkout', 'masterstudy-lms-learning-management-system' ),
-			'img'   => STM_LMS_URL . 'assets/img/pro-features/woocommerce-checkout.png',
-			'desc'  => esc_html__( 'Upgrade to Pro now and streamline your checkout process to boost your online course sales.', 'masterstudy-lms-learning-management-system' ),
-			'value' => STM_LMS_Helpers::is_pro() ? '' : 'pro_banner',
+			'type'    => 'pro_banner',
+			'label'   => esc_html__( 'Woocommerce Checkout', 'masterstudy-lms-learning-management-system' ),
+			'img'     => STM_LMS_URL . 'assets/img/pro-features/woocommerce-checkout.png',
+			'desc'    => esc_html__( 'Upgrade to Pro now and streamline your checkout process to boost your online course sales.', 'masterstudy-lms-learning-management-system' ),
+			'value'   => STM_LMS_Helpers::is_pro() ? '' : 'pro_banner',
+			'submenu' => $submenu_checkout,
 		),
 		'guest_checkout'                       => array(
 			'type'        => 'checkbox',
@@ -83,8 +90,8 @@ function stm_lms_settings_ecommerce_section() {
 			'label'        => esc_html__( 'Required to enable guest checkout in WooCommerce', 'masterstudy-lms-learning-management-system' ),
 			'dependency'   => array(
 				array(
-					'key'   => 'wocommerce_checkout',
-					'value' => 'not_empty',
+					'key'   => 'ecommerce_engine',
+					'value' => 'woocommerce',
 				),
 				array(
 					'key'   => 'guest_checkout',
@@ -104,8 +111,8 @@ function stm_lms_settings_ecommerce_section() {
 			'type'       => 'notice_banner',
 			'label'      => esc_html__( 'The feature is not available when WooCommerce checkout is enabled', 'masterstudy-lms-learning-management-system' ),
 			'dependency' => array(
-				'key'   => 'wocommerce_checkout',
-				'value' => 'not_empty',
+				'key'   => 'ecommerce_engine',
+				'value' => 'woocommerce',
 			),
 			'submenu'    => $submenu_checkout,
 		),
@@ -115,8 +122,8 @@ function stm_lms_settings_ecommerce_section() {
 			'hint'       => esc_html__( 'Enable this setting if you want to show courses in the product catalog of WooCommerce shop page', 'masterstudy-lms-learning-management-system' ),
 			'pro'        => true,
 			'dependency' => array(
-				'key'   => 'wocommerce_checkout',
-				'value' => 'not_empty',
+				'key'   => 'ecommerce_engine',
+				'value' => 'woocommerce',
 			),
 			'pro_url'    => admin_url( 'admin.php?page=stm-lms-go-pro&source=wocommerce-checkout-settings' ),
 			'submenu'    => $submenu_checkout,
@@ -130,8 +137,8 @@ function stm_lms_settings_ecommerce_section() {
 			),
 			'dependency'   => array(
 				array(
-					'key'   => 'wocommerce_checkout',
-					'value' => 'not_empty',
+					'key'   => 'ecommerce_engine',
+					'value' => 'woocommerce',
 				),
 				array(
 					'key'   => 'woocommerce_course_visibility',
@@ -179,7 +186,7 @@ function stm_lms_settings_ecommerce_section() {
 			'type'    => 'checkbox',
 			'label'   => esc_html__( 'Phone Number', 'masterstudy-lms-learning-management-system' ),
 			'submenu' => $submenu_checkout,
-			'group'   => 'ended'
+			'group'   => 'ended''
 		),*/
 		// phpcs:enable
 		/*GROUP ENDED*/

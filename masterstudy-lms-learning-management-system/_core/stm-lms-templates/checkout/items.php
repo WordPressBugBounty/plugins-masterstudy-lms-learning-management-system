@@ -155,7 +155,7 @@ else :
 									<span>
 									<?php
 										echo esc_html__( 'Pay ', 'masterstudy-lms-learning-management-system' );
-										echo esc_html( STM_LMS_Helpers::display_price( $item['price'] ) );
+										echo esc_html( STM_LMS_Helpers::display_price( $total ) );
 									?>
 									</span>
 								</a>

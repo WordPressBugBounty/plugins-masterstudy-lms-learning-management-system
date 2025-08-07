@@ -187,11 +187,11 @@ if ( ! class_exists( 'STM_Lms_Post_Type' ) ) {
 						'single' => esc_html__( 'Order', 'masterstudy-lms-learning-management-system' ),
 						'plural' => esc_html__( 'Orders', 'masterstudy-lms-learning-management-system' ),
 						'args'   => array(
-							'public'              => false,
-							'exclude_from_search' => true,
-							'publicly_queryable'  => false,
-							'show_in_menu'        => 'admin.php?page=stm-lms-settings',
-							'supports'            => array( 'title' ),
+							'public'            => false,
+							'show_ui'           => false,
+							'show_in_menu'      => false,
+							'show_in_admin_bar' => false,
+							'supports'          => array( 'title' ),
 						),
 					),
 				)
@@ -257,7 +257,6 @@ if ( ! class_exists( 'STM_Lms_Post_Type' ) ) {
 
 			return wp_parse_args( $args, $default_args );
 		}
-
 	}
 
 	new STM_Lms_Post_Type();

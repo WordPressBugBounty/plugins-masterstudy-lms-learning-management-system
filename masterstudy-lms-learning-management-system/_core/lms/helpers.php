@@ -889,7 +889,7 @@ function stm_lms_available_addons() {
 }
 
 function stm_lms_addons_menu_position() {
-	$menu_position = class_exists( 'Stm_Lms_Statistics' ) ? 9 : 8; // Default Post Types & Taxonomies
+	$menu_position = class_exists( 'Stm_Lms_Statistics' ) ? 8 : 7; // Default Post Types & Taxonomies
 	$post_types    = apply_filters( 'stm_lms_post_types_array', array() );
 
 	foreach ( $post_types as $post_type ) {

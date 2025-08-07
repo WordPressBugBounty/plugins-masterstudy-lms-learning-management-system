@@ -64,8 +64,8 @@ function stm_lms_settings_route_section() {
 				'label'           => esc_html__( 'Checkout', 'masterstudy-lms-learning-management-system' ),
 				'description'     => esc_html__( 'Select the page where users will complete their course purchases', 'masterstudy-lms-learning-management-system' ),
 				'dependency'      => array(
-					'key'     => 'wocommerce_checkout',
-					'value'   => 'not_empty',
+					'key'     => 'ecommerce_engine',
+					'value'   => 'woocommerce',
 					'section' => 'section_ecommerce',
 				),
 				'dependency_mode' => 'disabled',

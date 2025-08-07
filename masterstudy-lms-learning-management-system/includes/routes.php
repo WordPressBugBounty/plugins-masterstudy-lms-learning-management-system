@@ -541,6 +541,35 @@ $router->group(
 );
 
 /**
+ * Order routes
+ */
+$router->group(
+	array(
+		'middleware' => array(
+			\MasterStudy\Lms\Routing\Middleware\Authentication::class,
+			\MasterStudy\Lms\Routing\Middleware\Administrator::class,
+		),
+	),
+	function ( Router $router ) {
+		$router->get(
+			'/all-orders',
+			\MasterStudy\Lms\Http\Controllers\Order\GetOrdersController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Order\GetOrders::class
+		);
+		$router->get(
+			'/orders/{order_id}',
+			\MasterStudy\Lms\Http\Controllers\Order\GetOrderController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Order\GetOrder::class
+		);
+		$router->post(
+			'/orders-bulk-update',
+			\MasterStudy\Lms\Http\Controllers\Order\BulkUpdateOrdersController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Order\BulkUpdateOrder::class
+		);
+	}
+);
+
+/**
  * Public routes
  */
 $router->group(
@@ -566,8 +595,13 @@ $router->group(
 		);
 		$router->get(
 			'/orders',
-			\MasterStudy\Lms\Http\Controllers\Order\GetOrdersController::class,
-			\MasterStudy\Lms\Routing\Swagger\Routes\Order\GetOrders::class
+			\MasterStudy\Lms\Http\Controllers\Order\GetUserOrdersController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Order\GetUserOrders::class
+		);
+		$router->put(
+			'/orders/{order_id}',
+			\MasterStudy\Lms\Http\Controllers\Order\UpdateOrderController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Order\UpdateOrder::class
 		);
 		$router->get(
 			'/enrolled-quizzes',

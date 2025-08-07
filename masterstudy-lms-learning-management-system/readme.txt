@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.16
+Stable tag: 3.6.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,16 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.17 - 2025-08-07 =
+- **New:** Added the ability to add custom notes to orders.
+- **New:** Instructors can now add custom notes to orders on the "My Sales" page (Pro)
+- **New:** Added the ability to filter orders by date.
+- **New:** Added search functionality for orders by Order ID and user.
+- **Improvement:** Enhanced UI/UX of the "Orders" section in the admin dashboard
+- **New:** Added search functionality for orders by Order ID and user.
+- **Improvement:** Added eCommerce source selection for LMS in Settings → eCommerce → Checkout (Native or WooCommerce).
+- **Fixed:** Resolved an issue where course generation via AI Lab occasionally failed during content saving (Pro)
+
 = 3.6.16 - 2025-08-05 =
 - **Fixed:** Minor bug fixes.
 
@@ -341,14 +351,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.6.13 - 2025-07-17 =
 - **Fixed:** Minor bug fixes.
-
-= 3.6.12 - 2025-07-16 =
-- **Improvement:** Added “Required Question” option in quizzes — students won’t be able to finish an attempt without answering required questions
-- **Improvement:** You can now restrict student access to the WordPress Dashboard using the “Restrict WordPress Dashboard access for instructors and students” setting — previously, this only worked for instructors
-- **Improvement:** All course-selling related settings are now grouped into a single eCommerce section in LMS Settings
-- **Improvement:** Optimized Video Preview loading speed on the Single Course page — videos now load only on playback, reducing page load time (Pro)
-- **Improvement:** Added AI-based duration estimation for the Lesson Duration field via the AI Lab add-on (Pro)
-- **Improvement:** Added a new lesson type — PDF Lesson (Pro)
-- **Fixed:** When re-purchasing an expired Paid Membership plan, access to previously purchased courses was not restored
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

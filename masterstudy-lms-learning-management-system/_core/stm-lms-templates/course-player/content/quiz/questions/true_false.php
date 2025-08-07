@@ -47,6 +47,22 @@ foreach ( $data['answers'] as $answer ) {
 				</div>
 				<?php
 			}
+			if ( ! empty( $answer['explain'] ) && $show_answers && ! empty( $last_quiz ) ) {
+				?>
+				<div class="masterstudy-course-player-answer__hint">
+					<?php
+					STM_LMS_Templates::show_lms_template(
+						'components/hint',
+						array(
+							'content'   => $answer['explain'],
+							'side'      => 'right',
+							'dark_mode' => $dark_mode,
+						)
+					);
+					?>
+				</div>
+				<?php
+			}
 			if ( $show_answers ) {
 				if ( $correctly ) {
 					?>

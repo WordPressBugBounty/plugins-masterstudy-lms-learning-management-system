@@ -26,7 +26,7 @@ class STM_LMS_Cart {
 	}
 
 	public static function woocommerce_checkout_enabled() {
-		return STM_LMS_Options::get_option( 'wocommerce_checkout', false ) && class_exists( 'WooCommerce' );
+		return STM_LMS_Options::get_option( 'ecommerce_engine', 'native' ) === 'woocommerce' && class_exists( 'WooCommerce' );
 	}
 
 	public static function masterstudy_add_to_cart( $item_id, $user_id ) {

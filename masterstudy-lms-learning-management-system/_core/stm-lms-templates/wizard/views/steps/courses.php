@@ -167,22 +167,26 @@
 		</div>
 	</div>
 	<hr v-if="isPro()"/>
-	<div class="stm_lms_splash_wizard__field stm_lms_splash_wizard__field_switch" v-if="isPro()" v-bind:class="{'inactive' : !wizard.wocommerce_checkout}">
+	<div class="stm_lms_splash_wizard__field stm_lms_splash_wizard__field_switch" v-if="isPro()" v-bind:class="{'inactive' : wizard.ecommerce_engine !== 'woocommerce'}">
 		<?php
 		STM_LMS_Templates::show_lms_template(
 			'wizard/views/field_data',
 			array(
-				'title' => esc_html__( 'WooCommerce Checkout', 'masterstudy-lms-learning-management-system' ),
+				'title' => esc_html__( 'Select eCommerce Engine', 'masterstudy-lms-learning-management-system' ),
 			)
 		);
 		?>
 		<div class="stm_lms_splash_wizard__field_input">
 			<?php
 			STM_LMS_Templates::show_lms_template(
-				'wizard/fields/switcher',
+				'wizard/fields/select',
 				array(
-					'model' => 'wizard.wocommerce_checkout',
-					'desc'  => esc_html__( 'Install the WooCommerce plugin and set up the Cart and Checkout pages', 'masterstudy-lms-learning-management-system' ),
+					'model'    => 'wizard.ecommerce_engine',
+					'options'  => array(
+						'native'      => esc_html__( 'Native', 'masterstudy-lms-learning-management-system' ),
+						'woocommerce' => esc_html__( 'WooCommerce Checkout', 'masterstudy-lms-learning-management-system' ),
+					),
+					'desc'     => esc_html__( 'Choose how you want to process course payments and orders.', 'masterstudy-lms-learning-management-system' ),
 				)
 			);
 			?>

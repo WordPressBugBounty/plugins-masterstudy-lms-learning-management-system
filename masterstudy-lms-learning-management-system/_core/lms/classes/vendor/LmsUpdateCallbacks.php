@@ -834,4 +834,17 @@ abstract class LmsUpdateCallbacks {
 
 		update_option( 'stm_lms_db_version', STM_LMS_DB_VERSION );
 	}
+
+	public static function lms_update_woocommerce_checkout_setting() {
+		$settings = get_option( 'stm_lms_settings' );
+
+		if ( empty( $settings ) ) {
+			return;
+		}
+
+		if ( isset( $settings['wocommerce_checkout'] ) && $settings['wocommerce_checkout'] ) {
+			$settings['ecommerce_engine'] = 'woocommerce';
+			update_option( 'stm_lms_settings', $settings );
+		}
+	}
 }

@@ -48,9 +48,6 @@
 							{{ field_info.info_title }}
 						</div>
 						<div class="stm-lms-payment_info_block_description" v-if="field_info.info_description" >
-							<div class="stm-lms-payment_info_block_hint">
-								<i class="fa fa-info-circle"></i>
-							</div>
 							<span v-html="field_info.info_description"></span>
 						</div>
 					</div>
