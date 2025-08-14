@@ -229,7 +229,7 @@ final class EnrolledQuizzesRepository {
 
 		$quiz_data['last_quiz']    = $attempt;
 		$quiz_data['last_answers'] = $attempt['answers'];
-		$quiz_data['show_answers'] = $show_answers || $quiz_data['show_answers'] || ! \STM_LMS_Options::get_option( 'retry_after_passing', false );
+		$quiz_data['show_answers'] = $show_answers || $quiz_data['show_answers'] || ! $quiz_data['retry_after_passing'];
 		$quiz_data['emoji_type']   = $progress < $quiz_data['passing_grade'] ? 'assignments_quiz_failed_emoji' : 'assignments_quiz_passed_emoji';
 		$quiz_data['emoji_name']   = $quiz_data['show_emoji'] ? \STM_LMS_Options::get_option( $quiz_data['emoji_type'] ) : '';
 

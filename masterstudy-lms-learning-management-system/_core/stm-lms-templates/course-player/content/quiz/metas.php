@@ -9,9 +9,8 @@
  * @var string $quiz_attempts
  * @var boolean $show_result
  * @var boolean $has_attempts
+ * @var boolean $show_history
  */
-
-$show_history = STM_LMS_Options::get_option( 'show_attempts_history', false );
 ?>
 
 <ul class="masterstudy-course-player-quiz__content-meta">

@@ -8,25 +8,30 @@ use WP_Post;
 
 class QuizRepository {
 	private static $fields_meta_map = array(
-		'correct_answer'       => 'correct_answer',
-		'duration'             => 'duration',
-		'duration_measure'     => 'duration_measure',
-		'excerpt'              => 'lesson_excerpt',
-		'attempts'             => 'attempts',
-		'passing_grade'        => 'passing_grade',
-		'random_questions'     => 'random_questions',
-		'required_answers_ids' => 'required_answers_ids',
-		're_take_cut'          => 're_take_cut',
-		'style'                => 'quiz_style',
+		'correct_answer'        => 'correct_answer',
+		'duration'              => 'duration',
+		'duration_measure'      => 'duration_measure',
+		'excerpt'               => 'lesson_excerpt',
+		'attempts'              => 'attempts',
+		'passing_grade'         => 'passing_grade',
+		'random_questions'      => 'random_questions',
+		'required_answers_ids'  => 'required_answers_ids',
+		're_take_cut'           => 're_take_cut',
+		'style'                 => 'quiz_style',
+		'quiz_attempts'         => 'quiz_attempts',
+		'show_attempts_history' => 'show_attempts_history',
+		'retry_after_passing'   => 'retry_after_passing',
 	);
 
 	private static $casts = array(
-		'correct_answer'   => 'bool',
-		'duration'         => 'int|nullable',
-		'attempts'         => 'int|nullable',
-		'passing_grade'    => 'float|nullable',
-		'random_questions' => 'bool',
-		're_take_cut'      => 'float|nullable',
+		'correct_answer'        => 'bool',
+		'duration'              => 'int|nullable',
+		'attempts'              => 'int|nullable',
+		'passing_grade'         => 'float|nullable',
+		'random_questions'      => 'bool',
+		're_take_cut'           => 'float|nullable',
+		'show_attempts_history' => 'bool',
+		'retry_after_passing'   => 'bool',
 	);
 
 	public function create( array $data ): int {

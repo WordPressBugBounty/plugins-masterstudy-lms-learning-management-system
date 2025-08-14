@@ -136,7 +136,7 @@ $classes = implode(
 			);
 		}
 
-		if ( $has_access && ( new QuizRepository() )->exists( $post->ID ) && ! empty( $quiz_data['show_history'] ) && ! empty( $quiz_data['has_attempts'] ) ) {
+		if ( $has_access && ( new QuizRepository() )->exists( $post->ID ) && ! empty( $quiz_data['show_attempts_history'] ) && ! empty( $quiz_data['has_attempts'] ) ) {
 			STM_LMS_Templates::show_lms_template(
 				'components/tabs',
 				array(

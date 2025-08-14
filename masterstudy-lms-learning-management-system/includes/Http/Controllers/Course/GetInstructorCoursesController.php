@@ -15,7 +15,7 @@ class GetInstructorCoursesController {
 		$args = array(
 			'post_type'      => PostType::COURSE,
 			'posts_per_page' => $per_page,
-			'post_status'    => empty( $post_status ) ? array( 'publish', 'draft', 'pending' ) : $post_status,
+			'post_status'    => empty( $post_status ) ? array( 'publish', 'draft', 'pending', 'rejected' ) : $post_status,
 			'author'         => $logged_user_id,
 		);
 

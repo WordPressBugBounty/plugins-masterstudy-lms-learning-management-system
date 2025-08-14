@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'stmlms';
-  src:  url('fonts/stmlms.eot?9mr1nn');
-  src:  url('fonts/stmlms.eot?9mr1nn#iefix') format('embedded-opentype'),
-    url('fonts/stmlms.ttf?9mr1nn') format('truetype'),
-    url('fonts/stmlms.woff?9mr1nn') format('woff'),
-    url('fonts/stmlms.svg?9mr1nn#stmlms') format('svg');
+  src:  url('fonts/stmlms.eot?sr5hnl');
+  src:  url('fonts/stmlms.eot?sr5hnl#iefix') format('embedded-opentype'),
+    url('fonts/stmlms.ttf?sr5hnl') format('truetype'),
+    url('fonts/stmlms.woff?sr5hnl') format('woff'),
+    url('fonts/stmlms.svg?sr5hnl#stmlms') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.stmlms-WhatsApp:before {
+  content: "\ea1d";
+}
 .stmlms-maximize:before {
   content: "\ea18";
 }

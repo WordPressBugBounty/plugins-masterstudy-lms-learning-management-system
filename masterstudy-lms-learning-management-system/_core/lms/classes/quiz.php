@@ -118,7 +118,7 @@ class STM_LMS_Quiz {
 
 		$score_per_question = 100 / $total_questions;
 		$cutting_rate       = ! empty( $quiz_info['re_take_cut'] ) ? ( 100 - $quiz_info['re_take_cut'] ) / 100 : 1;
-		$passing_grade      = get_post_meta( $quiz_id, 'passing_grade', true );
+		$passing_grade      = (float) get_post_meta( $quiz_id, 'passing_grade', true );
 		$user_answer_id     = 0;
 		$attempt_number     = stm_lms_get_user_quizzes( $user_id, $quiz_id, $course_id, array(), true ) + 1;
 

@@ -20,6 +20,10 @@ $reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 						<i class="fa fa-hourglass-half"></i>
 						<h4><?php esc_html_e( 'Pending for approval', 'masterstudy-lms-learning-management-system' ); ?></h4>
 					</div>
+					<div class="pending-message" v-if="course.status==='rejected'">
+						<i class="fa fa-times-circle"></i>
+						<h4><?php esc_html_e( 'Course Rejected', 'masterstudy-lms-learning-management-system' ); ?></h4>
+					</div>
 
 					<div class="stm_lms_instructor_courses__single--image-wrapper"
 						v-bind:class="{'no-image' : course.image===''}"
@@ -84,6 +88,13 @@ $reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 								v-bind:class="{'chosen' : course.status === 'draft'}">
 								<div class="stm_lms_instructor_courses__single--choice-icon"></div>
 								<span><?php esc_html_e( 'Drafted', 'masterstudy-lms-learning-management-system' ); ?></span>
+							</div>
+
+							<div class="stm_lms_instructor_courses__single--choice draft"
+								@click="changeStatus(course, 'rejected')"  v-if="course.status === 'rejected'"
+								v-bind:class="{'chosen' : course.status === 'rejected'}">
+								<div class="stm_lms_instructor_courses__single--choice-icon"></div>
+								<span><?php esc_html_e( 'Rejected', 'masterstudy-lms-learning-management-system' ); ?></span>
 							</div>
 
 							<a v-bind:href="course.edit_link" target="_blank"

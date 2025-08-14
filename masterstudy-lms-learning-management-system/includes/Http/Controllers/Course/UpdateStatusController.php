@@ -23,7 +23,7 @@ class UpdateStatusController {
 		$validator = new Validator(
 			$request->get_json_params(),
 			array(
-				'status' => 'required|contains_list,publish;pending;draft',
+				'status' => 'required|contains_list,publish;pending;draft;rejected',
 			)
 		);
 

@@ -175,3 +175,38 @@ function masterstudy_lms_pmpro_pages_custom_template_path( $templates, $page_nam
 	return $templates;
 }
 add_filter( 'pmpro_pages_custom_template_path', 'masterstudy_lms_pmpro_pages_custom_template_path', 10, 2 );
+
+if ( ! defined( 'STM_LMS_PRO_PATH' ) ) {
+	function masterstudy_lms_fallback_compile_email_event_vars( $data ) {
+
+		if ( empty( $data['vars'] ) || empty( $data['message'] ) ) {
+			return $data;
+		}
+
+		$vars = $data['vars'];
+
+		if ( ! empty( $data['subject'] ) ) {
+			preg_match_all( '~\{\{\s*(.*?)\s*\}\}~', $data['subject'], $matches );
+			if ( ! empty( $matches[0] ) && ! empty( $matches[1] ) ) {
+				foreach ( $matches[1] as $i => $key ) {
+					if ( isset( $vars[ $key ] ) ) {
+						$data['subject'] = str_replace( $matches[0][ $i ], $vars[ $key ], $data['subject'] );
+					}
+				}
+			}
+		}
+
+		preg_match_all( '~\{\{\s*(.*?)\s*\}\}~', $data['message'], $matches );
+		if ( ! empty( $matches[0] ) && ! empty( $matches[1] ) ) {
+			foreach ( $matches[1] as $i => $key ) {
+				if ( isset( $vars[ $key ] ) ) {
+					$data['message'] = str_replace( $matches[0][ $i ], $vars[ $key ], $data['message'] );
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	add_filter( 'stm_lms_filter_email_data', 'masterstudy_lms_fallback_compile_email_event_vars', 5 );
+}

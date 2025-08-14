@@ -185,6 +185,7 @@ if ( ! empty( $user_id ) ) {
 									'id'            => $course_id,
 									'icon_position' => '',
 									'icon_name'     => '',
+									'class'         => 'masterstudy-certificate-btn',
 								)
 							);
 						}
@@ -193,7 +194,7 @@ if ( ! empty( $user_id ) ) {
 							array(
 								'title'         => $block_enabled ? __( 'Got it', 'masterstudy-lms-learning-management-system' ) : __( 'View course', 'masterstudy-lms-learning-management-system' ),
 								'type'          => '',
-								'link'          => '#',
+								'link'          => $block_enabled ? '#' : get_post_permalink( $course_id ),
 								'style'         => 'tertiary',
 								'size'          => 'md',
 								'data'          => array(),

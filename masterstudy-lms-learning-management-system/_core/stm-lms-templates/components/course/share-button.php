@@ -79,6 +79,11 @@ if ( 'row' === $style ) {
 						</a>
 					</div>
 					<div class="masterstudy-single-course-share-button-modal__link-wrapper">
+						<a href="https://api.whatsapp.com/send?text=<?php echo rawurlencode( $course->title . "\n" . $course_url ); ?>" target="_blank" class="masterstudy-single-course-share-button-modal__link masterstudy-single-course-share-button-modal__link_whatsapp">
+							<?php echo esc_html__( 'WhatsApp', 'masterstudy-lms-learning-management-system' ); ?>
+						</a>
+					</div>
+					<div class="masterstudy-single-course-share-button-modal__link-wrapper">
 						<a href="#" data-url="<?php echo esc_url( $course_url ); ?>" class="masterstudy-single-course-share-button-modal__link masterstudy-single-course-share-button-modal__link_copy">
 							<?php echo esc_html__( 'Copy link', 'masterstudy-lms-learning-management-system' ); ?>
 						</a>

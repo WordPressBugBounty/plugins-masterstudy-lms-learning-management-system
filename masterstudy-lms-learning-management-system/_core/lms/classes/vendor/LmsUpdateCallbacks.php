@@ -10,6 +10,7 @@ use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Repositories\CurriculumSectionRepository;
 use MasterStudy\Lms\Utility\CourseGrade;
 use Automattic\WooCommerce\Utilities\OrderUtil;
+use WP_Query;
 
 abstract class LmsUpdateCallbacks {
 
@@ -154,7 +155,7 @@ abstract class LmsUpdateCallbacks {
 									)
 								);
 
-								$material_order ++;
+								++$material_order;
 							}
 						}
 					} else {
@@ -169,7 +170,7 @@ abstract class LmsUpdateCallbacks {
 								)
 							);
 
-							$section_order ++;
+							++$section_order;
 						}
 
 						$material_order = 1;
@@ -821,6 +822,27 @@ abstract class LmsUpdateCallbacks {
 		}
 
 		update_option( 'stm_lms_media_library_settings', $settings );
+	}
+	public static function lms_update_quiz_attempt_history_retake_after_passing() {
+		global $wpdb;
+		$opts                  = get_option( 'stm_lms_settings', array() );
+		$retry_after_passing   = empty( $opts['retry_after_passing'] ) ? '' : 'on';
+		$show_attempts_history = empty( $opts['show_attempts_history'] ) ? '' : 'on';
+		$quiz_attempts         = $opts['quiz_attempts'] ?? '';
+
+		$sql = $wpdb->prepare(
+			"SELECT ID FROM {$wpdb->posts} WHERE post_type = %s AND post_status = 'publish'",
+			PostType::QUIZ,
+		);
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$quiz_ids = $wpdb->get_col( $sql );
+
+		foreach ( $quiz_ids as $quiz_id ) {
+			update_post_meta( $quiz_id, 'retry_after_passing', $retry_after_passing );
+			update_post_meta( $quiz_id, 'show_attempts_history', $show_attempts_history );
+			update_post_meta( $quiz_id, 'quiz_attempts', $quiz_attempts );
+		}
 	}
 
 	public static function lms_create_bookmarks_table() {

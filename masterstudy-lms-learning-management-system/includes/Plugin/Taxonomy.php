@@ -86,6 +86,7 @@ class Taxonomy {
 				'post_type' => PostType::QUESTION,
 				'args'      => array(
 					'public'            => false,
+					'hierarchical'      => true,
 					'labels'            => array(
 						'name'              => _x( 'Questions Category', 'taxonomy general name', Plugin::TRANSLATION_DOMAIN ),
 						'singular_name'     => _x( 'Question Category', 'taxonomy singular name', Plugin::TRANSLATION_DOMAIN ),
@@ -139,7 +140,7 @@ class Taxonomy {
 			$category_map[ $category->parent ][] = $category;
 		}
 
-		$build_tree = function( $parent_id ) use ( &$category_map, &$build_tree ) {
+		$build_tree = function ( $parent_id ) use ( &$category_map, &$build_tree ) {
 			$result = array();
 
 			if ( isset( $category_map[ $parent_id ] ) ) {
@@ -157,7 +158,7 @@ class Taxonomy {
 
 	private static function all_categories_details( $categories ) {
 		return array_map(
-			function( $category ) {
+			function ( $category ) {
 				$category->course_image = wp_get_attachment_image_url( get_term_meta( $category->term_id, 'course_image', true ), 'full' );
 				$category->course_icon  = get_term_meta( $category->term_id, 'course_icon', true );
 				$category->course_color = get_term_meta( $category->term_id, 'course_color', true );
@@ -167,7 +168,6 @@ class Taxonomy {
 				}
 
 				return $category;
-
 			},
 			$categories
 		);
@@ -213,7 +213,7 @@ class Taxonomy {
 		if ( ! empty( $current_style ) && ! empty( $page_styles ) ) {
 			$matched = array_filter(
 				$page_styles,
-				function( $style ) use ( $current_style ) {
+				function ( $style ) use ( $current_style ) {
 					return isset( $style['name'] ) && $style['name'] === $current_style;
 				}
 			);
@@ -296,7 +296,7 @@ class Taxonomy {
 			if ( ! empty( $current_style ) && ! empty( $page_styles ) ) {
 				$matched = array_filter(
 					$page_styles,
-					function( $style ) use ( $current_style ) {
+					function ( $style ) use ( $current_style ) {
 						return isset( $style['name'] ) && $style['name'] === $current_style;
 					}
 				);
@@ -385,5 +385,4 @@ class Taxonomy {
 			$query->query_vars['order']   = $order;
 		}
 	}
-
 }

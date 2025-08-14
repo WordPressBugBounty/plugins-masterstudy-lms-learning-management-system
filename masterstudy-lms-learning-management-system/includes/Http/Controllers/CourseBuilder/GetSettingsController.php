@@ -27,6 +27,8 @@ final class GetSettingsController {
 				'currency_thousands'             => \STM_LMS_Options::get_option( 'currency_thousands', ' ' ),
 				'currency_decimals'              => \STM_LMS_Options::get_option( 'currency_decimals', '.' ),
 				'quiz_attempts'                  => \STM_LMS_Options::get_option( 'quiz_attempts', false ),
+				'quiz_show_attempts_history'     => \STM_LMS_Options::get_option( 'show_attempts_history', false ),
+				'quiz_retry_after_passing'       => \STM_LMS_Options::get_option( 'retry_after_passing', false ),
 				'grades_table'                   => \STM_LMS_Options::get_option( 'grades_table', stm_lms_settings_grades_default_values() ),
 				'presto_player_allowed'          => apply_filters( 'ms_plugin_presto_player_allowed', false ),
 				'deny_instructor_admin'          => \STM_LMS_Options::get_option( 'deny_instructor_admin', false ),

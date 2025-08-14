@@ -10,6 +10,7 @@
 use MasterStudy\Lms\Repositories\LessonRepository;
 
 wp_enqueue_style( 'masterstudy-course-player-pdf-lesson' );
+wp_enqueue_style( 'pdfjs_viewer_styles' );
 wp_enqueue_script( 'masterstudy-course-player-pdf-lesson' );
 
 $settings    = get_option( 'stm_lms_settings' );
@@ -60,8 +61,9 @@ if ( $allow_bookmarks ) {
 				<button class="masterstudy-pdf-btn masterstudy-pdf-container__back-btn">
 					<span class="stmlms-arrow-left"></span>
 				</button>
-				<div class="masterstudy-pdf-container__canvas">
+				<div class="masterstudy-pdf-container__canvas" style="--scale-factor: 1">
 					<canvas class="masterstudy-pdf-container__pdf-view"></canvas>
+					<div class="textLayer"></div>
 				</div>
 				<button class="masterstudy-pdf-btn masterstudy-pdf-container__next-btn">
 					<span class="stmlms-arrow-left"></span>

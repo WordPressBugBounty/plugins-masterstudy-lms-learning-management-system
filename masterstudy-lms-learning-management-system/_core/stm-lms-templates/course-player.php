@@ -167,7 +167,7 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 							'has_attempts'          => $quiz_data['has_attempts'] ?? false,
 						)
 					);
-					if ( 'quiz' === $data['content_type'] && STM_LMS_Options::get_option( 'show_attempts_history', false ) && ! empty( $quiz_data['has_attempts'] ) ) {
+					if ( 'quiz' === $data['content_type'] && $quiz_data['show_attempts_history'] && ! empty( $quiz_data['has_attempts'] ) ) {
 						STM_LMS_Templates::show_lms_template(
 							'course-player/content/quiz/history',
 							array(

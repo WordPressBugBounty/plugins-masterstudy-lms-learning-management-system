@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.17
+Stable tag: 3.6.18
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,21 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.18 - 2025-08-13 =
+- **Update:** Added WhatsApp sharing option to “Share Course” and “Share Public Profile” buttons
+- **Update:** Child categories now appear beneath their parent categories in the Questions Category section, visually separated for clarity
+- **Update:** The terms “words” and “characters” in Course Builder text editors are now translatable
+- **Update:** RTL support has been added to the Orders section in the admin panel
+- **Update:** The “View Course” button in the completion popup now redirects to the correct Single Course page.
+- **Update:** Settings for quiz attempt history and retake permissions can be configured individually per quiz
+- **Update:** Emails within the Email Manager add-on are organized by recipient type (Pro)
+- **New:** Added functionality to send reminder emails to students who haven’t logged in for a prolonged period (Pro)
+- **New:** Tooltips added to email templates within the Email Manager (Pro).
+- **New:** Course rejection functionality added — administrators can reject submitted courses directly via Course Builder and the admin panel (Pro)
+- **New:** A new email template “Course Rejection” has been added to notify instructors when their course is rejected by an admin (Pro)
+- **Fixed:** Bundle counts in “Reports & Analytics” on the Enrolled Courses page were incorrect when using WooCommerce Checkout (Pro)
+- **Fixed:** Internal links and anchors within PDF files did not function correctly in PDF Lessons (Pro)
+
 = 3.6.17 - 2025-08-07 =
 - **New:** Added the ability to add custom notes to orders.
 - **New:** Instructors can now add custom notes to orders on the "My Sales" page (Pro)
@@ -348,8 +363,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Improvement:** Added 5 new smart-tags to the Assignment Status Change email: {{assignment_result}}, {{assignment_comment}}, {{assignment_mark}}, {{assignment_url}}, {{instructor_name}} (Pro)
 - **Improvement:** Added a new email template and trigger for Lesson completion notification sent to instructors (Pro)
 - **Fixed:** The Assignment Status Changed email was sent to students even when the assignment wasn’t reviewed or the status hadn’t changed (Pro)
-
-= 3.6.13 - 2025-07-17 =
-- **Fixed:** Minor bug fixes.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

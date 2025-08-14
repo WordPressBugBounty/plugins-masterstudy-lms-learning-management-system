@@ -56,6 +56,7 @@ class STM_Lms_Taxonomies {
 					'post_type' => 'stm-questions',
 					'args'      => array(
 						'public'            => false,
+						'hierarchical'      => true,
 						'labels'            => array(
 							'name'              => _x( 'Questions category', 'taxonomy general name', 'masterstudy-lms-learning-management-system' ),
 							'singular_name'     => _x( 'Question category', 'taxonomy singular name', 'masterstudy-lms-learning-management-system' ),
@@ -103,7 +104,6 @@ class STM_Lms_Taxonomies {
 		}
 		return $content;
 	}
-
 }
 
 new STM_Lms_Taxonomies();

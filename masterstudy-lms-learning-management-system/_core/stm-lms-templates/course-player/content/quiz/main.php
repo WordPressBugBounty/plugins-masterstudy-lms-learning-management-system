@@ -48,7 +48,8 @@ $passing_grade = intval( $data['passing_grade'] ?? 0 );
 $grade         = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $passing_grade ) : round( $passing_grade, 1 ) . '%';
 ?>
 
-<div class="masterstudy-course-player-quiz <?php echo esc_attr( $data['show_answers'] ? 'masterstudy-course-player-quiz_show-answers' : '' ); ?>">
+<div
+	class="masterstudy-course-player-quiz <?php echo esc_attr( $data['show_answers'] ? 'masterstudy-course-player-quiz_show-answers' : '' ); ?>">
 	<?php
 	$data['last_answers'] = ! empty( $data['last_answers'] ) ? $data['last_answers'] : array();
 	if ( ! empty( $data['last_quiz'] ) ) {
@@ -99,6 +100,7 @@ $grade         = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_inst
 					'allowed_attempts'   => $data['attempts'] ?? 0,
 					'quiz_attempts'      => $data['quiz_attempts'] ?? 0,
 					'show_result'        => ! empty( $data['last_quiz'] ),
+					'show_history'       => $data['show_history'],
 					'has_attempts'       => $data['has_attempts'] ?? false,
 				)
 			);
@@ -127,17 +129,18 @@ $grade         = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_inst
 			<?php
 		}
 		?>
-		<form class="masterstudy-course-player-quiz__form <?php echo esc_attr( ! $data['show_answers'] || empty( $data['last_quiz'] ) ? 'masterstudy-course-player-quiz__form_hide' : '' ); ?>">
+		<form
+			class="masterstudy-course-player-quiz__form <?php echo esc_attr( ! $data['show_answers'] || empty( $data['last_quiz'] ) ? 'masterstudy-course-player-quiz__form_hide' : '' ); ?>">
 			<input type="hidden" name="source" value="<?php echo intval( $post_id ); ?>">
 			<?php
-				STM_LMS_Templates::show_lms_template(
-					'course-player/content/quiz/questions',
-					array(
-						'dark_mode' => $dark_mode,
-						'quiz_data' => $data,
-						'quiz_id'   => $item_id,
-					)
-				);
+			STM_LMS_Templates::show_lms_template(
+				'course-player/content/quiz/questions',
+				array(
+					'dark_mode' => $dark_mode,
+					'quiz_data' => $data,
+					'quiz_id'   => $item_id,
+				)
+			);
 			?>
 			<?php if ( 'pagination' === $data['quiz_style'] && $data['questions_for_nav'] > 1 ) { ?>
 				<div class="masterstudy-course-player-quiz__pagination">
@@ -156,7 +159,7 @@ $grade         = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_inst
 				</div>
 				<?php
 			}
-			if ( ! $data['passed'] || STM_LMS_Options::get_option( 'retry_after_passing', false ) || $is_single_quiz ) {
+			if ( ! $data['passed'] || $data['retry_after_passing'] || $is_single_quiz ) {
 				?>
 				<input type="hidden" name="question_ids" value="<?php echo esc_attr( implode( ',', array_column( $data['questions'], 'id' ) ) ); ?>"/>
 				<?php if ( ! empty( $data['required_answers_ids'] ) ) : ?>

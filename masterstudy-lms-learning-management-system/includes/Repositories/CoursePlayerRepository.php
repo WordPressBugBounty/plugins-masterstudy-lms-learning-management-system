@@ -291,14 +291,16 @@ final class CoursePlayerRepository {
 		$quiz_data = array_merge(
 			$quiz,
 			array(
-				'content'        => $content,
-				'question_banks' => array(),
-				'quiz_style'     => \STM_LMS_Quiz::get_style( $quiz_id ),
-				'duration'       => \STM_LMS_Quiz::get_quiz_duration( $quiz_id ),
-				'duration_value' => $quiz['duration'],
-				'quiz_attempts'  => \STM_LMS_Options::get_option( 'quiz_attempts' ),
-				'is_retakable'   => true,
-				'show_attempts'  => true,
+				'content'               => $content,
+				'question_banks'        => array(),
+				'quiz_style'            => \STM_LMS_Quiz::get_style( $quiz_id ),
+				'duration'              => \STM_LMS_Quiz::get_quiz_duration( $quiz_id ),
+				'duration_value'        => $quiz['duration'],
+				'quiz_attempts'         => empty( $quiz['quiz_attempts'] ) ? \STM_LMS_Options::get_option( 'quiz_attempts' ) : $quiz['quiz_attempts'],
+				'retry_after_passing'   => empty( $quiz['retry_after_passing'] ) ? \STM_LMS_Options::get_option( 'retry_after_passing' ) : $quiz['retry_after_passing'],
+				'show_attempts_history' => empty( $quiz['show_attempts_history'] ) ? \STM_LMS_Options::get_option( 'show_attempts_history' ) : $quiz['show_attempts_history'],
+				'is_retakable'          => true,
+				'show_attempts'         => true,
 			)
 		);
 
@@ -428,7 +430,7 @@ final class CoursePlayerRepository {
 		$quiz_data['has_attempts']      = stm_lms_attempts_exists( $course_id, $quiz_id, $user_id );
 		$quiz_data['has_h5p_shortcode'] = isset( $quiz['content'] ) && preg_match( '/\[h5p id="\d+"\]/', $quiz['content'] );
 		$quiz_data['show_history']      =
-			\STM_LMS_Options::get_option( 'show_attempts_history', false )
+			$quiz_data['show_attempts_history']
 			&& ! empty( $quiz_data['questions'] )
 			&& ! $quiz_data['has_h5p_shortcode'];
 

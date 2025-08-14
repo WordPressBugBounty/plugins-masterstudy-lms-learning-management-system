@@ -53,6 +53,7 @@ abstract class LmsUpdates {
 		'3.6.7'  => array( 'lms_flush_rewrite_rules', 'lms_reset_page_routes' ), // Update default media library extensions to include vtt
 		'3.6.14' => array( 'lms_create_bookmarks_table' ), // Create bookmark table
 		'3.6.16' => array( 'lms_update_woocommerce_checkout_setting' ), // If the 'wocommerce_checkout' setting is enabled, set 'ecommerce_engine' to 'woocommerce'.
+		'3.6.17' => array( 'lms_update_quiz_attempt_history_retake_after_passing' ), // Update default media library extensions to include vtt
 	);
 
 	/**

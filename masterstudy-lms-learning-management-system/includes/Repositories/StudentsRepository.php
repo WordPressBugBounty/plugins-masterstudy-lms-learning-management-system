@@ -527,7 +527,7 @@ final class StudentsRepository {
 
 		$user_courses = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT course_id, progress_percent FROM {$wpdb->prefix}stm_lms_user_courses WHERE user_id = %d",
+				"SELECT course_id, bundle_id, progress_percent FROM {$wpdb->prefix}stm_lms_user_courses WHERE user_id = %d",
 				$student_id
 			),
 			ARRAY_A
@@ -545,7 +545,18 @@ final class StudentsRepository {
 			return $statuses;
 		}
 
+		$bundle_ids = array();
+		foreach ( $user_courses as $c ) {
+			if ( '0' !== $c['bundle_id'] ) {
+				$bundle_ids[ $c['bundle_id'] ] = true;
+			}
+		}
+
 		foreach ( $user_courses as $course ) {
+			if ( '0' === $course['bundle_id'] && isset( $bundle_ids[ $course['course_id'] ] ) ) {
+				continue;
+			}
+
 			$course_id        = $course['course_id'];
 			$curriculum       = ( new CurriculumRepository() )->get_curriculum( $course_id, true );
 			$course_materials = array_reduce(

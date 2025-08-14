@@ -103,6 +103,7 @@ class STM_LMS_Lesson {
 
 		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );
 		$subject = esc_html__( '{{user_login}} Has Completed a Lesson in {{course_title}}', 'masterstudy-lms-learning-management-system' );
+		$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
 
 		STM_LMS_Helpers::send_email( \STM_LMS_Helpers::masterstudy_lms_get_post_author_email_by_post_id( $course_id ), $subject, $message, 'stm_lms_student_lesson_completed_for_instructor', $email_data );
 

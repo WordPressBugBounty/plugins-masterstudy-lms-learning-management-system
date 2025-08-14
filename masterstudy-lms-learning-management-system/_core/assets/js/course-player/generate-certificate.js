@@ -10,7 +10,7 @@ var jsPDF = window.jspdf.jsPDF;
     if (course_certificate.preview && !course_certificate.demo) {
       getCertificate(course_certificate.course_id, course_certificate.course_id, true);
     }
-    $('body').on('click', '.masterstudy-single-course-complete__buttons .masterstudy-button, .masterstudy_preview_certificate, .masterstudy-student-course-card .masterstudy-button', function (e) {
+    $('body').on('click', '.masterstudy-single-course-complete__buttons .masterstudy-certificate-btn, .masterstudy_preview_certificate, .masterstudy-student-course-card .masterstudy-button', function (e) {
       e.preventDefault();
       if (course_certificate.demo) return;
       var courseId = $(this).attr('data-id') || false;

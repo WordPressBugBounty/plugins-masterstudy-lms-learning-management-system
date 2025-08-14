@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MasterStudy LMS WordPress Plugin – for Online Courses and Education plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.6.16\n"
+"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.6.17\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/masterstudy-lms-learning-management-system\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-08-06T11:59:30+00:00\n"
+"POT-Creation-Date: 2025-08-12T10:05:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 
@@ -7943,7 +7943,7 @@ msgstr ""
 #: _core/lms/classes/models/StmLmsPayout.php:149
 #: _core/lms/views/payout/meta-box-payout-data.php:123
 #: _core/lms/views/statistics/statistics.php:70
-#: _core/stm-lms-templates/wizard/views/steps/courses.php:219
+#: _core/stm-lms-templates/wizard/views/steps/courses.php:223
 msgid "Admin commission"
 msgstr ""
 
@@ -7952,9 +7952,9 @@ msgid "Instructor Earnings"
 msgstr ""
 
 #: _core/lms/classes/models/StmLmsPayout.php:208
-#: _core/settings/main_settings/ecommerce.php:223
-#: _core/settings/main_settings/ecommerce.php:245
-#: _core/settings/main_settings/ecommerce.php:251
+#: _core/settings/main_settings/ecommerce.php:230
+#: _core/settings/main_settings/ecommerce.php:252
+#: _core/settings/main_settings/ecommerce.php:258
 #: _core/settings/main_settings/payout.php:11
 msgid "Payouts"
 msgstr ""
@@ -10226,7 +10226,7 @@ msgid "Courses  Let users filter courses by availability for completion"
 msgstr ""
 
 #: _core/settings/main_settings/ecommerce.php:10
-#: _core/settings/main_settings/ecommerce.php:193
+#: _core/settings/main_settings/ecommerce.php:200
 #: _core/settings/main_settings/payments.php:6
 #: _core/settings/main_settings/payments.php:12
 msgid "Payment Methods"
@@ -10272,97 +10272,107 @@ msgstr ""
 msgid "Define how many numbers can be after the decimal point, like 2 in 7.49"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:62
+#: _core/settings/main_settings/ecommerce.php:63
 #: _core/stm-lms-templates/wizard/views/steps/courses.php:175
+msgid "Select eCommerce Engine"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:66
+#: _core/stm-lms-templates/wizard/views/steps/courses.php:186
+msgid "Native"
+msgstr ""
+
+#: _core/settings/main_settings/ecommerce.php:67
+#: _core/stm-lms-templates/wizard/views/steps/courses.php:187
 msgid "WooCommerce Checkout"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:63
-msgid "Turn this on to use WooCommerce to buy courses. You need to have WooCommerce, Cart and Checkout Pages set up first"
+#: _core/settings/main_settings/ecommerce.php:70
+msgid "eCommerce engine to manage payments. Native uses MasterStudy’s built-in payment methods, while WooCommerce requires its plugin and setup accordingly."
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:70
+#: _core/settings/main_settings/ecommerce.php:76
 msgid "Woocommerce Checkout"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:72
+#: _core/settings/main_settings/ecommerce.php:78
 msgid "Upgrade to Pro now and streamline your checkout process to boost your online course sales."
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:77
+#: _core/settings/main_settings/ecommerce.php:84
 msgid "Guest checkout"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:78
+#: _core/settings/main_settings/ecommerce.php:85
 msgid "Allow guests to register an account during checkout"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:83
+#: _core/settings/main_settings/ecommerce.php:90
 msgid "Required to enable guest checkout in WooCommerce"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:99
+#: _core/settings/main_settings/ecommerce.php:106
 msgid "Redirect to checkout after adding to cart"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:100
-#: _core/settings/main_settings/ecommerce.php:105
+#: _core/settings/main_settings/ecommerce.php:107
+#: _core/settings/main_settings/ecommerce.php:112
 msgid "The feature is not available when WooCommerce checkout is enabled"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:114
+#: _core/settings/main_settings/ecommerce.php:121
 msgid "Display courses on WooCommerce shop page"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:115
+#: _core/settings/main_settings/ecommerce.php:122
 msgid "Enable this setting if you want to show courses in the product catalog of WooCommerce shop page"
 msgstr ""
 
 #. translators: %s link to plugin
-#: _core/settings/main_settings/ecommerce.php:128
+#: _core/settings/main_settings/ecommerce.php:135
 #, php-format
 msgid "If price filtering doesn’t work for courses and products, try regenerating `Product lookup tables` in %s."
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:129
+#: _core/settings/main_settings/ecommerce.php:136
 msgid "WooCommerce settings"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:204
+#: _core/settings/main_settings/ecommerce.php:211
 msgid "Admin Comission (%)"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:208
+#: _core/settings/main_settings/ecommerce.php:215
 msgid "Put the percentage admin will get from sales"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:213
+#: _core/settings/main_settings/ecommerce.php:220
 msgid "Instructor earnings (%)"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:217
+#: _core/settings/main_settings/ecommerce.php:224
 msgid "Put the percentage instructors will get from sales"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:225
-#: _core/settings/main_settings/ecommerce.php:247
+#: _core/settings/main_settings/ecommerce.php:232
+#: _core/settings/main_settings/ecommerce.php:254
 #: _core/settings/main_settings/payout.php:13
 msgid "Make paying instructors easier with automated payouts to ensure timely and hassle-free earnings."
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:226
-#: _core/settings/main_settings/ecommerce.php:248
+#: _core/settings/main_settings/ecommerce.php:233
+#: _core/settings/main_settings/ecommerce.php:255
 #: _core/settings/main_settings/payout.php:14
 msgid "Automate"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:236
+#: _core/settings/main_settings/ecommerce.php:243
 #: _core/settings/main_settings/payout.php:24
 msgid "Masterstudy LMS PRO Payout"
 msgstr ""
 
-#: _core/settings/main_settings/ecommerce.php:261
-#: _core/settings/main_settings/ecommerce.php:262
+#: _core/settings/main_settings/ecommerce.php:268
+#: _core/settings/main_settings/ecommerce.php:269
 msgid "Ecommerce"
 msgstr ""
 
@@ -13680,6 +13690,7 @@ msgid "Start record"
 msgstr ""
 
 #: _core/stm-lms-templates/components/wp-editor.php:28
+#: assets/course-builder/js/main.js:1
 msgid "words"
 msgstr ""
 
@@ -15158,19 +15169,19 @@ msgstr ""
 msgid "Allow filtering courses by category, level, price and more"
 msgstr ""
 
-#: _core/stm-lms-templates/wizard/views/steps/courses.php:185
-msgid "Install the WooCommerce plugin and set up the Cart and Checkout pages"
+#: _core/stm-lms-templates/wizard/views/steps/courses.php:189
+msgid "Choose how you want to process course payments and orders."
 msgstr ""
 
-#: _core/stm-lms-templates/wizard/views/steps/courses.php:197
+#: _core/stm-lms-templates/wizard/views/steps/courses.php:201
 msgid "Enable guest Checkout"
 msgstr ""
 
-#: _core/stm-lms-templates/wizard/views/steps/courses.php:207
+#: _core/stm-lms-templates/wizard/views/steps/courses.php:211
 msgid "Let users buy without registering by just entering their email"
 msgstr ""
 
-#: _core/stm-lms-templates/wizard/views/steps/courses.php:229
+#: _core/stm-lms-templates/wizard/views/steps/courses.php:233
 msgid "Specify the % that you’ll get from instructors’ sales."
 msgstr ""
 
@@ -15684,6 +15695,10 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Add new"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "characters"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -17812,10 +17827,6 @@ msgid "Select question type"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
-msgid "Course is generating. Do you want to leave this page?"
-msgstr ""
-
-#: assets/course-builder/js/main.js:1
 msgid "Section"
 msgstr ""
 
@@ -17841,6 +17852,10 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Basic info, requirements, intended audience"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Unsaved data will be lost. Do you want to continue?"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1

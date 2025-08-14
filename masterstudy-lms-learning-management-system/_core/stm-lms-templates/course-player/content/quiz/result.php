@@ -142,7 +142,7 @@ use MasterStudy\Lms\Pro\AddonsPlus\Grades\Services\GradeDisplay;
 						<?php } ?>
 					</div>
 				</div>
-				<?php if ( empty( $quiz_data['has_h5p_shortcode'] ) && $is_retakable && ( $progress < $passing_grade || STM_LMS_Options::get_option( 'retry_after_passing', false ) ) ) : ?>
+				<?php if ( empty( $quiz_data['has_h5p_shortcode'] ) && $is_retakable && ( $progress < $passing_grade || $quiz_data['retry_after_passing'] ) ) : ?>
 					<div class="masterstudy-course-player-quiz__result-retake">
 						<?php
 						STM_LMS_Templates::show_lms_template(

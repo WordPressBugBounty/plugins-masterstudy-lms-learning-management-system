@@ -48,8 +48,13 @@ $label = isset( $label ) ? $label : __( 'Share', 'masterstudy-lms-learning-manag
 					</a>
 				</div>
 				<div class="masterstudy-share-modal__link-wrapper">
-					<a href="https://t.me/share/url?url=<?php echo rawurlencode( $url ); ?>&amp;text=<?php echo rawurlencode( $course->title ); ?>" target="_blank" class="masterstudy-share-modal__link masterstudy-share-modal__link_telegram">
+					<a href="https://t.me/share/url?url=<?php echo rawurlencode( $url ); ?>&amp;text=<?php echo rawurlencode( $course->title ?? '' ); ?>" target="_blank" class="masterstudy-share-modal__link masterstudy-share-modal__link_telegram">
 						<?php echo esc_html__( 'Telegram', 'masterstudy-lms-learning-management-system' ); ?>
+					</a>
+				</div>
+				<div class="masterstudy-share-modal__link-wrapper">
+					<a href="https://api.whatsapp.com/send?text=<?php echo rawurlencode( $course->title ?? '' . "\n" . $url ); ?>" target="_blank" class="masterstudy-share-modal__link masterstudy-share-modal__link_whatsapp">
+						<?php echo esc_html__( 'WhatsApp', 'masterstudy-lms-learning-management-system' ); ?>
 					</a>
 				</div>
 				<div class="masterstudy-share-modal__link-wrapper">

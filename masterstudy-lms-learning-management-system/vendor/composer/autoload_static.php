@@ -37,6 +37,7 @@ class ComposerStaticInitec50079b4c6a8950529d4e9c66db1c51
         'MasterStudy\\Lms\\Enums\\OrderStatus' => __DIR__ . '/../..' . '/includes/Enums/OrderStatus.php',
         'MasterStudy\\Lms\\Enums\\QuestionType' => __DIR__ . '/../..' . '/includes/Enums/QuestionType.php',
         'MasterStudy\\Lms\\Enums\\QuestionView' => __DIR__ . '/../..' . '/includes/Enums/QuestionView.php',
+        'MasterStudy\\Lms\\Enums\\QuizAttempts' => __DIR__ . '/../..' . '/includes/Enums/QuizAttempts.php',
         'MasterStudy\\Lms\\Enums\\QuizStyle' => __DIR__ . '/../..' . '/includes/Enums/QuizStyle.php',
         'MasterStudy\\Lms\\Http\\Controllers\\Blocks\\Course\\GetCategoriesController' => __DIR__ . '/../..' . '/includes/Http/Controllers/Blocks/Course/GetCategoriesController.php',
         'MasterStudy\\Lms\\Http\\Controllers\\Blocks\\Course\\GetLevelsController' => __DIR__ . '/../..' . '/includes/Http/Controllers/Blocks/Course/GetLevelsController.php',
