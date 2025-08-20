@@ -34,6 +34,53 @@ function stm_lms_get_user_course( $user_id, $course_id, $fields = array(), $ente
 	return $wpdb->get_results( $wpdb->prepare( $query, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 }
 
+function masterstudy_lms_get_user_course_membership( $user_id, $course_id, $enterprise = '' ) {
+	global $wpdb;
+
+	$table = stm_lms_user_courses_name( $wpdb );
+
+	$sql = "SELECT subscription_id, user_id, course_id
+	            FROM {$table}
+	            WHERE user_id = %d AND course_id = %d";
+	$params = array( (int) $user_id, (int) $course_id );
+
+	if ( ! empty( $enterprise ) ) {
+		$sql     .= ' AND enterprise_id = %d';
+		$params[] = (int) $enterprise;
+	}
+
+	// If multiples exist, prefer the latest record.
+	$sql .= ' ORDER BY user_course_id DESC LIMIT 1';
+
+	$prepared = $wpdb->prepare( $sql, $params ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$row      = $wpdb->get_row( $prepared, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+	if ( is_array( $row ) && ! empty( $row ) ) {
+		return $row;
+	}
+
+	return null;
+}
+
+function masterstudy_lms_update_user_course_membership( $user_id, $course_id, $subscription_id ) {
+	global $wpdb;
+
+	$table = stm_lms_user_courses_name( $wpdb );
+
+	$updated = $wpdb->update(
+		$table,
+		array( 'subscription_id' => (int) $subscription_id ),
+		array(
+			'user_id'   => (int) $user_id,
+			'course_id' => (int) $course_id,
+		),
+		array( '%d' ),
+		array( '%d', '%d' )
+	);
+
+	return ( false !== $updated && $updated > 0 );
+}
+
 function stm_lms_get_course_id_by_user_course_id( $user_course_id ) {
 	global $wpdb;
 	$table = stm_lms_user_courses_name( $wpdb );

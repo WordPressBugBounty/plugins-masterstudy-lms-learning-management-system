@@ -35,12 +35,6 @@
 								info_title: '<?php esc_html_e( 'Checkout description', 'masterstudy-lms-learning-management-system' ); ?>',
 								info_description: '<?php esc_html_e( 'Shown to users during checkout. Add a short message (e.g. “Pay securely with Stripe”).', 'masterstudy-lms-learning-management-system' ); ?>',
 							},
-							currency: {
-								type: 'text',
-								placeholder: '<?php esc_html_e( 'Enter Stripe currency code', 'masterstudy-lms-learning-management-system' ); ?>',
-								info_title: '<?php esc_html_e( 'Stripe currency code', 'masterstudy-lms-learning-management-system' ); ?>',
-								info_description: '<?php echo wp_kses_post( __( 'Set the currency for this payment method (e.g. USD, EUR, GBP). Use the standard 3-letter <a href="https://docs.stripe.com/currencies">ISO code</a>.', 'masterstudy-lms-learning-management-system' ) ); ?>',
-							},
 						},
 					},
 					paypal: {
@@ -55,14 +49,6 @@
 								placeholder: '<?php esc_html_e( 'Enter PayPal email', 'masterstudy-lms-learning-management-system' ); ?>',
 								info_title: '<?php esc_html_e( 'PayPal business email', 'masterstudy-lms-learning-management-system' ); ?>',
 								info_description: '<?php esc_html_e( 'Enter the PayPal email address where you want to receive payments.', 'masterstudy-lms-learning-management-system' ); ?>',
-							},
-							currency_code: {
-								type: 'select',
-								source: 'codes',
-								value : 'USD',
-								placeholder: '<?php esc_html_e( 'Select currency code', 'masterstudy-lms-learning-management-system' ); ?>',
-								info_title: '<?php esc_html_e( 'Currency', 'masterstudy-lms-learning-management-system' ); ?>',
-								info_description: '<?php esc_html_e( 'Choose the currency for this payment method.', 'masterstudy-lms-learning-management-system' ); ?>',
 							},
 							paypal_mode: {
 								type: 'select',

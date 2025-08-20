@@ -209,8 +209,9 @@ class STM_LMS_Cart {
 			$r['message'] = esc_html__( 'Order created, redirecting to PayPal', 'masterstudy-lms-learning-management-system' );
 		} elseif ( 'stripe' === $payment_code ) {
 			if ( ! empty( $_GET['token_id'] ) ) {
-				$url     = 'https://api.stripe.com/v1/charges';
-				$payment = STM_LMS_Options::get_option( 'payment_methods' );
+				$url                   = 'https://api.stripe.com/v1/charges';
+				$payment               = STM_LMS_Options::get_option( 'payment_methods' );
+				$transactions_currency = STM_LMS_Options::get_option( 'transactions_currency' );
 				if ( empty( $payment['stripe'] )
 					|| empty( $payment['stripe']['enabled'] )
 					|| empty( $payment['stripe']['fields'] )
@@ -225,7 +226,7 @@ class STM_LMS_Cart {
 					'Authorization' => 'Bearer ' . $sk_key,
 				);
 
-				$currency = ( ! empty( $payment['stripe']['fields']['currency'] ) ) ? $payment['stripe']['fields']['currency'] : 'usd';
+				$currency = ( ! empty( $transactions_currency ) ) ? $transactions_currency : 'usd';
 
 				$increment = apply_filters( 'masterstudy_payment_increment', 100 );
 

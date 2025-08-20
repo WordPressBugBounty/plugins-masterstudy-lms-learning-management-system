@@ -131,6 +131,15 @@ class STM_LMS_Subscriptions {
 		$courses = stm_lms_get_user_course( $user_id, $course_id, array( 'user_course_id' ) );
 		if ( ! empty( $courses ) ) {
 			stm_lms_update_start_time_in_user_course( $user_id, $course_id );
+			$info = masterstudy_lms_get_user_course_membership( (int) $user_id, (int) $course_id );
+
+			if ( null !== $info && (int) ( $info['subscription_id'] ?? 0 ) !== (int) $membership_id ) {
+				masterstudy_lms_update_user_course_membership(
+					(int) $user_id,
+					(int) $course_id,
+					(int) $membership_id
+				);
+			}
 		} else {
 			$sub = self::user_subscriptions( null, null, $membership_id );
 
@@ -607,6 +616,74 @@ class STM_LMS_Subscriptions {
 	public static function subscription_changed( $level_id, $user_id, $cancelled_level_id ) {
 		self::check_user_featured_courses();
 		self::check_user_subscription_courses( $user_id, $cancelled_level_id );
+		self::masterstudy_lms_sync_courses_after_admin_changed_memberships( $user_id );
+	}
+
+	public static function masterstudy_lms_sync_courses_after_admin_changed_memberships( $user_id ) {
+		global $wpdb;
+
+		$pmpro_table   = $wpdb->prefix . 'pmpro_memberships_users';
+		$courses_table = $wpdb->prefix . 'stm_lms_user_courses';
+
+		$changed_membership = $wpdb->get_row(
+			$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT * FROM {$pmpro_table}
+				WHERE user_id = %d
+				AND status = %s
+				ORDER BY id DESC
+				LIMIT 1",
+				$user_id,
+				'admin_changed'
+			)
+		);
+
+		if ( ! $changed_membership ) {
+			return false;
+		}
+
+		$status_check = $wpdb->get_var(
+			$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT status FROM {$pmpro_table}
+				WHERE id = %d",
+				$changed_membership->id
+			)
+		);
+
+		if ( 'admin_changed' !== $status_check ) {
+			return false;
+		}
+
+		$active_membership_id = $wpdb->get_var(
+			$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT id FROM {$pmpro_table}
+				WHERE user_id = %d
+				AND status = %s
+				ORDER BY id DESC
+				LIMIT 1",
+				$user_id,
+				'active'
+			)
+		);
+
+		if ( ! $active_membership_id ) {
+			return false;
+		}
+
+		$updated = $wpdb->update(
+			$courses_table,
+			array( 'subscription_id' => $active_membership_id ),
+			array(
+				'user_id'         => $user_id,
+				'subscription_id' => $changed_membership->id,
+			),
+			array( '%d' ),
+			array( '%d', '%d' )
+		);
+
+		return ( false !== $updated );
 	}
 
 	public static function check_user_featured_courses() {
@@ -739,7 +816,7 @@ class STM_LMS_Subscriptions {
 		if ( $membership_id ) {
 			$rows = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$table} WHERE membership_id = %d AND user_id = %d ORDER BY id ASC",
+					"SELECT * FROM {$table} WHERE membership_id = %d AND user_id = %d ORDER BY id DESC",
 					$membership_id,
 					$user_id
 				),

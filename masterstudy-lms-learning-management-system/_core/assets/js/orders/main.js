@@ -9,6 +9,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     perPageOrders();
     fetchOrders();
   });
+  var getTranslatedPaymentCode = function getTranslatedPaymentCode(paymentCode) {
+    switch (paymentCode) {
+      case 'wire_transfer':
+        return masterstudy_orders.payment_code_wire_transfer;
+      case 'cash':
+        return masterstudy_orders.payment_code_cash;
+      default:
+        return paymentCode;
+    }
+  };
+  var getStatusName = function getStatusName(status) {
+    switch (status) {
+      case 'completed':
+        return masterstudy_orders.statuses.completed;
+      case 'cancelled':
+        return masterstudy_orders.statuses.cancelled;
+      case 'pending':
+        return masterstudy_orders.statuses.pending;
+      default:
+        return status;
+    }
+  };
 
   //Function to retrieve data via API
   function fetchOrders(_x) {
@@ -80,9 +102,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   var template = document.getElementById("masterstudy-order-template");
                   var clone = template.content.cloneNode(true);
                   $(clone).find("[data-order-id]").text("#".concat(order.id));
-                  $(clone).find("[data-order-status]").text(order.status_name || order.status).addClass("".concat(order.status));
+                  $(clone).find("[data-order-status]").text(getStatusName(order.status_name || order.status)).addClass("".concat(order.status));
                   $(clone).find("[data-order-date]").text("".concat(order.date_formatted));
-                  $(clone).find("[data-order-payment]").text(order.payment_code === 'wire_transfer' ? 'Wire transfer' : order.payment_code);
+                  $(clone).find("[data-order-payment]").text(getTranslatedPaymentCode(order.payment_code));
                   var _loop = function _loop() {
                     if (order.cart_items.hasOwnProperty(key)) {
                       var item = order.cart_items[key];

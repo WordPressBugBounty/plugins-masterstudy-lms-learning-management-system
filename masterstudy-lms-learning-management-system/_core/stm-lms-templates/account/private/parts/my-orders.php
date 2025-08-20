@@ -6,10 +6,17 @@ wp_localize_script(
 	'masterstudy-orders',
 	'masterstudy_orders',
 	array(
-		'ajaxurl' => admin_url( 'admin-ajax.php' ),
-		'nonce'   => wp_create_nonce( 'ms_lms_nonce' ),
-		'no_order_title'       => esc_html__( 'No orders yet', 'masterstudy-lms-learning-management-system' ),
-		'no_order_description' => esc_html__( 'All information about your orders will be displayed here', 'masterstudy-lms-learning-management-system' ),
+		'ajaxurl'                    => admin_url( 'admin-ajax.php' ),
+		'nonce'                      => wp_create_nonce( 'ms_lms_nonce' ),
+		'no_order_title'             => esc_html__( 'No orders yet', 'masterstudy-lms-learning-management-system' ),
+		'no_order_description'       => esc_html__( 'All information about your orders will be displayed here', 'masterstudy-lms-learning-management-system' ),
+		'payment_code_wire_transfer' => esc_html__( 'Wire Transfer', 'masterstudy-lms-learning-management-system' ),
+		'payment_code_cash'          => esc_html__( 'Cash', 'masterstudy-lms-learning-management-system' ),
+		'statuses'                   => array(
+			'completed' => esc_html__( 'Completed', 'masterstudy-lms-learning-management-system' ),
+			'pending'   => esc_html__( 'Pending', 'masterstudy-lms-learning-management-system' ),
+			'cancelled' => esc_html__( 'Cancelled', 'masterstudy-lms-learning-management-system' ),
+		),
 	),
 );
 

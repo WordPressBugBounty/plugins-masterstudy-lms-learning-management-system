@@ -16,6 +16,7 @@
  * @var boolean $lesson_locked_by_drip
  * @var boolean $dark_mode
  * @var boolean $pdf_read_all
+ * @var boolean $retry_after_passing
  */
 
 use MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository;
@@ -91,7 +92,7 @@ if ( ! empty( $next_lesson ) ) {
 			}
 			?>
 		</div>
-		<?php if ( $lesson_completed ) { ?>
+		<?php if ( $lesson_completed && ! ( 'quiz' === $lesson_type && $retry_after_passing ) ) { ?>
 			<div class="masterstudy-course-player-navigation__status">
 				<?php echo esc_html__( 'Completed', 'masterstudy-lms-learning-management-system' ); ?>
 			</div>

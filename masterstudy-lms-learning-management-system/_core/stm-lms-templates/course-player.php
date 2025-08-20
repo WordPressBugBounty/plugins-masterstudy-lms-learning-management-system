@@ -242,6 +242,7 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 						'video_questions_stats'    => $data['video_questions_stats'] ?? array(),
 						'dark_mode'                => $data['dark_mode'],
 						'pdf_read_all'             => $data['pdf_read_all'] ?? null,
+						'retry_after_passing'      => $quiz_data['retry_after_passing'] ?? false,
 					)
 				);
 			}

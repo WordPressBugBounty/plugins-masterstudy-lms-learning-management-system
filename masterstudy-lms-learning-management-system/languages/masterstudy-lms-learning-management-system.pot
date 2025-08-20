@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MasterStudy LMS WordPress Plugin – for Online Courses and Education plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.6.17\n"
+"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.6.18\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/masterstudy-lms-learning-management-system\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-08-12T10:05:25+00:00\n"
+"POT-Creation-Date: 2025-08-14T10:35:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 
@@ -98,7 +98,7 @@ msgstr ""
 
 #: includes/actions.php:155
 #: _core/lms/classes/instructors.php:230
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:104
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:115
 msgid "Analytics"
 msgstr ""
 
@@ -215,7 +215,7 @@ msgstr ""
 #: _core/settings/main_settings/grades.php:125
 #: _core/settings/main_settings/grades.php:131
 #: _core/settings/main_settings/grades.php:137
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:110
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:121
 msgid "Grades"
 msgstr ""
 
@@ -492,49 +492,49 @@ msgstr ""
 msgid "Course Category"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:90
+#: includes/Plugin/Taxonomy.php:91
 msgctxt "taxonomy general name"
 msgid "Questions Category"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:91
+#: includes/Plugin/Taxonomy.php:92
 msgctxt "taxonomy singular name"
 msgid "Question Category"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:92
+#: includes/Plugin/Taxonomy.php:93
 msgid "Search Questions Category"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:93
+#: includes/Plugin/Taxonomy.php:94
 msgid "All Questions Category"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:94
+#: includes/Plugin/Taxonomy.php:95
 msgid "Parent Question Category"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:95
+#: includes/Plugin/Taxonomy.php:96
 msgid "Parent Question Category:"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:96
+#: includes/Plugin/Taxonomy.php:97
 msgid "Edit Question Category"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:97
+#: includes/Plugin/Taxonomy.php:98
 msgid "Update Question Category"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:98
+#: includes/Plugin/Taxonomy.php:99
 msgid "Add New Question Category"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:99
+#: includes/Plugin/Taxonomy.php:100
 msgid "New Question Category Name"
 msgstr ""
 
-#: includes/Plugin/Taxonomy.php:100
+#: includes/Plugin/Taxonomy.php:101
 msgid "Question Category"
 msgstr ""
 
@@ -575,7 +575,7 @@ msgstr ""
 
 #: includes/Plugin/Taxonomy.php:278
 #: includes/Plugin/Taxonomy.php:280
-#: _core/includes/post_type/taxonomies.php:83
+#: _core/includes/post_type/taxonomies.php:84
 msgid "Count"
 msgstr ""
 
@@ -3027,7 +3027,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/ms_lms_countdown.php:57
 #: _core/lms/classes/models/StmLmsPayout.php:151
 #: _core/lms/classes/order.php:407
-#: _core/stm-lms-templates/account/private/parts/my-orders.php:37
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:44
 #: _core/stm-lms-templates/pmpro/pages/invoice.php:100
 #: _core/stm-lms-templates/stm-lms-user-pmp.php:167
 #: assets/course-builder/js/main.js:1
@@ -4985,7 +4985,7 @@ msgstr ""
 #: _core/includes/elementor/widgets/deprecated/stm_lms_courses_carousel.php:137
 #: _core/includes/elementor/widgets/deprecated/stm_lms_single_course_carousel.php:113
 #: _core/lms/widgets/popular.widget.php:103
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:129
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:140
 #: _core/stm-lms-templates/components/course/card/global/popup-price.php:29
 #: _core/stm-lms-templates/components/course/card/global/price.php:27
 #: _core/stm-lms-templates/components/course/popular-courses.php:96
@@ -6432,49 +6432,49 @@ msgstr ""
 msgid "Course category"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:60
+#: _core/includes/post_type/taxonomies.php:61
 msgctxt "taxonomy general name"
 msgid "Questions category"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:61
+#: _core/includes/post_type/taxonomies.php:62
 msgctxt "taxonomy singular name"
 msgid "Question category"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:62
+#: _core/includes/post_type/taxonomies.php:63
 msgid "Search Questions category"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:63
+#: _core/includes/post_type/taxonomies.php:64
 msgid "All Questions category"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:64
+#: _core/includes/post_type/taxonomies.php:65
 msgid "Parent Question category"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:65
+#: _core/includes/post_type/taxonomies.php:66
 msgid "Parent Question category:"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:66
+#: _core/includes/post_type/taxonomies.php:67
 msgid "Edit Question category"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:67
+#: _core/includes/post_type/taxonomies.php:68
 msgid "Update Question category"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:68
+#: _core/includes/post_type/taxonomies.php:69
 msgid "Add New Question category"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:69
+#: _core/includes/post_type/taxonomies.php:70
 msgid "New Question category Name"
 msgstr ""
 
-#: _core/includes/post_type/taxonomies.php:70
+#: _core/includes/post_type/taxonomies.php:71
 msgid "Question category"
 msgstr ""
 
@@ -7472,7 +7472,7 @@ msgstr ""
 #: _core/lms/classes/course.php:50
 #: _core/lms/widgets/popular.widget.php:76
 #: _core/lms/widgets/popular.widget.php:79
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:133
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:144
 #: _core/stm-lms-templates/components/course/popular-courses.php:72
 #: _core/stm-lms-templates/components/course/popular-courses.php:74
 #: _core/stm-lms-templates/components/course/related-courses.php:97
@@ -7679,15 +7679,17 @@ msgstr ""
 
 #: _core/lms/classes/instructors.php:480
 #: _core/stm-lms-templates/account/private/instructor_parts/courses.php:12
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:79
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:83
 #: assets/course-builder/js/main.js:1
 msgid "Published"
 msgstr ""
 
 #: _core/lms/classes/instructors.php:483
 #: _core/lms/classes/order.php:409
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:17
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:185
 #: _core/stm-lms-templates/stm-lms-user-pmp.php:188
+#: assets/course-builder/js/main.js:1
 msgid "Pending"
 msgstr ""
 
@@ -7815,34 +7817,34 @@ msgstr ""
 msgid "{{user_login}} Has Completed a Lesson in {{course_title}}"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:125
-#: _core/lms/classes/lesson.php:300
+#: _core/lms/classes/lesson.php:126
+#: _core/lms/classes/lesson.php:301
 msgid "Section 1"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:140
-#: _core/lms/classes/lesson.php:310
+#: _core/lms/classes/lesson.php:141
+#: _core/lms/classes/lesson.php:311
 #, php-format
 msgid "Lecture %s"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:144
-#: _core/lms/classes/lesson.php:314
+#: _core/lms/classes/lesson.php:145
+#: _core/lms/classes/lesson.php:315
 #, php-format
 msgid "Assignment %s"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:148
-#: _core/lms/classes/lesson.php:318
+#: _core/lms/classes/lesson.php:149
+#: _core/lms/classes/lesson.php:319
 #, php-format
 msgid "Quiz %s"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:394
+#: _core/lms/classes/lesson.php:395
 msgid "Congratulations on completing {{user_login}}!"
 msgstr ""
 
-#: _core/lms/classes/lesson.php:414
+#: _core/lms/classes/lesson.php:415
 msgid "Congratulations! {{user_login}} Completed {{course_title}}!"
 msgstr ""
 
@@ -8004,11 +8006,15 @@ msgstr ""
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:138
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:247
 #: _core/stm-lms-templates/account/private/parts/enrolled-courses.php:267
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:16
 #: _core/stm-lms-templates/course-player/navigation.php:96
+#: assets/course-builder/js/main.js:1
 msgid "Completed"
 msgstr ""
 
 #: _core/lms/classes/order.php:415
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:18
+#: assets/course-builder/js/main.js:1
 msgid "Cancelled"
 msgstr ""
 
@@ -8028,7 +8034,7 @@ msgid "Course price"
 msgstr ""
 
 #: _core/lms/classes/order.php:420
-#: _core/stm-lms-templates/account/private/parts/my-orders.php:48
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:55
 #: _core/stm-lms-templates/checkout/thankyou.php:127
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:97
 #: _core/stm-lms-templates/pmpro/pages/invoice.php:85
@@ -8563,7 +8569,7 @@ msgid "Enrolled Quizzes"
 msgstr ""
 
 #: _core/lms/classes/user_menu.php:303
-#: _core/stm-lms-templates/account/private/parts/my-orders.php:23
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:30
 msgid "My Orders"
 msgstr ""
 
@@ -9073,9 +9079,9 @@ msgstr ""
 #: _core/stm-lms-templates/components/discussions.php:65
 #: _core/stm-lms-templates/components/modals/become-instructor.php:101
 #: _core/stm-lms-templates/components/modals/enterprise.php:100
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:42
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:106
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:171
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:43
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:108
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:173
 #: _core/stm-lms-templates/course-player/content/quiz/main.php:41
 #: _core/stm-lms-templates/pmpro/pages/billing.php:375
 #: _core/stm-lms-templates/pmpro/pages/cancel.php:99
@@ -10965,6 +10971,7 @@ msgid "Limited attempts"
 msgstr ""
 
 #: _core/settings/main_settings/quiz.php:49
+#: assets/course-builder/js/main.js:1
 msgid "Quiz Attempt History"
 msgstr ""
 
@@ -11402,6 +11409,8 @@ msgid "This will appear as the PayPal payment option title at checkout."
 msgstr ""
 
 #: _core/settings/payments/components_js/payments.php:86
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:13
+#: assets/course-builder/js/main.js:1
 msgid "Wire Transfer"
 msgstr ""
 
@@ -12073,32 +12082,41 @@ msgstr ""
 msgid "Pending for approval"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:86
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:25
+msgid "Course Rejected"
+msgstr ""
+
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:90
 msgid "Drafted"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:92
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:97
+#: assets/course-builder/js/main.js:1
+msgid "Rejected"
+msgstr ""
+
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:103
 #: assets/course-builder/js/main.js:1
 msgid "Edit"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:98
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:109
 msgid "Manage Students"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:144
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:155
 msgid "Make Featured"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:150
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:161
 msgid "Remove from Featured"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:154
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:165
 msgid "Edit course"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:158
+#: _core/stm-lms-templates/account/private/instructor_parts/grid.php:169
 msgid "Cancel request"
 msgstr ""
 
@@ -12288,7 +12306,7 @@ msgstr ""
 
 #: _core/stm-lms-templates/account/private/manage_students/main.php:249
 #: _core/stm-lms-templates/account/private/parts/enrolled-quizzes.php:84
-#: _core/stm-lms-templates/account/private/parts/my-orders.php:65
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:72
 #: _core/stm-lms-templates/account/private/track-students/list.php:206
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:133
 #: assets/course-builder/js/main.js:1
@@ -12297,7 +12315,7 @@ msgstr ""
 
 #: _core/stm-lms-templates/account/private/manage_students/main.php:253
 #: _core/stm-lms-templates/account/private/parts/enrolled-quizzes.php:88
-#: _core/stm-lms-templates/account/private/parts/my-orders.php:69
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:76
 #: _core/stm-lms-templates/account/private/track-students/list.php:210
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:137
 msgid "25 per page"
@@ -12305,7 +12323,7 @@ msgstr ""
 
 #: _core/stm-lms-templates/account/private/manage_students/main.php:254
 #: _core/stm-lms-templates/account/private/parts/enrolled-quizzes.php:89
-#: _core/stm-lms-templates/account/private/parts/my-orders.php:70
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:77
 #: _core/stm-lms-templates/account/private/track-students/list.php:211
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:138
 #: assets/course-builder/js/main.js:1
@@ -12314,7 +12332,7 @@ msgstr ""
 
 #: _core/stm-lms-templates/account/private/manage_students/main.php:255
 #: _core/stm-lms-templates/account/private/parts/enrolled-quizzes.php:90
-#: _core/stm-lms-templates/account/private/parts/my-orders.php:71
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:78
 #: _core/stm-lms-templates/account/private/track-students/list.php:212
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:139
 msgid "75 per page"
@@ -12322,7 +12340,7 @@ msgstr ""
 
 #: _core/stm-lms-templates/account/private/manage_students/main.php:256
 #: _core/stm-lms-templates/account/private/parts/enrolled-quizzes.php:91
-#: _core/stm-lms-templates/account/private/parts/my-orders.php:72
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:79
 #: _core/stm-lms-templates/account/private/track-students/list.php:213
 #: _core/stm-lms-templates/stm-lms-user-quiz-attempts.php:140
 #: assets/course-builder/js/main.js:1
@@ -12420,7 +12438,7 @@ msgstr ""
 #: _core/stm-lms-templates/account/private/parts/certificate-list.php:78
 #: _core/stm-lms-templates/components/file-attachment.php:60
 #: _core/stm-lms-templates/components/file-upload.php:65
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:91
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:93
 msgid "Download"
 msgstr ""
 
@@ -12553,7 +12571,12 @@ msgstr ""
 msgid "All information about your orders will be displayed here"
 msgstr ""
 
-#: _core/stm-lms-templates/account/private/parts/my-orders.php:41
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:14
+#: assets/course-builder/js/main.js:1
+msgid "Cash"
+msgstr ""
+
+#: _core/stm-lms-templates/account/private/parts/my-orders.php:48
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:137
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:155
 #: _core/stm-lms-templates/pmpro/pages/invoice.php:71
@@ -13199,8 +13222,8 @@ msgid "Select Course Template"
 msgstr ""
 
 #: _core/stm-lms-templates/components/course-templates.php:119
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:37
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:165
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:38
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:167
 #: assets/course-builder/js/main.js:1
 msgid "Save"
 msgstr ""
@@ -13321,13 +13344,13 @@ msgstr ""
 msgid "Your score"
 msgstr ""
 
-#: _core/stm-lms-templates/components/course/complete.php:194
+#: _core/stm-lms-templates/components/course/complete.php:195
 #: _core/stm-lms-templates/components/course/expired.php:134
 #: _core/stm-lms-templates/global/coming_soon.php:144
 msgid "Got it"
 msgstr ""
 
-#: _core/stm-lms-templates/components/course/complete.php:194
+#: _core/stm-lms-templates/components/course/complete.php:195
 msgid "View course"
 msgstr ""
 
@@ -13471,6 +13494,11 @@ msgstr ""
 
 #: _core/stm-lms-templates/components/course/share-button.php:83
 #: _core/stm-lms-templates/components/share.php:57
+msgid "WhatsApp"
+msgstr ""
+
+#: _core/stm-lms-templates/components/course/share-button.php:88
+#: _core/stm-lms-templates/components/share.php:62
 msgid "Copy link"
 msgstr ""
 
@@ -13677,7 +13705,7 @@ msgstr ""
 
 #: _core/stm-lms-templates/components/video-media.php:194
 #: _core/stm-lms-templates/course-player/content/lesson/audio.php:91
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:78
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:80
 msgid "of"
 msgstr ""
 
@@ -13711,36 +13739,36 @@ msgstr ""
 msgid "Lesson materials"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:38
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:156
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:39
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:158
 msgid "Page Number"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:39
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:76
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:40
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:78
 #: _core/stm-lms-templates/dashboard/components/course.php:149
 msgid "Page"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:40
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:162
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:41
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:164
 msgid "Note"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:41
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:42
 msgid "Enter your bookmark note"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:97
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:99
 #: _core/stm-lms-templates/pmpro/pages/confirmation.php:64
 msgid "Print"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:102
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:104
 msgid "Open in new tab"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:191
+#: _core/stm-lms-templates/course-player/content/lesson/pdf.php:193
 msgid "New bookmark"
 msgstr ""
 
@@ -13804,25 +13832,25 @@ msgstr ""
 msgid "Submit quiz"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/quiz/main.php:115
+#: _core/stm-lms-templates/course-player/content/quiz/main.php:117
 #: _core/stm-lms-templates/quiz/quiz.php:71
 msgid "Start Quiz"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/quiz/metas.php:20
+#: _core/stm-lms-templates/course-player/content/quiz/metas.php:19
 msgid "Questions count"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/quiz/metas.php:30
+#: _core/stm-lms-templates/course-player/content/quiz/metas.php:29
 msgid "Passing grade"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/quiz/metas.php:40
+#: _core/stm-lms-templates/course-player/content/quiz/metas.php:39
 #: assets/course-builder/js/main.js:1
 msgid "Time limit"
 msgstr ""
 
-#: _core/stm-lms-templates/course-player/content/quiz/metas.php:50
+#: _core/stm-lms-templates/course-player/content/quiz/metas.php:49
 msgid "Number of allowed attempts"
 msgstr ""
 
@@ -15859,6 +15887,10 @@ msgid "AI Generate"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "0"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "This field must have at least 1 item"
 msgstr ""
 
@@ -16072,6 +16104,10 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Course has been sent for review"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Course has been rejected"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
@@ -17305,6 +17341,14 @@ msgid "Show correct answer"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1
+msgid "Retake After Pass"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Limited attempts to retake quizzes"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
 msgid "Attempts"
 msgstr ""
 
@@ -17892,6 +17936,14 @@ msgstr ""
 
 #: assets/course-builder/js/main.js:1
 msgid "Go back"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Bank Transfer"
+msgstr ""
+
+#: assets/course-builder/js/main.js:1
+msgid "Credit Card"
 msgstr ""
 
 #: assets/course-builder/js/main.js:1

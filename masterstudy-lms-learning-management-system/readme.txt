@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.18
+Stable tag: 3.6.19
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,15 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+
+= 3.6.19 - 2025-08-20 =
+- **New:** Introduced new Custom Field types in Course Builder — Time and TinyMCE text editor 
+- **Update:** Payment currency for Stripe and PayPal is now selected under eCommerce → Currency via a new “Transactions currency” setting
+- **Fixed:** “Back to Course” button always redirected to the default site language when using WPML 
+- **Fixed:** Quiz answers containing only the number "0" were not displayed correctly
+- **Fixed:** Order statuses and payment system names were not translated on Orders, My Sales, My Orders, and Thank You pages
+- **Fixed:** Courses with a "Time Limit" setting could not be purchased again via WooCommerce Checkout (Pro)
+- **Fixed:** Courses could not be purchased via WooCommerce Checkout if previously bought through Paid Memberships Pro and the subscription was scheduled to end or be canceled (Pro)
 
 = 3.6.18 - 2025-08-13 =
 - **Update:** Added WhatsApp sharing option to “Share Course” and “Share Public Profile” buttons

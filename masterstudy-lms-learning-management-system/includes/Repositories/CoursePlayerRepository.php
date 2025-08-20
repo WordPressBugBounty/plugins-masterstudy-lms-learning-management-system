@@ -297,7 +297,7 @@ final class CoursePlayerRepository {
 				'duration'              => \STM_LMS_Quiz::get_quiz_duration( $quiz_id ),
 				'duration_value'        => $quiz['duration'],
 				'quiz_attempts'         => empty( $quiz['quiz_attempts'] ) ? \STM_LMS_Options::get_option( 'quiz_attempts' ) : $quiz['quiz_attempts'],
-				'retry_after_passing'   => empty( $quiz['retry_after_passing'] ) ? \STM_LMS_Options::get_option( 'retry_after_passing' ) : $quiz['retry_after_passing'],
+				'retry_after_passing'   => isset( $quiz['retry_after_passing'] ) ? $quiz['retry_after_passing'] : \STM_LMS_Options::get_option( 'retry_after_passing' ),
 				'show_attempts_history' => empty( $quiz['show_attempts_history'] ) ? \STM_LMS_Options::get_option( 'show_attempts_history' ) : $quiz['show_attempts_history'],
 				'is_retakable'          => true,
 				'show_attempts'         => true,

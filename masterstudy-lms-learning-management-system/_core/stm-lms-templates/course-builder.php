@@ -8,6 +8,7 @@ global $ms_lms_loaded_textdomain_path;
 $translations_path  = ! empty( $ms_lms_loaded_textdomain_path ) ? $ms_lms_loaded_textdomain_path : MS_LMS_PATH . '/languages';
 $additional_styles  = apply_filters( 'ms_lms_course_builder_additional_styles', array() );
 $additional_scripts = apply_filters( 'ms_lms_course_builder_additional_scripts', array() );
+$wp_referer         = wp_get_referer();
 
 wp_register_style( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_css', MS_LMS_URL . 'assets/course-builder/css/main.css' ), array(), MS_LMS_VERSION );
 wp_register_script( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_js', MS_LMS_URL . 'assets/course-builder/js/main.js' ), array(), MS_LMS_VERSION, true );
@@ -65,6 +66,10 @@ foreach ( $load_scripts as $handle ) {
 	<?php if ( function_exists( 'pll_current_language' ) ) { ?>
 	window.lmsApiSettings.lang = '<?php echo esc_js( pll_current_language() ); ?>';
 	<?php } ?>
+
+	<?php if ( ! empty( $wp_referer ) ) : ?>
+	window.lmsApiSettings.prevUrl = '<?php echo esc_url_raw( $wp_referer ); ?>';
+	<?php endif; ?>
 </script>
 <?php
 $scripts->print_translations( 'ms-lms-course-builder' );

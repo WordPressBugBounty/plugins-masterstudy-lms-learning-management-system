@@ -100,7 +100,7 @@ foreach ( $data['answers'] as $answer ) {
 			?>
 		</div>
 		<div class="masterstudy-course-player-answer__wrapper">
-			<?php if ( ! empty( $answer['text'] ) ) { ?>
+			<?php if ( isset( $answer['text'] ) ) { ?>
 				<div class="masterstudy-course-player-answer__text">
 					<?php echo wp_kses_post( $answer['text'] ); ?>
 				</div>

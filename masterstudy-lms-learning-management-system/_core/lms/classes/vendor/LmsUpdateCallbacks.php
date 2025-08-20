@@ -869,4 +869,25 @@ abstract class LmsUpdateCallbacks {
 			update_option( 'stm_lms_settings', $settings );
 		}
 	}
+
+	public static function lms_transactions_currency_backfill_from_payments() {
+		$settings = get_option( 'stm_lms_settings' );
+
+		if ( empty( $settings ) ) {
+			return;
+		}
+
+		$currency = 'usd';
+
+		if ( ! empty( $settings['payment_methods']['paypal']['fields']['currency_code'] ) ) {
+			$currency = $settings['payment_methods']['paypal']['fields']['currency_code'];
+		} elseif ( ! empty( $settings['payment_methods']['stripe']['fields']['currency'] ) ) {
+			$currency = $settings['payment_methods']['stripe']['fields']['currency'];
+		}
+
+		if ( $currency ) {
+			$settings['transactions_currency'] = $currency;
+			update_option( 'stm_lms_settings', $settings );
+		}
+	}
 }

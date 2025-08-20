@@ -161,7 +161,7 @@ if ( ! empty( $order_info ) ) :
 							<div class="masterstudy-orders-table__body-row">
 								<div class="masterstudy-orders-course-info">
 									<div class="masterstudy-orders-course-info__label"><?php echo esc_html__( 'Payment method:', 'masterstudy-lms-learning-management-system' ); ?></div>
-									<div class="masterstudy-orders-course-info__value masterstudy-payment-method"><?php echo wp_kses_post( 'wire_transfer' === $order_info['payment_code'] ? esc_html__( 'wire transfer', 'text-domain' ) : $order_info['payment_code'] ); ?></div>
+									<div class="masterstudy-orders-course-info__value masterstudy-payment-method"><?php echo wp_kses_post( STM_LMS_Order::get_payment_method_name( $order_info['payment_code'] ) ); ?></div>
 								</div>
 							</div>
 							<div class="masterstudy-orders-table__body-row">
@@ -173,7 +173,7 @@ if ( ! empty( $order_info ) ) :
 							<div class="masterstudy-orders-table__body-row">
 								<div class="masterstudy-orders-course-info">
 									<div class="masterstudy-orders-course-info__label"><?php echo esc_html__( 'Status:', 'masterstudy-lms-learning-management-system' ); ?></div>
-									<div class="masterstudy-orders-course-info__value"><span class="order-status <?php echo esc_attr( $order_info['status'] ); ?>"><?php echo esc_attr( $order_info['status'] ); ?></span></div>
+									<div class="masterstudy-orders-course-info__value"><span class="order-status <?php echo esc_attr( $order_info['status'] ); ?>"><?php echo esc_attr( STM_LMS_Order::get_status_name( $order_info['status'] ) ); ?></span></div>
 								</div>
 							</div>
 							<div class="masterstudy-orders-table__body-row">

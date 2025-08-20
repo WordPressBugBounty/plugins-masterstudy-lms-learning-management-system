@@ -659,4 +659,20 @@ class STM_LMS_Order {
 
 		return $in_enterprise;
 	}
+
+	public static function get_status_name( $status ) {
+		$translates = self::translates();
+		return $translates['i18n'][ $status ] ?? $status;
+	}
+
+	public static function get_payment_method_name( $method ) {
+		switch ( $method ) {
+			case 'cash':
+				return esc_html__( 'Cash', 'masterstudy-lms-learning-management-system' );
+			case 'wire_transfer':
+				return esc_html__( 'Wire transfer', 'masterstudy-lms-learning-management-system' );
+			default:
+				return $method;
+		}
+	}
 }
