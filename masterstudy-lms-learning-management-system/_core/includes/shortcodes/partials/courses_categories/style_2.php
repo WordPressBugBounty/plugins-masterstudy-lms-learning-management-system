@@ -75,7 +75,7 @@ if ( ! empty( $taxonomy ) ) :
 							printf(
 								/* translators: %s: nubmer */
 								esc_html__( '%s Courses', 'masterstudy-lms-learning-management-system' ),
-								esc_html( $term->count )
+								esc_html( STM_LMS_Courses::get_children_terms_count( $term->term_id ) )
 							);
 							?>
 						</span>

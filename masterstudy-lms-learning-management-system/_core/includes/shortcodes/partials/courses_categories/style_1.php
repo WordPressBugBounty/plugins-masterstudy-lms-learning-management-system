@@ -1,4 +1,7 @@
 <?php
+
+use MasterStudy\Lms\Plugin\PostType;
+
 if ( empty( $taxonomy ) ) {
 	$taxonomy = 'get_default';
 }
@@ -34,6 +37,7 @@ if ( ! empty( $taxonomy ) ) :
 			<?php
 			foreach ( $terms as $key => $term ) :
 				$term = get_term_by( 'id', $term, 'stm_lms_course_taxonomy' );
+
 				if ( empty( $term ) || is_wp_error( $term ) ) {
 					continue;
 				}
@@ -70,7 +74,7 @@ if ( ! empty( $taxonomy ) ) :
 							printf(
 							/* translators: %s: number */
 								esc_html__( '%s Courses', 'masterstudy-lms-learning-management-system' ),
-								esc_html( $term->count )
+								esc_html( STM_LMS_Courses::get_children_terms_count( $term->term_id ) )
 							);
 							?>
 						</span>

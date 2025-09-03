@@ -1,5 +1,6 @@
 <?php
 use MasterStudy\Lms\Plugin\PostType;
+use MasterStudy\Lms\Plugin\Taxonomy;
 
 new STM_LMS_Courses();
 
@@ -96,8 +97,8 @@ class STM_LMS_Courses {
 
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT ID, post_title FROM {$wpdb->posts} 
-				WHERE post_type = %s 
+				"SELECT ID, post_title FROM {$wpdb->posts}
+				WHERE post_type = %s
 				AND post_status = 'publish'
 				AND post_author = %d
 				ORDER BY post_date DESC",
@@ -254,7 +255,7 @@ class STM_LMS_Courses {
 		if ( ! empty( $value ) ) {
 			$array = array_filter(
 				$sorting_options,
-				function( $a ) use ( $value ) {
+				function ( $a ) use ( $value ) {
 					return $a === $value;
 				},
 				ARRAY_FILTER_USE_KEY
@@ -300,7 +301,7 @@ class STM_LMS_Courses {
 		if ( ! empty( $value ) ) {
 			$array = array_filter(
 				$price_options,
-				function( $a ) use ( $value ) {
+				function ( $a ) use ( $value ) {
 					return $a === $value;
 				},
 				ARRAY_FILTER_USE_KEY
@@ -477,7 +478,7 @@ class STM_LMS_Courses {
 					$terms[ $index ]['parent_name']    = get_term( $parent )->name;
 					$terms[ $index ]['category_terms'] = $category_terms;
 				}
-				$index ++;
+				++$index;
 			}
 			return $terms;
 		}
@@ -546,7 +547,6 @@ class STM_LMS_Courses {
 
 			}
 		}
-
 	}
 
 	public function filter_statuses( &$args ) {
@@ -607,7 +607,6 @@ class STM_LMS_Courses {
 				);
 			}
 		}
-
 	}
 
 	public function filter_level( &$args ) {
@@ -632,7 +631,6 @@ class STM_LMS_Courses {
 				}
 			}
 		}
-
 	}
 
 	public function filter_rating( &$args ) {
@@ -784,5 +782,43 @@ class STM_LMS_Courses {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Gets count of all posts including children categories of courses
+	 * @param int $id
+	 * @return int
+	 */
+	public static function get_children_terms_count( int $id ): int {
+		global $wpdb;
+
+		$all_term_ids = get_terms(
+			array(
+				'taxonomy'   => 'stm_lms_course_taxonomy',
+				'child_of'   => $id,
+				'fields'     => 'ids',
+				'hide_empty' => false,
+				'number'     => 0,
+			)
+		);
+
+		$all_term_ids[] = $id;
+
+		$placeholders = implode( ',', array_fill( 0, count( $all_term_ids ), '%d' ) );
+
+		$sql = "SELECT COUNT(DISTINCT p.ID) FROM {$wpdb->posts} p
+		INNER JOIN {$wpdb->term_relationships} tr ON tr.object_id = p.ID INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id
+		WHERE p.post_type = %s AND p.post_status = 'publish' AND tt.taxonomy = %s AND tt.term_id IN ($placeholders)";
+
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- No applicable variables for this query.
+				$sql,
+				array_merge(
+					array( PostType::COURSE, Taxonomy::COURSE_CATEGORY ),
+					$all_term_ids
+				)
+			)
+		);
 	}
 }

@@ -200,6 +200,22 @@ final class OrderRepository {
 		return true;
 	}
 
+	public function bulk_update_orders( array $request = array() ) {
+		$orders = $request['orders'];
+
+		foreach ( $orders as $order ) {
+			$success = self::update_order( $order['id'], $order );
+
+			if ( false === $success ) {
+				return array(
+					'id' => $order['id'],
+				);
+			}
+		}
+
+		return true;
+	}
+
 	public function update_order( int $order_id, array $request ): bool {
 		$order_status = $request['status'];
 		$order_note   = $request['note'];

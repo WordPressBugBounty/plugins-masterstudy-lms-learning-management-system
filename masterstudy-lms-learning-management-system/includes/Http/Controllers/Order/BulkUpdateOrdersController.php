@@ -28,6 +28,8 @@ final class BulkUpdateOrdersController {
 
 		if ( BulkOrderAction::DELETE === $params['action'] ) {
 			$error = ( new OrderRepository() )->bulk_remove_orders( $params );
+		} elseif ( BulkOrderAction::UPDATE_STATUS === $params['action'] ) {
+			$error = ( new OrderRepository() )->bulk_update_orders( $params );
 		}
 
 		if ( is_array( $error ) ) {

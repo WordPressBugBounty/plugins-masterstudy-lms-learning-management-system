@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.19
+Stable tag: 3.6.20
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+
+= 3.6.20 - 2025-09-03 =
+- **New:** Added the ability to change the status of multiple orders using Bulk Actions
+- **Fixed:** Child categories were not included in course counts for parent categories in the Courses Categories widget
+- **Fixed:** Instructors could access other users media files in the WordPress media library
+- **Fixed:** The Open Sans font did not display certain characters in the Czech language
 
 = 3.6.19 - 2025-08-20 =
 - **New:** Introduced new Custom Field types in Course Builder — Time and TinyMCE text editor 

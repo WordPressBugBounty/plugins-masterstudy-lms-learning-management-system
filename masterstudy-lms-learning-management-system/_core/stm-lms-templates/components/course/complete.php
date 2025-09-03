@@ -23,6 +23,9 @@ if ( ! empty( $total_progress['course']['progress_percent'] ) ) {
 	$course_passed = $total_progress['course']['progress_percent'] >= ( $settings['certificate_threshold'] ?? 70 );
 }
 
+$course_completed_message     = apply_filters( 'masterstudy_lms_course_completed_message', esc_html__( 'You have successfully completed the course', 'masterstudy-lms-learning-management-system' ), $course_id, $course_passed );
+$course_not_completed_message = apply_filters( 'masterstudy_lms_course_not_completed_message', esc_html__( 'You have NOT completed the course', 'masterstudy-lms-learning-management-system' ), $course_id, $course_passed );
+
 wp_enqueue_style( 'masterstudy-single-course-complete' );
 wp_enqueue_script( 'masterstudy-single-course-complete' );
 wp_localize_script(
@@ -152,7 +155,7 @@ if ( ! empty( $user_id ) ) {
 						</div>
 					</div>
 					<div class="masterstudy-single-course-complete__message">
-						<?php echo $course_passed ? esc_html__( 'You have successfully completed the course', 'masterstudy-lms-learning-management-system' ) : esc_html__( 'You have NOT completed the course', 'masterstudy-lms-learning-management-system' ); ?>
+						<?php echo $course_passed ? wp_kses_post( $course_completed_message ) : wp_kses_post( $course_not_completed_message ); ?>
 					</div>
 					<h2 class="masterstudy-single-course-complete__title"></h2>
 					<div class="masterstudy-single-course-complete__curiculum-statistic">

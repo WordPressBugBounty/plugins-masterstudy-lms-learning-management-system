@@ -43,6 +43,8 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 		add_action( 'admin_menu', array( self::class, 'manage_users' ), 10000 );
 
+		add_filter( 'ajax_query_attachments_args', 'STM_LMS_Instructor::restrict_media_to_own' );
+
 		/*Plug for add student*/
 		if ( ! class_exists( 'STM_LMS_Enterprise_Courses' ) ) {
 			add_action(
@@ -1259,5 +1261,12 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 	public static function has_ai_access( $user_id ) {
 		return current_user_can( 'administrator' ) || get_user_meta( $user_id, 'stm_lms_ai_enabled', true );
+	}
+
+	public static function restrict_media_to_own( $query ) {
+		if ( self::has_instructor_role() && ! current_user_can( 'administrator' ) ) {
+			$query['author'] = wp_get_current_user()->ID;
+		}
+		return $query;
 	}
 }
