@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.20
+Stable tag: 3.6.21
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,9 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.21 - 2025-09-11 =
+- **Fixed:** Minor bug fixes.
+
 = 3.6.20 - 2025-09-03 =
 - **New:** Added the ability to change the status of multiple orders using Bulk Actions
 - **Fixed:** Child categories were not included in course counts for parent categories in the Courses Categories widget
@@ -364,19 +367,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fixed:** Removed automatic page scrolling when starting a quiz with a long description
 - **Fixed:** Corrected time display in Quiz Attempt History
 - **Fixed:** Fixed incorrect page navigation direction in PDF Lessons in RTL layout (Pro)
-
-= 3.6.14 - 2025-07-24 =
-- **Fixed:** The word "Curriculum" was not translated in the mobile version of the Course Player
-- **Fixed:** On multilingual sites, course enrollment triggered email notifications from all translated course copies
-- **Fixed:** The "Lost Password?" text on the login page caused layout issues when translated into longer phrases
-- **Fixed:** Video in video lessons was getting cropped on wide monitors
-- **Fixed:** Video Preview didn’t work on iOS devices on the Single Course page (Pro)
-- **Improvement:** Redesigned the Bundle creation page (Pro)
-- **Improvement:** Bundles can now be sold using Points (Pro)
-- **Improvement:** Bundle cards now show the price in Points (Pro)
-- **Improvement:** Added a new email template and trigger for Course Expiration Notification for Students (Pro)
-- **Improvement:** Added 5 new smart-tags to the Assignment Status Change email: {{assignment_result}}, {{assignment_comment}}, {{assignment_mark}}, {{assignment_url}}, {{instructor_name}} (Pro)
-- **Improvement:** Added a new email template and trigger for Lesson completion notification sent to instructors (Pro)
-- **Fixed:** The Assignment Status Changed email was sent to students even when the assignment wasn’t reviewed or the status hadn’t changed (Pro)
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

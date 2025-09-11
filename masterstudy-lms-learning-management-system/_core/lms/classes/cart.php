@@ -133,20 +133,52 @@ class STM_LMS_Cart {
 	public static function masterstudy_handle_order_received_endpoint() {
 		global $wp;
 
-		if ( isset( $wp->query_vars['masterstudy-orders-received'] ) ) {
-			$post = get_post( intval( $wp->query_vars['masterstudy-orders-received'] ) );
+		if ( ! isset( $wp->query_vars['masterstudy-orders-received'] ) ) {
+			return;
+		}
 
-			if ( ! $post || 'trash' === $post->post_status ) {
-				global $wp_query;
-				$wp_query->set_404();
-				status_header( 404 );
-				get_template_part( '404' );
-				exit;
-			}
+		$order_id = (int) $wp->query_vars['masterstudy-orders-received'];
+		$order    = get_post( $order_id );
 
-			include MS_LMS_PATH . '/_core/stm-lms-templates/checkout/thankyou.php';
+		if ( empty( $order ) || 'stm-orders' !== get_post_type( $order ) || 'trash' === $order->post_status ) {
+			global $wp_query;
+			$wp_query->set_404();
+			status_header( 404 );
+			get_template_part( '404' );
 			exit;
 		}
+
+		$provided_key = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
+		if ( '' === $provided_key ) {
+			status_header( 403 );
+			exit;
+		}
+
+		$expected_key = get_post_meta( $order_id, 'order_key', true );
+		if ( '' === $expected_key ) {
+			$expected_key = (string) get_post_field( 'post_name', $order_id ); // legacy
+		}
+
+		if ( ! hash_equals( (string) $expected_key, (string) $provided_key ) ) {
+			status_header( 403 );
+			exit;
+		}
+
+		$current_user_id = get_current_user_id();
+		$order_owner_id  = (int) get_post_meta( $order_id, 'user_id', true );
+
+		$can_view = (
+			( $current_user_id > 0 && $current_user_id === $order_owner_id ) ||
+			current_user_can( 'manage_options' ) // or a custom cap like 'stm_lms_manage_orders'
+		);
+
+		if ( ! $can_view ) {
+			status_header( 403 );
+			exit;
+		}
+
+		include MS_LMS_PATH . '/_core/stm-lms-templates/checkout/thankyou.php';
+		exit;
 	}
 
 	public static function purchase_courses() {

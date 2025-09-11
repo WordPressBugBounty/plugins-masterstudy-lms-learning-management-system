@@ -598,11 +598,6 @@ $router->group(
 			\MasterStudy\Lms\Http\Controllers\Order\GetUserOrdersController::class,
 			\MasterStudy\Lms\Routing\Swagger\Routes\Order\GetUserOrders::class
 		);
-		$router->put(
-			'/orders/{order_id}',
-			\MasterStudy\Lms\Http\Controllers\Order\UpdateOrderController::class,
-			\MasterStudy\Lms\Routing\Swagger\Routes\Order\UpdateOrder::class
-		);
 		$router->get(
 			'/enrolled-quizzes',
 			\MasterStudy\Lms\Http\Controllers\Quiz\GetEnrolledQuizzesController::class,
@@ -637,6 +632,22 @@ $router->group(
 			'/student/stats/{student_id}',
 			\MasterStudy\Lms\Http\Controllers\Student\GetStudentStatsController::class,
 			\MasterStudy\Lms\Routing\Swagger\Routes\Student\GetStudentStats::class
+		);
+	}
+);
+
+$router->group(
+	array(
+		'middleware' => array(
+			\MasterStudy\Lms\Routing\Middleware\Authentication::class,
+			\MasterStudy\Lms\Routing\Middleware\Instructor::class,
+		),
+	),
+	function ( Router $router ) {
+		$router->put(
+			'/orders/{order_id}',
+			\MasterStudy\Lms\Http\Controllers\Order\UpdateOrderController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Order\UpdateOrder::class
 		);
 	}
 );

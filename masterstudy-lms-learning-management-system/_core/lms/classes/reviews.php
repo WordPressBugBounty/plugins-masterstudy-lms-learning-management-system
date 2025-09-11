@@ -235,11 +235,15 @@ class STM_LMS_Reviews {
 	}
 
 	public static function create( $course_id, $mark, $review ) {
+		global $wpdb;
+
 		$current_user = STM_LMS_User::get_current_user();
+
 		if ( empty( $current_user['id'] ) ) {
 			die;
 		}
-		$user_id = $current_user['id'];
+
+		$user_id = (int) $current_user['id'];
 
 		$r = array(
 			'error'   => false,
@@ -247,18 +251,8 @@ class STM_LMS_Reviews {
 			'message' => esc_html__( 'Your review is moderating.', 'masterstudy-lms-learning-management-system' ),
 		);
 
-		/*Check if user has review*/
-		$prev_reviews = self::get_user_review_on_course( $course_id, $user_id );
-		if ( $prev_reviews->found_posts ) {
-			$r = array(
-				'error'   => true,
-				'status'  => 'error',
-				'message' => esc_html__( 'You already left review.', 'masterstudy-lms-learning-management-system' ),
-			);
-		}
-
 		if ( empty( $mark ) ) {
-			$r = array(
+			return array(
 				'error'   => true,
 				'status'  => 'error',
 				'message' => esc_html__( 'Please, check rating', 'masterstudy-lms-learning-management-system' ),
@@ -266,66 +260,91 @@ class STM_LMS_Reviews {
 		}
 
 		if ( empty( $review ) ) {
-			$r = array(
+			return array(
 				'error'   => true,
 				'status'  => 'error',
 				'message' => esc_html__( 'Please, write review.', 'masterstudy-lms-learning-management-system' ),
 			);
 		}
 
-		if ( ! $r['error'] ) {
-			if ( $mark > 5 ) {
-				$mark = 5;
-			}
-			if ( $mark < 1 ) {
-				$mark = 1;
+		$lock_key   = sprintf( 'stm_reviews_%d_%d', (int) $course_id, (int) $user_id );
+		$lock_taken = false;
+
+		try {
+			$lock_taken = (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT GET_LOCK(%s, %d)', $lock_key, 5 ) );
+		} catch ( \Throwable $e ) {
+			$lock_taken = false;
+		}
+
+		$prev_reviews = self::get_user_review_on_course( $course_id, $user_id );
+
+		if ( $prev_reviews->found_posts ) {
+			if ( $lock_taken ) {
+				$wpdb->query( $wpdb->prepare( 'SELECT RELEASE_LOCK(%s)', $lock_key ) );
 			}
 
-			/* Create post object*/
-			$my_review = array(
-				'post_type'    => 'stm-reviews',
-				'post_title'   => wp_strip_all_tags(
-					sprintf(
-						/* translators: %s: string */
-						esc_html__( 'Review on %1$s by %2$s', 'masterstudy-lms-learning-management-system' ),
-						get_the_title( $course_id ),
-						$current_user['login']
-					)
-				),
-				'post_content' => $review,
-				'post_status'  => 'pending',
+			return array(
+				'error'   => true,
+				'status'  => 'error',
+				'message' => esc_html__( 'You already left review.', 'masterstudy-lms-learning-management-system' ),
 			);
+		}
 
-			$review_id = wp_insert_post( $my_review );
+		if ( $mark > 5 ) {
+			$mark = 5;
+		}
 
-			$meta_fields = array(
-				'review_course' => $course_id,
-				'review_user'   => $user_id,
-				'review_mark'   => $mark,
-			);
+		if ( $mark < 1 ) {
+			$mark = 1;
+		}
 
-			foreach ( $meta_fields as $meta_key => $meta_value ) {
-				update_post_meta( $review_id, $meta_key, $meta_value );
-			}
-
-			$course_title = get_the_title( $course_id );
-			$login        = $current_user['login'];
-
-			STM_LMS_Helpers::send_email(
-				'admin',
-				esc_html__( 'New Review', 'masterstudy-lms-learning-management-system' ),
+		$my_review = array(
+			'post_type'    => 'stm-reviews',
+			'post_title'   => wp_strip_all_tags(
 				sprintf(
 					/* translators: %s: string */
-					esc_html__( 'Check out new review on course %1$s by %2$s', 'masterstudy-lms-learning-management-system' ),
-					$course_title,
-					$login
-				),
-				'stm_lms_new_review',
-				compact( 'course_title', 'login' )
-			);
+					esc_html__( 'Review on %1$s by %2$s', 'masterstudy-lms-learning-management-system' ),
+					get_the_title( $course_id ),
+					$current_user['login']
+				)
+			),
+			'post_content' => $review,
+			'post_status'  => 'pending',
+		);
 
-			delete_transient( STM_LMS_Instructor::transient_name( $current_user['id'], 'rating' ) );
+		$review_id = wp_insert_post( $my_review );
+
+		$meta_fields = array(
+			'review_course' => $course_id,
+			'review_user'   => $user_id,
+			'review_mark'   => $mark,
+		);
+
+		foreach ( $meta_fields as $meta_key => $meta_value ) {
+			update_post_meta( $review_id, $meta_key, $meta_value );
 		}
+
+		if ( $lock_taken ) {
+			$wpdb->query( $wpdb->prepare( 'SELECT RELEASE_LOCK(%s)', $lock_key ) );
+		}
+
+		$course_title = get_the_title( $course_id );
+		$login        = $current_user['login'];
+
+		STM_LMS_Helpers::send_email(
+			'admin',
+			esc_html__( 'New Review', 'masterstudy-lms-learning-management-system' ),
+			sprintf(
+				/* translators: %s: string */
+				esc_html__( 'Check out new review on course %1$s by %2$s', 'masterstudy-lms-learning-management-system' ),
+				$course_title,
+				$login
+			),
+			'stm_lms_new_review',
+			compact( 'course_title', 'login' )
+		);
+
+		delete_transient( STM_LMS_Instructor::transient_name( $current_user['id'], 'rating' ) );
 
 		return $r;
 	}
