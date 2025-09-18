@@ -5,8 +5,6 @@
  * @var $course_end_time
  */
 
-wp_enqueue_script( 'stm-lms-countdown' );
-
 $time_left = $course_end_time - time();
 $days_left = floor( $time_left / DAY_IN_SECONDS );
 ?>
