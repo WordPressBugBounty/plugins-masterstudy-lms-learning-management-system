@@ -1,6 +1,8 @@
 <?php
 namespace StmLmsElementor\Widgets;
 
+use DateTime;
+use DateTimeZone;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Background;
@@ -8,6 +10,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Border;
 use Elementor\Plugin;
+use Exception;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -199,11 +202,19 @@ class MsLmsCountdown extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 
+		$site_tz = wp_timezone();
+		try {
+			$dt    = new DateTime( $settings['datepicker'], $site_tz );
+			$ts_ms = $dt->setTimezone( new DateTimeZone( 'UTC' ) )->getTimestamp() * 1000;
+		} catch ( Exception $e ) {
+			$ts_ms = 0;
+		}
+
 		\STM_LMS_Templates::show_lms_template(
 			'components/countdown',
 			array(
 				'style'      => $settings['preset'] ?? 'default',
-				'start_time' => ! empty( $settings['datepicker'] ) ? strtotime( $settings['datepicker'] ) : 0,
+				'start_time' => $ts_ms,
 				'id'         => wp_rand( 0, 999999 ),
 			)
 		);

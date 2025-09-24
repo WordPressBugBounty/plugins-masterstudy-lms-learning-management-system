@@ -12,13 +12,22 @@
           payment_code: '',
           stripe: '',
           stripe_card: '',
-          stripe_complete: false
+          stripe_complete: false,
+          agree_with_policy: false
         };
       },
-      mounted: function mounted() {},
+      mounted: function mounted() {
+        var gdpr = $('.masterstudy-checkout-gdpr');
+        if (!gdpr.length) {
+          this.agree_with_policy = true;
+        }
+      },
       methods: {
+        toggle_policy: function toggle_policy() {
+          this.agree_with_policy = !this.agree_with_policy;
+        },
         purchase_courses: function purchase_courses() {
-          if (this.loading) return false;
+          if (this.loading || !this.agree_with_policy) return false;
           var vm = this;
           vm.loading = true;
           function handleResponse(response) {

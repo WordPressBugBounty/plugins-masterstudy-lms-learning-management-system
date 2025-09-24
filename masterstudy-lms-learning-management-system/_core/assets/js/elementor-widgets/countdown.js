@@ -4,10 +4,11 @@
   var initCountdown = function initCountdown($scope) {
     $scope.find('.masterstudy-countdown').each(function () {
       var $el = $(this);
-      if ($el.data('countdown-initialized')) return;
+      var $time = $el.data('timer');
+      if ($el.data('countdown-initialized') || $time <= 0 || new Date() > $time) return;
       $el.data('countdown-initialized', true);
       $el.countdown({
-        timestamp: $el.data('timer')
+        timestamp: $time
       });
     });
   };

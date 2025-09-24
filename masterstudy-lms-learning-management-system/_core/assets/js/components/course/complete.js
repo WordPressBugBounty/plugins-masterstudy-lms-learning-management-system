@@ -3,7 +3,9 @@
 (function ($) {
   $(document).ready(function () {
     var completeBlock = $('.masterstudy-single-course-complete');
+    var ratingForm = $('.masterstudy-single-course-complete__review-form');
     completeBlock.removeAttr('style');
+    var currentRating = 0;
     if (course_completed.completed) {
       $('body').addClass('masterstudy-single-course-complete_hidden');
       completeBlock.addClass('masterstudy-single-course-complete_active');
@@ -25,11 +27,66 @@
       if ($(event.target).hasClass('masterstudy-single-course-complete')) {
         $('.masterstudy-single-course-complete').removeClass('masterstudy-single-course-complete_active');
         $('body').removeClass('masterstudy-single-course-complete_hidden');
+        setTimeout(function () {
+          $('.masterstudy-single-course-complete__wrapper').css('display', 'flex');
+          $('.masterstudy-single-course-complete__review-form').toggle(false);
+        }, 400);
       }
     });
     $('.masterstudy-single-course-complete__buttons, .masterstudy-single-course-complete__close').on('click', function (event) {
       $('.masterstudy-single-course-complete').removeClass('masterstudy-single-course-complete_active');
       $('body').removeClass('masterstudy-single-course-complete_hidden');
+      setTimeout(function () {
+        $('.masterstudy-single-course-complete__wrapper').css('display', 'flex');
+        $('.masterstudy-single-course-complete__review-form').toggle(false);
+      }, 400);
+    });
+    $('.masterstudy-single-course-complete__review-btn').on('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $('.masterstudy-single-course-complete__wrapper').toggle(false);
+      $('.masterstudy-single-course-complete__review-form').css('display', 'flex');
+    });
+    ratingForm.on('mouseenter', '.masterstudy-single-course-complete__review-rating .stmlms-star', function (e) {
+      $(this).prevAll('.stmlms-star').addClass('masterstudy-single-course-complete__review-star-filled');
+      $(this).nextAll('.stmlms-star').removeClass('masterstudy-single-course-complete__review-star-filled');
+      $(this).addClass('masterstudy-single-course-complete__review-star-filled');
+    });
+    ratingForm.on('mouseout', '.masterstudy-single-course-complete__review-rating .stmlms-star', function (e) {
+      e.stopPropagation();
+    });
+    ratingForm.on('click', '.masterstudy-single-course-complete__review-rating .stmlms-star', function (e) {
+      currentRating = $(this).index() + 1;
+      $('.masterstudy-single-course-complete__review-rating').removeClass('masterstudy-single-course-complete__review-rating_error');
+    });
+    ratingForm.on('mouseout', '.masterstudy-single-course-complete__review-rating', function () {
+      $(this).children().each(function (i, elem) {
+        if (currentRating < i + 1) {
+          $(elem).removeClass('masterstudy-single-course-complete__review-star-filled');
+        } else {
+          $(elem).addClass('masterstudy-single-course-complete__review-star-filled');
+        }
+      });
+    });
+    ratingForm.on('click', "[data-id='masterstudy-single-course-complete__review-submit']", function () {
+      if (!currentRating) {
+        $('.masterstudy-single-course-complete__review-rating').addClass('masterstudy-single-course-complete__review-rating_error');
+      } else {
+        $('.masterstudy-single-course-complete__review-rating').removeClass('masterstudy-single-course-complete__review-rating_error');
+      }
+      addReview(currentRating, course_completed.course_id);
+    });
+    ratingForm.on('click', "[data-id='masterstudy-single-course-complete__review-back']", function () {
+      $('.masterstudy-single-course-complete__wrapper').css('display', 'flex');
+      $('.masterstudy-single-course-complete__review-form').toggle(false);
+    });
+    $('.masterstudy-single-course-complete__review-error-container').on('click', '.stmlms-close', function () {
+      $('.masterstudy-single-course-complete__review-error-msg').html("");
+      $('.masterstudy-single-course-complete__review-error-container').removeClass('masterstudy-single-course-complete__review-error-container_active');
+    });
+    $('.masterstudy-single-course-complete__review-success-container').on('click', '.stmlms-close', function () {
+      $('.masterstudy-single-course-complete__review-success-msg').html('');
+      $('.masterstudy-single-course-complete__review-success-container').removeClass('masterstudy-single-course-complete__review-success-container_active');
     });
   });
   function stmLmsInitProgress(statsContainer) {
@@ -62,5 +119,38 @@
       });
       statsContainer.find('.masterstudy-button_course_button').attr('href', stats.url);
     }
+  }
+  function addReview(userMark, courseId) {
+    var addReviewsUrl = stm_lms_ajaxurl + '?action=stm_lms_add_review&nonce=' + stm_lms_nonces['stm_lms_add_review'];
+    var submitBtn = $("[data-id='masterstudy-single-course-complete__review-submit']");
+    var currentEditor = tinyMCE.get('editor_add_review_complete_popup') || null;
+    var reviewText;
+    if (currentEditor) {
+      reviewText = currentEditor.getContent();
+    }
+    if (!reviewText) {
+      $('#editor_add_review_complete_popup_ifr').addClass('masterstudy-single-course-complete__review-editor_error');
+      return;
+    } else {
+      $('#editor_add_review_complete_popup_ifr').removeClass('masterstudy-single-course-complete__review-editor_error');
+    }
+    submitBtn.addClass('masterstudy-button_loading');
+    $.post(addReviewsUrl, {
+      post_id: courseId,
+      mark: userMark,
+      review: reviewText
+    }, function (response) {
+      if (response.status === 'success') {
+        $('.masterstudy-single-course-complete__review-success-msg').html(response.message);
+        $('.masterstudy-single-course-complete__review-success-container').addClass('masterstudy-single-course-complete__review-success-container_active');
+        $('.masterstudy-single-course-complete__wrapper').css('display', 'flex');
+        $('.masterstudy-single-course-complete__review-form').toggle(false);
+        $('.masterstudy-single-course-complete__review-btn').remove();
+      } else {
+        $('.masterstudy-single-course-complete__review-error-msg').html(response.message);
+        $('.masterstudy-single-course-complete__review-error-container').addClass('masterstudy-single-course-complete__review-error-container_active');
+      }
+      submitBtn.removeClass('masterstudy-button_loading');
+    });
   }
 })(jQuery);

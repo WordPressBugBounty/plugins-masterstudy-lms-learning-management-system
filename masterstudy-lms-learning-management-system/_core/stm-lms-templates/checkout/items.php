@@ -8,7 +8,8 @@
  */
 
 
-$items = stm_lms_get_cart_items( $user_id, apply_filters( 'stm_lms_cart_items_fields', array( 'item_id', 'price' ) ) );
+$settings = get_option( 'stm_lms_settings' );
+$items    = stm_lms_get_cart_items( $user_id, apply_filters( 'stm_lms_cart_items_fields', array( 'item_id', 'price' ) ) );
 ?>
 <div class="masterstudy-checkout-container__top">
 	<?php
@@ -151,7 +152,19 @@ else :
 
 						if ( count( $enabled_methods ) > 0 ) :
 							?>
-								<a href="#" @click.prevent="purchase_courses()" class="btn btn-default stm_lms_pay_button" v-bind:class="{'loading' : loading}">
+
+							<?php
+							if ( ! empty( $settings['gdpr_page'] ) && ! empty( $settings['gdpr_warning'] ) ) {
+								STM_LMS_Templates::show_lms_template(
+									'checkout/gdpr',
+									array(
+										'gdpr_page'    => $settings['gdpr_page'],
+										'gdpr_warning' => $settings['gdpr_warning'],
+									)
+								);
+							}
+							?>
+								<a href="#" @click.prevent="purchase_courses()" class="btn btn-default stm_lms_pay_button" v-bind:class="{'loading' : loading, 'stm_lms_disabled_button': !agree_with_policy}">
 									<span>
 									<?php
 										echo esc_html__( 'Pay ', 'masterstudy-lms-learning-management-system' );

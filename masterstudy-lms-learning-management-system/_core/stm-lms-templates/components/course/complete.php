@@ -11,13 +11,20 @@
 
 use MasterStudy\Lms\Pro\addons\certificate_builder\CertificateRepository;
 
-$total_progress   = STM_LMS_Lesson::get_total_progress( $user_id ?? null, $course_id );
-$course_passed    = false;
-$dark_mode        = isset( $dark_mode ) ? $dark_mode : false;
-$lesson_completed = isset( $lesson_completed ) ? $lesson_completed : false;
-$block_enabled    = isset( $block_enabled ) ? $block_enabled : false;
-$elementor_widget = isset( $elementor_widget ) ? $elementor_widget : false;
-$elementor_editor = isset( $elementor_editor ) ? $elementor_editor : false;
+$total_progress     = STM_LMS_Lesson::get_total_progress( $user_id ?? null, $course_id );
+$course_passed      = false;
+$dark_mode          = isset( $dark_mode ) ? $dark_mode : false;
+$lesson_completed   = isset( $lesson_completed ) ? $lesson_completed : false;
+$block_enabled      = isset( $block_enabled ) ? $block_enabled : false;
+$elementor_widget   = isset( $elementor_widget ) ? $elementor_widget : false;
+$elementor_editor   = isset( $elementor_editor ) ? $elementor_editor : false;
+$stars              = range( 1, 5 );
+$is_reviews_allowed = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+
+if ( $is_reviews_allowed ) {
+	$has_review = STM_LMS_Reviews::get_user_review_on_course( $course_id, $user_id )->found_posts;
+}
+
 
 if ( ! empty( $total_progress['course']['progress_percent'] ) ) {
 	$course_passed = $total_progress['course']['progress_percent'] >= ( $settings['certificate_threshold'] ?? 70 );
@@ -174,6 +181,11 @@ if ( ! empty( $user_id ) ) {
 							</div>
 						<?php } ?>
 					</div>
+					<div class="masterstudy-single-course-complete__review-success-container">
+						<div class="masterstudy-single-course-complete__review-success-icon"></div>
+						<div class="masterstudy-single-course-complete__review-success-msg"></div>
+						<span class="stmlms-close"></span>
+					</div>
 					<div class="masterstudy-single-course-complete__buttons">
 						<?php
 						if ( is_ms_lms_addon_enabled( 'certificate_builder' ) && ( $lesson_completed || $block_enabled ) && $course_passed && masterstudy_lms_course_has_certificate( $course_id ) ) {
@@ -206,11 +218,98 @@ if ( ! empty( $user_id ) ) {
 								'icon_name'     => '',
 							)
 						);
+
+						if ( $is_reviews_allowed && empty( $has_review ) ) {
+							STM_LMS_Templates::show_lms_template(
+								'components/button',
+								array(
+									'title'         => __( 'Leave review', 'masterstudy-lms-learning-management-system' ),
+									'type'          => '',
+									'style'         => 'tertiary',
+									'size'          => 'md',
+									'link'          => '#',
+									'data'          => array(),
+									'id'            => 'leave_review',
+									'icon_position' => '',
+									'icon_name'     => '',
+									'class'         => 'masterstudy-single-course-complete__review-btn',
+								)
+							);
+						}
 						?>
 					</div>
 				</div>
 			</div>
 		</div>
+		<?php if ( $is_reviews_allowed && empty( $has_review ) ) : ?>
+			<div class="masterstudy-single-course-complete__wrapper masterstudy-single-course-complete__review-form">
+				<div class="masterstudy-single-course-complete__review-header">
+					<span class="masterstudy-single-course-complete__review-title">
+						<?php echo esc_html__( 'Leave your review', 'masterstudy-lms-learning-management-system' ); ?>
+					</span>
+					<span class="masterstudy-single-course-complete__close"></span>
+				</div>
+				<div class="masterstudy-single-course-complete__review-rating">
+					<?php foreach ( $stars as $star ) { ?>
+						<span class="stmlms-star"></span>
+					<?php } ?>
+				</div>
+				<div class="masterstudy-single-course-complete__review-form-editor">
+					<?php
+					STM_LMS_Templates::show_lms_template(
+						'components/wp-editor',
+						array(
+							'id'        => 'editor_add_review_complete_popup',
+							'content'   => '',
+							'dark_mode' => $dark_mode ?? false,
+							'settings'  => array(
+								'quicktags'     => false,
+								'media_buttons' => false,
+								'teeny'         => false,
+								'textarea_rows' => 13,
+								'tinymce'       => array(
+									'toolbar1' => 'bold italic underline strikethrough bullist numlist link',
+									'toolbar2' => false,
+									'plugins'  => 'lists,link,wordpress',
+								),
+							),
+						)
+					);
+					?>
+				</div>
+				<div class="masterstudy-single-course-complete__review-error-container">
+					<div class="masterstudy-single-course-complete__review-error-icon"></div>
+					<div class="masterstudy-single-course-complete__review-error-msg"></div>
+					<span class="stmlms-close"></span>
+				</div>
+				<div class="masterstudy-single-course-complete__review-form-actions">
+					<?php
+					STM_LMS_Templates::show_lms_template(
+						'components/button',
+						array(
+							'id'    => 'masterstudy-single-course-complete__review-back',
+							'title' => esc_html__( 'Back', 'masterstudy-lms-learning-management-system' ),
+							'link'  => '#',
+							'style' => 'tertiary',
+							'size'  => 'sm',
+						)
+					);
+					?>
+					<?php
+					STM_LMS_Templates::show_lms_template(
+						'components/button',
+						array(
+							'id'    => 'masterstudy-single-course-complete__review-submit',
+							'title' => esc_html__( 'Submit review', 'masterstudy-lms-learning-management-system' ),
+							'link'  => '#',
+							'style' => 'primary',
+							'size'  => 'sm',
+						)
+					);
+					?>
+				</div>
+			</div>
+		<?php endif; ?>
 	</div>
 	<?php
 }

@@ -312,6 +312,10 @@ add_action( 'template_redirect', 'pmpro_account_redirect' );
 function stm_lms_body_class( $classes ) {
 	$classes[] = 'stm_lms_' . STM_LMS_Options::get_option( 'load_more_type', 'button' );
 
+	if ( get_query_var( 'lms_template' ) === 'course-player' ) {
+		$classes = array_diff( $classes, array( 'blog' ) );
+	}
+
 	return $classes;
 }
 

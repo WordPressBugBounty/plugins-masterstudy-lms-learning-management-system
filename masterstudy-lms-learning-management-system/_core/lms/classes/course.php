@@ -106,6 +106,13 @@ class STM_LMS_Course {
 			$user_id = get_current_user_id();
 		}
 
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			$is_translate     = true;
+			$language_details = apply_filters( 'wpml_post_language_details', null, $course_id )['locale'] ?? get_locale();
+		} else {
+			$language_details = get_locale();
+		}
+
 		if ( empty( $user_id ) ) {
 			die;
 		}
@@ -117,7 +124,7 @@ class STM_LMS_Course {
 			$course['status']           = 'enrolled';
 			$course['progress_percent'] = $progress;
 			$course['start_time']       = time();
-			$course['lng_code']         = get_locale();
+			$course['lng_code']         = $language_details;
 
 			$course['enterprise_id'] = $enterprise;
 			$course['bundle_id']     = $bundle;

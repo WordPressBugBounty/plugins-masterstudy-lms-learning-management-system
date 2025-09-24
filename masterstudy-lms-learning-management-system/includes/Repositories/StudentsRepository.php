@@ -48,7 +48,7 @@ final class StudentsRepository {
 			WHERE {$course_table}.course_id = %d";
 
 		if ( ! empty( $params['s'] ) ) {
-			$search_term = '%' . strtolower( $params['s'] ) . '%';
+			$search_term   = '%' . strtolower( $params['s'] ) . '%';
 			$search_string = $wpdb->prepare(
 				' AND (LOWER(display_name) LIKE %s OR LOWER(user_email) LIKE %s)',
 				$search_term,
@@ -525,10 +525,13 @@ final class StudentsRepository {
 	public function student_courses_statuses( $student_id ) {
 		global $wpdb;
 
+		$lng_code = get_locale();
+
 		$user_courses = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT course_id, bundle_id, progress_percent FROM {$wpdb->prefix}stm_lms_user_courses WHERE user_id = %d",
-				$student_id
+				"SELECT course_id, bundle_id, progress_percent FROM {$wpdb->prefix}stm_lms_user_courses WHERE user_id = %d AND lng_code = %s",
+				$student_id,
+				$lng_code
 			),
 			ARRAY_A
 		);

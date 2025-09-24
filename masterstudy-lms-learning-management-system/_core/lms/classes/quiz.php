@@ -117,7 +117,8 @@ class STM_LMS_Quiz {
 		$total_questions = CoursePlayerRepository::masterstudy_lms_get_question_bank_total_items( $quiz_id );
 
 		$score_per_question = 100 / $total_questions;
-		$cutting_rate       = ! empty( $quiz_info['re_take_cut'] ) ? ( 100 - $quiz_info['re_take_cut'] ) / 100 : 1;
+		$re_take_cut        = (float) get_post_meta( $quiz_id, 're_take_cut', true );
+		$cutting_rate       = ! empty( $re_take_cut ) ? ( 100 - $re_take_cut ) / 100 : 1;
 		$passing_grade      = (float) get_post_meta( $quiz_id, 'passing_grade', true );
 		$user_answer_id     = 0;
 		$attempt_number     = stm_lms_get_user_quizzes( $user_id, $quiz_id, $course_id, array(), true ) + 1;
@@ -154,7 +155,7 @@ class STM_LMS_Quiz {
 			$user_answer_id = stm_lms_add_user_answer( compact( 'user_id', 'course_id', 'quiz_id', 'question_id', 'attempt_number', 'user_answer', 'correct_answer' ) );
 		}
 
-		$progress = 1 === $attempt_number ? round( $progress ) : round( $progress * $cutting_rate );
+		$progress = 1 === $attempt_number ? round( $progress ) : round( $progress * pow( $cutting_rate, $attempt_number - 1 ) );
 		$status   = $progress < $passing_grade ? 'failed' : 'passed';
 
 		$user_quiz = compact( 'user_id', 'course_id', 'quiz_id', 'progress', 'status', 'sequency' );

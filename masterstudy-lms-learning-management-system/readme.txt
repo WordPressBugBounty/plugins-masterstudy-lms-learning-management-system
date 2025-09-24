@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.22
+Stable tag: 3.6.23
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -309,6 +309,15 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 == Changelog ==
 
+= 3.6.23 - 2025-09-24 =
+- **Improvement:** Added an option to enable a site policy agreement checkbox at checkout
+- **Improvement:** Added a course rating option for students in the final screen of the Course Player, without requiring navigation to the Single Course page
+- **Improvement:** AI Lab add-on now includes new models — GPT-5, GPT-5 Mini, and GPT-5 Nano (Pro)
+- **Fixed:** Removed the blog property from lessons in the Course Player
+- **Fixed:** Resolved an issue with purchased courses not displaying correctly in different languages on the Enrolled Courses page when using WPML
+- **Fixed:** The “Points cut after retake (%)” setting was not applied during quiz retakes
+- **Fixed:** The Countdown widget did not pull time settings from WordPress settings
+
 = 3.6.22 - 2025-09-18 =
 - **Fixed:** The timer was not displayed on the Enrolled Courses page for courses with a time limit enabled
 
@@ -322,9 +331,9 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fixed:** The Open Sans font did not display certain characters in the Czech language
 
 = 3.6.19 - 2025-08-20 =
-- **New:** Introduced new Custom Field types in Course Builder — Time and TinyMCE text editor 
+- **New:** Introduced new Custom Field types in Course Builder — Time and TinyMCE text editor
 - **Update:** Payment currency for Stripe and PayPal is now selected under eCommerce → Currency via a new “Transactions currency” setting
-- **Fixed:** “Back to Course” button always redirected to the default site language when using WPML 
+- **Fixed:** “Back to Course” button always redirected to the default site language when using WPML
 - **Fixed:** Quiz answers containing only the number "0" were not displayed correctly
 - **Fixed:** Order statuses and payment system names were not translated on Orders, My Sales, My Orders, and Thank You pages
 - **Fixed:** Courses with a "Time Limit" setting could not be purchased again via WooCommerce Checkout (Pro)
