@@ -286,7 +286,8 @@
                         onBeforeAjax: Function,
                         onAjaxProgress: Function,
                         onAjaxLoaded: Function,
-                        onShouldGetData: Function
+                        onShouldGetData: Function,
+                        onKeydown: Function
                     },
 
                     data: function data() {
@@ -339,6 +340,7 @@
 
                         // Get the original data
                         cleanUp: function cleanUp(data) {
+                            if (data == null) return null;
                             return JSON.parse(JSON.stringify(data));
                         },
 
@@ -366,6 +368,8 @@
                         },
                         handleKeyDown: function handleKeyDown(e) {
                             var key = e.keyCode;
+
+                            this.onKeydown?.(e);
 
                             // Disable when list isn't showing up
                             if (!this.showList) return;
@@ -449,6 +453,7 @@
                         selectList: function selectList(data) {
                             // Deep clone of the original object
                             var clean = this.cleanUp(data);
+                            if (!clean) return;
                             // Put the selected data to type (model)
                             this.type = clean[this.anchor];
                             // Hide List

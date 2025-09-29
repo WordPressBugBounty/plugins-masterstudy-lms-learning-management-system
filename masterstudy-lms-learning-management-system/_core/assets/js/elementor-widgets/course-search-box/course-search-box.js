@@ -20,6 +20,10 @@
           },
           searching: function searching(value) {
             this.url = value;
+          },
+          handleKeydown: function handleKeydown(e) {
+            if (e.keyCode !== 13) return;
+            window.open($('.ms_lms_course_search_box__search_input_button').attr('href'), '_self');
           }
         }
       });

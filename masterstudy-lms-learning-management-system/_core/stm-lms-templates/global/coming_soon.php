@@ -66,7 +66,7 @@ if ( 'card' === $mode ) {
 			'components/countdown',
 			array(
 				'id'         => $count_down_id,
-				'start_time' => $start_time,
+				'start_time' => $start_time * 1000,
 				'dark_mode'  => false,
 				'style'      => 'default',
 			),
@@ -83,7 +83,7 @@ if ( 'card' === $mode ) {
 				'components/countdown',
 				array(
 					'id'         => $count_down_id,
-					'start_time' => $start_time,
+					'start_time' => $start_time * 1000,
 					'dark_mode'  => false,
 					'style'      => 'default',
 				),

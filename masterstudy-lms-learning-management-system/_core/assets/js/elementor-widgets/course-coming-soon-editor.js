@@ -78,6 +78,8 @@ var CourseComingSoon = /*#__PURE__*/function (_elementorModules$fro) {
       this.elements.$notifyModalWrapper.removeAttr('style');
       this.elements.$curriculumPreview.css('display', 'none');
       this.elements.$countdown.each(function () {
+        var $time = jQuery(this).data('timer');
+        if ($time <= 0 || new Date() > $time) return;
         jQuery(this).countdown({
           timestamp: jQuery(this).data('timer')
         });

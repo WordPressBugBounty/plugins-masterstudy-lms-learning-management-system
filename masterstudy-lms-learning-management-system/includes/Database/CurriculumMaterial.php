@@ -31,7 +31,7 @@ class CurriculumMaterial extends AbstractQuery {
 		global $wpdb;
 
 		return $this->query()
-			->select( 'materials.*, posts.`post_title`, postmeta.`meta_value` as `lesson_type`' )
+			->select( 'materials.*, posts.`post_title`, posts.`post_name`, postmeta.`meta_value` as `lesson_type`' )
 			->asTable( 'materials' )
 			->join(
 				sprintf(

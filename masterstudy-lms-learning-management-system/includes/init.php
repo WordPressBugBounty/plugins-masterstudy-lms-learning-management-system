@@ -17,3 +17,4 @@ $lms = new Plugin(
 $lms->load_file( __DIR__ . '/actions.php' );
 $lms->load_file( __DIR__ . '/filters.php' );
 $lms->load_file( __DIR__ . '/enqueue.php' );
+$lms->load_file( __DIR__ . '/Hooks/export_import.php' );

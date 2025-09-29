@@ -138,7 +138,7 @@ wp_localize_script(
 				?>
 			</div>
 			<?php
-		} elseif ( in_array( $lesson['video_type'], array( LessonVideoType::YOUTUBE, LessonVideoType::VIMEO ), true ) ) {
+		} elseif ( ( ! empty( $lesson['youtube_url'] ) || ! empty( $lesson['vimeo_url'] ) ) && in_array( $lesson['video_type'], array( LessonVideoType::YOUTUBE, LessonVideoType::VIMEO ), true ) ) {
 			$video_id = $is_youtube_type ? ms_plugin_get_youtube_id( $lesson['youtube_url'] ) : ms_plugin_get_vimeo_id( $lesson['vimeo_url'] );
 
 			if ( $plyr_vimeo_video_player && $is_vimeo_type || $plyr_youtube_video_player && $is_youtube_type ) {

@@ -4,8 +4,10 @@
   $(document).ready(function () {
     jQuery('.masterstudy-countdown').each(function () {
       if (jQuery(this).find('.countDays').length === 0) {
+        var $time = jQuery(this).data('timer');
+        if ($time <= 0 || new Date() > $time * 1000) return;
         jQuery(this).countdown({
-          timestamp: jQuery(this).data('timer')
+          timestamp: $time
         });
       }
     });
@@ -39,6 +41,8 @@
           data = data['responseJSON'];
           jQuery('.masterstudy-countdown').each(function () {
             if (jQuery(this).find('.countDays').length === 0) {
+              var $time = jQuery(this).data('timer');
+              if ($time <= 0 || new Date() > $time) return;
               jQuery(this).countdown({
                 timestamp: jQuery(this).data('timer')
               });

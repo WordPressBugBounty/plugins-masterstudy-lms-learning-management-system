@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.6.23
+Stable tag: 3.6.24
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+
+= 3.6.24 - 2025-09-29 =
+- **Improvement:** Courses can now be searched by pressing "Enter/Return" in the Elementor "Courses Searchbox" widget — previously, only the search icon triggered the search
+- **Fixed:** Resolved an issue with infinite page reloading in the Elementor editor
+- **Fixed:** Empty video blocks were displayed in video lessons even when no video was inserted for YouTube or Vimeo source types
+- **Fixed:** Rating stars and checkboxes overlapped text in the course archive filter when using RTL layout
+- **Fixed:** The Elementor "Courses Searchbox" widget no longer suggests inserting an account password into the search field
+- **Fixed:** Exported course content was not being assigned to the course after importing via the WordPress Importer plugin
 
 = 3.6.23 - 2025-09-24 =
 - **Improvement:** Added an option to enable a site policy agreement checkbox at checkout

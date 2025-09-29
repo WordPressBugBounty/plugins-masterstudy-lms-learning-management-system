@@ -147,8 +147,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         $btn.attr('data-offset', data['page']);
         hide_button($btn, data['page']);
         $('.masterstudy-countdown').each(function () {
+          var $time = $(this).data('timer');
+          if ($time <= 0 || new Date() > $time) return;
           $(this).countdown({
-            timestamp: $(this).data('timer')
+            timestamp: $time
           });
         });
       }

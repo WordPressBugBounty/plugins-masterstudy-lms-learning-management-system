@@ -500,6 +500,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         loadComingSoon();
         jQuery('.masterstudy-countdown').each(function () {
           if (jQuery(this).find('.countDays').length === 0) {
+            var $time = jQuery(this).data('timer');
+            if ($time <= 0 || new Date() > $time) return;
             jQuery(this).countdown({
               timestamp: jQuery(this).data('timer')
             });
@@ -561,6 +563,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }
         jQuery('.masterstudy-countdown').each(function () {
           if (jQuery(this).find('.countDays').length === 0) {
+            var $time = jQuery(this).data('timer');
+            if ($time <= 0 || new Date() > $time) return;
             jQuery(this).countdown({
               timestamp: jQuery(this).data('timer')
             });
@@ -607,6 +611,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }
         jQuery('.masterstudy-countdown').each(function () {
           if (jQuery(this).find('.countDays').length === 0) {
+            var $time = jQuery(this).data('timer');
+            if ($time <= 0 || new Date() > $time) return;
             jQuery(this).countdown({
               timestamp: jQuery(this).data('timer')
             });
