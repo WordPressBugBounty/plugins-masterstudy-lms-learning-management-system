@@ -16,7 +16,7 @@
 					</div>
 					<div class="stm-lms-payment_header_block_description" v-if="payment_info.payment_description" >
 						<div class="stm-lms-payment_info_block_hint">
-							<i class="fa fa-info-circle"></i>
+							<i class="stmlms-info-circle"></i>
 						</div>
 						<span v-if="payment_info.payment_description" v-html="payment_info.payment_description"></span>
 					</div>
@@ -57,9 +57,16 @@
 							v-model="payments[payment].fields[field_name].value">
 					</textarea>
 
-					<input type="text" v-if="field_info['type'] == 'text'"
-							v-bind:placeholder="field_info['placeholder']"
-							v-model="payment_info.fields[field_name].value">
+					<div class="stm-lms-payment_content" v-if="field_info['type'] == 'text'">
+						<input type="text"
+								v-bind:placeholder="field_info['placeholder']"
+								v-model="payment_info.fields[field_name].value"
+								v-bind:readonly="field_info['readonly']"
+								v-bind:id="payment + _ +field_name"
+								@click="handleInputClick(field_info, payment + _ + field_name)">
+
+						<div v-if="activeTooltip === payment + _ + field_name" class="readonly-tooltip">copied_text</div>
+					</div>
 
 					<select v-if="field_info['type'] == 'select'"
 							v-model="payment_info.fields[field_name].value">

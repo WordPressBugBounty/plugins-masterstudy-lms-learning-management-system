@@ -19,6 +19,159 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return paymentCode;
     }
   };
+
+  // Build timeline HTML like on thank you page
+  function buildOrderTimeline(order, item) {
+    try {
+      var plan = order && order.plan ? order.plan : null;
+      if (!plan || !plan.billing_cycles) return "";
+      var billingCycles = parseInt(plan.billing_cycles, 10);
+      if (!billingCycles || billingCycles <= 0) return "";
+
+      // Check if trial period exists
+      var isTrial = plan.trial_period && parseInt(plan.trial_period, 10) > 0;
+      var trialPeriodDays = isTrial ? parseInt(plan.trial_period, 10) : 0;
+      var i18n = order && order.i18n ? order.i18n : {};
+      var labelPaymentPlan = i18n.payment_plan || 'Payment Plan:';
+      var labelDaily = i18n.daily_payments || 'daily payments';
+      var labelWeekly = i18n.weekly_payments || 'weekly payments';
+      var labelMonthly = i18n.monthly_payments || 'monthly payments';
+      var labelYearly = i18n.yearly_payments || 'yearly payments';
+      var labelPayment = i18n.payment || 'payment';
+      var labelTotal = i18n.total || 'Total:';
+      var labelTrial = i18n.trial || 'Trial';
+      var labelDays = i18n.days;
+      var recurringInterval = plan.recurring_interval || 'month';
+      var allowedIntervals = ['day', 'week', 'month', 'year'];
+
+      // Validate interval and default to month if invalid
+      if (!allowedIntervals.includes(recurringInterval)) {
+        recurringInterval = 'month';
+      }
+      var recurringIntervalText = recurringInterval === 'year' ? labelYearly : recurringInterval === 'week' ? labelWeekly : recurringInterval === 'day' ? labelDaily : labelMonthly;
+
+      // prefer subscription start date if present
+      var startDateStr = order && order.subscription && order.subscription.start_date ? order.subscription.start_date : null;
+      var startDate = startDateStr ? new Date(startDateStr) : new Date();
+
+      // Use formatted item price per cycle if available
+      var perCycleAmount = item && item.price_with_taxes_formatted ? item.price_with_taxes_formatted : order && order.total_with_taxes ? order.total_with_taxes : '';
+      if (isTrial) {
+        billingCycles = ++billingCycles;
+      }
+      var stepsHtml = '';
+      for (var i = 1; i <= billingCycles; i++) {
+        var _order$locale;
+        var stepDate = new Date(startDate.getTime());
+
+        // Calculate date based on trial period
+        if (isTrial) {
+          if (i === 1) {
+            // Trial period starts immediately
+            // stepDate remains as startDate
+          } else {
+            // Subsequent payments start after trial period + intervals
+            var intervalsAfterTrial = i - 2; // -2 because first payment is trial, second starts after trial
+            if (recurringInterval === 'year') {
+              stepDate.setFullYear(stepDate.getFullYear() + intervalsAfterTrial);
+            } else if (recurringInterval === 'month') {
+              stepDate.setMonth(stepDate.getMonth() + intervalsAfterTrial);
+            } else if (recurringInterval === 'week') {
+              stepDate.setDate(stepDate.getDate() + intervalsAfterTrial * 7);
+            } else if (recurringInterval === 'day') {
+              stepDate.setDate(stepDate.getDate() + intervalsAfterTrial);
+            }
+            // Add trial period days
+            stepDate.setDate(stepDate.getDate() + trialPeriodDays);
+          }
+        } else {
+          // No trial - regular intervals
+          if (recurringInterval === 'year') {
+            stepDate.setFullYear(stepDate.getFullYear() + (i - 1));
+          } else if (recurringInterval === 'month') {
+            stepDate.setMonth(stepDate.getMonth() + (i - 1));
+          } else if (recurringInterval === 'week') {
+            stepDate.setDate(stepDate.getDate() + (i - 1) * 7);
+          } else if (recurringInterval === 'day') {
+            stepDate.setDate(stepDate.getDate() + (i - 1));
+          }
+        }
+        var locale = ((_order$locale = order.locale) === null || _order$locale === void 0 ? void 0 : _order$locale.replace('_', '-')) || undefined;
+        var subscription_order_count = order.subscription_order_count || 1;
+        var dateFormatter = new Intl.DateTimeFormat(locale, {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        });
+        var formattedDate = dateFormatter.format(stepDate);
+        var isChecked = i <= subscription_order_count ? 'checked' : '';
+        var isActive = i === subscription_order_count + 1 ? 'active' : '';
+
+        // Determine step title and amount based on trial
+        var stepTitle = void 0,
+          stepAmount = void 0;
+        if (isTrial && i === 1) {
+          stepTitle = "".concat(labelTrial, " ").concat(trialPeriodDays, " ").concat(labelDays);
+          stepAmount = '$0'; // Trial is free
+        } else {
+          stepTitle = "".concat(i, " ").concat(labelPayment);
+          stepAmount = perCycleAmount;
+        }
+        if (order.coupon_id || order.first_order_coupon) {
+          var firstPaymentIdx = 1;
+          if (isTrial) {
+            ++firstPaymentIdx;
+          }
+          if (i === firstPaymentIdx) {
+            var _order$coupon_item_pr, _order$first_order_co;
+            stepAmount = (_order$coupon_item_pr = order.coupon_item_price_formatted) !== null && _order$coupon_item_pr !== void 0 ? _order$coupon_item_pr : (_order$first_order_co = order.first_order_coupon) === null || _order$first_order_co === void 0 ? void 0 : _order$first_order_co.coupon_item_price_formatted;
+          }
+        }
+        stepsHtml += "\n          <div class=\"masterstudy-orders-course-info__timeline-step ".concat(isChecked).concat(isActive ? ' ' + isActive : '', "\">\n            <div class=\"masterstudy-orders-course-info__timeline-circle\"></div>\n            <div class=\"masterstudy-orders-course-info__timeline-content\">\n              <span class=\"masterstudy-orders-course-info__timeline-title\">").concat(stepTitle, "</span>\n              <span class=\"masterstudy-orders-course-info__timeline-date\">").concat(formattedDate, "</span>\n              <span class=\"masterstudy-orders-course-info__timeline-amount\">").concat(stepAmount, "</span>\n            </div>\n          </div>");
+      }
+
+      // Compute total amount across billing cycles if numeric price is available
+      var totalBlockHtml = '';
+      var unitPriceNumeric = item && typeof item.price !== 'undefined' ? parseFloat(item.price_with_taxes) : NaN;
+      if (!Number.isNaN(unitPriceNumeric) && Number.isFinite(unitPriceNumeric)) {
+        // Calculate total considering trial period
+        var totalNumeric;
+        if (isTrial) {
+          // Trial is free, so total is (cycles - 1) * price
+          totalNumeric = unitPriceNumeric * (billingCycles - 1);
+        } else {
+          // No trial - regular calculation
+          totalNumeric = unitPriceNumeric * billingCycles;
+        }
+
+        // If we have coupon in subscription, then remove the discount from total amount
+        if (order.coupon_id && !Number.isNaN(Number(order.coupon_item_discount))) {
+          totalNumeric -= Math.min(unitPriceNumeric, Number(order.coupon_item_discount));
+        } else if (order.first_order_coupon && !Number.isNaN(order.first_order_coupon.coupon_item_discount)) {
+          totalNumeric -= Math.min(unitPriceNumeric, Number(order.first_order_coupon.coupon_item_discount));
+        }
+
+        // Try to mimic formatting from perCycleAmount by detecting currency symbol placement
+        var example = perCycleAmount || '';
+        var prefix = '';
+        var suffix = '';
+        // Extract non-numeric prefix/suffix as currency symbol(s)
+        var leadingSymbols = example.match(/^\s*([^0-9.,\s]+)/);
+        var trailingSymbols = example.match(/([^0-9.,\s]+)\s*$/);
+        if (leadingSymbols && leadingSymbols[1]) prefix = leadingSymbols[1];
+        if (trailingSymbols && trailingSymbols[1]) suffix = trailingSymbols[1];
+        var formattedNumber = new Intl.NumberFormat(undefined, {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        }).format(totalNumeric);
+        var totalFormatted = "".concat(prefix).concat(prefix ? ' ' : '').concat(formattedNumber).concat(suffix ? ' ' : '').concat(suffix).trim();
+        totalBlockHtml = "\n          <div class=\"masterstudy-orders-course-info__timeline-total\">\n            <span>".concat(labelTotal, "</span>\n            <strong>").concat(totalFormatted, "</strong>\n          </div>");
+      }
+      return "\n        <div class=\"masterstudy-orders-course-info__timeline\">\n          <div class=\"masterstudy-orders-course-info__timeline-plan-title\">\n            ".concat(labelPaymentPlan, "\n            <span>").concat(billingCycles, " ").concat(recurringIntervalText, "</span>\n          </div>\n          ").concat(stepsHtml, "\n        </div>\n        ").concat(totalBlockHtml);
+    } catch (e) {
+      return "";
+    }
+  }
   var getStatusName = function getStatusName(status) {
     switch (status) {
       case 'completed':
@@ -114,19 +267,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                       var additionalInfo = "";
                       if (matchingItem) {
                         if (matchingItem.enterprise && matchingItem.enterprise !== "0" || matchingItem.enterprise_id && matchingItem.enterprise_id !== "0") {
-                          additionalInfo = "<span class=\"order-status\">enterprise</span>";
+                          additionalInfo = "<span class=\"order-status\">".concat(masterstudy_orders.enterprise, "</span>");
                         } else if ((matchingItem.bundle && matchingItem.bundle !== "0" || item.bundle_courses_count > 0) && matchingItem.bundle_id && matchingItem.bundle_id !== "0") {
-                          additionalInfo = "<span class=\"order-status\">bundle</span>";
+                          additionalInfo = "<span class=\"order-status\">".concat(masterstudy_orders.bundle, "</span>");
+                        } else if (order.is_subscription) {
+                          additionalInfo = "<span class=\"order-status\">".concat(masterstudy_orders.subscription, "</span>");
                         }
                       }
-                      var orderHtml = "\n              <div class=\"masterstudy-orders-table__body-row\">\n                <div class=\"masterstudy-orders-course-info\">\n                  <div class=\"masterstudy-orders-course-info__image\">".concat(item.image ? "<a href=\"".concat(item.link, "\">").concat(item.image, "</a>") : "<img src=\"".concat(item.placeholder, "\" alt=\"").concat(item.title, "\">"), "</div>\n                  <div class=\"masterstudy-orders-course-info__common\">\n                    <div class=\"masterstudy-orders-course-info__title\">").concat(item.title ? "<a href=\"".concat(item.link, "\">").concat(item.title, "</a>") : "<em>N/A</em>", " ").concat(additionalInfo, "</div>\n                    <div class=\"masterstudy-orders-course-info__category\">\n                    ").concat(item.enterprise_name ? "".concat(order.i18n.enterprise, " ").concat(item.enterprise_name) : " ".concat(item.terms.join(", ")), "\n                    ").concat(item.bundle_courses_count > 0 ? "".concat(item.bundle_courses_count, " ").concat(order.i18n.bundle) : "", "\n                    </div>\n                  </div>\n                  <div class=\"masterstudy-orders-course-info__price\">").concat(item.price_formatted, "</div>\n                </div>\n              </div>");
+                      var hasBillingCycles = order && order.plan && Number(order.plan.billing_cycles) > 0;
+                      var isSubscription = order.is_subscription ? order.is_subscription : false;
+                      var timelineHtml = buildOrderTimeline(order, item);
+                      // Use course_info for subscriptions if available, otherwise use cart_items data
+                      var displayImage = item.image;
+                      var displayTitle = item.title;
+                      var displayLink = item.link;
+                      if (isSubscription) {
+                        var course_info = order.course_info,
+                          plan = order.plan;
+                        if (course_info && 'course' === plan.type) {
+                          displayImage = course_info.course_thumbnail ? "<img src=\"".concat(course_info.course_thumbnail, "\" alt=\"").concat(course_info.course_title || 'Course', "\" />") : item.image;
+                          displayTitle = course_info.course_title || plan.name;
+                          displayLink = course_info.course_url || item.link;
+                        } else {
+                          displayTitle = plan.name;
+                          displayLink = plan.memberships_url || '/';
+                        }
+                      }
+                      var orderHtml = "\n              <div class=\"masterstudy-orders-table__body-row".concat(isSubscription ? ' memberships' : '', "\">\n                <div class=\"masterstudy-orders-course-info").concat(hasBillingCycles ? ' billing-cycles' : '', "\">\n                  <div class=\"masterstudy-orders-course-info__image\">").concat(displayImage ? "<a href=\"".concat(displayLink, "\">").concat(displayImage, "</a>") : isSubscription ? '' : "<img src=\"".concat(item.placeholder, "\" alt=\"").concat(displayTitle, "\">"), "</div>\n                  <div class=\"masterstudy-orders-course-info__common\">\n                    <div class=\"masterstudy-orders-course-info__title\">").concat(displayTitle ? "<a href=\"".concat(displayLink, "\">").concat(displayTitle, "</a>") : "<em>N/A</em>", " ").concat(additionalInfo, "</div>\n                    <div class=\"masterstudy-orders-course-info__category\">\n                    ").concat(item.enterprise_name ? "".concat(order.i18n.enterprise, " ").concat(item.enterprise_name) : " ".concat(item.terms.join(", ")), "\n                    ").concat(item.bundle_courses_count > 0 ? "".concat(item.bundle_courses_count, " ").concat(order.i18n.bundle) : "", "\n                    </div>\n                    ").concat(timelineHtml, "\n                  </div>\n                  <div class=\"masterstudy-orders-course-info__price\">").concat(item.price_formatted, "</div>\n                </div>\n              </div>");
                       $(clone).find(".masterstudy-orders-table__body").append(orderHtml);
                     }
                   };
                   for (var key in order.cart_items) {
                     _loop();
                   }
-                  $(clone).find("[data-order-total]").text("".concat(order.total));
+                  $(clone).find("[data-order-total]").text("".concat(order.total_formatted));
+                  $(clone).find("[data-order-subtotal]").text("".concat(order.subtotal_formatted));
+                  $(clone).find("[data-order-taxes]").text("".concat(order.taxes_formatted));
+                  if (order.coupon_value) {
+                    $(clone).find("[data-order-coupon]").text(order.coupon_value);
+                  } else {
+                    $(clone).find('[data-id="coupon"]').remove();
+                  }
                   var detailsContainer = $(clone).find(".masterstudy-orders-course-info__details");
                   var button = detailsContainer.find(".masterstudy-button");
                   if (button.length > 0) {

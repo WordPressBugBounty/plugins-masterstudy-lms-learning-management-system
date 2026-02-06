@@ -23,7 +23,7 @@ wp_localize_script(
 	<div class="stm_lms_expired_popup__inner">
 
 		<div class="stm_lms_expired_popup__close">
-			<i class="fa fa-times"></i>
+			<i class="stmlms-times"></i>
 		</div>
 
 		<div class="stm_lms_expired_popup__image">

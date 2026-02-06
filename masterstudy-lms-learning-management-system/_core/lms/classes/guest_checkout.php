@@ -2,6 +2,8 @@
 
 use MasterStudy\Lms\Pro\addons\CourseBundle\Repository\CourseBundleRepository;
 use MasterStudy\Lms\Pro\addons\CourseBundle\Utility\CourseBundleCheckout;
+use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository;
+use MasterStudy\Lms\Plugin\Addons;
 
 new STM_LMS_Guest_Checkout();
 
@@ -81,9 +83,15 @@ class STM_LMS_Guest_Checkout {
 				'item_id' => $item_id,
 			);
 
+			$plan = is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ? ( new SubscriptionPlanRepository() )->get( $item_id ) : null;
+
 			if ( 'stm-course-bundles' === get_post_type( $item_id )
 				&& class_exists( '\MasterStudy\Lms\Pro\addons\CourseBundle\Repository\CourseBundleRepository' ) ) {
 				$cart_item['price'] = CourseBundleRepository::get_bundle_price( $item_id );
+			} elseif ( $plan ) {
+				$cart_item['price']           = SubscriptionPlanRepository::get_actual_price( $plan );
+				$cart_item['is_subscription'] = 1;
+				$cart_item['is_trial']        = ! empty( $plan['trial_period'] );
 			} else {
 				$cart_item['price'] = STM_LMS_Course::get_course_price( $item_id );
 			}
@@ -263,7 +271,7 @@ class STM_LMS_Guest_Checkout {
 
 		foreach ( $items as $item ) {
 			if ( 'stm-course-bundles' === get_post_type( $item['item_id'] )
-				&& class_exists( '\MasterStudy\Lms\Pro\addons\CourseBundle\Repository\CourseBundleRepository' ) ) {
+				&& class_exists( 'CourseBundleRepository' ) ) {
 				$response[] = CourseBundleCheckout::add_to_cart( $item['item_id'], $user_id );
 			} else {
 				$response[] = STM_LMS_Cart::masterstudy_add_to_cart( $item['item_id'], $user_id );

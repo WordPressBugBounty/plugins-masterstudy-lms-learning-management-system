@@ -55,7 +55,7 @@ $this->add_control(
 		'label'     => esc_html__( 'Icon Filled Color', 'masterstudy-lms-learning-management-system' ),
 		'type'      => Controls_Manager::COLOR,
 		'selectors' => array(
-			'{{WRAPPER}} .ms_lms_courses_card_item_popup_wishlist .stm-lms-wishlist i.fa.fa-heart' => 'color: {{VALUE}}',
+			'{{WRAPPER}} .ms_lms_courses_card_item_popup_wishlist .stm-lms-wishlist i.stmlms-heart-2' => 'color: {{VALUE}}',
 		),
 	)
 );

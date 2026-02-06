@@ -7,7 +7,7 @@ function stm_lms_settings_gdpr_section() {
 	return array(
 		'name'   => esc_html__( 'Privacy Policy', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'Privacy Policy Settings', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fas fa-shield-alt',
+		'icon'   => 'stmlms-shield-alt',
 		'fields' => array(
 			'gdpr_warning' => array(
 				'type'        => 'text',

@@ -3,7 +3,10 @@
 namespace MasterStudy\Lms\Repositories;
 
 use MasterStudy\Lms\Enums\LessonType;
+use MasterStudy\Lms\Enums\QuestionType;
 use MasterStudy\Lms\Plugin\PostType;
+use MasterStudy\Lms\Plugin\Addons;
+use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Services\CourseService;
 use function Patchwork\CodeManipulation\prime;
 
 final class CoursePlayerRepository {
@@ -400,6 +403,12 @@ final class CoursePlayerRepository {
 								: $quiz_data['question_banks'][ $question['id'] ]->found_posts - 1;
 						}
 					}
+
+					if ( ! empty( $quiz_data['random_answers'] ) && 'completed' !== $this->data['lesson_completed'] &&
+						! in_array( $question['type'], array( QuestionType::FILL_THE_GAP, QuestionType::KEYWORDS ), true )
+					) {
+						shuffle( $question['answers'] );
+					}
 				}
 
 				if ( ! empty( $sequence ) && is_array( $sequence ) ) {
@@ -420,10 +429,12 @@ final class CoursePlayerRepository {
 							'question_id',
 							'user_answer',
 							'correct_answer',
+							'questions_order',
 						)
 					),
 					'question_id'
 				);
+
 			}
 		}
 

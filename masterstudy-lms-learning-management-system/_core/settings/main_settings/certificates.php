@@ -4,7 +4,7 @@ function stm_lms_settings_certificates_section() {
 	$certificate_settings_fields = array(
 		'name'   => esc_html__( 'Certificates', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'Certificates Settings', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fas fa-certificate',
+		'icon'   => 'stmlms-certificate',
 		'fields' => array(
 			'certificate_threshold'    => array(
 				'type'        => 'number',
@@ -54,7 +54,7 @@ function stm_lms_settings_certificates_section() {
 		$certificate_settings_fields = array(
 			'name'   => esc_html__( 'Certificates', 'masterstudy-lms-learning-management-system' ),
 			'label'  => esc_html__( 'Certificates Settings', 'masterstudy-lms-learning-management-system' ),
-			'icon'   => 'fas fa-certificate',
+			'icon'   => 'stmlms-certificate',
 			'fields' => array(
 				'pro_banner' => array(
 					'type'  => 'pro_banner',

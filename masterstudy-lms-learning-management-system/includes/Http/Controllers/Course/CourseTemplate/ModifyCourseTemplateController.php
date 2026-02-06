@@ -23,6 +23,17 @@ class ModifyCourseTemplateController {
 		}
 
 		$data   = $request->get_json_params();
+
+		if ( ! current_user_can( 'edit_post', $data['post_id'] ) ) {
+			return new \WP_REST_Response(
+				array(
+					'error_code' => 'modify_template_access_error',
+					esc_html__( 'You do not have permission to update course templates.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
+
 		$result = ( new CourseTemplateRepository() )->modify_template( $data['title'], $data['post_id'] );
 
 		if ( ! $result ) {

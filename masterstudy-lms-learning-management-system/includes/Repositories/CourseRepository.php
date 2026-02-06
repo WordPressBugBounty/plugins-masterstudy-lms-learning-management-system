@@ -416,7 +416,22 @@ final class CourseRepository extends AbstractRepository {
 	}
 
 	public function update_announcement( int $course_id, string $announcement ): void {
-		update_post_meta( $course_id, 'announcement', Sanitizer::html( $announcement ) );
+		update_post_meta(
+			$course_id,
+			'announcement',
+			Sanitizer::html(
+				$announcement,
+				array(
+					'img' => array(
+						'src'    => array(),
+						'width'  => array(),
+						'height' => array(),
+						'title'  => array(),
+						'alt'    => array(),
+					),
+				)
+			)
+		);
 	}
 
 	public function instructor_courses( array $args ) {
@@ -597,11 +612,14 @@ final class CourseRepository extends AbstractRepository {
 		$user_wishlist          = $this->get_user_wishlist();
 		$is_coming_soon_enabled = is_ms_lms_addon_enabled( 'coming_soon' ) && function_exists( 'masterstudy_lms_coming_soon_start_time' );
 		$subscription_enabled   = \STM_LMS_Subscriptions::subscription_enabled();
+		$courses_statuses       = \STM_LMS_Helpers::get_course_statuses();
+		$is_featured_enabled    = \STM_LMS_Options::get_option( 'enable_featured_courses', false );
 
 		foreach ( $posts as &$post ) {
 			$meta           = get_post_meta( $post->ID );
 			$section_ids    = ( new CurriculumSectionRepository() )->get_course_section_ids( $post->ID );
 			$is_in_wishlist = is_null( $user_wishlist ) ? 'not-authorized' : in_array( $post->ID, $user_wishlist, true );
+			$status_data    = $courses_statuses[ $meta['status'][0] ] ?? null;
 
 			$extra_fields = array(
 				'price'                  => $meta['price'][0] ?? '',
@@ -616,10 +634,11 @@ final class CourseRepository extends AbstractRepository {
 				'duration_info'          => $meta['duration_info'][0] ?? '',
 				'members'                => $meta['current_students'][0] ?? '',
 				'end_time'               => intval( $meta['end_time'][0] ?? 0 ),
-				'featured'               => ( $meta['featured'][0] ?? null ) === 'on',
+				'featured'               => ( $meta['featured'][0] ?? null ) === 'on' && $is_featured_enabled,
 				'lock_lesson'            => ( $meta['lock_lesson'][0] ?? null ) === 'on',
 				'level'                  => $meta['level'][0] ?? null,
 				'status'                 => $meta['status'][0] ?? null,
+				'status_data'            => $status_data,
 				'views'                  => $meta['views'][0] ?? 0,
 				'access_duration'        => $meta['access_duration'][0] ?? '',
 				'access_devices'         => $meta['access_devices'][0] ?? '',

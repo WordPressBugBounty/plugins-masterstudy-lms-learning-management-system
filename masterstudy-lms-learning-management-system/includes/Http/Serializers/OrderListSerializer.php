@@ -11,13 +11,16 @@ final class OrderListSerializer extends AbstractSerializer {
 	 */
 	public function toArray( $data ): array {
 		return array(
-			'id'      => $data['id'],
-			'user'    => $data['user']['login'],
-			'user_id' => $data['user']['id'],
-			'amount'  => $data['total'],
-			'method'  => $data['payment_code'],
-			'date'    => $data['date'],
-			'status'  => $data['status'],
+			'id'           => $data['id'],
+			'user'         => $data['user']['login'],
+			'user_id'      => $data['user']['id'],
+			'total'        => $data['total'],
+			'subtotal'     => $data['subtotal'],
+			'coupon_value' => $data['coupon_value'],
+			'taxes'        => $data['taxes'],
+			'method'       => $data['payment_code'],
+			'date'         => $data['date'],
+			'status'       => $data['status'],
 		);
 	}
 }

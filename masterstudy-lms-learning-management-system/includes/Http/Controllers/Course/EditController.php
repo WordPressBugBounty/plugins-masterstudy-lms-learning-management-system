@@ -46,6 +46,8 @@ class EditController {
 				'presto_player_allowed'          => apply_filters( 'ms_plugin_presto_player_allowed', false ),
 				'deny_instructor_admin'          => \STM_LMS_Options::get_option( 'deny_instructor_admin', false ),
 				'course_builder_fonts'           => \STM_LMS_Options::get_option( 'course_builder_fonts', null ),
+				'allow_instructor_subscription'  => \STM_LMS_Options::get_option( 'allow_instructor_subscription', false ),
+				'enable_featured_courses'        => \STM_LMS_Options::get_option( 'enable_featured_courses', true ),
 			)
 		);
 
@@ -74,6 +76,7 @@ class EditController {
 					'assets_url'        => STM_LMS_URL . 'assets',
 				),
 				'lesson_types'        => apply_filters( 'masterstudy_lms_lesson_types', array_map( 'strval', LessonType::cases() ) ),
+				'course_statuses'     => get_option( 'course_statuses_config', array() ),
 				'video_sources'       => apply_filters( 'masterstudy_lms_lesson_video_sources', array() ),
 				'audio_sources'       => apply_filters( 'masterstudy_lms_lesson_audio_sources', array() ),
 				'presto_player_posts' => apply_filters( 'ms_plugin_presto_player_posts', array() ),

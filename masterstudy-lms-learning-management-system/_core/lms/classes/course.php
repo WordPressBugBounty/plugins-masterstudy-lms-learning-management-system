@@ -38,7 +38,7 @@ class STM_LMS_Course {
 			$single_sale       = get_post_meta( $course_id, 'single_sale', true );
 			$not_in_membership = get_post_meta( $course_id, 'not_membership', true );
 
-			if ( ! $single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership ) {
+			if ( ! $single_sale && ! $not_in_membership ) {
 				ob_start();
 				$subscription_image = STM_LMS_URL . 'assets/img/members_only.svg';
 				?>
@@ -101,7 +101,7 @@ class STM_LMS_Course {
 	}
 
 	// TODO: Remove $instructor_id after 3.5.0
-	public static function add_user_course( $course_id, $user_id, $current_lesson_id, $progress = 0, $is_translate = false, $enterprise = '', $bundle = '', $for_points = '', $instructor_id = '' ) {
+	public static function add_user_course( $course_id, $user_id, $current_lesson_id, $progress = 0, $is_translate = false, $enterprise = '', $bundle = '', $for_points = '', $instructor_id = '', $subscription_id = '' ) {
 		if ( empty( $user_id ) ) {
 			$user_id = get_current_user_id();
 		}
@@ -126,9 +126,10 @@ class STM_LMS_Course {
 			$course['start_time']       = time();
 			$course['lng_code']         = $language_details;
 
-			$course['enterprise_id'] = $enterprise;
-			$course['bundle_id']     = $bundle;
-			$course['for_points']    = $for_points;
+			$course['enterprise_id']   = $enterprise;
+			$course['bundle_id']       = $bundle;
+			$course['for_points']      = $for_points;
+			$course['subscription_id'] = $subscription_id;
 
 			if ( is_ms_lms_addon_enabled( 'grades' ) && masterstudy_lms_is_course_gradable( $course_id ) ) {
 				$course['is_gradable'] = 1;
@@ -433,17 +434,18 @@ class STM_LMS_Course {
 	}
 
 	public static function get_all_statuses() {
-		return array(
-			'hot'     => esc_html__( 'Hot', 'masterstudy-lms-learning-management-system' ),
-			'new'     => esc_html__( 'New', 'masterstudy-lms-learning-management-system' ),
-			'special' => esc_html__( 'Special', 'masterstudy-lms-learning-management-system' ),
-		);
+		$statuses = STM_LMS_Helpers::get_course_statuses();
+		return ! empty( $statuses ) ? array_column( $statuses, 'label', 'id' ) : array();
 	}
 
 	public static function status_label( $status ) {
-		$labels = self::get_all_statuses();
+		$labels = STM_LMS_Helpers::get_course_statuses();
 
-		return ( ! empty( $labels[ $status ] ) ) ? $labels[ $status ] : '';
+		return empty( $labels[ $status ] ) ? array(
+			'bg_color'   => '',
+			'text_color' => '',
+			'label'      => '',
+		) : $labels[ $status ];
 	}
 
 	public static function get_post_status( $course_id ) {
@@ -466,8 +468,10 @@ class STM_LMS_Course {
 
 		if ( empty( $status_dates_start ) && empty( $status_dates_end ) ) {
 			return array(
-				'status' => $post_status,
-				'label'  => $post_status_label,
+				'status'     => $post_status,
+				'label'      => $post_status_label['label'],
+				'bg_color'   => $post_status_label['bg_color'],
+				'text_color' => $post_status_label['text_color'],
 			);
 		}
 
@@ -475,8 +479,10 @@ class STM_LMS_Course {
 			$current_time = time() * 1000;
 			if ( $current_time > $status_dates_start && $current_time < $status_dates_end ) {
 				return array(
-					'status' => $post_status,
-					'label'  => $post_status_label,
+					'status'     => $post_status,
+					'label'      => $post_status_label['label'],
+					'bg_color'   => $post_status_label['bg_color'],
+					'text_color' => $post_status_label['text_color'],
 				);
 			}
 		}
@@ -489,7 +495,7 @@ class STM_LMS_Course {
 		$sale_price = self::get_sale_price( $course_id );
 
 		/*If we have both prices*/
-		if ( ! empty( $price ) && ! empty( $sale_price ) ) {
+		if ( ! empty( $price ) && ( ! empty( $sale_price ) || '0' === $sale_price ) ) {
 			$price = $sale_price;
 		}
 
@@ -715,7 +721,7 @@ class STM_LMS_Course {
 		$settings['enable_sticky']                  = $settings['enable_sticky'] ?? false;
 		$settings['course_sticky_sidebar']          = $settings['course_sticky_sidebar'] ?? true;
 		$settings['grades_page_display']            = $settings['grades_page_display'] ?? 'tab';
-		$grades_enabled                             = is_ms_lms_addon_enabled( 'grades' ) && masterstudy_lms_is_course_gradable( $course->id );
+		$grades_enabled                             = is_ms_lms_addon_enabled( 'grades' ) && function_exists( 'masterstudy_lms_is_course_gradable' ) && masterstudy_lms_is_course_gradable( $course->id );
 		$settings['course_tab_reviews']             = $settings['course_tab_reviews'] ?? true;
 		$show_panel                                 = ( empty( $current_user_id ) || ! STM_LMS_User::has_course_access( $course->id, '', false ) ) && ! $is_coming_soon;
 
@@ -725,7 +731,7 @@ class STM_LMS_Course {
 		if ( 'modern-curriculum' === $template ) {
 			add_filter(
 				'stm_lms_course_tabs',
-				function( $tabs ) {
+				function ( $tabs ) {
 					if ( isset( $tabs['curriculum'] ) ) {
 						unset( $tabs['curriculum'] );
 					}

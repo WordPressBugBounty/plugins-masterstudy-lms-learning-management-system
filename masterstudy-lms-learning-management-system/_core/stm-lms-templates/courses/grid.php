@@ -61,7 +61,7 @@ if ( $q->have_posts() ) :
 					<?php esc_html_e( 'Featured Courses', 'masterstudy-lms-learning-management-system' ); ?>
 				</h3>
 				<a href="<?php echo esc_attr( $link ); ?>">
-				<i class="fas fa-arrow-right"></i>
+				<i class="stmlms-arrow-right-2"></i>
 				<span>
 					<?php esc_html_e( 'Show all', 'masterstudy-lms-learning-management-system' ); ?>
 				</span>
@@ -134,7 +134,7 @@ if ( $q->have_posts() ) :
 			<?php esc_html_e( 'No courses found.', 'masterstudy-lms-learning-management-system' ); ?>
 		</p>
 		<a href="<?php echo esc_attr( get_permalink( STM_LMS_Options::courses_page() ) ); ?>" class="stm_lms_courses__filter_reset">
-			<i class="fa fa-refresh"></i>
+			<i class="stmlms-refresh-2"></i>
 			<span><?php esc_html_e( 'Reset all', 'masterstudy-lms-learning-management-system' ); ?></span>
 		</a>
 	</div>

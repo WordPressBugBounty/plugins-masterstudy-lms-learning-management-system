@@ -865,7 +865,7 @@ class StmLmsProfileAuthLinks extends Widget_Base {
 			?>
 			<a href="<?php echo esc_url( $settings['auth_links_btn_link']['url'] ); ?>" class="ms-lms-authorization">
 				<span class="ms-lms-authorization-icon">
-					<i class="<?php echo esc_attr( ! empty( $settings['profile_lms_icon']['value'] ) ? $settings['profile_lms_icon']['value'] : 'fas fa-user' ); ?>" aria-hidden="true"></i>
+					<i class="<?php echo esc_attr( ! empty( $settings['profile_lms_icon']['value'] ) ? $settings['profile_lms_icon']['value'] : 'stmlms-user-2' ); ?>" aria-hidden="true"></i>
 				</span>
 				<a href="<?php echo esc_url( $settings['auth_links_btn_link']['url'] ); ?>">
 					<span class="ms-lms-authorization-title">

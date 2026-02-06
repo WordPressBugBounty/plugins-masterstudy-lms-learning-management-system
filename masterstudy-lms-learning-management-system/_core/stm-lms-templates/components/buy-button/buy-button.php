@@ -75,12 +75,9 @@ if ( ! $is_affiliate ) {
 				'button_classes'       => $button_classes,
 				'prerequisite_preview' => $prerequisite_preview,
 				'only_membership'      => ! $single_sale,
+				'prerequisite_passed'  => $prerequisite_passed,
+				'hide_group_course'    => $hide_group_course,
 			)
 		);
 	endif;
-
-	if ( $prerequisite_passed && empty( $hide_group_course ) ) {
-		/* Displaying the button for the Group Courses addon */
-		do_action( 'masterstudy_group_course_button', $post_id );
-	}
 }

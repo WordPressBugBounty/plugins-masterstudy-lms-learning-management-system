@@ -4,6 +4,8 @@ namespace MasterStudy\Lms\Http\Controllers\CourseBuilder;
 
 use MasterStudy\Lms\Enums\LessonType;
 use MasterStudy\Lms\Plugin\Addons;
+use STM_LMS_Options;
+
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 final class GetSettingsController {
@@ -33,6 +35,8 @@ final class GetSettingsController {
 				'presto_player_allowed'          => apply_filters( 'ms_plugin_presto_player_allowed', false ),
 				'deny_instructor_admin'          => \STM_LMS_Options::get_option( 'deny_instructor_admin', false ),
 				'course_builder_fonts'           => \STM_LMS_Options::get_option( 'course_builder_fonts', null ),
+				'allow_instructor_subscription'  => \STM_LMS_Options::get_option( 'allow_instructor_subscription', false ),
+				'enable_featured_courses'        => \STM_LMS_Options::get_option( 'enable_featured_courses', true ),
 			)
 		);
 
@@ -66,6 +70,7 @@ final class GetSettingsController {
 					'assets_url'      => STM_LMS_URL . 'assets',
 				),
 				'lesson_types'        => $lesson_types,
+				'course_statuses'     => \STM_LMS_Helpers::get_course_statuses(),
 				'video_sources'       => apply_filters( 'masterstudy_lms_lesson_video_sources', array() ),
 				'audio_sources'       => apply_filters( 'masterstudy_lms_lesson_audio_sources', array() ),
 				'presto_player_posts' => apply_filters( 'ms_plugin_presto_player_posts', array() ),

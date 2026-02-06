@@ -173,7 +173,7 @@ class STM_LMS_WPCFTO_HELPERS {
 			<div class="field_overlay"></div>
 			<span class="pro-notice">
 				<a href="#" @click.prevent="enableAddon($event, '<?php echo esc_attr( $addon_state ); ?>')">
-					<i class="fa fa-power-off"></i>
+					<i class="stmlms-power-off"></i>
 				<?php esc_html_e( 'Enable addon', 'masterstudy-lms-learning-management-system' ); ?>
 				</a>
 			</span>

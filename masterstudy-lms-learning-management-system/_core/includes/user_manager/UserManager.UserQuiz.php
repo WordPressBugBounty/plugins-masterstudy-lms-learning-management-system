@@ -82,6 +82,7 @@ class STM_LMS_User_Manager_User_Quiz {
 		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/quiz.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
 		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/keywords_question.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
 		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/item_match_question.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
+		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/sortable_question_admin.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
 		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/image_match_question.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
 		<link rel="stylesheet" href="<?php echo esc_url( STM_LMS_URL . 'assets/css/parts/fill_the_gap.css' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>"/>
 
@@ -94,6 +95,7 @@ class STM_LMS_User_Manager_User_Quiz {
 					'question_id',
 					'user_answer',
 					'correct_answer',
+					'questions_order',
 				),
 				$attempt
 			);

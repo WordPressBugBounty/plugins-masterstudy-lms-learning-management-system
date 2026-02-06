@@ -2,14 +2,25 @@
 
 $values = ( ! empty( $_GET['category'] ) ) ? $_GET['category'] : array( $category ?? '' );
 
-$terms = get_terms(
-	'stm_lms_course_taxonomy',
-	array(
-		'orderby' => 'count',
-		'order'   => 'DESC',
-		'parent'  => false,
-	)
+$terms_args = array(
+	'taxonomy' => 'stm_lms_course_taxonomy',
+	'orderby'  => 'count',
+	'order'    => 'DESC',
+	'parent'   => false,
 );
+
+if ( false !== STM_LMS_Options::get_option( 'course_categories_sort_alpha', false ) ) {
+	$terms_args = array_merge(
+		$terms_args,
+		array(
+			'orderby' => 'name',
+			'order'   => 'ASC',
+			'parent'  => false,
+		)
+	);
+}
+
+$terms = get_terms( $terms_args );
 
 $parents = array();
 
@@ -34,12 +45,12 @@ if ( ! empty( $terms ) ) : ?>
 					<span class="stm_lms_styled_checkbox__inner">
 						<input type="checkbox"
 							<?php
-							if ( in_array( intval( $term->term_id ), $values ) ) {
+							if ( in_array( intval( $term->term_id ), $values, true ) ) {
 								echo 'checked="checked"';}
 							?>
 							value="<?php echo intval( $term->term_id ); ?>"
 							name="category[]"/>
-						<span><i class="fa fa-check"></i> </span>
+						<span><i class="stmlms-check-3"></i> </span>
 					</span>
 						<span><?php echo esc_html( $term->name ); ?></span>
 					</label>

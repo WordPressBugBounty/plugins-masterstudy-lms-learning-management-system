@@ -1223,7 +1223,7 @@ class Validator {
 	 * todo add handler for network errors, api error response
 	 */
 	protected function validate_twitter( $field, $input, $param = null ) {
-		$json_twitter = file_get_contents( 'http://twitter.com/users/username_available?username=' . $input ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$json_twitter = file_get_contents( 'https://twitter.com/users/username_available?username=' . $input ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
 		$twitter_response = json_decode( $json_twitter );
 		if ( 'taken' !== $twitter_response->reason ) {

@@ -27,15 +27,12 @@
 	<div class="col-md-6">
 		<div class="form-group form-group-display-name">
 			<label for="display_name"><?php echo esc_html__( 'Display name publicly as:', 'masterstudy-lms-learning-management-system' ); ?></label>
-			<select name="display_name" id="display_name" class="disable-select" @change="updateDisplayName">
+			<select name="display_name" id="display_name" class="disable-select masterstudy-edit-account-display-name-options">
 				<?php foreach ( $display_name_options as $option ) : ?>
 					<option value="<?php echo esc_attr( $option ); ?>" <?php selected( $user->display_name, $option ); ?>>
 						<?php echo esc_html( $option ); ?>
 					</option>
 				<?php endforeach; ?>
-				<option v-for="option in displayNameOptions" :key="option" :value="option">
-					{{ option }}
-				</option>
 			</select>
 			<p><?php echo esc_html__( 'The display name is shown in all public fields, such as the author name, instructor name, student name', 'masterstudy-lms-learning-management-system' ); ?></p>
 		</div>

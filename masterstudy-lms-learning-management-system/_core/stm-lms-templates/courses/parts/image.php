@@ -4,9 +4,10 @@
  * @var $img_size
  */
 
-$lazyload    = STM_LMS_Options::get_option( 'enable_lazyload', false );
-$img_size    = masterstudy_get_image_size( ! empty( $img_size ) ? $img_size : '330x185' );
-$post_status = STM_LMS_Course::get_post_status( $id );
+$lazyload            = STM_LMS_Options::get_option( 'enable_lazyload', false );
+$img_size            = masterstudy_get_image_size( ! empty( $img_size ) ? $img_size : '330x185' );
+$post_status         = STM_LMS_Course::get_post_status( $id );
+$is_featured_enabled = STM_LMS_Options::get_option( 'enable_featured_courses', true );
 
 if ( $lazyload ) {
 	wp_enqueue_script( 'masterstudy_lazysizes' );
@@ -45,12 +46,15 @@ if ( is_user_logged_in() ) {
 		</div>
 	<?php endif; ?>
 	<div class="featured-course-container">
-		<?php if ( ! empty( $featured ) ) : ?>
+		<?php if ( ! empty( $featured ) && $is_featured_enabled ) : ?>
 			<div class="elab_is_featured_product"><?php esc_html_e( 'Featured', 'masterstudy-lms-learning-management-system' ); ?></div>
 		<?php endif; ?>
 	</div>
 	<?php if ( ! empty( $post_status ) ) : ?>
-		<div class="stm_lms_post_status heading_font <?php echo esc_html( sanitize_text_field( $post_status['status'] ) ); ?>">
+		<div
+		class="stm_lms_post_status heading_font <?php echo esc_html( sanitize_text_field( $post_status['status'] ) ); ?>"
+		style="background-color: <?php echo esc_attr( sanitize_text_field( $post_status['bg_color'] ) ); ?>;
+		color: <?php echo esc_attr( sanitize_text_field( $post_status['text_color'] ) ); ?>;">
 			<?php echo esc_html( sanitize_text_field( $post_status['label'] ) ); ?>
 		</div>
 	<?php endif; ?>

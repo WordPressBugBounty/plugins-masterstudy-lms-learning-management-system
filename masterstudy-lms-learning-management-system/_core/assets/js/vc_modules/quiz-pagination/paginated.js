@@ -35,11 +35,11 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
     }, {
       key: "createPager",
       value: function createPager() {
-        this.pagerWrapper.append("<div class=\"pager-prev\"><i class=\"fa fa-arrow-left\"></i></div>");
+        this.pagerWrapper.append("<div class=\"pager-prev\"><i class=\"stmlms-arrow-left-2\"></i></div>");
         for (var i = 0; i < this.pages.length; i++) {
-          this.pagerWrapper.append("<div class=\"".concat(this.pagerSelector, "\" data-question=\"").concat(i, "\"><i class=\"fa fa-circle\" data-page=\"").concat(i + 1, "\"></i></div>"));
+          this.pagerWrapper.append("<div class=\"".concat(this.pagerSelector, "\" data-question=\"").concat(i, "\"><i class=\"stmlms-circle\" data-page=\"").concat(i + 1, "\"></i></div>"));
         }
-        this.pagerWrapper.append("<div class=\"pager-next\"><i class=\"fa fa-arrow-right\"></i></div>");
+        this.pagerWrapper.append("<div class=\"pager-next\"><i class=\"stmlms-arrow-right-2\"></i></div>");
       }
     }, {
       key: "pagerClick",

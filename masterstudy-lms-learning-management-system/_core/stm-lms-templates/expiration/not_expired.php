@@ -10,7 +10,7 @@ $days_left = floor( $time_left / DAY_IN_SECONDS );
 ?>
 
 <div class="stm_lms_expired_notice expired_in_progress">
-	<i class="far fa-clock"></i>
+	<i class="stmlms-clock"></i>
 	<?php
 	if ( $days_left < 1 ) {
 		printf(

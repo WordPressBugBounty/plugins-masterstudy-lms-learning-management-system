@@ -7,6 +7,7 @@
     SECONDS_IN_A_MINUTE = 60;
 
   $.fn.countdown = function (prop) {
+    if (prop === undefined) return
     const options = $.extend(
       {
         callback: function () {},

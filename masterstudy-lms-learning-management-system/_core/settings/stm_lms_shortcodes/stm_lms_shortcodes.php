@@ -238,4 +238,11 @@
 			<li><?php echo esc_html__( 'number (number of posts on the page)', 'masterstudy-lms-learning-management-system' ); ?></li>
 		</ul>
 	</div>
+	<div>
+		<label><?php echo esc_html__( 'Memberships Plans (pro version)', 'masterstudy-lms-learning-management-system' ); ?></label>
+		<input type="text" value='[masterstudy_membership_pricing]' disabled />
+		<ul class="params">
+			<li><?php echo esc_html__( 'This shortcode is available only when the Membership feature is enabled', 'masterstudy-lms-learning-management-system' ); ?></li>
+		</ul>
+	</div>
 </div>

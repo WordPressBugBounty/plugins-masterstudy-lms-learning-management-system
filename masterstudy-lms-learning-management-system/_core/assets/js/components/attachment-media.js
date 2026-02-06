@@ -91,6 +91,9 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         audioCounter++;
         var formData = new FormData();
         formData.append('file', audioFile);
+        if (typeof assignments_data !== 'undefined' && assignments_data !== null) {
+          formData.append('assignment', true);
+        }
         recorder.addClass('masterstudy-audio__recorder_hidden');
         if (audioBlob.size) {
           var sizeInMB = audioBlob.size / (1024 * 1024);
@@ -193,6 +196,9 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         videoCounter++;
         var formData = new FormData();
         formData.append('file', videoFile);
+        if (typeof assignments_data !== 'undefined' && assignments_data !== null) {
+          formData.append('assignment', true);
+        }
         if (videoBlob.size) {
           var sizeInMB = videoBlob.size / (1024 * 1024);
           if (sizeInMB > media_data.video_max_size * 1) {
@@ -301,6 +307,9 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         }
         var formData = new FormData();
         formData.append('file', file);
+        if (typeof assignments_data !== 'undefined' && assignments_data !== null) {
+          formData.append('assignment', true);
+        }
         $.ajax({
           url: apiEndpoint,
           type: 'POST',

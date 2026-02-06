@@ -8,7 +8,9 @@
  * @var boolean $dark_mode
  */
 
+use MasterStudy\Lms\Enums\QuestionType;
 use MasterStudy\Lms\Pro\AddonsPlus\Grades\Services\GradeCalculator;
+use MasterStudy\Lms\Utility\Question;
 
 $is_single_quiz = $is_single_quiz ?? false;
 
@@ -27,6 +29,7 @@ wp_localize_script(
 		'is_single_quiz' => $is_single_quiz,
 		'quiz_id'        => intval( $item_id ),
 		'course_id'      => intval( $post_id ),
+		'random_answers' => $data['random_answers'],
 		'confirmation'   => esc_html__( 'Once you submit, you will no longer be able to change your answers. Are you sure you want to submit the quiz?', 'masterstudy-lms-learning-management-system' ),
 	)
 );
@@ -46,6 +49,7 @@ STM_LMS_Templates::show_lms_template(
 );
 $passing_grade = intval( $data['passing_grade'] ?? 0 );
 $grade         = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $passing_grade ) : round( $passing_grade, 1 ) . '%';
+
 ?>
 
 <div
@@ -168,6 +172,16 @@ $grade         = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_inst
 				<input type="hidden" name="action" value="stm_lms_user_answers"/>
 				<input type="hidden" name="quiz_id" value="<?php echo intval( $item_id ); ?>"/>
 				<input type="hidden" name="course_id" value="<?php echo intval( $post_id ); ?>"/>
+				<?php foreach ( $data['questions'] as $question ) : ?>
+					<?php
+					$sorted_ids = Question::get_sorted_answers_ids( $question['type'], $question['answers'] );
+
+					if ( '' === $sorted_ids ) {
+						continue;
+					}
+					?>
+					<input type="hidden" name="order_<?php echo esc_attr( $question['id'] ); ?>" value="<?php echo esc_attr( $sorted_ids ); ?>" />
+				<?php endforeach ?>
 			<?php } ?>
 		</form>
 		<?php

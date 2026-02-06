@@ -32,7 +32,7 @@ function stm_lms_settings_quiz_section() {
 	$quiz_fields = array(
 		'name'   => esc_html__( 'Quiz', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'Quiz Settings', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fas fa-question',
+		'icon'   => 'stmlms-question-2',
 		'fields' => array(
 			'quiz_attempts'         => array(
 				'type'        => 'select',

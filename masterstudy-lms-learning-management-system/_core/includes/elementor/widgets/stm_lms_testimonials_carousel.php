@@ -404,6 +404,19 @@ class StmLmsProTestimonials extends Widget_Base {
 				),
 			)
 		);
+		$this->add_control(
+			'testimonials_icon_color',
+			array(
+				'label'     => esc_html__( 'Icon Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .ms-lms-testimonials-header .ms-lms-testimonials-icon .ms-lms-testimonials-icon__fillable' => 'fill: {{VALUE}};',
+				),
+				'condition' => array(
+					'testimonials_style' => array( 'style_1' ),
+				),
+			)
+		);
 		$this->end_controls_tab();
 		$this->start_controls_tab(
 			'header_text_hover',
@@ -997,7 +1010,7 @@ class StmLmsProTestimonials extends Widget_Base {
 		$html .= '<div class="ms-lms-starter-theme-testimonials">';
 		foreach ( $testimonials_data as $testimonial ) {
 			$html .= '<div class="stm_testimonials_single" >
-						<div class="stars" ><i class="fa fa-star" ></i ></div>
+						<div class="stars" ><i class="stmlms-star-3" ></i ></div>
 						<div class="testimonials_title h3" >'
 					. sanitize_text_field( $testimonial['title'] ) .
 					'</div>

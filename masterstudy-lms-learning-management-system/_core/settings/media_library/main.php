@@ -12,7 +12,7 @@ wp_enqueue_style( 'stm-lms-media_library-style', STM_LMS_URL . 'assets/css/parts
 			<div class="stm-lms-upload__header">
 				<div class="stm-lms-upload__title"><?php esc_html_e( 'Media Gallery', 'masterstudy-lms-learning-management-system' ); ?></div>
 				<div class="stm-lms-upload__close" @click="closeModal()">
-					<span class="fas fa-times"></span>
+					<span class="stmlms-times"></span>
 				</div>
 			</div>
 			<div class="stm-lms-upload__drop">
@@ -28,7 +28,7 @@ wp_enqueue_style( 'stm-lms-media_library-style', STM_LMS_URL . 'assets/css/parts
 						<div class="stm-lms-upload__file-type">
 							<div class="stm-lms-upload-select">
 								<div class="stm-lms-upload-select__icon">
-									<span class="fas fa-caret-down"></span>
+									<span class="stmlms-caret-down"></span>
 								</div>
 								<select name="file-type" v-model="filter.fileType">
 									<option value="all" selected><?php esc_html_e( 'All files', 'masterstudy-lms-learning-management-system' ); ?></option>
@@ -42,7 +42,7 @@ wp_enqueue_style( 'stm-lms-media_library-style', STM_LMS_URL . 'assets/css/parts
 						<div class="stm-lms-upload__filter">
 							<div class="stm-lms-upload-select">
 								<div class="stm-lms-upload-select__icon">
-									<span class="fas fa-caret-down"></span>
+									<span class="stmlms-caret-down"></span>
 								</div>
 								<select name="sort" v-model="filter.sortBy">
 									<option value="post_title" selected><?php esc_html_e( 'Name: A / z', 'masterstudy-lms-learning-management-system' ); ?></option>

@@ -1,5 +1,7 @@
 <?php
+use MasterStudy\Lms\Plugin\Addons;
 use MasterStudy\Lms\Plugin\PostType;
+use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Services\CourseService;
 
 STM_LMS_User::init();
 
@@ -832,8 +834,6 @@ class STM_LMS_User {
 
 				$current_lesson = ( ! empty( $course['current_lesson_id'] ) ) ? $course['current_lesson_id'] : STM_LMS_Lesson::get_first_lesson( $id );
 
-				$membership_info = STM_LMS_Helpers::masterstudy_lms_check_membership_status( $user_id, $course, $id, false );
-
 				ob_start();
 				STM_LMS_Templates::show_lms_template(
 					'global/expired_course',
@@ -845,34 +845,46 @@ class STM_LMS_User {
 				$expiration = ob_get_clean();
 
 				$post = array(
-					'id'                  => $id,
-					'url'                 => get_the_permalink( $id ),
-					'image_id'            => get_post_thumbnail_id( $id ),
-					'title'               => get_the_title( $id ),
-					'link'                => get_the_permalink( $id ),
-					'image'               => $image,
-					'terms'               => wp_get_post_terms( $id, 'stm_lms_course_taxonomy' ),
-					'terms_list'          => stm_lms_get_terms_array( $id, 'stm_lms_course_taxonomy', 'name' ),
-					'views'               => STM_LMS_Course::get_course_views( $id ),
-					'price'               => STM_LMS_Helpers::display_price( $price ),
-					'sale_price'          => STM_LMS_Helpers::display_price( $sale_price ),
-					'post_status'         => $post_status,
-					'availability'        => get_post_meta( $id, 'coming_soon_status', true ),
-					'progress'            => strval( $course['progress_percent'] ),
+					'id'                => $id,
+					'url'               => get_the_permalink( $id ),
+					'image_id'          => get_post_thumbnail_id( $id ),
+					'title'             => get_the_title( $id ),
+					'link'              => get_the_permalink( $id ),
+					'image'             => $image,
+					'terms'             => wp_get_post_terms( $id, 'stm_lms_course_taxonomy' ),
+					'terms_list'        => stm_lms_get_terms_array( $id, 'stm_lms_course_taxonomy', 'name' ),
+					'views'             => STM_LMS_Course::get_course_views( $id ),
+					'price'             => STM_LMS_Helpers::display_price( $price ),
+					'sale_price'        => STM_LMS_Helpers::display_price( $sale_price ),
+					'post_status'       => $post_status,
+					'availability'      => get_post_meta( $id, 'coming_soon_status', true ),
+					'progress'          => strval( $course['progress_percent'] ),
 					/* translators: %s: course complete */
-					'progress_label'      => sprintf( esc_html__( '%s%% Complete', 'masterstudy-lms-learning-management-system' ), $course['progress_percent'] ),
-					'current_lesson_id'   => STM_LMS_Lesson::get_lesson_url( $id, $current_lesson ),
-					'course_id'           => $id,
-					'lesson_id'           => $current_lesson,
+					'progress_label'    => sprintf( esc_html__( '%s%% Complete', 'masterstudy-lms-learning-management-system' ), $course['progress_percent'] ),
+					'current_lesson_id' => STM_LMS_Lesson::get_lesson_url( $id, $current_lesson ),
+					'course_id'         => $id,
+					'lesson_id'         => $current_lesson,
 					/* translators: %s: start time */
-					'start_time'          => sprintf( esc_html__( 'Started %s', 'masterstudy-lms-learning-management-system' ), date_i18n( get_option( 'date_format' ), $course['start_time'] ) ),
-					'duration'            => get_post_meta( $id, 'duration_info', true ),
-					'expiration'          => $expiration,
-					'is_expired'          => STM_LMS_Course::is_course_time_expired( get_current_user_id(), $id ),
-					'membership_expired'  => $membership_info['membership_expired'],
-					'membership_inactive' => $membership_info['membership_inactive'],
-					'no_membership_plan'  => $membership_info['no_membership_plan'],
+					'start_time'        => sprintf( esc_html__( 'Started %s', 'masterstudy-lms-learning-management-system' ), date_i18n( get_option( 'date_format' ), $course['start_time'] ) ),
+					'duration'          => get_post_meta( $id, 'duration_info', true ),
+					'expiration'        => $expiration,
+					'is_expired'        => STM_LMS_Course::is_course_time_expired( get_current_user_id(), $id ),
 				);
+
+				if ( STM_LMS_Subscriptions::subscription_enabled() ) {
+					$state = STM_LMS_Helpers::masterstudy_lms_check_membership_status(
+						$user_id,
+						$course,
+						$id,
+						false
+					);
+				} elseif ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
+					$state = ( new CourseService() )->get_course_access_state( (int) $user_id, $course, (int) $id );
+				}
+
+				$post['membership_expired']  = isset( $state['membership_expired'] ) ? $state['membership_expired'] : false;
+				$post['membership_inactive'] = isset( $state['membership_inactive'] ) ? $state['membership_inactive'] : false;
+				$post['no_membership_plan']  = isset( $state['no_membership_plan'] ) ? $state['no_membership_plan'] : true;
 
 				/* Check course complete status*/
 				$curriculum       = ( new MasterStudy\Lms\Repositories\CurriculumRepository() )->get_curriculum( $id, true );
@@ -961,19 +973,29 @@ class STM_LMS_User {
 		$columns = array( 'user_course_id', 'enterprise_id', 'subscription_id', 'bundle_id', 'for_points' );
 		$course  = stm_lms_get_user_course( $user_id, $course_id, $columns );
 
-		$membership_info = STM_LMS_Helpers::masterstudy_lms_check_membership_status( $user_id, $course, $course_id, true );
+		if ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
+			$subscription_info = ( new CourseService() )->has_access_to_course( $user_id, $course, $course_id, $add );
+			$condition         = $add ? $subscription_info['only_for_membership'] && $subscription_info['bought_by_membership'] : $subscription_info['only_for_membership'];
+			if ( $condition ) {
+				return apply_filters( 'stm_lms_has_course_access', $subscription_info['has_access'], $course_id, $item_id );
+			}
+		}
 
-		if ( $membership_info['membership_expired'] || $membership_info['membership_inactive'] ) {
-			return apply_filters( 'stm_lms_has_course_access', 0, $course_id, $item_id );
+		if ( STM_LMS_Subscriptions::subscription_enabled() ) {
+			$membership_info = STM_LMS_Helpers::masterstudy_lms_check_membership_status( $user_id, $course, $course_id, true );
+			if ( $membership_info['membership_expired'] || $membership_info['membership_inactive'] ) {
+				return apply_filters( 'stm_lms_has_course_access', false, $course_id, $item_id );
+			}
 		}
 
 		if ( ! count( $course ) ) {
 			/*If course is free*/
 			$prerequisite_passed = true;
+			$is_free             = ( get_post_meta( $course_id, 'single_sale', true ) && empty( STM_LMS_Course::get_course_price( $course_id ) ) );
 			if ( class_exists( 'STM_LMS_Prerequisites' ) ) {
 				$prerequisite_passed = STM_LMS_Prerequisites::is_prerequisite( true, $course_id );
 			}
-			if ( $membership_info['is_free'] && $prerequisite_passed && $add ) {
+			if ( $is_free && $prerequisite_passed && $add ) {
 				$auto_enroll = STM_LMS_Options::get_option( 'course_user_auto_enroll', false );
 				if ( $auto_enroll || ! is_single() ) {
 					STM_LMS_Course::add_user_course( $course_id, $user_id, STM_LMS_Lesson::get_lesson_url( $course_id, '' ), 0 );
@@ -985,7 +1007,7 @@ class STM_LMS_User {
 			/*Check for expiration*/
 			$course_expired = STM_LMS_Course::is_course_time_expired( $user_id, $course_id );
 			if ( $course_expired ) {
-				return apply_filters( 'stm_lms_has_course_access', 0, $course_id, $item_id );
+				return apply_filters( 'stm_lms_has_course_access', false, $course_id, $item_id );
 			}
 		}
 
@@ -1060,7 +1082,7 @@ class STM_LMS_User {
 		$user_id = $user['id'];
 
 		$r = array(
-			'icon' => 'far fa-heart',
+			'icon' => 'stmlms-heart-3',
 			'text' => esc_html__( 'Add to wishlist', 'masterstudy-lms-learning-management-system' ),
 		);
 
@@ -1072,7 +1094,7 @@ class STM_LMS_User {
 		if ( ! in_array( $post_id, $wishlist ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$wishlist[] = $post_id;
 			$r          = array(
-				'icon' => 'fa fa-heart',
+				'icon' => 'stmlms-heart-2',
 				'text' => esc_html__( 'Remove from wishlist', 'masterstudy-lms-learning-management-system' ),
 			);
 		} else {
@@ -1186,12 +1208,88 @@ class STM_LMS_User {
 	}
 
 	public static function extra_fields_display( $user ) {
+		wp_enqueue_style( 'masterstudy-select2' );
+		wp_enqueue_script( 'masterstudy-personal-info' );
+		wp_localize_script(
+			'masterstudy-personal-info',
+			'masterstudy_personal_info_data',
+			array(
+				'is_admin' => is_admin(),
+			)
+		);
 		?>
+
 		<h3><?php esc_html_e( 'Extra profile information', 'masterstudy-lms-learning-management-system' ); ?></h3>
 
 		<table class="form-table">
 			<?php
-			$fields = self::extra_fields();
+			$personal_options = masterstudy_lms_personal_data_display_options( $user->ID );
+			$settings         = get_option( 'stm_lms_settings' );
+			$fields           = self::extra_fields();
+
+			foreach ( $personal_options['personal_fields'] as $key => $label ) :
+				if ( empty( $settings[ "personal_data_{$key}" ] ) ) {
+					continue;
+				}
+				?>
+				<tr>
+					<th>
+						<label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label>
+						<td>
+							<?php if ( 'country' === $key ) : ?>
+								<select
+									name="masterstudy_personal_country"
+									data-placeholder="<?php echo esc_attr( $personal_options['country_label'] ); ?>"
+									required
+								>
+									<option value="" disabled selected hidden><?php echo esc_html( $personal_options['country_label'] ); ?></option>
+									<?php foreach ( $personal_options['countries'] as $country ) : ?>
+										<option value="<?php echo esc_attr( $country['code'] ); ?>"
+											<?php selected( $country['code'], $personal_options['current_country'] ); ?>>
+											<?php echo esc_html( $country['name'] ); ?>
+										</option>
+									<?php endforeach; ?>
+								</select>
+							<?php elseif ( 'state' === $key ) : ?>
+								<select
+									name="masterstudy_personal_state"
+									class="masterstudy-personal-info__state-select"
+									data-placeholder="<?php echo esc_attr( $personal_options['state_label'] ); ?>"
+									<?php echo $personal_options['is_us'] ? 'required' : 'style="display:none" disabled'; ?>
+								>
+									<option value="" disabled selected hidden><?php echo esc_html( $personal_options['state_label'] ); ?></option>
+									<?php
+									foreach ( $personal_options['us_states'] as $st ) :
+										$code = (string) ( $st['code'] ?? '' );
+										$name = (string) ( $st['name'] ?? '' );
+										?>
+										<option value="<?php echo esc_attr( $code ); ?>"
+											<?php selected( strtoupper( $code ), $personal_options['state_code_selected'] ); ?>>
+											<?php echo esc_html( $name ); ?>
+										</option>
+									<?php endforeach; ?>
+								</select>
+								<input
+									type="text"
+									name="masterstudy_personal_state"
+									class="regular-text masterstudy-personal-info__state-input"
+									value="<?php echo esc_attr( $personal_options['state_code_selected'] ? '' : $personal_options['current_state'] ); ?>"
+									<?php echo $personal_options['is_us'] ? 'style="display:none" disabled' : 'required'; ?>
+								>
+							<?php else : ?>
+								<input
+									type="text"
+									name="masterstudy_personal_<?php echo esc_attr( $key ); ?>"
+									class="regular-text"
+									value="<?php echo esc_attr( isset( $personal_options['personal_data'][ $key ] ) ? $personal_options['personal_data'][ $key ] : '' ); ?>"
+								>
+							<?php endif; ?>
+						<td>
+					</th>
+				</tr>
+				<?php
+			endforeach;
+
 			foreach ( $fields as $field_key => $field ) :
 				?>
 				<tr>
@@ -1209,7 +1307,7 @@ class STM_LMS_User {
 		</table>
 
 		<?php if ( current_user_can( 'manage_options' ) ) : ?>
-		<h3><?php esc_html_e( 'Rating information', 'masterstudy-lms-learning-management-system' ); ?></h3>
+			<h3><?php esc_html_e( 'Rating information', 'masterstudy-lms-learning-management-system' ); ?></h3>
 
 		<table class="form-table">
 			<?php
@@ -1230,11 +1328,11 @@ class STM_LMS_User {
 			<?php endforeach; ?>
 		</table>
 		<!-- Zoom.us        -->
-			<?php if ( class_exists( 'StmZoom' ) || class_exists( 'Video_Conferencing_With_Zoom' ) ) : ?>
+			<?php if ( class_exists( 'MSLMS_StmZoom' ) || class_exists( 'Video_Conferencing_With_Zoom' ) ) : ?>
 				<?php
 
-				if ( class_exists( 'StmZoom' ) ) {
-					$zoom_users = StmZoom::stm_zoom_get_users();
+				if ( class_exists( 'MSLMS_StmZoom' ) ) {
+					$zoom_users = MSLMS_StmZoom::MSLMS_ZOOM_get_users();
 				} else {
 					$zoom_users_list = video_conferencing_zoom_api_get_user_transients();
 					$zoom_users      = array();
@@ -1248,62 +1346,58 @@ class STM_LMS_User {
 				}
 				$user_host = get_the_author_meta( 'stm_lms_zoom_host', $user->ID );
 				?>
-			<h3><?php esc_html_e( 'Zoom.us settings', 'masterstudy-lms-learning-management-system' ); ?></h3>
-			<table class="form-table">
-				<tr>
-					<th>
-						<label for="stm_lms_zoom_host"><?php esc_html_e( 'Meeting Host', 'masterstudy-lms-learning-management-system' ); ?></label>
-					</th>
-					<td>
-						<select id="stm_lms_zoom_host" name="stm_lms_zoom_host">
-							<option value=""><?php esc_html_e( 'Select host', 'masterstudy-lms-learning-management-system' ); ?></option>
-							<?php foreach ( $zoom_users as $zoom_user ) : ?>
-								<option value="<?php echo esc_attr( $zoom_user['id'] ); ?>"
-									<?php
-									! empty( $user_host ) ? selected( $user_host, $zoom_user['id'] ) : false;
-									?>
-								><?php echo esc_html( $zoom_user['first_name'] . ' ( ' . $zoom_user['email'] . ' )' ); ?></option>
-							<?php endforeach; ?>
-						</select>
-					</td>
-				</tr>
-			</table>
-		<?php endif; ?>
-		<!-- end Zoom.us        -->
-		<!--Google Classrooms Auditory-->
-			<?php
+				<h3><?php esc_html_e( 'Zoom.us settings', 'masterstudy-lms-learning-management-system' ); ?></h3>
+				<table class="form-table">
+					<tr>
+						<th>
+							<label for="stm_lms_zoom_host"><?php esc_html_e( 'Meeting Host', 'masterstudy-lms-learning-management-system' ); ?></label>
+						</th>
+						<td>
+							<select id="stm_lms_zoom_host" name="stm_lms_zoom_host">
+								<option value=""><?php esc_html_e( 'Select host', 'masterstudy-lms-learning-management-system' ); ?></option>
+								<?php foreach ( $zoom_users as $zoom_user ) : ?>
+									<option value="<?php echo esc_attr( $zoom_user['id'] ); ?>"
+										<?php
+										! empty( $user_host ) ? selected( $user_host, $zoom_user['id'] ) : false;
+										?>
+									><?php echo esc_html( $zoom_user['first_name'] . ' ( ' . $zoom_user['email'] . ' )' ); ?></option>
+								<?php endforeach; ?>
+							</select>
+						</td>
+					</tr>
+				</table>
+				<?php
+			endif;
 			if ( class_exists( 'STM_LMS_Google_Classroom' ) ) :
 				$g_c_key           = 'google_classroom_auditory';
 				$auditories        = STM_LMS_Helpers::get_posts( 'stm-auditory' );
 				$selected_auditory = get_the_author_meta( $g_c_key, $user->ID );
 				?>
-			<table class="form-table">
-				<tr>
-					<th>
-						<label for="<?php echo esc_attr( $g_c_key ); ?>">
-							<?php
-							esc_html_e( 'Google Classroom auditory', 'masterstudy-lms-learning-management-system' );
-							?>
-						</label>
-					</th>
-					<td>
-						<select name="<?php echo esc_attr( $g_c_key ); ?>" id="<?php echo esc_attr( $g_c_key ); ?>">
-							<option value=""><?php esc_html_e( 'Select auditory', 'masterstudy-lms-learning-management-system' ); ?></option>
-							<?php foreach ( $auditories as $auditory_value => $auditory_name ) : ?>
-								<option value="<?php echo esc_attr( $auditory_value ); ?>"
-										<?php echo esc_attr( selected( $selected_auditory, $auditory_value ) ); ?>>
-									<?php echo esc_attr( $auditory_name ); ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
-					</td>
-				</tr>
-			</table>
-		<?php endif; ?>
-
-
-			<?php
-	endif;
+				<table class="form-table">
+					<tr>
+						<th>
+							<label for="<?php echo esc_attr( $g_c_key ); ?>">
+								<?php
+								esc_html_e( 'Google Classroom auditory', 'masterstudy-lms-learning-management-system' );
+								?>
+							</label>
+						</th>
+						<td>
+							<select name="<?php echo esc_attr( $g_c_key ); ?>" id="<?php echo esc_attr( $g_c_key ); ?>">
+								<option value=""><?php esc_html_e( 'Select auditory', 'masterstudy-lms-learning-management-system' ); ?></option>
+								<?php foreach ( $auditories as $auditory_value => $auditory_name ) : ?>
+									<option value="<?php echo esc_attr( $auditory_value ); ?>"
+											<?php echo esc_attr( selected( $selected_auditory, $auditory_value ) ); ?>>
+										<?php echo esc_attr( $auditory_name ); ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						</td>
+					</tr>
+				</table>
+				<?php
+			endif;
+		endif;
 	}
 
 	public static function save_extra_fields( $user_id ) {
@@ -1316,6 +1410,32 @@ class STM_LMS_User {
 		foreach ( $fields as $field_key => $field ) {
 			update_user_meta( $user_id, $field_key, sanitize_text_field( $_POST[ $field_key ] ) );
 		}
+
+		$prefix           = 'masterstudy_personal_';
+		$allowed_suffixes = array( 'country', 'state', 'post_code', 'city', 'company', 'phone' );
+		$pd_input         = array();
+
+		foreach ( $allowed_suffixes as $suf ) {
+			$key_pref         = $prefix . $suf;
+			$pd_input[ $suf ] = isset( $_POST[ $key_pref ] )
+				? sanitize_text_field( wp_unslash( $_POST[ $key_pref ] ) )
+				: ( isset( $_POST[ $suf ] ) ? sanitize_text_field( wp_unslash( $_POST[ $suf ] ) ) : '' );
+		}
+
+		$country   = strtoupper( trim( (string) $pd_input['country'] ) );
+		$state_raw = (string) $pd_input['state'];
+		$state     = strtoupper( trim( $state_raw ) );
+
+		$personal_data_new = array(
+			'country'   => $country,
+			'state'     => ( 'US' === $country ? $state : sanitize_text_field( $state_raw ) ),
+			'post_code' => sanitize_text_field( $pd_input['post_code'] ),
+			'city'      => sanitize_text_field( $pd_input['city'] ),
+			'company'   => sanitize_text_field( $pd_input['company'] ),
+			'phone'     => sanitize_text_field( $pd_input['phone'] ),
+		);
+
+		update_user_meta( $user_id, 'masterstudy_personal_data', $personal_data_new );
 
 		if ( current_user_can( 'manage_options' ) ) {
 			$fields = self::rating_fields();
@@ -1481,6 +1601,14 @@ class STM_LMS_User {
 					'ID'           => $user_id,
 					'display_name' => $display_name,
 				)
+			);
+		}
+
+		if ( isset( $user_data['personal_data'] ) && is_array( $user_data['personal_data'] ) ) {
+			update_user_meta(
+				$user_id,
+				'masterstudy_personal_data',
+				array_map( 'sanitize_text_field', $user_data['personal_data'] )
 			);
 		}
 

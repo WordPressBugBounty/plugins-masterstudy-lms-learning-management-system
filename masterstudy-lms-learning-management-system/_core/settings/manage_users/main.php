@@ -33,8 +33,8 @@ $is_ai_addon_enabled = is_ms_lms_addon_enabled( Addons::AI_LAB );
 			<th><?php esc_html_e( 'User email', 'masterstudy-lms-learning-management-system' ); ?></th>
 			<th width="20%"><?php esc_html_e( 'User Info', 'masterstudy-lms-learning-management-system' ); ?></th>
 			<th @click="direction = direction === 'ASC' ? 'DESC' : 'ASC'" style="cursor: pointer;">
-				<i class="fa fa-long-arrow-alt-up"></i>
-				<i class="fa fa-long-arrow-alt-down"></i>
+				<i class="stmlms-long-arrow-alt-up"></i>
+				<i class="stmlms-long-arrow-alt-down"></i>
 				<?php esc_html_e( 'Submission Date', 'masterstudy-lms-learning-management-system' ); ?>
 			</th>
 			<?php if ( $is_ai_addon_enabled ) : ?>
@@ -87,7 +87,7 @@ $is_ai_addon_enabled = is_ms_lms_addon_enabled( Addons::AI_LAB );
 	<div class="history_modal" v-if="historyModal.status">
 		<div class="history_overlay" @click="historyModal.status = false"></div>
 		<div class="history_close" @click="historyModal.status = false">
-			<i class="fas fa-times"></i>
+			<i class="stmlms-times"></i>
 		</div>
 		<div class="history_modal_body">
 			<div class="lms-dashboard-table">

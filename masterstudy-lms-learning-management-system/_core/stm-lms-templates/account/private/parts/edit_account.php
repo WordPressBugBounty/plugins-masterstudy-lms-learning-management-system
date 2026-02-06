@@ -5,20 +5,30 @@
 
 $is_instructor = STM_LMS_Instructor::is_instructor();
 
+wp_enqueue_style( 'masterstudy-select2' );
+wp_enqueue_script( 'masterstudy-personal-info' );
 stm_lms_register_style( 'edit_account' );
-stm_lms_register_script( 'edit_account', array( 'vue.js', 'vue-resource.js' ) );
+stm_lms_register_script( 'edit_account' );
 stm_lms_register_style( 'user_info_top' );
 
 if ( ! metadata_exists( 'user', $current_user['id'], 'disable_report_email_notifications' ) ) {
 	$current_user['meta']['disable_report_email_notifications'] = true;
 }
 
-$data = wp_json_encode( $current_user );
+$data              = wp_json_encode( $current_user );
+$personal_data_raw = get_user_meta( $current_user['id'], 'masterstudy_personal_data', true );
+
+if ( ! is_array( $personal_data_raw ) ) {
+	$personal_data_raw = array();
+}
+
+$personal_data = wp_json_encode( (object) $personal_data_raw );
+
 wp_add_inline_script(
 	'stm-lms-edit_account',
-	"var stm_lms_edit_account_info = {$data}"
+	"var stm_lms_edit_account_info = {$data};
+	var stm_lms_personal_data = {$personal_data};"
 );
-
 ?>
 
 
@@ -76,41 +86,23 @@ wp_add_inline_script(
 	?>
 
 	<div class="row">
-
 		<div class="col-md-12">
-
 			<div class="row">
-
 				<div class="col-md-6 col-sm-6">
-
-					<button @click="saveUserInfo()"
-							v-bind:class="{'loading' : loading}"
-							class="btn btn-default btn-save-account">
+					<button class="btn btn-default btn-save-account">
 						<span><?php esc_html_e( 'Save changes', 'masterstudy-lms-learning-management-system' ); ?></span>
 					</button>
-
 				</div>
-
 				<div class="col-md-6 col-sm-6">
-
 					<div class="stm_lms_sidebar_logout_wrapper text-right xs-text-left">
 						<?php STM_LMS_Templates::show_lms_template( 'account/private/parts/logout' ); ?>
 					</div>
-
 				</div>
-
 			</div>
-
 		</div>
-
 		<div class="col-md-12">
-			<transition name="slide-fade">
-				<div class="stm-lms-message" v-bind:class="status" v-if="message">
-					{{ message }}
-				</div>
-			</transition>
+			<div class="stm-lms-message masterstudy-edit-account-message-hidden">
+			</div>
 		</div>
-
 	</div>
-
 </div>

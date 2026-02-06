@@ -15,22 +15,22 @@ $wishlisted = STM_LMS_User::is_wishlisted( $course_id );
 if ( is_user_logged_in() ) { ?>
 	<div class="stm-lms-wishlist"
 		data-add="<?php esc_html_e( 'Add to Wishlist', 'masterstudy-lms-learning-management-system' ); ?>"
-		data-add-icon="far fa-heart"
+		data-add-icon="stmlms-heart-3"
 		data-remove="<?php esc_html_e( 'Remove from Wishlist', 'masterstudy-lms-learning-management-system' ); ?>"
-		data-remove-icon="fa fa-heart"
+		data-remove-icon="stmlms-heart-2"
 		data-id="<?php echo intval( $course_id ); ?>">
 		<?php if ( $wishlisted ) { ?>
-			<i class="fa fa-heart"></i>
+			<i class="stmlms-heart-2"></i>
 			<span><?php esc_html_e( 'Remove from Wishlist', 'masterstudy-lms-learning-management-system' ); ?></span>
 		<?php } else { ?>
-			<i class="far fa-heart"></i>
+			<i class="stmlms-heart-3"></i>
 			<span><?php esc_html_e( 'Add to Wishlist', 'masterstudy-lms-learning-management-system' ); ?></span>
 		<?php } ?>
 	</div>
 <?php } else { ?>
 	<div class="stm-lms-wishlist">
 		<a href="<?php echo esc_url( STM_LMS_User::login_page_url() ); ?>">
-			<i class="far fa-heart"></i>
+			<i class="stmlms-heart-3"></i>
 			<span><?php esc_html_e( 'Add to Wishlist', 'masterstudy-lms-learning-management-system' ); ?></span>
 		</a>
 	</div>

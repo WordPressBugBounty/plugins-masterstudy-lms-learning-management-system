@@ -208,7 +208,7 @@ class STM_LMS_User_Menu {
 				'id'           => 'dashboard',
 				'lms_template' => 'stm-lms-user',
 				'menu_title'   => esc_html__( 'Dashboard', 'masterstudy-lms-learning-management-system' ),
-				'menu_icon'    => 'fa-tachometer-alt',
+				'menu_icon'    => 'stmlms-tachometer-alt',
 				'menu_url'     => STM_LMS_User::login_page_url(),
 				'is_active'    => ( ! empty( $settings['user_url'] ) ) ? $settings['user_url'] : '',
 				'menu_place'   => 'main',
@@ -228,7 +228,7 @@ class STM_LMS_User_Menu {
 					'slug'         => 'edit-course',
 					'lms_template' => 'course-builder',
 					'menu_title'   => esc_html__( 'Add Course', 'masterstudy-lms-learning-management-system' ),
-					'menu_icon'    => 'fa-plus',
+					'menu_icon'    => 'stmlms-plus-2',
 					'menu_url'     => ms_plugin_manage_course_url(),
 					'menu_place'   => 'main',
 				);
@@ -241,7 +241,7 @@ class STM_LMS_User_Menu {
 			'slug'         => 'enrolled-courses',
 			'lms_template' => 'stm-lms-user-courses',
 			'menu_title'   => esc_html__( 'Enrolled Courses', 'masterstudy-lms-learning-management-system' ),
-			'menu_icon'    => 'fa-book',
+			'menu_icon'    => 'stmlms-book-2',
 			'menu_url'     => ms_plugin_user_account_url( 'enrolled-courses' ),
 			'is_active'    => ( ! $is_instructor && intval( $settings['user_url'] ?? null ) === get_queried_object_id() ),
 			'menu_place'   => 'learning',
@@ -254,7 +254,7 @@ class STM_LMS_User_Menu {
 				'slug'         => 'settings',
 				'lms_template' => 'stm-lms-user-settings',
 				'menu_title'   => esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ),
-				'menu_icon'    => 'fa-cog',
+				'menu_icon'    => 'stmlms-cog-2',
 				'menu_url'     => ms_plugin_user_account_url( 'settings' ),
 				'menu_place'   => 'learning',
 			);
@@ -267,7 +267,7 @@ class STM_LMS_User_Menu {
 				'slug'         => 'chat',
 				'lms_template' => 'stm-lms-user-chats',
 				'menu_title'   => esc_html__( 'Messages', 'masterstudy-lms-learning-management-system' ),
-				'menu_icon'    => 'fa-envelope',
+				'menu_icon'    => 'stmlms-envelope-2',
 				'menu_url'     => ms_plugin_user_account_url( 'chat' ),
 				'badge_count'  => STM_LMS_Chat::user_new_messages( $user_id ),
 				'menu_place'   => 'learning',
@@ -280,7 +280,7 @@ class STM_LMS_User_Menu {
 			'slug'         => 'wishlist',
 			'lms_template' => 'stm-lms-wishlist',
 			'menu_title'   => esc_html__( 'Wishlist', 'masterstudy-lms-learning-management-system' ),
-			'menu_icon'    => 'fa-star',
+			'menu_icon'    => 'stmlms-star-3',
 			'menu_url'     => STM_LMS_User::wishlist_url(),
 			'is_active'    => ( ! empty( $settings['wishlist_url'] ) ) ? $settings['wishlist_url'] : '',
 			'menu_place'   => 'learning',
@@ -291,7 +291,7 @@ class STM_LMS_User_Menu {
 			'slug'         => 'enrolled-quizzes',
 			'lms_template' => 'stm-lms-user-quizzes',
 			'menu_title'   => esc_html__( 'Enrolled Quizzes', 'masterstudy-lms-learning-management-system' ),
-			'menu_icon'    => 'fa-question',
+			'menu_icon'    => 'stmlms-question-2',
 			'menu_url'     => ms_plugin_user_account_url( 'enrolled-quizzes' ),
 			'menu_place'   => 'learning',
 		);
@@ -301,7 +301,7 @@ class STM_LMS_User_Menu {
 			'slug'         => 'my-orders',
 			'lms_template' => 'stm-lms-user-orders',
 			'menu_title'   => esc_html__( 'My Orders', 'masterstudy-lms-learning-management-system' ),
-			'menu_icon'    => 'fa-shopping-basket',
+			'menu_icon'    => 'stmlms-shopping-basket',
 			'menu_url'     => ms_plugin_user_account_url( 'my-orders' ),
 			'menu_place'   => 'learning',
 		);
@@ -313,7 +313,7 @@ class STM_LMS_User_Menu {
 				'slug'         => 'memberships-pmp',
 				'lms_template' => 'stm-lms-user-pmp',
 				'menu_title'   => esc_html__( 'Memberships', 'masterstudy-lms-learning-management-system' ),
-				'menu_icon'    => 'fa-address-card',
+				'menu_icon'    => 'stmlms-address-card',
 				'menu_url'     => STM_LMS_User::my_pmpro_url(),
 				'menu_place'   => 'learning',
 			);
@@ -463,6 +463,9 @@ class STM_LMS_User_Menu {
 						break;
 					case 'my-grades':
 						$add_element = STM_LMS_Helpers::is_pro_plus() && $full_menu;
+						break;
+					case 'my-subscriptions':
+						$add_element = is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) && $full_menu;
 						break;
 				}
 

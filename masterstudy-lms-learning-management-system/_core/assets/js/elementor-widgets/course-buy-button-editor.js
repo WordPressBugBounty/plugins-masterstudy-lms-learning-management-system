@@ -26,11 +26,16 @@ var CourseBuyButton = /*#__PURE__*/function (_elementorModules$fro) {
       return {
         selectors: {
           buyButton: '.masterstudy-buy-button',
-          buyButtonDropdown: '.masterstudy-buy-button_plans-dropdown',
+          buyButtonDropdown: '.masterstudy-buy-button-dropdown',
           buyButtonDisabled: '.masterstudy-buy-button__link_disabled',
           prerequisitesButton: '.masterstudy-prerequisites__button',
           prerequisitesContainer: '.masterstudy-prerequisites',
-          explanationTitle: '.masterstudy-prerequisites-list__explanation-title'
+          explanationTitle: '.masterstudy-prerequisites-list__explanation-title',
+          dropdownSectionHead: '.masterstudy-buy-button-dropdown__head',
+          bodyWrapper: '.masterstudy-buy-button-dropdown__body-wrapper',
+          membershipPlanLink: '.masterstudy-membership-plan-link',
+          membershipPlanLinkUse: '.masterstudy-membership-plan-link_use',
+          membershipPlanButton: '.masterstudy-membership-plan__button'
         }
       };
     }
@@ -44,7 +49,13 @@ var CourseBuyButton = /*#__PURE__*/function (_elementorModules$fro) {
         $buyButtonDisabled: this.$element.find(selectors.buyButtonDisabled),
         $prerequisitesButton: this.$element.find(selectors.prerequisitesButton),
         $prerequisitesContainer: this.$element.find(selectors.prerequisitesContainer),
-        $explanationTitle: this.$element.find(selectors.explanationTitle)
+        $explanationTitle: this.$element.find(selectors.explanationTitle),
+        $dropdown: this.$element.find(selectors.buyButtonDropdown),
+        $dropdownSectionHead: this.$element.find(selectors.dropdownSectionHead),
+        $bodyWrapper: this.$element.find(selectors.bodyWrapper),
+        $membershipPlanLink: this.$element.find(selectors.membershipPlanLink),
+        $membershipPlanLinkUse: this.$element.find(selectors.membershipPlanLinkUse),
+        $membershipPlanButton: this.$element.find(selectors.membershipPlanButton)
       };
     }
   }, {
@@ -74,6 +85,33 @@ var CourseBuyButton = /*#__PURE__*/function (_elementorModules$fro) {
       if (this.elements.$explanationTitle.length) {
         this.elements.$explanationTitle.on('click', function (event) {
           return _this.toggleExplanation(event);
+        });
+      }
+      if (this.elements.$dropdown.length) {
+        var s = this.getSettings('selectors');
+        var openClass = 'masterstudy-buy-button-dropdown__section_open';
+        this.elements.$dropdown.off('click.msbHead');
+        this.elements.$dropdown.on('click.msbHead', s.dropdownSectionHead, function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          var $head = jQuery(event.currentTarget);
+          var $section = $head.closest('.masterstudy-buy-button-dropdown__section');
+          var $dropdown = $head.closest(s.buyButtonDropdown);
+          $dropdown.find('.masterstudy-buy-button-dropdown__section').not($section).removeClass(openClass);
+          $section.toggleClass(openClass);
+        });
+      }
+      if (this.elements.$dropdown.length) {
+        var _s = this.getSettings('selectors');
+        this.elements.$dropdown.off('click.msbMembership');
+        this.elements.$dropdown.on('click.msbMembership', _s.membershipPlanLink, function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          var $link = jQuery(event.currentTarget);
+          var $wrap = $link.closest(_s.bodyWrapper);
+          $wrap.find(_s.membershipPlanLinkUse).removeClass('masterstudy-membership-plan-link_use');
+          $link.addClass('masterstudy-membership-plan-link_use');
+          $wrap.find(_s.membershipPlanButton).removeClass('masterstudy-membership-plan__button_disabled');
         });
       }
       jQuery(document).on('click', function (event) {

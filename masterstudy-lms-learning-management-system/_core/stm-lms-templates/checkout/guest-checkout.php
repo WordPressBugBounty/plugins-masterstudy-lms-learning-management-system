@@ -3,12 +3,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use MasterStudy\Lms\Plugin\Addons;
+use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository;
+
 /**
  * $var $user_id
  */
 
 $items         = STM_LMS_Guest_Checkout::get_cart_items();
 $guest_enabled = STM_LMS_Guest_Checkout::guest_enabled();
+$is_guest      = ! is_user_logged_in();
+$is_trial      = false;
 ?>
 <div class="masterstudy-checkout-container__top">
 <?php
@@ -37,6 +42,20 @@ else :
 				<div class="masterstudy-checkout-table__body">
 				<?php
 				foreach ( $items as $item ) :
+					if ( isset( $item['is_subscription'] ) && $item['is_subscription'] && is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
+						$total   += $item['price'];
+						$is_trial = ! empty( $item['is_trial'] );
+
+						STM_LMS_Templates::show_lms_template(
+							'checkout/subscription-item',
+							array(
+								'item' => $item,
+							)
+						);
+
+						continue;
+					}
+
 					if ( ! get_post_type( $item['item_id'] ) ) {
 						continue;
 					}
@@ -101,7 +120,7 @@ else :
 								?>
 								</div>
 							</div>
-							<div class="masterstudy-checkout-course-info__price">
+							<div data-id="checkout-price" class="masterstudy-checkout-course-info__price <?php echo $is_guest ? 'masterstudy-checkout-course-info__price-guest' : ''; ?>">
 								<span><?php echo esc_html( STM_LMS_Helpers::display_price( $item['price'] ) ); ?></span>
 								<div class="stm_lms_cart__item_delete">
 									<i class="stmlms-trash1"
@@ -126,8 +145,22 @@ else :
 				</div>
 				<div class="masterstudy-checkout-table__footer">
 					<div class="masterstudy-checkout-course-info">
-						<div class="masterstudy-checkout-course-info__label"><?php echo esc_html__( 'Total:', 'masterstudy-lms-learning-management-system' ); ?></div>
-						<div class="masterstudy-checkout-course-info__price"><?php echo esc_html( STM_LMS_Helpers::display_price( $total ) ); ?></div>
+						<div class="masterstudy-checkout-course-info__block">
+							<div class="masterstudy-checkout-course-info__label">
+								<?php echo esc_html__( 'Total:', 'masterstudy-lms-learning-management-system' ); ?>
+							</div>
+							<div class="masterstudy-checkout-course-info__price">
+								<?php
+								if ( ! empty( $is_trial ) ) {
+									echo esc_html(
+										STM_LMS_Helpers::display_price( $is_trial ? 0 : (float) $total )
+									);
+								} else {
+									echo esc_html( STM_LMS_Helpers::display_price_with_taxes( (float) $total ) );
+								}
+								?>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -39,7 +39,7 @@ if ( ! empty( $results ) ) : ?>
 								?>
 								value="<?php echo sanitize_text_field( $user->ID ); //phpcs:ignore ?>"
 								name="instructor[]"/>
-						<span><i class="fa fa-check"></i> </span>
+						<span><i class="stmlms-check-3"></i> </span>
 					</span>
 						<span><?php echo esc_html( STM_LMS_User::display_name( $user ) ); ?></span>
 					</label>

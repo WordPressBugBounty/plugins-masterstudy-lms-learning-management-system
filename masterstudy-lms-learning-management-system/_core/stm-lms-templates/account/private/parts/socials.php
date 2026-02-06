@@ -15,7 +15,7 @@ $fields  = STM_LMS_User::extra_fields();
 				class="<?php echo esc_attr( $social ); ?> stm_lms_update_field__<?php echo esc_attr( $social ); ?>"
 			>
 				<?php if ( 'twitter' !== $social ) { ?>
-					<i class="fab fa-<?php echo esc_attr( $fields[ $social ]['icon'] ); ?>"></i>
+					<i class="stmlms-<?php echo esc_attr( $fields[ $social ]['icon'] ); ?>"></i>
 				<?php } ?>
 			</a>
 			<?php

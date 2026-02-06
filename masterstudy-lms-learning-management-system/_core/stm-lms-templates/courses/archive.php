@@ -44,7 +44,7 @@ $args            = apply_filters(
 
 			<?php
 			$meta_query    = ! empty( $args['meta_query'] ) ? $args['meta_query'] : array();
-			$show_featured = true;
+			$show_featured = STM_LMS_Options::get_option( 'enable_featured_courses', true );
 			foreach ( $meta_query as $query ) {
 				if ( is_array( $query ) ) {
 					foreach ( $query as $query_item ) {
@@ -54,7 +54,7 @@ $args            = apply_filters(
 					}
 				}
 			}
-			if ( $show_featured && ! STM_LMS_Options::get_option( 'disable_featured_courses', false ) ) {
+			if ( $show_featured && STM_LMS_Options::get_option( 'disable_featured_courses', false ) ) {
 				$per_row            = STM_LMS_Options::get_option( 'courses_per_row', 3 );
 				$number_of_featured = STM_LMS_Options::get_option( 'number_featured_in_archive', $per_row );
 				if ( ! empty( $number_of_featured ) && 0 !== $number_of_featured ) {

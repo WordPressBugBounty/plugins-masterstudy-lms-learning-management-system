@@ -11,6 +11,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Plugin;
+use STM_LMS_Options;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -127,7 +128,7 @@ class MsLmsCourses extends Widget_Base {
 		if ( ! empty( $value ) ) {
 			$array = array_filter(
 				$sorting_options,
-				function( $a ) use ( $value ) {
+				function ( $a ) use ( $value ) {
 					return $a === $value;
 				},
 				ARRAY_FILTER_USE_KEY
@@ -137,18 +138,29 @@ class MsLmsCourses extends Widget_Base {
 	}
 
 	public function filter_options( $value ) {
+		$terms_args = array(
+			'taxonomy' => 'stm_lms_course_taxonomy',
+			'orderby'  => 'count',
+			'order'    => 'DESC',
+			'parent'   => false,
+		);
+
+		if ( false !== STM_LMS_Options::get_option( 'course_categories_sort_alpha', false ) ) {
+			$terms_args = array_merge(
+				$terms_args,
+				array(
+					'orderby' => 'name',
+					'order'   => 'ASC',
+					'parent'  => false,
+				)
+			);
+		}
+
 		$filter_options = array(
 			'category'    => array(
 				'label'    => esc_html__( 'Category', 'masterstudy-lms-learning-management-system' ),
 				'template' => 'category',
-				'terms'    => get_terms(
-					'stm_lms_course_taxonomy',
-					array(
-						'orderby' => 'count',
-						'order'   => 'DESC',
-						'parent'  => false,
-					)
-				),
+				'terms'    => get_terms( $terms_args ),
 			),
 			'subcategory' => array(
 				'label'    => esc_html__( 'Subcategory', 'masterstudy-lms-learning-management-system' ),
@@ -210,7 +222,7 @@ class MsLmsCourses extends Widget_Base {
 		if ( ! empty( $value ) ) {
 			$array = array_filter(
 				$filter_options,
-				function( $a ) use ( $value ) {
+				function ( $a ) use ( $value ) {
 					return $a === $value;
 				},
 				ARRAY_FILTER_USE_KEY
@@ -256,7 +268,7 @@ class MsLmsCourses extends Widget_Base {
 		if ( ! empty( $value ) ) {
 			$array = array_filter(
 				$sorting_options,
-				function( $a ) use ( $value ) {
+				function ( $a ) use ( $value ) {
 					return $a === $value;
 				},
 				ARRAY_FILTER_USE_KEY
@@ -301,11 +313,9 @@ class MsLmsCourses extends Widget_Base {
 					$sort_options[ intval( $option ) ] = $this->sorting_term_options( intval( $option ) );
 				}
 			}
-		} else {
-			if ( ! empty( $settings['sort_options'] ) ) {
-				foreach ( $settings['sort_options'] as $option ) {
-					$sort_options[ $option ] = $this->sorting_options( $option );
-				}
+		} elseif ( ! empty( $settings['sort_options'] ) ) {
+			foreach ( $settings['sort_options'] as $option ) {
+				$sort_options[ $option ] = $this->sorting_options( $option );
 			}
 		}
 
@@ -404,11 +414,9 @@ class MsLmsCourses extends Widget_Base {
 					$sort_options[ intval( $option ) ] = $this->sorting_term_options( intval( $option ) );
 				}
 			}
-		} else {
-			if ( ! empty( $settings['sort_options'] ) ) {
-				foreach ( $settings['sort_options'] as $option ) {
-					$sort_options[ $option ] = $this->sorting_options( $option );
-				}
+		} elseif ( ! empty( $settings['sort_options'] ) ) {
+			foreach ( $settings['sort_options'] as $option ) {
+				$sort_options[ $option ] = $this->sorting_options( $option );
 			}
 		}
 		/* courses query */
@@ -625,7 +633,7 @@ class MsLmsCourses extends Widget_Base {
 			$default_args['tax_query'] = $tax_query;
 		}
 
-		$default_args   = apply_filters( 'stm_lms_filter_courses', $default_args, array(), array(), $settings['sort_by'] );
+		$default_args = apply_filters( 'stm_lms_filter_courses', $default_args, array(), array(), $settings['sort_by'] );
 		if ( 0 !== $posts_per_page ) {
 			$courses = \STM_LMS_Courses::get_all_courses( $default_args );
 		}

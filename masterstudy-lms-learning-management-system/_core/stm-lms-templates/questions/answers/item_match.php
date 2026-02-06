@@ -6,11 +6,18 @@
  * @var string $question
  * @var string $question_explanation
  * @var string $question_hint
+ * @var string $random_answers
  */
+
+use MasterStudy\Lms\Utility\Question;
 
 $question_id = get_the_ID();
 
 stm_lms_register_style( 'item_match_question' );
+
+if ( ! empty( $user_answer['questions_order'] ) && 'on' === $random_answers ) {
+	$answers = Question::sort_answers_by_order( $answers, $user_answer['questions_order'], $type );
+}
 
 $user_answers = array();
 if ( ! empty( $user_answer['user_answer'] ) ) {
@@ -39,7 +46,7 @@ if ( ! empty( $user_answer['user_answer'] ) ) {
 							<div class="stm_lms_question_item_match__match"></div>
 							<?php if ( ! empty( $correct_answer['explain'] ) ) : ?>
 								<div class="stm-lms-single-answer__hint">
-									<i class="fa fa-info"></i>
+									<i class="stmlms-info"></i>
 									<div class="stm-lms-single-answer__hint_text">
 										<div class="inner">
 											<?php echo wp_kses_post( $correct_answer['explain'] ); ?>
@@ -65,7 +72,7 @@ if ( ! empty( $user_answer['user_answer'] ) ) {
 
 						<?php if ( ! empty( $correct_answer['explain'] ) ) : ?>
 							<div class="stm-lms-single-answer__hint">
-								<i class="fa fa-info"></i>
+								<i class="stmlms-info"></i>
 								<div class="stm-lms-single-answer__hint_text">
 									<div class="inner">
 										<?php echo wp_kses_post( $correct_answer['explain'] ); ?>

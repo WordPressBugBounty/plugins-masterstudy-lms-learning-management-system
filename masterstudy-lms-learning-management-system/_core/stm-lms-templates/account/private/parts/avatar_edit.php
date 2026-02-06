@@ -18,7 +18,7 @@ wp_add_inline_script(
 	<?php if ( ! empty( $my_avatar ) ) : ?>
 		<i class="stmlms-cross delete_avatar"></i>
 	<?php endif; ?>
-	<i class="fa-dashcam" data-text="<?php esc_attr_e( 'Change photo', 'masterstudy-lms-learning-management-system' ); ?>"></i>
+	<i class="stmlms-dashcam" data-text="<?php esc_attr_e( 'Change photo', 'masterstudy-lms-learning-management-system' ); ?>"></i>
 	<?php if ( ! empty( $current_user['avatar'] ) ) : ?>
 		<div class="stm-lms-user_avatar">
 			<?php echo wp_kses_post( $current_user['avatar'] ); ?>

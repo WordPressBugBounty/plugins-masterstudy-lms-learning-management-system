@@ -3,6 +3,8 @@
 use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Pro\addons\CourseBundle\Repository\CourseBundleRepository;
 use MasterStudy\Lms\Repositories\CourseRepository;
+use MasterStudy\Lms\Plugin\Addons;
+use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Services\CourseService;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -19,6 +21,35 @@ function stm_lms_str_replace_once( $str_pattern, $str_replacement, $string ) {
 
 	return $string;
 }
+
+function masterstudy_lms_fix_course_permalink_polylang( $post_link, $post = null ) {
+	if ( ! function_exists( 'pll_current_language' ) ) {
+		return $post_link;
+	}
+	if ( ! empty( $post ) && 'stm-courses' !== $post->post_type ) {
+		return $post_link;
+	}
+
+	$course = ( new CourseRepository() )->find( get_the_ID() );
+
+	$courses_page_url = STM_LMS_Course::courses_page_url();
+	$course_url       = $courses_page_url . $course->slug;
+
+	if ( str_contains( $post_link, $courses_page_url ) ) {
+		return $post_link;
+	}
+
+	$first  = wp_parse_url( $post_link );
+	$second = wp_parse_url( $course_url );
+
+	$path_parts  = explode( '/', trim( $first['path'], '/' ) );
+	$lang_prefix = $path_parts[0]; // ru
+
+	$result = $first['scheme'] . '://' . $first['host'] . '/' . $lang_prefix . $second['path'];
+
+	return $result;
+}
+add_filter( 'the_permalink', 'masterstudy_lms_fix_course_permalink_polylang', 10, 2 );
 
 function stm_lms_get_wpml_binded_id( $id ) {
 
@@ -712,14 +743,6 @@ add_action(
  */
 function stm_lms_available_addons() {
 	$available_addons = array(
-		'udemy'                   => array(
-			'name'          => esc_html__( 'Udemy Importer', 'masterstudy-lms-learning-management-system' ),
-			'url'           => esc_url( STM_LMS_URL . 'assets/addons/udemy.png' ),
-			'settings'      => admin_url( 'admin.php?page=stm-lms-udemy-settings' ),
-			'description'   => esc_html__( 'Import courses from Udemy and display them on your website. Use ready-made courses on your platform and earn commissions.', 'masterstudy-lms-learning-management-system' ),
-			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-udemy&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
-			'documentation' => 'udemy-course-importer',
-		),
 		'prerequisite'            => array(
 			'name'          => esc_html__( 'Prerequisites', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/msp.png' ),
@@ -823,7 +846,7 @@ function stm_lms_available_addons() {
 		'zoom_conference'         => array(
 			'name'          => esc_html__( 'Zoom Conference', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/zoom_conference.png' ),
-			'settings'      => admin_url( 'admin.php?page=stm_lms_zoom_conference' ),
+			'settings'      => admin_url( 'admin.php?page=mslms_zoom_settings' ),
 			'description'   => esc_html__( 'Enjoy the new type of lesson — connect Zoom Video Conferencing with your website and interact with your students in real-time.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-zoom&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'zoom-video-conferencing',
@@ -1468,6 +1491,13 @@ add_action( 'install_plugins_pre_masterstudy_addons', 'masterstudy_addons_plugin
 function masterstudy_lms_course_has_certificate( $course_id ) {
 	global $wpdb;
 
+	if ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
+		$is_provided = ( new CourseService() )->is_certificate_provided( get_current_user_id(), $course_id );
+		if ( ! $is_provided ) {
+			return false;
+		}
+	}
+
 	$course_certificate = get_post_meta( $course_id, 'course_certificate', true );
 
 	if ( 'none' === $course_certificate ) {
@@ -1666,5 +1696,51 @@ function masterstudy_lms_get_user_enrolled_date( $course_id, $user_id ) {
 			$user_id,
 			$course_id
 		)
+	);
+}
+
+function masterstudy_lms_personal_data_fields() {
+	return array(
+		'country'   => esc_html__( 'Country', 'masterstudy-lms-learning-management-system' ),
+		'post_code' => esc_html__( 'Post Code', 'masterstudy-lms-learning-management-system' ),
+		'state'     => esc_html__( 'State', 'masterstudy-lms-learning-management-system' ),
+		'city'      => esc_html__( 'City', 'masterstudy-lms-learning-management-system' ),
+		'company'   => esc_html__( 'Company Name', 'masterstudy-lms-learning-management-system' ),
+		'phone'     => esc_html__( 'Phone Number', 'masterstudy-lms-learning-management-system' ),
+	);
+}
+
+function masterstudy_lms_personal_data_display_options( $user_id ) {
+	$personal_data       = get_user_meta( $user_id, 'masterstudy_personal_data', true );
+	$personal_data       = is_array( $personal_data ) ? $personal_data : array();
+	$current_country     = strtoupper( (string) ( $personal_data['country'] ?? '' ) );
+	$is_us               = ( 'US' === $current_country );
+	$current_state       = (string) ( $personal_data['state'] ?? '' );
+	$state_label         = esc_html__( 'Select state', 'masterstudy-lms-learning-management-system' );
+	$country_label       = esc_html__( 'Select your country', 'masterstudy-lms-learning-management-system' );
+	$us_states           = masterstudy_lms_get_us_states( true );
+	$state_code_selected = '';
+
+	if ( $current_state && ! empty( $us_states ) ) {
+		$cur_up = strtoupper( $current_state );
+		foreach ( $us_states as $st ) {
+			if ( strtoupper( (string) ( $st['code'] ?? '' ) ) === $cur_up ) {
+				$state_code_selected = $cur_up;
+				break;
+			}
+		}
+	}
+
+	return array(
+		'countries'           => masterstudy_lms_get_countries( false ),
+		'personal_data'       => $personal_data,
+		'current_country'     => $current_country,
+		'is_us'               => $is_us,
+		'current_state'       => $current_state,
+		'state_label'         => $state_label,
+		'country_label'       => $country_label,
+		'us_states'           => $us_states,
+		'state_code_selected' => $state_code_selected,
+		'personal_fields'     => masterstudy_lms_personal_data_fields(),
 	);
 }

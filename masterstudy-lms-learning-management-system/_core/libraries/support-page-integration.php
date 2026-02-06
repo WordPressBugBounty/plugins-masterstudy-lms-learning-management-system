@@ -64,6 +64,9 @@ add_action(
 							),
 						),
 					),
+					'hosting'       => array(
+						'show_hosting' => true,
+					),
 					'features'      => array(
 						'title'        => __( 'Get MasterStudy and Enjoy PRO Features', 'masterstudy-lms-learning-management-system' ),
 						'title_pro'    => __( 'Get MasterStudy and Enjoy PRO PLUS Features', 'masterstudy-lms-learning-management-system' ),

@@ -35,6 +35,7 @@ class UpdatePricingSettingsController {
 				'enterprise_price'       => 'nullable|float',
 				'not_membership'         => 'required|boolean',
 				'affiliate_course'       => 'required|boolean',
+				'subscriptions'          => 'nullable|boolean',
 				'affiliate_course_text'  => 'required_if_accepted,affiliate_course|string',
 				'affiliate_course_link'  => 'required_if_accepted,affiliate_course|string',
 				'price_info'             => 'nullable|string',

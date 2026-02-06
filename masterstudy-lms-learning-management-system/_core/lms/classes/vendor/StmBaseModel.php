@@ -10,6 +10,7 @@ namespace stmLms\Classes\Vendor;
 abstract class StmBaseModel implements ModelInterface {
 
 	public $old_properties;
+	public $pinged;
 
 	/**
 	 * Get the column used as the primary key, defaults to 'id'.

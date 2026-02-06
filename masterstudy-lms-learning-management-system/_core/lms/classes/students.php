@@ -20,7 +20,7 @@ class STM_LMS_Students {
 			'slug'         => 'enrolled-students',
 			'lms_template' => 'stm-lms-enrolled-students',
 			'menu_title'   => esc_html__( 'Students', 'masterstudy-lms-learning-management-system' ),
-			'menu_icon'    => 'fa-user',
+			'menu_icon'    => 'stmlms-user-2',
 			'menu_url'     => ms_plugin_user_account_url( 'enrolled-students' ),
 			'menu_place'   => 'main',
 		);
@@ -32,7 +32,7 @@ class STM_LMS_Students {
 		add_submenu_page(
 			'stm-lms-settings',
 			esc_html__( 'Students', 'masterstudy-lms-learning-management-system' ),
-			'<span class="stm-lms-students-menu-title"><span class="stm-lms-menu-text">' . esc_html__( 'Students', 'masterstudy-lms-learning-management-system' ) . '</span><span class="stm-lms-menu-status">' . esc_html__( 'new', 'masterstudy-lms-learning-management-system' ) . '</span></span>',
+			'<span class="stm-lms-students-menu-title"><span class="stm-lms-menu-text">' . esc_html__( 'Students', 'masterstudy-lms-learning-management-system' ) . '</span></span>',
 			'manage_options',
 			'manage_students',
 			array( $this, 'manage_users_template' ),

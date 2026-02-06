@@ -26,9 +26,10 @@ class UpdateSettingsController {
 			return WpResponseFactory::not_found();
 		}
 
-		$levels      = array_keys( \STM_LMS_Helpers::get_course_levels() );
-		$video_types = apply_filters( 'masterstudy_lms_lesson_video_types', array_map( 'strval', LessonVideoType::cases() ) );
-		$validator   = new Validator(
+		$levels          = array_keys( \STM_LMS_Helpers::get_course_levels() );
+		$course_statuses = array_keys( \STM_LMS_Helpers::get_course_statuses() );
+		$video_types     = apply_filters( 'masterstudy_lms_lesson_video_types', array_map( 'strval', LessonVideoType::cases() ) );
+		$validator       = new Validator(
 			$request->get_json_params(),
 			array(
 				'category'                => 'required|array',
@@ -56,7 +57,7 @@ class UpdateSettingsController {
 				'is_lock_lesson'          => 'required|boolean',
 				'level'                   => 'nullable|string|contains_list,' . implode( ';', $levels ),
 				'slug'                    => 'required|string',
-				'status'                  => 'nullable|string|contains_list,' . implode( ';', CourseStatus::cases() ),
+				'status'                  => 'nullable|string|contains_list,' . implode( ';', $course_statuses ),
 				'status_date_end'         => 'nullable|integer',
 				'status_date_start'       => 'nullable|integer',
 				'title'                   => 'required|string',

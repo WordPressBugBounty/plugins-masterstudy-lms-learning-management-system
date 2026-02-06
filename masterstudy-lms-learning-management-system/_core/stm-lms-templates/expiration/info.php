@@ -6,7 +6,7 @@
 
 <div class="stm_lms_expired_notice__wrapper">
 	<div class="stm_lms_expired_notice warning_expired">
-		<i class="far fa-clock"></i>
+		<i class="stmlms-clock"></i>
 		<?php
 		printf(
 			wp_kses_post(

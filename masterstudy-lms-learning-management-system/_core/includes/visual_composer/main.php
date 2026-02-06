@@ -11,6 +11,7 @@ $modules = array(
 	'stm_lms_membership_levels',
 	'masterstudy_authorization_form',
 	'masterstudy_instructor_registration',
+	'masterstudy_membership_pricing',
 );
 
 foreach ( $modules as $module ) {

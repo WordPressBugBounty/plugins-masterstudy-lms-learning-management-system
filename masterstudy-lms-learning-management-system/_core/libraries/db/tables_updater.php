@@ -26,7 +26,6 @@ function stm_lms_tables_update() {
 	stm_lms_user_searches();
 	stm_lms_curriculum_sections();
 	stm_lms_curriculum_materials();
-	stm_lms_order_items();
 	stm_lms_user_bookmarks();
 
 	if ( function_exists( 'stm_lms_user_subscriptions' ) ) {
@@ -42,8 +41,14 @@ function stm_lms_tables_update() {
 	}
 
 	// Update LMS Pro tables from Free version
-	if ( defined( 'STM_LMS_PRO_PATH' ) && is_ms_lms_addon_enabled( 'assignments' ) ) {
-		stm_lms_user_assignments_table();
+	if ( defined( 'STM_LMS_PRO_PATH' ) ) {
+		if ( is_ms_lms_addon_enabled( 'assignments' ) ) {
+			stm_lms_user_assignments_table();
+		}
+
+		if ( is_ms_lms_addon_enabled( 'subscriptions' ) ) {
+			stm_lms_subscription_tables();
+		}
 	}
 
 	update_option( 'stm_lms_db_version', STM_LMS_DB_VERSION );

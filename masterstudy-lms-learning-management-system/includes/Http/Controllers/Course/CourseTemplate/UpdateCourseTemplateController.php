@@ -24,6 +24,16 @@ class UpdateCourseTemplateController {
 
 		$data = $request->get_json_params();
 
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return new \WP_REST_Response(
+				array(
+					'error_code' => 'modify_template_access_error',
+					esc_html__( 'You do not have permission to update course templates.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
+
 		$result = ( new CourseTemplateRepository() )->update( $data['course_style'] );
 
 		if ( ! $result ) {

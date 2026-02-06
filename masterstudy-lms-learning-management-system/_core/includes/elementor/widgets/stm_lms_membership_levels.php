@@ -36,7 +36,7 @@ class StmLmsMembershipLevels extends Widget_Base {
 	 * @return string Widget title.
 	 */
 	public function get_title() {
-		return esc_html__( 'Membership Plans', 'masterstudy-lms-learning-management-system' );
+		return esc_html__( 'PMPro Plans', 'masterstudy-lms-learning-management-system' );
 	}
 
 	/**
@@ -203,7 +203,7 @@ class StmLmsMembershipLevels extends Widget_Base {
 				'label'   => esc_html__( 'Plan items icons', 'masterstudy-lms-learning-management-system' ),
 				'type'    => \Elementor\Controls_Manager::ICONS,
 				'default' => array(
-					'value'   => 'fas fa-check-circle',
+					'value'   => 'stmlms-check-3-circle',
 					'library' => 'fa-solid',
 				),
 			)
@@ -987,7 +987,7 @@ class StmLmsMembershipLevels extends Widget_Base {
 			'button_position'   => $settings['button_position'] ?? 'before_level_items',
 			'level_mark_list'   => $settings['level_mark_list'],
 			'level_items_icons' => $settings['level_items_icons'] ?? array(
-				'value'   => 'fas fa-check-circle',
+				'value'   => 'stmlms-check-3-circle',
 				'library' => 'fa-solid',
 			),
 		);

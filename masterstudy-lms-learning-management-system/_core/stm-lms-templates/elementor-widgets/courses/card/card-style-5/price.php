@@ -1,9 +1,9 @@
 <?php
 $course_free_status = masterstudy_lms_course_free_status( $course['single_sale'], $course['price'] );
-
-$has_price_info = $course['single_sale'] && ! $course_free_status['zero_price'];
-$members_only   = ! $course['single_sale'] && STM_LMS_Subscriptions::subscription_enabled() && ! $course['not_in_membership'];
-$has_free_info  = $course_free_status['is_free'];
+$has_price_info     = $course['single_sale'] && ! $course_free_status['zero_price'];
+$members_only       = ! $course['single_sale'] && ! $course['not_in_membership'];
+$has_free_info      = $course_free_status['is_free'];
+$is_sale            = ! empty( $course['sale_price'] ) && $course['is_sale_active'];
 
 $preview_class = ( ! $has_price_info && ! $members_only && ! $has_free_info )
 	? 'ms_lms_courses_card_item_info_price_preview_open'
@@ -18,12 +18,12 @@ $preview_class = ( ! $has_price_info && ! $members_only && ! $has_free_info )
 		<?php endif; ?>
 	</a>
 	<?php if ( $has_price_info ) { ?>
-		<div class="ms_lms_courses_card_item_info_price_single <?php echo ( ! empty( $course['sale_price'] ) && $course['is_sale_active'] ) ? 'sale' : ''; ?>">
-			<span><?php echo esc_html( STM_LMS_Helpers::display_price( $course['price'] ) ); ?></span>
+		<div class="ms_lms_courses_card_item_info_price_single <?php echo $is_sale ? 'sale' : ''; ?>">
+			<span><?php echo esc_html( STM_LMS_Helpers::display_price_with_taxes( $course['price'] ) ); ?></span>
 		</div>
-		<?php if ( ! empty( $course['sale_price'] ) && $course['is_sale_active'] ) { ?>
+		<?php if ( $is_sale ) { ?>
 			<div class="ms_lms_courses_card_item_info_price_sale">
-				<span><?php echo esc_html( STM_LMS_Helpers::display_price( $course['sale_price'] ) ); ?></span>
+				<span><?php echo esc_html( STM_LMS_Helpers::display_price_with_taxes( $course['sale_price'] ) ); ?></span>
 			</div>
 		<?php } ?>
 	<?php } elseif ( $members_only ) { ?>

@@ -188,7 +188,9 @@ $not_empty_stats            = $reviews || $point || $certificate || $enterprise 
 					<div class="stm_lms_instructor_courses__single--image">
 						<div class="stm_lms_post_status heading_font"
 							v-if="course.post_status"
-							v-bind:class="course.post_status.status">
+							v-bind:class="course.post_status.status"
+							:style="{color: `${course.post_status.text_color}`, background: `${course.post_status.bg_color}`}"
+						>
 							{{ course.post_status.label }}
 						</div>
 						<div v-html="course.image" class="image_wrapper"></div>
@@ -210,7 +212,7 @@ $not_empty_stats            = $reviews || $point || $certificate || $enterprise 
 						<div class="stm_lms_instructor_courses__single--progress">
 							<div class="stm_lms_instructor_courses__single--progress_top">
 								<div class="stm_lms_instructor_courses__single--duration" v-if="course.duration">
-									<i class="far fa-clock"></i>
+									<i class="stmlms-clock"></i>
 									{{ course.duration }}
 								</div>
 								<div class="stm_lms_instructor_courses__single--completed">

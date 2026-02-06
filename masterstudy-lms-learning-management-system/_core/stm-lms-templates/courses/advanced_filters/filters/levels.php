@@ -20,13 +20,13 @@ if ( ! empty( $statuses ) ) : ?>
 					<span class="stm_lms_styled_checkbox__inner">
 						<input type="checkbox"
 							<?php
-							if ( in_array( sanitize_text_field( $status ), $values ) ) {
+							if ( in_array( sanitize_text_field( $status ), $values, true ) ) {
 								echo 'checked="checked"';
 							}
 							?>
 							value="<?php echo sanitize_text_field( $status ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>"
 							name="levels[]"/>
-						<span><i class="fa fa-check"></i> </span>
+						<span><i class="stmlms-check-3"></i> </span>
 					</span>
 						<span><?php echo esc_html( $status_label ); ?></span>
 					</label>

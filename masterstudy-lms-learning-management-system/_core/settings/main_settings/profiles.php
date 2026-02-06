@@ -495,7 +495,7 @@ function stm_lms_settings_profiles_section() {
 	return array(
 		'name'   => esc_html__( 'Profiles', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'Profiles Settings', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fa fa-user-circle',
+		'icon'   => 'stmlms-user-circle',
 		'fields' => array_merge( $general_fields, stm_lms_settings_sorting_the_menu_section() ),
 	);
 }

@@ -21,19 +21,19 @@
 				</div>
 				<span v-show="!error.status">{{ this.fileName }} - <?php esc_html_e( 'Uploading', 'masterstudy-lms-learning-management-system' ); ?> {{ this.progressBar }}%</span>
 				<div class="progress-close" @click="clearUpload">
-					<i class="fas fa-times"></i>
+					<i class="stmlms-times"></i>
 				</div>
 			</div>
 			<div class="error-message-block" v-show="error.status">
 				<div class="error-message-icon">
-					<i class="fas fa-exclamation-circle"></i>
+					<i class="stmlms-exclamation-circle"></i>
 				</div>
 				<div>
 					<div class="error-message-filename">{{ this.fileName }}</div>
 					<div class="error-message">{{ error.message }}</div>
 				</div>
 				<div class="error-message-close" @click="closeInput">
-					<i class="fas fa-times"></i>
+					<i class="stmlms-times"></i>
 				</div>
 			</div>
 		</div>

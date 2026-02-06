@@ -17,7 +17,7 @@ foreach ( $answers as $answer ) : ?>
 	<div class="stm-lms-single-answer">
 		<label>
 			<input type="radio" name="<?php echo esc_attr( $question_id ); ?>"  value="<?php echo esc_attr( $answer['value'] ); ?>"/>
-			<i class="fa fa-check"></i>
+			<i class="stmlms-check-3"></i>
 				<?php echo esc_html( $answer['text'] ); ?>
 		</label>
 	</div>

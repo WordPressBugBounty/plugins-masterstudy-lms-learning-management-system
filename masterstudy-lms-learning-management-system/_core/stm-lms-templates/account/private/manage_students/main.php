@@ -214,7 +214,7 @@ $student_public = STM_LMS_Options::get_option( 'student_public_profile', true );
 					<div class="masterstudy-tcell masterstudy-tcell_is-empty">
 						<?php echo esc_html__( 'No Students Found.', 'masterstudy-lms-learning-management-system' ); ?>
 					</div>
-				</div>	
+				</div>
 			</div>
 
 			<div class="masterstudy-tfooter masterstudy-tfooter--hidden">

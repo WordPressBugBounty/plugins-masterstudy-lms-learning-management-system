@@ -40,6 +40,7 @@ class UpdateController {
 				'quiz_attempts'         => 'required|string|contains_list,' . implode( ';', array_map( 'strval', QuizAttempts::cases() ) ),
 				'show_attempts_history' => 'boolean',
 				'retry_after_passing'   => 'boolean',
+				'random_answers'        => 'boolean',
 			)
 		);
 

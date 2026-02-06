@@ -8,7 +8,7 @@ stm_lms_register_script( 'manage_students/import-modal' );
 			<span class="masterstudy-manage-students-import__modal-title">
 				<span data-step="1,2,3"><?php esc_html_e( 'Import students from CSV', 'masterstudy-lms-learning-management-system' ); ?></span>
 				<span data-step="6"><?php esc_html_e( 'Import partially complete', 'masterstudy-lms-learning-management-system' ); ?></span>
-			</span> 
+			</span>
 			<span class="masterstudy-manage-students-import__modal-close"></span>
 		</div>
 		<div class="masterstudy-manage-students-import__modal-text">
@@ -38,7 +38,7 @@ stm_lms_register_script( 'manage_students/import-modal' );
 		</div>
 		<div class="masterstudy-manage-students-import__info hidden" data-step="6">
 			<span class="masterstudy-manage-students-import__warning">
-				<i class="fas fa-exclamation-triangle"></i>
+				<i class="stmlms-exclamation-triangle"></i>
 				<?php esc_html_e( 'The users below were not imported as they had already been enrolled in this course.', 'masterstudy-lms-learning-management-system' ); ?>
 			</span>
 			<div class="masterstudy-manage-students-import__list">
@@ -46,7 +46,7 @@ stm_lms_register_script( 'manage_students/import-modal' );
 			</div>
 		</div>
 		<div class="masterstudy-manage-students-import__file-upload" data-step="1">
-			<div class="masterstudy-manage-students-import__file-upload__item-wrapper"></div> 
+			<div class="masterstudy-manage-students-import__file-upload__item-wrapper"></div>
 			<div class="masterstudy-manage-students-import__file-upload__field">
 				<?php
 				STM_LMS_Templates::show_lms_template(
@@ -64,9 +64,9 @@ stm_lms_register_script( 'manage_students/import-modal' );
 				?>
 				<div class="masterstudy-manage-students-import__file-upload__field-text">
 					<p><?php esc_html_e( 'Drag file here or click the button.', 'masterstudy-lms-learning-management-system' ); ?></p>
-				</div> 
+				</div>
 				<div class="masterstudy-manage-students-import__file-upload__field-error" data-step="1">
-					<i class="fas fa-exclamation-triangle"></i>
+					<i class="stmlms-exclamation-triangle"></i>
 					<span class="masterstudy-manage-students-import__unsupported-file-type hidden">
 						<?php esc_html_e( 'Unsupported file type.', 'masterstudy-lms-learning-management-system' ); ?>
 					</span>
@@ -85,7 +85,7 @@ stm_lms_register_script( 'manage_students/import-modal' );
 						)
 					);
 					?>
-				</div> 
+				</div>
 				<input type="file" class="masterstudy-manage-students-import__file-upload__input" accept=".csv">
 			</div>
 		</div>

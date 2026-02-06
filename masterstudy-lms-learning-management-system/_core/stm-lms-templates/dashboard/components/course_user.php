@@ -46,7 +46,7 @@
 								<div class="section_item__toggle"
 									v-if="item.type==='assignment' || item.type==='quiz'"
 									@click="openAssignments(item)">
-									<i class="fa fa-chevron-down"></i>
+									<i class="stmlms-chevron-down-2"></i>
 								</div>
 							</h4>
 							<div class="section_item__completed">

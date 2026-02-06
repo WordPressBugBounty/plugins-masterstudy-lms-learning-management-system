@@ -11,8 +11,8 @@
 			<div class="ms_lms_courses_archive__filter_options_item_category">
 				<label class="ms_lms_courses_archive__filter_options_item_checkbox">
 					<span class="ms_lms_courses_archive__filter_options_item_checkbox_inner">
-						<input type="checkbox" value="<?php echo esc_html( $levels ); ?>" <?php checked( in_array( $levels, $metas['level'] ) ); ?> name="level[]"/>
-						<span><i class="fa fa-check"></i></span>
+						<input type="checkbox" value="<?php echo esc_html( $levels ); ?>" <?php checked( in_array( $levels, $metas['level'], true ) ); ?> name="level[]"/>
+						<span><i class="stmlms-check-3"></i></span>
 					</span>
 					<span class="ms_lms_courses_archive__filter_options_item_checkbox_label"><?php echo esc_html( $levels_label ); ?></span>
 				</label>

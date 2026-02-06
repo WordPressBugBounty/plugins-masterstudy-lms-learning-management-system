@@ -10,8 +10,9 @@ function masterstudy_get_elementor_unlock_banner( $addon = '' ) {
 	if ( ! empty( $addon ) ) {
 		$addon_name   = 'coming_soon' === $addon ? 'upcoming' : $addon;
 		$addon_titles = array(
-			'grades'      => __( 'Grades Addon', 'masterstudy-lms-learning-management-system' ),
-			'coming_soon' => __( 'Upcoming Course Status Addon', 'masterstudy-lms-learning-management-system' ),
+			'grades'        => __( 'Grades Addon', 'masterstudy-lms-learning-management-system' ),
+			'subscriptions' => __( 'Subscriptions Addon', 'masterstudy-lms-learning-management-system' ),
+			'coming_soon'   => __( 'Upcoming Course Status Addon', 'masterstudy-lms-learning-management-system' ),
 		);
 		$link_text    = esc_html__( 'Activate', 'masterstudy-lms-learning-management-system' );
 		$link         = admin_url( "admin.php?page=stm-addons&search={$addon_name}" );

@@ -6,11 +6,16 @@
  * @var $total
  */
 
-$payment_methods = STM_LMS_Options::get_option( 'payment_methods' );
+$payment_methods  = STM_LMS_Options::get_option( 'payment_methods' );
+$has_subscription = STM_LMS_Cart::cart_has_subscription_item();
+
 if ( ! empty( $payment_methods ) ) :
+	if ( $has_subscription ) {
+		$payment_methods = array_intersect_key( $payment_methods, STM_LMS_Cart::subscription_payment_methods() );
+	}
+
 	$payment_method_names = STM_LMS_Cart::payment_methods();
 	?>
-
 	<div class="stm-lms-payment-methods">
 		<?php foreach ( $payment_methods as $payment_method_code => $payment_method ) : ?>
 			<?php if ( ! empty( $payment_method['enabled'] ) ) : ?>
@@ -68,9 +73,9 @@ if ( ! empty( $payment_methods ) ) :
 										</script>
 										<?php
 									else :
-										if ( ! empty( $payment_field ) && 'Currency' !== $payment_field ) :
+										if ( ! empty( $payment_field ) && 'Currency' !== $payment_field && ! empty( $payment_method_names[ $payment_field_key ] ) ) :
 											?>
-											<div class="stm-lms-payment-method__field">
+											<div class="stm-lms-payment-method__field-stripe">
 												<div class="stm-lms-payment-method__field_label">
 													<?php echo esc_html( $payment_method_names[ $payment_field_key ] ); ?>
 												</div>

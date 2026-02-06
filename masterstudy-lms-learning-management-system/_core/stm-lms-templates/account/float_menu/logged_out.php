@@ -34,7 +34,7 @@ if ( ! empty( $terms_all ) ) {
 			<span>
 				<?php esc_html_e( 'Hey, Please Login', 'masterstudy-lms-learning-management-system' ); ?>
 			</span>
-			<i class="fa fa-user"></i>
+			<i class="stmlms-user-2"></i>
 		</div>
 
 		<div class="stm_lms_user_float_menu__login_head">

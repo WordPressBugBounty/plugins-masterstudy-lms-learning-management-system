@@ -19,7 +19,7 @@
 				<div class="searchboxes">
 					<add_user :course_id="id" v-on:studentAdded="studentAdded" :title="origin_title"></add_user>
 					<div class="searchbox-wrapper">
-						<i class="fa fa-search"></i>
+						<i class="stmlms-search-2"></i>
 						<input type="text" v-model="search"
 							placeholder="<?php esc_attr_e( 'Search student...', 'masterstudy-lms-learning-management-system' ); ?>">
 					</div>
@@ -35,32 +35,32 @@
 						<th class="name">
 							<div class="sort-table" @click="sortBy('name')"
 								v-bind:class="[sort === 'name' ? 'active' : '', 'direction_' + sortDirection]">
-								<i class="fa fa-long-arrow-alt-up"></i>
-								<i class="fa fa-long-arrow-alt-down"></i>
+								<i class="stmlms-long-arrow-alt-up"></i>
+								<i class="stmlms-long-arrow-alt-down"></i>
 								<?php esc_html_e( 'Student name', 'masterstudy-lms-learning-management-system' ); ?>
 							</div>
 						</th>
 						<th class="email">
 							<div class="sort-table" @click="sortBy('email')"
 								v-bind:class="[sort === 'email' ? 'active' : '', 'direction_' + sortDirection]">
-								<i class="fa fa-long-arrow-alt-up"></i>
-								<i class="fa fa-long-arrow-alt-down"></i>
+								<i class="stmlms-long-arrow-alt-up"></i>
+								<i class="stmlms-long-arrow-alt-down"></i>
 								<?php esc_html_e( 'Student email', 'masterstudy-lms-learning-management-system' ); ?>
 							</div>
 						</th>
 						<th class="time">
 							<div class="sort-table" @click="sortBy('time')"
 								v-bind:class="[sort === 'time' ? 'active' : '', 'direction_' + sortDirection]">
-								<i class="fa fa-long-arrow-alt-up"></i>
-								<i class="fa fa-long-arrow-alt-down"></i>
+								<i class="stmlms-long-arrow-alt-up"></i>
+								<i class="stmlms-long-arrow-alt-down"></i>
 								<?php esc_html_e( 'Started', 'masterstudy-lms-learning-management-system' ); ?>
 							</div>
 						</th>
 						<th class="progress_cell">
 							<div class="sort-table" @click="sortBy('progress')"
 								v-bind:class="[sort === 'progress' ? 'active' : '', 'direction_' + sortDirection]">
-								<i class="fa fa-long-arrow-alt-up"></i>
-								<i class="fa fa-long-arrow-alt-down"></i>
+								<i class="stmlms-long-arrow-alt-up"></i>
+								<i class="stmlms-long-arrow-alt-down"></i>
 								<?php esc_html_e( 'Progress', 'masterstudy-lms-learning-management-system' ); ?>
 							</div>
 						</th>
@@ -112,7 +112,7 @@
 
 						<td class="student_progress">
 							<div class="goToProgress" @click="toUser(id, list.user_id)" v-if="list.user_id">
-								<i class="fa fa-list"></i>
+								<i class="stmlms-list-2"></i>
 								<?php esc_html_e( 'Progress', 'masterstudy-lms-learning-management-system' ); ?>
 							</div>
 						</td>

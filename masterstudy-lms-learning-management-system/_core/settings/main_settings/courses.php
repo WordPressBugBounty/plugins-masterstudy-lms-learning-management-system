@@ -9,7 +9,7 @@ function stm_lms_settings_courses_section() {
 	$courses_settings_fields = array(
 		'name'   => esc_html__( 'Courses', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'Courses Settings', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fas fa-book',
+		'icon'   => 'stmlms-book-2',
 		'fields' => array(
 			'demo_import'                       => array(
 				'type' => 'demo_import',
@@ -137,25 +137,15 @@ function stm_lms_settings_courses_section() {
 					__( 'A unique name that shows in the URL before the category, like in <br/> example.com/blog/course-category/templates. Here, "course-category" is the slug, and "templates" is the category', 'masterstudy-lms-learning-management-system' ),
 				),
 			),
-			'disable_featured_courses'          => array(
-				'type'        => 'checkbox',
-				'label'       => esc_html__( 'Show featured courses on top of the list page', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'Show the special courses at the top of the list', 'masterstudy-lms-learning-management-system' ),
-			),
-			'number_featured_in_archive'        => array(
-				'type'        => 'number',
-				'label'       => esc_html__( 'Number of featured courses on the Archive page', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'How many special courses to show on the Archive page', 'masterstudy-lms-learning-management-system' ),
-				'value'       => 3,
-				'dependency'  => array(
-					'key'   => 'disable_featured_courses',
-					'value' => 'empty',
-				),
-			),
 			'enable_courses_filter'             => array(
 				'type'        => 'checkbox',
 				'label'       => esc_html__( 'Filters on the Archive page', 'masterstudy-lms-learning-management-system' ),
 				'description' => esc_html__( 'Allow users to filter courses on the Archive page', 'masterstudy-lms-learning-management-system' ),
+			),
+			'course_categories_sort_alpha'      => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Sort course categories alphabetically', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Enable this to display course categories in alphabetical order in the filters sidebar on courses page.', 'masterstudy-lms-learning-management-system' ),
 			),
 
 			/*GROUP STARTED*/
@@ -248,13 +238,6 @@ function stm_lms_settings_courses_section() {
 				),
 			),
 			/*GROUP ENDED*/
-			'pro_banner'                        => array(
-				'type'  => 'pro_banner',
-				'label' => esc_html__( 'Upcoming Course Status Addon', 'masterstudy-lms-learning-management-system' ),
-				'img'   => STM_LMS_URL . 'assets/img/pro-features/upcoming_nuxy_banner.png',
-				'desc'  => esc_html__( 'Promote courses that are not ready for enrollment. Give a preview of the upcoming courses and a countdown to the launch date.', 'masterstudy-lms-learning-management-system' ),
-				'hint'  => esc_html__( 'Unlock', 'masterstudy-lms-learning-management-system' ),
-			),
 		),
 	);
 
@@ -276,6 +259,81 @@ function stm_lms_settings_courses_section() {
 		);
 		$courses_settings_fields['fields'] = array_merge( $courses_settings_fields['fields'], $courses_filter_field );
 	}
+
+	if ( STM_LMS_Helpers::is_pro() ) {
+		$featured_courses = array(
+			'enable_featured_courses'    => array(
+				'group'       => 'started',
+				'group_title' => esc_html__( 'Featured Courses', 'masterstudy-lms-learning-management-system' ),
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Featured Courses', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Enable this option to highlight selected courses as featured throughout your site.', 'masterstudy-lms-learning-management-system' ),
+				'value'       => true,
+				'pro'         => true,
+			),
+			'courses_featured_num'       => array(
+				'type'        => 'number',
+				'label'       => esc_html__( 'Number of featured courses', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Define how many courses you want to highlight as special', 'masterstudy-lms-learning-management-system' ),
+				'value'       => 1,
+				'dependency'  => array(
+					'key'   => 'enable_featured_courses',
+					'value' => 'not_empty',
+				),
+			),
+			'disable_featured_courses'   => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Show Featured Courses at the Top of the Courses Page', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Display featured courses before all others on the courses page. This does not work for pages created with page builders (Elementor, Gutenberg etc.).', 'masterstudy-lms-learning-management-system' ),
+				'dependency'  => array(
+					'key'   => 'enable_featured_courses',
+					'value' => 'not_empty',
+				),
+			),
+			'number_featured_in_archive' => array(
+				'group'        => 'ended',
+				'type'         => 'number',
+				'label'        => esc_html__( 'Number of Courses in Featured Section', 'masterstudy-lms-learning-management-system' ),
+				'description'  => esc_html__( 'Set how many featured courses are displayed inside the featured block on the courses archive page. The list is trimmed to this number. This does not work for pages created with page builders.', 'masterstudy-lms-learning-management-system' ),
+				'value'        => 3,
+				'dependency'   => array(
+					array(
+						'key'   => 'disable_featured_courses',
+						'value' => 'not_empty',
+					),
+					array(
+						'key'   => 'enable_featured_courses',
+						'value' => 'not_empty',
+					),
+				),
+				'dependencies' => '&&',
+			),
+		);
+	} else {
+		$featured_courses = array(
+			'enable_featured_courses' => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Featured Courses', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Enable this option to highlight selected courses as featured throughout your site.', 'masterstudy-lms-learning-management-system' ),
+				'value'       => true,
+				'pro'         => true,
+			),
+		);
+	}
+
+	$courses_settings_fields['fields'] = array_merge( $courses_settings_fields['fields'], $featured_courses );
+
+	$pro_banner = array(
+		'pro_banner' => array(
+			'type'  => 'pro_banner',
+			'label' => esc_html__( 'Upcoming Course Status Addon', 'masterstudy-lms-learning-management-system' ),
+			'img'   => STM_LMS_URL . 'assets/img/pro-features/upcoming_nuxy_banner.png',
+			'desc'  => esc_html__( 'Promote courses that are not ready for enrollment. Give a preview of the upcoming courses and a countdown to the launch date.', 'masterstudy-lms-learning-management-system' ),
+			'hint'  => esc_html__( 'Unlock', 'masterstudy-lms-learning-management-system' ),
+		),
+	);
+
+	$courses_settings_fields['fields'] = array_merge( $courses_settings_fields['fields'], $pro_banner );
 
 	return $courses_settings_fields;
 }

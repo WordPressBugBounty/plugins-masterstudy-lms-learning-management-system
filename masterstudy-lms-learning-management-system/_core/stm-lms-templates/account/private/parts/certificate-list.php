@@ -83,7 +83,7 @@ if ( ! empty( $completed ) ) { ?>
 				<div class="affiliate_points heading_font" data-copy="<?php echo esc_attr( $code ); ?>">
 					<span class="hidden" id="<?php echo esc_attr( $code ); ?>"><?php echo esc_html( $code ); ?></span>
 					<span class="affiliate_points__btn">
-						<i class="fa fa-link"></i>
+						<i class="stmlms-link-2"></i>
 						<span class="text"><?php esc_html_e( 'Copy code', 'masterstudy-lms-learning-management-system' ); ?></span>
 					</span>
 				</div>

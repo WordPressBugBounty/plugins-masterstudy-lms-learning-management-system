@@ -76,6 +76,9 @@ function updateDates(period) {
   } else if (typeof stats_data.is_student !== "undefined" && stats_data.is_student) {
     _periodKey = 'StudentListSelectedPeriodKey';
     _period = 'StudentListSelectedPeriod';
+  } else if (stats_data.is_account_statistics) {
+    _periodKey = 'StatisticsSelectedPeriodKey';
+    _period = 'StatisticsSelectedPeriod';
   }
   if (isDefaultPeriod && saveToLocale) {
     localStorage.setItem(_periodKey, defaultPeriodKey);

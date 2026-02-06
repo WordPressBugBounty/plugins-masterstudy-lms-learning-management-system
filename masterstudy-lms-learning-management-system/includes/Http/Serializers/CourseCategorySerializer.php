@@ -19,6 +19,7 @@ final class CourseCategorySerializer extends AbstractSerializer {
 			'icon'     => $data->course_icon ?? null,
 			'color'    => $data->course_color ?? null,
 			'courses'  => $data->course_count ?? null,
+			'count'    => $data->count ?? null,
 		);
 	}
 }

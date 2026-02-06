@@ -4,7 +4,7 @@ namespace MasterStudy\Lms\Utility;
 
 class Sanitizer {
 
-	public static function html( string $value ) {
+	public static function html( string $value, array $extended_html = array() ) {
 		$allowed_html = array(
 			'a'          => array(
 				'href'  => array(),
@@ -25,6 +25,8 @@ class Sanitizer {
 			'li'         => array( 'style' => array() ),
 			'blockquote' => array(),
 		);
+
+		$allowed_html = array_merge( $allowed_html, $extended_html );
 
 		return wp_kses( $value, $allowed_html );
 	}

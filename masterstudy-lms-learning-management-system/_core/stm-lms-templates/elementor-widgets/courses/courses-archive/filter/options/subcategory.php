@@ -18,7 +18,7 @@ $selected_subcategories = ! empty( $_GET['terms'] ) ? array_map( 'intval', $_GET
 						<label class="ms_lms_courses_archive__filter_options_item_checkbox">
 							<span class="ms_lms_courses_archive__filter_options_item_checkbox_inner">
 								<input type="checkbox" value="<?php echo intval( $item->term_id ); ?>" <?php checked( in_array( $item->term_id, $selected_subcategories, true ) ); ?> name="subcategory[]"/>
-								<span><i class="fa fa-check"></i></span>
+								<span><i class="stmlms-check-3"></i></span>
 							</span>
 							<span class="ms_lms_courses_archive__filter_options_item_checkbox_label"><?php echo esc_html( $item->name ); ?></span>
 						</label>

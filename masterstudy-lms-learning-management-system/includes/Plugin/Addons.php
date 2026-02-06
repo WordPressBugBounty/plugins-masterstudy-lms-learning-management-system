@@ -33,6 +33,7 @@ class Addons {
 	public const AUDIO_LESSON        = 'audio_lesson';
 	public const GRADES              = 'grades';
 	public const AI_LAB              = 'ai_lab';
+	public const SUBSCRIPTIONS       = 'subscriptions';
 
 	public static function all(): array {
 		return array(
@@ -63,6 +64,7 @@ class Addons {
 			self::AUDIO_LESSON,
 			self::GRADES,
 			self::AI_LAB,
+			self::SUBSCRIPTIONS,
 		);
 	}
 
@@ -76,7 +78,7 @@ class Addons {
 	}
 
 	public static function list(): array {
-		return array(
+		$addons_list = array(
 			self::CERTIFICATE_BUILDER => array(
 				'name'          => esc_html__( 'Certificate Builder', 'masterstudy-lms-learning-management-system' ),
 				'url'           => esc_url( STM_LMS_URL . 'assets/addons/certtificate_builder.png' ),
@@ -84,6 +86,15 @@ class Addons {
 				'description'   => esc_html__( 'Сreate and design your own certificates to award them to students after the course completion.', 'masterstudy-lms-learning-management-system' ),
 				'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-certificatebuilder&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 				'documentation' => 'certificate-builder',
+			),
+			self::SUBSCRIPTIONS       => array(
+				'name'          => esc_html__( 'Subscriptions', 'masterstudy-lms-learning-management-system' ),
+				'url'           => esc_url( STM_LMS_URL . 'assets/addons/subscriptions.png' ),
+				'settings'      => admin_url( 'admin.php?page=stm-lms-settings&submenu=subscriptions#section_ecommerce' ),
+				'description'   => esc_html__( 'Allow students to access courses with easy-to-use subscription plans. Manage memberships, recurring payments, and give learners continuous access to your content.', 'masterstudy-lms-learning-management-system' ),
+				'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-subscriptions&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
+				'pro_plus'      => true,
+				'documentation' => 'subscriptions',
 			),
 			self::EMAIL_MANAGER       => array(
 				'name'          => esc_html__( 'Email Manager', 'masterstudy-lms-learning-management-system' ),
@@ -219,7 +230,7 @@ class Addons {
 			self::ZOOM_CONFERENCE     => array(
 				'name'          => esc_html__( 'Zoom Conference', 'masterstudy-lms-learning-management-system' ),
 				'url'           => esc_url( STM_LMS_URL . 'assets/addons/zoom_conference.png' ),
-				'settings'      => admin_url( 'admin.php?page=stm_lms_zoom_conference' ),
+				'settings'      => admin_url( 'admin.php?page=mslms_zoom_settings' ),
 				'description'   => esc_html__( 'Enjoy the new type of lesson — connect Zoom Video Conferencing with your website and interact with your students in real-time.', 'masterstudy-lms-learning-management-system' ),
 				'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-zoom&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 				'documentation' => 'zoom-video-conferencing',
@@ -287,14 +298,6 @@ class Addons {
 				'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-gclassroom&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 				'documentation' => 'google-classroom',
 			),
-			self::UDEMY               => array(
-				'name'          => esc_html__( 'Udemy Importer', 'masterstudy-lms-learning-management-system' ),
-				'url'           => esc_url( STM_LMS_URL . 'assets/addons/udemy.png' ),
-				'settings'      => admin_url( 'admin.php?page=stm-lms-udemy-settings' ),
-				'description'   => esc_html__( 'Import courses from Udemy and display them on your website. Enrich your course catalog and earn affiliate commissions.', 'masterstudy-lms-learning-management-system' ),
-				'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-udemy&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
-				'documentation' => 'udemy-course-importer',
-			),
 			self::ONLINE_TESTING      => array(
 				'name'          => esc_html__( 'Online Testing', 'masterstudy-lms-learning-management-system' ),
 				'url'           => esc_url( STM_LMS_URL . 'assets/addons/mst.png' ),
@@ -304,5 +307,25 @@ class Addons {
 				'documentation' => 'online-testing',
 			),
 		);
+
+		$udemy_visible = get_option( 'ms_lms_udemy_visible', false );
+
+		if ( ! $udemy_visible && is_ms_lms_addon_enabled( self::UDEMY ) ) {
+			$udemy_visible = true;
+			update_option( 'ms_lms_udemy_visible', 1 );
+		}
+
+		if ( $udemy_visible ) {
+			$addons_list[ self::UDEMY ] = array(
+				'name'          => esc_html__( 'Udemy Importer', 'masterstudy-lms-learning-management-system' ),
+				'url'           => esc_url( STM_LMS_URL . 'assets/addons/udemy.png' ),
+				'settings'      => admin_url( 'admin.php?page=stm-lms-udemy-settings' ),
+				'description'   => esc_html__( 'Import courses from Udemy and display them on your website. Enrich your course catalog and earn affiliate commissions.', 'masterstudy-lms-learning-management-system' ),
+				'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-udemy&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
+				'documentation' => 'udemy-course-importer',
+			);
+		}
+
+		return $addons_list;
 	}
 }

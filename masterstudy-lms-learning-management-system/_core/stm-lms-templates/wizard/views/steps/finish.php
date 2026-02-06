@@ -62,6 +62,23 @@
 			</div>
 		</div>
 	</div>
+	<div class="wizard-finish__integrations">
+		<div class="wizard-finish__integrations-logo">
+			<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/wizard/rapyd.png' ); ?>" width="190" height="41" alt="">
+		</div>
+		<div class="wizard-finish__integrations-title">
+			<div class="wizard-finish__integrations-title-top">
+				<?php echo esc_html__( 'Enterprise-Grade Hosting from', 'masterstudy-lms-learning-management-system' ); ?>
+			</div>
+			<div class="wizard-finish__integrations-title-bottom">
+				<span><?php echo esc_html__( 'just $29', 'masterstudy-lms-learning-management-system' ); ?></span>
+				<small><?php echo esc_html__( 'Without the Hyper Costs.', 'masterstudy-lms-learning-management-system' ); ?></small>
+			</div>
+		</div>
+		<a href="https://rapyd.cloud/pricing/?fpr=stylemixthemes" class="wizard-finish__integrations-button" target="_blank">
+			<?php esc_html_e( 'Get Deal', 'masterstudy-lms-learning-management-system' ); ?>
+		</a>
+	</div>
 	<div class="wizard-finish__links">
 		<a href="https://docs.stylemixthemes.com/masterstudy-lms/" class="wizard-finish__links_block" target="_blank">
 			<div class="wizard-finish__links_block_wrapper">

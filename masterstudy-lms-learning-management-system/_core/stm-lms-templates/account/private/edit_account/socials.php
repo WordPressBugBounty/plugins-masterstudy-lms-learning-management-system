@@ -12,7 +12,7 @@
 					<label class="heading_font"><?php esc_html_e( 'Facebook', 'masterstudy-lms-learning-management-system' ); ?></label>
 					<div class="form-group-social form-group-social_icon form-group-social_facebook">
 						<input v-model="data.meta.facebook"
-							class="form-control"
+							class="form-control masterstudy-edit-account-social-facebook-input"
 							placeholder="<?php esc_html_e( 'Facebook profile url', 'masterstudy-lms-learning-management-system' ); ?>"/>
 					</div>
 				</div>
@@ -20,7 +20,7 @@
 					<label class="heading_font"><?php esc_html_e( 'LinkedIn', 'masterstudy-lms-learning-management-system' ); ?></label>
 					<div class="form-group-social form-group-social_icon form-group-social_linkedin">
 						<input v-model="data.meta.linkedin"
-							class="form-control"
+							class="form-control masterstudy-edit-account-social-linkedin-input"
 							placeholder="<?php esc_html_e( 'LinkedIn profile url', 'masterstudy-lms-learning-management-system' ); ?>"/>
 					</div>
 				</div>
@@ -30,7 +30,7 @@
 					<label class="heading_font"><?php esc_html_e( 'X (Twitter)', 'masterstudy-lms-learning-management-system' ); ?></label>
 					<div class="form-group-social form-group-social_icon form-group-social_twitter">
 						<input v-model="data.meta.twitter"
-							class="form-control"
+							class="form-control masterstudy-edit-account-social-twitter-input"
 							placeholder="<?php esc_html_e( 'X profile url', 'masterstudy-lms-learning-management-system' ); ?>"/>
 					</div>
 				</div>
@@ -38,7 +38,7 @@
 					<label class="heading_font"><?php esc_html_e( 'Instagram', 'masterstudy-lms-learning-management-system' ); ?></label>
 					<div class="form-group-social form-group-social_icon form-group-social_instagram">
 						<input v-model="data.meta.instagram"
-							class="form-control"
+							class="form-control masterstudy-edit-account-social-instagram-input"
 							placeholder="<?php esc_html_e( 'Instagram profile url', 'masterstudy-lms-learning-management-system' ); ?>"/>
 					</div>
 				</div>

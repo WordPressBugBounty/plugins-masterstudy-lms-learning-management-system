@@ -14,7 +14,7 @@ function stm_lms_settings_route_section() {
 	}
 
 	$data = array(
-		'icon'   => 'fas fa-link',
+		'icon'   => 'stmlms-link-2',
 		'name'   => esc_html__( 'LMS Pages', 'masterstudy-lms-learning-management-system' ),
 		'fields' => array(
 
@@ -86,6 +86,18 @@ function stm_lms_settings_route_section() {
 			),
 		),
 	);
+
+	$is_subscriptions_enabled = is_ms_lms_addon_enabled( 'subscriptions' );
+	$is_pro_plus              = STM_LMS_Helpers::is_pro_plus();
+
+	if ( $is_pro_plus && $is_subscriptions_enabled ) {
+		$data['fields']['memberships_url'] = array(
+			'type'        => 'select',
+			'label'       => esc_html__( 'Membership Plans Page', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Choose the page where all available membership plans will be displayed', 'masterstudy-lms-learning-management-system' ),
+			'options'     => $pages,
+		);
+	}
 
 	if ( is_ms_lms_addon_enabled( 'certificate_builder' ) ) {
 		$data['fields']['certificate_page_url'] = array(

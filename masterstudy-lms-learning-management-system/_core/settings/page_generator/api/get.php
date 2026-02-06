@@ -21,6 +21,10 @@ function stm_lms_generate_pages_list() {
 		$list['certificate_page_url'] = esc_html__( 'Certificate Page', 'masterstudy-lms-learning-management-system' );
 	}
 
+	if ( defined( 'STM_LMS_PRO_PATH' ) && isset( $enabled_addons['subscriptions'] ) && 'on' === $enabled_addons['subscriptions'] ) {
+		$list['memberships_url'] = esc_html__( 'Memberships', 'masterstudy-lms-learning-management-system' );
+	}
+
 	return $list;
 }
 
@@ -188,6 +192,8 @@ function stm_lms_generate_pages( $pages ) {
 		$page_opt[ $page_option ] = $page_id;
 	}
 
+	$options = array();
+
 	if ( ! empty( $page_opt ) ) {
 		$options = get_option( 'stm_lms_settings', array() );
 
@@ -199,6 +205,8 @@ function stm_lms_generate_pages( $pages ) {
 
 		do_action( 'stm_lms_pages_generated' );
 	}
+
+	do_action( 'masterstudy_add_shortcode_memberships_page', null, $options );
 }
 
 function stm_lms_generate_archive_pages() {

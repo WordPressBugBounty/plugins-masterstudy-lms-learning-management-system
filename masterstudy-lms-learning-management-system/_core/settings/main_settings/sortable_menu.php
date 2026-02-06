@@ -40,8 +40,8 @@ function stm_lms_settings_sorting_the_menu_section() {
 					'options' => array(),
 				),
 			),
-			'description' => '<ul><li><i class="fa fa-lock"></i><p>' . esc_html__( 'There are restrictions for dragging and/or disabling the option', 'masterstudy-lms-learning-management-system' ) . '</p><li>
-								<li><i class="fa fa-exclamation-triangle"></i><p>' . esc_html__( 'The option is important and is not recommended to be disabled', 'masterstudy-lms-learning-management-system' ) . '</p><li>',
+			'description' => '<ul><li><i class="stmlms-lock-2"></i><p>' . esc_html__( 'There are restrictions for dragging and/or disabling the option', 'masterstudy-lms-learning-management-system' ) . '</p><li>
+								<li><i class="stmlms-exclamation-triangle"></i><p>' . esc_html__( 'The option is important and is not recommended to be disabled', 'masterstudy-lms-learning-management-system' ) . '</p><li>',
 		),
 		'sorting_the_menu_student'    => array(
 			'type'        => 'sorter',
@@ -59,7 +59,7 @@ function stm_lms_settings_sorting_the_menu_section() {
 					'options' => array(),
 				),
 			),
-			'description' => '<ul><li><i class="fa fa-exclamation-triangle"></i><p>' . esc_html__( 'The option is important and is not recommended to be disabled.', 'masterstudy-lms-learning-management-system' ) . '</p><li>',
+			'description' => '<ul><li><i class="stmlms-exclamation-triangle"></i><p>' . esc_html__( 'The option is important and is not recommended to be disabled.', 'masterstudy-lms-learning-management-system' ) . '</p><li>',
 		),
 		'sorting_float_menu_main'     => array(
 			'type'        => 'sorter',
@@ -78,8 +78,8 @@ function stm_lms_settings_sorting_the_menu_section() {
 				),
 			),
 			'preview'     => STM_LMS_URL . 'assets/img/sorting_the_menu/main.png',
-			'description' => '<ul><li><i class="fa fa-lock"></i><p>' . esc_html__( 'There are restrictions for dragging and/or disabling the option.', 'masterstudy-lms-learning-management-system' ) . '</p><li>
-								<li><i class="fa fa-exclamation-triangle"></i><p>' . esc_html__( 'The option is important and is not recommended to be disabled.', 'masterstudy-lms-learning-management-system' ) . '</p><li>',
+			'description' => '<ul><li><i class="stmlms-lock-2"></i><p>' . esc_html__( 'There are restrictions for dragging and/or disabling the option.', 'masterstudy-lms-learning-management-system' ) . '</p><li>
+								<li><i class="stmlms-exclamation-triangle"></i><p>' . esc_html__( 'The option is important and is not recommended to be disabled.', 'masterstudy-lms-learning-management-system' ) . '</p><li>',
 		),
 		'sorting_float_menu_learning' => array(
 			'type'        => 'sorter',
@@ -98,7 +98,7 @@ function stm_lms_settings_sorting_the_menu_section() {
 				),
 			),
 			'preview'     => STM_LMS_URL . 'assets/img/sorting_the_menu/learning.png',
-			'description' => '<ul><li><i class="fa fa-exclamation-triangle"></i><p>' . esc_html__( 'The option is important and is not recommended to be disabled.', 'masterstudy-lms-learning-management-system' ) . '</p><li>',
+			'description' => '<ul><li><i class="stmlms-exclamation-triangle"></i><p>' . esc_html__( 'The option is important and is not recommended to be disabled.', 'masterstudy-lms-learning-management-system' ) . '</p><li>',
 		),
 	);
 }

@@ -19,6 +19,7 @@ function stm_lms_user_cart() {
 		item_id int(11) NOT NULL,
 		quantity mediumint(9) NOT NULL,
 		price float(9) NOT NULL,
+		is_subscription tinyint(1) DEFAULT 0,
 		enterprise float(9) DEFAULT 0,
 		bundle float(9) DEFAULT 0,
 		PRIMARY KEY  (user_cart_id)

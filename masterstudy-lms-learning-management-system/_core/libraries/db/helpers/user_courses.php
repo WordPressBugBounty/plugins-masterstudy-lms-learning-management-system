@@ -34,12 +34,13 @@ function stm_lms_get_user_course( $user_id, $course_id, $fields = array(), $ente
 	return $wpdb->get_results( $wpdb->prepare( $query, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 }
 
+
 function masterstudy_lms_get_user_course_membership( $user_id, $course_id, $enterprise = '' ) {
 	global $wpdb;
 
 	$table = stm_lms_user_courses_name( $wpdb );
 
-	$sql = "SELECT subscription_id, user_id, course_id
+	$sql    = "SELECT subscription_id, user_id, course_id
 	            FROM {$table}
 	            WHERE user_id = %d AND course_id = %d";
 	$params = array( (int) $user_id, (int) $course_id );
@@ -247,6 +248,7 @@ function stm_lms_update_user_course_endtime( $user_course_id, $endtime ) {
 }
 
 function stm_lms_get_delete_user_course( $user_id, $item_id ) {
+	do_action( 'masterstudy_lms_before_delete_user_course', $user_id, $item_id );
 	global $wpdb;
 	$table = stm_lms_user_courses_name( $wpdb );
 
@@ -257,6 +259,7 @@ function stm_lms_get_delete_user_course( $user_id, $item_id ) {
 			'course_id' => $item_id,
 		)
 	);
+	do_action( 'masterstudy_lms_after_delete_user_course', $user_id, $item_id );
 }
 
 function stm_lms_get_delete_user_courses( $user_id ) {
@@ -422,19 +425,33 @@ function stm_lms_build_enrolled_query_parts( string $search = '', int $course_id
            ) p ON p.user_id = u.ID"
 		: '';
 
-	switch ( $orderby ) :
-		case 'joined':
-			$orderby = 'u.user_registered';
-			break;
-		case 'enrolled':
-			$orderby = 'c.enrolled';
-			break;
-		case 'points':
-			$orderby = 'p.points';
-			break;
-	endswitch;
+	// Validate and sanitize orderby parameter to prevent SQL injection
+	$allowed_orderby_fields = array(
+		'joined'    => 'u.user_registered',
+		'enrolled'  => 'c.enrolled',
+		'points'    => 'p.points',
+		'id'        => 'u.ID',
+		'name'      => 'u.display_name',
+		'email'     => 'u.user_email',
+		'login'     => 'u.user_login',
+	);
 
-	$order_by = $orderby && $order ? "ORDER BY {$orderby} {$order}" : 'ORDER BY u.user_registered DESC';
+	// Default to safe field if orderby is not in whitelist
+	$safe_orderby = 'u.user_registered';
+	if ( ! empty( $orderby ) && isset( $allowed_orderby_fields[ $orderby ] ) ) {
+		$safe_orderby = $allowed_orderby_fields[ $orderby ];
+	}
+
+	// Validate and sanitize order parameter
+	$safe_order = 'DESC';
+	if ( ! empty( $order ) ) {
+		$order_upper = strtoupper( $order );
+		if ( in_array( $order_upper, array( 'ASC', 'DESC' ), true ) ) {
+			$safe_order = $order_upper;
+		}
+	}
+
+	$order_by = "ORDER BY {$safe_orderby} {$safe_order}";
 
 	$select = array( 'u.ID', 'c.enrolled' );
 	if ( $points_enabled ) {

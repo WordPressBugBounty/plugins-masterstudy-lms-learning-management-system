@@ -4,7 +4,7 @@ function stm_lms_settings_payout_section() {
 	$payouts = array(
 		'name'   => esc_html__( 'Payout', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'Payout Settings', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fas fa-hand-holding-usd',
+		'icon'   => 'stmlms-hand-holding-usd',
 		'fields' => array(
 			'pro_banner' => array(
 				'type'  => 'pro_banner',

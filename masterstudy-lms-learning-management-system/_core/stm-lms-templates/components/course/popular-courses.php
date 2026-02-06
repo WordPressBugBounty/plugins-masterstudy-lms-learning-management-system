@@ -22,6 +22,10 @@ $query_args       = array(
 	'fields'         => 'ids',
 );
 
+if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+	$query_args['suppress_filters'] = false;
+}
+
 $course_ids        = get_posts( $query_args );
 $stars             = range( 1, 5 );
 $course_reviews    = STM_LMS_Options::get_option( 'course_tab_reviews', true );
@@ -67,7 +71,7 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 								<?php echo esc_html( stm_lms_minimize_word( $popular_course->title, 40 ) ); ?>
 							</a>
 							<div class="masterstudy-popular-courses__item-block">
-								<?php if ( ! $popular_course->single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $popular_course->not_in_membership ) { ?>
+								<?php if ( ! $popular_course->single_sale && ! $popular_course->not_in_membership ) { ?>
 									<div class="masterstudy-popular-courses__subscription">
 										<img class="masterstudy-popular-courses__subscription-image" src="<?php echo esc_url( STM_LMS_URL . 'assets/img/members_only.svg' ); ?>" alt="<?php esc_attr_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>"/>
 										<div class="masterstudy-popular-courses__subscription-title">

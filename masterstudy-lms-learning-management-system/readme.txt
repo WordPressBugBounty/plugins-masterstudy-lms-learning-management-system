@@ -3,9 +3,9 @@ Contributors: Stylemix
 Donate link: https://stylemixthemes.com/
 Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.6.24
+Stable tag: 3.7.14
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,84 +308,36 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.14 - 2026-01-29 =
+- **Fixed:** Minor bugfix
 
-= 3.6.24 - 2025-09-29 =
-- **Improvement:** Courses can now be searched by pressing "Enter/Return" in the Elementor "Courses Searchbox" widget — previously, only the search icon triggered the search
-- **Fixed:** Resolved an issue with infinite page reloading in the Elementor editor
-- **Fixed:** Empty video blocks were displayed in video lessons even when no video was inserted for YouTube or Vimeo source types
-- **Fixed:** Rating stars and checkboxes overlapped text in the course archive filter when using RTL layout
-- **Fixed:** The Elementor "Courses Searchbox" widget no longer suggests inserting an account password into the search field
-- **Fixed:** Exported course content was not being assigned to the course after importing via the WordPress Importer plugin
+= 3.7.13 - 2026-01-28 =
+- **New:** Added a new "Ordering" question type for quizzes
+- **New:** Added alphabetical sorting for categories in the courses page filter
+- **Update:** Improved the layout of email blocks in the Email Manager add-on (Pro)
+- **Update:** Prompt character limits in the AI Lab add-on are now determined by the selected model instead of a shared global limit (Pro)
+- **Fixed:** Importing a large number of students via Import/Export in Manage Students occasionally returned server errors and failed to complete
+- **Fixed:** Single Course pages returned 404 errors when using the Polylang plugin
+- **Fixed:** The course count filter in the Students section did not function correctly
+- **Fixed:** Question categories were reset on page reload when using the standalone question editor in the admin panel
+- **Fixed:** When purchasing LMS products using Japanese Yen with Stripe, extra zeros were added to the payment amount
+- **Fixed:** Stripe did not allow completing a purchase when a 100% discount coupon was applied (Pro)
+- **Fixed:** Calendar events were not created for students from Google Meet lessons (Pro)
 
-= 3.6.23 - 2025-09-24 =
-- **Improvement:** Added an option to enable a site policy agreement checkbox at checkout
-- **Improvement:** Added a course rating option for students in the final screen of the Course Player, without requiring navigation to the Single Course page
-- **Improvement:** AI Lab add-on now includes new models — GPT-5, GPT-5 Mini, and GPT-5 Nano (Pro)
-- **Fixed:** Removed the blog property from lessons in the Course Player
-- **Fixed:** Resolved an issue with purchased courses not displaying correctly in different languages on the Enrolled Courses page when using WPML
-- **Fixed:** The “Points cut after retake (%)” setting was not applied during quiz retakes
-- **Fixed:** The Countdown widget did not pull time settings from WordPress settings
+= 3.7.12 - 2026-01-09 =
+- **Fixed:** Minor bugfix
 
-= 3.6.22 - 2025-09-18 =
-- **Fixed:** The timer was not displayed on the Enrolled Courses page for courses with a time limit enabled
+= 3.7.11 - 2026-01-06 =
+- **Fixed:** Answer options disappeared after retaking a quiz.
 
-= 3.6.21 - 2025-09-11 =
+= 3.7.10 - 2025-12-26 =
 - **Fixed:** Minor bug fixes.
 
-= 3.6.20 - 2025-09-03 =
-- **New:** Added the ability to change the status of multiple orders using Bulk Actions
-- **Fixed:** Child categories were not included in course counts for parent categories in the Courses Categories widget
-- **Fixed:** Instructors could access other users media files in the WordPress media library
-- **Fixed:** The Open Sans font did not display certain characters in the Czech language
-
-= 3.6.19 - 2025-08-20 =
-- **New:** Introduced new Custom Field types in Course Builder — Time and TinyMCE text editor
-- **Update:** Payment currency for Stripe and PayPal is now selected under eCommerce → Currency via a new “Transactions currency” setting
-- **Fixed:** “Back to Course” button always redirected to the default site language when using WPML
-- **Fixed:** Quiz answers containing only the number "0" were not displayed correctly
-- **Fixed:** Order statuses and payment system names were not translated on Orders, My Sales, My Orders, and Thank You pages
-- **Fixed:** Courses with a "Time Limit" setting could not be purchased again via WooCommerce Checkout (Pro)
-- **Fixed:** Courses could not be purchased via WooCommerce Checkout if previously bought through Paid Memberships Pro and the subscription was scheduled to end or be canceled (Pro)
-
-= 3.6.18 - 2025-08-13 =
-- **Update:** Added WhatsApp sharing option to “Share Course” and “Share Public Profile” buttons
-- **Update:** Child categories now appear beneath their parent categories in the Questions Category section, visually separated for clarity
-- **Update:** The terms “words” and “characters” in Course Builder text editors are now translatable
-- **Update:** RTL support has been added to the Orders section in the admin panel
-- **Update:** The “View Course” button in the completion popup now redirects to the correct Single Course page.
-- **Update:** Settings for quiz attempt history and retake permissions can be configured individually per quiz
-- **Update:** Emails within the Email Manager add-on are organized by recipient type (Pro)
-- **New:** Added functionality to send reminder emails to students who haven’t logged in for a prolonged period (Pro)
-- **New:** Tooltips added to email templates within the Email Manager (Pro).
-- **New:** Course rejection functionality added — administrators can reject submitted courses directly via Course Builder and the admin panel (Pro)
-- **New:** A new email template “Course Rejection” has been added to notify instructors when their course is rejected by an admin (Pro)
-- **Fixed:** Bundle counts in “Reports & Analytics” on the Enrolled Courses page were incorrect when using WooCommerce Checkout (Pro)
-- **Fixed:** Internal links and anchors within PDF files did not function correctly in PDF Lessons (Pro)
-
-= 3.6.17 - 2025-08-07 =
-- **New:** Added the ability to add custom notes to orders.
-- **New:** Instructors can now add custom notes to orders on the "My Sales" page (Pro)
-- **New:** Added the ability to filter orders by date.
-- **New:** Added search functionality for orders by Order ID and user.
-- **Improvement:** Enhanced UI/UX of the "Orders" section in the admin dashboard
-- **New:** Added search functionality for orders by Order ID and user.
-- **Improvement:** Added eCommerce source selection for LMS in Settings → eCommerce → Checkout (Native or WooCommerce).
-- **Fixed:** Resolved an issue where course generation via AI Lab occasionally failed during content saving (Pro)
-
-= 3.6.16 - 2025-08-05 =
-- **Fixed:** Minor bug fixes.
-
-= 3.6.15 - 2025-07-30 =
-- **Improvement:** Added an option to change the hover color of course titles in the Elementor "Courses" widget
-- **Improvement:** Added email-based student search in the "Manage Students" section
-- **Improvement:** Added the ability to display courses by specific categories in the Elementor "Courses" widget (Grid layout)
-- **Improvement:** Implemented visual validation for incorrect answers in Keywords questions — incorrect input is highlighted in red with an animation
-- **Improvement:** Enabled copy and paste functionality in Course Builder text editors using the cursor only
-- **Improvement:** Support for creating "Image Matching" and "Image Choice" quiz questions added to the AI Lab add-on (Pro)
-- **Fixed:** Year input fields in Course Builder now restrict input to four digits
-- **Fixed:** Switching a question from Multiple Choice to Single Choice now clears multiple selected answers
-- **Fixed:** Removed automatic page scrolling when starting a quiz with a long description
-- **Fixed:** Corrected time display in Quiz Attempt History
-- **Fixed:** Fixed incorrect page navigation direction in PDF Lessons in RTL layout (Pro)
+= 3.7.9 - 2025-12-25 =
+- **New:** Built-in discount coupon system for courses, subscriptions, and bundles (Pro)
+- **Fixed:** Warning messages were displayed on the Course Category creation page
+- **Fixed:** Admin Commission and Instructor Earnings values were not saved in plugin settings (Pro)
+- **Fixed:** The "Subscription Only" filter did not display courses with an active subscription setting (Pro)
+- **Fixed:** An error occurred when students uploaded files in Assignments (Pro)
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

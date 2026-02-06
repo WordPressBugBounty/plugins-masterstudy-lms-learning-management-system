@@ -11,4 +11,5 @@ final class QuestionType extends Enum {
 	public const QUESTION_BANK = 'question_bank';
 	public const SINGLE_CHOICE = 'single_choice';
 	public const TRUE_FALSE    = 'true_false';
+	public const SORTABLE      = 'sortable';
 }

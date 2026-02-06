@@ -21,8 +21,8 @@ final class GetStudentsController {
 				's'                 => 'nullable|string',
 				'page'              => 'nullable|integer',
 				'per_page'          => 'nullable|integer',
-				'order'             => 'nullable|string',
-				'orderby'           => 'nullable|string',
+				'order'             => 'nullable|string|contains_list,asc;desc;ASC;DESC',
+				'orderby'           => 'nullable|string|contains_list,joined;enrolled;points;id;name;email;login',
 				'course_id'         => 'nullable|integer',
 				'subscribed'        => 'nullable|boolean',
 			)

@@ -55,6 +55,9 @@ Vue.component('demo_import', {
       var authorInput = document.getElementById('section_ecommerce-author_fee');
       if (authorInput) {
         authorInput.value = authorVal;
+        authorInput.dispatchEvent(new Event('input', {
+          bubbles: true
+        }));
       }
     },
     onAuthorInput: function onAuthorInput(event) {
@@ -66,6 +69,9 @@ Vue.component('demo_import', {
       var adminInput = document.getElementById('section_ecommerce-admin_fee');
       if (adminInput) {
         adminInput.value = adminVal;
+        adminInput.dispatchEvent(new Event('input', {
+          bubbles: true
+        }));
       }
     },
     importData: function importData() {

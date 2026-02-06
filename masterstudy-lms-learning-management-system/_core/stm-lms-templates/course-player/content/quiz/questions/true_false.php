@@ -6,6 +6,12 @@
  * @var boolean $dark_mode
  */
 
+use MasterStudy\Lms\Utility\Question;
+
+if ( ! empty( $data['last_answers']['questions_order'] ) ) {
+	$data['answers'] = Question::sort_answers_by_order( $data['answers'], $data['last_answers']['questions_order'], $data['type'] );
+}
+
 foreach ( $data['answers'] as $answer ) {
 	$correctly    = false;
 	$wrongly      = false;

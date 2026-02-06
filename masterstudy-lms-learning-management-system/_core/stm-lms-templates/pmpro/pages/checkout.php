@@ -59,7 +59,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 				if ( $pmpro_msg ) {
 					?>
 					<div id="pmpro_message"
-						class="pmpro_message <?php echo esc_attr( $pmpro_msgt ); ?>"><i class="fa fa-info"></i><?php echo wp_kses_post( $pmpro_msg ); ?></div>
+						class="pmpro_message <?php echo esc_attr( $pmpro_msgt ); ?>"><i class="stmlms-info"></i><?php echo wp_kses_post( $pmpro_msg ); ?></div>
 					<?php
 				} else {
 					?>
@@ -97,7 +97,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 										<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pmpro_img/pmpro_user.svg' ); ?>" alt="">
 										<label for="username"><?php esc_html_e( 'Username', 'masterstudy-lms-learning-management-system' ); ?></label>
 									</div>
-									<input id="username" name="username" type="text" 
+									<input id="username" name="username" type="text"
 										placeholder="<?php esc_attr_e( 'Enter username', 'masterstudy-lms-learning-management-system' ); ?>"
 										class="input <?php echo esc_attr( pmpro_getClassForField( 'username' ) ); ?>" size="30"
 										value="<?php echo esc_attr( $username ); ?>"/>
@@ -222,7 +222,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 					}
 					?>
 					<div id="pmpro_account_loggedin" class="message message-notice">
-						<i class="fa fa-info"></i>
+						<i class="stmlms-info"></i>
 						<p><?php printf( wp_kses_post( __( 'You are logged in as <strong>%1$s</strong>. If you would like to use a different account for this membership, <a href="%2$s">%3$s.</a>', 'masterstudy-lms-learning-management-system' ) ), esc_html( $current_user->user_login ), esc_url( $url ), wp_kses_post( $text ) ); ?></p>
 					</div>
 				<?php } ?>
@@ -237,7 +237,7 @@ if ( class_exists( 'STM_LMS_Templates' ) ) {
 
 				<?php if ( 'paypal' === pmpro_getGateway() && empty( $pmpro_review ) ) { ?>
 					<table id="pmpro_payment_method" class="pmpro_checkout top1em" width="100%" cellpadding="0" cellspacing="0"
-						border="0" 
+						border="0"
 						<?php if ( ! $pmpro_requirebilling ) { ?>
 							style="display: none;"
 						<?php } ?>

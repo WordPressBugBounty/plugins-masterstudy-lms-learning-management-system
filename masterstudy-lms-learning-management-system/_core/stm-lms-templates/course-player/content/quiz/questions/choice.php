@@ -9,6 +9,12 @@
  * @var string $choice
  */
 
+use MasterStudy\Lms\Utility\Question;
+
+if ( ! empty( $data['last_answers']['questions_order'] ) ) {
+	$data['answers'] = Question::sort_answers_by_order( $data['answers'], $data['last_answers']['questions_order'], $data['type'] );
+}
+
 $is_multi_choice = 'multi' === $choice;
 $input_type      = $is_multi_choice ? 'checkbox' : 'radio';
 

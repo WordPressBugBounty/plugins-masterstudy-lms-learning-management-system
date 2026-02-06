@@ -64,6 +64,12 @@ $router->post(
 );
 
 $router->get(
+	'/courses/categories/list',
+	\MasterStudy\Lms\Http\Controllers\Course\GetCategoriesListController::class,
+	\MasterStudy\Lms\Routing\Swagger\Routes\Course\GetCategoriesList::class
+);
+
+$router->get(
 	'/courses/{course_id}/edit',
 	\MasterStudy\Lms\Http\Controllers\Course\EditController::class,
 	\MasterStudy\Lms\Routing\Swagger\Routes\Course\Edit::class
@@ -237,6 +243,12 @@ $router->post(
 	\MasterStudy\Lms\Routing\Swagger\Routes\Student\AddStudent::class
 );
 
+$router->post(
+	'/student/bulk/{course_id}',
+	\MasterStudy\Lms\Http\Controllers\Student\AddStudentsBulkController::class,
+	\MasterStudy\Lms\Routing\Swagger\Routes\Student\AddStudentsBulk::class
+);
+
 $router->put(
 	'/student/progress/{course_id}/{student_id}',
 	\MasterStudy\Lms\Http\Controllers\Student\SetStudentProgressController::class,
@@ -395,6 +407,7 @@ $router->group(
 	array(
 		'middleware' => array(
 			\MasterStudy\Lms\Routing\Middleware\Authentication::class,
+			\MasterStudy\Lms\Routing\Middleware\Instructor::class,
 		),
 		'prefix'     => '/course-templates',
 	),
@@ -531,6 +544,11 @@ $router->group(
 			'/course-levels',
 			\MasterStudy\Lms\Http\Controllers\Blocks\Course\GetLevelsController::class,
 			\MasterStudy\Lms\Routing\Swagger\Routes\Blocks\Course\GetLevels::class,
+		);
+		$router->get(
+			'/course-statuses',
+			\MasterStudy\Lms\Http\Controllers\Blocks\Course\GetStatusesController::class,
+			\MasterStudy\Lms\Routing\Swagger\Routes\Blocks\Course\GetStatuses::class,
 		);
 		$router->get(
 			'/settings',

@@ -35,6 +35,27 @@ class STM_Support_Page {
 		return null;
 	}
 
+	private static function get_public_value( $source, string $key ) {
+		if ( is_array( $source ) ) {
+			return $source[ $key ] ?? null;
+		}
+
+		if ( is_object( $source ) ) {
+			// "incomplete object"
+			$as_array = (array) $source;
+
+			if ( array_key_exists( $key, $as_array ) ) {
+				return $as_array[ $key ];
+			}
+
+			if ( isset( $source->{$key} ) ) {
+				return $source->{$key};
+			}
+		}
+
+		return null;
+	}
+
 	public static function get_freemius_ticket_url( $textdomain ) {
 		$freemius = self::get_freemius_data( $textdomain );
 
@@ -47,20 +68,29 @@ class STM_Support_Page {
 
 		$fs_data = get_option( 'fs_accounts' );
 
-		if (
-			isset( $fs_data['sites'][ $plugin_slug ] ) &&
-			isset( $fs_data['sites'][ $plugin_slug ]->user_id )
-		) {
-			$fs_user_id = $fs_data['sites'][ $plugin_slug ]->user_id;
-			$fs_user    = $fs_data['users'][ $fs_user_id ] ?? null;
+		if ( ! is_array( $fs_data ) ) {
+			$fs_data = array();
+		}
 
-			if ( $fs_user ) {
+		$site = $fs_data['sites'][ $plugin_slug ] ?? null;
+
+		$fs_user_id = self::get_public_value( $site, 'user_id' );
+		$fs_user_id = $fs_user_id ? (int) $fs_user_id : 0;
+
+		if ( $fs_user_id > 0 ) {
+			$fs_user = $fs_data['users'][ $fs_user_id ] ?? null;
+
+			$fs_email = self::get_public_value( $fs_user, 'email' );
+			$fs_first = self::get_public_value( $fs_user, 'first' );
+			$fs_last  = self::get_public_value( $fs_user, 'last' );
+
+			if ( $fs_email ) {
 				return add_query_arg(
 					array(
 						'item_id'    => $item_id,
 						'fs_id'      => $fs_user_id,
-						'fs_email'   => $fs_user->email,
-						'fs_fl_name' => trim( $fs_user->first . ' ' . $fs_user->last ),
+						'fs_email'   => $fs_email,
+						'fs_fl_name' => trim( (string) $fs_first . ' ' . (string) $fs_last ),
 					),
 					'https://support.stylemixthemes.com/fs-ticket/new'
 				);

@@ -76,7 +76,7 @@ class StmLmsCoursesCategories extends Widget_Base {
 	 * @return string Widget icon.
 	 */
 	public function get_icon() {
-		return 'eicon-tags lms-icon';
+		return 'stmlms-categories-old lms-icon';
 	}
 
 	/**
@@ -94,7 +94,7 @@ class StmLmsCoursesCategories extends Widget_Base {
 	 * @return array Widget categories.
 	 */
 	public function get_categories() {
-		return array( 'stm_lms' );
+		return array( 'stm_lms_old' );
 	}
 
 	protected function register_controls() {
@@ -160,7 +160,7 @@ class StmLmsCoursesCategories extends Widget_Base {
 					'6' => 6,
 				),
 				'default'     => '6',
-				'condition' => array(
+				'condition'   => array(
 					'style' => array( 'style_4' ),
 				),
 			)
@@ -401,8 +401,8 @@ class StmLmsCoursesCategories extends Widget_Base {
 				'size_units' => array( '%' ),
 				'range'      => array(
 					'%' => array(
-						'min' => 0,
-						'max' => 100,
+						'min'  => 0,
+						'max'  => 100,
 						'step' => 1,
 					),
 				),
@@ -419,7 +419,6 @@ class StmLmsCoursesCategories extends Widget_Base {
 			)
 		);
 		$this->end_controls_section();
-
 	}
 
 	/**

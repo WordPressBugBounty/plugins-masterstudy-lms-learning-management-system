@@ -1,27 +1,30 @@
 <?php
-$reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+$reviews             = STM_LMS_Options::get_option( 'course_tab_reviews', true );
+$is_featured_enabled = STM_LMS_Options::get_option( 'enable_featured_courses', true );
 ?>
 
 <div class="stm_lms_instructor_courses__grid">
 
-	<div class="stm_lms_instructor_courses__single" v-for="course in courses"  v-bind:class="'course-' + course.status">
+	<div class="stm_lms_instructor_courses__single" v-for="course in courses"  v-bind:class="'course-' + course.status" >
 		<div class="stm_lms_instructor_courses__single__inner">
 			<div class="stm_lms_instructor_courses__single--image">
 
 				<div class="stm_lms_post_status heading_font"
-					v-if="course.post_status"
-					v-bind:class="course.post_status.status">
+					v-if="course.post_status && course.post_status.label"
+					v-bind:class="course.post_status.status"
+					:style="{color: `${course.post_status.text_color}`, background: `${course.post_status.bg_color}`}"
+				>
 					{{ course.post_status.label }}
 				</div>
 
 				<a v-bind:href="course.link" target="_blank">
 
 					<div class="pending-message" v-if="course.status==='pending'">
-						<i class="fa fa-hourglass-half"></i>
+						<i class="stmlms-hourglass-half"></i>
 						<h4><?php esc_html_e( 'Pending for approval', 'masterstudy-lms-learning-management-system' ); ?></h4>
 					</div>
 					<div class="pending-message" v-if="course.status==='rejected'">
-						<i class="fa fa-times-circle"></i>
+						<i class="stmlms-times-circle"></i>
 						<h4><?php esc_html_e( 'Course Rejected', 'masterstudy-lms-learning-management-system' ); ?></h4>
 					</div>
 
@@ -149,6 +152,7 @@ $reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 				<div class="stm_lms_instructor_courses__single--featured heading_font"
 					v-bind:class="{'loading' : course.changingFeatured}">
 
+					<?php if ( $is_featured_enabled ) : ?>
 					<div class="feature_it add_to_featured"
 						@click="changeFeatured(course)"
 						v-if="course.status == 'publish' && course.is_featured != 'on'">
@@ -160,6 +164,7 @@ $reviews = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 						@click="changeFeatured(course)">
 						<?php esc_html_e( 'Remove from Featured', 'masterstudy-lms-learning-management-system' ); ?>
 					</div>
+					<?php endif; ?>
 
 					<a class="feature_it edit_course" v-if="course.status === 'draft'" :href="course.edit_link" target="_blank">
 						<?php esc_html_e( 'Edit course', 'masterstudy-lms-learning-management-system' ); ?>

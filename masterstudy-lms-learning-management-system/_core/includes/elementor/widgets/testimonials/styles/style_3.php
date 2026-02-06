@@ -32,7 +32,7 @@
 					</div>
 					<?php if ( $testimonial['review_rating'] > 0 ) : ?>
 					<div class="ms-lms-testimonial-review-rating">
-						<?php echo wp_kses_post( str_repeat( '<i class="fa fa-star"></i>', intval( $testimonial['review_rating'] ) ) ); ?>
+						<?php echo wp_kses_post( str_repeat( '<i class="stmlms-star-3"></i>', intval( $testimonial['review_rating'] ) ) ); ?>
 					</div>
 					<?php endif; ?>
 					<div class="author-name"><?php echo esc_html( $testimonial['author_name'] ); ?></div>

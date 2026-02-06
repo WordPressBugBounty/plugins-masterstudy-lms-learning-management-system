@@ -9,7 +9,7 @@
 		<div class="row">
 			<div class="col-md-12 email-send-me-container">
 				<label class="switch" for="checkbox">
-					<input type="checkbox" id="checkbox" v-model="data.meta.disable_report_email_notifications"/>
+					<input type="checkbox" id="checkbox" class="masterstudy-edit-account-email-notifications" />
 					<div class="slider round"></div>
 				</label>
 				<p><?php esc_html_e( 'Send weekly/monthly reports', 'masterstudy-lms-learning-management-system' ); ?></p>

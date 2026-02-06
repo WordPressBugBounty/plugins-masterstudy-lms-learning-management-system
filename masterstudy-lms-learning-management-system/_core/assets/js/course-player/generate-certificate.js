@@ -311,6 +311,11 @@ var jsPDF = window.jspdf.jsPDF;
 
   //Convert image to PDF
   function convertToPDF(element, preview, orientation) {
+    var changedLang = null;
+    if (document.documentElement.lang === 'bg-BG') {
+      changedLang = document.documentElement.lang;
+      document.documentElement.lang = 'en-US';
+    }
     html2canvas(element, {
       scale: 3,
       useCORS: true
@@ -335,6 +340,10 @@ var jsPDF = window.jspdf.jsPDF;
         window.open(pdfUrl, '_blank');
       }
       element.remove();
+    })["finally"](function () {
+      if (changedLang) {
+        document.documentElement.lang = changedLang;
+      }
     });
   }
 })(jQuery);

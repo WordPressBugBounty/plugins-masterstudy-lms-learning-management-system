@@ -7,7 +7,14 @@
  * @var string $question_hint
  * @var string $item_id
  * @var string $question_view_type
+ * @var array $user_answer
  */
+
+use MasterStudy\Lms\Utility\Question;
+
+if ( ! empty( $user_answer['questions_order'] ) ) {
+	$answers = Question::sort_answers_by_order( $answers, $user_answer['questions_order'], $type );
+}
 
 $question_id         = get_the_ID();
 $is_correct          = ( ! empty( $user_answer['correct_answer'] ) ) ? true : false;
@@ -68,7 +75,7 @@ foreach ( $answers as $answer ) :
 				disabled
 				name="<?php echo esc_attr( $question_id ); ?>"
 				value="<?php echo wp_kses_post( $full_answer ); ?>"/>
-			<i class="fa fa-check"></i>
+			<i class="stmlms-check-3"></i>
 
 			<?php
 			if ( $is_image ) {
@@ -77,7 +84,7 @@ foreach ( $answers as $answer ) :
 					<img src="<?php echo esc_url( $answer['text_image']['url'] ); ?>"/>
 				<?php } else { ?>
 					<div class="empty-image">
-						<i class="fa fa-image"></i>
+						<i class="stmlms-image-2"></i>
 					</div>
 					<?php
 				}
@@ -88,7 +95,7 @@ foreach ( $answers as $answer ) :
 			if ( ! empty( $answer['explain'] ) ) :
 				?>
 				<div class="stm-lms-single-answer__hint">
-					<i class="fa fa-info"></i>
+					<i class="stmlms-info"></i>
 					<div class="stm-lms-single-answer__hint_text">
 						<div class="inner">
 							<?php echo wp_kses_post( $answer['explain'] ); ?>

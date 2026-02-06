@@ -163,15 +163,18 @@ function masterstudy_lms_get_currencies_array() {
 }
 
 function stm_lms_settings_ecommerce_section() {
-	$is_payout_enabled = is_ms_lms_addon_enabled( Addons::STATISTICS );
-	$is_pro            = STM_LMS_Helpers::is_pro();
-	$submenu_currency  = esc_html__( 'Currency', 'masterstudy-lms-learning-management-system' );
-	$submenu_checkout  = esc_html__( 'Checkout', 'masterstudy-lms-learning-management-system' );
-	$submenu_payment   = esc_html__( 'Payment Methods', 'masterstudy-lms-learning-management-system' );
-	$submenu_payout    = esc_html__( 'Payout', 'masterstudy-lms-learning-management-system' );
+	$is_payout_enabled     = is_ms_lms_addon_enabled( Addons::STATISTICS );
+	$is_pro                = STM_LMS_Helpers::is_pro();
+	$is_pro_plus           = STM_LMS_Helpers::is_pro_plus();
+	$submenu_currency      = esc_html__( 'Currency', 'masterstudy-lms-learning-management-system' );
+	$submenu_checkout      = esc_html__( 'Checkout', 'masterstudy-lms-learning-management-system' );
+	$submenu_payment       = esc_html__( 'Payment Methods', 'masterstudy-lms-learning-management-system' );
+	$submenu_subscriptions = esc_html__( 'Subscriptions', 'masterstudy-lms-learning-management-system' );
+	$submenu_taxes         = esc_html__( 'Taxes', 'masterstudy-lms-learning-management-system' );
+	$submenu_payout        = esc_html__( 'Payout', 'masterstudy-lms-learning-management-system' );
 
 	$currency_fields = array(
-		'transactions_currency'    => array(
+		'transactions_currency' => array(
 			'type'          => 'search-select',
 			'label'         => esc_html__( 'Transactions currency', 'masterstudy-lms-learning-management-system' ),
 			'columns'       => '50',
@@ -180,7 +183,7 @@ function stm_lms_settings_ecommerce_section() {
 			'submenu_title' => true,
 			'options'       => masterstudy_lms_get_currencies_array(),
 		),
-		'currency_symbol'    => array(
+		'currency_symbol'       => array(
 			'type'          => 'text',
 			'label'         => esc_html__( 'Currency symbol', 'masterstudy-lms-learning-management-system' ),
 			'columns'       => '50',
@@ -188,7 +191,7 @@ function stm_lms_settings_ecommerce_section() {
 			'submenu'       => $submenu_currency,
 			'submenu_title' => true,
 		),
-		'currency_position'  => array(
+		'currency_position'     => array(
 			'type'        => 'select',
 			'label'       => esc_html__( 'Currency position', 'masterstudy-lms-learning-management-system' ),
 			'value'       => 'left',
@@ -200,7 +203,7 @@ function stm_lms_settings_ecommerce_section() {
 			'description' => esc_html__( 'Decide if the money symbol goes before or after the number', 'masterstudy-lms-learning-management-system' ),
 			'submenu'     => $submenu_currency,
 		),
-		'currency_thousands' => array(
+		'currency_thousands'    => array(
 			'type'        => 'text',
 			'label'       => esc_html__( 'Thousands separator', 'masterstudy-lms-learning-management-system' ),
 			'value'       => ',',
@@ -208,7 +211,7 @@ function stm_lms_settings_ecommerce_section() {
 			'description' => esc_html__( 'The symbol to split large numbers into groups, like 1,000', 'masterstudy-lms-learning-management-system' ),
 			'submenu'     => $submenu_currency,
 		),
-		'currency_decimals'  => array(
+		'currency_decimals'     => array(
 			'type'        => 'text',
 			'label'       => esc_html__( 'Decimals separator', 'masterstudy-lms-learning-management-system' ),
 			'value'       => '.',
@@ -216,7 +219,7 @@ function stm_lms_settings_ecommerce_section() {
 			'description' => esc_html__( 'The symbol to show the decimal point, like 12.45', 'masterstudy-lms-learning-management-system' ),
 			'submenu'     => $submenu_currency,
 		),
-		'decimals_num'       => array(
+		'decimals_num'          => array(
 			'type'        => 'number',
 			'label'       => esc_html__( 'Number of fractional numbers allowed', 'masterstudy-lms-learning-management-system' ),
 			'value'       => 2,
@@ -317,51 +320,100 @@ function stm_lms_settings_ecommerce_section() {
 			'dependencies' => '&&',
 			'submenu'      => $submenu_checkout,
 		),
-
-		/*GROUP STARTED*/
-		// phpcs:disable Squiz.PHP.CommentedOutCode.Found
-		/*'woo_country'                          => array(
-			'group'       => 'started',
-			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Country', 'masterstudy-lms-learning-management-system' ),
-			'description' => esc_html__( 'Если включены Taxes отключить нельзя', 'masterstudy-lms-learning-management-system' ),
-			'group_title' => esc_html__( 'Checkout Fields', 'masterstudy-lms-learning-management-system' ),
-			'submenu'     => $submenu_checkout,
-		),
-		'woo_postcode'                         => array(
-			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Postcode', 'masterstudy-lms-learning-management-system' ),
-			'description' => esc_html__( 'Если включены Taxes отключить нельзя', 'masterstudy-lms-learning-management-system' ),
-			'submenu'     => $submenu_checkout,
-		),
-		'woo_state'                            => array(
-			'type'        => 'checkbox',
-			'label'       => esc_html__( 'State', 'masterstudy-lms-learning-management-system' ),
-			'description' => esc_html__( 'Если включены Taxes отключить нельзя', 'masterstudy-lms-learning-management-system' ),
-			'submenu'     => $submenu_checkout,
-		),
-		'woo_town_city'                        => array(
-			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Town/City', 'masterstudy-lms-learning-management-system' ),
-			'description' => esc_html__( 'Если включены Taxes отключить нельзя', 'masterstudy-lms-learning-management-system' ),
-			'submenu'     => $submenu_checkout,
-		),
-		'woo_company_name'                     => array(
-			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Company Name', 'masterstudy-lms-learning-management-system' ),
-			'submenu' => $submenu_checkout,
-		),
-		'woo_phone_number'                     => array(
-			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Phone Number', 'masterstudy-lms-learning-management-system' ),
-			'submenu' => $submenu_checkout,
-			'group'   => 'ended''
-		),*/
-		// phpcs:enable
-		/*GROUP ENDED*/
 	);
 
-	$currency_fields = array_merge( $currency_fields, $checkout_fields ?? array() );
+	if ( STM_LMS_Helpers::is_pro_plus() ) {
+		$checkout_fields = array_merge(
+			$checkout_fields,
+			array(
+				'enable_coupon_code' => array(
+					'type'        => 'checkbox',
+					'label'       => esc_html__( 'Enable Coupon Code', 'masterstudy-lms-learning-management-system' ),
+					'description' => esc_html__( 'Allow users to apply the coupon code during checkout', 'masterstudy-lms-learning-management-system' ),
+					'submenu'     => $submenu_checkout,
+				),
+			)
+		);
+
+		$personal_data_fields = array(
+			'personal_data_country'   => array(
+				'group'           => 'started',
+				'type'            => 'checkbox',
+				'label'           => esc_html__( 'Country', 'masterstudy-lms-learning-management-system' ),
+				'hint'            => esc_html__( 'Enable this option to collect the country of your customers during checkout. This option will be always enabled when taxes are enabled.', 'masterstudy-lms-learning-management-system' ),
+				'value'           => true,
+				'group_title'     => esc_html__( 'Checkout Fields', 'masterstudy-lms-learning-management-system' ),
+				'submenu'         => $submenu_checkout,
+				'dependency'      => array(
+					'key'   => 'taxes_enabled',
+					'value' => 'not_empty',
+				),
+				'dependency_mode' => 'always_on',
+			),
+			'personal_data_post_code' => array(
+				'type'            => 'checkbox',
+				'label'           => esc_html__( 'Post Code', 'masterstudy-lms-learning-management-system' ),
+				'hint'            => esc_html__( 'Enable this option to collect the post code of your customers during checkout. This option will be always enabled when taxes are enabled.', 'masterstudy-lms-learning-management-system' ),
+				'value'           => true,
+				'submenu'         => $submenu_checkout,
+				'dependency'      => array(
+					'key'   => 'taxes_enabled',
+					'value' => 'not_empty',
+				),
+				'dependency_mode' => 'always_on',
+			),
+			'personal_data_state'     => array(
+				'type'            => 'checkbox',
+				'label'           => esc_html__( 'State', 'masterstudy-lms-learning-management-system' ),
+				'hint'            => esc_html__( 'Enable this option to collect the state of your customers during checkout. This option will be always enabled when taxes are enabled.', 'masterstudy-lms-learning-management-system' ),
+				'value'           => true,
+				'submenu'         => $submenu_checkout,
+				'dependency'      => array(
+					'key'   => 'taxes_enabled',
+					'value' => 'not_empty',
+				),
+				'dependency_mode' => 'always_on',
+			),
+			'personal_data_city'      => array(
+				'type'            => 'checkbox',
+				'label'           => esc_html__( 'Town/City', 'masterstudy-lms-learning-management-system' ),
+				'hint'            => esc_html__( 'Enable this option to collect the city of your customers during checkout. This option will be always enabled when taxes are enabled.', 'masterstudy-lms-learning-management-system' ),
+				'value'           => true,
+				'submenu'         => $submenu_checkout,
+				'dependency'      => array(
+					'key'   => 'taxes_enabled',
+					'value' => 'not_empty',
+				),
+				'dependency_mode' => 'always_on',
+			),
+			'personal_data_company'   => array(
+				'type'    => 'checkbox',
+				'label'   => esc_html__( 'Company Name', 'masterstudy-lms-learning-management-system' ),
+				'hint'    => esc_html__( 'Enable this option to collect the company name of your customers during checkout.', 'masterstudy-lms-learning-management-system' ),
+				'value'   => true,
+				'submenu' => $submenu_checkout,
+			),
+			'personal_data_phone'     => array(
+				'type'    => 'checkbox',
+				'label'   => esc_html__( 'Phone Number', 'masterstudy-lms-learning-management-system' ),
+				'hint'    => esc_html__( 'Enable this option to collect the phone number of your customers during checkout.', 'masterstudy-lms-learning-management-system' ),
+				'value'   => true,
+				'submenu' => $submenu_checkout,
+				'group'   => 'ended',
+			),
+			'personal_data__notice'   => array(
+				'type'       => 'notice_banner',
+				'label'      => esc_html__( 'The features is not available when WooCommerce checkout is enabled', 'masterstudy-lms-learning-management-system' ),
+				'dependency' => array(
+					'key'   => 'ecommerce_engine',
+					'value' => 'woocommerce',
+				),
+				'submenu'    => $submenu_checkout,
+			),
+		);
+	}
+
+	$currency_fields = array_merge( $currency_fields, $checkout_fields ?? array(), $personal_data_fields ?? array() );
 
 	$payment_fields = array(
 		'payment_methods' => array(
@@ -372,12 +424,139 @@ function stm_lms_settings_ecommerce_section() {
 	);
 
 	$currency_fields = array_merge( $currency_fields, $payment_fields ?? array() );
+	$woo_checkout    = STM_LMS_Options::get_option( 'ecommerce_engine', 'native' ) === 'woocommerce';
+
+	if ( is_ms_lms_addon_enabled( 'subscriptions' ) && ! STM_LMS_Subscriptions::subscription_enabled() && ! $woo_checkout ) {
+		$subscription_fields = array(
+			'allow_instructor_subscription' => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Allow Instructors to Create Course Subscriptions', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'This setting lets instructors set up subscription plans for their courses in Course Builder.', 'masterstudy-lms-learning-management-system' ),
+				'submenu'     => $submenu_subscriptions,
+			),
+			'manage_memberships'            => array(
+				'type'        => 'button-links',
+				'label'       => esc_html__( 'Manage Memberships', 'masterstudy-lms-learning-management-system' ),
+				'button_text' => esc_html__( 'Manage Memberships', 'masterstudy-lms-learning-management-system' ),
+				'button_url'  => esc_url( admin_url() . 'admin.php?page=manage_membership_plans' ),
+				'blank'       => true,
+				'description' => esc_html__( 'This button directs you to the membership management tab, where you can create, edit, and organize different membership plans.', 'masterstudy-lms-learning-management-system' ),
+				'submenu'     => $submenu_subscriptions,
+			),
+			'subscriptions_notice'          => array(
+				'type'       => 'notice_banner',
+				'label'      => esc_html__( 'The feature is not available when WooCommerce checkout is enabled', 'masterstudy-lms-learning-management-system' ),
+				'dependency' => array(
+					'key'   => 'ecommerce_engine',
+					'value' => 'woocommerce',
+				),
+				'submenu'    => $submenu_subscriptions,
+			),
+		);
+	} elseif ( is_ms_lms_addon_enabled( 'subscriptions' ) && STM_LMS_Subscriptions::subscription_enabled() ) {
+		$subscription_fields = array(
+			'subscriptions_notice' => array(
+				'type'        => 'notification_message',
+				'description' => sprintf(
+					'<h1>%s</h1><p>%s</p>',
+					esc_html__( 'MasterStudy Native Subscriptions are not available when Paid Memberships Pro is enabled.', 'masterstudy-lms-learning-management-system' ),
+					esc_html__( 'Now system is using Paid Memberships Pro for subscriptions. If you want to switch to native subscription system of MasterStudy LMS, please deactivate the Paid Memberships Pro plugin.', 'masterstudy-lms-learning-management-system' )
+				),
+				'submenu'     => $submenu_subscriptions,
+				'buttons'     => array(
+					array(
+						'url'  => 'https://docs.stylemixthemes.com/masterstudy-lms/lms-pro-addons/subscriptions',
+						'text' => esc_html__( 'Learn more', 'masterstudy-lms-learning-management-system' ),
+					),
+				),
+			),
+		);
+	} elseif ( is_ms_lms_addon_enabled( 'subscriptions' ) && $woo_checkout ) {
+		$subscription_fields = array(
+			'subscriptions_notice' => array(
+				'type'        => 'notification_message',
+				'description' => sprintf(
+					'<h1>%s</h1><p>%s</p>',
+					esc_html__( 'MasterStudy Native Subscriptions are not available when WooCommerce Checkout is activated.', 'masterstudy-lms-learning-management-system' ),
+					esc_html__( 'Now system is using WooCommerce Checkout for payments in your platform. If you want to switch to native subscription system of MasterStudy LMS, please deactivate the WooCommerce Checkout plugin.', 'masterstudy-lms-learning-management-system' )
+				),
+				'submenu'     => $submenu_subscriptions,
+				'buttons'     => array(
+					array(
+						'url'  => 'https://docs.stylemixthemes.com/masterstudy-lms/lms-pro-addons/subscriptions',
+						'text' => esc_html__( 'Learn more', 'masterstudy-lms-learning-management-system' ),
+					),
+				),
+			),
+		);
+	}
+
+	$currency_fields = array_merge( $currency_fields, $subscription_fields ?? array() );
+
+	if ( STM_LMS_Helpers::is_pro_plus() ) {
+		$taxes_fields = array(
+			'taxes_enabled' => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Taxes', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Turn on this option to apply tax rates to your course prices and memberships.', 'masterstudy-lms-learning-management-system' ),
+				'submenu'     => $submenu_taxes,
+			),
+			'taxes_notice'  => array(
+				'type'       => 'notice_banner',
+				'label'      => esc_html__( 'The feature is not available when WooCommerce checkout is enabled', 'masterstudy-lms-learning-management-system' ),
+				'dependency' => array(
+					'key'   => 'ecommerce_engine',
+					'value' => 'woocommerce',
+				),
+				'submenu'    => $submenu_taxes,
+			),
+			'taxes_display' => array(
+				'type'        => 'radio',
+				'label'       => esc_html__( 'Price Display Mode', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Choose whether entered prices include or exclude tax.', 'masterstudy-lms-learning-management-system' ),
+				'options'     => array(
+					'excluded' => esc_html__( 'Prices exclude tax', 'masterstudy-lms-learning-management-system' ),
+					'included' => esc_html__( 'Prices include tax', 'masterstudy-lms-learning-management-system' ),
+				),
+				'dependency'  => array(
+					'key'   => 'taxes_enabled',
+					'value' => 'not_empty',
+				),
+				'value'       => 'excluded',
+				'submenu'     => $submenu_taxes,
+			),
+			'taxes'         => array(
+				'type'       => 'taxes',
+				'label'      => esc_html__( 'Taxes', 'masterstudy-lms-learning-management-system' ),
+				'submenu'    => $submenu_taxes,
+				'dependency' => array(
+					'key'   => 'taxes_enabled',
+					'value' => 'not_empty',
+				),
+			),
+		);
+	} else {
+		$taxes_fields = array(
+			'pro_banner' => array(
+				'type'        => 'pro_banner',
+				'label'       => esc_html__( 'Taxes', 'masterstudy-lms-learning-management-system' ),
+				'img'         => STM_LMS_URL . 'assets/img/pro-features/taxes.png',
+				'desc'        => esc_html__( 'Take full control of your financial insights! Easily configure taxes by countries and regions, ensuring accurate payouts and transparent accounting.', 'masterstudy-lms-learning-management-system' ),
+				'hint'        => esc_html__( 'Unlock', 'masterstudy-lms-learning-management-system' ),
+				'is_pro_plus' => ! $is_pro_plus,
+				'utm_url'     => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=mswpadmin&utm_medium=taxes&utm_campaign=masterstudy-plugin',
+				'submenu'     => $submenu_taxes,
+			),
+		);
+	}
+
+	$currency_fields = array_merge( $currency_fields, $taxes_fields ?? array() );
 
 	$payout_fields = array(
 		'admin_fee'  => array(
 			'group'       => 'started',
 			'type'        => 'number',
-			'label'       => esc_html__( 'Admin Comission (%)', 'masterstudy-lms-learning-management-system' ),
+			'label'       => esc_html__( 'Admin Commission (%)', 'masterstudy-lms-learning-management-system' ),
 			'value'       => '90',
 			'pro'         => true,
 			'pro_url'     => admin_url( 'admin.php?page=stm-lms-go-pro&source=instructor-earnings-settings' ),
@@ -436,7 +615,19 @@ function stm_lms_settings_ecommerce_section() {
 	return array(
 		'name'   => esc_html__( 'Ecommerce', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'Ecommerce', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fas fa-money-check-alt',
+		'icon'   => 'stmlms-money-check-alt',
 		'fields' => $currency_fields,
+	);
+}
+
+function masterstudy_lms_ecommerce_options() {
+	return array(
+		'country'       => STM_LMS_Options::get_option( 'personal_data_country', null ),
+		'post_code'     => STM_LMS_Options::get_option( 'personal_data_post_code', null ),
+		'state'         => STM_LMS_Options::get_option( 'personal_data_state', null ),
+		'city'          => STM_LMS_Options::get_option( 'personal_data_city', null ),
+		'company'       => STM_LMS_Options::get_option( 'personal_data_company', null ),
+		'phone'         => STM_LMS_Options::get_option( 'personal_data_phone', null ),
+		'taxes_enabled' => STM_LMS_Helpers::taxes_display()['enabled'],
 	);
 }

@@ -14,6 +14,7 @@ use StmLmsElementor\Widgets\StmLmsCertificateChecker;
 use StmLmsElementor\Widgets\StmLmsCourseBundles;
 use StmLmsElementor\Widgets\StmLmsGoogleClassroom;
 use StmLmsElementor\Widgets\StmLmsMembershipLevels;
+use StmLmsElementor\Widgets\MasterstudyMembership;
 use StmLmsElementor\Widgets\StmLmsCallToAction;
 use StmLmsElementor\Widgets\MsLmsCoursesSearchbox;
 use StmLmsElementor\Widgets\MsLmsInstructorsCarousel;
@@ -25,6 +26,7 @@ use StmLmsElementor\Widgets\MsLmsBlog;
 use StmLmsElementor\Widgets\MsLmsMailchimp;
 use StmLmsElementor\Widgets\MsLmsCountdown;
 use StmLmsElementor\Widgets\MsLmsIconBox;
+use StmLmsElementor\Widgets\MsLmsCoursesCategories;
 
 use StmLmsElementor\Widgets\Course\MsLmsCourseCategories;
 use StmLmsElementor\Widgets\Course\MsLmsCourseUpdated;
@@ -115,7 +117,7 @@ final class Plugin {
 		$existing_categories = $elements_manager->get_categories();
 		$categories          = array_merge( $new_categories, $existing_categories );
 
-		$set_categories = function( $categories ) {
+		$set_categories = function ( $categories ) {
 			$this->categories = $categories;
 		};
 		$set_categories->call( $elements_manager, $categories );
@@ -249,6 +251,7 @@ final class Plugin {
 		require STM_LMS_PATH . '/includes/elementor/helpers/course-data.php';
 		require STM_LMS_PATH . '/includes/elementor/helpers/unlock-banner.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/stm_lms_membership_levels.php';
+		require STM_LMS_PATH . '/includes/elementor/widgets/ms_lms_memberships.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/stm_lms_call_to_action.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/stm_lms_profile_auth_links.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/stm_lms_testimonials_carousel.php';
@@ -298,6 +301,7 @@ final class Plugin {
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_buy_button.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_grades.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_coming_soon.php';
+		require STM_LMS_PATH . '/includes/elementor/widgets/ms_lms_courses_categories.php';
 		// Pro widgets
 		require STM_LMS_PATH . '/includes/elementor/widgets/deprecated/stm_lms_certificate_checker.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/deprecated/stm_lms_course_bundles.php';
@@ -309,6 +313,7 @@ final class Plugin {
 		$widgets_manager->register( new StmCoursesSearchbox() );
 		$widgets_manager->register( new StmLmsSingleCourseCarousel() );
 		$widgets_manager->register( new StmLmsCoursesCarousel() );
+		$widgets_manager->register( new MsLmsCoursesCategories() );
 		$widgets_manager->register( new StmLmsCoursesCategories() );
 		$widgets_manager->register( new StmLmsCoursesGrid() );
 		$widgets_manager->register( new StmLmsFeaturedTeacher() );
@@ -355,6 +360,7 @@ final class Plugin {
 		$widgets_manager->register( new MsLmsCourseComingSoon() );
 		$widgets_manager->register( new MsLmsCourseDescription() );
 		$widgets_manager->register( new StmLmsMembershipLevels() );
+		$widgets_manager->register( new \MasterstudyMembership() );
 
 		if ( defined( 'MC4WP_VERSION' ) ) {
 			$widgets_manager->register( new \MsLmsMailchimp() );

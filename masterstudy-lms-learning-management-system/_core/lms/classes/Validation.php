@@ -2204,7 +2204,7 @@ if(!class_exists('Validation')) {
 			if (!isset($input[$field]) || empty($input[$field])) {
 				return;
 			}
-			$json_twitter = file_get_contents("http://twitter.com/users/username_available?username=" . $input[$field]);
+			$json_twitter = file_get_contents("https://twitter.com/users/username_available?username=" . $input[$field]);
 
 			$twitter_response = json_decode($json_twitter);
 			if ($twitter_response->reason != "taken") {

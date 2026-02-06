@@ -13,8 +13,9 @@
 		STM_LMS_Templates::show_lms_template(
 			'components/switcher',
 			array(
-				'name' => 'buy_for_points',
-				'on'   => ! empty( $points ),
+				'name'  => 'buy_for_points',
+				'class' => 'masterstudy-switcher-toggleable',
+				'on'    => ! empty( $points ),
 			)
 		);
 		?>

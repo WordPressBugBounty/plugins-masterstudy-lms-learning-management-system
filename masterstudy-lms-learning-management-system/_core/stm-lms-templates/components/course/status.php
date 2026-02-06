@@ -4,12 +4,8 @@
  */
 
 
-$course_status = false;
-$labels        = array(
-	'hot'     => __( 'Hot course', 'masterstudy-lms-learning-management-system' ),
-	'new'     => __( 'New course', 'masterstudy-lms-learning-management-system' ),
-	'special' => __( 'Special course', 'masterstudy-lms-learning-management-system' ),
-);
+$course_status   = false;
+$course_statuses = \STM_LMS_Helpers::get_course_statuses();
 
 if ( ! empty( $course->status ) ) {
 	if ( empty( $course->status_date_start ) && empty( $course->status_date_end ) ) {
@@ -22,10 +18,11 @@ if ( ! empty( $course->status ) ) {
 	}
 }
 
-if ( $course_status ) {
+if ( $course_status && ! empty( $course_statuses[ $course->status ] ) ) {
+	$_status = $course_statuses[ $course->status ];
 	?>
-	<span class="masterstudy-single-course-status masterstudy-single-course-status_<?php echo esc_attr( $course->status ); ?>">
-		<?php echo esc_html( $labels[ $course->status ] ); ?>
+	<span style="color: <?php echo esc_attr( $_status['text_color'] ); ?>; background-color: <?php echo esc_attr( $_status['bg_color'] ); ?>" class="masterstudy-single-course-status">
+		<?php echo esc_attr( $_status['label'] ); ?>
 	</span>
 	<?php
 }

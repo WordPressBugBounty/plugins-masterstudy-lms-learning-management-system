@@ -4,7 +4,7 @@
   $(document).ready(function () {
     $('.masterstudy-pricing-item').each(function () {
       var $section = $(this);
-      var $switcher = $section.find('.masterstudy-switcher input[type="checkbox"]');
+      var $switcher = $section.find('.masterstudy-switcher.masterstudy-switcher-toggleable input[type="checkbox"]');
       var $content = $section.find('.masterstudy-pricing-item__content');
       if (!$switcher.is(':checked')) {
         $content.hide();

@@ -3,7 +3,7 @@ function stm_lms_settings_general_section() {
 	return array(
 		'name'   => esc_html__( 'General', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'General Settings', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fas fa-sliders-h',
+		'icon'   => 'stmlms-sliders-h',
 		'fields' => array(
 			/*GROUP STARTED*/
 			'main_color'            => array(
@@ -27,6 +27,7 @@ function stm_lms_settings_general_section() {
 			'accent_color'          => array(
 				'group'       => 'started',
 				'type'        => 'color',
+				'format'      => 'rgba',
 				'value'       => 'rgba(34,122,255,1)',
 				'label'       => esc_html__( 'Accent', 'masterstudy-lms-learning-management-system' ),
 				'description' => esc_html__( 'Pick a color for buttons, quiz info, chosen options, progress bar, notice background, links, and Trial course badge in the Course Player', 'masterstudy-lms-learning-management-system' ),
@@ -35,6 +36,7 @@ function stm_lms_settings_general_section() {
 			),
 			'danger_color'          => array(
 				'type'        => 'color',
+				'format'      => 'rgba',
 				'value'       => 'rgba(255,57,69,1)',
 				'label'       => esc_html__( 'Danger', 'masterstudy-lms-learning-management-system' ),
 				'description' => esc_html__( 'Select a color for required but unfilled fields, wrong options chosen in quizzes, and notifications for failed quizzes and assignments', 'masterstudy-lms-learning-management-system' ),
@@ -42,6 +44,7 @@ function stm_lms_settings_general_section() {
 			),
 			'warning_color'         => array(
 				'type'        => 'color',
+				'format'      => 'rgba',
 				'value'       => 'rgba(255,168,0,1)',
 				'label'       => esc_html__( 'Warning', 'masterstudy-lms-learning-management-system' ),
 				'description' => esc_html__( 'Choose a color for warnings', 'masterstudy-lms-learning-management-system' ),
@@ -49,6 +52,7 @@ function stm_lms_settings_general_section() {
 			),
 			'success_color'         => array(
 				'type'        => 'color',
+				'format'      => 'rgba',
 				'value'       => 'rgba(97,204,47,1)',
 				'label'       => esc_html__( 'Success', 'masterstudy-lms-learning-management-system' ),
 				'description' => esc_html__( 'Choose a color for wrong options chosen in quizzes, and notifications for passed quizzes and assignments', 'masterstudy-lms-learning-management-system' ),
@@ -67,14 +71,6 @@ function stm_lms_settings_general_section() {
 				'hint'    => esc_html__( 'Upload your brand\'s logo image for the print page', 'masterstudy-lms-learning-management-system' ),
 				'pro'     => true,
 				'pro_url' => admin_url( 'admin.php?page=stm-lms-go-pro&source=print-logo' ),
-			),
-			'courses_featured_num'  => array(
-				'type'        => 'number',
-				'label'       => esc_html__( 'Number of featured courses', 'masterstudy-lms-learning-management-system' ),
-				'description' => esc_html__( 'Define how many courses you want to highlight as special', 'masterstudy-lms-learning-management-system' ),
-				'value'       => 1,
-				'pro'         => true,
-				'pro_url'     => admin_url( 'admin.php?page=stm-lms-go-pro' ),
 			),
 			'deny_instructor_admin' => array(
 				'type'        => 'checkbox',

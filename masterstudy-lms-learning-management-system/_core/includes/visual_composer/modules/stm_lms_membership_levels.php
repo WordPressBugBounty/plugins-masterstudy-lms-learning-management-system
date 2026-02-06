@@ -11,7 +11,7 @@ function stm_lms_membership_levels_vc() {
 
 	vc_map(
 		array(
-			'name'           => esc_html__( 'STM Membership plans', 'masterstudy-lms-learning-management-system' ),
+			'name'           => esc_html__( 'PMPro Plans', 'masterstudy-lms-learning-management-system' ),
 			'base'           => 'stm_membership_levels',
 			'icon'           => 'stm_membership_levels',
 			'description'    => esc_html__( 'Membership Plans', 'masterstudy-lms-learning-management-system' ),

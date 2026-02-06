@@ -9,7 +9,7 @@ function stm_lms_settings_ai_lab_section() {
 	$ai_settings_fields = array(
 		'name'   => esc_html__( 'AI Lab', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'AI Lab Settings', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fas fa-wand-magic-sparkles',
+		'icon'   => 'stmlms-wand-magic-sparkles',
 		'fields' => array(
 			'openai_api_key'           => array(
 				'type'        => 'text',
@@ -96,7 +96,7 @@ function stm_lms_settings_ai_lab_section() {
 		$ai_settings_fields = array(
 			'name'   => esc_html__( 'AI Lab', 'masterstudy-lms-learning-management-system' ),
 			'label'  => esc_html__( 'AI Lab Settings', 'masterstudy-lms-learning-management-system' ),
-			'icon'   => 'fas fa-wand-magic-sparkles',
+			'icon'   => 'stmlms-wand-magic-sparkles',
 			'fields' => array(
 				'pro_banner_ai_lab' => array(
 					'type'        => 'pro_banner',

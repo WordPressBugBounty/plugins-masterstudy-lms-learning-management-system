@@ -5,7 +5,7 @@ use stmLms\Classes\Vendor\StmBaseModel;
 
 class StmLmsCourse extends StmBaseModel {
 
-	protected $fillable = [
+	protected $fillable = array(
 		'ID',
 		'post_author',
 		'post_date',
@@ -27,8 +27,8 @@ class StmLmsCourse extends StmBaseModel {
 		'menu_order',
 		'post_type',
 		'post_mime_type',
-		'comment_count'
-	];
+		'comment_count',
+	);
 
 	public $ID;
 	public $post_author;
@@ -53,21 +53,21 @@ class StmLmsCourse extends StmBaseModel {
 	public $post_mime_type;
 	public $comment_count;
 	public $post;
+	public $date;
+	public $amount;
+	public $order_item_count;
 
-	public static function get_primary_key()
-	{
+	public static function get_primary_key() {
 		return 'ID';
 	}
 
-	public static function get_table()
-	{
+	public static function get_table() {
 		global $wpdb;
 		return $wpdb->prefix . 'posts';
 	}
 
-	public static function get_searchable_fields()
-	{
-		return [
+	public static function get_searchable_fields() {
+		return array(
 			'ID',
 			'post_author',
 			'post_date',
@@ -90,15 +90,13 @@ class StmLmsCourse extends StmBaseModel {
 			'post_type',
 			'post_mime_type',
 			'comment_count',
-		];
+		);
 	}
 
-	public static function init(){
-
+	public static function init() {
 	}
 
-	public static function after_delete_post($postid){
-
+	public static function after_delete_post( $postid ) {
 	}
 
 	/**
@@ -107,19 +105,20 @@ class StmLmsCourse extends StmBaseModel {
 	 *
 	 * @return array|mixed|null
 	 */
-	public function getMeta($meta_key ,$flip = false){
-		if($meta = get_post_meta($this->ID, $meta_key, true) AND !empty($meta)) {
-			return ($flip) ? array_flip(unserialize($meta)) : unserialize($meta);
+	public function getMeta( $meta_key, $flip = false ) {
+		$meta = get_post_meta( $this->ID, $meta_key, true );
+		if ( ! empty( $meta ) ) {
+			$meta = maybe_unserialize( $meta );
+			return ( $flip ) ? array_flip( $meta ) : $meta;
 		}
 		return null;
 	}
 
-	public static function load($data) {
+	public static function load( $data ) {
 		$model = new StmOrder();
-		foreach ($data as $key => $val) {
+		foreach ( $data as $key => $val ) {
 			$model->$key = $val;
 		}
 		return $model;
 	}
 }
-

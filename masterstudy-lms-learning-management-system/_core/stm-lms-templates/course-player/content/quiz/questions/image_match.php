@@ -10,6 +10,10 @@
 
 use MasterStudy\Lms\Utility\Question;
 
+if ( ! empty( $data['last_answers']['questions_order'] ) ) {
+	$data['answers'] = Question::sort_answers_by_order( $data['answers'], $data['last_answers']['questions_order'], $data['type'] );
+}
+
 if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 	$user_answers = Question::filter_matching_user_answers( $data, 'stm_lms_image_match', true );
 } elseif ( empty( $data['last_answers'] ) && $data['is_correct'] ) {
@@ -38,7 +42,7 @@ if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 		<div class="masterstudy-course-player-image-match__question <?php echo esc_attr( $data['answer_class'] ?? '' ); ?>">
 			<div class="masterstudy-course-player-image-match__question-wrapper">
 				<div class="masterstudy-course-player-image-match__question-content">
-					<img src="<?php echo esc_url( ! empty( $answer['question_image']['url'] ) ? $answer['question_image']['url'] : STM_LMS_URL . 'assets/img/image_not_found.png' ); ?>"/>
+					<img data-image-id="<?php echo esc_attr( ! empty( $answer['question_image']['id'] ) ? $answer['question_image']['id'] : '' ); ?>" src="<?php echo esc_url( ! empty( $answer['question_image']['url'] ) ? $answer['question_image']['url'] : STM_LMS_URL . 'assets/img/image_not_found.png' ); ?>"/>
 					<?php if ( ! empty( $answer['question'] ) ) { ?>
 						<div class="masterstudy-course-player-image-match__question-text">
 							<?php echo wp_kses_post( $answer['question'] ); ?>

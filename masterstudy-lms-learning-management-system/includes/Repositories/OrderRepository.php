@@ -65,9 +65,10 @@ final class OrderRepository {
 		$page       = $request['page'] ?? 1;
 		$offset     = ( $page - 1 ) * $per_page;
 		$search     = isset( $request['search'] ) ? trim( $request['search'] ) : '';
-		$status     = $request['status'];
+		$status     = $request['status'] ?? '';
 		$date_range = isset( $request['date_range'] ) ? trim( $request['date_range'] ) : '';
-		$sort       = $request['sort'];
+		$sort       = $request['sort'] ?? '';
+		$coupon_id  = $request['coupon_id'] ?? '';
 
 		$joins  = array();
 		$wheres = array(
@@ -91,6 +92,11 @@ final class OrderRepository {
 			$wheres[]    = $wpdb->prepare( 'pm_status.meta_value = %s', $status );
 		}
 
+		if ( ! empty( $coupon_id ) ) {
+			$joins[]  = "INNER JOIN {$wpdb->postmeta} pm_coupon ON pm_coupon.post_id = p.ID AND pm_coupon.meta_key = 'coupon_id'";
+			$wheres[] = $wpdb->prepare( 'pm_coupon.meta_value = %s', $coupon_id );
+		}
+
 		if ( ! empty( $date_range ) ) {
 			$dates = explode( ',', $date_range );
 			$from  = ! empty( $dates[0] ) ? trim( $dates[0] ) : '';
@@ -105,17 +111,12 @@ final class OrderRepository {
 			}
 		}
 
-		$order_by  = 'ORDER BY p.post_date DESC';
-		$direction = 'ASC';
-		$sort_key  = '';
+		$order_by = 'ORDER BY p.post_date DESC';
 
 		if ( ! empty( $sort ) ) {
-			if ( '-' === $sort[0] ) {
-				$direction = 'DESC';
-				$sort_key  = substr( $sort, 1 );
-			} else {
-				$sort_key = $sort;
-			}
+			$sort_params = \STM_LMS_Helpers::get_sort_params_by_string( $sort );
+			$direction   = $sort_params['direction'];
+			$sort_key    = $sort_params['key'];
 
 			switch ( $sort_key ) {
 				case 'id':

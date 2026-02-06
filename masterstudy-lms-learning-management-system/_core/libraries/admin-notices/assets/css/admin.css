@@ -359,6 +359,10 @@ body.about-php .stm-notice, body.credits-php .stm-notice, body.freedoms-php .stm
     height: 110px;
   }
 }
+.wp-core-ui .popup-dash-promo-content-item .popup-dash-desc ul {
+  list-style: inherit;
+  padding-left: 40px;
+}
 .wp-core-ui .popup-dash-promo-content-item .popup-dash-actions {
   display: flex;
   align-items: baseline;
@@ -504,7 +508,7 @@ body.about-php .stm-notice, body.credits-php .stm-notice, body.freedoms-php .stm
 }
 .wp-core-ui .stm-notice-bulk-update ul li .bulk-update-plugin-indicator::before {
   display: none;
-  content: "\e94e";
+  content: var(--stmlms-icon-checked, "\e94e");
   font-family: "stmlms" !important;
   font-size: 9px;
   color: #227AFF;

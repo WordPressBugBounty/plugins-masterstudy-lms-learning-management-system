@@ -23,6 +23,10 @@ class StmOrderItems extends StmBaseModel {
 	public $quantity;
 	public $price;
 	public $transaction;
+	public $total_price;
+	public $count;
+	public $name;
+	public $date_created;
 
 	public static function init() {
 		add_action( 'order_created', array( self::class, 'order_created' ), 10, 4 );

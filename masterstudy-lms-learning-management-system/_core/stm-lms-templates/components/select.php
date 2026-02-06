@@ -7,6 +7,7 @@
  * @var string  $select_width - select component width.
  * @var string  $placeholder  - select component placeholder.
  * @var mixed   $default      - select component default value.
+ * @var boolean $apply_default - apply default value for input placeholder
  * @var array   $options      - select component options items
  * (option_value = array_key, option_content = array_value).
  * @var boolean $dark_mode    - if $dark_mode is true then add class
@@ -15,14 +16,15 @@
  * @package masterstudy
  */
 
-$select_name  = $select_name ?? '';
-$select_id    = $select_id ?? $select_name;
-$placeholder  = $placeholder ?? __( 'Select an item', 'masterstudy-lms-learning-management-system' );
-$options      = is_array( $options ) ? $options : array();
-$dark_mode    = $dark_mode ?? false;
-$select_width = ! empty( $select_width ) ? 'style=min-width:' . $select_width : '';
-$default      = $default ?? '';
-$queryable    = ( $is_queryable ?? false ) ? 'true' : 'false';
+$select_name   = $select_name ?? '';
+$select_id     = $select_id ?? $select_name;
+$placeholder   = $placeholder ?? __( 'Select an item', 'masterstudy-lms-learning-management-system' );
+$options       = is_array( $options ) ? $options : array();
+$dark_mode     = $dark_mode ?? false;
+$select_width  = ! empty( $select_width ) ? 'style=min-width:' . $select_width : '';
+$default       = $default ?? '';
+$apply_default = ( $apply_default ?? false ) ? 'true' : 'false';
+$queryable     = ( $is_queryable ?? false ) ? 'true' : 'false';
 
 wp_enqueue_style( 'masterstudy-select', STM_LMS_URL . 'assets/css/components/select.css', null, MS_LMS_VERSION );
 wp_enqueue_script( 'masterstudy-select', STM_LMS_URL . 'assets/js/components/select.js', array(), MS_LMS_VERSION, true );
@@ -30,7 +32,7 @@ wp_enqueue_script( 'masterstudy-select', STM_LMS_URL . 'assets/js/components/sel
 <div class="masterstudy-select<?php echo esc_attr( $dark_mode ? ' masterstudy-select_dark-mode' : '' ); ?>" <?php echo esc_attr( $select_width ); ?> data-queryable="<?php echo esc_attr( $queryable ); ?>" data-id="<?php echo esc_attr( $select_id ); ?>">
 	<input id="<?php echo esc_attr( $select_id ); ?>" name="<?php echo esc_attr( $select_name ); ?>" class="masterstudy-select__input" type="hidden" value="<?php echo esc_attr( $default ); ?>">
 	<div class="masterstudy-select__wrapper">
-		<div class="masterstudy-select__placeholder" data-initial="<?php echo esc_attr( $default ); ?>" data-placeholder="<?php echo esc_attr( $placeholder ); ?>">
+		<div class="masterstudy-select__placeholder" data-initial="<?php echo esc_attr( $default ); ?>" data-apply_default="<?php echo esc_attr( $apply_default ); ?>" data-placeholder="<?php echo esc_attr( $placeholder ); ?>">
 			<?php echo esc_html( $placeholder ); ?>
 		</div>
 		<span class="masterstudy-select__clear">

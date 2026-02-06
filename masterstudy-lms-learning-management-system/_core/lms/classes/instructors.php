@@ -45,6 +45,8 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 		add_filter( 'ajax_query_attachments_args', 'STM_LMS_Instructor::restrict_media_to_own' );
 
+		add_filter( 'wp_insert_post_data', array( self::class, 'maybe_publish_elementor_template' ), 10, 2 );
+
 		/*Plug for add student*/
 		if ( ! class_exists( 'STM_LMS_Enterprise_Courses' ) ) {
 			add_action(
@@ -323,16 +325,23 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		}
 
 		if ( $post && 'elementor_library' === $post->post_type ) {
+			$user_data = get_userdata( $user_id );
+			$is_admin  = $user_data && in_array( 'administrator', (array) $user_data->roles, true );
+
 			if ( 'edit_post' === $cap ) {
-				$caps = array( ( $user_id === (int) $post->post_author ) ? 'edit_elementor_libraries' : 'do_not_allow' );
+				$caps = array( ( $user_id === (int) $post->post_author || $is_admin ) ? 'edit_elementor_libraries' : 'do_not_allow' );
 			}
 
 			if ( 'delete_post' === $cap ) {
-				$caps = array( ( $user_id === (int) $post->post_author ) ? 'delete_elementor_libraries' : 'do_not_allow' );
+				$caps = array( ( $user_id === (int) $post->post_author || $is_admin ) ? 'delete_elementor_libraries' : 'do_not_allow' );
 			}
 
 			if ( 'read_post' === $cap ) {
 				$caps = array( ( 'private' !== $post->post_status || $user_id === (int) $post->post_author ) ? 'read_elementor_libraries' : 'do_not_allow' );
+			}
+
+			if ( 'publish_post' === $cap ) {
+				$caps = array( ( $user_id === (int) $post->post_author ) ? 'publish_elementor_libraries' : 'do_not_allow' );
 			}
 		}
 
@@ -519,7 +528,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					'single_sale'                 => $single_sale,
 					'is_free'                     => $course_free_status['is_free'],
 					'zero_price'                  => $course_free_status['zero_price'],
-					'members_only'                => STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership,
+					'members_only'                => ! $single_sale && ! $not_in_membership,
 					'edit_link'                   => ms_plugin_manage_course_url( $id ),
 					'coming_soon_link'            => ms_plugin_manage_course_url( "$id/settings/access" ),
 					'post_status'                 => $post_status,
@@ -668,6 +677,8 @@ class STM_LMS_Instructor extends STM_LMS_User {
 						}
 					}
 
+					unset( $data['register_user_password'], $data['register_user_password_re'] );
+
 					update_user_meta( $user_id, 'become_instructor', $data );
 					update_user_meta( $user_id, 'submission_date', time() );
 					update_user_meta( $user_id, 'submission_status', 'pending' );
@@ -712,6 +723,8 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 				$subject = esc_html__( 'New Instructor Application', 'masterstudy-lms-learning-management-system' );
 				$user    = STM_LMS_User::get_current_user( $user_id );
+
+				unset( $data['register_user_password'], $data['register_user_password_re'] );
 
 				update_user_meta( $user_id, 'become_instructor', $data );
 				update_user_meta( $user_id, 'submission_date', time() );
@@ -1268,5 +1281,21 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			$query['author'] = wp_get_current_user()->ID;
 		}
 		return $query;
+	}
+
+	public static function maybe_publish_elementor_template( $data, $postarr ) {
+		if ( empty( $data['post_type'] ) || 'elementor_library' !== $data['post_type'] ) {
+			return $data;
+		}
+
+		if ( ! self::is_instructor() ) {
+			return $data;
+		}
+
+		if ( 'pending' === $data['post_status'] ) {
+			$data['post_status'] = 'publish';
+		}
+
+		return $data;
 	}
 }

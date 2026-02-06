@@ -9,6 +9,11 @@
  * @var string $item_id
  */
 
+use MasterStudy\Lms\Utility\Question;
+
+if ( ! empty( $user_answer['questions_order'] ) ) {
+	$answers = Question::sort_answers_by_order( $answers, $user_answer['questions_order'], $type );
+}
 
 $question_id         = get_the_ID();
 $show_correct_answer = get_post_meta( $item_id, 'correct_answer', true );
@@ -29,13 +34,13 @@ foreach ( $answers as $answer ) :
 		}
 	}
 
-	if ( $answer['text'] == $user_answer && $answer['isTrue'] ) {
+	if ( $answer['text'] === $user_answer && $answer['isTrue'] ) {
 		$answer_class[] = 'correctly_answered';
 	}
-	if ( $answer['text'] == $user_answer && ! $answer['isTrue'] ) {
+	if ( $answer['text'] === $user_answer && ! $answer['isTrue'] ) {
 		$answer_class[] = 'wrongly_answered';
 	}
-	if ( $answer['text'] != $user_answer && $answer['isTrue'] && $show_correct_answer ) {
+	if ( $answer['text'] !== $user_answer && $answer['isTrue'] && $show_correct_answer ) {
 		$answer_class[] = 'correct_answer';
 	}
 
@@ -47,7 +52,7 @@ foreach ( $answers as $answer ) :
 	?>
 	<div class="stm-lms-single-answer <?php echo esc_attr( implode( ' ', $answer_class ) ); ?>">
 		<label>
-			<input 
+			<input
 			<?php
 			if ( $answered ) {
 				echo esc_attr( 'checked' );}
@@ -56,7 +61,7 @@ foreach ( $answers as $answer ) :
 					disabled
 					name="<?php echo esc_attr( $question_id ); ?>"
 					value="<?php echo esc_attr( $answer['text'] ); ?>"/>
-			<i class="fa fa-check"></i>
+			<i class="stmlms-check-3"></i>
 			<?php echo esc_html( $answer['label'] ); ?>
 		</label>
 	</div>

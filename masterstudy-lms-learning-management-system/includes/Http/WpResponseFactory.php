@@ -43,6 +43,10 @@ final class WpResponseFactory {
 		return self::create( 200, array( 'status' => 'ok' ) );
 	}
 
+	public static function ok_with_data( $data ): WP_REST_Response {
+		return self::create( 200, $data );
+	}
+
 	public static function create( int $status, array $data ): WP_REST_Response {
 		return new WP_REST_Response( $data, $status );
 	}

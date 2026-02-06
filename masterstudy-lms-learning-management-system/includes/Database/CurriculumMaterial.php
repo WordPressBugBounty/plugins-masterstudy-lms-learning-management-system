@@ -5,6 +5,7 @@ namespace MasterStudy\Lms\Database;
 class CurriculumMaterial extends AbstractQuery {
 	public ?int $id = null;
 	public int $post_id;
+	public ?string $post_name;
 	public string $post_type;
 	public int $section_id;
 	public int $order;

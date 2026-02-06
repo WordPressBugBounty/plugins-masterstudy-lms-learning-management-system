@@ -12,6 +12,12 @@
       var selectName = selectInput.attr('name');
       var urlParams = new URLSearchParams(window.location.search);
       var currentUrl = window.location.href;
+      selectInput.on('change', function () {
+        var option = selectOptions.filter("[data-value=\"".concat(selectInput.val(), "\"]"));
+        $(option).addClass('masterstudy-select__option_selected');
+        $(option).siblings().removeClass('masterstudy-select__option_selected');
+        placeholder.text(option.text());
+      });
 
       // Open select dropdown.
       $(select).on('click', function (e) {
@@ -51,7 +57,14 @@
 
       // Select option.
       $.each(selectOptions, function (i, option) {
-        // Change select valeu on option click
+        // Change select value on option click
+
+        var data = $(option).data('value');
+        var applyDefault = $(placeholder).data('apply_default');
+        if (initialValue && data === initialValue && applyDefault === true) {
+          selectInput.val(initialValue);
+          placeholder.text($(this).html());
+        }
         $(option).on('click', function () {
           var selectVal = $(this).data('value');
           // Change classes

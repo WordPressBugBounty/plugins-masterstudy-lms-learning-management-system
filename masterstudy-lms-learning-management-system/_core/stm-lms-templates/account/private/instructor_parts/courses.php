@@ -74,7 +74,7 @@ stm_lms_register_style( 'instructor_courses' );
 				</a>
 			</div>
 			<a href="<?php echo esc_url( $links['add_new'] ); ?>" class="btn btn-default" target="_blank">
-				<i class="fa fa-plus"></i>
+				<i class="stmlms-plus-2"></i>
 				<?php esc_html_e( 'Add New course', 'masterstudy-lms-learning-management-system' ); ?>
 			</a>
 		</div>
@@ -102,7 +102,7 @@ stm_lms_register_style( 'instructor_courses' );
 				<i class="stm-lms-course-reset-filter-icon"></i>
 			</a>
 			<a href="<?php echo esc_url( $links['add_new'] ); ?>" class="btn btn-default" target="_blank">
-				<i class="fa fa-plus"></i>
+				<i class="stmlms-plus-2"></i>
 				<?php esc_html_e( 'Add your first course', 'masterstudy-lms-learning-management-system' ); ?>
 			</a>
 		</div>
@@ -122,11 +122,6 @@ stm_lms_register_style( 'instructor_courses' );
 					<div class="stm_lms_instructor_quota__buttons">
 						<span class="btn btn-default"
 							@click="quota = {}"><?php esc_html_e( 'Done', 'masterstudy-lms-learning-management-system' ); ?></span>
-						<a href="<?php echo esc_url( STM_LMS_Subscriptions::level_url() ); ?>"
-							v-if="quota.available_quota === 0"
-							class="btn btn-default upgrade">
-							<?php esc_html_e( 'Upgrade', 'masterstudy-lms-learning-management-system' ); ?>
-						</a>
 					</div>
 				</div>
 				<div class="stm_lms_instructor_quota__overlay" @click="quota = {}"></div>

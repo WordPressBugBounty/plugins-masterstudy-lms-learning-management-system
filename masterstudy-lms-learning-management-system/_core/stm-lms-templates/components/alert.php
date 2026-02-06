@@ -63,6 +63,7 @@ $submit_button_style = $submit_button_style ?? '';
 				}
 				?>
 			</div>
+			<div class="masterstudy-alert__error"></div>
 		</div>
 	</div>
 </div>

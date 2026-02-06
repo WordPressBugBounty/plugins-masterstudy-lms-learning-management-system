@@ -1,10 +1,13 @@
 <?php
+$is_featured_enabled = STM_LMS_Options::get_option( 'enable_featured_courses', true );
 foreach ( $courses as $course ) {
-	$course = STM_LMS_Courses::get_course_submetas( $course, $course_image_size );
+	$course            = STM_LMS_Courses::get_course_submetas( $course, $course_image_size );
+	$status_bg_style   = ! empty( $course['current_status']['bg_color'] ) ? esc_attr( '--status-background: ' . $course['current_status']['bg_color'] . ';' ) : '';
+	$status_text_style = ! empty( $course['current_status']['text_color'] ) ? esc_attr( '--status-text-color: ' . $course['current_status']['text_color'] . ';' ) : '';
 	?>
-	<div class="ms_lms_courses_card_item <?php echo esc_attr( $featured ?? '' ); ?> <?php echo esc_attr( ( 'courses-carousel' === $widget_type ) ? 'swiper-slide' : '' ); ?>">
+	<div class="ms_lms_courses_card_item <?php echo esc_attr( $is_featured_enabled ? $featured ?? '' : '' ); ?> <?php echo esc_attr( ( 'courses-carousel' === $widget_type ) ? 'swiper-slide' : '' ); ?>">
 		<div class="ms_lms_courses_card_item_wrapper">
-			<?php if ( ! empty( $course['featured'] ) ) { ?>
+			<?php if ( ! empty( $course['featured'] ) && $is_featured_enabled ) { ?>
 				<div class="ms_lms_courses_card_item_featured <?php echo esc_attr( ( ! empty( $card_data['featured_position'] ) ) ? $card_data['featured_position'] : '' ); ?>">
 					<span><?php echo esc_html__( 'Featured', 'masterstudy-lms-learning-management-system' ); ?></span>
 				</div>
@@ -12,7 +15,11 @@ foreach ( $courses as $course ) {
 			}
 			if ( ! empty( $course['current_status'] ) ) {
 				?>
-				<div class="ms_lms_courses_card_item_status <?php echo esc_attr( ( ! empty( $card_data['status_presets'] ) ) ? $card_data['status_presets'] : '' ); ?> <?php echo esc_attr( ( ! empty( $card_data['status_position'] ) ) ? $card_data['status_position'] : '' ); ?> <?php echo esc_attr( ( ! empty( $course['current_status']['status'] ) ) ? $course['current_status']['status'] : '' ); ?> <?php echo esc_attr( ( ! empty( $course['current_status']['status'] ) ) ? $course['current_status']['status'] : '' ); ?>">
+				<div
+					<?php if ( ! empty( $status_bg_style ) || ! empty( $status_text_style ) ) : ?>
+					style="<?php echo esc_attr( $status_bg_style ); ?> <?php echo esc_attr( $status_text_style ); ?>"
+					<?php endif ?>
+					class="ms_lms_courses_card_item_status <?php echo esc_attr( ( ! empty( $card_data['status_presets'] ) ) ? $card_data['status_presets'] : '' ); ?> <?php echo esc_attr( ( ! empty( $card_data['status_position'] ) ) ? $card_data['status_position'] : '' ); ?> <?php echo esc_attr( ( ! empty( $course['current_status']['status'] ) ) ? $course['current_status']['status'] : '' ); ?> <?php echo esc_attr( ( ! empty( $course['current_status']['status'] ) ) ? $course['current_status']['status'] : '' ); ?>">
 					<span><?php echo esc_html( $course['current_status']['label'] ); ?></span>
 				</div>
 			<?php } ?>
@@ -95,9 +102,8 @@ foreach ( $courses as $course ) {
 							'mode'      => 'card',
 						),
 					);
-				} else {
-					if ( ! empty( $card_data['show_price'] ) ) {
-						?>
+				} elseif ( ! empty( $card_data['show_price'] ) ) {
+					?>
 						<div class="ms_lms_courses_card_item_info_bottom_wrapper">
 							<?php
 							STM_LMS_Templates::show_lms_template(
@@ -110,7 +116,7 @@ foreach ( $courses as $course ) {
 							?>
 						</div>
 						<?php
-					}
+
 				}
 				?>
 			</div>

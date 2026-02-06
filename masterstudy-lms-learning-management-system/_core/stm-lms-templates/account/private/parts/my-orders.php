@@ -12,6 +12,9 @@ wp_localize_script(
 		'no_order_description'       => esc_html__( 'All information about your orders will be displayed here', 'masterstudy-lms-learning-management-system' ),
 		'payment_code_wire_transfer' => esc_html__( 'Wire Transfer', 'masterstudy-lms-learning-management-system' ),
 		'payment_code_cash'          => esc_html__( 'Cash', 'masterstudy-lms-learning-management-system' ),
+		'bundle'                     => esc_html__( 'Bundle', 'masterstudy-lms-learning-management-system' ),
+		'enterprise'                 => esc_html__( 'Enterprise', 'masterstudy-lms-learning-management-system' ),
+		'subscription'               => esc_html__( 'Subscription', 'masterstudy-lms-learning-management-system' ),
 		'statuses'                   => array(
 			'completed' => esc_html__( 'Completed', 'masterstudy-lms-learning-management-system' ),
 			'pending'   => esc_html__( 'Pending', 'masterstudy-lms-learning-management-system' ),
@@ -19,6 +22,9 @@ wp_localize_script(
 		),
 	),
 );
+
+$taxes_display     = STM_LMS_Helpers::taxes_display();
+$is_coupon_enabled = STM_LMS_Helpers::is_coupons_enabled();
 
 if ( ! STM_LMS_Cart::woocommerce_checkout_enabled() ) :
 	?>
@@ -52,8 +58,31 @@ if ( ! STM_LMS_Cart::woocommerce_checkout_enabled() ) :
 					<div class="masterstudy-orders-table__body"></div>
 					<div class="masterstudy-orders-table__footer">
 						<div class="masterstudy-orders-course-info">
-							<div class="masterstudy-orders-course-info__label"><?php echo esc_html__( 'Total', 'masterstudy-lms-learning-management-system' ); ?>:</div>
-							<div class="masterstudy-orders-course-info__price" data-order-total></div>
+							<?php if ( $taxes_display['enabled'] || $is_coupon_enabled ) { ?>
+								<div data-id="subtotal" class="masterstudy-orders-course-info__block">
+									<div class="masterstudy-orders-course-info__label"><?php echo esc_html__( 'Subtotal', 'masterstudy-lms-learning-management-system' ); ?>:</div>
+									<div class="masterstudy-orders-course-info__price" data-order-subtotal></div>
+								</div>
+							<?php } ?>
+							<?php if ( $is_coupon_enabled ) : ?>
+								<div data-id="coupon" class="masterstudy-orders-course-info__block">
+									<div class="masterstudy-orders-course-info__label"><?php echo esc_html__( 'Coupon', 'masterstudy-lms-learning-management-system' ); ?>:</div>
+									<div class="masterstudy-orders-course-info__price" data-order-coupon></div>
+								</div>
+							<?php endif; ?>
+							<?php if ( $taxes_display['enabled'] ) : ?>
+								<div data-id="taxes" class="masterstudy-orders-course-info__block">
+									<div class="masterstudy-orders-course-info__label"><?php echo esc_html__( 'Tax', 'masterstudy-lms-learning-management-system' ); ?>:</div>
+									<div class="masterstudy-orders-course-info__price" data-order-taxes></div>
+								</div>
+							<?php endif; ?>
+							<div data-id="total" class="masterstudy-orders-course-info__block">
+								<div class="masterstudy-orders-course-info__label">
+									<?php echo esc_html__( 'Total', 'masterstudy-lms-learning-management-system' ); ?>:</div>
+								<div class="masterstudy-orders-course-info__price">
+									<span class="masterstudy-orders-course-info__price-value" data-order-total></span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

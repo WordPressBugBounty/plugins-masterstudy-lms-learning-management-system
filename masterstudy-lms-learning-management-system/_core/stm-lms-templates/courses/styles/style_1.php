@@ -10,8 +10,9 @@
  * @var $image_size
  */
 
-$classes   = array( $has_sale_price, $style );
-$classes[] = ( ! empty( $featured ) && 'on' === $featured ) ? 'is_featured' : '';
+$is_featured_enabled = STM_LMS_Options::get_option( 'enable_featured_courses', true );
+$classes             = array( $has_sale_price, $style );
+$classes[]           = ( ! empty( $featured ) && 'on' === $featured && $is_featured_enabled ) ? 'is_featured' : '';
 
 $image_params = array(
 	'id'       => $id,

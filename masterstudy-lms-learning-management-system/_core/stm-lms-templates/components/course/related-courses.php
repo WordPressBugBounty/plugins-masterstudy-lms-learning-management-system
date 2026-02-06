@@ -22,6 +22,10 @@ $args              = array(
 	'fields'         => 'ids',
 );
 
+if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+	$args['suppress_filters'] = false;
+}
+
 if ( 'by_category' === $related_option ) {
 	$categories = wp_get_post_terms( $course->id, 'stm_lms_course_taxonomy' );
 	$terms      = array();
@@ -92,7 +96,7 @@ if ( ! empty( $course_ids ) ) { ?>
 								<?php echo esc_html( stm_lms_minimize_word( $related_course->title, 40 ) ); ?>
 							</a>
 							<div class="masterstudy-related-courses__item-block">
-								<?php if ( ! $related_course->single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $related_course->not_in_membership ) { ?>
+								<?php if ( ! $related_course->single_sale && ! $related_course->not_in_membership ) { ?>
 									<div class="masterstudy-related-courses__subscription">
 										<img class="masterstudy-related-courses__subscription-image" src="<?php echo esc_url( STM_LMS_URL . 'assets/img/members_only.svg' ); ?>" alt="<?php esc_attr_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>"/>
 										<div class="masterstudy-related-courses__subscription-title">

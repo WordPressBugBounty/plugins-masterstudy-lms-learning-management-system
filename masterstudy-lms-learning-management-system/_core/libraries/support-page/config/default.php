@@ -27,7 +27,7 @@ if ( isset( $data['notices'] ) && is_array( $data['notices'] ) ) {
 			$has_promo = array_filter( $notice['post_terms']['type_category'], function( $cat ) {
 				return isset( $cat['slug'] ) && 'promo' === $cat['slug'];
 			} );
-			
+
 			if ( ! empty( $has_promo ) ) {
 				$promo_notice = $notice;
 				break;
@@ -139,6 +139,29 @@ return array(
 					'type'  => 'primary',
 				),
 			),
+		),
+		'hosting'       => array(
+			'class'        => 'help-item-full-width help-item-hosting',
+			'description'  => sprintf(
+				__( 'Enterprise-Grade Hosting from %1$s %2$s ', 'support-page' ),
+				'<span>' . __( 'just $29', 'support-page' ) . '</span>',
+				'<small>' . __( 'Without the Hyper Costs.', 'support-page' ) . '</small>',
+			),
+			'show_hosting' => false,
+			'logo'         => SUPPORT_PAGE_URL . 'assets/images/integrations/rapyd.png',
+			'logo-alt'     => 'Rapyd',
+			'logo-width'   => '190',
+			'logo-height'  => '41',
+			'buttons'      => array(
+				array(
+					'label'     => __( 'Get Deal', 'support-page' ),
+					'href'      => 'https://rapyd.cloud/pricing/?fpr=stylemixthemes ',
+					'type'      => 'pink',
+				),
+			),
+			'image'        => SUPPORT_PAGE_URL . 'assets/images/hosting-bg.jpg',
+			'image-width'  => '1110',
+			'image-height' => '142',
 		),
 		'features'      => array(
 			'class'        => 'help-item-full-width help-item-features',

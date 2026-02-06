@@ -1,5 +1,9 @@
 <?php
 use MasterStudy\Lms\Plugin\PostType;
+use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Enums\SubscriptionPlanType;
+use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository;
+use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionRepository;
+use MasterStudy\Lms\Pro\RestApi\Repositories\CouponRepository;
 
 STM_LMS_Order::init();
 
@@ -114,35 +118,61 @@ class STM_LMS_Order {
 			$order_meta = apply_filters( 'stm_lms_order_details', array(), $order_id );
 		} else {
 			$order_meta = STM_LMS_Helpers::parse_meta_field( $order_id );
+
+			// Parse meta fields is not getting hidden post meta, so we need to get them manually
+			$order_meta['_order_total']    = get_post_meta( $order_id, '_order_total', true );
+			$order_meta['_order_subtotal'] = get_post_meta( $order_id, '_order_subtotal', true );
+			$order_meta['_order_taxes']    = get_post_meta( $order_id, '_order_taxes', true );
 		}
 
 		$cart_items = array();
 		$total      = 0;
-		$subtotal   = 0;
-		$tax        = 0;
+
+		if ( is_ms_lms_addon_enabled( 'subscriptions' ) ) {
+			if ( isset( $order_meta['subscription_id'] ) && intval( $order_meta['subscription_id'] ) ) {
+				$order_meta['subscription_order_count'] = ( new SubscriptionPlanRepository() )->get_subscription_orders_with_queue( $order_id, intval( $order_meta['subscription_id'] ) );
+			}
+		}
 
 		if ( isset( $order_meta['items'] ) && is_array( $order_meta['items'] ) ) {
 			foreach ( $order_meta['items'] as $order_item ) {
-				$item_id = $order_item['item_id'];
-				$terms   = stm_lms_get_terms_array( $item_id, 'stm_lms_course_taxonomy', 'name' );
+				$item_id         = $order_item['item_id'];
+				$terms           = stm_lms_get_terms_array( $item_id, 'stm_lms_course_taxonomy', 'name' );
+				$is_subscription = $order_item['is_subscription'] ?? false;
 
 				$cart_item = array(
-					'item_id'         => $item_id,
-					'thumbnail_id'    => get_post_thumbnail_id( $item_id ),
-					'title'           => ! empty( $order_item['title'] ) ? $order_item['title'] : get_the_title( $item_id ),
-					'link'            => get_the_permalink( $item_id ),
-					'image'           => get_the_post_thumbnail( $item_id, 'img-300-225' ),
-					'image_url'       => get_the_post_thumbnail_url( $item_id ),
-					'image_full'      => get_the_post_thumbnail( $item_id, 'full' ),
-					'placeholder'     => STM_LMS_URL . 'assets/img/image_not_found.png',
-					'price'           => $order_item['price'],
-					'terms'           => ! empty( $terms ) ? $terms : wp_list_pluck( get_the_terms( $item_id, 'product_cat' ), 'name' ),
-					'price_formatted' => STM_LMS_Helpers::display_price( $order_item['price'] ),
+					'item_id'                    => $item_id,
+					'thumbnail_id'               => get_post_thumbnail_id( $item_id ),
+					'title'                      => ! empty( $order_item['title'] ) ? $order_item['title'] : get_the_title( $item_id ),
+					'link'                       => get_the_permalink( $item_id ),
+					'image'                      => get_the_post_thumbnail( $item_id, 'img-300-225' ),
+					'image_url'                  => get_the_post_thumbnail_url( $item_id ),
+					'image_full'                 => get_the_post_thumbnail( $item_id, 'full' ),
+					'placeholder'                => STM_LMS_URL . 'assets/img/image_not_found.png',
+					'price'                      => $order_item['price'],
+					'terms'                      => ! empty( $terms ) ? $terms : wp_list_pluck( get_the_terms( $item_id, 'product_cat' ), 'name' ),
+					'price_formatted'            => STM_LMS_Helpers::display_price( $order_item['price'] ),
+					'price_with_taxes'           => STM_LMS_Helpers::display_price_with_taxes( $order_item['price'], null, true ),
+					'price_with_taxes_formatted' => STM_LMS_Helpers::display_price_with_taxes( $order_item['price'] ),
 				);
 
-				$total    += $order_item['price'] + ( $order_item['tax'] ?? 0 );
-				$subtotal += ! empty( $order_item['subtotal'] ) ? $order_item['subtotal'] : 0;
-				$tax      += ! empty( $order_item['tax'] ) ? $order_item['tax'] : 0;
+				if ( ! $is_subscription ) {
+					$cart_item['link']       = get_the_permalink( $item_id );
+					$cart_item['image']      = get_the_post_thumbnail( $item_id, 'img-300-225' );
+					$cart_item['image_url']  = get_the_post_thumbnail_url( $item_id, 'img-300-225' );
+					$cart_item['image_full'] = get_the_post_thumbnail( $item_id, 'full' );
+				} elseif ( class_exists( 'MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository' ) ) {
+					$subscription_plan              = ( new SubscriptionPlanRepository() )->get( $item_id );
+					$cart_item['title']             = $subscription_plan['name'] ?? esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
+					$cart_item['subscription_type'] = SubscriptionPlanRepository::get_plan_type( $subscription_plan['type'] ?? '' );
+
+					if ( SubscriptionPlanType::COURSE === $subscription_plan['type'] ) {
+						$course_item            = $subscription_plan['items'][0];
+						$cart_item['image_url'] = get_the_post_thumbnail_url( $course_item['object_id'] );
+					}
+				}
+
+				$total += $order_item['price'];
 
 				$cart_item['enterprise_id'] = ! empty( $order_item['enterprise_id'] ) ? $order_item['enterprise_id'] : null;
 				$cart_item['bundle_id']     = ! empty( $order_item['bundle_id'] ) ? $order_item['bundle_id'] : null;
@@ -178,26 +208,62 @@ class STM_LMS_Order {
 
 		$i18n = self::translates();
 
+		$cart_total  = $total;
+		$coupon_data = self::get_coupon_data( $order_id, $cart_total );
+
 		$timezone = get_option( 'gmt_offset' );
 		$diff     = ! empty( $timezone ) ? $timezone * 60 * 60 : 0;
 		$diff     = apply_filters( 'stm_lms_gmt_offset', $diff );
+		$total    = isset( $order_meta['_order_total'] ) ? (float) $order_meta['_order_total'] : (float) $total;
+		$taxes    = isset( $order_meta['_order_taxes'] ) ? (float) $order_meta['_order_taxes'] : 0;
+		$subtotal = isset( $order_meta['_order_subtotal'] ) ? (float) $order_meta['_order_subtotal'] : (float) $total;
+
+		$result                  = $order_meta['personal_data'] ?? array();
+		$is_result_empty         = empty( $result );
+		$should_check_for_coupon = empty( $coupon_data ) && isset( $order_meta['subscription_order_count'] ) && $order_meta['subscription_order_count'] > 1;
+
+		if ( $is_result_empty || $should_check_for_coupon ) {
+			$subs_id = get_post_meta( $order_id, 'subscription_id', true );
+			if ( null !== $subs_id && '' !== $subs_id && is_ms_lms_addon_enabled( 'subscriptions' ) ) {
+				$get_subscription = ( new SubscriptionRepository() )->get( intval( $subs_id ) );
+				$first_order_id   = $get_subscription['first_order_id'];
+
+				if ( $is_result_empty ) {
+					$result = ( get_post_meta( $first_order_id, 'personal_data' ) )[0];
+				}
+
+				if ( $should_check_for_coupon ) {
+					$coupon      = self::get_coupon_data( $first_order_id, $cart_total );
+					$coupon_data = array(
+						'first_order_coupon' => empty( $coupon ) ? null : $coupon,
+					);
+				}
+			}
+		}
 
 		return array_merge(
 			$order_meta,
 			$i18n,
+			$coupon_data,
 			array(
-				'id'             => $order_id,
-				'date'           => $order_meta['date'] ?? '',
-				'date_formatted' => isset( $order_meta['date'] )
+				'id'                 => $order_id,
+				'date'               => $order_meta['date'] ?? '',
+				'date_formatted'     => isset( $order_meta['date'] )
 					? date_i18n( $date_format . ' ' . $time_format, $order_meta['date'] + $diff )
 					: '',
-				'cart_items'     => $cart_items,
-				'total'          => STM_LMS_Helpers::display_price( $total ),
-				'subtotal'       => $tax > 0 ? STM_LMS_Helpers::display_price( $subtotal ) : null,
-				'tax'            => $tax > 0 ? STM_LMS_Helpers::display_price( $tax ) : null,
-				'user'           => isset( $order_meta['user_id'] )
+				'cart_items'         => $cart_items,
+				'total'              => $total,
+				'subtotal'           => $subtotal,
+				'taxes'              => $taxes,
+				'total_formatted'    => STM_LMS_Helpers::display_price( $total ),
+				'total_with_taxes'   => STM_LMS_Helpers::display_price_with_taxes( $total ),
+				'subtotal_formatted' => STM_LMS_Helpers::display_price( $subtotal ),
+				'taxes_formatted'    => STM_LMS_Helpers::display_price( $taxes ),
+				'personal_data'      => $result,
+				'user'               => isset( $order_meta['user_id'] )
 					? STM_LMS_User::get_current_user( $order_meta['user_id'] )
 					: null,
+				'locale'             => get_locale(),
 			)
 		);
 	}
@@ -259,6 +325,7 @@ class STM_LMS_Order {
 					"SELECT
                         p.ID AS course_id,
                         product_lookup.product_net_revenue as price,
+						COALESCE(product_lookup.tax_amount, 0) AS price_tax,
                         enterprise.meta_value as enterprise_id,
                         bundle.meta_value as bundle_id
                         FROM {$wpdb->posts} p
@@ -313,6 +380,10 @@ class STM_LMS_Order {
 				$course->bundle_id = ! empty( $bundle_id ) ? reset( $bundle_id )['bundle'] : null;
 			}
 
+			$price_net   = isset( $course->price ) ? (float) $course->price : 0.0;
+			$price_tax   = isset( $course->price_tax ) ? (float) $course->price_tax : 0.0;
+			$price_gross = $price_net + $price_tax;
+
 			$cart_items[] = array(
 				'thumbnail_id'         => get_post_thumbnail_id( $course->course_id ),
 				'title'                => get_the_title( $course->course_id ),
@@ -322,13 +393,11 @@ class STM_LMS_Order {
 				'placeholder'          => STM_LMS_URL . 'assets/img/image_not_found.png',
 				'price'                => $course->price,
 				'terms'                => ! empty( $terms ) ? $terms : wp_list_pluck( get_the_terms( $course->course_id, 'product_cat' ), 'name' ),
-				'price_formatted'      => STM_LMS_Helpers::display_price( $course->price ),
+				'price_formatted'      => STM_LMS_Helpers::display_price_with_taxes( $price_gross ),
 				'enterprise_id'        => ! empty( $course->enterprise_id ) ? $course->enterprise_id : null,
 				'bundle_id'            => ! empty( $course->bundle_id ) ? $course->bundle_id : null,
 				'bundle_courses_count' => self::get_bundle_courses_count( $course->bundle_id ),
 			);
-
-			$total += $course->price;
 		}
 
 		$order_meta = apply_filters( 'stm_lms_order_details', array(), $order_id );
@@ -336,26 +405,47 @@ class STM_LMS_Order {
 			$order_meta = STM_LMS_Helpers::parse_meta_field( $order_id );
 		}
 
+		if ( STM_LMS_Helpers::is_pro_plus() ) {
+			$coupon_id    = get_post_meta( $order_id, 'coupon_id', true );
+			$coupon_value = get_post_meta( $order_id, 'coupon_value', true );
+			$coupon_type  = get_post_meta( $order_id, 'coupon_type', true );
+
+			if ( ! empty( $coupon_value ) ) {
+				$coupon_value = '-' . ( 'amount' === $coupon_type ? STM_LMS_Helpers::display_price( (float) $coupon_value ) : $coupon_value . '%' );
+			}
+		}
+
 		$i18n     = self::translates();
 		$timezone = get_option( 'gmt_offset' );
 		$diff     = ! empty( $timezone ) ? $timezone * 60 * 60 : 0;
 		$diff     = apply_filters( 'stm_lms_gmt_offset', $diff );
-		$tax      = isset( $order_meta['items'] ) ? array_sum( array_column( $order_meta['items'], 'tax' ) ) : 0;
+		$taxes    = ! empty( $order_meta['_order_taxes'] ) ? (float) $order_meta['_order_taxes'] : 0;
+		$subtotal = ! empty( $order_meta['_order_subtotal'] ) ? (float) $order_meta['_order_subtotal'] : 0;
+		$total    = ! empty( $order_meta['_order_total'] ) ? (float) $order_meta['_order_total'] : 0;
 
 		return array_merge(
 			$order_meta,
 			$i18n,
 			array(
-				'id'             => $order_id,
-				'date'           => $order_meta['date'] ?? '',
-				'date_formatted' => isset( $order_meta['date'] )
+				'id'                 => $order_id,
+				'date'               => $order_meta['date'] ?? '',
+				'date_formatted'     => isset( $order_meta['date'] )
 					? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $order_meta['date'] + $diff )
 					: '',
-				'cart_items'     => $cart_items,
-				'total'          => STM_LMS_Helpers::display_price( $total + $tax ),
-				'user'           => isset( $order_meta['user_id'] )
+				'cart_items'         => $cart_items,
+				'total'              => $total,
+				'subtotal'           => $subtotal,
+				'taxes'              => $taxes,
+				'total_formatted'    => STM_LMS_Helpers::display_price( $total ),
+				'subtotal_formatted' => STM_LMS_Helpers::display_price( $subtotal ),
+				'taxes_formatted'    => STM_LMS_Helpers::display_price( $taxes ),
+				'user'               => isset( $order_meta['user_id'] )
 					? STM_LMS_User::get_current_user( $order_meta['user_id'] )
 					: null,
+				'course_info'        => ! empty( $order_meta['course_info'] ) ? $order_meta['course_info'] : null,
+				'coupon_value'       => $coupon_value ?? null,
+				'coupon_type'        => $coupon_type ?? null,
+				'coupon_id'          => $coupon_id ?? null,
 			)
 		);
 	}
@@ -364,10 +454,10 @@ class STM_LMS_Order {
 	 * @param $data [user_id, cart_items, payment_code, _order_total, _order_currency]
 	 * @param bool $return
 	 *
-	 * @return int|WP_Error
+	 * @return null|int|WP_Error
 	 */
 	public static function create_order( $data, $return = false ) {
-		if ( ! is_user_logged_in() || empty( $data['user_id'] ) ) {
+		if ( empty( $data['user_id'] ) ) {
 			die;
 		}
 
@@ -380,11 +470,17 @@ class STM_LMS_Order {
 			'order_key'       => uniqid( $data['user_id'] . time() ),
 			'order_note'      => '',
 			'_order_total'    => $data['_order_total'],
+			'_order_taxes'    => $data['_order_taxes'],
+			'_order_subtotal' => $data['_order_subtotal'],
 			'_order_currency' => $data['_order_currency'],
+			'coupon_value'    => $data['coupon_value'] ?? null,
+			'coupon_type'     => $data['coupon_type'] ?? null,
+			'coupon_id'       => $data['coupon_id'] ?? null,
+			'is_subscription' => $data['is_subscription'] ?? false,
 		);
 
 		$order_post = array(
-			'post_type'   => 'stm-orders',
+			'post_type'   => PostType::ORDER,
 			'post_title'  => wp_strip_all_tags( $order_info['order_key'] ),
 			'post_status' => 'publish',
 		);
@@ -395,6 +491,18 @@ class STM_LMS_Order {
 			update_post_meta( $order_id, $meta_key, $meta_value );
 		}
 
+		if ( $order_info['is_subscription'] ) {
+			update_post_meta( $order_id, 'plan', $data['plan'] );
+		}
+
+		if ( ! empty( $data['course_info'] ) && is_array( $data['course_info'] ) ) {
+			update_post_meta( $order_id, 'course_info', $data['course_info'] );
+		}
+
+		if ( ! empty( $data['personal_data'] ) && is_array( $data['personal_data'] ) ) {
+			update_post_meta( $order_id, 'personal_data', $data['personal_data'] );
+		}
+
 		if ( $return ) {
 			return $order_id;
 		}
@@ -403,23 +511,31 @@ class STM_LMS_Order {
 	public static function translates() {
 		return array(
 			'i18n' => array(
-				'order_key'    => esc_html__( 'Order key', 'masterstudy-lms-learning-management-system' ),
-				'date'         => esc_html__( 'Date', 'masterstudy-lms-learning-management-system' ),
-				'status'       => esc_html__( 'Status', 'masterstudy-lms-learning-management-system' ),
-				'pending'      => esc_html__( 'Pending', 'masterstudy-lms-learning-management-system' ),
-				'processing'   => esc_html__( 'Processing', 'masterstudy-lms-learning-management-system' ),
-				'failed'       => esc_html__( 'Failed', 'masterstudy-lms-learning-management-system' ),
-				'on-hold'      => esc_html__( 'On hold', 'masterstudy-lms-learning-management-system' ),
-				'refunded'     => esc_html__( 'Refunded', 'masterstudy-lms-learning-management-system' ),
-				'completed'    => esc_html__( 'Completed', 'masterstudy-lms-learning-management-system' ),
-				'cancelled'    => esc_html__( 'Cancelled', 'masterstudy-lms-learning-management-system' ),
-				'user'         => esc_html__( 'User', 'masterstudy-lms-learning-management-system' ),
-				'order_items'  => esc_html__( 'Order items', 'masterstudy-lms-learning-management-system' ),
-				'course_name'  => esc_html__( 'Course name', 'masterstudy-lms-learning-management-system' ),
-				'course_price' => esc_html__( 'Course price', 'masterstudy-lms-learning-management-system' ),
-				'total'        => esc_html__( 'Total', 'masterstudy-lms-learning-management-system' ),
-				'bundle'       => esc_html__( 'Courses in bundle', 'masterstudy-lms-learning-management-system' ),
-				'enterprise'   => esc_html__( 'for group', 'masterstudy-lms-learning-management-system' ),
+				'order_key'        => esc_html__( 'Order key', 'masterstudy-lms-learning-management-system' ),
+				'date'             => esc_html__( 'Date', 'masterstudy-lms-learning-management-system' ),
+				'status'           => esc_html__( 'Status', 'masterstudy-lms-learning-management-system' ),
+				'pending'          => esc_html__( 'Pending', 'masterstudy-lms-learning-management-system' ),
+				'processing'       => esc_html__( 'Processing', 'masterstudy-lms-learning-management-system' ),
+				'failed'           => esc_html__( 'Failed', 'masterstudy-lms-learning-management-system' ),
+				'on-hold'          => esc_html__( 'On hold', 'masterstudy-lms-learning-management-system' ),
+				'refunded'         => esc_html__( 'Refunded', 'masterstudy-lms-learning-management-system' ),
+				'completed'        => esc_html__( 'Completed', 'masterstudy-lms-learning-management-system' ),
+				'cancelled'        => esc_html__( 'Cancelled', 'masterstudy-lms-learning-management-system' ),
+				'user'             => esc_html__( 'User', 'masterstudy-lms-learning-management-system' ),
+				'order_items'      => esc_html__( 'Order items', 'masterstudy-lms-learning-management-system' ),
+				'course_name'      => esc_html__( 'Course name', 'masterstudy-lms-learning-management-system' ),
+				'course_price'     => esc_html__( 'Course price', 'masterstudy-lms-learning-management-system' ),
+				'total'            => esc_html__( 'Total', 'masterstudy-lms-learning-management-system' ),
+				'subtotal'         => esc_html__( 'Subtotal', 'masterstudy-lms-learning-management-system' ),
+				'taxes'            => esc_html__( 'Taxes', 'masterstudy-lms-learning-management-system' ),
+				'bundle'           => esc_html__( 'Courses in bundle', 'masterstudy-lms-learning-management-system' ),
+				'enterprise'       => esc_html__( 'for group', 'masterstudy-lms-learning-management-system' ),
+				'payment_plan'     => esc_html__( 'Payment Plan:', 'masterstudy-lms-learning-management-system' ),
+				'daily_payments'   => esc_html__( 'daily payments', 'masterstudy-lms-learning-management-system' ),
+				'weekly_payments'  => esc_html__( 'weekly payments', 'masterstudy-lms-learning-management-system' ),
+				'monthly_payments' => esc_html__( 'monthly payments', 'masterstudy-lms-learning-management-system' ),
+				'yearly_payments'  => esc_html__( 'yearly payments', 'masterstudy-lms-learning-management-system' ),
+				'days'             => esc_html__( 'day(s)', 'masterstudy-lms-learning-management-system' ),
 			),
 		);
 	}
@@ -493,6 +609,9 @@ class STM_LMS_Order {
 
 		if ( $accept_order ) {
 			foreach ( $cart_items as $cart_item ) {
+				if ( 1 === (int) $cart_item['is_subscription'] ) {
+					continue;
+				}
 				STM_LMS_Course::add_user_course( $cart_item['item_id'], $user_id, 0, 0 );
 				STM_LMS_Course::add_student( $cart_item['item_id'] );
 			}
@@ -674,5 +793,40 @@ class STM_LMS_Order {
 			default:
 				return $method;
 		}
+	}
+
+	private static function get_coupon_data( int $order_id, int $total ): array {
+		if ( STM_LMS_Helpers::is_coupons_enabled() ) {
+			$coupon_id    = get_post_meta( $order_id, 'coupon_id', true );
+			$coupon_value = get_post_meta( $order_id, 'coupon_value', true );
+			$coupon_type  = get_post_meta( $order_id, 'coupon_type', true );
+
+			if ( empty( $coupon_id ) || empty( $coupon_value ) ) {
+				return array();
+			}
+
+			$original_coupon_value = $coupon_value;
+
+			if ( 'amount' === $coupon_type ) {
+				$coupon_value = min( (float) $coupon_value, $total );
+			}
+
+			$coupon_value                = '-' . ( 'amount' === $coupon_type ? STM_LMS_Helpers::display_price( (float) $coupon_value ) : $coupon_value . '%' );
+			$coupon_discount             = STM_LMS_Helpers::calculate_coupon_discount( $total, (float) $original_coupon_value, $coupon_type );
+			$coupon_item_price_formatted = STM_LMS_Helpers::display_price_with_taxes( max( 0, $total - $coupon_discount ) );
+
+			$coupon = ( new CouponRepository() )->get( (int) $coupon_id );
+
+			return array(
+				'coupon_data'                 => $coupon,
+				'coupon_item_discount'        => STM_LMS_Helpers::display_price_with_taxes( $coupon_discount, null, true ),
+				'coupon_value'                => $coupon_value,
+				'coupon_item_price_formatted' => $coupon_item_price_formatted,
+				'original_coupon_value'       => $coupon_value,
+				'coupon_type'                 => $coupon_type,
+			);
+		}
+
+		return array();
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 namespace StmLmsElementor\Widgets\Course;
 
+use MasterStudy\Lms\Plugin\Addons;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Background;
@@ -272,151 +273,19 @@ class MsLmsCourseBuyButton extends Widget_Base {
 			)
 		);
 		$this->end_controls_section();
-		if ( is_ms_lms_addon_enabled( 'enterprise_courses' ) ) {
-			$this->start_controls_section(
-				'for_business_section',
-				array(
-					'label' => esc_html__( 'For Business Separator', 'masterstudy-lms-learning-management-system' ),
-					'tab'   => Controls_Manager::TAB_STYLE,
-				)
-			);
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				array(
-					'name'     => 'for_business_typography',
-					'selector' => '{{WRAPPER}} .masterstudy-button-enterprise__title span, {{WRAPPER}}',
-				)
-			);
-			$this->add_control(
-				'for_business_color',
-				array(
-					'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
-					'type'      => Controls_Manager::COLOR,
-					'selectors' => array(
-						'{{WRAPPER}} .masterstudy-button-enterprise__title span' => 'color: {{VALUE}}',
-					),
-				)
-			);
-			$this->add_control(
-				'for_business_lines_color',
-				array(
-					'label'     => esc_html__( 'Lines Color', 'masterstudy-lms-learning-management-system' ),
-					'type'      => Controls_Manager::COLOR,
-					'selectors' => array(
-						'{{WRAPPER}} .masterstudy-button-enterprise__title::before, {{WRAPPER}} .masterstudy-button-enterprise__title::after' => 'background-color: {{VALUE}}',
-					),
-				)
-			);
-			$this->end_controls_section();
-		}
-		if ( is_ms_lms_addon_enabled( 'enterprise_courses' ) ) {
-			$this->start_controls_section(
-				'enterprise_section',
-				array(
-					'label' => esc_html__( 'Buy For Group Button', 'masterstudy-lms-learning-management-system' ),
-					'tab'   => Controls_Manager::TAB_STYLE,
-				)
-			);
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				array(
-					'name'     => 'enterprise_typography',
-					'selector' => '{{WRAPPER}} .masterstudy-button-enterprise__button',
-				)
-			);
-			$this->add_control(
-				'enterprise_border_radius',
-				array(
-					'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
-					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%' ),
-					'selectors'  => array(
-						'{{WRAPPER}} .masterstudy-button-enterprise__button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-					),
-				)
-			);
-			$this->start_controls_tabs(
-				'enterprise_tab'
-			);
-			$this->start_controls_tab(
-				'enterprise_normal_tab',
-				array(
-					'label' => esc_html__( 'Normal', 'masterstudy-lms-learning-management-system' ),
-				)
-			);
-			$this->add_control(
-				'enterprise_color',
-				array(
-					'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
-					'type'      => Controls_Manager::COLOR,
-					'selectors' => array(
-						'{{WRAPPER}} .masterstudy-button-enterprise__button' => 'color: {{VALUE}}',
-					),
-				)
-			);
-			$this->add_group_control(
-				Group_Control_Background::get_type(),
-				array(
-					'name'     => 'enterprise_normal_background',
-					'types'    => array( 'classic', 'gradient' ),
-					'selector' => '{{WRAPPER}} .masterstudy-button-enterprise__button',
-				)
-			);
-			$this->add_group_control(
-				Group_Control_Border::get_type(),
-				array(
-					'name'     => 'enterprise_normal_border',
-					'selector' => '{{WRAPPER}} .masterstudy-button-enterprise__button',
-				)
-			);
-			$this->end_controls_tab();
-			$this->start_controls_tab(
-				'enterprise_hover_tab',
-				array(
-					'label' => esc_html__( 'Hover', 'masterstudy-lms-learning-management-system' ),
-				)
-			);
-			$this->add_control(
-				'enterprise_hover_color',
-				array(
-					'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
-					'type'      => Controls_Manager::COLOR,
-					'selectors' => array(
-						'{{WRAPPER}} .masterstudy-button-enterprise__button:hover' => 'color: {{VALUE}}',
-					),
-				)
-			);
-			$this->add_group_control(
-				Group_Control_Background::get_type(),
-				array(
-					'name'     => 'enterprise_background_hover',
-					'types'    => array( 'classic', 'gradient' ),
-					'selector' => '{{WRAPPER}} .masterstudy-button-enterprise__button:hover',
-				)
-			);
-			$this->add_group_control(
-				Group_Control_Border::get_type(),
-				array(
-					'name'     => 'enterprise_border_hover',
-					'selector' => '{{WRAPPER}} .masterstudy-button-enterprise__button:hover',
-				)
-			);
-			$this->end_controls_tab();
-			$this->end_controls_tabs();
-			$this->end_controls_section();
-		}
 		$this->start_controls_section(
 			'dropdown_section',
 			array(
-				'label' => esc_html__( 'Plans dropdown', 'masterstudy-lms-learning-management-system' ),
+				'label' => esc_html__( 'Dropdown Sections', 'masterstudy-lms-learning-management-system' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			)
 		);
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			array(
+				'label'    => esc_html__( 'Title Typography', 'masterstudy-lms-learning-management-system' ),
 				'name'     => 'dropdown_title_typography',
-				'selector' => '{{WRAPPER}} .masterstudy-buy-button_plans-dropdown__title',
+				'selector' => '{{WRAPPER}} .masterstudy-buy-button-dropdown__head-title',
 			)
 		);
 		$this->add_control(
@@ -425,23 +294,116 @@ class MsLmsCourseBuyButton extends Widget_Base {
 				'label'     => esc_html__( 'Title Color', 'masterstudy-lms-learning-management-system' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .masterstudy-buy-button_plans-dropdown__title' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown__head-title' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'dropdown_separator_color',
+			array(
+				'label'     => esc_html__( 'Separator Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown__body' => 'border-bottom: 1px solid {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown__section:last-child .masterstudy-buy-button-dropdown__body' => 'border-bottom: none',
+				),
+			)
+		);
+		$this->add_control(
+			'dropdown_scroll_color',
+			array(
+				'label'     => esc_html__( 'Scroll Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown__body-wrapper::-webkit-scrollbar-thumb' => 'background: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'dropdown_scroll_hover_color',
+			array(
+				'label'     => esc_html__( 'Scroll Hover Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown__body-wrapper::-webkit-scrollbar-thumb:hover' => 'background: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'dropdown_scroll_track_color',
+			array(
+				'label'     => esc_html__( 'Scroll Track Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown__body-wrapper::-webkit-scrollbar-track' => 'background: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'dropdown_checkbox_color',
+			array(
+				'label'     => esc_html__( 'Radio Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown__head-checkbox' => 'border-color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'dropdown_active_checkbox_color',
+			array(
+				'label'     => esc_html__( 'Active Radio Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown__section_open .masterstudy-buy-button-dropdown__head-checkbox' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown__section_open .masterstudy-buy-button-dropdown__head-checkbox::before' => 'background-color: {{VALUE}}',
 				),
 			)
 		);
 		$this->add_group_control(
 			Group_Control_Background::get_type(),
 			array(
-				'name'     => 'dropdown_background',
-				'types'    => array( 'classic', 'gradient' ),
-				'selector' => '{{WRAPPER}} .masterstudy-buy-button_plans-dropdown',
+				'name'           => 'dropdown_active_checkbox_background',
+				'types'          => array( 'classic', 'gradient' ),
+				'selector'       => '{{WRAPPER}} .masterstudy-buy-button-dropdown__section_open .masterstudy-buy-button-dropdown__head-checkbox',
+				'fields_options' => array(
+					'background' => array(
+						'label' => esc_html__( 'Active Radio Background', 'masterstudy-lms-learning-management-system' ),
+					),
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			array(
+				'name'           => 'dropdown_background',
+				'types'          => array( 'classic', 'gradient' ),
+				'selector'       => '{{WRAPPER}} .masterstudy-buy-button-dropdown',
+				'fields_options' => array(
+					'background' => array(
+						'label' => esc_html__( 'Background', 'masterstudy-lms-learning-management-system' ),
+					),
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			array(
+				'name'           => 'dropdown_background_open',
+				'types'          => array( 'classic', 'gradient' ),
+				'selector'       => '{{WRAPPER}} .masterstudy-buy-button-dropdown__section.masterstudy-buy-button-dropdown__section_open',
+				'fields_options' => array(
+					'background' => array(
+						'label' => esc_html__( 'Open Section Background', 'masterstudy-lms-learning-management-system' ),
+					),
+				),
 			)
 		);
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			array(
 				'name'     => 'dropdown_border',
-				'selector' => '{{WRAPPER}} .masterstudy-buy-button_plans-dropdown',
+				'selector' => '{{WRAPPER}} .masterstudy-buy-button-dropdown',
 			)
 		);
 		$this->add_control(
@@ -451,7 +413,7 @@ class MsLmsCourseBuyButton extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%' ),
 				'selectors'  => array(
-					'{{WRAPPER}} .masterstudy-buy-button_plans-dropdown' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
@@ -462,7 +424,7 @@ class MsLmsCourseBuyButton extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%' ),
 				'selectors'  => array(
-					'{{WRAPPER}} .masterstudy-buy-button_plans-dropdown' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .masterstudy-buy-button-dropdown' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
@@ -470,139 +432,511 @@ class MsLmsCourseBuyButton extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			array(
 				'name'     => 'dropdown_shadow',
-				'selector' => '{{WRAPPER}} .masterstudy-buy-button_plans-dropdown',
+				'selector' => '{{WRAPPER}} .masterstudy-buy-button-dropdown',
 			)
 		);
 		$this->end_controls_section();
 		$this->start_controls_section(
-			'plan_button_section',
+			'dropdown_button_section',
 			array(
-				'label' => esc_html__( 'Plan Buttons', 'masterstudy-lms-learning-management-system' ),
+				'label' => esc_html__( 'Dropdown Buy Buttons', 'masterstudy-lms-learning-management-system' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			)
 		);
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			array(
-				'name'     => 'plan_button_typography',
-				'selector' => '{{WRAPPER}} .masterstudy-buy-button_plans-dropdown a, {{WRAPPER}} .masterstudy-buy-button_plans-dropdown a span',
+				'name'     => 'dropdown_button_typography',
+				'selector' => '{{WRAPPER}} a.masterstudy-purchase-button span, {{WRAPPER}} .masterstudy-membership-plan__button span, {{WRAPPER}} .masterstudy-points-button span, {{WRAPPER}} .masterstudy-button-enterprise__button span',
 			)
 		);
 		$this->add_control(
-			'plan_button_border_radius',
+			'dropdown_button_border_radius',
 			array(
 				'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%' ),
 				'selectors'  => array(
-					'{{WRAPPER}} .masterstudy-buy-button_plans-dropdown a' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} a.masterstudy-purchase-button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .masterstudy-membership-plan__button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .masterstudy-button-enterprise__button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .masterstudy-points-button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
 		$this->start_controls_tabs(
-			'plan_button_tab'
+			'dropdown_button_tab'
 		);
 		$this->start_controls_tab(
-			'plan_button_normal_tab',
+			'dropdown_button_normal_tab',
 			array(
 				'label' => esc_html__( 'Normal', 'masterstudy-lms-learning-management-system' ),
 			)
 		);
 		$this->add_control(
-			'plan_button_color',
+			'dropdown_button_color',
 			array(
 				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .masterstudy-buy-button_plans-dropdown a span' => 'color: {{VALUE}}',
+					'{{WRAPPER}} a.masterstudy-purchase-button' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-membership-plan__button' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-button-enterprise__button' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-points-button' => 'color: {{VALUE}}',
 				),
 			)
 		);
 		$this->add_group_control(
 			Group_Control_Background::get_type(),
 			array(
-				'name'     => 'plan_button_normal_background',
+				'name'     => 'dropdown_button_normal_background',
 				'types'    => array( 'classic', 'gradient' ),
-				'selector' => '{{WRAPPER}} .masterstudy-buy-button_plans-dropdown a',
+				'selector' => '{{WRAPPER}} a.masterstudy-purchase-button, {{WRAPPER}} .masterstudy-membership-plan__button, {{WRAPPER}} .masterstudy-button-enterprise__button, {{WRAPPER}} .masterstudy-points-button',
 			)
 		);
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			array(
-				'name'     => 'plan_button_normal_border',
-				'selector' => '{{WRAPPER}} .masterstudy-buy-button_plans-dropdown a',
+				'name'     => 'dropdown_button_normal_border',
+				'selector' => '{{WRAPPER}} a.masterstudy-purchase-button, {{WRAPPER}} .masterstudy-membership-plan__button, {{WRAPPER}} .masterstudy-button-enterprise__button, {{WRAPPER}} .masterstudy-points-button',
 			)
 		);
 		$this->end_controls_tab();
 		$this->start_controls_tab(
-			'plan_button_hover_tab',
+			'dropdown_button_hover_tab',
 			array(
 				'label' => esc_html__( 'Hover', 'masterstudy-lms-learning-management-system' ),
 			)
 		);
 		$this->add_control(
-			'plan_button_hover_color',
+			'dropdown_button_hover_color',
 			array(
 				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .masterstudy-buy-button_plans-dropdown a:hover span' => 'color: {{VALUE}}',
+					'{{WRAPPER}} a.masterstudy-purchase-button:hover span' => 'color: {{VALUE}}',
+					'{{WRAPPER}}  .masterstudy-membership-plan__button:hover span' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-button-enterprise__button:hover span' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-points-button:hover span' => 'color: {{VALUE}}',
 				),
 			)
 		);
 		$this->add_group_control(
 			Group_Control_Background::get_type(),
 			array(
-				'name'     => 'plan_button_background_hover',
+				'name'     => 'dropdown_button_background_hover',
 				'types'    => array( 'classic', 'gradient' ),
-				'selector' => '{{WRAPPER}} .masterstudy-buy-button_plans-dropdown a:hover',
+				'selector' => '{{WRAPPER}} a.masterstudy-purchase-button:hover, {{WRAPPER}} .masterstudy-membership-plan__button:hover, {{WRAPPER}} .masterstudy-button-enterprise__button:hover, {{WRAPPER}} .masterstudy-points-button:hover, {{WRAPPER}} .masterstudy-points-button.masterstudy-points-button_not-enough-points:hover',
 			)
 		);
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			array(
-				'name'     => 'plan_button_border_hover',
-				'selector' => '{{WRAPPER}} .masterstudy-buy-button_plans-dropdown a:hover',
+				'name'     => 'dropdown_button_border_hover',
+				'selector' => '{{WRAPPER}} a.masterstudy-purchase-button:hover, {{WRAPPER}} .masterstudy-membership-plan__button:hover, {{WRAPPER}} .masterstudy-button-enterprise__button:hover, {{WRAPPER}} .masterstudy-points-button:hover',
 			)
 		);
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
-		if ( is_ms_lms_addon_enabled( 'point_system' ) ) {
+		$this->end_controls_section();
+		$this->start_controls_section(
+			'onetime_section',
+			array(
+				'label' => esc_html__( 'One Time Purchase Section', 'masterstudy-lms-learning-management-system' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			array(
+				'label'    => esc_html__( 'Regular Price Typography', 'masterstudy-lms-learning-management-system' ),
+				'name'     => 'onetime_price_typography',
+				'selector' => '{{WRAPPER}} .masterstudy-buy-button__price-value',
+			)
+		);
+		$this->add_control(
+			'onetime_price_color',
+			array(
+				'label'     => esc_html__( 'Regular Price Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-buy-button__price-value' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			array(
+				'label'    => esc_html__( 'Sale Price Typography', 'masterstudy-lms-learning-management-system' ),
+				'name'     => 'onetime_sale_price_typography',
+				'selector' => '{{WRAPPER}} .masterstudy-buy-button__price-value.masterstudy-buy-button__price-value_sale',
+			)
+		);
+		$this->add_control(
+			'onetime_sale_price_color',
+			array(
+				'label'     => esc_html__( 'Sale Price Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-buy-button__price-value.masterstudy-buy-button__price-value_sale' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->end_controls_section();
+		if ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
+			$this->start_controls_section(
+				'subscription_section',
+				array(
+					'label' => esc_html__( 'Subscription & Membership Sections', 'masterstudy-lms-learning-management-system' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'label'    => esc_html__( 'Plan Title Typography', 'masterstudy-lms-learning-management-system' ),
+					'name'     => 'subscription_plan_title_typography',
+					'selector' => '{{WRAPPER}} .masterstudy-membership-plan__label',
+				)
+			);
+			$this->add_control(
+				'subscription_plan_title_color',
+				array(
+					'label'     => esc_html__( 'Plan Title Color', 'masterstudy-lms-learning-management-system' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						'{{WRAPPER}} .masterstudy-membership-plan__label' => 'color: {{VALUE}}',
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'label'    => esc_html__( 'Plan Price Typography', 'masterstudy-lms-learning-management-system' ),
+					'name'     => 'subscription_plan_price_typography',
+					'selector' => '{{WRAPPER}} .masterstudy-membership-plan__price',
+				)
+			);
+			$this->add_control(
+				'subscription_plan_price_color',
+				array(
+					'label'     => esc_html__( 'Plan Price Color', 'masterstudy-lms-learning-management-system' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						'{{WRAPPER}} .masterstudy-membership-plan__price' => 'color: {{VALUE}}',
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'label'    => esc_html__( 'Plan Old Price Typography', 'masterstudy-lms-learning-management-system' ),
+					'name'     => 'subscription_plan_old_price_typography',
+					'selector' => '{{WRAPPER}} .masterstudy-membership-plan__old-price',
+				)
+			);
+			$this->add_control(
+				'subscription_plan_old_price_color',
+				array(
+					'label'     => esc_html__( 'Plan Old Price Color', 'masterstudy-lms-learning-management-system' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						'{{WRAPPER}} .masterstudy-membership-plan__old-price' => 'color: {{VALUE}}',
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'label'    => esc_html__( 'Plan Period Typography', 'masterstudy-lms-learning-management-system' ),
+					'name'     => 'subscription_plan_period_typography',
+					'selector' => '{{WRAPPER}} .masterstudy-membership-plan__period',
+				)
+			);
+			$this->add_control(
+				'subscription_plan_period_color',
+				array(
+					'label'     => esc_html__( 'Plan Period Color', 'masterstudy-lms-learning-management-system' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						'{{WRAPPER}} .masterstudy-membership-plan__period' => 'color: {{VALUE}}',
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'label'    => esc_html__( 'Plan Label Typography', 'masterstudy-lms-learning-management-system' ),
+					'name'     => 'subscription_plan_label_typography',
+					'selector' => '{{WRAPPER}} .masterstudy-membership-plan__label-featured',
+				)
+			);
+			$this->add_control(
+				'subscription_plan_label_color',
+				array(
+					'label'     => esc_html__( 'Plan Label Color', 'masterstudy-lms-learning-management-system' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						'{{WRAPPER}} .masterstudy-membership-plan__label-featured' => 'color: {{VALUE}}',
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Background::get_type(),
+				array(
+					'name'           => 'subscription_label_background',
+					'types'          => array( 'classic', 'gradient' ),
+					'selector'       => '{{WRAPPER}} .masterstudy-membership-plan__label-featured',
+					'fields_options' => array(
+						'background' => array(
+							'label' => esc_html__( 'Plan Label Background', 'masterstudy-lms-learning-management-system' ),
+						),
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Border::get_type(),
+				array(
+					'name'           => 'subscription_label_border',
+					'selector'       => '{{WRAPPER}} .masterstudy-membership-plan__label-featured',
+					'fields_options' => array(
+						'border' => array(
+							'label' => esc_html__( 'Plan Label Border', 'masterstudy-lms-learning-management-system' ),
+						),
+					),
+				)
+			);
+			$this->add_control(
+				'subscription_label_border_radius',
+				array(
+					'label'      => esc_html__( 'Plan Label Border Radius', 'masterstudy-lms-learning-management-system' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						'{{WRAPPER}} .masterstudy-membership-plan__label-featured' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
 			$this->add_responsive_control(
-				'plan_icon_width',
+				'subscription_label_padding',
+				array(
+					'label'      => esc_html__( 'Padding', 'masterstudy-lms-learning-management-system' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						'{{WRAPPER}} .masterstudy-membership-plan__label-featured' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'label'    => esc_html__( 'Plan Features Typography', 'masterstudy-lms-learning-management-system' ),
+					'name'     => 'subscription_plan_features_typography',
+					'selector' => '{{WRAPPER}} .masterstudy-membership-plan__features-item',
+				)
+			);
+			$this->add_control(
+				'subscription_plan_features_color',
+				array(
+					'label'     => esc_html__( 'Plan Features Color', 'masterstudy-lms-learning-management-system' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						'{{WRAPPER}} .masterstudy-membership-plan__features-item' => 'color: {{VALUE}}',
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Background::get_type(),
+				array(
+					'name'           => 'subscription_background',
+					'types'          => array( 'classic', 'gradient' ),
+					'selector'       => '{{WRAPPER}} .masterstudy-membership-plan-link',
+					'fields_options' => array(
+						'background' => array(
+							'label' => esc_html__( 'Plan Background', 'masterstudy-lms-learning-management-system' ),
+						),
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Border::get_type(),
+				array(
+					'name'           => 'subscription_border',
+					'selector'       => '{{WRAPPER}} .masterstudy-membership-plan-link',
+					'fields_options' => array(
+						'border' => array(
+							'label' => esc_html__( 'Plan Border', 'masterstudy-lms-learning-management-system' ),
+						),
+					),
+				)
+			);
+			$this->add_control(
+				'subscription_border_radius',
+				array(
+					'label'      => esc_html__( 'Plan Border Radius', 'masterstudy-lms-learning-management-system' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						'{{WRAPPER}} .masterstudy-membership-plan-link' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Background::get_type(),
+				array(
+					'name'           => 'subscription_active_background',
+					'types'          => array( 'classic', 'gradient' ),
+					'selector'       => '{{WRAPPER}} .masterstudy-membership-plan-link.masterstudy-membership-plan-link_use',
+					'fields_options' => array(
+						'background' => array(
+							'label' => esc_html__( 'Active Plan Background', 'masterstudy-lms-learning-management-system' ),
+						),
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Border::get_type(),
+				array(
+					'name'           => 'subscription_active_border',
+					'selector'       => '{{WRAPPER}} .masterstudy-membership-plan-link.masterstudy-membership-plan-link_use',
+					'fields_options' => array(
+						'border' => array(
+							'label' => esc_html__( 'Active Plan Border', 'masterstudy-lms-learning-management-system' ),
+						),
+					),
+				)
+			);
+			$this->add_control(
+				'subscription_active_border_radius',
+				array(
+					'label'      => esc_html__( 'Active Plan Border Radius', 'masterstudy-lms-learning-management-system' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						'{{WRAPPER}} .masterstudy-membership-plan-link.masterstudy-membership-plan-link_use' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+			$this->end_controls_section();
+		}
+		if ( is_ms_lms_addon_enabled( 'enterprise_courses' ) ) {
+			$this->start_controls_section(
+				'enterprise_section',
+				array(
+					'label' => esc_html__( 'Group Course Section', 'masterstudy-lms-learning-management-system' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'label'    => esc_html__( 'Price Typography', 'masterstudy-lms-learning-management-system' ),
+					'name'     => 'enterprise_price_typography',
+					'selector' => '{{WRAPPER}} .masterstudy-button-enterprise__price-value',
+				)
+			);
+			$this->add_control(
+				'enterprise_price_color',
+				array(
+					'label'     => esc_html__( 'Price Color', 'masterstudy-lms-learning-management-system' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						'{{WRAPPER}} .masterstudy-button-enterprise__price-value' => 'color: {{VALUE}}',
+					),
+				)
+			);
+			$this->end_controls_section();
+		}
+		if ( is_ms_lms_addon_enabled( 'point_system' ) ) {
+			$this->start_controls_section(
+				'points_section',
+				array(
+					'label' => esc_html__( 'Points Section', 'masterstudy-lms-learning-management-system' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			);
+			$this->add_responsive_control(
+				'points_icon_width',
 				array(
 					'label'      => esc_html__( 'Point Icon Width', 'masterstudy-lms-learning-management-system' ),
 					'type'       => Controls_Manager::SLIDER,
 					'size_units' => array( '%', 'px' ),
 					'selectors'  => array(
-						'{{WRAPPER}} .masterstudy-points img' => 'width: {{SIZE}}{{UNIT}};',
+						'{{WRAPPER}} .masterstudy-points__info img' => 'width: {{SIZE}}{{UNIT}};',
 					),
 				)
 			);
 			$this->add_responsive_control(
-				'plan_icon_height',
+				'points_icon_height',
 				array(
 					'label'      => esc_html__( 'Point Icon Height', 'masterstudy-lms-learning-management-system' ),
 					'type'       => Controls_Manager::SLIDER,
 					'size_units' => array( '%', 'px' ),
 					'selectors'  => array(
-						'{{WRAPPER}} .masterstudy-points img' => 'height: {{SIZE}}{{UNIT}};',
+						'{{WRAPPER}} .masterstudy-points__info img' => 'height: {{SIZE}}{{UNIT}};',
 					),
 				)
 			);
 			$this->add_responsive_control(
-				'plan_icon_margin',
+				'points_icon_margin',
 				array(
 					'label'      => esc_html__( 'Point Icon Margin', 'masterstudy-lms-learning-management-system' ),
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px', '%' ),
 					'selectors'  => array(
-						'{{WRAPPER}} .masterstudy-points img' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						'{{WRAPPER}} .masterstudy-points__info img' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'label'    => esc_html__( 'Price Typography', 'masterstudy-lms-learning-management-system' ),
+					'name'     => 'points_price_typography',
+					'selector' => '{{WRAPPER}} .masterstudy-points__price',
+				)
+			);
+			$this->add_control(
+				'points_price_color',
+				array(
+					'label'     => esc_html__( 'Price Color', 'masterstudy-lms-learning-management-system' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						'{{WRAPPER}} .masterstudy-points__price' => 'color: {{VALUE}}',
+					),
+				)
+			);
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'label'    => esc_html__( 'Description Typography', 'masterstudy-lms-learning-management-system' ),
+					'name'     => 'points_description_typography',
+					'selector' => '{{WRAPPER}} .masterstudy-points__text',
+				)
+			);
+			$this->add_control(
+				'points_description_color',
+				array(
+					'label'     => esc_html__( 'Description Color', 'masterstudy-lms-learning-management-system' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						'{{WRAPPER}} .masterstudy-points__text' => 'color: {{VALUE}}',
+					),
+				)
+			);
+			$this->add_control(
+				'points_description_icon_color',
+				array(
+					'label'     => esc_html__( 'Description Icon Color', 'masterstudy-lms-learning-management-system' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						'{{WRAPPER}} .masterstudy-points__icon' => 'color: {{VALUE}}',
+					),
+				)
+			);
+			$this->end_controls_section();
 		}
-		$this->end_controls_section();
 		if ( is_ms_lms_addon_enabled( 'prerequisite' ) ) {
 			$this->start_controls_section(
 				'prerequisites_section',

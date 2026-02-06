@@ -9,7 +9,7 @@
  */
 
 $question_id = get_the_ID();
-$is_image    = (bool) ( ! empty( $question_view_type ) && 'image' == $question_view_type );
+$is_image    = (bool) ( ! empty( $question_view_type ) && 'image' === $question_view_type );
 
 foreach ( $answers as $answer ) :
 	$full_answer = ( ! empty( $answer['text_image']['url'] ) )
@@ -21,22 +21,26 @@ foreach ( $answers as $answer ) :
 			<input type="checkbox"
 					name="<?php echo esc_attr( $question_id ); ?>[]"
 					value="<?php echo esc_attr( $full_answer ); ?>"/>
-			<i class="fa fa-check"></i>
-			<?php if ( $is_image ) {
-				if ( ! empty( $answer['text_image']['url'] ) ) { ?>
+			<i class="stmlms-check-3"></i>
+			<?php
+			if ( $is_image ) {
+				if ( ! empty( $answer['text_image']['url'] ) ) {
+					?>
 					<img src="<?php echo esc_url( $answer['text_image']['url'] ); ?>"/>
 				<?php } else { ?>
 					<div class="empty-image">
-						<i class="fa fa-image"></i>
+						<i class="stmlms-image-2"></i>
 					</div>
-				<?php }
-			} else  {
-				echo wp_kses( $answer['text'], [] );
-			} ?>
+					<?php
+				}
+			} else {
+				echo wp_kses( $answer['text'], array() );
+			}
+			?>
 		</label>
 		<?php if ( $is_image && ! empty( $answer['text'] ) ) { ?>
-			<span><?php echo wp_kses( $answer['text'], [] ); ?></span>
+			<span><?php echo wp_kses( $answer['text'], array() ); ?></span>
 		<?php } ?>
 	</div>
-<?php
+	<?php
 endforeach;

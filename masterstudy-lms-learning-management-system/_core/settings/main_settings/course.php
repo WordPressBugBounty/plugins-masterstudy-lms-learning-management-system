@@ -148,6 +148,52 @@ function stm_lms_settings_course_section() {
 				),
 			),
 		),
+		'course_statuses_config'               => array(
+			'type'        => 'repeater',
+			'label'       => esc_html__( 'Course statuses', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Set different statuses for courses to highlight them among others (e.g. Hot, Special, Popular)', 'masterstudy-lms-learning-management-system' ),
+			'fields'      => array(
+				'id'         => array(
+					'type'    => 'text',
+					'label'   => esc_html__( 'Status ID', 'masterstudy-lms-learning-management-system' ),
+					'columns' => '50',
+				),
+				'label'      => array(
+					'type'    => 'text',
+					'label'   => esc_html__( 'Status Label', 'masterstudy-lms-learning-management-system' ),
+					'columns' => '50',
+				),
+				'bg_color'   => array(
+					'type'    => 'color',
+					'value'   => 'rgba(34,122,255,1)',
+					'label'   => esc_html__( 'Status Background Color', 'masterstudy-lms-learning-management-system' ),
+					'columns' => '33',
+				),
+				'text_color' => array(
+					'type'    => 'color',
+					'value'   => 'rgba(255,255,255,1)',
+					'label'   => esc_html__( 'Status Text Color', 'masterstudy-lms-learning-management-system' ),
+					'columns' => '33',
+				),
+			),
+			'value'       => array(
+				array(
+					'id'       => 'hot',
+					'label'    => esc_html__( 'Hot', 'masterstudy-lms-learning-management-system' ),
+					'bg_color' => 'rgba(255,0,0,1)',
+				),
+				array(
+					'id'       => 'new',
+					'label'    => esc_html__( 'New', 'masterstudy-lms-learning-management-system' ),
+					'bg_color' => 'rgba(29,184,116,1)',
+				),
+				array(
+					'id'       => 'special',
+					'label'    => esc_html__( 'Special', 'masterstudy-lms-learning-management-system' ),
+					'bg_color' => 'rgba(240, 155, 35,1)',
+				),
+			),
+		),
 		'course_allow_new_categories'          => array(
 			'type'  => 'checkbox',
 			'label' => esc_html__( 'Allow instructors to create new categories', 'masterstudy-lms-learning-management-system' ),
@@ -427,7 +473,7 @@ function stm_lms_settings_course_section() {
 	$course_settings_fields = array(
 		'name'   => esc_html__( 'Course', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'Course Settings', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fas fa-book',
+		'icon'   => 'stmlms-book-2',
 		'fields' => $course_summary_fields,
 	);
 

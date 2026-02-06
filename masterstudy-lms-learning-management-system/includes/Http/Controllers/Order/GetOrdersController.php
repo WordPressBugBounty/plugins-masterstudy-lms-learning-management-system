@@ -22,6 +22,7 @@ final class GetOrdersController {
 				'status'     => 'nullable|string|contains_list,' . implode( ';', OrderStatus::cases() ),
 				'date_range' => 'nullable|string',
 				'sort'       => 'nullable|string',
+				'coupon_id'  => 'nullable|integer',
 			)
 		);
 

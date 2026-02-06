@@ -9,11 +9,15 @@
       button.on('click', function () {
         toggleAnimation(button);
       });
-      button.find('.masterstudy-buy-button_plans-dropdown').on('click', function (event) {
+      button.find('.masterstudy-buy-button-dropdown').on('click', function (event) {
         event.stopPropagation();
       });
       button.find('.masterstudy-buy-button__link_disabled').on('click', function (event) {
         event.preventDefault();
+      });
+      button.find('.masterstudy-buy-button-dropdown__head').on('click', function () {
+        $(this).parent().siblings().removeClass('masterstudy-buy-button-dropdown__section_open');
+        $(this).parent().toggleClass('masterstudy-buy-button-dropdown__section_open');
       });
       function toggleAnimation(btn) {
         animationActive = !animationActive;
@@ -47,12 +51,28 @@
           item_id: item_id
         },
         beforeSend: function beforeSend() {
-          button.find('.masterstudy-buy-button__title').addClass('masterstudy-buy-button__loading');
+          button.addClass('masterstudy-purchase-button__loading');
+          var titleButton = button.find('.masterstudy-buy-button__title');
+          if (titleButton.length) {
+            titleButton.addClass('masterstudy-buy-button__loading');
+          }
         },
         complete: function complete(data) {
           var responseJSON = data['responseJSON'];
-          button.find('.masterstudy-buy-button__title').removeClass('masterstudy-buy-button__loading');
-          button.find('.masterstudy-buy-button__title').text(responseJSON['text']);
+          button.removeClass('masterstudy-purchase-button__loading');
+          var titleEl = button.find('.masterstudy-purchase-button__title');
+          var titleButton = button.find('.masterstudy-buy-button__title');
+          if (titleButton.length) {
+            titleButton.removeClass('masterstudy-buy-button__loading');
+          }
+          if (titleEl.length) {
+            titleEl.text(responseJSON['text']);
+          } else {
+            var altTitleEl = button.find('.masterstudy-buy-button__title');
+            if (altTitleEl.length) {
+              altTitleEl.text(responseJSON['text']);
+            }
+          }
           if (responseJSON['cart_url']) {
             if (responseJSON['redirect']) window.location = responseJSON['cart_url'];
             button.attr('href', responseJSON['cart_url']);

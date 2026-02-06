@@ -10,12 +10,18 @@
  * @var string $question_view_type
  */
 
+use MasterStudy\Lms\Utility\Question;
+
+if ( ! empty( $user_answer['questions_order'] ) ) {
+	$answers = Question::sort_answers_by_order( $answers, $user_answer['questions_order'], $type );
+}
+
 $question_id                = get_the_ID();
 $show_correct_answer        = get_post_meta( $item_id, 'correct_answer', true );
 $is_correct                 = ( ! empty( $user_answer['correct_answer'] ) ) ? true : false;
 $user_answer['user_answer'] = ( ! empty( $user_answer['user_answer'] ) ) ? explode( ',', $user_answer['user_answer'] ) : array();
 $user_answer                = $user_answer['user_answer'];
-$is_image                   = (bool) ( ! empty( $question_view_type ) && 'image' == $question_view_type );
+$is_image                   = (bool) ( ! empty( $question_view_type ) && 'image' === $question_view_type );
 $user_answer                = array_map( 'rawurldecode', $user_answer );
 
 foreach ( $answers as $answer ) {
@@ -23,13 +29,13 @@ foreach ( $answers as $answer ) {
 	$full_answer  = ( ! empty( $answer['text_image']['url'] ) )
 		? trim( rawurldecode( $answer['text'] ) ) . '|' . $answer['text_image']['url']
 		: trim( rawurldecode( $answer['text'] ) );
-	if ( in_array( $full_answer, $user_answer ) && $answer['isTrue'] ) {
+	if ( in_array( $full_answer, $user_answer, true ) && $answer['isTrue'] ) {
 		$answer_class[] = 'correctly_answered';
 	}
-	if ( in_array( $full_answer, $user_answer ) && ! $answer['isTrue'] ) {
+	if ( in_array( $full_answer, $user_answer, true ) && ! $answer['isTrue'] ) {
 		$answer_class[] = 'wrongly_answered';
 	}
-	if ( ! in_array( $full_answer, $user_answer ) && $answer['isTrue'] && $show_correct_answer ) {
+	if ( ! in_array( $full_answer, $user_answer, true ) && $answer['isTrue'] && $show_correct_answer ) {
 		$answer_class[] = 'correct_answer';
 	}
 
@@ -45,7 +51,7 @@ foreach ( $answers as $answer ) {
 	?>
 	<div class="stm-lms-single-answer <?php echo esc_attr( implode( ' ', $answer_class ) ); ?>">
 		<label>
-			<input 
+			<input
 			<?php
 			if ( $answered ) {
 				echo esc_attr( 'checked' ); }
@@ -54,7 +60,7 @@ foreach ( $answers as $answer ) {
 				type="checkbox"
 				name="<?php echo esc_attr( $question_id ); ?>[]"
 				value="<?php echo esc_attr( $full_answer ); ?>"/>
-			<i class="fa fa-check"></i>
+			<i class="stmlms-check-3"></i>
 			<?php
 			if ( $is_image ) {
 				if ( ! empty( $answer['text_image']['url'] ) ) {
@@ -62,7 +68,7 @@ foreach ( $answers as $answer ) {
 					<img src="<?php echo esc_url( $answer['text_image']['url'] ); ?>"/>
 				<?php } else { ?>
 					<div class="empty-image">
-						<i class="fa fa-image"></i>
+						<i class="stmlms-image-2"></i>
 					</div>
 					<?php
 				}
@@ -73,7 +79,7 @@ foreach ( $answers as $answer ) {
 			if ( ! empty( $answer['explain'] ) ) {
 				?>
 				<div class="stm-lms-single-answer__hint">
-					<i class="fa fa-info"></i>
+					<i class="stmlms-info"></i>
 					<div class="stm-lms-single-answer__hint_text">
 						<div class="inner">
 							<?php echo wp_kses_post( $answer['explain'] ); ?>

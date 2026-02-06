@@ -16,7 +16,7 @@
 				<div class="stm-lms-upload-file__date">{{ file.date }}</div>
 				<div class="stm-lms-upload-file__size">{{ file.size }}</div>
 				<div class="stm-lms-upload-file__actions">
-					<span class="fas fa-trash" @click="deleteFile(file)"></span>
+					<span class="stmlms-trash-2" @click="deleteFile(file)"></span>
 				</div>
 			</div>
 		</div>

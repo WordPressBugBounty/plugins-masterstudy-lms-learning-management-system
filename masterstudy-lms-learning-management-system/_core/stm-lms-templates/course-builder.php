@@ -11,10 +11,12 @@ $additional_scripts = apply_filters( 'ms_lms_course_builder_additional_scripts',
 $wp_referer         = wp_get_referer();
 
 wp_register_style( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_css', MS_LMS_URL . 'assets/course-builder/css/main.css' ), array(), MS_LMS_VERSION );
+wp_register_script( 'ms-lms-course-builder-vendors', apply_filters( 'ms_lms_course_builder_vendors_js', MS_LMS_URL . 'assets/course-builder/js/vendors.js' ), array(), MS_LMS_VERSION, true );
 wp_register_script( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_js', MS_LMS_URL . 'assets/course-builder/js/main.js' ), array(), MS_LMS_VERSION, true );
 wp_register_script( 'ms-lms-course-builder-tinymce', MS_LMS_URL . '/assets/course-builder/tinymce/hugerte.min.js', array(), MS_LMS_VERSION, true );
+wp_register_script( 'ms-lms-course-builder-translations', apply_filters( 'ms_lms_course_builder_translations_js', MS_LMS_URL . 'assets/course-builder/js/i18n-translations.js' ), array(), MS_LMS_VERSION, true );
 
-wp_set_script_translations( 'ms-lms-course-builder', 'masterstudy-lms-learning-management-system', $translations_path );
+wp_set_script_translations( 'ms-lms-course-builder-translations', 'masterstudy-lms-learning-management-system', $translations_path );
 
 $scripts = wp_scripts();
 $styles  = wp_styles();
@@ -72,17 +74,16 @@ foreach ( $load_scripts as $handle ) {
 	<?php endif; ?>
 </script>
 <?php
-$scripts->print_translations( 'ms-lms-course-builder' );
+$scripts->print_translations( 'ms-lms-course-builder-translations' );
 
 if ( ! class_exists( '\_WP_Editors', false ) ) {
 	require ABSPATH . WPINC . '/class-wp-editor.php';
 }
-
-//\_WP_Editors::print_default_editor_scripts();
-//\_WP_Editors::print_tinymce_scripts();
 ?>
 <script src="<?php echo esc_url( $scripts->registered['ms-lms-course-builder-tinymce']->src ); // phpcs:ignore ?>"></script>
 <script src="<?php echo esc_url( $scripts->registered['ms-lms-course-builder']->src ); // phpcs:ignore ?>"></script>
+<script src="<?php echo esc_url( $scripts->registered['ms-lms-course-builder-vendors']->src ); // phpcs:ignore ?>"></script>
+<script src="<?php echo esc_url( $scripts->registered['ms-lms-course-builder-translations']->src ); // phpcs:ignore ?>"></script>
 <?php
 if ( ! empty( $additional_scripts ) ) {
 	foreach ( $additional_scripts as $script_url ) {

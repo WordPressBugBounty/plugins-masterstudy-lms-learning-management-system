@@ -55,7 +55,7 @@ use \MasterStudy\Lms\Plugin\Addons;
 				</li>
 			</ul>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=stm-lms-go-pro&source=get-now-button-addons-banner' ) ); ?>" class="stm-lms-addon-banner__button" target="_blank">
-				<i class="fas fa-arrow-right"></i>
+				<i class="stmlms-arrow-right-2"></i>
 				<?php echo esc_html__( 'Get Now', 'masterstudy-lms-learning-management-system' ); ?>
 			</a>
 		</div>

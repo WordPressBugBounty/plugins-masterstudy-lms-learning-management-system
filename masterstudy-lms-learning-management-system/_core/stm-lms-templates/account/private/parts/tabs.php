@@ -16,7 +16,7 @@ if ( ! empty( $sub_items ) ) {
 }
 if ( is_user_logged_in() ) {
 	?>
-	<div class="stm_lms_acc_tabs 
+	<div class="stm_lms_acc_tabs
 	<?php
 	if ( ! empty( $sub_items ) ) {
 		echo esc_attr( 'has_sub_items' );}
@@ -35,7 +35,7 @@ if ( is_user_logged_in() ) {
 		</div>
 		<?php if ( ! empty( $sub_items ) ) { ?>
 			<div class="stm_lms_acc_tabs__secondary">
-				<i class="stm_lms_acc_tabs__toggle fa fa-ellipsis-v"></i>
+				<i class="stm_lms_acc_tabs__toggle stmlms-ellipsis-v"></i>
 				<div class="stm_lms_acc_tabs__secondary_inner">
 					<?php foreach ( $sub_items as $menu_section ) { ?>
 						<div class="stm_lms_acc_tabs__secondary_inner__section">

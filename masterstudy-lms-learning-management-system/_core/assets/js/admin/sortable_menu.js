@@ -19,11 +19,11 @@
     });
     function add_notice() {
       var menu_elements = {
-        '[data-id="dashboard"]': 'fa fa-lock',
-        '[data-id="assignments"]': 'fa fa-exclamation-triangle',
-        '[data-id="enrolled_courses"]': 'fa fa-exclamation-triangle',
-        '[data-id="bundles"]': 'fa fa-exclamation-triangle',
-        '[data-id="my_orders"]': 'fa fa-exclamation-triangle'
+        '[data-id="dashboard"]': 'stmlms-lock-2',
+        '[data-id="assignments"]': 'stmlms-exclamation-triangle',
+        '[data-id="enrolled_courses"]': 'stmlms-exclamation-triangle',
+        '[data-id="bundles"]': 'stmlms-exclamation-triangle',
+        '[data-id="my_orders"]': 'stmlms-exclamation-triangle'
       };
       $.each(menu_elements, function (element, value) {
         $(element).each(function () {

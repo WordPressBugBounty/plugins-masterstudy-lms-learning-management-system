@@ -10,6 +10,16 @@ use WP_REST_Response;
 
 final class UploadFromUrlController {
 	public function __invoke( WP_REST_Request $request ): WP_REST_Response {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_REST_Response(
+				array(
+					'error_code' => 'delete_media_access_error',
+					'message'    => esc_html__( 'You do not have permission to upload media files.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
+
 		$validator = new Validator(
 			$request->get_params(),
 			array(

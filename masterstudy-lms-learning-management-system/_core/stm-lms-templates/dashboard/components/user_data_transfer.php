@@ -2,13 +2,13 @@
 	<div class="user-data-transfer">
 		<div class="user-data-transfer__action">
 			<a href="#" class="user-data-transfer__btn user-data-transfer__btn-import" @click.prevent="modalVisible=true">
-				<i class="fa fa-upload"></i>
+				<i class="stmlms-upload-2"></i>
 				<span>
 					<?php esc_html_e( 'Import CSV', 'masterstudy-lms-learning-management-system' ); ?>
 				</span>
 			</a>
 			<a href="#" class="user-data-transfer__btn user-data-transfer__btn-export" @click.prevent="exportUsers">
-				<i class="fa fa-download"></i>
+				<i class="stmlms-download-2"></i>
 				<span>
 					<?php esc_html_e( 'Export CSV', 'masterstudy-lms-learning-management-system' ); ?>
 				</span>
@@ -21,7 +21,7 @@
 						<span class="user-data-transfer__modal-title">
 							<span v-if="importStep<3"><?php esc_html_e( 'Import students from CSV', 'masterstudy-lms-learning-management-system' ); ?></span>
 							<span v-if="importStep==4"><?php esc_html_e( 'Import partially complete', 'masterstudy-lms-learning-management-system' ); ?></span>
-						</span> 
+						</span>
 						<span class="user-data-transfer__modal-close" @click="closeImportModal()"></span>
 					</div>
 					<div class="user-data-transfer__modal-text" v-if="importStep<3 || importStep==4">
@@ -34,7 +34,7 @@
 					</div>
 					<div class="user-data-transfer__modal-download" v-if="importStep<2">
 						<a href="<?php echo esc_url( STM_LMS_URL . 'assets/samples/import_users.csv' ); // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet ?>" class="user-data-transfer__btn user-data-transfer__btn-download" download>
-							<i class="fa fa-download"></i>
+							<i class="stmlms-download-2"></i>
 							<span>
 								<?php esc_html_e( 'Download a CSV file template', 'masterstudy-lms-learning-management-system' ); ?>
 							</span>
@@ -42,7 +42,7 @@
 					</div>
 					<div class="user-data-transfer__info" v-if="importStep==4">
 						<span class="user-data-transfer__warning">
-							<i class="fas fa-exclamation-triangle"></i>
+							<i class="stmlms-exclamation-triangle"></i>
 							<?php esc_html_e( 'The users below were not imported as they had already been enrolled in this course.', 'masterstudy-lms-learning-management-system' ); ?>
 						</span>
 						<div  class="user-data-transfer__list">
@@ -52,16 +52,16 @@
 						</div>
 					</div>
 					<div class="user-data-transfer-file-upload" v-if="importStep==0" ref="uploadFileDropArea">
-						<div class="user-data-transfer-file-upload__item-wrapper"></div> 
+						<div class="user-data-transfer-file-upload__item-wrapper"></div>
 						<div class="user-data-transfer-file-upload__field">
 							<span class="user-data-transfer-file-upload__field-button" @click.prevent="uploadImportFile()">
 								<?php esc_html_e( 'Upload CSV', 'masterstudy-lms-learning-management-system' ); ?>
-							</span> 
+							</span>
 							<div class="user-data-transfer-file-upload__field-text">
 								<p><?php esc_html_e( 'Drag file here or click the button.', 'masterstudy-lms-learning-management-system' ); ?></p>
-							</div> 
+							</div>
 							<div :class="{ 'user-data-transfer-file-upload__field-error': true, 'is-visible': fileTypeError || emptyCsvFile }">
-								<i class="fas fa-exclamation-triangle"></i>
+								<i class="stmlms-exclamation-triangle"></i>
 								<span v-if="fileTypeError">
 									<?php esc_html_e( 'Unsupported file type.', 'masterstudy-lms-learning-management-system' ); ?>
 								</span>
@@ -73,7 +73,7 @@
 										<?php esc_html_e( 'Try again', 'masterstudy-lms-learning-management-system' ); ?>
 									</span>
 								</a>
-							</div> 
+							</div>
 							<input ref="importFileInput" type="file" class="user-data-transfer-file-upload__input" accept=".csv">
 						</div>
 					</div>
@@ -96,7 +96,7 @@
 						</div>
 						<div class="user-data-transfer-progress__title">
 							<span>
-								<?php esc_html_e( 'Importing', 'masterstudy-lms-learning-management-system' ); ?> 
+								<?php esc_html_e( 'Importing', 'masterstudy-lms-learning-management-system' ); ?>
 								{{userDataFileName}}:
 							</span>
 							<span class="user-data-transfer-progress__percent">{{importProgress}}%</span>

@@ -7,7 +7,7 @@
 
 			<a href="#" class="add_user__btn" @click.prevent="active = true" v-if="!active">
 
-				<i class="fa fa-user-plus"></i>
+				<i class="stmlms-user-plus"></i>
 
 				<?php esc_html_e( 'Add student', 'masterstudy-lms-learning-management-system' ); ?>
 
@@ -19,7 +19,7 @@
 
 		<div class="add_user_box" v-if="active">
 
-			<i class="fa fa-envelope"></i>
+			<i class="stmlms-envelope-2"></i>
 
 			<h3><?php esc_html_e( 'Invite student to this course:', 'masterstudy-lms-learning-management-system' ); ?>
 				{{title}}</h3>

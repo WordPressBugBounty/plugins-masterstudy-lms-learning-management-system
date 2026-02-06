@@ -16,7 +16,7 @@ $menu_items           = STM_LMS_User_Menu::stm_lms_user_menu_display();
 		?>
 
 		<div class="stm_lms_user_float_menu__scrolled_label">
-			<i class="fa fa-chevron-down"></i>
+			<i class="stmlms-chevron-down-2"></i>
 		</div>
 
 	</div>

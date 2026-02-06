@@ -22,6 +22,7 @@ function stm_lms_user_answers() {
 		user_answer TEXT NOT NULL,
 		correct_answer tinyint(1) NOT NULL,
 		attempt_number mediumint(9) NOT NULL,
+		questions_order TEXT NULL,
 		PRIMARY KEY  (user_answer_id)
 	) $charset_collate;";
 

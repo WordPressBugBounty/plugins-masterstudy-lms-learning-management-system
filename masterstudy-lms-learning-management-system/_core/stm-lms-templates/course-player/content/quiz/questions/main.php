@@ -34,10 +34,6 @@ $data['correct_answer']      = ! empty( $data['last_answers']['correct_answer'] 
 	? true
 	: ( 'question_bank' === $data['type'] ? 'bank' : false );
 
-if ( $data['is_correct'] ) {
-	$data['last_answers'] = array();
-}
-
 $classes = implode(
 	' ',
 	array_filter(

@@ -4,7 +4,7 @@ function stm_lms_settings_google_api_section() {
 	return array(
 		'name'   => esc_html__( 'Recaptcha', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'Recaptcha', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fab fa-google',
+		'icon'   => 'stmlms-google',
 		'fields' => array(
 			'recaptcha_site_key'    => array(
 				'type'        => 'text',

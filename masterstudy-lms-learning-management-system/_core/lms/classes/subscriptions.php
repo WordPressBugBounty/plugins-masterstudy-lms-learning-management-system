@@ -390,13 +390,14 @@ class STM_LMS_Subscriptions {
 	}
 
 	public static function stm_lms_pmpro_settings() {
-		$level_id        = ( ! empty( $_GET['edit'] ) ) ? intval( $_GET['edit'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$course_limit    = get_option( 'stm_lms_course_number_' . $level_id, 0 );
-		$course_number   = $course_limit;
-		$course_featured = self::get_featured_courses_number( $level_id );
-		$plan_group      = self::get_plan_group( $level_id );
-		$category        = self::get_plan_private_category( $level_id );
-		$terms           = stm_lms_get_terms_for_membership( 'stm_lms_course_taxonomy', array( 'hide_empty' => false ), false );
+		$level_id            = ( ! empty( $_GET['edit'] ) ) ? intval( $_GET['edit'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$course_limit        = get_option( 'stm_lms_course_number_' . $level_id, 0 );
+		$course_number       = $course_limit;
+		$course_featured     = self::get_featured_courses_number( $level_id );
+		$plan_group          = self::get_plan_group( $level_id );
+		$category            = self::get_plan_private_category( $level_id );
+		$terms               = stm_lms_get_terms_for_membership( 'stm_lms_course_taxonomy', array( 'hide_empty' => false ), false );
+		$is_featured_enabled = STM_LMS_Options::get_option( 'enable_featured_courses', true );
 
 		if ( empty( $plan_group ) ) {
 			$plan_group = '';
@@ -418,6 +419,7 @@ class STM_LMS_Subscriptions {
 				</td>
 			</tr>
 
+			<?php if ( $is_featured_enabled ) : ?>
 			<tr class="membership_categories">
 				<th scope="row" valign="top">
 					<label><?php esc_html_e( 'Number of featured courses quote in subscription', 'masterstudy-lms-learning-management-system' ); ?>: </label>
@@ -427,6 +429,7 @@ class STM_LMS_Subscriptions {
 					<small><?php esc_html_e( 'Instructors can mark their courses as featured', 'masterstudy-lms-learning-management-system' ); ?></small>
 				</td>
 			</tr>
+			<?php endif; ?>
 
 			<tr class="membership_categories">
 				<th scope="row" valign="top">
@@ -625,18 +628,21 @@ class STM_LMS_Subscriptions {
 		$pmpro_table   = $wpdb->prefix . 'pmpro_memberships_users';
 		$courses_table = $wpdb->prefix . 'stm_lms_user_courses';
 
+		$change_statuses = array( 'admin_changed', 'changed' );
+		$in_placeholders = implode( ', ', array_fill( 0, count( $change_statuses ), '%s' ) );
+
 		$changed_membership = $wpdb->get_row(
+			// phpcs:disable
 			$wpdb->prepare(
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT * FROM {$pmpro_table}
-				WHERE user_id = %d
-				AND status = %s
-				ORDER BY id DESC
-				LIMIT 1",
-				$user_id,
-				'admin_changed'
+			"SELECT * FROM {$pmpro_table}
+			WHERE user_id = %d
+			AND status IN ( {$in_placeholders} )
+			ORDER BY id DESC
+			LIMIT 1",
+				array_merge( array( $user_id ), $change_statuses )
 			)
 		);
+		// phpcs:enable
 
 		if ( ! $changed_membership ) {
 			return false;
@@ -651,7 +657,7 @@ class STM_LMS_Subscriptions {
 			)
 		);
 
-		if ( 'admin_changed' !== $status_check ) {
+		if ( ! in_array( $status_check, array( 'admin_changed', 'changed' ), true ) ) {
 			return false;
 		}
 
@@ -826,7 +832,7 @@ class STM_LMS_Subscriptions {
 		foreach ( $rows as $membership ) {
 			$membership_status = $membership['status'];
 
-			if ( 'active' === $membership_status || 'changed' === $membership_status ) {
+			if ( 'active' === $membership_status ) {
 				$membership_inactive = false;
 				break;
 			} elseif ( 'expired' === $membership_status ) {

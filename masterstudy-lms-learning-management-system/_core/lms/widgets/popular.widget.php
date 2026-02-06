@@ -67,7 +67,7 @@ class Stm_Lms_Popular_Courses extends WP_Widget {
 					$not_in_membership  = get_post_meta( $post_id, 'not_membership', true );
 					$course_free_status = masterstudy_lms_course_free_status( $single_sale, $price );
 					$content            = '';
-					if ( ! $single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership ) {
+					if ( ! $single_sale && ! $not_in_membership ) {
 						ob_start();
 						$subscription_image = STM_LMS_URL . 'assets/img/members_only.svg';
 						?>

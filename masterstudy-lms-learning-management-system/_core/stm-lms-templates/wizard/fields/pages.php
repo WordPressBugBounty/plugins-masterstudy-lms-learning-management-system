@@ -31,8 +31,8 @@ if ( isset( $instructor_step ) ) {
 		<?php echo esc_attr( $page_key ); ?>: '<?php echo esc_html( $page ); ?>',
 	<?php endforeach; ?>
 	})">
-	<i class="fa fa-arrow-right" v-if="!loading_system_pages"></i>
-	<i class="fa fa-circle-notch" v-else></i>
+	<i class="stmlms-arrow-right-2" v-if="!loading_system_pages"></i>
+	<i class="stmlms-circle-notch" v-else></i>
 	<span v-if="!loading_system_pages">
 		<?php echo esc_html( $btn_title ); ?>
 	</span>

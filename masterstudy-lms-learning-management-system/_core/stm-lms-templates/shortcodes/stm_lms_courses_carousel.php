@@ -186,10 +186,10 @@ if ( class_exists( 'STM_LMS_Helpers' ) ) :
 			<?php if ( 'disable' !== $prev_next ) : ?>
 				<div class="stm_lms_courses_carousel__buttons">
 					<div class="stm_lms_courses_carousel__button stm_lms_courses_carousel__button_prev sbc_h sbrc_h">
-						<i class="fa fa-chevron-left"></i>
+						<i class="stmlms-chevron-left-2"></i>
 					</div>
 					<div class="stm_lms_courses_carousel__button stm_lms_courses_carousel__button_next sbc_h sbrc_h">
-						<i class="fa fa-chevron-right"></i>
+						<i class="stmlms-chevron-right-2"></i>
 					</div>
 				</div>
 			<?php endif; ?>

@@ -29,8 +29,8 @@
 				</a>
 				<button class="stm-lms-pro-button main-btn buttonload button starter_install_theme_btn" name="starter_install_theme_btn">
 					<span class="ui-button-text"> <?php echo esc_html( __( 'Install Now', 'masterstudy-lms-learning-management-system' ) ); ?></span>
-					<i class="fa fa-refresh fa-spin installing"></i>
-					<i class="fa fa-check downloaded" aria-hidden="true"></i>
+					<i class="stmlms-refresh-2 stmlms-spin installing"></i>
+					<i class="stmlms-check-3 downloaded" aria-hidden="true"></i>
 				</button>
 			</div>
 		</div>

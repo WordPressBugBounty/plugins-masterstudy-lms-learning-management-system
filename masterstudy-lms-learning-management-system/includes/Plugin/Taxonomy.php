@@ -3,6 +3,7 @@
 namespace MasterStudy\Lms\Plugin;
 
 use MasterStudy\Lms\Plugin;
+use STM_LMS_Course;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; //Exit if accessed directly
@@ -51,6 +52,7 @@ class Taxonomy {
 			10,
 			2
 		);
+		add_filter( 'term_link', array( __CLASS__, 'overwrite_taxonomy_term_link' ), 10, 3 );
 	}
 
 	/**
@@ -79,7 +81,6 @@ class Taxonomy {
 					'show_ui'           => true,
 					'show_admin_column' => true,
 					'query_var'         => true,
-					'rewrite'           => array( 'slug' => $course_category_slug ),
 				),
 			),
 			self::QUESTION_CATEGORY => array(
@@ -263,6 +264,11 @@ class Taxonomy {
 		if ( ! isset( $_POST['course_page_style_nonce'] ) || ! wp_verify_nonce( $_POST['course_page_style_nonce'], 'course_page_style_nonce' ) ) {
 			return;
 		}
+
+		if ( isset( $_POST['course_icon'] ) ) {
+			update_term_meta( $term_id, 'course_icon', sanitize_text_field( $_POST['course_icon'] ) );
+		}
+
 		if ( isset( $_POST['course_page_style'] ) && 'none' !== $_POST['course_page_style'] ) {
 			update_term_meta( $term_id, 'course_page_style', sanitize_text_field( $_POST['course_page_style'] ) );
 		} else {
@@ -384,5 +390,12 @@ class Taxonomy {
 			$query->query_vars['orderby'] = 'count';
 			$query->query_vars['order']   = $order;
 		}
+	}
+
+	public static function overwrite_taxonomy_term_link( $url, $term, $taxonomy ) {
+		if ( self::COURSE_CATEGORY === $taxonomy ) {
+			return esc_url( STM_LMS_Course::courses_page_url() . '?terms[]=' . $term->term_id . '&category[]=' . $term->term_id );
+		}
+		return $url;
 	}
 }

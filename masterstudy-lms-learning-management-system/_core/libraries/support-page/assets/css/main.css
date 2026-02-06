@@ -5,6 +5,7 @@ body.wp-core-ui .stm-notice {
 
 .help-center {
   --color-text: #303442;
+  --color-pink: #F940C2;
   --color-accent: #2371B1;
   --color-white: #ffffff;
   --color-orange: #FC7B40;
@@ -152,6 +153,14 @@ body.wp-core-ui .stm-notice {
 .help-center .help-grid .help-item .support-page-button-secondary:hover,
 .help-center .news-subscription .help-item .support-page-button-secondary:hover {
   background: var(--color-text);
+}
+.help-center .help-grid .help-item .support-page-button-pink,
+.help-center .news-subscription .help-item .support-page-button-pink {
+  background: var(--color-pink);
+}
+.help-center .help-grid .help-item .support-page-button-pink:hover,
+.help-center .news-subscription .help-item .support-page-button-pink:hover {
+  background: color-mix(in srgb, var(--color-pink) 80%, var(--color-text));
 }
 .help-center .help-grid .help-item .support-page-button-notice,
 .help-center .news-subscription .help-item .support-page-button-notice {
@@ -315,6 +324,82 @@ body.wp-core-ui .stm-notice {
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+}
+.help-center .help-grid .help-item.help-item-hosting,
+.help-center .news-subscription .help-item.help-item-hosting {
+  grid-column: 1/-1;
+  padding: 40px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  color: var(--color-white);
+  flex-direction: row;
+  justify-content: space-between;
+}
+.help-center .help-grid .help-item.help-item-hosting *,
+.help-center .news-subscription .help-item.help-item-hosting * {
+  z-index: 2;
+}
+.help-center .help-grid .help-item.help-item-hosting p,
+.help-center .help-grid .help-item.help-item-hosting small,
+.help-center .news-subscription .help-item.help-item-hosting p,
+.help-center .news-subscription .help-item.help-item-hosting small {
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 120%;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  max-width: 546px;
+  text-align: start;
+  margin-bottom: 0;
+}
+.help-center .help-grid .help-item.help-item-hosting p span,
+.help-center .help-grid .help-item.help-item-hosting small span,
+.help-center .news-subscription .help-item.help-item-hosting p span,
+.help-center .news-subscription .help-item.help-item-hosting small span {
+  color: var(--color-pink);
+}
+.help-center .help-grid .help-item.help-item-hosting p small,
+.help-center .help-grid .help-item.help-item-hosting small small,
+.help-center .news-subscription .help-item.help-item-hosting p small,
+.help-center .news-subscription .help-item.help-item-hosting small small {
+  font-weight: 400;
+}
+.help-center .help-grid .help-item.help-item-hosting .image,
+.help-center .news-subscription .help-item.help-item-hosting .image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.help-center .help-grid .help-item.help-item-hosting .image img,
+.help-center .news-subscription .help-item.help-item-hosting .image img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+@media (max-width: 1199px) {
+  .help-center .help-grid .help-item.help-item-hosting,
+  .help-center .news-subscription .help-item.help-item-hosting {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  .help-center .help-grid .help-item.help-item-hosting p,
+  .help-center .news-subscription .help-item.help-item-hosting p {
+    text-align: center;
+  }
+}
+.help-center .help-grid .help-item.help-item-hosting .support-page-button,
+.help-center .news-subscription .help-item.help-item-hosting .support-page-button {
+  padding: 16px 36px;
+  font-size: 12px;
+  text-transform: uppercase;
+  line-height: 14px;
+  letter-spacing: 0.5px;
 }
 .help-center .help-grid .help-item.help-item-review,
 .help-center .news-subscription .help-item.help-item-review {

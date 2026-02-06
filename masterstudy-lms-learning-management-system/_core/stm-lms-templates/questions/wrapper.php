@@ -27,6 +27,8 @@ if ( ! empty( $question_view_type ) ) {
 	$stm_lms_vars['question_view_type'] = $question_view_type;
 }
 
+$stm_lms_vars['random_answers'] = get_post_meta( $item_id, 'random_answers', true ) ?? '';
+
 $question_template = ( STM_LMS_Quiz::show_answers( $item_id, true ) ) ? 'questions/answers/' . $type : 'questions/' . $type;
 $number            = ( ! empty( $number ) ) ? $number : 1;
 

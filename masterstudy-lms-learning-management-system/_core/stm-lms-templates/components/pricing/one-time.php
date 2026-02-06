@@ -13,8 +13,9 @@
 		STM_LMS_Templates::show_lms_template(
 			'components/switcher',
 			array(
-				'name' => 'single_sale',
-				'on'   => ! empty( $price ),
+				'name'  => 'single_sale',
+				'class' => 'masterstudy-switcher-toggleable',
+				'on'    => ! empty( $price ),
 			)
 		);
 		?>

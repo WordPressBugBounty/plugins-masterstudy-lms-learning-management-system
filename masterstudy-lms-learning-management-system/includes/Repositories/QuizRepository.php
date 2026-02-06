@@ -21,6 +21,7 @@ class QuizRepository {
 		'quiz_attempts'         => 'quiz_attempts',
 		'show_attempts_history' => 'show_attempts_history',
 		'retry_after_passing'   => 'retry_after_passing',
+		'random_answers'        => 'random_answers',
 	);
 
 	private static $casts = array(
@@ -32,6 +33,7 @@ class QuizRepository {
 		're_take_cut'           => 'float|nullable',
 		'show_attempts_history' => 'bool',
 		'retry_after_passing'   => 'bool',
+		'random_answers'        => 'bool',
 	);
 
 	public function create( array $data ): int {

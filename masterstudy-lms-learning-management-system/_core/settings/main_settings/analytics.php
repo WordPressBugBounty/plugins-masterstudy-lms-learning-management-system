@@ -4,7 +4,7 @@ function stm_lms_settings_analytics_section() {
 	$main_fields = array(
 		'name'   => esc_html__( 'Reports & Analytics', 'masterstudy-lms-learning-management-system' ),
 		'label'  => esc_html__( 'Reports & Analytics', 'masterstudy-lms-learning-management-system' ),
-		'icon'   => 'fas fa-chart-pie',
+		'icon'   => 'stmlms-chart-pie',
 		'fields' => array(
 			'pro_banner' => array(
 				'type'        => 'pro_banner',

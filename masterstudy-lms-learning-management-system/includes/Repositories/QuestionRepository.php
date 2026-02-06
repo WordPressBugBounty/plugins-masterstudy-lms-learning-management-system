@@ -155,6 +155,7 @@ final class QuestionRepository extends AbstractRepository {
 
 			foreach ( $data_question as $match_index => $match ) {
 				$width                                = 'width: ' . ( strlen( $match ) * 8 + 16 ) . 'px';
+				$width                               .= '; min-width: ' . ( strlen( $match ) * 8 + 16 ) . 'px';
 				$name                                 = "{$data['id']}[{$match_index}]";
 				$data['answer_field'][ $match_index ] = "<input type='text' name='{$name}' style='{$width}' />";
 			}
@@ -167,7 +168,10 @@ final class QuestionRepository extends AbstractRepository {
 						? stripslashes( rawurldecode( $data['user_answer'][ $match_index ] ) )
 						: null;
 
-					$correct = ( isset( $data['user_answer'][ $match_index ] ) && strtolower( $match_answer ) === strtolower( $data['user_answer'][ $match_index ] ) || $data['is_correct'] )
+					$user_answer  = trim( strtolower( stripslashes( rawurldecode( $data['user_answer'][ $match_index ] ) ) ) );
+					$match_answer = trim( strtolower( stripslashes( rawurldecode( html_entity_decode( $match_answer, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) ) ) );
+
+					$correct = ( isset( $data['user_answer'][ $match_index ] ) && $match_answer === $user_answer || $data['is_correct'] )
 						? 'masterstudy-course-player-fill-the-gap__check-correct'
 						: 'masterstudy-course-player-fill-the-gap__check-incorrect';
 
@@ -180,5 +184,4 @@ final class QuestionRepository extends AbstractRepository {
 
 		return apply_filters( 'masterstudy_lms_fill_gap_question_output_data', $data );
 	}
-
 }

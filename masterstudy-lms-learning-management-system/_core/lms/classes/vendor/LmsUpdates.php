@@ -55,6 +55,10 @@ abstract class LmsUpdates {
 		'3.6.16' => array( 'lms_update_woocommerce_checkout_setting' ), // If the 'wocommerce_checkout' setting is enabled, set 'ecommerce_engine' to 'woocommerce'.
 		'3.6.17' => array( 'lms_update_quiz_attempt_history_retake_after_passing' ), // Update default media library extensions to include vtt
 		'3.6.18' => array( 'lms_transactions_currency_backfill_from_payments' ),
+		'3.6.19' => array( 'lms_update_user_answers_table' ), // Update answers table
+		'3.7.0'  => array( 'lms_update_db_tables' ),
+		'3.7.3'  => array( 'lms_update_zero_sale_price' ), // If user had sale_price 0 then make it an empty string, otherwise keep the value,
+		'3.7.5'  => array( 'lms_add_course_statuses' ), // Add default course statuses
 	);
 
 	/**

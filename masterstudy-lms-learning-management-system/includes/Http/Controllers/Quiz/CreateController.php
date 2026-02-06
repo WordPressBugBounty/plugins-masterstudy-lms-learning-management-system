@@ -27,12 +27,13 @@ class CreateController {
 				're_take_cut'           => 'nullable|numeric',
 				'style'                 => 'required|contains_list,' . implode( ';', array_map( 'strval', QuizStyle::cases() ) ),
 				'title'                 => 'required|string',
-				'required_answers_ids'  => 'array',
 				'questions'             => 'array',
 				'custom_fields'         => 'array',
 				'quiz_attempts'         => 'required|string|contains_list,' . implode( ';', array_map( 'strval', QuizAttempts::cases() ) ),
 				'show_attempts_history' => 'boolean',
 				'retry_after_passing'   => 'boolean',
+				'required_answers_ids'  => 'array',
+				'random_answers'        => 'boolean',
 			)
 		);
 

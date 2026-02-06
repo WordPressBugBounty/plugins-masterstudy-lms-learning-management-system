@@ -550,21 +550,22 @@ class STM_LMS_Courses {
 	}
 
 	public function filter_statuses( &$args ) {
-		$status = ! empty( $_GET['status'] ) ? $_GET['status'] : array();
+		$statuses = ! empty( $_GET['status'] ) ? $_GET['status'] : array();
 
-		if ( ! empty( $args['featured'] ) && $args['featured'] && ! STM_LMS_Options::get_option( 'disable_featured_courses', false ) ) {
+		$course_statuses = array_keys( STM_LMS_Helpers::get_course_statuses() );
+		if ( ! empty( $args['featured'] ) && $args['featured'] && STM_LMS_Options::get_option( 'disable_featured_courses', false ) ) {
 
 			$per_row                = STM_LMS_Options::get_option( 'courses_per_row', 3 );
 			$number_of_featured     = STM_LMS_Options::get_option( 'number_featured_in_archive', $per_row );
 			$args['posts_per_page'] = $number_of_featured;
 			$args['orderby']        = 'rand';
-			if ( empty( $status ) ) {
-				$status = array( 'featured' );
-			} elseif ( is_array( $status ) && ! in_array( 'featured', $status, true ) ) {
-				$status[] = 'featured';
+			if ( empty( $statuses ) ) {
+				$statuses = array( 'featured' );
+			} elseif ( is_array( $statuses ) && ! in_array( 'featured', $statuses, true ) ) {
+				$statuses[] = 'featured';
 			}
 		}
-		if ( ! empty( $status ) && is_array( $status ) ) {
+		if ( ! empty( $statuses ) && is_array( $statuses ) ) {
 
 			if ( empty( $args['meta_query'] ) ) {
 				$args['meta_query'] = array(
@@ -575,7 +576,7 @@ class STM_LMS_Courses {
 				);
 			}
 
-			if ( in_array( 'featured', $status, true ) ) {
+			if ( in_array( 'featured', $statuses, true ) ) {
 				$args['meta_query']['status'][] = array(
 					'key'     => 'featured',
 					'value'   => 'on',
@@ -583,28 +584,14 @@ class STM_LMS_Courses {
 				);
 			}
 
-			if ( in_array( 'hot', $status, true ) ) {
-				$args['meta_query']['status'][] = array(
-					'key'     => 'status',
-					'value'   => 'hot',
-					'compare' => '=',
-				);
-			}
-
-			if ( in_array( 'new', $status, true ) ) {
-				$args['meta_query']['status'][] = array(
-					'key'     => 'status',
-					'value'   => 'new',
-					'compare' => '=',
-				);
-			}
-
-			if ( in_array( 'special', $status, true ) ) {
-				$args['meta_query']['status'][] = array(
-					'key'     => 'status',
-					'value'   => 'special',
-					'compare' => '=',
-				);
+			foreach ( $statuses as $status ) {
+				if ( in_array( $status, $course_statuses, true ) ) {
+					$args['meta_query']['status'][] = array(
+						'key'     => 'status',
+						'value'   => $status,
+						'compare' => '=',
+					);
+				}
 			}
 		}
 	}

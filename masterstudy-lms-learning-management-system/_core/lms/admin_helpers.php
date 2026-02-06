@@ -9,8 +9,8 @@ add_action(
 
 		stm_lms_register_script( 'admin/lms_sub_menu' );
 		/** enqueue styles **/
+		wp_enqueue_style( 'stm_lms_icons', STM_LMS_URL . 'assets/icons/style.css', null, STM_LMS_VERSION );
 		wp_enqueue_style( 'stm_lms_starter_theme', STM_LMS_URL . 'includes/starter-theme/assets/main.css', array( 'wp-admin' ), $version );
-		wp_enqueue_style( 'font-awesome-min', STM_LMS_URL . 'assets/vendors/font-awesome.min.css', null, $version, 'all' );
 
 		/** enqueue javascript **/
 		wp_enqueue_script( 'stm_lms_starter_theme', STM_LMS_URL . 'includes/starter-theme/assets/main.js', array( 'jquery-core' ), $version, true );
@@ -52,7 +52,6 @@ add_action(
 /** Add icons for gutenberg blocks */
 function stm_lms_gutenberg_block_styles() {
 	wp_enqueue_style( 'stm_lms_icons', STM_LMS_URL . 'assets/icons/style.css', null, STM_LMS_VERSION );
-	wp_enqueue_style( 'font-awesome-min', STM_LMS_URL . 'assets/vendors/font-awesome.min.css', null, STM_LMS_VERSION, 'all' );
 	wp_enqueue_style( 'linear', STM_LMS_URL . 'libraries/nuxy/taxonomy_meta/assets/linearicons/linear.css', null, STM_LMS_VERSION, 'all' );
 }
 
@@ -81,6 +80,7 @@ function stm_lms_add_theme_caps() {
 			$user->add_cap( 'delete_elementor_libraries' );
 			$user->add_cap( 'delete_others_elementor_libraries' );
 			$user->add_cap( 'read_elementor_libraries' );
+			$user->add_cap( 'publish_elementor_libraries' );
 		}
 	}
 
@@ -97,9 +97,9 @@ function stm_lms_add_theme_caps() {
 			$user->add_cap( 'edit_elementor_libraries' );
 			$user->add_cap( 'delete_elementor_libraries' );
 			$user->add_cap( 'read_elementor_libraries' );
+			$user->add_cap( 'publish_elementor_libraries' );
 		}
 	}
-
 }
 add_action( 'init', 'stm_lms_add_theme_caps' );
 
@@ -123,7 +123,7 @@ function masterstudy_lms_addons_dynamic_url( $addon_key ) {
 
 add_action(
 	'wp_ajax_stm_lms_hide_announcement',
-	function() {
+	function () {
 		check_ajax_referer( 'stm_lms_hide_announcement', 'nonce' );
 		set_transient( 'stm_lms_app_notice', '1', MONTH_IN_SECONDS );
 	}
@@ -157,7 +157,6 @@ add_action(
 			set_transient( 'stm_masterstudy-lms-learning-management-system_single_notice_setting', $data );
 			update_option( 'stm_lms_course_created', true );
 		}
-
 	},
 	20,
 	3
@@ -294,7 +293,7 @@ add_action(
 function stm_lms_route_trash_page_handler( $post_id ) {
 	if ( get_post_type( $post_id ) === 'page' ) {
 		$settings = get_option( 'stm_lms_settings', array() );
-		$pages    = array( 'user_url', 'instructor_url_profile', 'student_url_profile', 'wishlist_url', 'checkout_url' );
+		$pages    = array( 'user_url', 'instructor_url_profile', 'student_url_profile', 'wishlist_url', 'checkout_url', 'memberships_url' );
 
 		foreach ( $pages as $page ) {
 			if ( isset( $settings[ $page ] ) && intval( $settings[ $page ] ) === $post_id ) {

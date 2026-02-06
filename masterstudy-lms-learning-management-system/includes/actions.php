@@ -196,6 +196,10 @@ function masterstudy_remove_admin_notices() {
 		'analytics_page_users',
 		'analytics_page_reviews',
 		'toplevel_page_grades',
+		'masterstudy_page_manage_orders',
+		'masterstudy_page_manage_memberships',
+		'masterstudy_page_manage_membership_plans',
+		'masterstudy_page_manage_coupons',
 	);
 
 	if ( in_array( $screen->id, $pages, true ) ) {
@@ -225,7 +229,7 @@ add_action( 'admin_head', 'masterstudy_remove_admin_notices' );
  */
 add_action(
 	'woocommerce_order_status_completed',
-	function( $order_id ) {
+	function ( $order_id ) {
 		$order   = wc_get_order( $order_id );
 		$user_id = $order->get_user_id();
 
@@ -268,7 +272,7 @@ function masterstudy_add_orders_page() {
 		'manage_options',
 		'manage_orders',
 		fn () => STM_LMS_Templates::show_lms_template( 'orders' ),
-		8
+		stm_lms_addons_menu_position()
 	);
 }
 

@@ -7,10 +7,10 @@
       $(this).closest('.masterstudy-membership-modal').removeClass('active');
       $(this).closest('.masterstudy-membership-modal').find('.masterstudy-membership-modal__wrapper').removeClass('active');
     });
-    $('[data-masterstudy-modal]').on('click', function (e) {
+    $('[data-masterstudy-modal="masterstudy-membership-modal"]').on('click', function (e) {
       e.preventDefault();
       var modalName = $(this).data('masterstudy-modal');
-      $('.masterstudy-buy-button_plans-dropdown').css('transform', 'none');
+      $('.masterstudy-buy-button-dropdown').css('transform', 'none');
       $(".".concat(modalName)).addClass('active');
       setTimeout(function () {
         $(".".concat(modalName, " .masterstudy-membership-modal__wrapper")).addClass('active');

@@ -279,22 +279,24 @@ final class StudentsRepository {
 	}
 
 	public function add_student( $course_id, $data ) {
-		$course_id          = intval( $course_id );
-		$user               = get_user_by( 'email', $data['email'] );
+		$course_id          = (int) $course_id;
+		$email              = sanitize_email( $data['email'] ?? '' );
+		$user               = $email ? get_user_by( 'email', $email ) : false;
 		$is_enrolled        = false;
 		$is_enrolled_before = false;
 
 		if ( $user ) {
 			$course             = \STM_LMS_Course::get_user_course( $user->ID, $course_id );
-			$is_enrolled_before = ! empty( $course ) && intval( $course['course_id'] ) === $course_id;
+			$is_enrolled_before = ! empty( $course ) && (int) $course['course_id'] === $course_id;
 		}
 
-		$added = \STM_LMS_Instructor::add_student_to_course( array( $course_id ), array( $data['email'] ) );
+		$added = \STM_LMS_Instructor::add_student_to_course( array( $course_id ), array( $email ) );
 
-		if ( ! $added['error'] ) {
-			$first_name  = sanitize_text_field( trim( $user_data['first_name'] ?? '' ) );
-			$last_name   = sanitize_text_field( trim( $user_data['last_name'] ?? '' ) );
-			$user        = get_user_by( 'email', $data['email'] );
+		if ( empty( $added['error'] ) ) {
+			$first_name = sanitize_text_field( trim( (string) ( $data['first_name'] ?? '' ) ) );
+			$last_name  = sanitize_text_field( trim( (string) ( $data['last_name'] ?? '' ) ) );
+
+			$user        = get_user_by( 'email', $email );
 			$is_enrolled = true;
 
 			if ( $user && ( $first_name || $last_name ) ) {
@@ -303,17 +305,103 @@ final class StudentsRepository {
 						'ID'           => $user->ID,
 						'first_name'   => $first_name,
 						'last_name'    => $last_name,
-						'display_name' => "$first_name $last_name",
+						'display_name' => trim( $first_name . ' ' . $last_name ),
 					)
 				);
 			}
 		}
 
 		return array(
-			'email'              => $data['email'],
+			'email'              => $email,
 			'student_id'         => $user ? $user->ID : 0,
 			'is_enrolled'        => $is_enrolled,
 			'is_enrolled_before' => $is_enrolled_before,
+		);
+	}
+
+	public function add_students_bulk( int $course_id, array $students ): array {
+		$emails_map = array(); // email => student row.
+		foreach ( $students as $row ) {
+			$email = sanitize_email( $row['email'] ?? '' );
+			if ( empty( $email ) ) {
+				continue;
+			}
+			$emails_map[ $email ] = $row; // de-duplicate by email.
+		}
+
+		$emails = array_keys( $emails_map );
+		if ( empty( $emails ) ) {
+			return array(
+				'added'   => array(),
+				'failed'  => array(),
+				'total'   => 0,
+				'message' => 'No valid emails found.',
+			);
+		}
+
+		// Detect already-enrolled BEFORE adding.
+		$enrolled_before = array();
+		foreach ( $emails as $email ) {
+			$user = get_user_by( 'email', $email );
+			if ( ! $user ) {
+				continue;
+			}
+			$course = \STM_LMS_Course::get_user_course( $user->ID, $course_id );
+			if ( ! empty( $course ) && (int) $course['course_id'] === $course_id ) {
+				$enrolled_before[ $email ] = true;
+			}
+		}
+
+		$added = \STM_LMS_Instructor::add_student_to_course( array( $course_id ), $emails );
+
+		// If the LMS function returns per-email errors, map them; otherwise treat as success.
+		$failed = array();
+		if ( ! empty( $added['error'] ) && ! empty( $added['errors'] ) && is_array( $added['errors'] ) ) {
+			$failed = $added['errors'];
+		}
+
+		$results = array();
+		foreach ( $emails as $email ) {
+			if ( isset( $failed[ $email ] ) ) {
+				$results[] = array(
+					'email'              => $email,
+					'student_id'         => 0,
+					'is_enrolled'        => false,
+					'is_enrolled_before' => ! empty( $enrolled_before[ $email ] ),
+					'error'              => (string) $failed[ $email ],
+				);
+				continue;
+			}
+
+			$user = get_user_by( 'email', $email );
+
+			// Update names if provided.
+			$row        = $emails_map[ $email ];
+			$first_name = sanitize_text_field( trim( (string) ( $row['first_name'] ?? '' ) ) );
+			$last_name  = sanitize_text_field( trim( (string) ( $row['last_name'] ?? '' ) ) );
+
+			if ( $user && ( $first_name || $last_name ) ) {
+				wp_update_user(
+					array(
+						'ID'           => $user->ID,
+						'first_name'   => $first_name,
+						'last_name'    => $last_name,
+						'display_name' => trim( $first_name . ' ' . $last_name ),
+					)
+				);
+			}
+
+			$results[] = array(
+				'email'              => $email,
+				'student_id'         => $user ? $user->ID : 0,
+				'is_enrolled'        => true,
+				'is_enrolled_before' => ! empty( $enrolled_before[ $email ] ),
+			);
+		}
+
+		return array(
+			'total' => count( $results ),
+			'added' => $results,
 		);
 	}
 
@@ -336,7 +424,7 @@ final class StudentsRepository {
 		}
 
 		if ( class_exists( 'STM_LMS_Mails' ) ) {
-			$user            = \STM_LMS_User::get_current_user( $student_id );
+			$user            = \STM_LMS_User::get_current_user( \STM_LMS_Helpers::masterstudy_lms_get_user_by_email( $user_email ) );
 			$user_login      = $user['login'];
 			$course_title    = get_the_title( $course_id );
 			$instructor_name = \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( \STM_LMS_User::get_current_user()['id'] );
@@ -664,6 +752,9 @@ final class StudentsRepository {
 		$certificates = array();
 
 		foreach ( $courses as $course ) {
+			if ( ! masterstudy_lms_course_has_certificate( $course['course_id'] ) ) {
+				continue;
+			}
 			$course_terms    = wp_get_post_terms( $course['course_id'], 'stm_lms_course_taxonomy', array( 'fields' => 'ids' ) );
 			$categories_list = implode( ',', array_map( 'intval', $course_terms ) );
 

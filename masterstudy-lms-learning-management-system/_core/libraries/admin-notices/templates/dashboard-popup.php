@@ -28,7 +28,7 @@ $img = empty($thumbnail_url) ? 'not-image' : ''
 				<?php echo esc_html( $post_title ); ?>
 			</div>
 			<div class="popup-dash-desc">
-				<?php echo $post_content; ?>
+				<?php echo wp_kses_post( $post_content ); ?>
 			</div>
 			<div class="popup-dash-actions">
 				<?php if ( !empty( $button_text_post ) ) { ?>

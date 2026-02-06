@@ -3,7 +3,7 @@ function stm_lms_settings_course_player_section() {
 	$course_player_settings = array(
 		'name'  => esc_html__( 'Course Player', 'masterstudy-lms-learning-management-system' ),
 		'label' => esc_html__( 'Course Player Settings', 'masterstudy-lms-learning-management-system' ),
-		'icon'  => 'fas fa-chalkboard-teacher',
+		'icon'  => 'stmlms-chalkboard-teacher',
 	);
 
 	$course_player_primary_fields = array(

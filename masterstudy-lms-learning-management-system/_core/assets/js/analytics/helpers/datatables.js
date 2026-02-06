@@ -139,8 +139,17 @@ function updateDataTable(table, selector, loaders, currentRoute, pageData, dataS
         }
       };
       lessonsData.forEach(function (item) {
+        var lesson_type = item.lesson_type;
+        switch (lesson_type) {
+          case 'zoom conference':
+            lesson_type = 'zoom_conference';
+            break;
+          case 'assignment':
+            lesson_type = 'assignments';
+            break;
+        }
         pageData.push({
-          title: '<img src="' + table_data.img_route + '/assets/icons/lessons/' + item.lesson_type + '.svg' + '" class="masterstudy-datatables-lesson-icon"></img>' + item.lesson_name,
+          title: '<img src="' + table_data.img_route + '/assets/icons/lessons/' + lesson_type + '.svg' + '" class="masterstudy-datatables-lesson-icon"></img>' + item.lesson_name,
           data: item.lesson_id,
           orderable: false,
           tooltip: item.lesson_name,

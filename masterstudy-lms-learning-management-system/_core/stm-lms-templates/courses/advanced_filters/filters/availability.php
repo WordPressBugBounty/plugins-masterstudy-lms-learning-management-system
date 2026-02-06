@@ -25,7 +25,7 @@ $statuses     = array(
 						?>
 							value="<?php echo esc_html( $status ); ?>"
 							name="availability"/>
-						<span><i class="fa fa-check"></i> </span>
+						<span><i class="stmlms-check-3"></i> </span>
 					</span>
 					<span><?php echo esc_html( $status_label ); ?></span>
 				</label>

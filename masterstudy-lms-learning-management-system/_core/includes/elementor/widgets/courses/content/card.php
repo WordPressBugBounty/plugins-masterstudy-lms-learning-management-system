@@ -79,11 +79,13 @@ $this->add_control(
 		'type' => Controls_Manager::DIVIDER,
 	)
 );
+
+$is_featured_enabled = STM_LMS_Options::get_option( 'enable_featured_courses', true );
 $this->add_switcher_control(
 	'show_featured_block',
 	array(
 		'label'      => esc_html__( 'Featured Block', 'masterstudy-lms-learning-management-system' ),
-		'default'    => 'yes',
+		'default'    => $is_featured_enabled ? 'yes' : '',
 		'conditions' => $this->add_widget_type_conditions( array( 'courses-archive' ) ),
 	)
 );

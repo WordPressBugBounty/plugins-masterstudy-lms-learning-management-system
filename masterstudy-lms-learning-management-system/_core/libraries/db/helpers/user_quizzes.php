@@ -96,7 +96,7 @@ function stm_lms_get_user_last_quiz( $user_id, $quiz_id, $fields = array(), $cou
 	$select_fields = empty( $fields ) ? 'main.*' : implode(
 		', ',
 		array_map(
-			function( $field ) {
+			function ( $field ) {
 				$field = esc_sql( $field );
 				return str_starts_with( $field, 'main.' ) ? $field : "main.{$field}";
 			},
@@ -426,7 +426,7 @@ function stm_lms_get_attempt( int $attempt_id, int $user_id, int $quiz_id = 0, i
 		return array();
 	}
 
-	$answers_request = "SELECT question_id, user_answer, correct_answer FROM {$answers}
+	$answers_request = "SELECT question_id, user_answer, correct_answer, questions_order FROM {$answers}
 		WHERE user_id = %d AND quiz_id = %d AND course_id = %d AND attempt_number = %d";
 
 	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -437,9 +437,10 @@ function stm_lms_get_attempt( int $attempt_id, int $user_id, int $quiz_id = 0, i
 		foreach ( $answers_data as $answer_row ) {
 			if ( isset( $answer_row['question_id'] ) ) {
 				$answers_array[ $answer_row['question_id'] ] = array(
-					'question_id'    => $answer_row['question_id'],
-					'user_answer'    => $answer_row['user_answer'],
-					'correct_answer' => $answer_row['correct_answer'],
+					'question_id'     => $answer_row['question_id'],
+					'user_answer'     => $answer_row['user_answer'],
+					'correct_answer'  => $answer_row['correct_answer'],
+					'questions_order' => $answer_row['questions_order'],
 				);
 			}
 		}

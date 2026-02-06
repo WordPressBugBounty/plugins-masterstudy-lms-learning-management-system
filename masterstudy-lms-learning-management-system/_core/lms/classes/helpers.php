@@ -1,5 +1,8 @@
 <?php
 
+use MasterStudy\Lms\Plugin\Addons;
+use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository;
+
 STM_LMS_Helpers::init();
 
 class STM_LMS_Helpers {
@@ -128,7 +131,7 @@ class STM_LMS_Helpers {
 	public static function stm_rgba_change_alpha_dynamically( $color, $alpha ) {
 		$is_comma = false;
 		$rgb      = '';
-		for ( $i = strlen( $color ) - 1; $i >= 0; $i -- ) {
+		for ( $i = strlen( $color ) - 1; $i >= 0; $i-- ) {
 			if ( $is_comma ) {
 				$rgb = $color[ $i ] . $rgb;
 			}
@@ -209,6 +212,13 @@ class STM_LMS_Helpers {
 		return true;
 	}
 
+	public static function taxes_display() {
+		return array(
+			'enabled'  => STM_LMS_Cart::woocommerce_checkout_enabled() || ! self::is_pro_plus() ? false : STM_LMS_Options::get_option( 'taxes_enabled', false ),
+			'included' => 'included' === STM_LMS_Options::get_option( 'taxes_display', 'excluded' ),
+		);
+	}
+
 	public static function display_price( $price ) {
 		if ( ! isset( $price ) ) {
 			return '';
@@ -232,6 +242,143 @@ class STM_LMS_Helpers {
 		} else {
 			return $price . $symbol;
 		}
+	}
+
+	public static function display_price_with_taxes( $price, $user_id = null, $only_value = false ) {
+		if ( '' === $price || null === $price ) {
+			return '';
+		}
+
+		$base_price = (float) $price;
+
+		if ( ! is_user_logged_in() || STM_LMS_Cart::woocommerce_checkout_enabled() ) {
+			return $only_value ? (float) $base_price : self::display_price( $base_price );
+		}
+
+		$taxes_display = self::taxes_display();
+
+		if ( ! $taxes_display['enabled'] ) {
+			return $only_value ? (float) $base_price : self::display_price( $base_price );
+		}
+
+		$personal_info = get_user_meta( $user_id ? (int) $user_id : get_current_user_id(), 'masterstudy_personal_data', true );
+		$personal_data = is_array( $personal_info ) ? $personal_info : array();
+		$rate          = self::get_tax_rate_for_personal_data( $personal_data );
+
+		if ( $rate <= 0 ) {
+			return $only_value ? (float) $base_price : self::display_price( $base_price );
+		}
+
+		$total_price = ! $taxes_display['included'] ? $base_price + ( $base_price * $rate / 100 ) : $base_price;
+
+		return $only_value ? (float) $total_price : self::display_price( $total_price );
+	}
+
+	public static function get_tax_rate_for_personal_data( array $personal_data ): float {
+		$taxes_display = self::taxes_display();
+
+		if ( ! $taxes_display['enabled'] ) {
+			return 0.0;
+		}
+
+		$country    = strtoupper( (string) ( $personal_data['country'] ?? '' ) );
+		$user_state = strtoupper( (string) ( $personal_data['state'] ?? '' ) );
+
+		if ( '' === $country ) {
+			return 0.0;
+		}
+
+		$name_to_code = array();
+		$states       = masterstudy_lms_all_us_states();
+
+		if ( 'US' === $country && ! empty( $states ) ) {
+			foreach ( $states as $st ) {
+				$code = strtoupper( (string) ( $st['code'] ?? '' ) );
+				$name = strtoupper( (string) ( $st['name'] ?? '' ) );
+				if ( $code && $name ) {
+					$name_to_code[ $name ] = $code;
+				}
+			}
+
+			if ( $user_state && isset( $name_to_code[ $user_state ] ) ) {
+				$user_state = $name_to_code[ $user_state ];
+			}
+		}
+
+		$tax_entries  = (array) STM_LMS_Options::get_option( 'taxes', array() );
+		$chosen_rate  = null;
+		$country_rate = null;
+
+		foreach ( $tax_entries as $entry ) {
+			if ( ! is_array( $entry ) ) {
+				continue;
+			}
+
+			$entry_country = strtoupper( (string) ( $entry['country'] ?? '' ) );
+
+			if ( $entry_country !== $country ) {
+				continue;
+			}
+
+			$region = strtoupper( trim( (string) ( $entry['region'] ?? '' ) ) );
+			$rate   = isset( $entry['rate'] ) ? (float) $entry['rate'] : 0.0;
+
+			if ( 'US' === $country ) {
+				if ( '' !== $region ) {
+					if ( isset( $name_to_code[ $region ] ) ) {
+						$region = $name_to_code[ $region ];
+					}
+					if ( '' !== $user_state && $region === $user_state ) {
+						$chosen_rate = $rate;
+						break;
+					}
+				} else {
+					$country_rate = $rate;
+				}
+			} elseif ( '' === $region ) {
+					$country_rate = $rate;
+			}
+		}
+
+		if ( null !== $chosen_rate ) {
+			return (float) $chosen_rate;
+		}
+
+		if ( null !== $country_rate ) {
+			return (float) $country_rate;
+		}
+
+		return 0.0;
+	}
+
+	public static function display_taxes_amount( float $subtotal, $user_id = null, $only_value = false ) {
+		if ( $subtotal <= 0 ) {
+			return $only_value ? 0.0 : self::display_price( 0 );
+		}
+
+		$taxes_display = self::taxes_display();
+
+		if ( empty( $taxes_display['enabled'] ) ) {
+			return $only_value ? 0.0 : self::display_price( 0 );
+		}
+
+		if ( ! is_user_logged_in() || STM_LMS_Cart::woocommerce_checkout_enabled() ) {
+			return $only_value ? 0.0 : self::display_price( 0 );
+		}
+
+		$personal_info = get_user_meta( $user_id ? (int) $user_id : get_current_user_id(), 'masterstudy_personal_data', true );
+		$personal_data = is_array( $personal_info ) ? $personal_info : array();
+		$rate          = (float) self::get_tax_rate_for_personal_data( $personal_data );
+
+		if ( $rate <= 0 ) {
+			return $only_value ? 0.0 : self::display_price( 0 );
+		}
+
+		$taxes = ! empty( $taxes_display['included'] )
+			? ( $subtotal * $rate / ( 100.0 + $rate ) )
+			: ( $subtotal * $rate / 100.0 );
+
+		return $only_value ? (float) $taxes : self::display_price( $taxes );
 	}
 
 	// TODO replace with CourseRepository::SORT_MAPPING
@@ -562,7 +709,7 @@ class STM_LMS_Helpers {
 		if ( $posts ) {
 			foreach ( $posts as $post ) {
 				$data[ $post->ID ] = $post->post_title;
-			};
+			}
 		}
 
 		if ( $as_array ) {
@@ -618,6 +765,33 @@ class STM_LMS_Helpers {
 		return $user_levels;
 	}
 
+	private static function translations_for_statuses(): array {
+		return array(
+			'Hot'     => esc_html__( 'Hot', 'masterstudy-lms-learning-management-system' ),
+			'New'     => esc_html__( 'New', 'masterstudy-lms-learning-management-system' ),
+			'Special' => esc_html__( 'Special', 'masterstudy-lms-learning-management-system' ),
+		);
+	}
+
+	public static function get_course_statuses(): array {
+		$statuses      = STM_LMS_Options::get_option( 'course_statuses_config', array() );
+		$translations  = self::translations_for_statuses();
+		$user_statuses = array();
+		if ( ! empty( $statuses ) ) {
+			foreach ( $statuses as $status ) {
+				if ( empty( $status['id'] ) || empty( $status['label'] ) ) {
+					continue;
+				}
+
+				$status['label'] = $translations[ $status['label'] ] ?? $status['label'];
+
+				$user_statuses[ $status['id'] ] = $status;
+			}
+		}
+
+		return empty( $user_statuses ) ? array() : $user_statuses;
+	}
+
 	public static function is_stripe_enabled() {
 		$payment = STM_LMS_Options::get_option( 'payment_methods' );
 
@@ -647,7 +821,7 @@ class STM_LMS_Helpers {
 		if ( is_array( $array ) ) {
 			return array_filter(
 				$array,
-				function( $item ) {
+				function ( $item ) {
 					if ( is_string( $item ) ) {
 						$item = sanitize_text_field( $item );
 					} elseif ( is_numeric( $item ) ) {
@@ -718,10 +892,9 @@ class STM_LMS_Helpers {
 		return in_array( $active_theme, $themes, true );
 	}
 
-	public static function masterstudy_lms_check_membership_status( $user_id, $course, $course_id, $isMultiple ) {
-		$course                 = $isMultiple ? ( is_array( $course ) && ! empty( $course ) ? $course[0] : $course ) : $course;
+	public static function masterstudy_lms_check_membership_status( $user_id, $course, $course_id, $is_multiple ) {
+		$course                 = $is_multiple ? ( is_array( $course ) && ! empty( $course ) ? $course[0] : $course ) : $course;
 		$author_id              = get_post_field( 'post_author', $course_id );
-		$subscription_enabled   = STM_LMS_Subscriptions::subscription_enabled();
 		$in_enterprise          = STM_LMS_Order::is_purchased_by_enterprise( $course, $user_id );
 		$my_course              = intval( $author_id ) === intval( $user_id );
 		$is_free                = ( get_post_meta( $course_id, 'single_sale', true ) && empty( STM_LMS_Course::get_course_price( $course_id ) ) );
@@ -731,14 +904,14 @@ class STM_LMS_Helpers {
 		$bought_by_membership   = ! empty( $course['subscription_id'] );
 		$not_in_membership      = get_post_meta( $course_id, 'not_membership', true );
 		$only_for_membership    = ! $not_in_membership && ! $is_bought && ! $is_free && ! $in_enterprise && ! $in_bundle && ! $for_points;
-		$membership_level       = $subscription_enabled && STM_LMS_Subscriptions::user_has_subscription( $user_id );
-		$no_membership_plan     = $subscription_enabled && ! $membership_level && $only_for_membership && ! $my_course && $bought_by_membership;
+		$membership_level       = STM_LMS_Subscriptions::user_has_subscription( $user_id );
+		$no_membership_plan     = ! $membership_level && $only_for_membership && ! $my_course && $bought_by_membership;
 		$course_subscription_id = $course['subscription_id'] ?? 0;
 		$membership_info        = STM_LMS_Subscriptions::get_membership_status_by_course( $user_id, $course_subscription_id );
 
 		$with_membership     = $only_for_membership && ! $my_course && $bought_by_membership;
-		$membership_expired  = $subscription_enabled && $membership_info['membership_expired'] && $with_membership;
-		$membership_inactive = $subscription_enabled && $membership_info['membership_inactive'] && $with_membership;
+		$membership_expired  = $membership_info['membership_expired'] && $with_membership;
+		$membership_inactive = $membership_info['membership_inactive'] && $with_membership;
 
 		return array(
 			'membership_expired'  => $membership_expired,
@@ -757,8 +930,8 @@ class STM_LMS_Helpers {
 		}
 
 		// Fallback, should not normally be needed
-		$protocol = ( is_ssl() ? 'https://' : 'http://' );
-		$host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
+		$protocol    = ( is_ssl() ? 'https://' : 'http://' );
+		$host        = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
 		$request_uri = $_SERVER['REQUEST_URI'] ?? '/';
 		return $protocol . $host . $request_uri;
 	}
@@ -935,5 +1108,86 @@ class STM_LMS_Helpers {
 		);
 
 		return str_replace( $search, $replace, $footer_copyrights );
+	}
+
+	public static function get_sort_params_by_string( string $sort ): array {
+		$direction = 'ASC';
+		$sort_key  = $sort;
+		if ( '-' === $sort[0] ) {
+			$direction = 'DESC';
+			$sort_key  = substr( $sort, 1 );
+		}
+
+		return array(
+			'key'       => $sort_key,
+			'direction' => $direction,
+		);
+	}
+
+	public static function masterstudy_lms_get_checkout_header_text( $items ) {
+		$title = esc_html__( 'Order items', 'masterstudy-lms-learning-management-system' );
+
+		if ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
+			foreach ( $items as $item ) {
+				if ( $item['is_subscription'] ) {
+					$subscription = ( new SubscriptionPlanRepository() )->get( $item['item_id'] );
+					$title        = esc_html__( 'Membership Plan', 'masterstudy-lms-learning-management-system' );
+
+					if ( 'course' === $subscription['type'] ) {
+						$title = ( ! empty( $subscription['billing_cycles'] ) && $subscription['billing_cycles'] > 0 )
+							? esc_html__( 'Course Payment Plan', 'masterstudy-lms-learning-management-system' )
+							: esc_html__( 'Course Subscription', 'masterstudy-lms-learning-management-system' );
+					}
+				}
+			}
+		}
+
+		return $title;
+	}
+	public static function masterstudy_lms_get_subscription_interval_label( $recurring_interval ) {
+		$interval_label = 'monthly payments';
+
+		if ( ! empty( $recurring_interval ) ) {
+			switch ( $recurring_interval ) {
+				case 'day':
+					$interval_label = esc_html__( 'daily payments', 'masterstudy-lms-learning-management-system' );
+					break;
+				case 'week':
+					$interval_label = esc_html__( 'weekly payments', 'masterstudy-lms-learning-management-system' );
+					break;
+				case 'month':
+					$interval_label = esc_html__( 'monthly payments', 'masterstudy-lms-learning-management-system' );
+					break;
+				case 'year':
+					$interval_label = esc_html__( 'yearly payments', 'masterstudy-lms-learning-management-system' );
+					break;
+			}
+		}
+
+		return $interval_label;
+	}
+
+	public static function enqueue_font_awesome_icons() {
+		$elementor_main = WP_PLUGIN_DIR . '/elementor/elementor.php';
+		$wpbakery       = WP_PLUGIN_DIR . '/js_composer/js_composer.php';
+		$base           = STM_LMS_URL . 'libraries/nuxy/metaboxes/assets/'; // Rewrite STM_WPCFTO_URL
+
+		if ( file_exists( $elementor_main ) || file_exists( $wpbakery ) ) {
+			wp_enqueue_style( 'font-awesome-min', $base . 'vendors/font-awesome.min.css', null, MS_LMS_VERSION );
+		}
+	}
+
+	public static function is_coupons_enabled(): bool {
+		return self::is_pro_plus() && STM_LMS_Options::get_option( 'enable_coupon_code', false );
+	}
+
+	public static function calculate_coupon_discount( float $price, $coupon_value, string $coupon_type ): float {
+		if ( 'percent' === $coupon_type ) {
+			$discount = round( ( $price * (float) $coupon_value ) / 100, 2 );
+		} else {
+			$discount = $coupon_value;
+		}
+
+		return $discount;
 	}
 }

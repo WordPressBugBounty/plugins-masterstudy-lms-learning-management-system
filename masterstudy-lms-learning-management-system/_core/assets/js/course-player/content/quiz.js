@@ -1,5 +1,9 @@
 "use strict";
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
@@ -98,6 +102,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       if ($('.masterstudy-course-player-question__content').find('.masterstudy-course-player-image-match').length > 0) {
         initializeImageMatch();
       }
+      if ($('.masterstudy-course-player-question__content').find('.masterstudy-course-player-sortable').length > 0) {
+        initializeSortable();
+      }
+      $('.masterstudy-course-player-fill-the-gap__questions ').on('input', 'input', function () {
+        var _$$val;
+        var val = (_$$val = $(this).val()) !== null && _$$val !== void 0 ? _$$val : '';
+        var minWidth = this.style.minWidth.replace(/\D+/, '');
+        $(this).css('width', "".concat(Math.max(Number(minWidth), val.length * 8 + 16), "px"));
+      });
       $('.masterstudy-course-player-content__wrapper').scrollTop(0);
       startQuiz();
     });
@@ -211,6 +224,107 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       e.preventDefault();
       $("[data-id='quiz_alert']").removeClass('masterstudy-alert_open');
     });
+    function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var _ref = [array[j], array[i]];
+        array[i] = _ref[0];
+        array[j] = _ref[1];
+      }
+      return array;
+    }
+    function randomizeAnswersOnRetake() {
+      $('input[name^="order_"]').each(function (_, el) {
+        var val = JSON.parse($(el).attr('value'));
+        var id = $(el).attr('name').split('_')[1];
+        var shuffledArray = shuffleArray(val);
+        var question = $("[data-question-id=\"".concat(id, "\"]"));
+        var container = question.find('.masterstudy-course-player-question__content');
+        var questionAnswers = container.find('.masterstudy-course-player-answer');
+        var isItemMatch = !!container.find('.masterstudy-course-player-item-match').length;
+        var isImageMatch = !!container.find('.masterstudy-course-player-image-match').length;
+        var isSortable = !!container.find('.masterstudy-course-player-sortable').length;
+        if (isSortable) return;
+        if (isItemMatch) {
+          var elMap = {};
+          var answerContainer = container.find('.masterstudy-course-player-item-match__answer');
+          var itemMatchContainer = container.find('.masterstudy-course-player-item-match');
+          var questionQuestions = container.find('.masterstudy-course-player-item-match__question');
+          questionQuestions.each(function (idx, questionEl) {
+            var questionVal = $(questionEl).find('.masterstudy-course-player-item-match__question-content');
+            if (questionVal) {
+              questionVal = questionVal.text().trim();
+              var answer = questionAnswers[idx];
+              elMap[questionVal] = {
+                question: $(this),
+                answer: answer
+              };
+            }
+          });
+          questionAnswers.detach();
+          questionQuestions.detach();
+          _toConsumableArray(shuffledArray).reverse().forEach(function (val) {
+            if (elMap[val]) {
+              itemMatchContainer.prepend(elMap[val].question);
+            }
+          });
+          shuffledArray.forEach(function (val) {
+            if (elMap[val]) {
+              answerContainer.append(elMap[val].answer);
+            }
+          });
+        } else if (isImageMatch) {
+          var _elMap = {};
+          var _answerContainer = container.find('.masterstudy-course-player-image-match__answer');
+          var imageMatchContainer = container.find('.masterstudy-course-player-image-match');
+          var _questionQuestions = container.find('.masterstudy-course-player-image-match__question');
+          _questionQuestions.each(function (idx, questionEl) {
+            var questionVal = $(questionEl).find('.masterstudy-course-player-image-match__question-content img');
+            if (questionVal) {
+              questionVal = $(questionVal).attr('data-image-id');
+              var answer = questionAnswers[idx];
+              _elMap[questionVal] = {
+                question: $(this),
+                answer: answer
+              };
+            }
+          });
+          questionAnswers.detach();
+          _questionQuestions.detach();
+          _toConsumableArray(shuffledArray).reverse().forEach(function (val) {
+            if (_elMap[val]) {
+              imageMatchContainer.prepend(_elMap[val].question);
+            }
+          });
+          shuffledArray.forEach(function (val) {
+            if (_elMap[val]) {
+              _answerContainer.append(_elMap[val].answer);
+            }
+          });
+        } else {
+          var answersMap = {};
+          questionAnswers.each(function (_, answerEl) {
+            var answerVal = $(answerEl).find('.masterstudy-course-player-answer__text');
+            if (answerVal) {
+              var mathJax = $(answerVal).find('script[type^="math/tex"]');
+              if (mathJax.length) {
+                answerVal = "$$".concat(mathJax.text().trim(), "$$");
+              } else {
+                answerVal = answerVal.text().trim();
+              }
+              answersMap[answerVal] = $(this);
+            }
+          });
+          questionAnswers.detach();
+          shuffledArray.forEach(function (val) {
+            if (answersMap[val]) {
+              container.append(answersMap[val]);
+            }
+          });
+        }
+        $(el).attr('value', JSON.stringify(shuffledArray));
+      });
+    }
 
     // retake quiz
     $('.masterstudy-course-player-quiz__result-retake .masterstudy-button').click(function () {
@@ -223,9 +337,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var wrongStatus = container.find('.masterstudy-course-player-answer__status-wrong');
       var correctStatus = container.find('.masterstudy-course-player-answer__status-correct');
       var itemMatchAnswers = container.find('.masterstudy-course-player-item-match');
+      var sortableAnswers = container.find('.masterstudy-course-player-sortable');
       var imageMatchAnswers = container.find('.masterstudy-course-player-image-match');
       var fillTheGap = container.find('.masterstudy-course-player-fill-the-gap');
       var keywords = container.find('.masterstudy-course-player-quiz-keywords');
+      if (quiz_data.random_answers === '1') {
+        randomizeAnswersOnRetake();
+      }
 
       // hide unnecessary blocks
       quizForm.removeClass('masterstudy-course-player-quiz__form_hide');
@@ -253,6 +371,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         itemMatchAnswers.find('.masterstudy-course-player-item-match__question').removeClass('masterstudy-course-player-item-match__question_correct masterstudy-course-player-item-match__question_wrong masterstudy-course-player-item-match__question_full');
         itemMatchAnswers.find('.masterstudy-course-player-item-match__input').val('').attr('value', '');
         initializeItemMatch();
+      }
+      if (sortableAnswers.length > 0) {
+        sortableAnswers.removeClass('masterstudy-course-player-sortable_not-drag');
+        sortableAnswers.find('.masterstudy-course-player-sortable__answer-item').removeClass('masterstudy-course-player-sortable__answer-item_correct');
+        sortableAnswers.find('.masterstudy-course-player-sortable__answer-item').removeClass('masterstudy-course-player-sortable__answer-item_wrong');
+        sortableAnswers.find('.masterstudy-course-player-sortable__answer-item-number').remove();
+        sortableAnswers.find('.masterstudy-course-player-sortable__answer-item-actions').remove();
+        sortableAnswers.find('.masterstudy-course-player-sortable__input').val('').attr('value', '');
+        initializeSortable();
       }
 
       // reset Image Match answers
@@ -433,6 +560,57 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           }
         }).addClass(questionClass);
       });
+    }
+    function initializeSortable() {
+      $('.masterstudy-course-player-sortable:not(.masterstudy-course-player-sortable_not-drag)').each(function (index) {
+        var questionClass = 'item_drag_' + index;
+        var $list = $(this).find('.masterstudy-course-player-sortable__answer');
+        shuffleChildren($list);
+        updateOrderingInput($list);
+        $list.addClass(questionClass).sortable({
+          axis: 'y',
+          containment: 'parent',
+          helper: 'clone',
+          tolerance: 'pointer',
+          start: function start(event, ui) {
+            $(ui.helper).css('cursor', 'grabbing');
+          },
+          stop: function stop(event, ui) {
+            $(ui.helper).css('cursor', 'grab');
+            updateOrderingInput($list);
+          },
+          update: function update(event, ui) {
+            updateOrderingInput($list);
+          }
+        });
+      });
+      function shuffleChildren($container) {
+        var $children = $container.children().get();
+        $children.sort(function () {
+          return Math.random() - 0.5;
+        });
+        $.each($children, function (_, child) {
+          $container.append(child);
+        });
+      }
+      function updateOrderingInput($list) {
+        var items = [];
+        var $questionBlock = $list.closest('.masterstudy-course-player-sortable');
+        var $input = $questionBlock.find('.masterstudy-course-player-sortable__input');
+        $list.find('.masterstudy-course-player-sortable__answer-item-content').each(function () {
+          var $slot = $(this);
+          var mathScript = $slot.find('script[type^="math/tex"]');
+          var item;
+          if (mathScript.length) {
+            item = "$$".concat(mathScript.text().trim(), "$$");
+          } else {
+            item = $slot.text().trim();
+          }
+          items.push(item);
+        });
+        var sortable_val = '[stm_lms_sortable]' + items.join('[stm_lms_sep]');
+        $input.val(sortable_val).trigger('change');
+      }
     }
     function initializeImageMatch() {
       $('.masterstudy-course-player-image-match:not(.masterstudy-course-player-image-match_not-drag)').each(function (index) {

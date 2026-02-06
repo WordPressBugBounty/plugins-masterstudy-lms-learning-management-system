@@ -10,6 +10,7 @@ $shortcodes = array(
 	'stm_lms_courses_categories',
 	'stm_lms_featured_teacher',
 	'masterstudy_authorization',
+	'masterstudy_membership_pricing',
 );
 
 foreach ( $shortcodes as $shortcode ) {

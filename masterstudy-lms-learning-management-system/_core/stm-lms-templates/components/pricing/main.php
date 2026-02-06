@@ -7,7 +7,7 @@
  * @var float $price
  * @var string $price_info
  * @var bool $show_price_info
- *
+ * @var int $bundle_id
  */
 
 wp_enqueue_style( 'masterstudy-pricing' );

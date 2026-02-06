@@ -10,12 +10,15 @@
 
 use MasterStudy\Lms\Utility\Question;
 
+if ( ! empty( $data['last_answers']['questions_order'] ) ) {
+	$data['answers'] = Question::sort_answers_by_order( $data['answers'], $data['last_answers']['questions_order'], $data['type'] );
+}
+
 if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 	$user_answers = Question::filter_matching_user_answers( $data, 'stm_lms_item_match' );
 } elseif ( empty( $data['last_answers'] ) && $data['is_correct'] ) {
 	$user_answers = $data['answers'];
 }
-
 ?>
 
 <div class="masterstudy-course-player-item-match <?php echo esc_attr( $show_answers ? 'masterstudy-course-player-item-match_not-drag' : '' ); ?>">

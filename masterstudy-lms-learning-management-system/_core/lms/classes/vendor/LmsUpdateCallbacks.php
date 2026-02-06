@@ -857,6 +857,14 @@ abstract class LmsUpdateCallbacks {
 		update_option( 'stm_lms_db_version', STM_LMS_DB_VERSION );
 	}
 
+	public static function lms_update_user_answers_table() {
+		require_once STM_LMS_LIBRARY . '/db/tables.php';
+
+		if ( function_exists( 'stm_lms_tables_update' ) ) {
+			stm_lms_user_answers();
+		}
+	}
+
 	public static function lms_update_woocommerce_checkout_setting() {
 		$settings = get_option( 'stm_lms_settings' );
 
@@ -888,6 +896,77 @@ abstract class LmsUpdateCallbacks {
 		if ( $currency ) {
 			$settings['transactions_currency'] = $currency;
 			update_option( 'stm_lms_settings', $settings );
+		}
+	}
+
+	public static function lms_add_course_statuses() {
+		$settings = get_option( 'stm_lms_settings' );
+
+		if ( empty( $settings ) ) {
+			return;
+		}
+
+		$settings['course_statuses_config'] = array(
+			array(
+				'id'         => 'hot',
+				'label'      => 'Hot',
+				'bg_color'   => 'rgba(255,0,0,1)',
+				'text_color' => 'rgba(255,255,255,1)',
+			),
+			array(
+				'id'         => 'new',
+				'label'      => 'New',
+				'bg_color'   => 'rgba(29,184,116,1)',
+				'text_color' => 'rgba(255,255,255,1)',
+			),
+			array(
+				'id'         => 'special',
+				'label'      => 'Special',
+				'bg_color'   => 'rgba(240, 155, 35,1)',
+				'text_color' => 'rgba(255,255,255,1)',
+			),
+		);
+
+		update_option( 'stm_lms_settings', $settings );
+	}
+
+	public static function lms_subscription_patch() {
+		require_once STM_LMS_LIBRARY . '/db/tables.php';
+
+		if ( function_exists( 'stm_lms_tables_update' ) ) {
+			stm_lms_user_cart();
+		}
+	}
+
+	public static function lms_update_zero_sale_price() {
+		global $wpdb;
+
+		$meta_key = 'sale_price';
+
+		$results = $wpdb->get_results(
+			$wpdb->prepare( "SELECT meta_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s", $meta_key ),
+			ARRAY_A
+		);
+
+		if ( empty( $results ) ) {
+			return;
+		}
+
+		foreach ( $results as $row ) {
+			$meta_id    = $row['meta_id'];
+			$meta_value = $row['meta_value'];
+
+			if ( '0' !== $meta_value && 0 !== $meta_value ) {
+				continue;
+			}
+
+			$wpdb->update(
+				$wpdb->postmeta,
+				array( 'meta_value' => '' ),
+				array( 'meta_id' => $meta_id ),
+				array( '%s' ),
+				array( '%d' )
+			);
 		}
 	}
 }

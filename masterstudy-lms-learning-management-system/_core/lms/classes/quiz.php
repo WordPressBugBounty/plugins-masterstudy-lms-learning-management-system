@@ -2,6 +2,7 @@
 
 use MasterStudy\Lms\Pro\AddonsPlus\Grades\Services\GradeCalculator;
 use MasterStudy\Lms\Repositories\CoursePlayerRepository;
+use MasterStudy\Lms\Utility\Question;
 
 STM_LMS_Quiz::init();
 
@@ -130,8 +131,9 @@ class STM_LMS_Quiz {
 				continue;
 			}
 
-			$question_id = intval( $question_id );
-			$type        = get_post_meta( $question_id, 'type', true );
+			$question_id     = intval( $question_id );
+			$type            = get_post_meta( $question_id, 'type', true );
+			$questions_order = $_POST[ "order_$question_id" ] ?? '';
 
 			switch ( $type ) {
 				case 'fill_the_gap':
@@ -139,6 +141,7 @@ class STM_LMS_Quiz {
 				case 'single_choice':
 				case 'multi_choice':
 				case 'keywords':
+				case 'sortable':
 					$answer = is_array( $value ) ? array_map( 'trim', $value ) : trim( (string) $value );
 					$answer = self::deslash( $answer );
 					break;
@@ -149,10 +152,9 @@ class STM_LMS_Quiz {
 			}
 
 			$user_answer    = is_array( $answer ) ? implode( ',', $answer ) : $answer;
-			$correct_answer = self::check_answer( $question_id, $answer );
+			$correct_answer = self::check_answer( $question_id, $answer, array(), $questions_order );
 			$progress      += $correct_answer ? $score_per_question : 0;
-
-			$user_answer_id = stm_lms_add_user_answer( compact( 'user_id', 'course_id', 'quiz_id', 'question_id', 'attempt_number', 'user_answer', 'correct_answer' ) );
+			$user_answer_id = stm_lms_add_user_answer( compact( 'user_id', 'course_id', 'quiz_id', 'question_id', 'attempt_number', 'user_answer', 'correct_answer', 'questions_order' ) );
 		}
 
 		$progress = 1 === $attempt_number ? round( $progress ) : round( $progress * pow( $cutting_rate, $attempt_number - 1 ) );
@@ -331,7 +333,7 @@ class STM_LMS_Quiz {
 		return $new_answers;
 	}
 
-	public static function check_answer( $question_id, $answer, $answers = array() ) {
+	public static function check_answer( $question_id, $answer, $answers = array(), $order = '' ) {
 		$correct = false;
 		$answers = ! empty( $answers ) ? $answers : get_post_meta( $question_id, 'answers', true );
 
@@ -368,7 +370,7 @@ class STM_LMS_Quiz {
 					}
 
 					$answer = array_map(
-						function( $answers ) {
+						function ( $answers ) {
 							return str_replace( '\\', '', html_entity_decode( stripslashes( rawurldecode( $answers ) ), ENT_QUOTES ) );
 						},
 						$answer
@@ -399,6 +401,10 @@ class STM_LMS_Quiz {
 						explode( '[stm_lms_sep]', str_replace( '[stm_lms_item_match]', '', $answer ) )
 					);
 
+					if ( ! empty( $order ) ) {
+						$answers = Question::sort_answers_by_order( $answers, $order, $type );
+					}
+
 					foreach ( $answers as $i => $correct_answer ) {
 						$correct = true;
 
@@ -414,6 +420,10 @@ class STM_LMS_Quiz {
 					return $correct;
 				case 'image_match':
 					$answer = explode( '[stm_lms_sep]', str_replace( '[stm_lms_image_match]', '', $answer ) );
+
+					if ( ! empty( $order ) ) {
+						$answers = Question::sort_answers_by_order( $answers, $order, $type );
+					}
 
 					foreach ( $answers as $i => $correct_answer ) {
 						$correct     = true;
@@ -449,7 +459,10 @@ class STM_LMS_Quiz {
 								break;
 							}
 
-							if ( strtolower( stripslashes( rawurldecode( $correct_answer['answer'] ) ) ) !== strtolower( stripslashes( rawurldecode( $answer[ $i ] ) ) ) ) {
+							$user_ans    = trim( strtolower( stripslashes( rawurldecode( $answer[ $i ] ) ) ) );
+							$correct_ans = trim( strtolower( stripslashes( rawurldecode( html_entity_decode( $correct_answer['answer'], ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) ) ) );
+
+							if ( $correct_ans !== $user_ans ) {
 								$correct = false;
 								break;
 							}
@@ -459,6 +472,26 @@ class STM_LMS_Quiz {
 					}
 
 					break;
+				case 'sortable':
+					$answer = array_map(
+						function ( $item ) {
+							return stripslashes( htmlspecialchars_decode( rawurldecode( $item ) ) );
+						},
+						explode( '[stm_lms_sep]', str_replace( '[stm_lms_sortable]', '', $answer ) )
+					);
+
+					foreach ( $answers as $i => $correct_answer ) {
+						$correct = true;
+
+						$processed_correct_answer = str_replace( '\\', '', html_entity_decode( wp_unslash( strtolower( $correct_answer['text'] ) ), ENT_QUOTES ) );
+						$processed_answer         = str_replace( '\\', '', html_entity_decode( wp_unslash( strtolower( $answer[ $i ] ) ), ENT_QUOTES ) );
+						if ( preg_replace( '/^\(|\)$/', '', $processed_correct_answer ) !== preg_replace( '/^\(|\)$/', '', $processed_answer ) ) {
+							$correct = false;
+							break;
+						}
+					}
+
+					return $correct;
 				default:
 					$answer = wp_unslash( $answer );
 
