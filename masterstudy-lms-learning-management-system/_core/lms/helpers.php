@@ -1,5 +1,6 @@
 <?php
 
+use MasterStudy\Lms\Enums\PricingMode;
 use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Pro\addons\CourseBundle\Repository\CourseBundleRepository;
 use MasterStudy\Lms\Repositories\CourseRepository;
@@ -10,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-use \MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
+use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 
 function stm_lms_str_replace_once( $str_pattern, $str_replacement, $string ) {
 	if ( strpos( $string, $str_pattern ) !== false ) {
@@ -144,7 +145,6 @@ function masterstudy_lms_time_elapsed_string_e( $number, $time_key ) {
 	}
 
 	return $translate ? sprintf( $translate, $number ) : $translate;
-
 }
 
 function stm_lms_register_style( $style, $deps = array(), $inline_css = '' ) {
@@ -437,7 +437,7 @@ function masterstudy_lms_wrap_timecode( $content ) {
 	$pattern = '/\{(.*?)((?:\d{1,2}:\d{1,2}(?::\d{1,2})?))(.*?)\}/u';
 	$content = preg_replace_callback(
 		$pattern,
-		function( $matches ) {
+		function ( $matches ) {
 			$pre_text      = wp_kses_post( trim( $matches[1] ) );
 			$timecode      = $matches[2];
 			$post_text     = wp_kses_post( trim( $matches[3] ) );
@@ -515,10 +515,9 @@ add_filter(
 				}
 				$lang['url'] = $lang['url'] . $sub_path;
 			}
-		};
+		}
 
 		return $langs;
-
 	}
 );
 
@@ -639,12 +638,10 @@ function stm_lms_create_unique_id( $atts ) {
 function stm_lms_get_VC_attachment_img_safe( $attachment_id, $size_1, $size_2 = 'large', $url = false, $retina = true ) {
 	if ( function_exists( 'stm_lms_get_VC_img' ) && function_exists( 'wpb_getImageBySize' ) && ! empty( $size_1 ) ) {
 		$image = stm_lms_get_VC_img( $attachment_id, $size_1, $url );
-	} else {
-		if ( $url ) {
+	} elseif ( $url ) {
 			$image = stm_lms_get_image_url( $attachment_id, $size_2 );
-		} else {
-			$image = wp_get_attachment_image( $attachment_id, $size_2 );
-		}
+	} else {
+		$image = wp_get_attachment_image( $attachment_id, $size_2 );
 	}
 	if ( false === $retina && strpos( $image, 'srcset' ) !== false ) {
 		$image = str_replace( 'srcset', 'data-retina', $image );
@@ -921,7 +918,7 @@ function stm_lms_addons_menu_position() {
 
 	foreach ( $post_types as $post_type ) {
 		if ( isset( $post_type['args']['show_in_menu'] ) && 'admin.php?page=stm-lms-settings' === $post_type['args']['show_in_menu'] ) {
-			$menu_position ++;
+			++$menu_position;
 		}
 	}
 
@@ -1003,8 +1000,7 @@ function stm_lms_get_terms_for_membership( $taxonomy = '', $args = array( 'paren
 				$term_child               = get_term_by( 'id', $term_child_id, $taxonomy );
 				$select[ $term_child_id ] = "- {$term_child->name}";
 			}
-		};
-
+		}
 	}
 
 	return $select;
@@ -1491,7 +1487,7 @@ add_action( 'install_plugins_pre_masterstudy_addons', 'masterstudy_addons_plugin
 function masterstudy_lms_course_has_certificate( $course_id ) {
 	global $wpdb;
 
-	if ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
+	if ( class_exists( 'MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Services\CourseService' ) ) {
 		$is_provided = ( new CourseService() )->is_certificate_provided( get_current_user_id(), $course_id );
 		if ( ! $is_provided ) {
 			return false;
@@ -1577,7 +1573,7 @@ function masterstudy_find_id_in_array( $array, $target_id ) {
 		}
 		return false;
 	}
-};
+}
 
 function masterstudy_course_header_meta_data() {
 	$course = ( new CourseRepository() )->find( get_the_ID() );
@@ -1601,9 +1597,10 @@ function masterstudy_course_header_meta_data() {
 }
 add_action( 'wp_head', 'masterstudy_course_header_meta_data' );
 
-function masterstudy_lms_course_free_status( $single_sale, $price ) {
+function masterstudy_lms_course_free_status( $course_id, $price ) {
+	$pricing_mode = get_post_meta( $course_id, 'pricing_mode', true ) ?? false;
 	return array(
-		'is_free'    => $single_sale && 0.0 === floatval( $price ),
+		'is_free'    => PricingMode::FREE === $pricing_mode,
 		'zero_price' => empty( $price ) || 0.0 === floatval( $price ),
 	);
 }

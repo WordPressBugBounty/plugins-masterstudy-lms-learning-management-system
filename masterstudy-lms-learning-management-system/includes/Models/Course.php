@@ -85,7 +85,13 @@ class Course {
 	public ?string $udemy_assets;
 	public ?string $udemy_articles;
 	public ?string $udemy_certificate;
+	public ?string $single_sale_price_info;
+	public ?string $free_price_info;
 	public ?string $price_info;
+	public ?string $enterprise_price_info;
+	public ?string $points_price_info;
+	public ?string $subscription_price_info;
+	public ?string $pricing_mode;
 	public ?float $price;
 	public ?float $sale_price;
 	public ?string $coming_soon_date;

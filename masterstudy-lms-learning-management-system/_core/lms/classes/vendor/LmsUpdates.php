@@ -59,6 +59,7 @@ abstract class LmsUpdates {
 		'3.7.0'  => array( 'lms_update_db_tables' ),
 		'3.7.3'  => array( 'lms_update_zero_sale_price' ), // If user had sale_price 0 then make it an empty string, otherwise keep the value,
 		'3.7.5'  => array( 'lms_add_course_statuses' ), // Add default course statuses
+		'3.7.15' => array( 'lms_update_pricing' ), // Update old pricing to new separated pricing
 	);
 
 	/**

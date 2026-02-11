@@ -5,12 +5,13 @@ namespace stmLms\Classes\Vendor;
 use Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableDataStore;
 use MasterStudy\Lms\Database\CurriculumMaterial;
 use MasterStudy\Lms\Database\CurriculumSection;
+use MasterStudy\Lms\Enums\PricingMode;
 use MasterStudy\Lms\Plugin\PostType;
+use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Enums\SubscriptionPlanType;
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Repositories\CurriculumSectionRepository;
 use MasterStudy\Lms\Utility\CourseGrade;
 use Automattic\WooCommerce\Utilities\OrderUtil;
-use WP_Query;
 
 abstract class LmsUpdateCallbacks {
 
@@ -967,6 +968,139 @@ abstract class LmsUpdateCallbacks {
 				array( '%s' ),
 				array( '%d' )
 			);
+		}
+	}
+
+	public static function lms_update_pricing() {
+		global $wpdb;
+
+		$subscriptions_join   = '';
+		$subscriptions_select = '';
+		$prepare_args         = array();
+
+		if ( is_ms_lms_addon_enabled( 'subscriptions' ) ) {
+			$subscription_plans_table = stm_lms_subscription_plans_table_name( $wpdb );
+			$plan_items_table         = stm_lms_subscription_plan_items_table_name( $wpdb );
+
+			$subscriptions_join = "
+            LEFT JOIN (
+                SELECT pi.object_id, COUNT(*) AS total_plans
+                FROM {$subscription_plans_table} AS p
+                INNER JOIN {$plan_items_table} AS pi ON pi.plan_id = p.id
+                WHERE p.type = %s AND p.is_enabled = 1
+                GROUP BY pi.object_id
+            ) AS sp ON sp.object_id = posts.ID
+        ";
+
+			$subscriptions_select = ',
+            MAX(COALESCE(sp.total_plans, 0)) AS total_plans
+        ';
+
+			$prepare_args[] = SubscriptionPlanType::COURSE;
+		}
+
+		$sql = "
+        SELECT posts.ID AS course_id,
+
+            MAX(CASE WHEN pm.meta_key = 'pricing_mode' THEN pm.meta_value END) 			  AS pricing_mode,
+            MAX(CASE WHEN pm.meta_key = 'affiliate_course' THEN pm.meta_value END)        AS affiliate_course,
+            MAX(CASE WHEN pm.meta_key = 'affiliate_course_link' THEN pm.meta_value END)   AS affiliate_course_link,
+            MAX(CASE WHEN pm.meta_key = 'affiliate_course_text' THEN pm.meta_value END)   AS affiliate_course_text,
+            MAX(CASE WHEN pm.meta_key = 'single_sale' THEN pm.meta_value END)             AS single_sale,
+            MAX(CASE WHEN pm.meta_key = 'price' THEN pm.meta_value END)                   AS price,
+            MAX(CASE WHEN pm.meta_key = 'enterprise_price' THEN pm.meta_value END)        AS enterprise_price,
+            MAX(CASE WHEN pm.meta_key = 'points_price' THEN pm.meta_value END)            AS points_price,
+            MAX(CASE WHEN pm.meta_key = 'subscriptions' THEN pm.meta_value END)           AS subscriptions,
+            MAX(CASE WHEN pm.meta_key = 'not_membership' THEN pm.meta_value END)          AS not_membership,
+            MAX(CASE WHEN pm.meta_key = 'price_info' THEN pm.meta_value END)              AS price_info
+
+            {$subscriptions_select}
+
+        FROM {$wpdb->posts} AS posts
+
+        LEFT JOIN {$wpdb->postmeta} AS pm
+        ON pm.post_id = posts.ID
+        AND pm.meta_key IN (
+			'pricing_mode',
+			'affiliate_course',
+			'affiliate_course_link',
+			'affiliate_course_text',
+			'single_sale',
+			'price',
+			'enterprise_price',
+			'points_price',
+			'subscriptions',
+			'not_membership',
+			'price_info'
+		)
+
+        {$subscriptions_join}
+
+        WHERE posts.post_type = 'stm-courses' GROUP BY posts.ID
+    ";
+
+		if ( ! empty( $prepare_args ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- prepared before
+			$sql = $wpdb->prepare( $sql, $prepare_args );
+		}
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- prepared before
+		$rows = $wpdb->get_results( $sql, ARRAY_A );
+
+		if ( empty( $rows ) ) {
+			return;
+		}
+
+		foreach ( $rows as $row ) {
+			$course_id    = (int) $row['course_id'];
+			$pricing_info = $row['price_info'] ?? '';
+
+			// Pricing is affiliate
+			if (
+			! empty( $row['affiliate_course'] ) &&
+			! empty( $row['affiliate_course_link'] ) &&
+			! empty( $row['affiliate_course_text'] )
+			) {
+				update_post_meta( $course_id, 'pricing_mode', PricingMode::AFFILIATE );
+
+				if ( ! empty( $row['price'] ) ) {
+					update_post_meta( $course_id, 'affiliate_course_price', $row['price'] );
+				}
+				continue;
+			}
+
+			$total_plans = isset( $row['total_plans'] ) ? (int) $row['total_plans'] : 0;
+
+			// Pricing is paid
+			$has_single_sale_price   = ! empty( $row['single_sale'] ) && ! empty( $row['price'] );
+			$has_enterprise_price    = ! empty( $row['enterprise_price'] );
+			$has_points_price        = ! empty( $row['points_price'] );
+			$has_subscriptions_plans = ! empty( $total_plans ) && ! empty( $row['subscriptions'] );
+			$has_membership_enabled  = empty( $row['not_membership'] ) && ( is_ms_lms_addon_enabled( 'subscriptions' ) || defined( 'PMPRO_VERSION' ) );
+			$is_zero_price           = '0' === $row['price'];
+
+			if ( $has_enterprise_price ) {
+				update_post_meta( $course_id, 'enterprise', 'on' );
+			}
+
+			if ( $has_points_price ) {
+				update_post_meta( $course_id, 'points', 'on' );
+			}
+
+			if ( ! $is_zero_price && ( $has_single_sale_price || $has_enterprise_price || $has_points_price || $has_membership_enabled || $has_subscriptions_plans ) ) {
+				update_post_meta( $course_id, 'pricing_mode', PricingMode::PAID );
+				update_post_meta( $course_id, 'single_sale_price_info', $pricing_info );
+				update_post_meta( $course_id, 'enterprise_price_info', $pricing_info );
+				update_post_meta( $course_id, 'points_price_info', $pricing_info );
+				update_post_meta( $course_id, 'subscriptions_price_info', $pricing_info );
+				update_post_meta( $course_id, 'membership_price_info', $pricing_info );
+
+				continue;
+			}
+
+			// Pricing is free
+			update_post_meta( $course_id, 'pricing_mode', PricingMode::FREE );
+			update_post_meta( $course_id, 'free_price_info', $pricing_info );
 		}
 	}
 }

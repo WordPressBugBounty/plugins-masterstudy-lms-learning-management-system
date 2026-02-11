@@ -1,6 +1,6 @@
 <?php
-$course_free_status = masterstudy_lms_course_free_status( $course['single_sale'], $course['price'] );
-$members_only       = ! $course['single_sale'] && ! $course['not_in_membership'];
+$course_free_status = masterstudy_lms_course_free_status( $course['id'], $course['price'] );
+$members_only       = ! $course['single_sale'] && STM_LMS_Subscriptions::subscription_enabled() && ! $course['not_in_membership'];
 $has_price_info     = $course['single_sale'] && ! $course_free_status['zero_price'];
 $is_sale            = ! empty( $course['sale_price'] ) && $course['is_sale_active'];
 $show_container     = false;

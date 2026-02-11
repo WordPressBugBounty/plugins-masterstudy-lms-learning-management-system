@@ -484,7 +484,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				$sale_price_active  = STM_LMS_Helpers::is_sale_price_active( $id );
 				$single_sale        = get_post_meta( $id, 'single_sale', true );
 				$not_in_membership  = get_post_meta( $id, 'not_membership', true );
-				$course_free_status = masterstudy_lms_course_free_status( $single_sale, $price );
+				$course_free_status = masterstudy_lms_course_free_status( $id, $price );
 
 				switch ( $status ) {
 					case 'publish':

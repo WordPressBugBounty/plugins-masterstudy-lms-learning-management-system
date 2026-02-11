@@ -22,6 +22,7 @@ return array(
     'MasterStudy\\Lms\\Enums\\LessonType' => $baseDir . '/includes/Enums/LessonType.php',
     'MasterStudy\\Lms\\Enums\\LessonVideoType' => $baseDir . '/includes/Enums/LessonVideoType.php',
     'MasterStudy\\Lms\\Enums\\OrderStatus' => $baseDir . '/includes/Enums/OrderStatus.php',
+    'MasterStudy\\Lms\\Enums\\PricingMode' => $baseDir . '/includes/Enums/PricingMode.php',
     'MasterStudy\\Lms\\Enums\\QuestionType' => $baseDir . '/includes/Enums/QuestionType.php',
     'MasterStudy\\Lms\\Enums\\QuestionView' => $baseDir . '/includes/Enums/QuestionView.php',
     'MasterStudy\\Lms\\Enums\\QuizAttempts' => $baseDir . '/includes/Enums/QuizAttempts.php',

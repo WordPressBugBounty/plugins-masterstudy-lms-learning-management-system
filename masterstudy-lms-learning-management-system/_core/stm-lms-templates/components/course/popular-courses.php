@@ -47,7 +47,7 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 				$is_sale_active     = STM_LMS_Helpers::is_sale_price_active( $course_id );
 				$course_status      = STM_LMS_Course::get_post_status( $course_id );
 				$sale_price         = ! empty( $popular_course->sale_price ) && $is_sale_active ? true : false;
-				$course_free_status = masterstudy_lms_course_free_status( $popular_course->single_sale, $popular_course->price );
+				$course_free_status = masterstudy_lms_course_free_status( $popular_course->id, $popular_course->price );
 
 				if ( $popular_course->is_udemy_course ) {
 					$author_name = $popular_course->udemy_instructor['display_name'];

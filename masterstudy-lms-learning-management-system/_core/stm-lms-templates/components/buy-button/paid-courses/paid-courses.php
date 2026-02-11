@@ -10,6 +10,7 @@
 
 use MasterStudy\Lms\Plugin\Addons;
 use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository;
+use MasterStudy\Lms\Repositories\PricingRepository;
 
 wp_enqueue_style( 'masterstudy-button' );
 
@@ -19,13 +20,18 @@ $sale_price               = get_post_meta( $post_id, 'sale_price', true );
 $single_sale              = get_post_meta( $post_id, 'single_sale', true );
 $not_in_membership        = get_post_meta( $post_id, 'not_membership', true );
 $is_subscriptions_enabled = get_post_meta( $post_id, 'subscriptions', true );
+$price_info               = PricingRepository::get_price_info( $post_id );
+$cert_info                = PricingRepository::get_certificates_info( $post_id );
 $points_price             = class_exists( 'STM_LMS_Point_System' ) ? STM_LMS_Point_System::course_price( $post_id ) : null;
+$points_enabled           = get_post_meta( $post_id, 'points', true );
 $enterprise_price         = class_exists( 'STM_LMS_Enterprise_Courses' ) ? STM_LMS_Enterprise_Courses::get_enterprise_price( $post_id ) : null;
-$group_course_show        = $prerequisite_passed && empty( $hide_group_course ) && ! empty( $enterprise_price ) && $logged_in;
+$enterprise_enabled       = get_post_meta( $post_id, 'enterprise', true );
+$group_course_show        = $prerequisite_passed && empty( $hide_group_course ) && ! empty( $enterprise_enabled ) && $logged_in;
 $show_buttons             = apply_filters( 'stm_lms_pro_show_button', true, $post_id );
 $sale_price_active        = STM_LMS_Helpers::is_sale_price_active( $post_id );
 $is_sale                  = ! empty( $sale_price ) && ! empty( $sale_price_active );
 $guest_checkout           = STM_LMS_Options::get_option( 'guest_checkout', false );
+$cert_included_text       = esc_html__( 'Certificate included', 'masterstudy-lms-learning-management-system' );
 
 $pmpro_plans_courses        = array();
 $pmpro_plans_have_quota     = false;
@@ -97,7 +103,7 @@ if ( ! empty( $ms_membership_plans ) || ! empty( $ms_subscription_plans['plans']
 
 $dropdown_enabled = (
 	( ! empty( $pmpro_plans_courses ) && ! $not_in_membership )
-	|| ( ! empty( $points_price ) && $logged_in )
+	|| ( ! empty( $points_enabled ) && $logged_in )
 	|| ( $group_course_show && $logged_in )
 	|| ( ! empty( $ms_membership_plans ) && ! $not_in_membership )
 	|| ( ! empty( $ms_subscription_plans['plans'] ) )
@@ -122,6 +128,12 @@ if ( $logged_in && ! $only_membership ) {
 	);
 }
 
+if ( ! function_exists( 'concat_info' ) ) {
+	function concat_info( array $strings ): string {
+		return implode( ' • ', array_filter( $strings ) );
+	}
+}
+
 if ( $show_buttons ) {
 	?>
 	<div class="<?php echo esc_attr( implode( ' ', $button_classes ) ); ?>">
@@ -133,10 +145,13 @@ if ( $show_buttons ) {
 				'price'             => 'on' !== $single_sale ? '' : $price,
 				'sale_price'        => 'on' !== $single_sale ? '' : $sale_price,
 				'sale_price_active' => $sale_price_active,
+				'price_info'        => $price_info,
 			)
 		);
+		$single_price_info = $price_info['single_sale_price_info'];
 		if ( $dropdown_enabled ) {
 			?>
+
 			<div class="masterstudy-buy-button-dropdown">
 				<?php
 				if ( ! $only_membership ) {
@@ -166,6 +181,11 @@ if ( $show_buttons ) {
 										<?php echo esc_html__( 'Buy course', 'masterstudy-lms-learning-management-system' ); ?>
 									</span>
 								</a>
+								<?php if ( ! empty( $price_info['single_sale_price_info'] ) || $cert_info['single_sale'] ) : ?>
+									<span class="masterstudy-buy-button__price-info-text">
+										<?php echo esc_html( concat_info( array( $price_info['single_sale_price_info'] ?? '', $cert_info['single_sale'] ? $cert_included_text : null ) ) ); ?>
+									</span>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -193,6 +213,12 @@ if ( $show_buttons ) {
 									)
 								);
 								?>
+
+								<?php if ( ! empty( $price_info['membership_price_info'] ) || $cert_info['pmpro'] ) : ?>
+									<span class="masterstudy-buy-button__price-info-text">
+										<?php echo esc_html( concat_info( array( $price_info['membership_price_info'] ?? '', $cert_info['pmpro'] ? $cert_included_text : null ) ) ); ?>
+									</span>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -217,9 +243,13 @@ if ( $show_buttons ) {
 										'plans'          => $ms_membership_plans,
 										'logged_in'      => $logged_in,
 										'guest_checkout' => $guest_checkout,
+										'course_id'      => $post_id,
 									)
 								);
 								?>
+								<?php if ( ! empty( $price_info['membership_price_info'] ) ) : ?>
+									<span class="masterstudy-buy-button__price-info-text"><?php echo esc_html( $price_info['membership_price_info'] ); ?></span>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -244,16 +274,43 @@ if ( $show_buttons ) {
 										'plans'          => $ms_subscription_plans['plans'],
 										'logged_in'      => $logged_in,
 										'guest_checkout' => $guest_checkout,
+										'course_id'      => $post_id,
 									)
 								);
 								?>
+								<?php if ( ! empty( $price_info['subscriptions_price_info'] ) ) : ?>
+									<span class="masterstudy-buy-button__price-info-text"><?php echo esc_html( $price_info['subscriptions_price_info'] ); ?></span>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
 					<?php
 				}
 
-				if ( ! empty( $points_price ) && $logged_in ) {
+				if ( $group_course_show ) {
+					?>
+					<div class="masterstudy-buy-button-dropdown__section">
+						<div class="masterstudy-buy-button-dropdown__head">
+								<span class="masterstudy-buy-button-dropdown__head-title">
+									<?php echo esc_html__( 'Group course', 'masterstudy-lms-learning-management-system' ); ?>
+								</span>
+							<span class="masterstudy-buy-button-dropdown__head-checkbox"></span>
+						</div>
+						<div class="masterstudy-buy-button-dropdown__body">
+							<div class="masterstudy-buy-button-dropdown__body-wrapper">
+								<?php do_action( 'masterstudy_group_course_button', $post_id ); ?>
+								<?php if ( ! empty( $price_info['enterprise_price_info'] ) || $cert_info['enterprise'] ) : ?>
+									<span class="masterstudy-buy-button__price-info-text">
+										<?php echo esc_html( concat_info( array( $price_info['enterprise_price_info'] ?? '', $cert_info['enterprise'] ? $cert_included_text : null ) ) ); ?>
+									</span>
+								<?php endif; ?>
+							</div>
+						</div>
+					</div>
+					<?php
+				}
+
+				if ( ! empty( $points_enabled ) && $logged_in ) {
 					?>
 					<div class="masterstudy-buy-button-dropdown__section">
 						<div class="masterstudy-buy-button-dropdown__head">
@@ -265,24 +322,11 @@ if ( $show_buttons ) {
 						<div class="masterstudy-buy-button-dropdown__body">
 							<div class="masterstudy-buy-button-dropdown__body-wrapper">
 								<?php do_action( 'masterstudy_point_system', $post_id ); ?>
-							</div>
-						</div>
-					</div>
-					<?php
-				}
-
-				if ( $group_course_show ) {
-					?>
-					<div class="masterstudy-buy-button-dropdown__section">
-						<div class="masterstudy-buy-button-dropdown__head">
-							<span class="masterstudy-buy-button-dropdown__head-title">
-								<?php echo esc_html__( 'Group course', 'masterstudy-lms-learning-management-system' ); ?>
-							</span>
-							<span class="masterstudy-buy-button-dropdown__head-checkbox"></span>
-						</div>
-						<div class="masterstudy-buy-button-dropdown__body">
-							<div class="masterstudy-buy-button-dropdown__body-wrapper">
-								<?php do_action( 'masterstudy_group_course_button', $post_id ); ?>
+								<?php if ( ! empty( $price_info['points_price_info'] ) || $cert_info['points'] ) : ?>
+									<span class="masterstudy-buy-button__price-info-text">
+										<?php echo esc_html( concat_info( array( $price_info['points_price_info'] ?? '', $cert_info['points'] ? $cert_included_text : null ) ) ); ?>
+									</span>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -292,6 +336,13 @@ if ( $show_buttons ) {
 			</div>
 		<?php } ?>
 	</div>
+
+	<?php if ( ! $dropdown_enabled ) : ?>
+		<span class="masterstudy-buy-button__single-price-info-text">
+			<?php echo esc_html( concat_info( array( $price_info['single_sale_price_info'] ?? '', $cert_info['single_sale'] ? $cert_included_text : null ) ) ); ?>
+		</span>
+	<?php endif; ?>
+
 	<?php
 	if ( $group_course_show ) {
 		do_action( 'masterstudy_group_course_modal', $post_id );

@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.7.14
+Stable tag: 3.7.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -308,6 +308,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.15 - 2026-02-10 =
+- **Update:** The UI of the "Pricing" tab in Course Builder has been improved. Course access types are now organized into separate tabs.
+- **Update:** The "Pricing Info" field has been added to all course purchase methods.
+- **New:** Added ability to issue certificates based on the course purchase method, such as issuing certificates only for One-Time purchases [PRO].
+- **Fixed:** When adding a student via "Manage Students" with the Subscriptions add-on enabled, the "Start Course" button was not displayed on the Single Course page for the student [PRO].
+
 = 3.7.14 - 2026-01-29 =
 - **Fixed:** Minor bugfix
 
@@ -326,18 +332,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.7.12 - 2026-01-09 =
 - **Fixed:** Minor bugfix
-
-= 3.7.11 - 2026-01-06 =
-- **Fixed:** Answer options disappeared after retaking a quiz.
-
-= 3.7.10 - 2025-12-26 =
-- **Fixed:** Minor bug fixes.
-
-= 3.7.9 - 2025-12-25 =
-- **New:** Built-in discount coupon system for courses, subscriptions, and bundles (Pro)
-- **Fixed:** Warning messages were displayed on the Course Category creation page
-- **Fixed:** Admin Commission and Instructor Earnings values were not saved in plugin settings (Pro)
-- **Fixed:** The "Subscription Only" filter did not display courses with an active subscription setting (Pro)
-- **Fixed:** An error occurred when students uploaded files in Assignments (Pro)
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

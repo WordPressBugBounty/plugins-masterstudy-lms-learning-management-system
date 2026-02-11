@@ -19,6 +19,12 @@ final class CoursePlayerRepository {
 		'stm-google-meets' => 'google_meet',
 	);
 
+	private const NOT_RANDOMIZING_ANSWERS_TYPES = array(
+		QuestionType::FILL_THE_GAP,
+		QuestionType::KEYWORDS,
+		QuestionType::SORTABLE,
+	);
+
 	public function get_main_data( string $page_path, int $lesson_id ): array {
 		$course           = get_page_by_path( $page_path, OBJECT, PostType::COURSE );
 		$post_id          = apply_filters( 'wpml_object_id', $course->ID, 'post' ) ?? $course->ID;
@@ -405,7 +411,7 @@ final class CoursePlayerRepository {
 					}
 
 					if ( ! empty( $quiz_data['random_answers'] ) && 'completed' !== $this->data['lesson_completed'] &&
-						! in_array( $question['type'], array( QuestionType::FILL_THE_GAP, QuestionType::KEYWORDS ), true )
+						$this->can_answers_be_randomized( $question['type'] )
 					) {
 						shuffle( $question['answers'] );
 					}
@@ -502,5 +508,9 @@ final class CoursePlayerRepository {
 				static fn( $file ) => ! isset( $exclude_ids[ $file->ID ] )
 			)
 		);
+	}
+
+	private function can_answers_be_randomized( string $type ): bool {
+		return ! in_array( $type, self::NOT_RANDOMIZING_ANSWERS_TYPES, true );
 	}
 }

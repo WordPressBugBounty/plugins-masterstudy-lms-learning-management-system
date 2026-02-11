@@ -65,7 +65,7 @@ class Stm_Lms_Popular_Courses extends WP_Widget {
 					$rates              = ! empty( $meta['course_marks'] ) ? STM_LMS_Course::course_average_rate( $meta['course_marks'] ) : array();
 					$single_sale        = get_post_meta( $post_id, 'single_sale', true );
 					$not_in_membership  = get_post_meta( $post_id, 'not_membership', true );
-					$course_free_status = masterstudy_lms_course_free_status( $single_sale, $price );
+					$course_free_status = masterstudy_lms_course_free_status( $post_id, $price );
 					$content            = '';
 					if ( ! $single_sale && ! $not_in_membership ) {
 						ob_start();

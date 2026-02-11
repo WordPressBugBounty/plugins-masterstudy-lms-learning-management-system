@@ -975,7 +975,7 @@ class STM_LMS_User {
 
 		if ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
 			$subscription_info = ( new CourseService() )->has_access_to_course( $user_id, $course, $course_id, $add );
-			$condition         = $add ? $subscription_info['only_for_membership'] && $subscription_info['bought_by_membership'] : $subscription_info['only_for_membership'];
+			$condition         = $add ? $subscription_info['only_for_membership'] && $subscription_info['bought_by_membership'] : $subscription_info['only_for_membership'] && ! empty( $subscription_info['subscription_id'] );
 			if ( $condition ) {
 				return apply_filters( 'stm_lms_has_course_access', $subscription_info['has_access'], $course_id, $item_id );
 			}

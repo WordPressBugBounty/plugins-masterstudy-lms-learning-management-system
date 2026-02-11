@@ -8,8 +8,8 @@ $course_id          = get_the_ID();
 $single_sale        = get_post_meta( $course_id, 'single_sale', true );
 $is_udemy_course    = get_post_meta( $course_id, 'udemy_course_id', true );
 $not_in_membership  = get_post_meta( $course_id, 'not_in_membership', true );
-$members_only       = ! $single_sale && ! $not_in_membership;
-$course_free_status = masterstudy_lms_course_free_status( $single_sale, $price );
+$members_only       = ! $single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership;
+$course_free_status = masterstudy_lms_course_free_status( $course_id, $price );
 
 if ( $members_only ) { ?>
 	<div class="stm_lms_courses__single--price heading_font stm_lms_courses__single--price-membership">

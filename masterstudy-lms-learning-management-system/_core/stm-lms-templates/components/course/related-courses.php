@@ -72,7 +72,7 @@ if ( ! empty( $course_ids ) ) { ?>
 				$course_url         = STM_LMS_Course::courses_page_url() . $related_course->slug;
 				$is_sale_active     = STM_LMS_Helpers::is_sale_price_active( $course_id );
 				$sale_price         = ! empty( $related_course->sale_price ) && $is_sale_active ? true : false;
-				$course_free_status = masterstudy_lms_course_free_status( $related_course->single_sale, $related_course->price );
+				$course_free_status = masterstudy_lms_course_free_status( $related_course->id, $related_course->price );
 
 				if ( $related_course->is_udemy_course ) {
 					$author_name = $related_course->udemy_instructor['display_name'];

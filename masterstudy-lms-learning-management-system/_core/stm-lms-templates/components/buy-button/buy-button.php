@@ -9,6 +9,8 @@
  * @var bool $dark_mode
  */
 
+use MasterStudy\Lms\Enums\PricingMode;
+
 wp_enqueue_style( 'masterstudy-buy-button' );
 wp_enqueue_script( 'masterstudy-buy-button' );
 wp_localize_script(
@@ -24,6 +26,7 @@ wp_localize_script(
 
 $course_price          = STM_LMS_Course::get_course_price( $post_id );
 $single_sale           = get_post_meta( $post_id, 'single_sale', true );
+$pricing_mode          = get_post_meta( $post_id, 'pricing_mode', true );
 $has_access            = isset( $has_access ) ? $has_access : STM_LMS_User::has_course_access( $post_id, '', false );
 $prerequisite_passed   = true;
 $is_course_coming_soon = false;
@@ -48,14 +51,8 @@ if ( apply_filters( 'stm_lms_before_button_stop', false, $post_id ) && false ===
 	return false;
 }
 
-if ( class_exists( 'STM_LMS_Courses_Pro' ) && method_exists( 'STM_LMS_Courses_Pro', 'affiliate_course' ) ) {
-	$is_affiliate = STM_LMS_Courses_Pro::affiliate_course( $post_id );
-} else {
-	$is_affiliate = false;
-}
-
-if ( ! $is_affiliate ) {
-	if ( ( $has_access || ( empty( $course_price ) && $single_sale ) ) && $prerequisite_passed ) :
+if ( PricingMode::AFFILIATE !== $pricing_mode || ! class_exists( 'STM_LMS_Courses_Pro' ) ) {
+	if ( ( $has_access || PricingMode::FREE === $pricing_mode ) && $prerequisite_passed ) :
 		/* Including the button template for free courses */
 		STM_LMS_Templates::show_lms_template(
 			'components/buy-button/free-courses/free-courses',
@@ -80,4 +77,11 @@ if ( ! $is_affiliate ) {
 			)
 		);
 	endif;
+} else {
+	STM_LMS_Templates::show_lms_template(
+		'components/buy-button/paid-courses/affiliate',
+		array(
+			'course_id' => $post_id,
+		)
+	);
 }

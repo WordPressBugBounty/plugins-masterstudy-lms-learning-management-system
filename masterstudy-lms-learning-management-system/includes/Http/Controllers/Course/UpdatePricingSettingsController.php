@@ -2,6 +2,7 @@
 
 namespace MasterStudy\Lms\Http\Controllers\Course;
 
+use MasterStudy\Lms\Enums\PricingMode;
 use MasterStudy\Lms\Http\WpResponseFactory;
 use MasterStudy\Lms\Repositories\CourseRepository;
 use MasterStudy\Lms\Repositories\PricingRepository;
@@ -26,19 +27,53 @@ class UpdatePricingSettingsController {
 		$validator = new Validator(
 			$request->get_json_params(),
 			array(
-				'single_sale'            => 'required|boolean',
-				'price'                  => 'required_if_accepted,single_sale|nullable|float',
-				'sale_price'             => 'nullable|float',
-				'sale_price_dates_start' => 'required_with,sale_price_dates_end|nullable|integer',
-				'sale_price_dates_end'   => 'required_with,sale_price_dates_start|nullable|integer',
-				'points_price'           => 'nullable|float',
-				'enterprise_price'       => 'nullable|float',
-				'not_membership'         => 'required|boolean',
-				'affiliate_course'       => 'required|boolean',
-				'subscriptions'          => 'nullable|boolean',
-				'affiliate_course_text'  => 'required_if_accepted,affiliate_course|string',
-				'affiliate_course_link'  => 'required_if_accepted,affiliate_course|string',
-				'price_info'             => 'nullable|string',
+				// Free
+				'free_do_not_provide_certificate'        => 'nullable|boolean',
+				'free_paid_certificate'                  => 'nullable|boolean',
+				'free_certificate_price'                 => 'required_if_accepted,free_paid_certificate|nullable|float',
+				'free_price_info'                        => 'nullable|string',
+
+				// Paid
+				'single_sale'                            => 'nullable|boolean',
+				'single_sale_price_info'                 => 'nullable|string',
+				'single_sale_do_not_provide_certificate' => 'nullable|boolean',
+				'single_sale_paid_certificate'           => 'required_if_accepted,single_sale|boolean',
+				'single_sale_certificate_price'          => 'required_if_accepted,single_sale_paid_certificate|nullable|float',
+				'price'                                  => 'required_if_accepted,single_sale|nullable|float',
+				'sale_price'                             => 'nullable|float',
+				'sale_price_dates_start'                 => 'required_with,sale_price_dates_end|nullable|integer',
+				'sale_price_dates_end'                   => 'required_with,sale_price_dates_start|nullable|integer',
+
+				'enterprise'                             => 'nullable|boolean',
+				'enterprise_price'                       => 'required_if_accepted,enterprise|nullable|float',
+				'enterprise_price_info'                  => 'nullable|string',
+				'enterprise_do_not_provide_certificate'  => 'nullable|boolean',
+				'enterprise_paid_certificate'            => 'required_if_accepted,enterprise|boolean',
+				'enterprise_certificate_price'           => 'required_if_accepted,enterprise_paid_certificate|nullable|float',
+
+				'not_membership'                         => 'nullable|boolean',
+				'membership_price_info'                  => 'nullable|string',
+				'membership_do_not_provide_certificate'  => 'nullable|boolean',
+				'membership_paid_certificate'            => 'nullable|boolean',
+				'membership_certificate_price'           => 'nullable|float',
+
+				'points'                                 => 'nullable|boolean',
+				'points_price'                           => 'nullable|float',
+				'points_price_info'                      => 'nullable|string',
+				'points_do_not_provide_certificate'      => 'nullable|boolean',
+				'points_paid_certificate'                => 'nullable|boolean',
+				'points_certificate_price'               => 'required_if_accepted,points_paid_certificate|nullable|float',
+
+				'subscriptions'                          => 'nullable|boolean',
+				'subscriptions_price_info'               => 'nullable|string',
+
+				// Affiliate
+				'affiliate_course'                       => 'nullable|boolean',
+				'affiliate_course_text'                  => 'required_if_accepted,affiliate_course|string',
+				'affiliate_course_link'                  => 'required_if_accepted,affiliate_course|string',
+				'affiliate_course_price'                 => 'required_if_accepted,affiliate_course|float',
+
+				'pricing_mode'                           => 'required|string|contains_list,' . implode( ';', PricingMode::cases() ),
 			)
 		);
 

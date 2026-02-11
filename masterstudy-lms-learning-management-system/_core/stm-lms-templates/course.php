@@ -113,7 +113,6 @@
 				?>
 			</div>
 			<?php
-			STM_LMS_Templates::show_lms_template( 'components/course/price-info', array( 'course' => $course_data['course'] ) );
 		}
 		if ( $course_data['is_coming_soon'] && $course_data['course']->coming_soon_price && ! $course_data['course']->coming_soon_preorder ) {
 			?>

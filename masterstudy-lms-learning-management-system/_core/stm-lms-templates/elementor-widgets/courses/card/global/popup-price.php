@@ -1,5 +1,5 @@
 <?php
-$course_free_status = masterstudy_lms_course_free_status( $course['single_sale'], $course['price'] );
+$course_free_status = masterstudy_lms_course_free_status( $course['id'], $course['price'] );
 $is_sale            = ! empty( $course['sale_price'] ) && $course['is_sale_active'];
 
 if ( $course['single_sale'] && ! $course_free_status['zero_price'] ) { ?>

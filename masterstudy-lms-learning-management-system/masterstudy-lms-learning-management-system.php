@@ -7,7 +7,7 @@
  * Author: StylemixThemes
  * Author URI: https://stylemixthemes.com/
  * Text Domain: masterstudy-lms-learning-management-system
- * Version: 3.7.14
+ * Version: 3.7.15
  * Masterstudy LMS Pro tested up to: 4.8
  */
 
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-define( 'MS_LMS_VERSION', '3.7.14' );
+define( 'MS_LMS_VERSION', '3.7.15' );
 define( 'MS_LMS_FILE', __FILE__ );
 define( 'MS_LMS_PATH', dirname( MS_LMS_FILE ) );
 define( 'MS_LMS_URL', plugin_dir_url( MS_LMS_FILE ) );
