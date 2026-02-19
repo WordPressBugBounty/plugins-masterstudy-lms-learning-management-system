@@ -346,6 +346,14 @@ function stm_lms_enqueue_component_scripts( $hook_suffix ) {
 		array(
 			'custom_period' => __( 'Date range', 'masterstudy-lms-learning-management-system' ),
 			'locale'        => masterstudy_get_locale_info(),
+			'short_months'  => masterstudy_get_short_months_translations(),
+		)
+	);
+	wp_localize_script(
+		'masterstudy-date-helpers',
+		'date_helpers_data',
+		array(
+			'short_months' => masterstudy_get_short_months_translations(),
 		)
 	);
 
@@ -594,6 +602,37 @@ function masterstudy_datepicker_handles(): array {
 	);
 }
 
+if ( ! function_exists( 'masterstudy_get_short_months_translations' ) ) {
+	function masterstudy_get_short_months_translations() {
+		return array(
+			/* translators: Abbreviated month name for January */
+			esc_html__( 'Jan', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for February */
+			esc_html__( 'Feb', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for March */
+			esc_html__( 'Mar', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for April */
+			esc_html__( 'Apr', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for May */
+			esc_html__( 'May', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for June */
+			esc_html__( 'Jun', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for July */
+			esc_html__( 'Jul', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for August */
+			esc_html__( 'Aug', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for September */
+			esc_html__( 'Sep', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for October */
+			esc_html__( 'Oct', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for November */
+			esc_html__( 'Nov', 'masterstudy-lms-learning-management-system' ),
+			/* translators: Abbreviated month name for December */
+			esc_html__( 'Dec', 'masterstudy-lms-learning-management-system' ),
+		);
+	}
+}
+
 if ( ! function_exists( 'masterstudy_get_locale_info' ) ) {
 	function masterstudy_get_locale_info(): array {
 		$locale         = get_locale();
@@ -614,9 +653,81 @@ if ( ! function_exists( 'masterstudy_get_locale_info' ) ) {
 			$current_locale = $locales[ $locale ];
 		}
 
+		$time_format = get_option( 'time_format', 'g:i a' );
+		$time_24hr   = ( false !== strpos( $time_format, 'H' ) || false !== strpos( $time_format, 'G' ) );
+
 		return array(
 			'current_locale' => $current_locale,
-			'firstDayOfWeek' => get_option( 'start_of_week', 0 ),
+			'locale_object'  => array(
+				'weekdays'         => array(
+					'shorthand' => array(
+						/* translators: Abbreviated weekday name for Sunday */
+						esc_html__( 'Sun', 'masterstudy-lms-learning-management-system' ),
+						/* translators: Abbreviated weekday name for Monday */
+						esc_html__( 'Mon', 'masterstudy-lms-learning-management-system' ),
+						/* translators: Abbreviated weekday name for Tuesday */
+						esc_html__( 'Tue', 'masterstudy-lms-learning-management-system' ),
+						/* translators: Abbreviated weekday name for Wednesday */
+						esc_html__( 'Wed', 'masterstudy-lms-learning-management-system' ),
+						/* translators: Abbreviated weekday name for Thursday */
+						esc_html__( 'Thu', 'masterstudy-lms-learning-management-system' ),
+						/* translators: Abbreviated weekday name for Friday */
+						esc_html__( 'Fri', 'masterstudy-lms-learning-management-system' ),
+						/* translators: Abbreviated weekday name for Saturday */
+						esc_html__( 'Sat', 'masterstudy-lms-learning-management-system' ),
+					),
+					'longhand'  => array(
+						esc_html__( 'Sunday', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'Monday', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'Tuesday', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'Wednesday', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'Thursday', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'Friday', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'Saturday', 'masterstudy-lms-learning-management-system' ),
+					),
+				),
+				'months'           => array(
+					'shorthand' => masterstudy_get_short_months_translations(),
+					'longhand'  => array(
+						esc_html__( 'January', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'February', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'March', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'April', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'May', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'June', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'July', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'August', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'September', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'October', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'November', 'masterstudy-lms-learning-management-system' ),
+						esc_html__( 'December', 'masterstudy-lms-learning-management-system' ),
+					),
+				),
+				'daysInMonth'      => array( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ),
+				'firstDayOfWeek'   => absint( get_option( 'start_of_week', 0 ) ),
+				/* translators: Date range separator, e.g., "Jan 1 to Jan 15" */
+				'rangeSeparator'   => esc_html__( ' to ', 'masterstudy-lms-learning-management-system' ),
+				/* translators: Abbreviation for "Week" used in date picker week numbers (e.g., "Wk 1", "Wk 2") */
+				'weekAbbreviation' => esc_html__( 'Wk', 'masterstudy-lms-learning-management-system' ),
+				'scrollTitle'      => esc_html__( 'Scroll to increment', 'masterstudy-lms-learning-management-system' ),
+				'toggleTitle'      => esc_html__( 'Click to toggle', 'masterstudy-lms-learning-management-system' ),
+				'amPM'             => array(
+					/* translators: Time period indicator for morning hours (12:00-11:59), used in 12-hour time format */
+					esc_html__( 'AM', 'masterstudy-lms-learning-management-system' ),
+					/* translators: Time period indicator for afternoon/evening hours (12:00-11:59), used in 12-hour time format */
+					esc_html__( 'PM', 'masterstudy-lms-learning-management-system' ),
+				),
+				/* translators: Accessibility label for year selector in date picker */
+				'yearAriaLabel'    => esc_html__( 'Year', 'masterstudy-lms-learning-management-system' ),
+				/* translators: Accessibility label for month selector in date picker */
+				'monthAriaLabel'   => esc_html__( 'Month', 'masterstudy-lms-learning-management-system' ),
+				/* translators: Accessibility label for hour selector in time picker */
+				'hourAriaLabel'    => esc_html__( 'Hour', 'masterstudy-lms-learning-management-system' ),
+				/* translators: Accessibility label for minute selector in time picker */
+				'minuteAriaLabel'  => esc_html__( 'Minute', 'masterstudy-lms-learning-management-system' ),
+				'time_24hr'        => $time_24hr,
+			),
+			'firstDayOfWeek' => absint( get_option( 'start_of_week', 0 ) ),
 		);
 	}
 }

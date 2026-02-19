@@ -8,7 +8,7 @@ function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _ty
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function createDatepicker(selector) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var localeObject = flatpickr.l10ns[stats_data.locale['current_locale']];
+  var localeObject = stats_data.locale.locale_object ? stats_data.locale.locale_object : flatpickr.l10ns[stats_data.locale['current_locale']];
   var defaultOptions = {
     inline: true,
     mode: 'range',

@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.7.15
+Stable tag: 3.7.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,23 +172,27 @@ For more details, please visit [our website](https://stylemixthemes.com/wordpres
 
 **MasterStudy Premium Plugin Features**
 
+- **AI Lab**: Empowers you to generate complete courses, lessons, quizzes, and assignments with rich content and visuals from a single prompt.
+- **Subscriptions**: Offer recurring access to courses with automatic renewals.
+- **Memberships**: Give students instant access to unlock selected courses, categories, or your entire site.
+- **Taxes**: Apply country-specific tax rates to your course prices, choose how they’re displayed, and manage with a simple on/off toggle.
+- **Coupons**: Create powerful discount codes to boost enrollments and sales.
+- **Custom Course Pages**: Craft your conversion focused course pages with 50+ MasterStudy Elementor Widgets
+- **Email Manager**: Personalize email templates.
 - **Certificate Builder**: Make custom certificates easily.
-- **Udemy Importer**: Bring in Udemy lessons and earn commissions.
+- **Grades**: Assign, manage, and review grades for courses, quizzes, and assignments seamlessly.
+- **Reports and Analytics**: Track your course performance, monitor student progress and manage earnings—all in one place.
 - **Prerequisites**: Set required courses before new enrollments.
 - **Quizzes**: Add different types of questions to tests.
 - **Sequential Drip Content**: Plan lessons step by step.
-- **Gradebook**: See and export class results.
 - **Live Streaming**: Conduct live lessons.
 - **Group Courses**: Sell to companies and manage members.
 - **Assignments**: Students submit work and get grades.
 - **Question Media**: Add videos, audio, and images to quizzes.
 - **Point system**: Reward learners for achievements.
 - **Statistics and Payouts**: Analyze data and manage payments for instructors.
-- **Online Testing**: Embed quizzes anywhere and conduct tests online.
 - **Trial Courses**: Offer courses as trials or demos for new users.
 - **Co-instructors**: Assign multiple instructors to a course.
-- **Gradebook**: Monitor students' progress and performance.
-- **Email Manager**: Personalize email templates.
 - **Course Bundles**: Bundle courses together and offer discounts.
 - **Google Classrooms**: Import classes from Google Classrooms.
 - **Zoom Conference**: Conduct Zoom lessons, meetings, and webinars on your site.
@@ -198,8 +202,8 @@ For more details, please visit [our website](https://stylemixthemes.com/wordpres
 - **LMS Forms Editor**: Customize website forms with an easy-to-use editor.
 - **File Upload Manager**: Manage various file types in courses and lessons.
 - **Upcoming Course Status**: Promote courses that are not yet open for enrollment.
-- **Reports and Analytics**: Track your course performance, monitor student progress and manage earnings—all in one place.
-- **Grades**: Assign, manage, and review grades for courses, quizzes, and assignments seamlessly.
+- **Online Testing**: Embed quizzes anywhere and conduct tests online.
+- **Gradebook**: Monitor students' progress and performance.
 
 [youtube https://youtu.be/98LKgphFSCY]
 
@@ -308,6 +312,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.16 - 2026-02-19 =
+- **Fixed:** Resolved an issue where the Enrolled Students page content failed to load for some users.
+- **Fixed:** Month names were not translated in date filter calendars.
+- **Fixed:** Course progress was not reset after removing a student from a course.
+
 = 3.7.15 - 2026-02-10 =
 - **Update:** The UI of the "Pricing" tab in Course Builder has been improved. Course access types are now organized into separate tabs.
 - **Update:** The "Pricing Info" field has been added to all course purchase methods.

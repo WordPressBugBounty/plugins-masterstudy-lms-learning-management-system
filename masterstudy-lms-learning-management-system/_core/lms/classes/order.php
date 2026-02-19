@@ -161,7 +161,7 @@ class STM_LMS_Order {
 					$cart_item['image']      = get_the_post_thumbnail( $item_id, 'img-300-225' );
 					$cart_item['image_url']  = get_the_post_thumbnail_url( $item_id, 'img-300-225' );
 					$cart_item['image_full'] = get_the_post_thumbnail( $item_id, 'full' );
-				} elseif ( class_exists( 'MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository' ) ) {
+				} elseif ( is_ms_lms_addon_enabled( 'subscriptions' ) && class_exists( 'MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository' ) ) {
 					$subscription_plan              = ( new SubscriptionPlanRepository() )->get( $item_id );
 					$cart_item['title']             = $subscription_plan['name'] ?? esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
 					$cart_item['subscription_type'] = SubscriptionPlanRepository::get_plan_type( $subscription_plan['type'] ?? '' );

@@ -43,12 +43,21 @@ function resetTime(date) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
 function formatDate(date) {
+  var _window$date_helpers_;
   var options = {
     year: 'numeric',
     month: 'short',
     day: 'numeric'
   };
-  return new Date(date).toLocaleDateString('en-US', options);
+  var dateObj = new Date(date);
+  if ((_window$date_helpers_ = window.date_helpers_data) !== null && _window$date_helpers_ !== void 0 && _window$date_helpers_.short_months) {
+    var _window$date_helpers_2;
+    var year = dateObj.getFullYear();
+    var day = dateObj.getDate();
+    var month = dateObj.getMonth();
+    return "".concat((_window$date_helpers_2 = window.date_helpers_data) === null || _window$date_helpers_2 === void 0 ? void 0 : _window$date_helpers_2.short_months[month], " ").concat(day, ", ").concat(year);
+  }
+  return dateObj.toLocaleDateString(undefined, options);
 }
 function formatDateForFetch(date) {
   if (!date) {

@@ -1,5 +1,7 @@
 <?php
 
+use MasterStudy\Lms\Repositories\CurriculumRepository;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
@@ -259,6 +261,33 @@ function stm_lms_get_delete_user_course( $user_id, $item_id ) {
 			'course_id' => $item_id,
 		)
 	);
+
+	$course_id  = $item_id;
+	$student_id = $user_id;
+
+	$curriculum = ( new CurriculumRepository() )->get_curriculum( $course_id );
+
+	if ( empty( $curriculum['materials'] ) ) {
+		die;
+	}
+
+	$user_manage_class = new STM_LMS_User_Manager_Course_User();
+	foreach ( $curriculum['materials'] as $material ) {
+		switch ( $material['post_type'] ) {
+			case 'stm-lessons':
+				$user_manage_class::reset_lesson( $student_id, $course_id, $material['post_id'] );
+				break;
+			case 'stm-assignments':
+				$user_manage_class::reset_assignment( $student_id, $course_id, $material['post_id'] );
+				break;
+			case 'stm-quizzes':
+				$user_manage_class::reset_quiz( $student_id, $course_id, $material['post_id'] );
+				break;
+		}
+	}
+
+	stm_lms_reset_user_answers( $item_id, $user_id );
+	stm_lms_reset_marker_answers( $item_id, $user_id );
 	do_action( 'masterstudy_lms_after_delete_user_course', $user_id, $item_id );
 }
 
@@ -284,25 +313,93 @@ function stm_lms_delete_users_in_courses( array $user_ids ): array {
 
 	if ( empty( $user_ids ) ) {
 		return array(
-			'data'  => array(),
-			'total' => 0,
+			'data'           => array(),
+			'total'          => 0,
+			'lessons_deleted' => 0,
 		);
 	}
 
-	$table        = stm_lms_user_courses_name( $wpdb );
-	$placeholders = implode( ',', array_fill( 0, count( $user_ids ), '%d' ) );
-	$params       = array_merge( $user_ids, array( get_current_user_id() ) );
+	$user_ids     = array_map( 'absint', $user_ids );
+	$current_user = (int) get_current_user_id();
 
-	$select_sql = "SELECT user_id, course_id FROM {$table} AS uc
-	  INNER JOIN {$wpdb->posts} AS p ON uc.course_id = p.ID
-	  WHERE uc.user_id IN ( {$placeholders} ) AND p.post_author = %d";
-	$delete_sql = "DELETE uc FROM {$table} AS uc
-       INNER JOIN {$wpdb->posts} AS p ON uc.course_id = p.ID
-       WHERE uc.user_id IN ( {$placeholders} ) AND p.post_author = %d";
+	$courses_table = stm_lms_user_courses_name( $wpdb );
+	$lessons_table = stm_lms_user_lessons_name( $wpdb );
+	$quizzes_table = stm_lms_user_quizzes_name( $wpdb );
+	$answers_table = stm_lms_user_answers_name( $wpdb );
+
+	$placeholders = implode( ',', array_fill( 0, count( $user_ids ), '%d' ) );
+	$params       = array_merge( $user_ids, array( $current_user ) );
+
+	$delete_quizzes_sql = "
+	DELETE uq
+	FROM {$quizzes_table} AS uq
+	INNER JOIN {$wpdb->posts} AS p ON uq.course_id = p.ID
+	WHERE uq.user_id IN ( {$placeholders} )
+		AND p.post_author = %d
+	";
+
+	$delete_answers_sql = "
+	DELETE ua
+	FROM {$answers_table} AS ua
+	INNER JOIN {$wpdb->posts} AS p ON ua.course_id = p.ID
+	WHERE ua.user_id IN ( {$placeholders} )
+		AND p.post_author = %d
+	";
+
+	$select_sql = "
+		SELECT uc.user_id, uc.course_id
+		FROM {$courses_table} AS uc
+		INNER JOIN {$wpdb->posts} AS p ON uc.course_id = p.ID
+		WHERE uc.user_id IN ( {$placeholders} )
+			AND p.post_author = %d
+	";
+
+	$delete_lessons_sql = "
+		DELETE ul
+		FROM {$lessons_table} AS ul
+		INNER JOIN {$courses_table} AS uc
+			ON ul.user_id = uc.user_id
+			AND ul.course_id = uc.course_id
+		INNER JOIN {$wpdb->posts} AS p ON uc.course_id = p.ID
+		WHERE uc.user_id IN ( {$placeholders} )
+			AND p.post_author = %d
+	";
+
+	$delete_courses_sql = "
+		DELETE uc
+		FROM {$courses_table} AS uc
+		INNER JOIN {$wpdb->posts} AS p ON uc.course_id = p.ID
+		WHERE uc.user_id IN ( {$placeholders} )
+			AND p.post_author = %d
+	";
+
+	$data = $wpdb->get_results(
+		$wpdb->prepare( $select_sql, ...$params ), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		ARRAY_A
+	);
+
+	$lessons_deleted = (int) $wpdb->query(
+		$wpdb->prepare( $delete_lessons_sql, ...$params ) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	);
+
+	$answers_deleted = (int) $wpdb->query(
+		$wpdb->prepare( $delete_answers_sql, ...$params ) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	);
+
+	$quizzes_deleted = (int) $wpdb->query(
+		$wpdb->prepare( $delete_quizzes_sql, ...$params ) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	);
+
+	$total = (int) $wpdb->query(
+		$wpdb->prepare( $delete_courses_sql, ...$params ) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	);
 
 	return array(
-		'data'  => $wpdb->get_results( $wpdb->prepare( $select_sql, ...$params ), ARRAY_A ), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		'total' => $wpdb->query( $wpdb->prepare( $delete_sql, ...$params ) ), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		'data'            => $data,
+		'total'           => $total,
+		'lessons_deleted' => $lessons_deleted,
+		'quizzes_deleted' => $quizzes_deleted,
+		'answers_deleted' => $answers_deleted,
 	);
 }
 

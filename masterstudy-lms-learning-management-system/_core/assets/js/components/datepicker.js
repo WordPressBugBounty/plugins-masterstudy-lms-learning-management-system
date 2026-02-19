@@ -174,12 +174,21 @@ function resetTime(date) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
 function formatDate(date) {
+  var _window$datepicker_da;
   var options = {
     year: 'numeric',
     month: 'short',
     day: 'numeric'
   };
-  return new Date(date).toLocaleDateString('en-US', options);
+  var dateObj = new Date(date);
+  if ((_window$datepicker_da = window.datepicker_data) !== null && _window$datepicker_da !== void 0 && _window$datepicker_da.short_months) {
+    var _window$datepicker_da2;
+    var year = dateObj.getFullYear();
+    var day = dateObj.getDate();
+    var month = dateObj.getMonth();
+    return "".concat((_window$datepicker_da2 = window.datepicker_data) === null || _window$datepicker_da2 === void 0 ? void 0 : _window$datepicker_da2.short_months[month], " ").concat(day, ", ").concat(year);
+  }
+  return dateObj.toLocaleDateString('en-US', options);
 }
 function formatDateForFetch(date) {
   if (!date) {

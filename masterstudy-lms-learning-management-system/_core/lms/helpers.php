@@ -1487,7 +1487,7 @@ add_action( 'install_plugins_pre_masterstudy_addons', 'masterstudy_addons_plugin
 function masterstudy_lms_course_has_certificate( $course_id ) {
 	global $wpdb;
 
-	if ( class_exists( 'MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Services\CourseService' ) ) {
+	if ( is_ms_lms_addon_enabled( 'subscriptions' ) && class_exists( 'MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Services\CourseService' ) ) {
 		$is_provided = ( new CourseService() )->is_certificate_provided( get_current_user_id(), $course_id );
 		if ( ! $is_provided ) {
 			return false;
