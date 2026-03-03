@@ -34,7 +34,7 @@ class StmLmsCourseBundles extends Widget_Base {
 
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
-		wp_register_style( 'bundles_card', STM_LMS_URL . 'assets/css/parts/bundles/card.css', array(), STM_LMS_VERSION, false );
+		wp_register_style( 'bundles_card', STM_LMS_URL . 'assets/css/bundle/card.css', array(), STM_LMS_VERSION, false );
 	}
 
 	/**

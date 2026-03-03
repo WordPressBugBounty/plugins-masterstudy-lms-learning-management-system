@@ -2,6 +2,7 @@
 
 namespace stmLms\Classes\Models;
 
+use MasterStudy\Lms\Validation\Validator;
 use WP_User_Query;
 use stmLms\Classes\Vendor\StmBaseModelUser;
 
@@ -62,6 +63,15 @@ class StmUser extends StmBaseModelUser {
 			->find();
 	}
 
+	public function get_course_by_id( $id ) {
+		return StmLmsCourse::query()
+			->asTable( 'course' )
+			->where_in( 'course.`post_type`', array( 'stm-courses', 'stm-course-bundles' ) )
+			->where( 'course.`post_author`', intval( $this->ID ) )
+			->where( 'course.`id`', intval( $id ) )
+			->find();
+	}
+
 	public function get_first_course() {
 		$courses = StmLmsCourse::query()
 			->asTable( 'course' )
@@ -81,22 +91,24 @@ class StmUser extends StmBaseModelUser {
 		);
 
 		// phpcs:ignore WordPress.Security.NonceVerification
-		$email             = $_POST['paypal_email'] ?? $email;
-		$validator         = new \Validation();
-		$data_for_validate = $validator->sanitize( array( 'email' => $email ) );
-		$validator->validation_rules(
+		$email     = $_POST['paypal_email'] ?? $email;
+		$validator = new Validator(
 			array(
-				'email' => 'required|valid_email',
+				'email' => $email,
+			),
+			array(
+				'email' => 'required|email',
 			)
 		);
 
-		$validated_data = $validator->run( $data_for_validate );
-		if ( false === $validated_data ) {
+		if ( $validator->fails() ) {
 			$errors            = $validator->get_errors_array();
 			$result['message'] = $errors['email'];
 
 			return $result;
 		}
+
+		$validated_data = $validator->get_validated();
 
 		if ( get_current_user_id() && isset( $validated_data['email'] ) ) {
 			update_user_meta( get_current_user_id(), 'stm_lms_paypal_email', $validated_data['email'] );

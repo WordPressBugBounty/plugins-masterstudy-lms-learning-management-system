@@ -108,23 +108,19 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 		$user_id = $user['id'];
 
-		if ( empty( $_GET['post_id'] ) || ( empty( $_GET['status'] ) && in_array( $_GET['status'], $statuses, true ) ) ) {
+		if ( empty( $_GET['post_id'] ) || ( empty( $_GET['status'] ) || ! in_array( $_GET['status'], $statuses, true ) ) ) {
 			die;
 		}
 
 		$course_id = intval( $_GET['post_id'] );
 		$status    = sanitize_text_field( $_GET['status'] );
 
-		if ( ! STM_LMS_Course::check_course_author( $course_id, $user_id ) ) {
-			die;
-		}
-
 		if ( apply_filters( 'stm_lms_before_change_course_status', false ) ) {
 			do_action( 'stm_lms_change_course_status', $status );
 			wp_send_json( $status );
 		}
 
-		if ( 'publish' === $status ) {
+		if ( 'publish' === $status && ! current_user_can( 'manage_options' ) ) {
 			$premoderation = STM_LMS_Options::get_option( 'course_premoderation', false );
 			$status        = ( $premoderation ) ? 'pending' : 'publish';
 		}
@@ -300,11 +296,31 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			}
 		}
 
+		$is_course_co_instructor = false;
+
+		if ( $post && 'stm-courses' === $post->post_type ) {
+			$co_instructors = array();
+			$co_meta        = get_post_meta( $post->ID, 'co_instructor', false );
+
+			if ( ! empty( $co_meta ) ) {
+				foreach ( (array) $co_meta as $co_instructor ) {
+					if ( is_array( $co_instructor ) ) {
+						$co_instructors = array_merge( $co_instructors, $co_instructor );
+					} else {
+						$co_instructors[] = $co_instructor;
+					}
+				}
+			}
+
+			$co_instructors         = array_filter( array_map( 'intval', $co_instructors ) );
+			$is_course_co_instructor = in_array( (int) $user_id, $co_instructors, true );
+		}
+
 		if ( $post && in_array( $cap, array( 'edit_stm_lms_post', 'delete_stm_lms_post', 'read_stm_lms_post' ), true ) ) {
 			$caps = array();
 
 			if ( 'edit_stm_lms_post' === $cap ) {
-				$caps[] = ( strval( $user_id ) === strval( $post->post_author ) )
+				$caps[] = ( strval( $user_id ) === strval( $post->post_author ) || $is_course_co_instructor )
 					? $post_type->cap->edit_posts
 					: $post_type->cap->edit_others_posts;
 			}
@@ -316,7 +332,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			}
 
 			if ( 'read_stm_lms_post' === $cap ) {
-				if ( 'private' !== $post->post_status || $user_id === (int) $post->post_author ) {
+				if ( 'private' !== $post->post_status || $user_id === (int) $post->post_author || $is_course_co_instructor ) {
 					$caps[] = 'read';
 				} else {
 					$caps[] = $post_type->cap->read_private_posts;
@@ -509,7 +525,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					'time'                        => get_post_time( 'U', true ),
 					'title'                       => html_entity_decode( get_the_title() ),
 					/* translators: %s Last Updated */
-					'updated'                     => sprintf( esc_html__( 'Last updated: %s', 'masterstudy-lms-learning-management-system' ), stm_lms_time_elapsed_string( get_post( $id )->post_modified ) ),
+					'updated'                     => stm_lms_time_elapsed_string( get_post( $id )->post_modified ),
 					'link'                        => get_the_permalink(),
 					'image'                       => $image,
 					'image_small'                 => $image_small,
@@ -546,6 +562,102 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 				$post['sale_price'] = ( $sale_price_active && ! empty( $sale_price ) ) ? STM_LMS_Helpers::display_price( $sale_price ) : '';
 				$result['posts'][]  = $post;
+			}
+		}
+
+		wp_reset_postdata();
+
+		return $result;
+	}
+
+	public static function get_instructor_courses( $args = array(), $pp = 12 ): array {
+		$result = array( 'posts' => array() );
+
+		if ( function_exists( 'pll_current_language' ) ) {
+			$args['lang'] = pll_current_language();
+		}
+
+		$pp = (int) $pp;
+
+		if ( $pp > 0 ) {
+			$args['posts_per_page'] = $pp;
+		}
+
+		$paged = 1;
+
+		if ( ! empty( $args['paged'] ) ) {
+			$paged = (int) $args['paged'];
+		} elseif ( ! empty( $args['page'] ) ) {
+			$paged = (int) $args['page'];
+		}
+
+		$paged = max( 1, $paged );
+
+		$query = new WP_Query( $args );
+
+		$total_posts = (int) $query->found_posts;
+
+		$result['found']    = $total_posts;
+		$result['per_page'] = $pp > 0 ? $pp : (int) $query->get( 'posts_per_page' );
+		$result['pages']    = $result['per_page'] > 0 ? (int) ceil( $result['found'] / $result['per_page'] ) : 1;
+		$result['total']    = ( $paged >= $result['pages'] );
+
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				$id = get_the_ID();
+
+				$status            = get_post_status( $id );
+				$price             = get_post_meta( $id, 'price', true );
+				$sale_price        = STM_LMS_Course::get_sale_price( $id );
+				$single_sale       = get_post_meta( $id, 'single_sale', true );
+				$is_featured       = get_post_meta( $id, 'featured', true );
+				$not_in_membership = get_post_meta( $id, 'not_membership', true );
+
+				switch ( $status ) {
+					case 'publish':
+						$status_label = esc_html__( 'Published', 'masterstudy-lms-learning-management-system' );
+						break;
+					case 'pending':
+						$status_label = esc_html__( 'Pending', 'masterstudy-lms-learning-management-system' );
+						break;
+					default:
+						$status_label = esc_html__( 'Draft', 'masterstudy-lms-learning-management-system' );
+						break;
+				}
+
+				$post = array(
+					'id'                          => $id,
+					'time'                        => get_post_time( 'U', true ),
+					'post_author'                 => get_post_field( 'post_author', $id ),
+					'post_title'                  => get_the_title( $id ),
+					'course_marks'                => get_post_meta( $id, 'course_marks', true ),
+					/* translators: %s Last Updated */
+					'updated'                     => stm_lms_time_elapsed_string( get_post( $id )->post_modified ),
+					'status'                      => $status,
+					'status_label'                => $status_label,
+					'featured'                    => $is_featured,
+					'views'                       => STM_LMS_Course::get_course_views( $id ),
+					'price'                       => $price,
+					'sale_price'                  => $sale_price,
+					'single_sale'                 => $single_sale,
+					'edit_link'                   => ms_plugin_manage_course_url( $id ),
+					'coming_soon_link'            => ms_plugin_manage_course_url( "$id/settings/access" ),
+					'duration_info'               => get_post_meta( $id, 'duration_info', true ),
+					'manage_students_link'        => self::instructor_manage_students_url() . "/?course_id=$id",
+					'can_instructor_add_students' => self::instructor_can_add_students(),
+					'not_in_membership'           => $not_in_membership,
+				);
+
+				if ( STM_LMS_Helpers::is_pro_plus() && STM_LMS_Options::get_option( 'instructors_reports', true ) ) {
+					$post = apply_filters( 'masterstudy_add_analytics_link', $post, $id );
+				}
+
+				if ( STM_LMS_Helpers::is_pro_plus() && is_ms_lms_addon_enabled( 'grades' ) ) {
+					$post = apply_filters( 'masterstudy_add_grades_link', $post, $id );
+				}
+
+				$result['posts'][] = $post;
 			}
 		}
 

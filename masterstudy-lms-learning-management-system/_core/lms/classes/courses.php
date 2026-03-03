@@ -78,12 +78,13 @@ class STM_LMS_Courses {
 		if ( is_user_logged_in() ) {
 			$my_progress = STM_LMS_Helpers::simplify_db_array( stm_lms_get_user_course( get_current_user_id(), $course['id'], array( 'progress_percent' ) ) );
 			if ( ! empty( $my_progress['progress_percent'] ) ) {
-				$progress = $my_progress['progress_percent'];
+				$progress = (int) $my_progress['progress_percent'];
 			}
 			if ( $progress > 100 ) {
 				$progress = 100;
 			}
 		}
+
 		$course['progress'] = $progress;
 
 		return $course;

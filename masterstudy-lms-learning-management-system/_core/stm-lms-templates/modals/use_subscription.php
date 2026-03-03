@@ -37,10 +37,10 @@ if ( ! empty( $user_approval['status'] ) && in_array( $user_approval['status'], 
 
 				<?php
 				if ( count( $stm_lms_vars ) > 1 ) {
-					STM_LMS_Templates::show_lms_template( 'account/v1/use_membership_multiply', compact( 'stm_lms_vars' ) );
+					STM_LMS_Templates::show_lms_template( 'modals/use_membership_multiply', compact( 'stm_lms_vars' ) );
 				} else {
 					STM_LMS_Templates::show_lms_template(
-						'account/v1/use_membership',
+						'modals/use_membership',
 						compact( 'subscription', 'needs_approval' )
 					);
 				}

@@ -198,6 +198,7 @@ class STM_LMS_User_Menu {
 		$user_id       = get_current_user_id();
 		$settings      = get_option( 'stm_lms_settings', array() );
 		$is_instructor = STM_LMS_Instructor::is_instructor( $user_id );
+		$current_slug  = self::get_current_account_slug();
 
 		$menus = array();
 
@@ -206,19 +207,13 @@ class STM_LMS_User_Menu {
 			$menus[] = array(
 				'order'        => 10,
 				'id'           => 'dashboard',
-				'lms_template' => 'stm-lms-user',
+				'lms_template' => 'account/main',
 				'menu_title'   => esc_html__( 'Dashboard', 'masterstudy-lms-learning-management-system' ),
-				'menu_icon'    => 'stmlms-tachometer-alt',
+				'menu_icon'    => 'stmlms-menu-dashboard',
 				'menu_url'     => STM_LMS_User::login_page_url(),
-				'is_active'    => ( ! empty( $settings['user_url'] ) ) ? $settings['user_url'] : '',
+				'is_active'    => ! empty( $settings['user_url'] ) ? get_queried_object_id() === intval( $settings['user_url'] ) : '',
 				'menu_place'   => 'main',
-			);
-
-			$menus[] = array(
-				'id'    => 'divider',
-				'order' => 90,
-				'type'  => 'divider',
-				'title' => esc_html__( 'Learning area', 'masterstudy-lms-learning-management-system' ),
+				'section'      => 'main',
 			);
 
 			if ( apply_filters( 'stm_lms_enable_add_course', true ) ) {
@@ -228,9 +223,10 @@ class STM_LMS_User_Menu {
 					'slug'         => 'edit-course',
 					'lms_template' => 'course-builder',
 					'menu_title'   => esc_html__( 'Add Course', 'masterstudy-lms-learning-management-system' ),
-					'menu_icon'    => 'stmlms-plus-2',
+					'menu_icon'    => 'stmlms-menu-add-course',
 					'menu_url'     => ms_plugin_manage_course_url(),
 					'menu_place'   => 'main',
+					'section'      => 'main',
 				);
 			}
 		}
@@ -239,71 +235,78 @@ class STM_LMS_User_Menu {
 			'order'        => 100,
 			'id'           => 'enrolled_courses',
 			'slug'         => 'enrolled-courses',
-			'lms_template' => 'stm-lms-user-courses',
+			'lms_template' => 'account/enrolled-courses',
 			'menu_title'   => esc_html__( 'Enrolled Courses', 'masterstudy-lms-learning-management-system' ),
-			'menu_icon'    => 'stmlms-book-2',
+			'menu_icon'    => 'stmlms-menu-enrolled-courses',
 			'menu_url'     => ms_plugin_user_account_url( 'enrolled-courses' ),
-			'is_active'    => ( ! $is_instructor && intval( $settings['user_url'] ?? null ) === get_queried_object_id() ),
+			'is_active'    => 'enrolled-courses' === $current_slug,
 			'menu_place'   => 'learning',
+			'section'      => 'main',
 		);
 
-		if ( ! self::float_menu_enabled() ) {
-			$menus[] = array(
-				'order'        => 110,
-				'id'           => 'settings',
-				'slug'         => 'settings',
-				'lms_template' => 'stm-lms-user-settings',
-				'menu_title'   => esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ),
-				'menu_icon'    => 'stmlms-cog-2',
-				'menu_url'     => ms_plugin_user_account_url( 'settings' ),
-				'menu_place'   => 'learning',
-			);
-		}
+		$menus[] = array(
+			'order'        => 110,
+			'id'           => 'settings',
+			'slug'         => 'settings',
+			'lms_template' => 'account/settings',
+			'menu_title'   => esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ),
+			'menu_icon'    => 'stmlms-menu-settings',
+			'menu_url'     => ms_plugin_user_account_url( 'settings' ),
+			'is_active'    => 'settings' === $current_slug,
+			'section'      => 'account',
+		);
 
-		if ( apply_filters( 'float_menu_item_enabled', true ) ) {
-			$menus[] = array(
-				'order'        => 120,
-				'id'           => 'messages',
-				'slug'         => 'chat',
-				'lms_template' => 'stm-lms-user-chats',
-				'menu_title'   => esc_html__( 'Messages', 'masterstudy-lms-learning-management-system' ),
-				'menu_icon'    => 'stmlms-envelope-2',
-				'menu_url'     => ms_plugin_user_account_url( 'chat' ),
-				'badge_count'  => STM_LMS_Chat::user_new_messages( $user_id ),
-				'menu_place'   => 'learning',
-			);
-		}
+		$menus[] = array(
+			'order'        => 120,
+			'id'           => 'messages',
+			'slug'         => 'chat',
+			'lms_template' => 'account/messages',
+			'menu_title'   => esc_html__( 'Messages', 'masterstudy-lms-learning-management-system' ),
+			'menu_icon'    => 'stmlms-menu-messages',
+			'menu_url'     => ms_plugin_user_account_url( 'chat' ),
+			'badge_count'  => STM_LMS_Chat::user_new_messages( $user_id ),
+			'is_active'    => 'chat' === $current_slug,
+			'menu_place'   => 'learning',
+			'section'      => 'communication',
+		);
 
 		$menus[] = array(
 			'order'        => 130,
 			'id'           => 'favorite_courses',
 			'slug'         => 'wishlist',
-			'lms_template' => 'stm-lms-wishlist',
+			'lms_template' => 'account/wishlist',
 			'menu_title'   => esc_html__( 'Wishlist', 'masterstudy-lms-learning-management-system' ),
-			'menu_icon'    => 'stmlms-star-3',
+			'menu_icon'    => 'stmlms-menu-wishlist',
 			'menu_url'     => STM_LMS_User::wishlist_url(),
-			'is_active'    => ( ! empty( $settings['wishlist_url'] ) ) ? $settings['wishlist_url'] : '',
+			'is_active'    => ! empty( $settings['wishlist_url'] ) ? get_queried_object_id() === intval( $settings['wishlist_url'] ) : '',
 			'menu_place'   => 'learning',
+			'section'      => 'account',
 		);
+
 		$menus[] = array(
 			'order'        => 140,
 			'id'           => 'enrolled_quizzes',
 			'slug'         => 'enrolled-quizzes',
-			'lms_template' => 'stm-lms-user-quizzes',
+			'lms_template' => 'account/enrolled-quizzes',
 			'menu_title'   => esc_html__( 'Enrolled Quizzes', 'masterstudy-lms-learning-management-system' ),
-			'menu_icon'    => 'stmlms-question-2',
+			'menu_icon'    => 'stmlms-menu-enrolled-quizzes',
 			'menu_url'     => ms_plugin_user_account_url( 'enrolled-quizzes' ),
 			'menu_place'   => 'learning',
+			'is_active'    => 'enrolled-quizzes' === $current_slug,
+			'section'      => 'main',
 		);
+
 		$menus[] = array(
 			'order'        => 150,
 			'id'           => 'my_orders',
 			'slug'         => 'my-orders',
-			'lms_template' => 'stm-lms-user-orders',
+			'lms_template' => 'account/my-orders',
 			'menu_title'   => esc_html__( 'My Orders', 'masterstudy-lms-learning-management-system' ),
-			'menu_icon'    => 'stmlms-shopping-basket',
+			'menu_icon'    => 'stmlms-menu-my-orders',
 			'menu_url'     => ms_plugin_user_account_url( 'my-orders' ),
 			'menu_place'   => 'learning',
+			'is_active'    => 'my-orders' === $current_slug,
+			'section'      => 'account',
 		);
 
 		if ( STM_LMS_Subscriptions::subscription_enabled() ) {
@@ -311,11 +314,13 @@ class STM_LMS_User_Menu {
 				'order'        => 125,
 				'id'           => 'memberships',
 				'slug'         => 'memberships-pmp',
-				'lms_template' => 'stm-lms-user-pmp',
+				'lms_template' => 'account/memberships-pmp',
 				'menu_title'   => esc_html__( 'Memberships', 'masterstudy-lms-learning-management-system' ),
-				'menu_icon'    => 'stmlms-address-card',
+				'menu_icon'    => 'stmlms-menu-memberships',
 				'menu_url'     => STM_LMS_User::my_pmpro_url(),
 				'menu_place'   => 'learning',
+				'is_active'    => 'memberships-pmp' === $current_slug,
+				'section'      => 'account',
 			);
 		}
 
@@ -326,6 +331,29 @@ class STM_LMS_User_Menu {
 		return $menus;
 	}
 
+	public static function get_current_account_slug(): string {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$path        = wp_parse_url( $request_uri, PHP_URL_PATH );
+		$path        = trim( (string) $path, '/' );
+
+		$base_url  = STM_LMS_User::login_page_url();
+		$base_path = wp_parse_url( $base_url, PHP_URL_PATH );
+		$base_path = trim( (string) $base_path, '/' );
+
+		if ( empty( $base_path ) || strpos( $path, $base_path ) !== 0 ) {
+			return '';
+		}
+
+		$tail = trim( substr( $path, strlen( $base_path ) ), '/' );
+		if ( '' === $tail ) {
+			return '';
+		}
+
+		$parts = explode( '/', $tail );
+
+		return sanitize_key( $parts[0] ?? '' );
+	}
+
 	/**
 	 * Displays a sortable menu on the site after filtering it
 	 */
@@ -333,25 +361,6 @@ class STM_LMS_User_Menu {
 		$menu_items = self::float_menu_items();
 
 		if ( STM_LMS_Instructor::is_instructor() ) {
-			$menu_items = self::remove_settings_from_menu( $menu_items );
-
-			if ( self::float_menu_enabled() ) {
-				$float_main_menu = apply_filters( 'stm_lms_sorted_menu', $menu_items, 'sorting_float_menu_main' );
-				$divider_key     = array_search( 'divider', array_column( $menu_items, 'id' ), true );
-
-				if ( -1 < $divider_key ) {
-					$float_main_menu[] = $menu_items[ $divider_key ];
-				}
-
-				$menu_items = array_unique(
-					array_merge(
-						$float_main_menu,
-						apply_filters( 'stm_lms_sorted_menu', $menu_items, 'sorting_float_menu_learning' )
-					),
-					SORT_REGULAR
-				);
-			}
-
 			$selected_menu = self::float_menu_enabled() ? 'sorting_full_float_menu' : 'sorting_the_menu';
 		} else {
 			$selected_menu = self::float_menu_enabled() ? 'sorting_float_menu_learning' : 'sorting_the_menu_student';
@@ -402,7 +411,7 @@ class STM_LMS_User_Menu {
 				$full_menu       = 'sorting_the_menu' === $menu_name || $student_menu;
 				switch ( $menu_item['id'] ) {
 					case 'settings':
-						$add_element = ! self::float_menu_enabled() && ( ! $is_instructor || is_admin() ) && $student_menu;
+						$add_element = true;
 						break;
 					case 'add_student':
 						$add_element = STM_LMS_Instructor::instructor_can_add_students() && $is_instructor && $instructor_menu;
@@ -544,28 +553,7 @@ class STM_LMS_User_Menu {
 				function( $menu_item ) use ( $disabled_items ) {
 					$menu_id = $menu_item['id'] ?? null;
 
-					if ( 'settings' === $menu_id ) {
-						return ! self::float_menu_enabled();
-					}
-
 					return ! empty( $menu_id ) && ! in_array( $menu_id, $disabled_items, true );
-				}
-			)
-		);
-	}
-
-	public static function remove_settings_from_menu( $menu_items ) {
-		return array_values(
-			array_filter(
-				$menu_items,
-				function( $menu_item ) {
-					$menu_id = $menu_item['id'] ?? null;
-
-					if ( 'settings' === $menu_id ) {
-						return ! STM_LMS_Instructor::is_instructor();
-					}
-
-					return ! empty( $menu_id );
 				}
 			)
 		);
@@ -614,5 +602,57 @@ class STM_LMS_User_Menu {
 
 	public static function get_menu_options( $menu ) {
 		return $menu[0]['options'] ?? false;
+	}
+
+	public static function get_account_menu_sections( array $menu_items ): array {
+		$section_labels = array(
+			'main'          => esc_html__( 'Main', 'masterstudy-lms-learning-management-system' ),
+			'communication' => esc_html__( 'Communication', 'masterstudy-lms-learning-management-system' ),
+			'progress'      => esc_html__( 'Progress', 'masterstudy-lms-learning-management-system' ),
+			'account'       => esc_html__( 'Account and settings', 'masterstudy-lms-learning-management-system' ),
+			'finance'       => esc_html__( 'Finance', 'masterstudy-lms-learning-management-system' ),
+		);
+
+		$section_labels = apply_filters( 'masterstudy_account_menu_section_labels', $section_labels );
+		$sections       = array();
+
+		foreach ( $menu_items as $menu_item ) {
+			$section_key = isset( $menu_item['section'] ) ? sanitize_key( (string) $menu_item['section'] ) : 'main';
+
+			if ( ! isset( $sections[ $section_key ] ) ) {
+				$sections[ $section_key ] = array();
+			}
+
+			$sections[ $section_key ][] = $menu_item;
+		}
+
+		$sections['account']   = $sections['account'] ?? array();
+		$sections['account'][] = array(
+			'order'      => 999999,
+			'id'         => 'logout',
+			'slug'       => 'logout',
+			'menu_title' => esc_html__( 'Log out', 'masterstudy-lms-learning-management-system' ),
+			'menu_icon'  => 'stmlms-menu-logout',
+			'menu_url'   => wp_logout_url( get_home_url() ),
+			'section'    => 'account',
+			'is_active'  => false,
+		);
+
+		$desired_order = apply_filters(
+			'masterstudy_account_menu_section_order',
+			array( 'main', 'communication', 'progress', 'finance', 'account' )
+		);
+
+		$final_order = array_values(
+			array_unique(
+				array_merge( $desired_order, array_keys( $sections ) )
+			)
+		);
+
+		return array(
+			'list'   => $sections,
+			'order'  => $final_order,
+			'labels' => $section_labels,
+		);
 	}
 }

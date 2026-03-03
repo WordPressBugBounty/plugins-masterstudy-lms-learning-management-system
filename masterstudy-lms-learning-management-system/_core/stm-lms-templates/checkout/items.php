@@ -18,20 +18,7 @@ $subtotal       = 0.0;
 $is_trial       = false;
 $settings       = get_option( 'stm_lms_settings' );
 $coupon_enabled = STM_LMS_Helpers::is_coupons_enabled();
-?>
 
-<div class="masterstudy-checkout-container__top">
-	<?php
-	STM_LMS_Templates::show_lms_template(
-		'account/private/parts/top_info',
-		array(
-			'title' => esc_html__( 'Checkout', 'masterstudy-lms-learning-management-system' ),
-		)
-	);
-	?>
-</div>
-
-<?php
 if ( empty( $items ) ) :
 	STM_LMS_Templates::show_lms_template( 'checkout/empty-cart' );
 else :

@@ -54,7 +54,7 @@ if ( ! class_exists( 'STM_Lms_Post_Type' ) ) {
 				}
 			}
 
-			if ( is_admin() || current_user_can( 'administrator' ) || current_user_can( 'stm_lms_instructor' ) ) {
+			if ( is_admin() || current_user_can( 'manage_options' ) || current_user_can( 'stm_lms_instructor' ) ) {
 				$unlock_lesson = true;
 			}
 
@@ -239,16 +239,16 @@ if ( ! class_exists( 'STM_Lms_Post_Type' ) ) {
 		}
 
 		public function post_type_args( $labels, $slug, $args = array() ) {
-			$can_edit     = ( current_user_can( 'edit_posts' ) );
 			$default_args = array(
 				'labels'             => $labels,
-				'public'             => $can_edit,
-				'publicly_queryable' => $can_edit,
+				'public'             => false,
+				'publicly_queryable' => false,
 				'show_ui'            => true,
 				'show_in_menu'       => true,
 				'query_var'          => true,
 				'rewrite'            => array( 'slug' => $slug ),
 				'capability_type'    => 'post',
+				'map_meta_cap'       => true,
 				'has_archive'        => false,
 				'hierarchical'       => false,
 				'menu_position'      => null,

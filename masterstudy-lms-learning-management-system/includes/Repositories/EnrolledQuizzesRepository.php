@@ -42,7 +42,7 @@ final class EnrolledQuizzesRepository {
 			}
 
 			$course_title = ! empty( get_post_status( $course_id ) )
-				? get_the_title( $course_id )
+				? wp_specialchars_decode( get_the_title( $course_id ), ENT_QUOTES )
 				: esc_html__( 'Course Deleted', 'masterstudy-lms-learning-management-system' );
 
 			if ( ! isset( $courses[ $course_id ] ) ) {
@@ -61,8 +61,9 @@ final class EnrolledQuizzesRepository {
 				$attempts_count  = isset( $quiz_item['attempts_count'] ) ? (int) $quiz_item['attempts_count'] : 0;
 				$questions_count = isset( $quiz_item['questions_count'] ) ? (int) $quiz_item['questions_count'] : 0;
 
-				$status = $this->format_status( $quiz_status );
-				$grade  = $this->format_grade( $progress );
+				$status      = $this->format_status( $quiz_status );
+				$grade       = $this->format_grade( $progress );
+				$grade_point = $this->get_grade_point( $progress );
 
 				$courses[ $course_id ]['quizzes'][] = array(
 					'user_quiz_id' => esc_html( $user_quiz_id ),
@@ -70,12 +71,13 @@ final class EnrolledQuizzesRepository {
 					'title'        => esc_html( get_the_title( $quiz_id ) ),
 					'url'          => esc_url( STM_LMS_Lesson::get_lesson_url( $course_id, $quiz_id ) ),
 					'grade'        => esc_html( $grade ),
+					'grade_point'  => esc_html( $grade_point ),
 					'progress'     => esc_html( $progress ),
 					'attempts'     => array(
 						'url'   => esc_url( ms_plugin_user_account_url( 'enrolled-quiz-attempts/' . $course_id . '/' . $quiz_id ) ),
 						'count' => sprintf(
 							/* translators: %d count attempts */
-							esc_html__( '%d attempts', 'masterstudy-lms-learning-management-system' ),
+							esc_html__( '%d attempt(s)', 'masterstudy-lms-learning-management-system' ),
 							$attempts_count
 						),
 					),
@@ -292,5 +294,9 @@ final class EnrolledQuizzesRepository {
 
 	private function format_grade( int $progress ) {
 		return is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->get_passing_grade( $progress ) : round( $progress, 1 ) . '%';
+	}
+
+	private function get_grade_point( int $progress ) {
+		return is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->calculate( $progress )['point'] : '';
 	}
 }

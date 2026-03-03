@@ -22,4 +22,4 @@ $menu_items           = STM_LMS_User_Menu::stm_lms_user_menu_display();
 	</div>
 
 <?php
-STM_LMS_Templates::show_lms_template( 'account/private/parts/logout' );
+STM_LMS_Templates::show_lms_template( 'account/float_menu/logout' );

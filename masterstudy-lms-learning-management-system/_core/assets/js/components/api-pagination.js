@@ -1,6 +1,7 @@
 "use strict";
 
 function initializePagination(currentPage, totalPages) {
+  var itemWidth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 50;
   var pagesContainer = jQuery(".masterstudy-pagination");
   var pagesWrapper = pagesContainer.find(".masterstudy-pagination__wrapper");
   var pagesList = pagesContainer.find(".masterstudy-pagination__list");
@@ -13,7 +14,7 @@ function initializePagination(currentPage, totalPages) {
       'total_pages': totalPages,
       'current_page': currentPage,
       'is_queryable': false,
-      'item_width': 50
+      'item_width': itemWidth
     };
   }
   numericFields.forEach(function (field) {
@@ -27,40 +28,49 @@ function initializePagination(currentPage, totalPages) {
   if (containerWidth) {
     pagesWrapper.css("width", containerWidth);
   }
-  prevNextButtonState(jQuery('.masterstudy-pagination'), currentPage, totalPages);
-  currentPosition = calculateInitialPosition(currentPage, centeredPage, totalPages, maxPosition);
-  pagesList.find("[data-id=\"".concat(currentPage, "\"]")).parent().addClass("masterstudy-pagination__item_current");
-  pagesList.animate({
-    left: -currentPosition + "px"
-  }, 50);
+  prevNextButtonState(pagesContainer, currentPage, totalPages);
+  setCurrentPage(pagesList, currentPage, 'masterstudy-pagination__item_current');
+  centerActivePage(pagesWrapper, pagesList, currentPage);
   scrollButtonNext.off('click').on('click', function (e) {
     e.preventDefault();
-    if (pages_data.is_queryable && currentPage < totalPages) {
-      updatePageQueryParam(currentPage + 1);
-    }
-    updateButtonState(scrollButtonNext, scrollButtonPrev, currentPage, totalPages);
-    scrollPageList(currentPage, centeredPage, maxPosition, pagesList);
+    if (currentPage >= totalPages) return;
+    currentPage += 1;
+    prevNextButtonState(pagesContainer, currentPage, totalPages);
     setCurrentPage(pagesList, currentPage, 'masterstudy-pagination__item_current');
+    centerActivePage(pagesWrapper, pagesList, currentPage);
+    if (pages_data.is_queryable) updatePageQueryParam(currentPage);
   });
   scrollButtonPrev.off('click').on('click', function (e) {
     e.preventDefault();
-    if (pages_data.is_queryable && currentPage > 1) {
-      updatePageQueryParam(currentPage - 1);
-    }
-    updateButtonState(scrollButtonNext, scrollButtonPrev, currentPage, totalPages);
-    scrollPageList(currentPage, centeredPage, maxPosition, pagesList);
+    if (currentPage <= 1) return;
+    currentPage -= 1;
+    prevNextButtonState(pagesContainer, currentPage, totalPages);
     setCurrentPage(pagesList, currentPage, 'masterstudy-pagination__item_current');
+    centerActivePage(pagesWrapper, pagesList, currentPage);
+    if (pages_data.is_queryable) updatePageQueryParam(currentPage);
   });
+  function clamp(n, min, max) {
+    return Math.max(min, Math.min(max, n));
+  }
+  function centerActivePage(pagesWrapper, pagesList, pageNumber) {
+    var activeBlock = pagesList.find("[data-id=\"".concat(pageNumber, "\"]"));
+    if (!activeBlock.length) return;
+    var wrapperWidth = pagesWrapper[0].getBoundingClientRect().width;
+    var blockRect = activeBlock[0].getBoundingClientRect();
+    var listRect = pagesList[0].getBoundingClientRect();
+    var blockCenter = blockRect.left - listRect.left + blockRect.width / 2;
+    var targetLeft = blockCenter - wrapperWidth / 2;
+    var maxScroll = Math.max(0, pagesList[0].scrollWidth - wrapperWidth);
+    targetLeft = clamp(targetLeft, 0, maxScroll);
+    pagesList.stop(true).animate({
+      left: -targetLeft + "px"
+    }, 120);
+  }
   jQuery(".masterstudy-pagination__item-block").off('click').on('click', function () {
-    currentPage = jQuery(this).data("id");
-    var container = jQuery(this).closest(".masterstudy-pagination");
-    currentPosition = calculateCurrentPosition(currentPage, centeredPage, maxPosition, noScroll, totalPages);
-    prevNextButtonState(container, currentPage, totalPages);
-    jQuery(this).parent().siblings().removeClass("masterstudy-pagination__item_current");
-    jQuery(this).parent().addClass("masterstudy-pagination__item_current");
-    pagesList.animate({
-      left: -currentPosition + "px"
-    }, 50);
+    currentPage = parseInt(jQuery(this).data("id"), 10);
+    prevNextButtonState(pagesContainer, currentPage, totalPages);
+    setCurrentPage(pagesList, currentPage, 'masterstudy-pagination__item_current');
+    centerActivePage(pagesWrapper, pagesList, currentPage);
     if (pages_data.is_queryable) {
       updatePageQueryParam(currentPage);
     }
@@ -126,6 +136,6 @@ function prevNextButtonState(container, currentPage, totalPages) {
 }
 jQuery(document).ready(function () {
   if (typeof pages_data !== 'undefined') {
-    initializePagination(parseInt(pages_data.current_page), parseInt(pages_data.total_pages));
+    initializePagination(parseInt(pages_data.current_page), parseInt(pages_data.total_pages), parseInt(pages_data.item_width));
   }
 });

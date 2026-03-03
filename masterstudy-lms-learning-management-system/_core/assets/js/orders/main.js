@@ -268,7 +268,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                       if (matchingItem) {
                         if (matchingItem.enterprise && matchingItem.enterprise !== "0" || matchingItem.enterprise_id && matchingItem.enterprise_id !== "0") {
                           additionalInfo = "<span class=\"order-status\">".concat(masterstudy_orders.enterprise, "</span>");
-                        } else if ((matchingItem.bundle && matchingItem.bundle !== "0" || item.bundle_courses_count > 0) && matchingItem.bundle_id && matchingItem.bundle_id !== "0") {
+                        } else if (matchingItem.bundle && matchingItem.bundle !== "0" || item.bundle_courses_count > 0) {
                           additionalInfo = "<span class=\"order-status\">".concat(masterstudy_orders.bundle, "</span>");
                         } else if (order.is_subscription) {
                           additionalInfo = "<span class=\"order-status\">".concat(masterstudy_orders.subscription, "</span>");
@@ -318,7 +318,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
               }
             } else {
-              orderHtml = "\n              <div class=\"masterstudy-orders-no-found__info\">\n                <div class=\"masterstudy-orders-no-found__info-icon\"><span class=\"stmlms-order\"></span></div>\n                <div class=\"masterstudy-orders-no-found__info-title\">".concat(masterstudy_orders.no_order_title, "</div>\n                <div class=\"masterstudy-orders-no-found__info-description\">").concat(masterstudy_orders.no_order_description, "</div>\n            </div>");
+              orderHtml = "\n              <div class=\"masterstudy-orders-no-found__info\">\n                <div class=\"masterstudy-orders-no-found__info-icon\"><i class=\"stmlms-orders\"></i></div>\n                <div class=\"masterstudy-orders-no-found__info-title\">".concat(masterstudy_orders.no_order_title, "</div>\n                <a href=\"").concat(masterstudy_orders.courses_page, "\" target=\"_blank\" class=\"masterstudy-button masterstudy-button_style-primary masterstudy-button_size-sm\">\n                  <span class=\"masterstudy-button__title\">").concat(masterstudy_orders.button_title, "</span>\n                </a>\n            </div>");
               $(".masterstudy-orders").append("".concat(orderHtml)).addClass("masterstudy-orders-no-found");
             }
             _context.next = 28;

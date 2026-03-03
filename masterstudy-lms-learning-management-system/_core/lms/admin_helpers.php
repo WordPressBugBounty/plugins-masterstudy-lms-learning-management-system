@@ -192,12 +192,17 @@ add_action(
 	100
 );
 
-add_action(
+add_filter(
 	'admin_url',
 	function ( $url, $path ) {
-		if ( home_url( '/' ) === ms_plugin_manage_course_url() ) {
+		if ( is_network_admin() ) {
 			return $url;
 		}
+		static $in_filter = false;
+		if ( $in_filter ) {
+			return $url; // prevent recursion
+		}
+		$in_filter = true;
 
 		$post_types = array(
 			'stm-courses'      => 'edit-course',
@@ -211,12 +216,15 @@ add_action(
 		if ( strpos( $path, 'post-new.php?post_type=' ) !== false ) {
 			$query_args = wp_parse_url( $path, PHP_URL_QUERY );
 			parse_str( $query_args, $query_params );
+
 			$post_type = $query_params['post_type'] ?? '';
 
 			if ( array_key_exists( $post_type, $post_types ) ) {
 				$url = ms_plugin_user_account_url( $post_types[ $post_type ] );
 			}
 		}
+
+		$in_filter = false;
 
 		return $url;
 	},

@@ -914,13 +914,14 @@ class STM_LMS_Helpers {
 		$membership_inactive = $membership_info['membership_inactive'] && $with_membership;
 
 		return array(
-			'membership_expired'  => $membership_expired,
-			'membership_inactive' => $membership_inactive,
-			'only_for_membership' => $only_for_membership,
-			'membership_level'    => $membership_level,
-			'is_bought'           => $is_bought,
-			'is_free'             => $is_free,
-			'no_membership_plan'  => $no_membership_plan,
+			'membership_expired'   => $membership_expired,
+			'membership_inactive'  => $membership_inactive,
+			'only_for_membership'  => $only_for_membership,
+			'membership_level'     => $membership_level,
+			'is_bought'            => $is_bought,
+			'is_free'              => $is_free,
+			'no_membership_plan'   => $no_membership_plan,
+			'bought_by_membership' => $bought_by_membership,
 		);
 	}
 	public static function masterstudy_lms_get_site_url() {

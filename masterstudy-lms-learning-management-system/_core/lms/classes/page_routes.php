@@ -203,96 +203,96 @@ class STM_LMS_Page_Router {
 		$page_routes = array(
 			'user_url'               => array(
 				'title'     => esc_html__( 'Private account', 'masterstudy-lms-learning-management-system' ),
-				'logged_in' => 'stm-lms-user',
+				'logged_in' => 'account/main',
 				'template'  => 'stm-lms-login',
 				'sub_pages' => array(
 					'chat_url'                   => array(
-						'template'  => 'stm-lms-user-chats',
+						'template'  => 'account/messages',
 						'protected' => true,
 						'url'       => 'chat',
 					),
 					'enrolled_courses_url'       => array(
-						'template'  => 'stm-lms-user-courses',
+						'template'  => 'account/student/dashboard',
 						'protected' => true,
 						'url'       => 'enrolled-courses',
 					),
 					'enrolled_quizzes_url'       => array(
-						'template'  => 'stm-lms-user-quizzes',
+						'template'  => 'account/enrolled-quizzes',
 						'protected' => true,
 						'url'       => 'enrolled-quizzes',
 					),
 					'enrolled_quiz_attempts_url' => array(
-						'template'  => 'stm-lms-user-quiz-attempts',
+						'template'  => 'account/enrolled-quiz-attempts',
 						'protected' => true,
 						'url'       => 'enrolled-quiz-attempts',
 						'vars'      => array( 'course_id', 'quiz_id' ),
 					),
 					'enrolled_quiz_attempt_url'  => array(
-						'template'  => 'stm-lms-user-quiz-attempt',
+						'template'  => 'account/enrolled-quiz-attempt',
 						'protected' => true,
 						'url'       => 'enrolled-quiz-attempt',
 						'vars'      => array( 'course_id', 'quiz_id', 'attempt_id' ),
 					),
 					'my_orders_url'              => array(
-						'template'  => 'stm-lms-user-orders',
+						'template'  => 'account/my-orders',
 						'protected' => true,
 						'url'       => 'my-orders',
 					),
 					'settings_url'               => array(
-						'template'  => 'stm-lms-user-settings',
+						'template'  => 'account/settings',
 						'protected' => true,
 						'url'       => 'settings',
 					),
 					'paid_membership_url'        => array(
-						'template'  => 'stm-lms-user-pmp',
+						'template'  => 'account/memberships-pmp',
 						'protected' => true,
 						'url'       => 'memberships-pmp',
 					),
 					'certificate_url'            => array(
-						'template'  => 'stm-lms-certificates',
+						'template'  => 'account/my-certificates',
 						'protected' => true,
 						'url'       => 'my-certificates',
 						'sub_pages' => array(
 							'certificate_url_generate' => array(
-								'template'  => 'stm-lms-certificates-generator',
+								'template'  => 'account/certificates-generator',
 								'protected' => true,
 								'var'       => 'course_id',
 							),
 						),
 					),
 					'instructor_certificate_url' => array(
-						'template'  => 'stm-lms-instructor-certificates',
+						'template'  => 'account/instructor/certificates',
 						'protected' => true,
 						'url'       => 'certificates',
 					),
 					'manage_students'            => array(
-						'template'         => 'stm-lms-instructor-manage-students',
+						'template'         => 'account/instructor/manage-students',
 						'protected'        => true,
 						'instructors_only' => true,
 						'url'              => 'manage-students',
 					),
 					'enrolled_students'          => array(
-						'template'         => 'stm-lms-enrolled-students',
+						'template'         => 'account/instructor/enrolled-students',
 						'protected'        => true,
 						'instructors_only' => true,
 						'url'              => 'enrolled-students',
 						'sub_pages'        => array(
 							'enrolled_student' => array(
-								'template'  => 'stm-lms-enrolled-student',
+								'template'  => 'account/instructor/enrolled-student',
 								'protected' => true,
 								'var'       => 'student_id',
 							),
 						),
 					),
 					'enrolled_students_progress' => array(
-						'template'         => 'stm-lms-instructor-manage-students',
+						'template'         => 'account/instructor/manage-students',
 						'protected'        => true,
 						'instructors_only' => true,
 						'url'              => 'enrolled-students-progress',
 						'vars'             => array( 'student_id', 'course_id' ),
 					),
 					'announcement'               => array(
-						'template'         => 'stm-lms-instructor-announcement',
+						'template'         => 'account/instructor/announcement',
 						'protected'        => true,
 						'instructors_only' => true,
 						'url'              => 'announcement',
@@ -396,7 +396,7 @@ class STM_LMS_Page_Router {
 			),
 			'wishlist_url'           => array(
 				'title'    => esc_html__( 'Wishlist', 'masterstudy-lms-learning-management-system' ),
-				'template' => 'stm-lms-wishlist',
+				'template' => 'account/wishlist',
 			),
 			'checkout_url'           => array(
 				'title'    => esc_html__( 'Checkout', 'masterstudy-lms-learning-management-system' ),
@@ -453,9 +453,7 @@ class STM_LMS_Page_Router {
 
 				$template = ( ! empty( $page_settings['logged_in'] ) && is_user_logged_in() ) ? $page_settings['logged_in'] : ( $page_settings['template'] ?? '' );
 
-				$page_content = STM_LMS_Templates::load_lms_template( 'body_class' );
-
-				$page_content .= STM_LMS_Templates::load_lms_template( $template );
+				$page_content = STM_LMS_Templates::load_lms_template( $template );
 
 				add_filter( 'the_content', array( $this, 'change_page_content' ), 100 );
 

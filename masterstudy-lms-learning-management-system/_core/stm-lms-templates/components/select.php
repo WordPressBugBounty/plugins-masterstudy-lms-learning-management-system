@@ -8,6 +8,7 @@
  * @var string  $placeholder  - select component placeholder.
  * @var mixed   $default      - select component default value.
  * @var boolean $apply_default - apply default value for input placeholder
+ * @var boolean $clearable - show clear icon or not
  * @var array   $options      - select component options items
  * (option_value = array_key, option_content = array_value).
  * @var boolean $dark_mode    - if $dark_mode is true then add class
@@ -25,6 +26,7 @@ $select_width  = ! empty( $select_width ) ? 'style=min-width:' . $select_width :
 $default       = $default ?? '';
 $apply_default = ( $apply_default ?? false ) ? 'true' : 'false';
 $queryable     = ( $is_queryable ?? false ) ? 'true' : 'false';
+$clearable     = $clearable ?? true;
 
 wp_enqueue_style( 'masterstudy-select', STM_LMS_URL . 'assets/css/components/select.css', null, MS_LMS_VERSION );
 wp_enqueue_script( 'masterstudy-select', STM_LMS_URL . 'assets/js/components/select.js', array(), MS_LMS_VERSION, true );
@@ -35,9 +37,11 @@ wp_enqueue_script( 'masterstudy-select', STM_LMS_URL . 'assets/js/components/sel
 		<div class="masterstudy-select__placeholder" data-initial="<?php echo esc_attr( $default ); ?>" data-apply_default="<?php echo esc_attr( $apply_default ); ?>" data-placeholder="<?php echo esc_attr( $placeholder ); ?>">
 			<?php echo esc_html( $placeholder ); ?>
 		</div>
+		<?php if ( $clearable ) : ?>
 		<span class="masterstudy-select__clear">
 			<span class="masterstudy-select__clear-icon"></span>
 		</span>
+		<?php endif ?>
 		<span class="masterstudy-select__caret"></span>
 	</div>
 	<div class="masterstudy-select__dropdown">

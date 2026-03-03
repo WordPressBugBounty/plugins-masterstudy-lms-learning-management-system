@@ -14,7 +14,7 @@
  * @var bool $login
  *
  * masterstudy-button_icon-left|right - for icon direction
- * masterstudy-button_style-primary|secondary|tertiary|outline|danger - for style change
+ * masterstudy-button_style-primary|secondary|tertiary|outline|danger|primary-light|danger-light - for style change
  * masterstudy-button_size-sm|md - for size change
  * masterstudy-button_loading - for loading animation
  * masterstudy-button_disabled - for "disabled" style

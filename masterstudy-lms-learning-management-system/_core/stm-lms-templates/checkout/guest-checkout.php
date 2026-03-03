@@ -14,18 +14,7 @@ $items         = STM_LMS_Guest_Checkout::get_cart_items();
 $guest_enabled = STM_LMS_Guest_Checkout::guest_enabled();
 $is_guest      = ! is_user_logged_in();
 $is_trial      = false;
-?>
-<div class="masterstudy-checkout-container__top">
-<?php
-	STM_LMS_Templates::show_lms_template(
-		'account/private/parts/top_info',
-		array(
-			'title' => esc_html__( 'Checkout', 'masterstudy-lms-learning-management-system' ),
-		)
-	);
-	?>
-</div>
-<?php
+
 if ( empty( $items ) ) :
 	STM_LMS_Templates::show_lms_template( 'checkout/empty-cart' );
 else :
@@ -170,7 +159,7 @@ else :
 				<?php STM_LMS_Templates::show_lms_template( 'checkout/payment', compact( 'user_id', 'total' ) ); ?>
 			</div>
 		<?php else : ?>
-			<?php STM_LMS_Templates::show_lms_template( 'account/v1/fast_login/main' ); ?>
+			<?php STM_LMS_Templates::show_lms_template( 'checkout/fast_login' ); ?>
 		<?php endif; ?>
 	</div>
 	<?php

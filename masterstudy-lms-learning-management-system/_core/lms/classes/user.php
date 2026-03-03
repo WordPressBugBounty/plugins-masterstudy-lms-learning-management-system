@@ -25,6 +25,8 @@ class STM_LMS_User {
 		add_action( 'wp_ajax_stm_lms_get_user_courses', 'STM_LMS_User::get_user_courses' );
 
 		add_action( 'wp_ajax_stm_lms_wishlist', 'STM_LMS_User::wishlist' );
+		add_action( 'wp_ajax_stm_lms_user_wishlist', 'STM_LMS_User::user_wishlist' );
+		add_action( 'wp_ajax_nopriv_stm_lms_user_wishlist', 'STM_LMS_User::user_wishlist' );
 
 		add_action( 'wsl_hook_process_login_before_wp_safe_redirect', 'STM_LMS_User::wsl_new_register_redirect_url', 100, 4 );
 
@@ -66,9 +68,82 @@ class STM_LMS_User {
 		add_filter( 'hidden_meta_boxes', 'STM_LMS_User::custom_hidden_meta_boxes', 10, 2 );
 
 		add_action(
-			'stm_lms_admin_after_wrapper_start',
+			'masterstudy_account_sidebar',
 			function ( $current_user ) {
-				STM_LMS_Templates::show_lms_template( 'account/private/parts/tabs', compact( 'current_user' ) );
+				STM_LMS_Templates::show_lms_template( 'account/parts/sidebar-back' );
+				STM_LMS_Templates::show_lms_template( 'account/parts/profile', array( 'current_user' => $current_user ) );
+				STM_LMS_Templates::show_lms_template( 'account/parts/menu', array( 'current_user' => $current_user ) );
+
+				$register_as_instructor = STM_LMS_Options::get_option( 'register_as_instructor', true );
+				$show_form              = STM_LMS_Options::get_option( 'have_a_question_form', true );
+				$show_become_instructor = false;
+
+				if ( ! empty( $register_as_instructor ) && ! empty( $current_user['roles'] ) && is_array( $current_user['roles'] ) ) {
+					$show_become_instructor = ! in_array( 'stm_lms_instructor', $current_user['roles'], true )
+						&& ! in_array( 'administrator', $current_user['roles'], true );
+				}
+
+				if ( $show_become_instructor || $show_form ) {
+					STM_LMS_Templates::show_lms_template( 'account/parts/menu-divider' );
+				}
+
+				if ( $show_become_instructor ) {
+					STM_LMS_Templates::show_lms_template(
+						'account/parts/become-instructor',
+						array( 'current_user' => $current_user )
+					);
+				}
+
+				if ( $show_form ) {
+					STM_LMS_Templates::show_lms_template(
+						'account/parts/have-question',
+						array( 'current_user' => $current_user )
+					);
+				}
+			}
+		);
+
+		add_action(
+			'masterstudy_after_account',
+			function ( $current_user ) {
+				STM_LMS_Templates::show_lms_template( 'account/parts/mobile-menu', array( 'current_user' => $current_user ) );
+
+				$settings   = get_option( 'stm_lms_settings', array() );
+				$main_page  = ! empty( $settings['user_url'] ) ? get_queried_object_id() !== intval( $settings['user_url'] ) : false;
+				$wishlist   = ! empty( $settings['wishlist_url'] ) ? get_queried_object_id() !== intval( $settings['wishlist_url'] ) : false;
+				$buddypress = function_exists( 'bp_is_user' ) && bp_is_user() ? true : false;
+
+				if ( $main_page && $wishlist && ! $buddypress ) {
+					STM_LMS_Templates::show_lms_template( 'footer' );
+				}
+			}
+		);
+
+		add_action(
+			'masterstudy_before_account',
+			function ( $current_user ) {
+				global $wp;
+
+				STM_LMS_Templates::show_lms_template( 'modals/preloader' );
+
+				$settings   = get_option( 'stm_lms_settings', array() );
+				$main_page  = ! empty( $settings['user_url'] ) ? get_queried_object_id() !== intval( $settings['user_url'] ) : false;
+				$wishlist   = ! empty( $settings['wishlist_url'] ) ? get_queried_object_id() !== intval( $settings['wishlist_url'] ) : false;
+				$buddypress = function_exists( 'bp_is_user' ) && bp_is_user() ? true : false;
+
+				$current_path          = trim( $wp->request, '/' );
+				$account_path          = trim( wp_parse_url( get_permalink( intval( $settings['user_url'] ) ), PHP_URL_PATH ), '/' );
+				$is_exact_account_page = ( $current_path === $account_path );
+				$theme                 = wp_get_theme();
+				$is_masterstudy        = ( $theme->get_template() === 'masterstudy' );
+
+				if ( class_exists( 'BuddyPress' ) && $is_exact_account_page && $is_masterstudy && ! $buddypress ) {
+					STM_LMS_User::js_redirect( STM_LMS_BuddyPress::bp_user_profile_url() );
+				}
+
+				if ( $main_page && $wishlist && ! $buddypress ) {
+					STM_LMS_Templates::show_lms_template( 'header' );
+				}
 			}
 		);
 	}
@@ -715,6 +790,7 @@ class STM_LMS_User {
 				'login'         => self::display_name( $current_user ),
 				'avatar'        => $avatar,
 				'avatar_url'    => $avatar_url,
+				'no_avatar'     => empty( $stm_lms_user_avatar ),
 				'email'         => $current_user->data->user_email,
 				'url'           => $for_student ? self::student_public_page_url( $current_user->ID ) : ( $is_instructor ? self::instructor_public_page_url( $current_user->ID ) : self::student_public_page_url( $current_user->ID ) ),
 				'is_instructor' => $is_instructor,
@@ -771,175 +847,246 @@ class STM_LMS_User {
 		<?php
 	}
 
-	public static function _get_user_courses( $offset, $status = 'all' ) { // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
-		$user = self::get_current_user();
+	public static function get_user_courses() {
+		check_ajax_referer( 'stm_lms_get_user_courses', 'nonce' );
 
-		if ( empty( $user['id'] ) ) {
-			die;
+		$status = ( ! empty( $_GET['status'] ) ) ? sanitize_text_field( (string) wp_unslash( $_GET['status'] ) ) : 'all';
+		$page   = 0;
+
+		if ( isset( $_GET['page'] ) ) {
+			$page = absint( $_GET['page'] );
+		} elseif ( isset( $_GET['offset'] ) ) {
+			$page = absint( $_GET['offset'] ) + 1;
 		}
+		$page = max( 1, $page );
 
-		$user_id        = $user['id'];
-		$posts_per_page = absint( get_option( 'posts_per_page', apply_filters( 'stm_lms_get_user_courses_per_page', 10 ) ) );
-		$offset         = $offset * $posts_per_page;
-		$total          = 0;
-		$response       = array(
-			'posts'  => array(),
-			'offset' => $offset,
+		$r = self::_get_user_courses( $page, $status );
+
+		wp_send_json( apply_filters( 'stm_lms_get_user_courses_filter', $r ) );
+	}
+
+	public static function _get_user_courses( $page, $status = 'all' ) {
+		$user     = self::get_current_user();
+		$response = array(
+			'courses'      => array(),
+			'pagination'   => '',
+			'total_pages'  => 0,
+			'total_posts'  => 0,
+			'current_page' => $page,
+			'posts'        => array(),
+			'pages'        => 0,
+			'total'        => true,
 		);
 
-		foreach ( stm_lms_get_user_courses( $user_id ) as $course_user ) {
-			if ( get_post_type( $course_user['course_id'] ) !== 'stm-courses' ) {
-				stm_lms_get_delete_courses( $course_user['course_id'] );
+		if ( empty( $user['id'] ) ) {
+			return $response;
+		}
+
+		$user_id        = (int) $user['id'];
+		$posts_per_page = absint( apply_filters( 'masterstudy_account_student_courses_per_page', 6 ) );
+		$page           = max( 1, absint( $page ) );
+		$status         = $status ? sanitize_text_field( (string) $status ) : 'all';
+
+		$all_course_rows = stm_lms_get_user_courses( $user_id );
+		if ( empty( $all_course_rows ) || ! is_array( $all_course_rows ) ) {
+			return $response;
+		}
+
+		$matched_rows = array();
+
+		foreach ( $all_course_rows as $course_row ) {
+			$course_id = ! empty( $course_row['course_id'] ) ? (int) $course_row['course_id'] : 0;
+			if ( ! $course_id ) {
 				continue;
 			}
 
-			++$total;
-		}
+			if ( get_post_type( $course_id ) !== 'stm-courses' ) {
+				stm_lms_get_delete_courses( $course_id );
+				continue;
+			}
 
-		$columns = array( 'course_id', 'current_lesson_id', 'progress_percent', 'subscription_id', 'start_time', 'status', 'enterprise_id', 'bundle_id', 'for_points' );
-		$courses = stm_lms_get_user_courses( $user_id, $posts_per_page, $offset, $columns, null, null );
+			if ( ! get_post_status( $course_id ) ) {
+				continue;
+			}
 
-		$response['total_posts'] = $total;
-		$response['total']       = $total <= $offset + $posts_per_page;
-		$response['pages']       = ceil( $total / $posts_per_page );
+			$complete_status = self::user_course_complete_status( $user_id, $course_row, $course_id );
 
-		if ( ! empty( $courses ) ) {
-			foreach ( $courses as $course ) {
-				$id = $course['course_id'];
-
-				if ( get_post_type( $id ) !== 'stm-courses' ) {
-					stm_lms_get_delete_courses( $id );
-					continue;
-				}
-
-				if ( ! get_post_status( $id ) ) {
-					continue;
-				}
-
-				$price      = get_post_meta( $id, 'price', true );
-				$sale_price = STM_LMS_Course::get_sale_price( $id );
-
-				if ( empty( $price ) && ! empty( $sale_price ) ) {
-					$price      = $sale_price;
-					$sale_price = '';
-				}
-
-				$post_status                = STM_LMS_Course::get_post_status( $id );
-				$image                      = ( function_exists( 'stm_get_VC_img' ) ) ? stm_get_VC_img( get_post_thumbnail_id( $id ), '272x161' ) : get_the_post_thumbnail( $id, 'img-300-225' );
-				$course['progress_percent'] = ( $course['progress_percent'] > 100 ) ? 100 : $course['progress_percent'];
-
-				if ( 'completed' === $course['status'] ) {
-					$course['progress_percent'] = '100';
-				}
-
-				$current_lesson = ( ! empty( $course['current_lesson_id'] ) ) ? $course['current_lesson_id'] : STM_LMS_Lesson::get_first_lesson( $id );
-
-				ob_start();
-				STM_LMS_Templates::show_lms_template(
-					'global/expired_course',
-					array(
-						'course_id'     => $id,
-						'expired_popup' => false,
-					)
-				);
-				$expiration = ob_get_clean();
-
-				$post = array(
-					'id'                => $id,
-					'url'               => get_the_permalink( $id ),
-					'image_id'          => get_post_thumbnail_id( $id ),
-					'title'             => get_the_title( $id ),
-					'link'              => get_the_permalink( $id ),
-					'image'             => $image,
-					'terms'             => wp_get_post_terms( $id, 'stm_lms_course_taxonomy' ),
-					'terms_list'        => stm_lms_get_terms_array( $id, 'stm_lms_course_taxonomy', 'name' ),
-					'views'             => STM_LMS_Course::get_course_views( $id ),
-					'price'             => STM_LMS_Helpers::display_price( $price ),
-					'sale_price'        => STM_LMS_Helpers::display_price( $sale_price ),
-					'post_status'       => $post_status,
-					'availability'      => get_post_meta( $id, 'coming_soon_status', true ),
-					'progress'          => strval( $course['progress_percent'] ),
-					/* translators: %s: course complete */
-					'progress_label'    => sprintf( esc_html__( '%s%% Complete', 'masterstudy-lms-learning-management-system' ), $course['progress_percent'] ),
-					'current_lesson_id' => STM_LMS_Lesson::get_lesson_url( $id, $current_lesson ),
-					'course_id'         => $id,
-					'lesson_id'         => $current_lesson,
-					/* translators: %s: start time */
-					'start_time'        => sprintf( esc_html__( 'Started %s', 'masterstudy-lms-learning-management-system' ), date_i18n( get_option( 'date_format' ), $course['start_time'] ) ),
-					'duration'          => get_post_meta( $id, 'duration_info', true ),
-					'expiration'        => $expiration,
-					'is_expired'        => STM_LMS_Course::is_course_time_expired( get_current_user_id(), $id ),
-				);
-
-				if ( STM_LMS_Subscriptions::subscription_enabled() ) {
-					$state = STM_LMS_Helpers::masterstudy_lms_check_membership_status(
-						$user_id,
-						$course,
-						$id,
-						false
-					);
-				} elseif ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
-					$state = ( new CourseService() )->get_course_access_state( (int) $user_id, $course, (int) $id );
-				}
-
-				$post['membership_expired']  = isset( $state['membership_expired'] ) ? $state['membership_expired'] : false;
-				$post['membership_inactive'] = isset( $state['membership_inactive'] ) ? $state['membership_inactive'] : false;
-				$post['no_membership_plan']  = isset( $state['no_membership_plan'] ) ? $state['no_membership_plan'] : true;
-
-				/* Check course complete status*/
-				$curriculum       = ( new MasterStudy\Lms\Repositories\CurriculumRepository() )->get_curriculum( $id, true );
-				$course_materials = array_reduce(
-					$curriculum,
-					function ( $carry, $section ) {
-						return array_merge( $carry, $section['materials'] ?? array() );
-					},
-					array()
-				);
-				$material_ids     = array_column( $course_materials, 'post_id' );
-				$last_lesson      = ! empty( $material_ids ) ? end( $material_ids ) : 0;
-				$lesson_post_type = get_post_type( $last_lesson );
-
-				if ( PostType::QUIZ === $lesson_post_type ) {
-					$last_quiz        = stm_lms_get_user_last_quiz( $user_id, $last_lesson, array( 'progress' ) );
-					$passing_grade    = get_post_meta( $last_lesson, 'passing_grade', true );
-					$lesson_completed = ! empty( $last_quiz['progress'] ) && $last_quiz['progress'] >= ( $passing_grade ?? 0 ) ? 'completed' : '';
-				} else {
-					$lesson_completed = STM_LMS_Lesson::is_lesson_completed( $user_id, $id, $last_lesson ) ? 'completed' : '';
-				}
-
-				$course_passed = intval( STM_LMS_Options::get_option( 'certificate_threshold', 70 ) ) <= intval( $course['progress_percent'] );
-
-				if ( ! empty( $lesson_completed ) && ! $course_passed ) {
-					$post['complete_status'] = 'failed';
-				} elseif ( intval( $course['progress_percent'] ) > 0 ) {
-					$post['complete_status'] = $course_passed ? 'completed' : 'in_progress';
-				} else {
-					$post['complete_status'] = 'not_started';
-				}
-
-				if ( $status === $post['complete_status'] || 'all' === $status ) {
-					$response['posts'][] = $post;
-				}
-
-				if ( empty( $response['posts'] ) ) {
-					$response['total'] = true;
-				}
+			if ( 'all' === $status || $status === $complete_status ) {
+				$matched_rows[] = $course_row;
 			}
 		}
+
+		$total_filtered = count( $matched_rows );
+		$total_pages    = ( $posts_per_page > 0 ) ? (int) ceil( $total_filtered / $posts_per_page ) : 0;
+
+		$response['total_posts'] = $total_filtered;
+		$response['total_pages'] = $total_pages;
+		$response['pages']       = $total_pages;
+
+		if ( $total_pages <= 0 ) {
+			return $response;
+		}
+
+		if ( $page > $total_pages ) {
+			$page                     = 1;
+			$response['current_page'] = 1;
+		}
+
+		$offset    = ( $page - 1 ) * $posts_per_page;
+		$page_rows = array_slice( $matched_rows, $offset, $posts_per_page );
+
+		$settings                       = get_option( 'stm_lms_settings', array() );
+		$settings['course_tab_reviews'] = $settings['course_tab_reviews'] ?? true;
+
+		foreach ( $page_rows as $course ) {
+			$post                  = self::build_user_course_card_payload( $user_id, $course );
+			$response['posts'][]   = $post;
+			$response['courses'][] = STM_LMS_Templates::load_lms_template(
+				'components/course/card/default',
+				array(
+					'course'       => $post,
+					'public'       => false,
+					'reviews'      => (bool) $settings['course_tab_reviews'],
+					'student_card' => true,
+				)
+			);
+		}
+
+		$response['total'] = ( $page >= $total_pages );
+
+		$response['pagination'] = STM_LMS_Templates::load_lms_template(
+			'components/pagination',
+			array(
+				'max_visible_pages' => 5,
+				'total_pages'       => $total_pages,
+				'current_page'      => $page,
+				'dark_mode'         => false,
+				'is_queryable'      => false,
+				'done_indicator'    => false,
+				'is_api'            => true,
+				'thin'              => true,
+			)
+		);
 
 		return $response;
 	}
 
-	public static function get_user_courses() {
-		check_ajax_referer( 'stm_lms_get_user_courses', 'nonce' );
+	private static function user_course_complete_status( int $user_id, array $course_row, int $course_id ): string {
+		$progress_percent = isset( $course_row['progress_percent'] ) ? (int) $course_row['progress_percent'] : 0;
 
-		$offset = ( ! empty( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) : 0;
+		if ( $progress_percent > 100 ) {
+			$progress_percent = 100;
+		}
 
-		$status = ( ! empty( $_GET['status'] ) ) ? sanitize_text_field( $_GET['status'] ) : 'all';
+		if ( ! empty( $course_row['status'] ) && 'completed' === (string) $course_row['status'] ) {
+			$progress_percent = 100;
+		}
 
-		$r = self::_get_user_courses( $offset, $status );
+		$curriculum       = ( new MasterStudy\Lms\Repositories\CurriculumRepository() )->get_curriculum( $course_id, true );
+		$course_materials = array_reduce(
+			$curriculum,
+			function ( $carry, $section ) {
+				return array_merge( $carry, $section['materials'] ?? array() );
+			},
+			array()
+		);
 
-		wp_send_json( apply_filters( 'stm_lms_get_user_courses_filter', $r ) );
+		$material_ids = array_column( $course_materials, 'post_id' );
+		$last_lesson  = ! empty( $material_ids ) ? (int) end( $material_ids ) : 0;
+
+		$lesson_completed = '';
+		$lesson_post_type = $last_lesson ? get_post_type( $last_lesson ) : '';
+
+		if ( $last_lesson && PostType::QUIZ === $lesson_post_type ) {
+			$last_quiz     = stm_lms_get_user_last_quiz( $user_id, $last_lesson, array( 'progress' ) );
+			$passing_grade = get_post_meta( $last_lesson, 'passing_grade', true );
+
+			$lesson_completed = ( ! empty( $last_quiz['progress'] ) && (int) $last_quiz['progress'] >= (int) ( $passing_grade ?? 0 ) )
+				? 'completed'
+				: '';
+		} elseif ( $last_lesson ) {
+			$lesson_completed = STM_LMS_Lesson::is_lesson_completed( $user_id, $course_id, $last_lesson ) ? 'completed' : '';
+		}
+
+		$course_passed = (int) STM_LMS_Options::get_option( 'certificate_threshold', 70 ) <= $progress_percent;
+
+		if ( ! empty( $lesson_completed ) && ! $course_passed ) {
+			return 'failed';
+		}
+
+		if ( $progress_percent > 0 ) {
+			return $course_passed ? 'completed' : 'in_progress';
+		}
+
+		return 'not_started';
+	}
+
+	private static function build_user_course_card_payload( int $user_id, array $course ): array {
+		$id = ! empty( $course['course_id'] ) ? (int) $course['course_id'] : 0;
+
+		$price      = get_post_meta( $id, 'price', true );
+		$sale_price = STM_LMS_Course::get_sale_price( $id );
+
+		if ( empty( $price ) && ! empty( $sale_price ) ) {
+			$price      = $sale_price;
+			$sale_price = '';
+		}
+
+		$current_lesson = ! empty( $course['current_lesson_id'] )
+			? (int) $course['current_lesson_id']
+			: (int) STM_LMS_Lesson::get_first_lesson( $id );
+
+		ob_start();
+		STM_LMS_Templates::show_lms_template(
+			'global/expired_course',
+			array(
+				'course_id'     => $id,
+				'expired_popup' => false,
+			)
+		);
+		$expiration = ob_get_clean();
+
+		$post = array(
+			'id'                 => $id,
+			'post_title'         => get_the_title( $id ),
+			'post_author'        => (int) get_post_field( 'post_author', $id ),
+			'post_excerpt'       => (string) get_post_field( 'post_excerpt', $id ),
+			'course_marks'       => get_post_meta( $id, 'course_marks', true ),
+			'price'              => $price,
+			'sale_price'         => $sale_price,
+			'single_sale'        => get_post_meta( $id, 'single_sale', true ),
+			'current_lesson_url' => STM_LMS_Lesson::get_lesson_url( $id, $current_lesson ),
+			'current_lesson_id'  => $current_lesson,
+			'start_time'         => sprintf(
+				/* translators: %s: start time */
+				esc_html__( 'Started %s', 'masterstudy-lms-learning-management-system' ),
+				date_i18n( get_option( 'date_format' ), (int) ( $course['start_time'] ?? time() ) )
+			),
+			'duration_info'      => get_post_meta( $id, 'duration_info', true ),
+			'expiration'         => $expiration,
+			'is_expired'         => STM_LMS_Course::is_course_time_expired( get_current_user_id(), $id ),
+			'not_in_membership'  => get_post_meta( $id, 'not_membership', true ),
+		);
+
+		if ( STM_LMS_Subscriptions::subscription_enabled() ) {
+			$state = STM_LMS_Helpers::masterstudy_lms_check_membership_status(
+				$user_id,
+				$course,
+				$id,
+				false
+			);
+		} elseif ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
+			$state = ( new CourseService() )->get_course_access_state( (int) $user_id, $course, (int) $id );
+		} else {
+			$state = array();
+		}
+
+		$post['bought_by_membership'] = ! empty( $state['bought_by_membership'] );
+		$post['membership_expired']   = ! empty( $state['membership_expired'] );
+		$post['membership_inactive']  = ! empty( $state['membership_inactive'] );
+		$post['no_membership_plan']   = isset( $state['no_membership_plan'] ) ? (bool) $state['no_membership_plan'] : true;
+
+		return $post;
 	}
 
 	public static function get_user_meta( $user_id, $key ) {
@@ -1062,6 +1209,98 @@ class STM_LMS_User {
 		}
 
 		return $wishlist;
+	}
+
+	public static function user_wishlist() {
+		check_ajax_referer( 'stm_lms_user_wishlist', 'nonce' );
+
+		$user_id = ! empty( $_GET['user_id'] ) ? intval( $_GET['user_id'] ) : 0;
+		$page    = ! empty( $_GET['page'] ) ? intval( $_GET['page'] ) : 1;
+
+		$data = self::get_user_wishlist( $user_id, $page );
+
+		wp_send_json( $data );
+	}
+
+	public static function get_user_wishlist( $user_id = 0, $page = 1 ) {
+		$wishlist = array();
+		$response = array(
+			'courses'      => array(),
+			'pagination'   => '',
+			'total_pages'  => 0,
+			'total_posts'  => 0,
+			'current_page' => (int) $page,
+			'posts'        => array(),
+			'pages'        => 0,
+			'total'        => true,
+		);
+
+		if ( ! empty( $user_id ) ) {
+			$wishlist = get_user_meta( $user_id, 'stm_lms_wishlist', true );
+		} elseif ( ! empty( $_COOKIE['stm_lms_wishlist'] ) ) {
+			$list     = sanitize_text_field( wp_unslash( $_COOKIE['stm_lms_wishlist'] ) );
+			$wishlist = array_values( array_unique( array_map( 'intval', array_filter( array_map( 'trim', explode( ',', $list ) ), 'strlen' ) ) ) );
+		}
+
+		if ( empty( $wishlist ) ) {
+			return $response;
+		}
+
+		$posts_per_page = absint( apply_filters( 'masterstudy_account_user_wishlist_per_page', 9 ) );
+		$page           = max( 1, absint( $page ) );
+
+		$query = new \WP_Query(
+			array(
+				'post_type'      => PostType::COURSE,
+				'post_status'    => array( 'publish' ),
+				'post__in'       => $wishlist,
+				'orderby'        => 'post__in',
+				'posts_per_page' => $posts_per_page,
+				'paged'          => $page,
+				'no_found_rows'  => false,
+			)
+		);
+
+		$settings                       = get_option( 'stm_lms_settings', array() );
+		$settings['course_tab_reviews'] = $settings['course_tab_reviews'] ?? true;
+
+		foreach ( $query->posts as $course_post ) {
+			$course              = (array) $course_post;
+			$course['course_id'] = (int) $course_post->ID;
+			$post                = self::build_user_course_card_payload( $user_id, $course );
+			$response['posts'][] = $post;
+
+			$response['courses'][] = STM_LMS_Templates::load_lms_template(
+				'components/course/card/default',
+				array(
+					'course'   => $post,
+					'public'   => true,
+					'reviews'  => (bool) $settings['course_tab_reviews'],
+					'wishlist' => true,
+				)
+			);
+		}
+
+		$response['total_posts'] = (int) $query->found_posts;
+		$response['total_pages'] = (int) $query->max_num_pages;
+		$response['pages']       = (int) $query->max_num_pages;
+		$response['total']       = ( $page >= (int) $query->max_num_pages );
+
+		$response['pagination'] = STM_LMS_Templates::load_lms_template(
+			'components/pagination',
+			array(
+				'max_visible_pages' => 5,
+				'total_pages'       => (int) $query->max_num_pages,
+				'current_page'      => $page,
+				'dark_mode'         => false,
+				'is_queryable'      => false,
+				'done_indicator'    => false,
+				'is_api'            => true,
+				'thin'              => true,
+			)
+		);
+
+		return $response;
 	}
 
 	public static function update_wishlist( $user_id, $wishlist ) {
@@ -2236,14 +2475,15 @@ class STM_LMS_User {
 		$register_as_instructor = STM_LMS_Options::get_option( 'register_as_instructor', true );
 
 		if ( ! empty( $current_user ) && ! empty( $register_as_instructor ) && ! empty( $current_user['roles'] ) ) {
-			if ( ! in_array( 'stm_lms_instructor', $current_user['roles'] ) && ! in_array( 'administrator', $current_user['roles'] ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-				STM_LMS_Templates::show_lms_template( 'account/private/parts/become_instructor', array( 'current_user' => $current_user ) );
+			if ( ! in_array( 'stm_lms_instructor', $current_user['roles'], true ) && ! in_array( 'administrator', $current_user['roles'], true ) ) {
+				STM_LMS_Templates::show_lms_template( 'account/parts/become-instructor', array( 'current_user' => $current_user ) );
 			}
 		}
 	}
 
 	public static function hide_become_instructor_notice() {
 		check_ajax_referer( 'stm_lms_hide_become_instructor_notice', 'nonce' );
+
 		if ( ! empty( $_POST['user_id'] ) ) {
 			$user_id = intval( $_POST['user_id'] );
 			$history = get_user_meta( $user_id, 'submission_history', true );

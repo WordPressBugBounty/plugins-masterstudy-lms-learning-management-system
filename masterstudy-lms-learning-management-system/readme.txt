@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.7.16
+Stable tag: 3.7.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.17 - 2026-03-03 =
+- **Update:** Updated the design of the Instructor and Student profile pages with a more modern interface and improved usability.
+- **Fixed:** Last Name was not displayed on the Thank You page when using Woo Checkout.
+
 = 3.7.16 - 2026-02-19 =
 - **Fixed:** Resolved an issue where the Enrolled Students page content failed to load for some users.
 - **Fixed:** Month names were not translated in date filter calendars.

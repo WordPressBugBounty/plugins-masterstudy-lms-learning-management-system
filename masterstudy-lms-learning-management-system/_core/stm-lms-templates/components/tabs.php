@@ -9,7 +9,7 @@
  *
  * masterstudy-tabs_dark-mode - for dark mode
  * masterstudy-tabs__item_active - for item active state
- * masterstudy-tabs_style-default|nav-sm|nav-md - for tabs style change
+ * masterstudy-tabs_style-default|nav-sm|nav-md|buttons - for tabs style change
  */
 
 wp_enqueue_style( 'masterstudy-tabs' );

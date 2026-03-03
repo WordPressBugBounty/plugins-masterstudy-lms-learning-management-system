@@ -16,14 +16,19 @@
  * @var boolean $multiple
  * @var boolean $dark_mode
  * @var boolean $full_image_view
+ * @var string $title
+ * @var string $style
  *
  * masterstudy-file-upload_dark-mode - for dark mode
  * masterstudy-file-upload__field_loading - for show loading progress in file upload field
  * masterstudy-file-upload__field_highlight - for highlight file upload field when file dragged to it
  * add style "width: ...%" to masterstudy-file-upload__field-progress-bar-filled to show progress
+ * styles: compact
  */
 
 $full_image_view = isset( $full_image_view ) ? $full_image_view : false;
+$style           = isset( $style ) ? $style : '';
+$title           = isset( $title ) ? $title : __( 'Upload file', 'masterstudy-lms-learning-management-system' );
 
 wp_enqueue_style( 'masterstudy-file-upload' );
 wp_enqueue_script( 'masterstudy-file-upload' );
@@ -44,9 +49,11 @@ wp_localize_script(
 
 $files_limit     = isset( $files_limit ) ? $files_limit : '';
 $file_dimensions = isset( $file_dimensions ) ? $file_dimensions : '';
+$classes         = ! empty( $style ) ? ' masterstudy-file-upload_style-' . esc_attr( $style ) : '';
+$classes        .= $dark_mode ? ' masterstudy-file-upload_dark-mode' : '';
 ?>
 
-<div class="masterstudy-file-upload <?php echo esc_attr( $dark_mode ? 'masterstudy-file-upload_dark-mode' : '' ); ?>">
+<div class="masterstudy-file-upload <?php echo esc_attr( $classes ); ?>">
 	<div class="masterstudy-file-upload__item-wrapper">
 		<?php
 		if ( ! empty( $attachments ) ) {
@@ -84,7 +91,7 @@ $file_dimensions = isset( $file_dimensions ) ? $file_dimensions : '';
 		?>
 		<div id="<?php echo esc_attr( $id ); ?>" class="masterstudy-file-upload__field <?php echo $full_image_view && ! empty( $attachments ) ? 'masterstudy-file-upload__field_disabled' : ''; ?>">
 			<span class="masterstudy-file-upload__field-button">
-				<?php echo esc_html__( 'Upload file', 'masterstudy-lms-learning-management-system' ); ?>
+				<?php echo esc_html( $title ); ?>
 			</span>
 			<div class="masterstudy-file-upload__field-text">
 				<p>

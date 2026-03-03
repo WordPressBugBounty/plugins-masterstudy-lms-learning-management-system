@@ -148,11 +148,6 @@ if ( ! empty( $order_info ) ) :
 			<?php endif; ?>
 			<div class="masterstudy-orders-container">
 				<div class="masterstudy-orders-table">
-					<div class="masterstudy-orders-table__header">
-						<div class="masterstudy-orders-course-info">
-							<?php echo esc_html__( 'Order details', 'masterstudy-lms-learning-management-system' ); ?>
-						</div>
-					</div>
 					<?php
 					if ( ! empty( $order_info['is_subscription'] ) ) :
 						$is_trial          = ! empty( $order_info['plan']['trial_period'] );

@@ -2,7 +2,7 @@
 
 (function ($) {
   $(document).ready(function () {
-    var all_classes = ['stm_lms_edit_account'];
+    var all_classes = ['masterstudy-account-settings'];
     $(document).on('drop', '.masterstudy-file-upload__field', function (e) {
       e.preventDefault();
       $(this).removeClass('masterstudy-file-upload__field_highlight');

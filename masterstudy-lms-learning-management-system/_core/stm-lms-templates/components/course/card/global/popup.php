@@ -28,7 +28,18 @@
 			<?php } ?>
 		</a>
 		<div class="masterstudy-course-card__popup-bottom">
-			<?php STM_LMS_Templates::show_lms_template( 'components/course/card/global/popup-price', array( 'course' => $course ) ); ?>
+			<?php
+			if ( ( ! empty( $wishlist ) ) ) {
+				?>
+				<div class="masterstudy-course-card__popup-wishlist">
+					<?php STM_LMS_Templates::show_lms_template( 'global/wish-list', array( 'course_id' => $course['id'] ) ); ?>
+				</div>
+				<?php
+			}
+			if ( ! STM_LMS_Helpers::masterstudy_lms_is_course_coming_soon( $course['id'] ) ) {
+				STM_LMS_Templates::show_lms_template( 'components/course/card/global/popup-price', array( 'course' => $course ) );
+			}
+			?>
 		</div>
 	</div>
 </div>

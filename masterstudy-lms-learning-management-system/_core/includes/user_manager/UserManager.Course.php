@@ -111,7 +111,8 @@ class STM_LMS_User_Manager_Course {
 	public function map_students( $student_course ) {
 		$user_id = $student_course['user_id'];
 
-		$student_course['ago'] = stm_lms_time_elapsed_string( gmdate( 'Y-m-d\TH:i:s\Z', $student_course['start_time'] ) );
+		$student_course['ago']                  = stm_lms_time_elapsed_string( gmdate( 'Y-m-d\TH:i:s\Z', $student_course['start_time'] ) );
+		$student_course['start_time_formatted'] = STM_LMS_Helpers::format_date( gmdate( 'Y-m-d\TH:i:s\Z', $student_course['start_time'] ) );
 
 		$student_course['student'] = STM_LMS_User::get_current_user( $user_id, false, false, false, 215, true );
 
@@ -149,10 +150,10 @@ class STM_LMS_User_Manager_Course {
 			update_post_meta( $course_id, 'current_students', --$meta['current_students'] );
 		}
 		if ( class_exists( 'STM_LMS_Mails' ) ) {
-			$user         = STM_LMS_User::get_current_user( $user_id );
-			$user_login   = $user['login'];
-			$course_title = get_the_title( $course_id );
-			$instructor_name  = \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( \STM_LMS_User::get_current_user()['id'] );
+			$user            = STM_LMS_User::get_current_user( $user_id );
+			$user_login      = $user['login'];
+			$course_title    = get_the_title( $course_id );
+			$instructor_name = \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user['id'] );
 
 			$message = sprintf(
 			/* translators: %1$s Course Title, %2$s User Login */

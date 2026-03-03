@@ -26,7 +26,7 @@ if ( ! STM_LMS_Instructor::is_instructor( $instructor['id'] ) || ! $profile_acti
 }
 
 wp_enqueue_style( 'masterstudy-review-card' );
-wp_enqueue_style( 'masterstudy-bundle-card' );
+wp_enqueue_style( 'masterstudy-bundle-card-default' );
 wp_enqueue_style( 'masterstudy-instructor-public-account' );
 wp_enqueue_script( 'masterstudy-instructor-public-account' );
 wp_localize_script(

@@ -2,6 +2,7 @@
 
 namespace stmLms\Classes\Models;
 
+use STM_LMS_Helpers;
 use STM_LMS_Options;
 use stmLms\Classes\Models\Admin\StmStatisticsListTable;
 
@@ -137,16 +138,22 @@ class StmStatistics {
 		$prefix      = $wpdb->prefix;
 		$user_orders = array();
 		$query       = StmOrderItems::query()
-			->select( ' lms_order_items.*, course.post_title as name, _order.`post_date` as date_created ' )
+			->select(
+				' lms_order_items.*,
+			course.post_title as name,
+			_order.`post_date` as date_created,
+			MAX(CASE WHEN meta.meta_key = "status" THEN meta.meta_value END) as status,
+    		MAX(CASE WHEN meta.meta_key = "payment_code" THEN meta.meta_value END) as payment_code'
+			)
 			->asTable( 'lms_order_items' )
-			->join( ' left join `' . $prefix . 'posts` as _order on ( lms_order_items.`order_id` = _order.ID ) left join `' . $prefix . 'posts` as course on  (course.ID = lms_order_items.`object_id`) ' )
+			->join( ' left join `' . $prefix . 'posts` as _order on ( lms_order_items.`order_id` = _order.ID ) left join `' . $prefix . 'posts` as course on  (course.ID = lms_order_items.`object_id`) left join ' . $prefix . 'postmeta as meta on (meta.post_id = _order.ID) ' )
 			->where_in( '_order.post_type', array( 'stm-orders', 'shop_order' ) );
 
 		if ( ! empty( $params['id'] ) ) {
 			$query->where( '_order.ID', intval( $params['id'] ) );
 		}
 
-		if ( empty( trim( $params['date_from'] ?? '' ) ) && ! empty( trim( $params['date_to'] ?? '' ) ) ) {
+		if ( ! empty( trim( $params['date_from'] ?? '' ) ) && ! empty( trim( $params['date_to'] ?? '' ) ) ) {
 			$query->where_raw(
 				' DATE(_order.post_date) >= "' . gmdate( 'Y-m-d', strtotime( $params['date_from'] ) ) . '" AND DATE(_order.post_date) <= "' . gmdate( 'Y-m-d', strtotime( $params['date_to'] ) ) . '" '
 			);
@@ -202,10 +209,10 @@ class StmStatistics {
 
 		$query_total_price = clone $query;
 		$query_total_price->select( ' SUM( lms_order_items.`price` * lms_order_items.`quantity`) as total_price ' );
-		$total_price                = $query_total_price->findOne()->total_price ?? 0;
-		$user_orders['total_price'] = ( $total_price ) ? $total_price : 0;
-		$query->join( ' left join ' . $prefix . 'postmeta as meta on (meta.post_id = _order.ID)' )
-			->group_by( 'lms_order_items.id' )
+		$total_price                    = $query_total_price->findOne()->total_price ?? 0;
+		$user_orders['total_price']     = ( $total_price ) ? $total_price : 0;
+		$user_orders['formatted_price'] = STM_LMS_Helpers::display_price( $user_orders['total_price'] );
+		$query->group_by( 'lms_order_items.id' )
 			->limit( $limit )
 			->offset( $offset );
 
@@ -312,5 +319,4 @@ class StmStatistics {
 
 		return $data;
 	}
-
 }

@@ -205,6 +205,10 @@ function stm_lms_enqueue_component_scripts( $hook_suffix ) {
 	wp_register_script( 'masterstudy-image-upload', STM_LMS_URL . 'assets/js/components/image-upload.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-share', STM_LMS_URL . 'assets/js/components/share.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-personal-info', STM_LMS_URL . 'assets/js/components/personal-info.js', array( 'jquery', 'masterstudy-select2' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-drawer-component', STM_LMS_URL . 'assets/js/components/drawer.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-modal-component', STM_LMS_URL . 'assets/js/components/modal.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-no-records', STM_LMS_URL . 'assets/js/components/no-records.js', null, MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-instructor-courses-select', STM_LMS_URL . 'assets/js/components/selects/instructor-courses-select.js', array( 'jquery' ), MS_LMS_VERSION, true );
 
 	/*Single Course Video*/
 	wp_register_style( 'masterstudy-single-course-video-plyr', STM_LMS_URL . 'assets/css/components/course/plyr.css', null, MS_LMS_VERSION );
@@ -227,6 +231,7 @@ function stm_lms_enqueue_component_scripts( $hook_suffix ) {
 
 	/*Components styles registration*/
 	wp_register_style( 'masterstudy-search', STM_LMS_URL . 'assets/css/components/search.css', array(), MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-input', STM_LMS_URL . 'assets/css/components/input.css', array(), MS_LMS_VERSION );
 	wp_register_style( 'masterstudy-sort-indicator', STM_LMS_URL . 'assets/css/components/sort-indicator.css', array(), MS_LMS_VERSION );
 	wp_register_style( 'masterstudy-loader', STM_LMS_URL . 'assets/css/components/loader.css', array(), MS_LMS_VERSION );
 	wp_register_style( 'masterstudy-single-course-complete', STM_LMS_URL . 'assets/css/components/course/complete.css', array(), MS_LMS_VERSION );
@@ -290,6 +295,10 @@ function stm_lms_enqueue_component_scripts( $hook_suffix ) {
 	wp_register_style( 'masterstudy-share', STM_LMS_URL . 'assets/css/components/share.css', array(), MS_LMS_VERSION );
 	wp_register_style( 'masterstudy-public-page-block', STM_LMS_URL . 'assets/css/components/public-page-block.css', array(), MS_LMS_VERSION );
 	wp_register_style( 'masterstudy_membership_pricing', STM_LMS_URL . 'assets/css/components/membership-pricing.css', array(), MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-no-records', STM_LMS_URL . 'assets/css/components/no-records.css', array(), MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-checkbox-component', STM_LMS_URL . 'assets/css/components/checkbox.css', array(), MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-drawer-component', STM_LMS_URL . 'assets/css/components/drawer.css', array(), MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-modal-component', STM_LMS_URL . 'assets/css/components/modal.css', array(), MS_LMS_VERSION );
 	wp_register_script( 'masterstudy-api-provider-class', STM_LMS_URL . 'assets/js/api-provider.js', array(), MS_LMS_VERSION, true );
 	wp_localize_script(
 		'masterstudy-api-provider-class',
@@ -358,13 +367,109 @@ function stm_lms_enqueue_component_scripts( $hook_suffix ) {
 	);
 
 	masterstudy_enqueue_students_page( $hook_suffix );
+	masterstudy_register_js_utils();
+}
+
+function stm_lms_account_scripts() {
+	wp_register_style( 'masterstudy-account-main', STM_LMS_URL . 'assets/css/account/main.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-profile', STM_LMS_URL . 'assets/css/account/profile.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-menu', STM_LMS_URL . 'assets/css/account/menu.css', null, MS_LMS_VERSION );
+	wp_register_script( 'masterstudy-account-menu', STM_LMS_URL . 'assets/js/account/menu.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_style( 'masterstudy-account-mobile-menu', STM_LMS_URL . 'assets/css/account/mobile-menu.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-menu-divider', STM_LMS_URL . 'assets/css/account/menu-divider.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-become-instructor', STM_LMS_URL . 'assets/css/account/become-instructor.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-have-question', STM_LMS_URL . 'assets/css/account/have-question.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-edit-account', STM_LMS_URL . 'assets/css/account/edit-account.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-instructor-account', STM_LMS_URL . 'assets/css/account/instructor/account.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-announcement', STM_LMS_URL . 'assets/css/account/instructor/announcement.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-enrolled-quizzes', STM_LMS_URL . 'assets/css/account/student/enrolled-quizzes.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-enrolled-quiz-attempts', STM_LMS_URL . 'assets/css/account/student/enrolled-quiz-attempts.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-enrolled-quiz-attempt', STM_LMS_URL . 'assets/css/account/student/enrolled-quiz-attempt.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-enrolled-assignments', STM_LMS_URL . 'assets/css/account/enrolled-assignments.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-gradebook', STM_LMS_URL . 'assets/css/account/instructor/gradebook.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-wishlist', STM_LMS_URL . 'assets/css/account/wishlist.css', null, MS_LMS_VERSION );
+	wp_register_script( 'masterstudy-account-wishlist', STM_LMS_URL . 'assets/js/account/wishlist.js', null, MS_LMS_VERSION, true );
+	wp_register_style( 'masterstudy-account-user-certificates', STM_LMS_URL . 'assets/css/account/my-certificates.css', null, MS_LMS_VERSION );
+	wp_register_script( 'masterstudy-account-user-certificates', STM_LMS_URL . 'assets/js/account/my-certificates.js', null, MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-announcement', STM_LMS_URL . 'assets/js/account/instructor/announcement.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_style( 'masterstudy-account-enrolled-courses', STM_LMS_URL . 'assets/css/account/enrolled-courses.css', null, MS_LMS_VERSION );
+	wp_register_script( 'masterstudy-account-enrolled-courses', STM_LMS_URL . 'assets/js/account/enrolled-courses.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_style( 'masterstudy-account-instructor-courses', STM_LMS_URL . 'assets/css/account/instructor/courses.css', null, MS_LMS_VERSION );
+	wp_register_script( 'masterstudy-account-instructor-courses', STM_LMS_URL . 'assets/js/account/instructor/courses.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_localize_script(
+		'masterstudy-account-instructor-courses',
+		'masterstudy_instructor_courses',
+		array(
+			'nonce'    => wp_create_nonce( 'wp_rest' ),
+			'user_id'  => get_current_user_id(),
+			'per_page' => 9,
+			'status'   => 'all',
+			'strings'  => array(
+				'error'           => esc_html__( 'Something went wrong. Please try again.', 'masterstudy-lms-learning-management-system' ),
+				'publish'         => esc_html__( 'Publish', 'masterstudy-lms-learning-management-system' ),
+				'to_draft'        => esc_html__( 'Move to drafts', 'masterstudy-lms-learning-management-system' ),
+				'featured'        => esc_html__( 'Remove from Featured', 'masterstudy-lms-learning-management-system' ),
+				'not_featured'    => esc_html__( 'Make Featured', 'masterstudy-lms-learning-management-system' ),
+				'featured_status' => esc_html__( 'Featured', 'masterstudy-lms-learning-management-system' ),
+				'featured_limit'  => esc_html__( 'You have reached the limit of featured courses.', 'masterstudy-lms-learning-management-system' ),
+			),
+		)
+	);
+	wp_register_script( 'masterstudy-account-instructor-co-courses', STM_LMS_URL . 'assets/js/account/instructor/co-courses.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_style( 'masterstudy-account-enterprise-groups', STM_LMS_URL . 'assets/css/account/enterprise-groups.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-enterprise-groups-create-edit-drawer', STM_LMS_URL . 'assets/css/account/parts/enterprise-groups/create-edit-drawer.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-enterprise-groups-view-drawer', STM_LMS_URL . 'assets/css/account/parts/enterprise-groups/view-drawer.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-enterprise-groups-import-csv-modal', STM_LMS_URL . 'assets/css/account/parts/enterprise-groups/import-csv-modal.css', null, MS_LMS_VERSION );
+	wp_register_script( 'masterstudy-account-enterprise-groups-create-edit-drawer', STM_LMS_URL . 'assets/js/account/parts/enterprise-groups/create-edit-drawer.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-enterprise-groups-view-drawer', STM_LMS_URL . 'assets/js/account/parts/enterprise-groups/view-drawer.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-enterprise-groups-import-csv-modal', STM_LMS_URL . 'assets/js/account/parts/enterprise-groups/import-csv-modal.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-enterprise-groups', STM_LMS_URL . 'assets/js/account/enterprise-groups.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-enrolled-assignments', STM_LMS_URL . 'assets/js/account/enrolled-assignments.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-gradebook', STM_LMS_URL . 'assets/js/account/instructor/gradebook.js', array( 'jquery', 'masterstudy-datepicker-component', 'masterstudy-datatables-component' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-settings', STM_LMS_URL . 'assets/js/account/settings.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_style( 'masterstudy-account-settings', STM_LMS_URL . 'assets/css/account/settings.css', null, MS_LMS_VERSION );
+	wp_register_script( 'masterstudy-account-enrolled-students', STM_LMS_URL . 'assets/js/account/instructor/enrolled-students.js', array( 'jquery', 'masterstudy-datatables-component' ), MS_LMS_VERSION, true );
+	wp_register_style( 'masterstudy-account-enrolled-students', STM_LMS_URL . 'assets/css/account/instructor/enrolled-students.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-memberships-pmp', STM_LMS_URL . 'assets/css/account/student/memberships-pmp.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-user-assignment', STM_LMS_URL . 'assets/css/account/instructor/user_assignment.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-settings', STM_LMS_URL . 'assets/css/account/settings.css', null, MS_LMS_VERSION );
+	wp_register_script( 'masterstudy-account-messages', STM_LMS_URL . 'assets/js/account/messages.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_style( 'masterstudy-account-messages', STM_LMS_URL . 'assets/css/account/messages.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-payout-statistics', STM_LMS_URL . 'assets/css/account/instructor/payout-statistics.css', null, MS_LMS_VERSION );
+	wp_register_script(
+		'masterstudy-account-payout-statistics',
+		STM_LMS_URL . 'assets/js/account/instructor/payout-statistics.js',
+		array(
+			'jquery',
+			'moment.min',
+			'masterstudy-charts-helpers',
+			'masterstudy-chartjs-library',
+			'masterstudy-api-provider',
+			'masterstudy-datepicker-helpers',
+			'masterstudy-date-helpers',
+			'masterstudy-datatables-component',
+		),
+		MS_LMS_VERSION,
+		true
+	);
+	wp_register_style( 'masterstudy-account-manage-students-student-progress', STM_LMS_URL . 'assets/css/account/instructor/manage_students/student-progress.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-manage-students-main', STM_LMS_URL . 'assets/css/account/instructor/manage_students/main.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-manage-students-import-modal', STM_LMS_URL . 'assets/css/account/instructor/manage_students/import-modal.css', null, MS_LMS_VERSION );
+	wp_register_script( 'masterstudy-account-manage-students-export-students', STM_LMS_URL . 'assets/js/account/instructor/manage_students/export-students.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-manage-students-import-modal', STM_LMS_URL . 'assets/js/account/instructor/manage_students/import-modal.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-manage-students-main', STM_LMS_URL . 'assets/js/account/instructor/manage_students/main.js', array( 'jquery', 'masterstudy-ajax-pagination' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-manage-students-student-progress', STM_LMS_URL . 'assets/js/account/instructor/manage_students/student-progress.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-account-google-meets-wizard', STM_LMS_URL . 'assets/js/account/instructor/google-meets/wizard.js', array( 'jquery', 'jquery-ui-resizable' ), MS_LMS_VERSION, true );
+	wp_register_style( 'masterstudy-account-google-meets-wizard', STM_LMS_URL . 'assets/css/account/instructor/google-meets/wizard.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-google-meets-meetings', STM_LMS_URL . 'assets/css/account/instructor/google-meets/meetings.css', null, MS_LMS_VERSION );
+	wp_register_style( 'masterstudy-account-google-meets-main', STM_LMS_URL . 'assets/css/account/instructor/google-meets/main.css', null, MS_LMS_VERSION );
 }
 
 function masterstudy_enqueue_students_page( string $hook_suffix ) {
 	$lms_template          = get_query_var( 'lms_template' );
 	$is_student_admin_page = ( 'masterstudy_page_manage_students' === $hook_suffix );
-	$is_student_list       = ( 'stm-lms-enrolled-students' === $lms_template );
-	$is_student_item       = ( 'stm-lms-enrolled-student' === $lms_template );
+	$is_student_list       = ( 'account/instructor/enrolled-students' === $lms_template );
+	$is_student_item       = ( 'account/instructor/enrolled-student' === $lms_template );
 
 	if ( $is_student_admin_page || $is_student_list ) {
 		$date_scripts_styles = masterstudy_datepicker_handles();
@@ -450,6 +555,7 @@ function stm_lms_enqueue_vss() {
 add_action( 'wp_enqueue_scripts', 'stm_lms_enqueue_ss' );
 add_action( 'wp_enqueue_scripts', 'stm_lms_enqueue_vss', 1 );
 add_action( 'wp_enqueue_scripts', 'stm_lms_enqueue_component_scripts' );
+add_action( 'wp_enqueue_scripts', 'stm_lms_account_scripts' );
 add_action( 'admin_enqueue_scripts', 'stm_lms_enqueue_component_scripts' );
 
 add_action( 'admin_head', 'stm_lms_nonces' );
@@ -475,6 +581,7 @@ function stm_lms_nonces() {
 		'stm_lms_get_user_courses',
 		'stm_lms_get_user_quizzes',
 		'stm_lms_wishlist',
+		'stm_lms_user_wishlist',
 		'stm_lms_save_user_info',
 		'stm_lms_lost_password',
 		'stm_lms_change_avatar',
@@ -495,7 +602,9 @@ function stm_lms_nonces() {
 		'wpcfto_save_settings',
 		'stm_lms_tables_update',
 		'stm_lms_get_enterprise_groups',
+		'stm_lms_get_enterprise_member_groups',
 		'stm_lms_get_enterprise_group',
+		'stm_lms_get_users_with_ent_courses',
 		'stm_lms_add_enterprise_group',
 		'stm_lms_delete_enterprise_group',
 		'stm_lms_add_to_cart_enterprise',
@@ -730,4 +839,9 @@ if ( ! function_exists( 'masterstudy_get_locale_info' ) ) {
 			'firstDayOfWeek' => absint( get_option( 'start_of_week', 0 ) ),
 		);
 	}
+}
+
+function masterstudy_register_js_utils() {
+	wp_register_script( 'masterstudy-pagination-utils', STM_LMS_URL . 'assets/js/utils/pagination.js', array( 'jquery' ), STM_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-slots-utils', STM_LMS_URL . 'assets/js/utils/slots.js', null, STM_LMS_VERSION, true );
 }

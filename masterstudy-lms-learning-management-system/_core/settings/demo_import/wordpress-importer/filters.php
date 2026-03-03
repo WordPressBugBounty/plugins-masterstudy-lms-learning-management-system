@@ -12,9 +12,6 @@ function stm_wp_import_post_meta_filter( $post_meta ) {
 				case '_elementor_data':
 					consulting_import_rebuilder_elementor_data($post_meta[ $meta_index ]['value'] );
 					break;
-				case 'testimonial_bg_img':
-					$post_meta[ $meta_index ]['value']  = consulting_importer_get_placeholder();
-					break;
 				case 'title_box_bg_image':
 					if ( ! empty( $meta['value'] ) ) {
 						$post_meta[ $meta_index ]['value']  = consulting_importer_get_placeholder();
@@ -35,11 +32,6 @@ add_filter( 'stm_wp_import_attachment_url', 'stm_wp_import_attachment_url_filter
 
 function stm_wp_import_attachment_url_filter( $url, $theme, $layout, $builder ) {
 	switch ( $theme ) {
-		case 'consulting':
-			if ( $builder === 'elementor' ) {
-				$url = 'https://consulting.stylemixthemes.com/demo/wp-content/uploads/2016/06/placeholder.gif';
-			}
-			break;
 		case 'masterstudy':
 			$image_name = basename($url);
 			if ( 'default' === $layout && 'elementor' !== $builder ) {

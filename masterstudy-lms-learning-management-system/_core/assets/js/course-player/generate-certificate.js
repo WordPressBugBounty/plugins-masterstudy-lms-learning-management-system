@@ -6,6 +6,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 var jsPDF = window.jspdf.jsPDF;
 (function ($) {
+  var lastClickElClass = null;
   $(document).ready(function () {
     if (course_certificate.preview && !course_certificate.demo) {
       getCertificate(course_certificate.course_id, course_certificate.course_id, true);
@@ -14,6 +15,7 @@ var jsPDF = window.jspdf.jsPDF;
       e.preventDefault();
       if (course_certificate.demo) return;
       var courseId = $(this).attr('data-id') || false;
+      lastClickElClass = $(this).attr('class');
       if (courseId) {
         getCertificate(courseId, courseId);
       }
@@ -337,7 +339,16 @@ var jsPDF = window.jspdf.jsPDF;
         $('.masterstudy-page-certificate__download .masterstudy-button').attr('href', doc.output('bloburl'));
         $('.masterstudy-page-certificate__download .masterstudy-button').removeClass('masterstudy-button_loading');
       } else {
-        window.open(pdfUrl, '_blank');
+        if (course_certificate.emit_pdf_url) {
+          document.dispatchEvent(new CustomEvent('generatedCertificateUrl', {
+            detail: {
+              value: pdfUrl,
+              className: lastClickElClass
+            }
+          }));
+        } else {
+          window.open(pdfUrl, '_blank');
+        }
       }
       element.remove();
     })["finally"](function () {

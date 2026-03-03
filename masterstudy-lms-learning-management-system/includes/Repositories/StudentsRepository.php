@@ -143,13 +143,14 @@ final class StudentsRepository {
 				}
 
 				$student = array(
-					'user_id'      => $user->ID,
-					'display_name' => $display_name,
-					'email'        => $user->user_email,
-					'registered'   => $user->user_registered,
-					'enrolled'     => $student['enrolled'] ?? 0,
-					'points'       => $student['points'] ?? 0,
-					'url'          => $url,
+					'user_id'        => $user->ID,
+					'display_name'   => $display_name,
+					'email'          => $user->user_email,
+					'registered'     => $user->user_registered,
+					'enrolled'       => $student['enrolled'] ?? 0,
+					'points'         => $student['points'] ?? 0,
+					'url'            => $url,
+					'date_formatted' => STM_LMS_Helpers::format_date( $user->user_registered ),
 				);
 			}
 		}
@@ -415,7 +416,7 @@ final class StudentsRepository {
 			$emails   = (array) get_post_meta( $course_id, 'coming_soon_student_emails', true );
 			$filtered = array_filter(
 				$emails,
-				static fn( $entry) => empty( $entry['email'] ) || $entry['email'] !== $user_email
+				static fn( $entry ) => empty( $entry['email'] ) || $entry['email'] !== $user_email
 			);
 
 			if ( count( $filtered ) !== count( $emails ) ) {
