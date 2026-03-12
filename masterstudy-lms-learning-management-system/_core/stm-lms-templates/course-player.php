@@ -15,6 +15,7 @@ add_action(
 	}
 );
 
+use MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentRepository;
 use MasterStudy\Lms\Repositories\CoursePlayerRepository;
 
 global $post;
@@ -30,6 +31,10 @@ $data          = $course_player->get_main_data( $lms_page_path, (int) $lesson_id
 $quiz_data     = 'quiz' === $data['lesson_type']
 	? $course_player->get_quiz_data( $data['item_id'], $data['user_id'], $data['post_id'] )
 	: array();
+
+$assignment_data = is_ms_lms_addon_enabled( 'assignments' ) && 'assignments' === $data['lesson_type'] ?
+	( new AssignmentRepository() )->get( $data['item_id'] ) :
+	array();
 
 do_action( 'masterstudy_lms_course_player_register_assets' );
 
@@ -58,6 +63,7 @@ STM_LMS_Templates::show_lms_template(
 		'course_url'               => $data['course_url'],
 		'user_page_url'            => $data['user_page_url'],
 		'quiz_duration'            => 'quiz' === $data['content_type'] ? $quiz_data['duration'] : '',
+		'assignment_duration'      => $assignment_data['time_limit'] ?? '',
 		'is_scorm_course'          => $data['is_scorm_course'],
 		'settings'                 => $data['settings'],
 		'dark_mode'                => $data['dark_mode'],

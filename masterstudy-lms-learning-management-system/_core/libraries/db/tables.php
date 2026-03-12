@@ -15,6 +15,7 @@ require_once STM_LMS_LIBRARY . '/db/helpers/user_cart.php';
 require_once STM_LMS_LIBRARY . '/db/helpers/user_chat.php';
 require_once STM_LMS_LIBRARY . '/db/helpers/user_searches.php';
 require_once STM_LMS_LIBRARY . '/db/helpers/user_bookmarks.php';
+require_once STM_LMS_LIBRARY . '/db/helpers/user_assignments.times.php';
 
 if ( is_admin() ) {
 	require_once STM_LMS_LIBRARY . '/db/tables_updater.php';
@@ -37,4 +38,5 @@ if ( is_admin() ) {
 // Load LMS Pro tables
 if ( defined( 'STM_LMS_PRO_PATH' ) ) {
 	require_once STM_LMS_LIBRARY . '/db/tables/user_assignments.table.php';
+	require_once STM_LMS_LIBRARY . '/db/tables/user_assignments.times.table.php';
 }

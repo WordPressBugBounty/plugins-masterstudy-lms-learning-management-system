@@ -64,6 +64,9 @@ foreach ( $load_scripts as $handle ) {
 		lmsUrl: '<?php echo esc_url_raw( rest_url( 'masterstudy-lms/v2' ) ); ?>',
 		wpUrl: '<?php echo esc_url_raw( rest_url( 'wp/v2' ) ); ?>',
 		nonce: '<?php echo esc_html( wp_create_nonce( 'wp_rest' ) ); ?>',
+		wp_date_format: '<?php echo esc_attr( get_option( 'date_format' ) ); ?>',
+		wp_time_format: '<?php echo esc_attr( get_option( 'time_format' ) ); ?>',
+		locale: '<?php echo esc_attr( get_locale() ); ?>',
 	};
 	<?php if ( function_exists( 'pll_current_language' ) ) { ?>
 	window.lmsApiSettings.lang = '<?php echo esc_js( pll_current_language() ); ?>';

@@ -17,6 +17,8 @@
     );
 
     let timeLeft, daysLeft, hoursLeft, minutesLeft, secondsLeft, positions;
+    const reloadStorageKey = `masterstudy_countdown_reload_${window.location.pathname}_${options.timestamp}`;
+    let reloadAttempted = false;
     init(this, options);
     positions = this.find(".position");
 
@@ -26,7 +28,19 @@
 
       if (timeLeft < 0) {
         timeLeft = 0;
-        location.reload();
+
+        // Prevent reload recursion when stale HTML/client clock keeps countdown expired.
+        const canUseStorage = typeof window.sessionStorage !== "undefined";
+        const hasReloaded = canUseStorage && window.sessionStorage.getItem(reloadStorageKey) === "1";
+
+        if (!reloadAttempted && !hasReloaded) {
+          reloadAttempted = true;
+          if (canUseStorage) {
+            window.sessionStorage.setItem(reloadStorageKey, "1");
+          }
+          window.location.reload();
+          return;
+        }
       }
 
       // Number of days left

@@ -61,6 +61,7 @@ abstract class LmsUpdates {
 		'3.7.5'  => array( 'lms_add_course_statuses' ), // Add default course statuses
 		'3.7.15' => array( 'lms_update_pricing' ), // Update old pricing to new separated pricing
 		'3.7.17' => array( 'lms_flush_rewrite_rules', 'lms_reset_page_routes' ),
+		'3.7.18' => array( 'lms_add_assignments_times_table' ), // Add times table for assignments
 	);
 
 	/**

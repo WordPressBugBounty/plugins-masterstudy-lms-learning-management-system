@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.7.17
+Stable tag: 3.7.18
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.18 - 2026-03-12 =
+- **New:** Added the ability to set deadlines for Assignments (PRO)
+- **Fixed:** Fixed WPML compatibility issue when editing pages with Elementor
+- **Fixed:** Fixed an issue with the Ordering question type where answer options were not displayed after a retake
+- **Fixed:** Time and date formats in "Upcoming Courses" are now synchronized with the WordPress settings
+
 = 3.7.17 - 2026-03-03 =
 - **Update:** Updated the design of the Instructor and Student profile pages with a more modern interface and improved usability.
 - **Fixed:** Last Name was not displayed on the Thank You page when using Woo Checkout.

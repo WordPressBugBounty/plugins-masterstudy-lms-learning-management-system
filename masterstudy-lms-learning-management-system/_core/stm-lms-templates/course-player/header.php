@@ -10,6 +10,7 @@
  * @var boolean $lesson_lock_before_start
  * @var array $settings
  * @var int $quiz_duration
+ * @var int $assignment_duration
  * @var boolean $is_scorm_course
  * @var boolean $dark_mode
  * @var boolean $theme_fonts
@@ -159,6 +160,11 @@ $classes = implode(
 		}
 		?>
 	</div>
+	<?php if ( ! empty( $assignment_duration ) && $assignment_duration > 0 ) : ?>
+		<div class="masterstudy-course-player-header__assignment-timer">
+			<?php STM_LMS_Templates::show_lms_template( 'course-player/assignments/timer' ); ?>
+		</div>
+	<?php endif; ?>
 	<?php if ( ! empty( $quiz_duration ) && $quiz_duration > 0 ) { ?>
 		<div class="masterstudy-course-player-header__quiz-timer">
 			<?php STM_LMS_Templates::show_lms_template( 'course-player/content/quiz/timer' ); ?>

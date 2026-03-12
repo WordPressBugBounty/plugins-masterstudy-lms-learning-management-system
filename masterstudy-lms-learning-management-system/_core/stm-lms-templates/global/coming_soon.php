@@ -58,7 +58,7 @@ if ( 'card' === $mode ) {
 		<div class="coming-soon-card-details">
 			<?php esc_html_e( 'Coming soon:', 'masterstudy-lms-learning-management-system' ); ?>
 			<span>
-				<?php echo esc_html( date( 'd.m.Y', $start_time ) ); ?>
+				<?php echo esc_html( wp_date( get_option( 'date_format' ), $start_time ) ); ?>
 			</span>
 		</div>
 		<?php

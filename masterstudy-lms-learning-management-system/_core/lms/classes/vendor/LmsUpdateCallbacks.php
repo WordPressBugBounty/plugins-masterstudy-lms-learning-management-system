@@ -1103,4 +1103,10 @@ abstract class LmsUpdateCallbacks {
 			update_post_meta( $course_id, 'free_price_info', $pricing_info );
 		}
 	}
+
+	public static function lms_add_assignments_times_table() {
+		if ( \STM_LMS_Helpers::is_pro() && is_ms_lms_addon_enabled( 'assignments' ) ) {
+			stm_lms_user_assignments_times_table();
+		}
+	}
 }

@@ -619,7 +619,29 @@ final class CourseRepository extends AbstractRepository {
 			$meta           = get_post_meta( $post->ID );
 			$section_ids    = ( new CurriculumSectionRepository() )->get_course_section_ids( $post->ID );
 			$is_in_wishlist = is_null( $user_wishlist ) ? 'not-authorized' : in_array( $post->ID, $user_wishlist, true );
-			$status_data    = $courses_statuses[ $meta['status'][0] ] ?? null;
+			$status_value   = $meta['status'][0] ?? null;
+			$status_data    = null;
+			$coming_soon_start_time = $is_coming_soon_enabled ? intval( masterstudy_lms_coming_soon_start_time( $post->ID ) ) : false;
+			$coming_soon_date_formatted = ! empty( $coming_soon_start_time )
+				? \STM_LMS_Helpers::format_date( '@' . $coming_soon_start_time )
+				: array();
+
+			if ( ! empty( $status_value ) ) {
+				$status_date_start = $meta['status_dates_start'][0] ?? '';
+				$status_date_end   = $meta['status_dates_end'][0] ?? '';
+
+				if ( empty( $status_date_start ) && empty( $status_date_end ) ) {
+					$status_data = $courses_statuses[ $status_value ] ?? null;
+				} else {
+					$current_time = time() * 1000;
+
+					if ( $current_time > intval( $status_date_start ) && $current_time < intval( $status_date_end ) ) {
+						$status_data = $courses_statuses[ $status_value ] ?? null;
+					} else {
+						$status_value = null;
+					}
+				}
+			}
 
 			$extra_fields = array(
 				'price'                  => $meta['price'][0] ?? '',
@@ -637,7 +659,7 @@ final class CourseRepository extends AbstractRepository {
 				'featured'               => ( $meta['featured'][0] ?? null ) === 'on' && $is_featured_enabled,
 				'lock_lesson'            => ( $meta['lock_lesson'][0] ?? null ) === 'on',
 				'level'                  => $meta['level'][0] ?? null,
-				'status'                 => $meta['status'][0] ?? null,
+				'status'                 => $status_value,
 				'status_data'            => $status_data,
 				'views'                  => $meta['views'][0] ?? 0,
 				'access_duration'        => $meta['access_duration'][0] ?? '',
@@ -649,7 +671,8 @@ final class CourseRepository extends AbstractRepository {
 				'user_url'               => \STM_LMS_User::user_page_url(),
 				'user_avatar'            => get_user_meta( get_current_user_id(), 'stm_lms_user_avatar', true ),
 				'coming_soon_status'     => $meta['coming_soon_status'][0] ?? '',
-				'coming_soon_start_time' => $is_coming_soon_enabled ? intval( masterstudy_lms_coming_soon_start_time( $post->ID ) ) : false,
+				'coming_soon_start_time' => $coming_soon_start_time,
+				'coming_soon_date_formatted' => $coming_soon_date_formatted,
 				'membership'             => $subscription_enabled && ! $meta['not_membership'][0] && ! $meta['single_sale'][0],
 				'trial'                  => $meta['shareware'][0] ?? null,
 			);

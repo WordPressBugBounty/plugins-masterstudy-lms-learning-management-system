@@ -1212,7 +1212,11 @@ function is_ms_lms_addon_enabled( $addon ) {
 
 function ms_plugin_user_account_url( $sub_page = '' ) {
 	$settings        = get_option( 'stm_lms_settings', array() );
-	$account_page_id = apply_filters( 'wpml_object_id', $settings['user_url'] ?? null, 'post' );
+	$account_page_id = isset( $settings['user_url'] ) ? (int) $settings['user_url'] : 0;
+
+	if ( $account_page_id ) {
+		$account_page_id = stm_lms_wpml_object_id_safe( $account_page_id, 'post' );
+	}
 
 	if ( empty( $account_page_id ) || ! did_action( 'init' ) ) {
 		return home_url( '/' );
@@ -1419,11 +1423,11 @@ function ms_plugin_authorization() {
 		$settings                                 = get_option( 'stm_lms_settings', array() );
 		$settings['instructor_registration_page'] = $settings['instructor_registration_page'] ?? false;
 		$page_id                                  = get_the_ID();
-		$current_id                               = apply_filters( 'wpml_object_id', $page_id, 'post' );
+		$current_id                               = $page_id ? stm_lms_wpml_object_id_safe( $page_id, 'post' ) : 0;
 		$wpml_pages                               = array(
-			apply_filters( 'wpml_object_id', intval( $settings['user_url'] ), 'post' ),
-			apply_filters( 'wpml_object_id', intval( $settings['instructor_url_profile'] ), 'post' ),
-			apply_filters( 'wpml_object_id', intval( $settings['student_url_profile'] ), 'post' ),
+			stm_lms_wpml_object_id_safe( intval( $settings['user_url'] ), 'post' ),
+			stm_lms_wpml_object_id_safe( intval( $settings['instructor_url_profile'] ), 'post' ),
+			stm_lms_wpml_object_id_safe( intval( $settings['student_url_profile'] ), 'post' ),
 		);
 		$pages                                    = array(
 			intval( $settings['user_url'] ),
@@ -1431,8 +1435,9 @@ function ms_plugin_authorization() {
 			intval( $settings['student_url_profile'] ),
 		);
 		if ( $settings['instructor_registration_page'] ) {
-			$wpml_pages[] = apply_filters( 'wpml_object_id', intval( $settings['instructor_registration_page'] ), 'post' );
-			$pages[]      = intval( $settings['instructor_registration_page'] );
+			$instructor_registration_id = intval( $settings['instructor_registration_page'] );
+			$wpml_pages[]               = stm_lms_wpml_object_id_safe( $instructor_registration_id, 'post' );
+			$pages[]                    = intval( $settings['instructor_registration_page'] );
 		}
 
 		if ( in_array( $current_id, $wpml_pages, true ) || in_array( $page_id, $pages, true ) ) {
@@ -1450,7 +1455,7 @@ function ms_plugin_authorization() {
 }
 add_action( 'wp_footer', 'ms_plugin_authorization' );
 
-// Deprecated; will be deleted when the theme version exceeds 4.8.27.
+//Todo Deprecated; will be deleted when the theme version exceeds 4.8.27.
 function enqueue_login_script() {
 	wp_enqueue_script( 'stm_grecaptcha' );
 	do_action( 'stm_lms_enqueue_login_script' );
@@ -1741,3 +1746,23 @@ function masterstudy_lms_personal_data_display_options( $user_id ) {
 		'personal_fields'     => masterstudy_lms_personal_data_fields(),
 	);
 }
+
+function stm_lms_wpml_object_id_safe( $object_id, $type = 'post' ) {
+	$object_id = is_numeric( $object_id ) ? (int) $object_id : 0;
+
+	if ( ! $object_id ) {
+		return null;
+	}
+
+	/**
+	 * call wpml filter after registration.
+	 */
+	if ( ! has_filter( 'wpml_object_id' ) ) {
+		return $object_id;
+	}
+
+	$translated_id = apply_filters( 'wpml_object_id', $object_id, $type, true );
+
+	return ! empty( $translated_id ) ? (int) $translated_id : $object_id;
+}
+

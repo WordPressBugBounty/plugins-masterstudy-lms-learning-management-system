@@ -75,3 +75,7 @@ function stm_lms_get_wc_orders( $wpdb ) {
 function stm_lms_user_bookmarks_name( $wpdb ) {
 	return $wpdb->prefix . 'stm_lms_user_bookmarks';
 }
+
+function stm_lms_user_assignments_times_name( $wpdb ) {
+	return $wpdb->prefix . 'stm_lms_user_assignments_times';
+}

@@ -44,6 +44,7 @@ function stm_lms_tables_update() {
 	if ( defined( 'STM_LMS_PRO_PATH' ) ) {
 		if ( is_ms_lms_addon_enabled( 'assignments' ) ) {
 			stm_lms_user_assignments_table();
+			stm_lms_user_assignments_times_table();
 		}
 
 		if ( is_ms_lms_addon_enabled( 'subscriptions' ) ) {

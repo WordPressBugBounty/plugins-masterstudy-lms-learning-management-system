@@ -373,6 +373,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         initializeItemMatch();
       }
       if (sortableAnswers.length > 0) {
+        sortableAnswers.removeClass('masterstudy-course-player-sortable_hide');
         sortableAnswers.removeClass('masterstudy-course-player-sortable_not-drag');
         sortableAnswers.find('.masterstudy-course-player-sortable__answer-item').removeClass('masterstudy-course-player-sortable__answer-item_correct');
         sortableAnswers.find('.masterstudy-course-player-sortable__answer-item').removeClass('masterstudy-course-player-sortable__answer-item_wrong');
