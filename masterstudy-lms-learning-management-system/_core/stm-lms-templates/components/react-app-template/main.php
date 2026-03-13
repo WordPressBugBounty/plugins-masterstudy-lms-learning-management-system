@@ -74,6 +74,7 @@ $load_scripts = array(
 
 	window.lmsApiSettings.locale = '<?php echo esc_attr( get_locale() ); ?>';
 	window.lmsApiSettings.wp_date_format = '<?php echo esc_attr( get_option( 'date_format' ) ); ?>';
+	window.lmsApiSettings.wp_time_format = '<?php echo esc_attr( get_option( 'time_format' ) ); ?>';
 </script>
 <?php
 foreach ( $load_scripts as $handle ) {
