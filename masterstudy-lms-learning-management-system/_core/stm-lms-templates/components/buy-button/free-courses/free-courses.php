@@ -28,13 +28,6 @@
 	$price_info             = get_post_meta( $post_id, 'free_price_info', true );
 	$cert_info              = empty( get_post_meta( $post_id, 'free_do_not_provide_certificate', true ) ) && $is_certificate_enabled;
 
-	if ( ! function_exists( 'concat_info' ) ) {
-		function concat_info( array $strings ): string {
-			return implode( ' • ', array_filter( $strings ) );
-		}
-	}
-
-
 	if ( $trial_addon ) {
 		$is_trial_course = get_post_meta( $post_id, 'shareware', true );
 		if ( 'on' === $is_trial_course ) {
@@ -88,7 +81,7 @@
 	<span class="masterstudy-buy-button__single-price-info-text">
 			<?php
 			echo esc_html(
-				concat_info(
+				STM_LMS_Helpers::masterstudy_lms_pricing_concat_info(
 					array(
 						$price_info ?? '',
 						$cert_info ? esc_html__( 'Certificate included', 'masterstudy-lms-learning-management-system' ) : null,

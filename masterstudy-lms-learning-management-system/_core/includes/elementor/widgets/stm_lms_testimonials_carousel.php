@@ -81,6 +81,7 @@ class StmLmsProTestimonials extends Widget_Base {
 					'style_1' => esc_html__( 'Centered', 'masterstudy-lms-learning-management-system' ),
 					'style_2' => esc_html__( 'Outlined', 'masterstudy-lms-learning-management-system' ),
 					'style_3' => esc_html__( 'Classic', 'masterstudy-lms-learning-management-system' ),
+					'style_4' => esc_html__( 'Compact', 'masterstudy-lms-learning-management-system' ),
 				),
 			)
 		);
@@ -110,7 +111,7 @@ class StmLmsProTestimonials extends Widget_Base {
 				'mobile_default'     => '1',
 				'frontend_available' => true,
 				'condition'          => array(
-					'testimonials_style' => array( 'style_1', 'style_3' ),
+					'testimonials_style' => array( 'style_1', 'style_3', 'style_4' ),
 				),
 			)
 		);
@@ -178,6 +179,14 @@ class StmLmsProTestimonials extends Widget_Base {
 			array(
 				'label' => esc_html__( 'Author name', 'masterstudy-lms-learning-management-system' ),
 				'type'  => Controls_Manager::TEXT,
+			)
+		);
+		$repeater->add_control(
+			'author_position',
+			array(
+				'label'   => esc_html__( 'Author position', 'masterstudy-lms-learning-management-system' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => esc_html__( 'Customer', 'masterstudy-lms-learning-management-system' ),
 			)
 		);
 		$repeater->add_control(
@@ -571,6 +580,19 @@ class StmLmsProTestimonials extends Widget_Base {
 				),
 			)
 		);
+		$this->add_control(
+			'author_position_color',
+			array(
+				'label'     => esc_html__( 'Position Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .stm-testimonials-carousel-wrapper-style_4 .author-position' => 'color: {{VALUE}};',
+				),
+				'condition' => array(
+					'testimonials_style' => 'style_4',
+				),
+			)
+		);
 		$this->start_controls_tabs(
 			'style_tabs_author'
 		);
@@ -643,6 +665,30 @@ class StmLmsProTestimonials extends Widget_Base {
 			)
 		);
 		$this->add_control(
+			'navigation_prev_icon',
+			array(
+				'label'     => esc_html__( 'Prev Icon', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::ICONS,
+				'skin'      => 'inline',
+				'condition' => array(
+					'arrows'             => 'yes',
+					'testimonials_style' => 'style_4',
+				),
+			)
+		);
+		$this->add_control(
+			'navigation_next_icon',
+			array(
+				'label'     => esc_html__( 'Next Icon', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::ICONS,
+				'skin'      => 'inline',
+				'condition' => array(
+					'arrows'             => 'yes',
+					'testimonials_style' => 'style_4',
+				),
+			)
+		);
+		$this->add_control(
 			'navigation_arrows_color',
 			array(
 				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
@@ -650,6 +696,10 @@ class StmLmsProTestimonials extends Widget_Base {
 				'selectors' => array(
 					'{{WRAPPER}} .swiper-button-prev:after' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .swiper-button-next:after' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .swiper-button-prev i'   => 'color: {{VALUE}}',
+					'{{WRAPPER}} .swiper-button-next i'   => 'color: {{VALUE}}',
+					'{{WRAPPER}} .swiper-button-prev svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .swiper-button-next svg' => 'fill: {{VALUE}}',
 				),
 			)
 		);
@@ -725,6 +775,10 @@ class StmLmsProTestimonials extends Widget_Base {
 				'selectors' => array(
 					'{{WRAPPER}} .swiper-button-prev:hover:after' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .swiper-button-next:hover:after' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .swiper-button-prev:hover i' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .swiper-button-next:hover i' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .swiper-button-prev:hover svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .swiper-button-next:hover svg' => 'fill: {{VALUE}}',
 				),
 			)
 		);
@@ -998,7 +1052,20 @@ class StmLmsProTestimonials extends Widget_Base {
 		}
 		extract( $settings );
 		if ( ! empty( $testimonials ) ) {
-			require_once MS_LMS_PATH . '/_core/includes/elementor/widgets/testimonials/styles/' . sanitize_file_name( $testimonials_style ) . '.php';
+			$allowed_styles     = array( 'style_1', 'style_2', 'style_3', 'style_4' );
+			$testimonials_style = ( ! empty( $testimonials_style ) && in_array( $testimonials_style, $allowed_styles, true ) )
+				? $testimonials_style
+				: 'style_1';
+
+			$style_file = MS_LMS_PATH . '/_core/includes/elementor/widgets/testimonials/styles/' . $testimonials_style . '.php';
+
+			if ( ! file_exists( $style_file ) ) {
+				$style_file = MS_LMS_PATH . '/_core/includes/elementor/widgets/testimonials/styles/style_1.php';
+			}
+
+			if ( file_exists( $style_file ) ) {
+				require_once $style_file;
+			}
 		}
 	}
 

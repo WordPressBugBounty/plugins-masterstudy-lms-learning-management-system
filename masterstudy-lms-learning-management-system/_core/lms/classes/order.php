@@ -229,7 +229,7 @@ class STM_LMS_Order {
 				$first_order_id   = $get_subscription['first_order_id'];
 
 				if ( $is_result_empty ) {
-					$result = ( get_post_meta( $first_order_id, 'personal_data' ) )[0];
+					$result = get_post_meta( $first_order_id, 'personal_data', true ) ?? array();
 				}
 
 				if ( $should_check_for_coupon ) {

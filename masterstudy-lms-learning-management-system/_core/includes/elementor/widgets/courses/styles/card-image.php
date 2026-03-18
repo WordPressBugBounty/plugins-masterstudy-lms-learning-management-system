@@ -28,7 +28,7 @@ $this->add_responsive_control(
 			'{{WRAPPER}} .ms_lms_courses_card_item_image' => 'height: {{SIZE}}{{UNIT}};',
 		),
 		'condition'  => array(
-			'course_card_presets' => array( 'card-style-1', 'card-style-2', 'card-style-3', 'card-style-4', 'card-style-5' ),
+			'course_card_presets' => array( 'card-style-1', 'card-style-2', 'card-style-3', 'card-style-4', 'card-style-5', 'card-style-7' ),
 		),
 	)
 );

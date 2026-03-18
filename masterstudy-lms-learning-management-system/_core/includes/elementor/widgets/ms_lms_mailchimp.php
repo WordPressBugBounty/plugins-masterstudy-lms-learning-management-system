@@ -143,6 +143,34 @@ class MsLmsMailchimp extends Widget_Base {
 			)
 		);
 		$this->add_responsive_control(
+			'section_field_width',
+			array(
+				'label'      => esc_html__( 'Width', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px', '%' ),
+				'range'      => array(
+					'px' => array(
+						'min' => 100,
+						'max' => 1000,
+					),
+					'%'  => array(
+						'min' => 10,
+						'max' => 100,
+					),
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .mc4wp-form-fields input[type=email]' => 'width: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'     => 'section_field_border',
+				'selector' => '{{WRAPPER}} .mc4wp-form-fields input[type=email]',
+			)
+		);
+		$this->add_responsive_control(
 			'section_field_padding',
 			array(
 				'label'      => esc_html__( 'Padding', 'masterstudy-lms-learning-management-system' ),
@@ -161,6 +189,17 @@ class MsLmsMailchimp extends Widget_Base {
 				'size_units' => array( 'px', '%' ),
 				'selectors'  => array(
 					'{{WRAPPER}} .mc4wp-form-fields input[type=email]' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'section_field_border_radius',
+			array(
+				'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%', 'em' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .mc4wp-form-fields input[type=email]' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
@@ -294,6 +333,17 @@ class MsLmsMailchimp extends Widget_Base {
 				'size_units' => array( 'px', '%' ),
 				'selectors'  => array(
 					'{{WRAPPER}} .mc4wp-form-fields input[type=submit]' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'section_button_border_radius',
+			array(
+				'label'      => esc_html__( 'Border Radius', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%', 'em' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .mc4wp-form-fields input[type=submit]' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);

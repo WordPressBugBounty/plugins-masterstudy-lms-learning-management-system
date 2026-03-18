@@ -15,7 +15,7 @@ $this->start_controls_section(
 				array(
 					'name'     => 'course_card_presets',
 					'operator' => 'in',
-					'value'    => array( 'card-style-4' ),
+					'value'    => array( 'card-style-4', 'card-style-7' ),
 				),
 			),
 		),

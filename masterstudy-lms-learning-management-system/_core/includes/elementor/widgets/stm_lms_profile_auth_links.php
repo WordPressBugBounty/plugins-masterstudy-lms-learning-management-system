@@ -535,6 +535,7 @@ class StmLmsProfileAuthLinks extends Widget_Base {
 				'default'   => '#227aff1a',
 				'selectors' => array(
 					'{{WRAPPER}} .stm_lms_account_dropdown .dropdown button:hover' => 'background-color: {{VALUE}} !important',
+					'{{WRAPPER}} .stm_lms_account_dropdown .open button' => 'background-color: {{VALUE}} !important',
 				),
 			)
 		);

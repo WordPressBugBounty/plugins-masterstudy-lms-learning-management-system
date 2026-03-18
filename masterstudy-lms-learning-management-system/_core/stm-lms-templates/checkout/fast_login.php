@@ -6,7 +6,7 @@ $restrict_registration          = STM_LMS_Options::get_option( 'restrict_registr
 $registration_strength_password = STM_LMS_Options::get_option( 'registration_strength_password', false );
 
 wp_localize_script(
-	'fast_login',
+	'stm-lms-fast_login',
 	'stm_lms_fast_login',
 	array(
 		'translations'                   => array(

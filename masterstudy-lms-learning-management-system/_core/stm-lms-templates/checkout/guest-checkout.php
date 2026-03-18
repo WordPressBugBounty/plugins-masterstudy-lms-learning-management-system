@@ -109,7 +109,7 @@ else :
 								?>
 								</div>
 							</div>
-							<div data-id="checkout-price" class="masterstudy-checkout-course-info__price <?php echo $is_guest ? 'masterstudy-checkout-course-info__price-guest' : ''; ?>">
+							<div data-id="checkout-price" data-current-price="<?php echo esc_attr( $item['price'] ); ?>" class="masterstudy-checkout-course-info__price <?php echo $is_guest ? 'masterstudy-checkout-course-info__price-guest' : ''; ?>">
 								<span><?php echo esc_html( STM_LMS_Helpers::display_price( $item['price'] ) ); ?></span>
 								<div class="stm_lms_cart__item_delete">
 									<i class="stmlms-trash1"

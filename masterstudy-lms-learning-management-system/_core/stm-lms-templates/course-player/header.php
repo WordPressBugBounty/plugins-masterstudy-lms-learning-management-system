@@ -68,6 +68,24 @@ $classes = implode(
 		)
 	)
 );
+
+$fallback_back_link_url = ! empty( $user_page_url ) ? $user_page_url : home_url( '/' );
+$referrer_url           = wp_get_referer();
+$current_lesson_url     = get_permalink();
+$course_path            = wp_parse_url( $course_url, PHP_URL_PATH );
+$referrer_path          = wp_parse_url( $referrer_url, PHP_URL_PATH );
+$is_course_referrer     = false;
+
+if ( ! empty( $course_path ) && ! empty( $referrer_path ) ) {
+	$course_path        = trailingslashit( $course_path );
+	$referrer_path      = trailingslashit( $referrer_path );
+	$is_course_referrer = str_starts_with( $referrer_path, $course_path )
+							&& untrailingslashit( $referrer_url ) !== untrailingslashit( $course_url );
+}
+
+$back_link_url = ( ! empty( $referrer_url ) && ! $is_course_referrer && untrailingslashit( $referrer_url ) !== untrailingslashit( $current_lesson_url ) )
+	? wp_validate_redirect( $referrer_url, $fallback_back_link_url )
+	: $fallback_back_link_url;
 ?>
 <div class="masterstudy-course-player-header <?php echo esc_attr( $classes ); ?>">
 	<div class="masterstudy-course-player-header__back">
@@ -76,7 +94,7 @@ $classes = implode(
 			'components/back-link',
 			array(
 				'id'  => 'masterstudy-course-player-back',
-				'url' => $user_page_url,
+				'url' => $back_link_url,
 			)
 		);
 		?>

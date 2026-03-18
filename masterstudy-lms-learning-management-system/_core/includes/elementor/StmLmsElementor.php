@@ -27,6 +27,8 @@ use StmLmsElementor\Widgets\MsLmsMailchimp;
 use StmLmsElementor\Widgets\MsLmsCountdown;
 use StmLmsElementor\Widgets\MsLmsIconBox;
 use StmLmsElementor\Widgets\MsLmsCoursesCategories;
+use StmLmsElementor\Widgets\Masterstudy_Lms_Faq;
+use StmLmsElementor\Widgets\MsLmsMegaMenu;
 
 use StmLmsElementor\Widgets\Course\MsLmsCourseCategories;
 use StmLmsElementor\Widgets\Course\MsLmsCourseUpdated;
@@ -228,6 +230,14 @@ final class Plugin {
 				'less_title' => __( 'Show less', 'masterstudy-lms-learning-management-system' ),
 			)
 		);
+		/* mega menu widget scripts and styles */
+		wp_register_script(
+			'masterstudy-mega-menu-editor',
+			STM_LMS_URL . 'assets/js/elementor-widgets/mega-menu/mega-menu-editor.js',
+			array( 'elementor-frontend', 'jquery' ),
+			MS_LMS_VERSION,
+			true
+		);
 	}
 
 	public function editor_styles() {
@@ -235,6 +245,12 @@ final class Plugin {
 		wp_enqueue_style( 'stm_lms_add_overlay' );
 		wp_enqueue_style( 'masterstudy-unlock-banner', STM_LMS_URL . 'assets/css/elementor-widgets/helpers/unlock-banner.css', array(), MS_LMS_VERSION, false );
 		wp_enqueue_style( 'masterstudy-elementor-course-note', STM_LMS_URL . 'assets/css/elementor-widgets/helpers/course-note.css', array(), MS_LMS_VERSION, false );
+		wp_register_style(
+			'masterstudy-mega-menu',
+			STM_LMS_URL . 'assets/css/elementor-widgets/mega-menu/mega-menu.css',
+			array(),
+			MS_LMS_VERSION
+		);
 	}
 
 	public function controls_styles() {
@@ -273,6 +289,7 @@ final class Plugin {
 		require STM_LMS_PATH . '/includes/elementor/widgets/ms_lms_mailchimp.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/ms_lms_countdown.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/ms_lms_icon_box.php';
+		require STM_LMS_PATH . '/includes/elementor/widgets/ms_lms_mega_menu.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_categories.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_updated.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_enrolled.php';
@@ -302,6 +319,7 @@ final class Plugin {
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_grades.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/course/ms_lms_course_coming_soon.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/ms_lms_courses_categories.php';
+		require STM_LMS_PATH . '/includes/elementor/widgets/masterstudy_lms_faq.php';
 		// Pro widgets
 		require STM_LMS_PATH . '/includes/elementor/widgets/deprecated/stm_lms_certificate_checker.php';
 		require STM_LMS_PATH . '/includes/elementor/widgets/deprecated/stm_lms_course_bundles.php';
@@ -314,6 +332,7 @@ final class Plugin {
 		$widgets_manager->register( new StmLmsSingleCourseCarousel() );
 		$widgets_manager->register( new StmLmsCoursesCarousel() );
 		$widgets_manager->register( new MsLmsCoursesCategories() );
+		$widgets_manager->register( new Masterstudy_Lms_Faq() );
 		$widgets_manager->register( new StmLmsCoursesCategories() );
 		$widgets_manager->register( new StmLmsCoursesGrid() );
 		$widgets_manager->register( new StmLmsFeaturedTeacher() );
@@ -328,6 +347,7 @@ final class Plugin {
 		$widgets_manager->register( new MsLmsAuthorization() );
 		$widgets_manager->register( new MsLmsCountdown() );
 		$widgets_manager->register( new MsLmsIconBox() );
+		$widgets_manager->register( new MsLmsMegaMenu() );
 		$widgets_manager->register( new MsLmsCourses() );
 		$widgets_manager->register( new MsLmsSlider() );
 		$widgets_manager->register( new \MsLmsBlog() );

@@ -24,6 +24,7 @@ $this->add_control(
 			'card-style-4' => esc_html__( 'Full Size Image', 'masterstudy-lms-learning-management-system' ),
 			'card-style-5' => esc_html__( 'Centered', 'masterstudy-lms-learning-management-system' ),
 			'card-style-6' => esc_html__( 'Info Accent', 'masterstudy-lms-learning-management-system' ),
+			'card-style-7' => esc_html__( 'Stacked', 'masterstudy-lms-learning-management-system' ),
 		),
 	)
 );
@@ -214,7 +215,7 @@ $this->add_switcher_control(
 	array(
 		'label'     => esc_html__( 'Excerpt', 'masterstudy-lms-learning-management-system' ),
 		'condition' => array(
-			'course_card_presets' => array( 'card-style-4' ),
+			'course_card_presets' => array( 'card-style-4', 'card-style-7' ),
 		),
 	)
 );
@@ -263,8 +264,8 @@ $this->add_slot_control(
 			'terms' => array(
 				array(
 					'name'     => 'course_card_presets',
-					'operator' => '===',
-					'value'    => 'card-style-2',
+					'operator' => 'in',
+					'value'    => array( 'card-style-2', 'card-style-7' ),
 				),
 				array(
 					'name'     => 'show_slots',

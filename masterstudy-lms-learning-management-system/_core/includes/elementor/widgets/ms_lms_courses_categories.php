@@ -43,6 +43,7 @@ class MsLmsCoursesCategories extends Widget_Base {
 	private function register_content_controls() {
 		$this->course_categories_content_controls();
 		$this->layout_content_controls();
+		$this->button_content_controls();
 	}
 
 	private function register_style_controls() {
@@ -50,6 +51,7 @@ class MsLmsCoursesCategories extends Widget_Base {
 		$this->card_style_section();
 		$this->category_title_style_section();
 		$this->courses_count_style_section();
+		$this->category_button_style_section();
 	}
 
 	private function course_categories_content_controls() {
@@ -73,6 +75,7 @@ class MsLmsCoursesCategories extends Widget_Base {
 					'style-3' => esc_html__( 'Sleek', 'masterstudy-lms-learning-management-system' ),
 					'style-4' => esc_html__( 'Dynamic', 'masterstudy-lms-learning-management-system' ),
 					'style-5' => esc_html__( 'Dynamic with Title Below', 'masterstudy-lms-learning-management-system' ),
+					'style-6' => esc_html__( 'Spotlight', 'masterstudy-lms-learning-management-system' ),
 				),
 			)
 		);
@@ -91,6 +94,41 @@ class MsLmsCoursesCategories extends Widget_Base {
 
 		$this->end_controls_section();
 	}
+
+	private function button_content_controls() {
+		$this->start_controls_section(
+			'button_section',
+			array(
+				'label'     => esc_html__( 'Button', 'masterstudy-lms-learning-management-system' ),
+				'tab'       => Controls_Manager::TAB_CONTENT,
+				'condition' => array(
+					'preset' => 'style-6',
+				),
+			)
+		);
+
+		$this->add_control(
+			'button_text',
+			array(
+				'label'   => esc_html__( 'Button text', 'masterstudy-lms-learning-management-system' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => esc_html__( 'Learn more', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+
+		$this->add_control(
+			'button_icon',
+			array(
+				'label'       => esc_html__( 'Icon', 'masterstudy-lms-learning-management-system' ),
+				'type'        => Controls_Manager::ICONS,
+				'skin'        => 'inline',
+				'label_block' => false,
+			)
+		);
+
+		$this->end_controls_section();
+	}
+
 	private function layout_content_controls() {
 		$selector = $this->container_prefix_selector( '' );
 		$this->start_controls_section(
@@ -216,7 +254,7 @@ class MsLmsCoursesCategories extends Widget_Base {
 					$selector => '--masterstudy-cards-gap: {{SIZE}}{{UNIT}};',
 				),
 				'condition'  => array(
-					'preset' => array( 'style-1', 'style-2', 'style-3' ),
+					'preset' => array( 'style-1', 'style-2', 'style-3', 'style-6' ),
 				),
 			)
 		);
@@ -335,7 +373,7 @@ class MsLmsCoursesCategories extends Widget_Base {
 	}
 
 	private function category_title_style_section() {
-		$condition            = array( 'preset' => array( 'style-4', 'style-5' ) );
+		$condition            = array( 'preset' => array( 'style-4', 'style-5', 'style-6' ) );
 		$title_selector       = $this->category_prefix_selector( ' .masterstudy-courses-category__category-title' );
 		$title_hover_selector = $this->category_prefix_selector( ':hover .masterstudy-courses-category__category-title' );
 
@@ -379,6 +417,17 @@ class MsLmsCoursesCategories extends Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'category_title_background',
+			array(
+				'label'     => esc_html__( 'Background', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					$title_selector => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
 		$this->add_responsive_control(
 			'category_title_margin',
 			array(
@@ -390,6 +439,18 @@ class MsLmsCoursesCategories extends Widget_Base {
 				),
 			)
 		);
+
+		$this->add_responsive_control(
+			'category_title_padding',
+			array(
+				'label'      => esc_html__( 'Padding', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%', 'em', 'rem' ),
+				'selectors'  => array(
+					$title_selector => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
@@ -397,7 +458,7 @@ class MsLmsCoursesCategories extends Widget_Base {
 			array(
 				'label'     => esc_html__( 'Hover', 'masterstudy-lms-learning-management-system' ),
 				'condition' => array(
-					'preset' => array( 'style-5', 'style-4' ),
+					'preset' => array( 'style-5', 'style-4', 'style-6' ),
 				),
 			)
 		);
@@ -409,6 +470,17 @@ class MsLmsCoursesCategories extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					$title_hover_selector => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_control(
+			'category_title_background_hover',
+			array(
+				'label'     => esc_html__( 'Background', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					$title_hover_selector => 'background-color: {{VALUE}}',
 				),
 			)
 		);
@@ -482,7 +554,7 @@ class MsLmsCoursesCategories extends Widget_Base {
 			array(
 				'label'     => esc_html__( 'Hover', 'masterstudy-lms-learning-management-system' ),
 				'condition' => array(
-					'preset' => array( 'style-5', 'style-4' ),
+					'preset' => array( 'style-5', 'style-4', 'style-6' ),
 				),
 			)
 		);
@@ -501,6 +573,126 @@ class MsLmsCoursesCategories extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->end_controls_tabs();
+		$this->end_controls_section();
+	}
+
+	private function category_button_style_section() {
+		$link_selector = $this->category_prefix_selector( ' .masterstudy-courses-category__category-link' );
+		$link_hover    = $this->category_prefix_selector( ':hover .masterstudy-courses-category__category-link' );
+		$icon_selector = $this->category_prefix_selector( ' .masterstudy-courses-category__category-link-icon-wrap' );
+		$icon_hover    = $this->category_prefix_selector( ':hover .masterstudy-courses-category__category-link-icon-wrap' );
+
+		$this->start_controls_section(
+			'category_button_style_section',
+			array(
+				'label'     => esc_html__( 'Button style', 'masterstudy-lms-learning-management-system' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => array(
+					'preset' => 'style-6',
+				),
+			)
+		);
+
+		$this->start_controls_tabs( 'button_style_tabs' );
+
+		$this->start_controls_tab(
+			'button_style_normal',
+			array(
+				'label' => esc_html__( 'Normal', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+
+		$this->add_control(
+			'button_text_color',
+			array(
+				'label'     => esc_html__( 'Text color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					$link_selector => 'color: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'button_icon_color',
+			array(
+				'label'     => esc_html__( 'Icon color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					$icon_selector => 'color: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'button_icon_background',
+			array(
+				'label'     => esc_html__( 'Icon background', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					$icon_selector => 'background-color: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'button_icon_border_radius',
+			array(
+				'label'      => esc_html__( 'Icon border radius', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					$icon_selector => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'button_style_hover',
+			array(
+				'label' => esc_html__( 'Hover', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+
+		$this->add_control(
+			'button_text_color_hover',
+			array(
+				'label'     => esc_html__( 'Text color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					$link_hover => 'color: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'button_icon_color_hover',
+			array(
+				'label'     => esc_html__( 'Icon color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					$icon_hover => 'color: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'button_icon_background_hover',
+			array(
+				'label'     => esc_html__( 'Icon background', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					$icon_hover => 'background-color: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
 		$this->end_controls_section();
 	}
 
@@ -772,20 +964,40 @@ class MsLmsCoursesCategories extends Widget_Base {
 	public function render() {
 		$settings = $this->get_settings_for_display();
 
-		$terms = get_terms(
-			array(
-				'taxonomy'   => Taxonomy::COURSE_CATEGORY,
-				'include'    => $settings['taxonomy'],
-				'orderby'    => 'include',
-				'hide_empty' => false,
-			)
+		$taxonomy_ids = isset( $settings['taxonomy'] ) && is_array( $settings['taxonomy'] ) ? $settings['taxonomy'] : array();
+		$args         = array(
+			'taxonomy'   => Taxonomy::COURSE_CATEGORY,
+			'hide_empty' => false,
 		);
+		if ( ! empty( $taxonomy_ids ) ) {
+			$args['include'] = $taxonomy_ids;
+			$args['orderby'] = 'include';
+		}
+
+		$terms = get_terms( $args );
+		if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+			$terms = array();
+		}
+
+		$preset          = isset( $settings['preset'] ) ? $settings['preset'] : 'style-1';
+		$allowed_presets = array( 'style-1', 'style-2', 'style-3', 'style-4', 'style-5', 'style-6' );
+		if ( ! in_array( $preset, $allowed_presets, true ) ) {
+			$preset = 'style-1';
+		}
 
 		$atts = array(
-			'taxonomy' => $settings['taxonomy'],
+			'taxonomy' => $taxonomy_ids,
 			'terms'    => $terms,
 		);
+		if ( 'style-6' === $preset ) {
+			$atts['link_text']   = isset( $settings['button_text'] ) && '' !== $settings['button_text']
+				? $settings['button_text']
+				: esc_html__( 'Learn more', 'masterstudy-lms-learning-management-system' );
+			$atts['button_icon'] = isset( $settings['button_icon'] ) && ! empty( $settings['button_icon']['value'] )
+				? $settings['button_icon']
+				: array();
+		}
 
-		\STM_LMS_Templates::show_lms_template( "elementor-widgets/courses-categories/{$settings['preset']}", $atts );
+		\STM_LMS_Templates::show_lms_template( "elementor-widgets/courses-categories/{$preset}", $atts );
 	}
 }

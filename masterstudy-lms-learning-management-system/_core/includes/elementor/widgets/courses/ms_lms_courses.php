@@ -369,18 +369,20 @@ class MsLmsCourses extends Widget_Base {
 
 		/* all options for templates */
 		$atts = array(
-			'show_header'         => $settings['show_header'],
-			'header_presets'      => $settings['header_presets'],
-			'title_text'          => $settings['title_text'],
-			'show_sorting'        => $settings['show_sorting'],
-			'sort_presets'        => $settings['sort_presets'],
-			'show_navigation'     => $settings['show_navigation'],
-			'navigation_presets'  => $settings['navigation_presets'],
-			'navigation_position' => $settings['navigation_position'],
-			'courses'             => $courses['posts'] ?? array(),
-			'featured_courses'    => $featured_courses['posts'] ?? array(),
-			'course_image_size'   => $settings['course_image_size'],
-			'sorting_data'        => array(
+			'show_header'                 => $settings['show_header'],
+			'header_presets'              => $settings['header_presets'],
+			'title_text'                  => $settings['title_text'],
+			'show_sorting'                => $settings['show_sorting'],
+			'sort_presets'                => $settings['sort_presets'],
+			'show_navigation'             => $settings['show_navigation'],
+			'navigation_presets'          => $settings['navigation_presets'],
+			'navigation_position'         => $settings['navigation_position'],
+			'navigation_arrows_prev_icon' => $settings['navigation_arrows_prev_icon'] ?? array(),
+			'navigation_arrows_next_icon' => $settings['navigation_arrows_next_icon'] ?? array(),
+			'courses'                     => $courses['posts'] ?? array(),
+			'featured_courses'            => $featured_courses['posts'] ?? array(),
+			'course_image_size'           => $settings['course_image_size'],
+			'sorting_data'                => array(
 				'sort_options'        => $sort_options,
 				'sort_by'             => $settings['sort_by'],
 				'sort_options_by_cat' => $settings['sort_options_by_cat'] ?? '',

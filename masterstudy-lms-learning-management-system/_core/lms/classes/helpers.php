@@ -53,6 +53,25 @@ class STM_LMS_Helpers {
 		return defined( 'STM_LMS_PLUS_ENABLED' );
 	}
 
+	public static function is_ms_starter_purchased() {
+		if ( ! function_exists( 'masterstudy_starter_fs_verify' ) ) {
+			return false;
+		}
+
+		$theme_slug = wp_get_theme()->get_stylesheet();
+
+		$is_starter_theme = (
+			'ms-lms-starter-theme' === $theme_slug
+			|| 'ms-lms-starter-theme-child' === $theme_slug
+		);
+
+		if ( ! $is_starter_theme ) {
+			return false;
+		}
+
+		return masterstudy_starter_fs_verify();
+	}
+
 	public static function wpcfto_save_settings() {
 		check_ajax_referer( 'wpcfto_save_settings', 'nonce' );
 
@@ -379,6 +398,10 @@ class STM_LMS_Helpers {
 			: ( $subtotal * $rate / 100.0 );
 
 		return $only_value ? (float) $taxes : self::display_price( $taxes );
+	}
+
+	public static function masterstudy_lms_pricing_concat_info( array $strings ): string {
+		return implode( ' • ', array_filter( $strings ) );
 	}
 
 	// TODO replace with CourseRepository::SORT_MAPPING

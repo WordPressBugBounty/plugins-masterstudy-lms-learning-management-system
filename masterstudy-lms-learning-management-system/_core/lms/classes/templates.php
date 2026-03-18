@@ -98,12 +98,69 @@ class STM_LMS_Templates {
 	}
 
 	public static function single_course() {
-		if ( isset( $_GET['course_style'] ) ) {
-			if ( 'default' === $_GET['course_style'] ) {
-				self::show_lms_template( 'course' );
+		if ( STM_LMS_Helpers::is_ms_starter_purchased() && ! STM_LMS_Helpers::is_pro() ) {
+			$course_id = get_the_ID();
+			$style     = function_exists( 'ms_plugin_get_course_page_style' )
+				? ms_plugin_get_course_page_style( $course_id )
+				: ( isset( $_GET['course_style'] ) ? sanitize_text_field( wp_unslash( $_GET['course_style'] ) ) : 'default' );
+
+			if ( empty( $style ) || 'default' === $style ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo self::load_lms_template( 'course', array( 'course_style' => 'default' ) );
+
+				return;
 			}
-			self::show_lms_template( 'course/' . sanitize_text_field( wp_unslash( $_GET['course_style'] ) ) );
-			return;
+
+			$elementor_templates = function_exists( 'masterstudy_lms_get_my_templates' )
+				? masterstudy_lms_get_my_templates( false )
+				: array();
+			$native_templates    = function_exists( 'masterstudy_lms_get_native_templates' )
+				? masterstudy_lms_get_native_templates()
+				: array();
+
+			$matched_elementor = array();
+			if ( is_array( $elementor_templates ) ) {
+				$matched_elementor = array_values(
+					array_filter(
+						$elementor_templates,
+						function ( $existing_style ) use ( $style ) {
+							return isset( $existing_style['name'] ) && $existing_style['name'] === $style;
+						}
+					)
+				);
+			}
+
+			if ( ! empty( $matched_elementor ) && isset( $matched_elementor[0]['id'] ) && class_exists( '\Elementor\Plugin' ) ) {
+				global $masterstudy_single_page_course_id;
+				$masterstudy_single_page_course_id = $course_id;
+
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $matched_elementor[0]['id'] );
+
+				return;
+			}
+
+			$matched_native = array_filter(
+				$native_templates,
+				function ( $existing_style ) use ( $style ) {
+					return isset( $existing_style['name'] ) && $existing_style['name'] === $style;
+				}
+			);
+
+			if ( ! empty( $matched_native ) ) {
+				self::show_lms_template( 'course/' . $style );
+
+				return;
+			}
+		} else {
+			if ( isset( $_GET['course_style'] ) ) {
+				if ( 'default' === $_GET['course_style'] ) {
+					self::show_lms_template( 'course' );
+				}
+				self::show_lms_template( 'course/' . sanitize_text_field( wp_unslash( $_GET['course_style'] ) ) );
+
+				return;
+			}
 		}
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo self::load_lms_template( 'course', array( 'course_style' => 'default' ) );

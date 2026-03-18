@@ -128,12 +128,6 @@ if ( $logged_in && ! $only_membership ) {
 	);
 }
 
-if ( ! function_exists( 'concat_info' ) ) {
-	function concat_info( array $strings ): string {
-		return implode( ' • ', array_filter( $strings ) );
-	}
-}
-
 if ( $show_buttons ) {
 	?>
 	<div class="<?php echo esc_attr( implode( ' ', $button_classes ) ); ?>">
@@ -183,7 +177,7 @@ if ( $show_buttons ) {
 								</a>
 								<?php if ( ! empty( $price_info['single_sale_price_info'] ) || $cert_info['single_sale'] ) : ?>
 									<span class="masterstudy-buy-button__price-info-text">
-										<?php echo esc_html( concat_info( array( $price_info['single_sale_price_info'] ?? '', $cert_info['single_sale'] ? $cert_included_text : null ) ) ); ?>
+										<?php echo esc_html( STM_LMS_Helpers::masterstudy_lms_pricing_concat_info( array( $price_info['single_sale_price_info'] ?? '', $cert_info['single_sale'] ? $cert_included_text : null ) ) ); ?>
 									</span>
 								<?php endif; ?>
 							</div>
@@ -216,7 +210,7 @@ if ( $show_buttons ) {
 
 								<?php if ( ! empty( $price_info['membership_price_info'] ) || $cert_info['pmpro'] ) : ?>
 									<span class="masterstudy-buy-button__price-info-text">
-										<?php echo esc_html( concat_info( array( $price_info['membership_price_info'] ?? '', $cert_info['pmpro'] ? $cert_included_text : null ) ) ); ?>
+										<?php echo esc_html( STM_LMS_Helpers::masterstudy_lms_pricing_concat_info( array( $price_info['membership_price_info'] ?? '', $cert_info['pmpro'] ? $cert_included_text : null ) ) ); ?>
 									</span>
 								<?php endif; ?>
 							</div>
@@ -301,7 +295,7 @@ if ( $show_buttons ) {
 								<?php do_action( 'masterstudy_group_course_button', $post_id ); ?>
 								<?php if ( ! empty( $price_info['enterprise_price_info'] ) || $cert_info['enterprise'] ) : ?>
 									<span class="masterstudy-buy-button__price-info-text">
-										<?php echo esc_html( concat_info( array( $price_info['enterprise_price_info'] ?? '', $cert_info['enterprise'] ? $cert_included_text : null ) ) ); ?>
+										<?php echo esc_html( STM_LMS_Helpers::masterstudy_lms_pricing_concat_info( array( $price_info['enterprise_price_info'] ?? '', $cert_info['enterprise'] ? $cert_included_text : null ) ) ); ?>
 									</span>
 								<?php endif; ?>
 							</div>
@@ -324,7 +318,7 @@ if ( $show_buttons ) {
 								<?php do_action( 'masterstudy_point_system', $post_id ); ?>
 								<?php if ( ! empty( $price_info['points_price_info'] ) || $cert_info['points'] ) : ?>
 									<span class="masterstudy-buy-button__price-info-text">
-										<?php echo esc_html( concat_info( array( $price_info['points_price_info'] ?? '', $cert_info['points'] ? $cert_included_text : null ) ) ); ?>
+										<?php echo esc_html( STM_LMS_Helpers::masterstudy_lms_pricing_concat_info( array( $price_info['points_price_info'] ?? '', $cert_info['points'] ? $cert_included_text : null ) ) ); ?>
 									</span>
 								<?php endif; ?>
 							</div>
@@ -339,7 +333,7 @@ if ( $show_buttons ) {
 
 	<?php if ( ! $dropdown_enabled ) : ?>
 		<span class="masterstudy-buy-button__single-price-info-text">
-			<?php echo esc_html( concat_info( array( $price_info['single_sale_price_info'] ?? '', $cert_info['single_sale'] ? $cert_included_text : null ) ) ); ?>
+			<?php echo esc_html( STM_LMS_Helpers::masterstudy_lms_pricing_concat_info( array( $price_info['single_sale_price_info'] ?? '', $cert_info['single_sale'] ? $cert_included_text : null ) ) ); ?>
 		</span>
 	<?php endif; ?>
 

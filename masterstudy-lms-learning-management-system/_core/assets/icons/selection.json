@@ -275,6 +275,7 @@
     { "properties": { "name": "medal-2" } },
     { "properties": { "name": "medal-converted" } },
     { "properties": { "name": "medal" } },
+    { "properties": { "name": "mega-menu-widget" } },
     { "properties": { "name": "members" } },
     { "properties": { "name": "membership-locked" } },
     { "properties": { "name": "membership-plans" } },

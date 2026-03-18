@@ -193,6 +193,7 @@ function stm_lms_enqueue_component_scripts( $hook_suffix ) {
 	wp_register_script( 'masterstudy-attachment-media', STM_LMS_URL . 'assets/js/components/attachment-media.js', array( 'masterstudy-video-recorder', 'masterstudy-audio-recorder', 'masterstudy-audio-player' ), MS_LMS_VERSION, true );
 	wp_register_script( 'ms_lms_courses_searchbox_autocomplete', STM_LMS_URL . 'assets/vendors/vue2-autocomplete.js', array( 'jquery', 'vue.js', 'vue2-autocomplete' ), MS_LMS_VERSION, true );
 	wp_register_script( 'ms_lms_courses_searchbox', STM_LMS_URL . 'assets/js/elementor-widgets/course-search-box/course-search-box.js', array( 'jquery', 'vue.js' ), MS_LMS_VERSION, true );
+	wp_register_script( 'masterstudy-mega-menu', STM_LMS_URL . 'assets/js/elementor-widgets/mega-menu/mega-menu.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-single-course-complete', STM_LMS_URL . 'assets/js/components/course/complete.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-single-course-stickybar', STM_LMS_URL . 'assets/js/components/course/stickybar.js', array( 'jquery' ), MS_LMS_VERSION, true );
 	wp_register_script( 'masterstudy-single-course-components', STM_LMS_URL . 'assets/js/components/course/main.js', array( 'jquery', 'jquery.cookie' ), MS_LMS_VERSION, true );
@@ -279,6 +280,7 @@ function stm_lms_enqueue_component_scripts( $hook_suffix ) {
 	wp_register_style( 'masterstudy-stats-loader', STM_LMS_URL . 'assets/css/components/stats-loader.css', array(), MS_LMS_VERSION );
 	wp_register_style( 'ms_lms_courses_searchbox', STM_LMS_URL . 'assets/css/elementor-widgets/course-search-box/course-search-box.css', array(), STM_LMS_VERSION, false );
 	wp_register_style( 'profile-auth-links-style', STM_LMS_URL . 'assets/css/elementor-widgets/auth-links.css', array(), STM_LMS_VERSION, false );
+	wp_register_style( 'masterstudy-mega-menu', STM_LMS_URL . 'assets/css/elementor-widgets/mega-menu/mega-menu.css', array(), MS_LMS_VERSION, false );
 	wp_register_style( 'stm_lms_icons', STM_LMS_URL . 'assets/icons/style.css', null, STM_LMS_VERSION );
 	wp_register_style( 'linear', STM_LMS_URL . 'libraries/nuxy/taxonomy_meta/assets/linearicons/linear.css', null, STM_LMS_VERSION, 'all' );
 	wp_register_style( 'premium-templates', STM_LMS_URL . 'assets/css/parts/premium-templates/premium-templates.css', array(), MS_LMS_VERSION, 'all' );

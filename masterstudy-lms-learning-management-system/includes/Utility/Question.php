@@ -86,7 +86,10 @@ final class Question {
 		}
 	}
 
-	public static function get_sorted_answers_ids( string $type, array $answers ): string {
+	public static function get_sorted_answers_ids( string $type, $answers ): string {
+		if ( ! is_array( $answers ) ) {
+			return '';
+		}
 		if ( in_array( $type, array( QuestionType::FILL_THE_GAP, QuestionType::KEYWORDS, QuestionType::QUESTION_BANK, QuestionType::SORTABLE ), true ) ) {
 			return '';
 		}

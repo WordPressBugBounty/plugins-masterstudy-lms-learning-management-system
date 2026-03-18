@@ -43,6 +43,8 @@ final class GetSettingsController {
 		$lesson_types = apply_filters( 'masterstudy_lms_lesson_types', array_map( 'strval', LessonType::cases() ) );
 		$courses_page = \STM_LMS_Options::courses_page();
 
+		$theme_slug = wp_get_theme()->get_stylesheet();
+
 		return new \WP_REST_Response(
 			array(
 				'addons'              => Addons::enabled_addons(),
@@ -51,6 +53,7 @@ final class GetSettingsController {
 					'lms_pro_plus'        => \STM_LMS_Helpers::is_pro_plus(),
 					'presto_player'       => defined( 'PRESTO_PLAYER_PLUGIN_FILE' ),
 					'vdocipher'           => defined( 'VDOCIPHER_PLUGIN_VERSION' ),
+					'ms_lms_starter'      => \STM_LMS_Helpers::is_ms_starter_purchased(),
 					'pmpro'               => defined( 'PMPRO_VERSION' ),
 					'eroom'               => defined( 'STM_ZOOM_VERSION' ),
 					'elementor_installed' => file_exists( WP_PLUGIN_DIR . '/elementor/elementor.php' ),

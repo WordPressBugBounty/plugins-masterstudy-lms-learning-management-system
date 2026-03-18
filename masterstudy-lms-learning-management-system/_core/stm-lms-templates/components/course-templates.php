@@ -40,7 +40,7 @@ wp_localize_script(
 $settings                 = get_option( 'stm_lms_settings' );
 $settings['course_style'] = $settings['course_style'] ?? 'default';
 $is_pro                   = STM_LMS_Helpers::is_pro();
-$is_pro_plus              = STM_LMS_Helpers::is_pro_plus();
+$is_pro_plus              = STM_LMS_Helpers::is_pro_plus() || STM_LMS_Helpers::is_ms_starter_purchased();
 $pro_hint                 = __( 'Upgrade to PRO PLUS', 'masterstudy-lms-learning-management-system' );
 $pro_plus_hint            = __( 'Upgrade to PRO', 'masterstudy-lms-learning-management-system' );
 $preview_url              = 'https://masterstudy.stylemixthemes.com/lms-plugin/courses-page/basics-of-masterstudy/';

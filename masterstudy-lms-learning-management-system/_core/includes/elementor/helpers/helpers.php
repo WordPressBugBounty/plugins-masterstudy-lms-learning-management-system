@@ -1,6 +1,6 @@
 <?php
 function masterstudy_lms_add_course_template_column_to_pages( $columns ) {
-	if ( ! STM_LMS_Helpers::is_pro_plus() || ! class_exists( '\Elementor\Plugin' ) ) {
+	if ( ( ! STM_LMS_Helpers::is_pro_plus() && ! STM_LMS_Helpers::is_ms_starter_purchased() ) || ! class_exists( '\Elementor\Plugin' ) ) {
 		return $columns;
 	}
 
@@ -19,7 +19,7 @@ function masterstudy_lms_add_course_template_column_to_pages( $columns ) {
 add_filter( 'manage_pages_columns', 'masterstudy_lms_add_course_template_column_to_pages' );
 
 function masterstudy_lms_fill_course_template_column_on_pages( $column_name, $post_id ) {
-	if ( ! STM_LMS_Helpers::is_pro_plus() || ! class_exists( '\Elementor\Plugin' ) ) {
+	if ( ( ! STM_LMS_Helpers::is_pro_plus() && ! STM_LMS_Helpers::is_ms_starter_purchased() ) || ! class_exists( '\Elementor\Plugin' ) ) {
 		return;
 	}
 

@@ -79,13 +79,6 @@ function stm_lms_settings_course_section() {
 				'value' => 'not_empty',
 			),
 		),
-		'pro_banner'                           => array(
-			'type'  => 'pro_banner',
-			'label' => esc_html__( 'All Course Layouts', 'masterstudy-lms-learning-management-system' ),
-			'img'   => STM_LMS_URL . 'assets/img/pro-features/course-formats.png',
-			'hint'  => 'slider',
-			'desc'  => esc_html__( 'Step up to Pro today and dive into a whole new level of course customization within the Course settings.', 'masterstudy-lms-learning-management-system' ),
-		),
 		'course_tabs'                          => array(
 			'group'       => 'started',
 			'type'        => 'notice',
@@ -300,6 +293,29 @@ function stm_lms_settings_course_section() {
 		),
 	);
 
+	if ( ! STM_LMS_Helpers::is_ms_starter_purchased() && ! STM_LMS_Helpers::is_pro() ) {
+		$pro_banner_field = array(
+			'type'  => 'pro_banner',
+			'label' => esc_html__( 'All Course Layouts', 'masterstudy-lms-learning-management-system' ),
+			'img'   => STM_LMS_URL . 'assets/img/pro-features/course-formats.png',
+			'hint'  => 'slider',
+			'desc'  => esc_html__( 'Step up to Pro today and dive into a whole new level of course customization within the Course settings.', 'masterstudy-lms-learning-management-system' ),
+		);
+
+		$insert_after = 'assignments_quiz_failed_emoji';
+		$keys         = array_keys( $course_settings_primary_fields );
+		$position     = array_search( $insert_after, $keys, true );
+
+		if ( false !== $position ) {
+			$course_settings_primary_fields = array_slice(
+				$course_settings_primary_fields, 0, $position + 1, true ) + // phpcs:ignore
+				array( 'pro_banner' => $pro_banner_field ) +
+				array_slice( $course_settings_primary_fields, $position + 1, null, true );
+		} else {
+			$course_settings_primary_fields['pro_banner'] = $pro_banner_field;
+		}
+	}
+
 	$audio_lesson_addon_fields = apply_filters( 'masterstudy_lms_audio_lesson_course_settings_fields', array() );
 
 	$course_settings_secondary_fields = array(
@@ -477,7 +493,7 @@ function stm_lms_settings_course_section() {
 		'fields' => $course_summary_fields,
 	);
 
-	if ( STM_LMS_Helpers::is_pro() ) {
+	if ( STM_LMS_Helpers::is_pro() || \STM_LMS_Helpers::is_ms_starter_purchased() ) {
 		$my_templates     = class_exists( '\Elementor\Plugin' ) ? masterstudy_lms_get_my_templates() : array();
 		$template_options = array_merge(
 			masterstudy_lms_get_native_templates(),
@@ -491,7 +507,6 @@ function stm_lms_settings_course_section() {
 				'description' => esc_html__( 'Select the style that will match your branding.', 'masterstudy-lms-learning-management-system' ),
 				'value'       => 'default',
 				'options'     => $template_options,
-				'pro'         => true,
 				'pro_url'     => admin_url( 'admin.php?page=stm-lms-go-pro&source=course-page-style-course-settings' ),
 			),
 		);

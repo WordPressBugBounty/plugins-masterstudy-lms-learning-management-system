@@ -27,6 +27,22 @@ $this->start_controls_section(
 		),
 	)
 );
+$this->add_control(
+	'navigation_arrows_prev_icon',
+	array(
+		'label' => esc_html__( 'Prev Arrow Icon', 'masterstudy-lms-learning-management-system' ),
+		'type'  => Controls_Manager::ICONS,
+		'skin'  => 'inline',
+	)
+);
+$this->add_control(
+	'navigation_arrows_next_icon',
+	array(
+		'label' => esc_html__( 'Next Arrow Icon', 'masterstudy-lms-learning-management-system' ),
+		'type'  => Controls_Manager::ICONS,
+		'skin'  => 'inline',
+	)
+);
 $this->start_controls_tabs(
 	'navigation_arrows_tab'
 );
@@ -210,6 +226,78 @@ $this->add_group_control(
 );
 $this->end_controls_tab();
 $this->end_controls_tabs();
+$side_arrows_conditions = array(
+	'relation' => 'and',
+	'terms'    => array(
+		array(
+			'name'     => 'type',
+			'operator' => '===',
+			'value'    => 'courses-carousel',
+		),
+		array(
+			'name'     => 'show_navigation',
+			'operator' => '===',
+			'value'    => 'yes',
+		),
+		array(
+			'name'     => 'navigation_position',
+			'operator' => '===',
+			'value'    => 'side',
+		),
+	),
+);
+$this->add_responsive_control(
+	'side_arrow_prev_left',
+	array(
+		'label'      => esc_html__( 'Prev Arrow (Left)', 'masterstudy-lms-learning-management-system' ),
+		'type'       => Controls_Manager::SLIDER,
+		'size_units' => array( 'px', '%' ),
+		'range'      => array(
+			'px' => array(
+				'min' => -200,
+				'max' => 200,
+			),
+			'%'  => array(
+				'min' => -50,
+				'max' => 50,
+			),
+		),
+		'default'    => array(
+			'unit' => 'px',
+			'size' => -50,
+		),
+		'selectors'  => array(
+			'{{WRAPPER}} .ms_lms_courses_carousel__navigation_prev.side-nav' => 'left: {{SIZE}}{{UNIT}}; right: auto;',
+		),
+		'conditions' => $side_arrows_conditions,
+	)
+);
+$this->add_responsive_control(
+	'side_arrow_next_right',
+	array(
+		'label'      => esc_html__( 'Next Arrow (Right)', 'masterstudy-lms-learning-management-system' ),
+		'type'       => Controls_Manager::SLIDER,
+		'size_units' => array( 'px', '%' ),
+		'range'      => array(
+			'px' => array(
+				'min' => -200,
+				'max' => 200,
+			),
+			'%'  => array(
+				'min' => -50,
+				'max' => 50,
+			),
+		),
+		'default'    => array(
+			'unit' => 'px',
+			'size' => -50,
+		),
+		'selectors'  => array(
+			'{{WRAPPER}} .ms_lms_courses_carousel__navigation_next.side-nav' => 'right: {{SIZE}}{{UNIT}}; left: auto;',
+		),
+		'conditions' => $side_arrows_conditions,
+	)
+);
 $this->add_responsive_control(
 	'navigation_arrows_padding',
 	array(

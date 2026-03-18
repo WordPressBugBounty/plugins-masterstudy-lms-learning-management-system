@@ -14,22 +14,45 @@
 				);
 			}
 			if ( ! empty( $show_navigation ) && 'top' === $navigation_position && empty( $show_sorting ) ) {
+				$prev_icon = $navigation_arrows_prev_icon ?? array();
+				$next_icon = $navigation_arrows_next_icon ?? array();
 				?>
 				<div class="ms_lms_courses_carousel__navigation">
 					<button class="ms_lms_courses_carousel__navigation_prev <?php echo ( ! empty( $navigation_presets ) ) ? esc_attr( $navigation_presets ) : 'style_1'; ?>">
-						<i class="stmlms-chevron-left"></i>
+						<?php
+						if ( ! empty( $prev_icon['value'] ) ) {
+							\Elementor\Icons_Manager::render_icon( $prev_icon, array( 'aria-hidden' => 'true' ) );
+						} else {
+							echo '<i class="stmlms-chevron-left" aria-hidden="true"></i>';
+						}
+						?>
 					</button>
 					<button class="ms_lms_courses_carousel__navigation_next <?php echo ( ! empty( $navigation_presets ) ) ? esc_attr( $navigation_presets ) : 'style_1'; ?>">
-						<i class="stmlms-chevron-right"></i>
+						<?php
+						if ( ! empty( $next_icon['value'] ) ) {
+							\Elementor\Icons_Manager::render_icon( $next_icon, array( 'aria-hidden' => 'true' ) );
+						} else {
+							echo '<i class="stmlms-chevron-right" aria-hidden="true"></i>';
+						}
+						?>
 					</button>
 				</div>
 			<?php } ?>
 		</div>
 	<?php } ?>
 	<div class="ms_lms_courses_carousel__content <?php echo esc_attr( ( ! empty( $header_presets ) ) ? " title_{$header_presets}" : '' ); ?>">
-		<?php if ( ! empty( $show_navigation ) && 'side' === $navigation_position ) { ?>
+		<?php
+		if ( ! empty( $show_navigation ) && 'side' === $navigation_position ) {
+			$prev_icon_side = $navigation_arrows_prev_icon ?? array();
+			?>
 			<button class="ms_lms_courses_carousel__navigation_prev side-nav <?php echo ( ! empty( $navigation_presets ) ) ? esc_attr( $navigation_presets ) : 'style_1'; ?>">
-				<i class="stmlms-chevron-left"></i>
+				<?php
+				if ( ! empty( $prev_icon_side['value'] ) ) {
+					\Elementor\Icons_Manager::render_icon( $prev_icon_side, array( 'aria-hidden' => 'true' ) );
+				} else {
+					echo '<i class="stmlms-chevron-left" aria-hidden="true"></i>';
+				}
+				?>
 			</button>
 		<?php } ?>
 		<div class="ms_lms_courses_card_wrapper swiper-container">
@@ -68,20 +91,43 @@
 			</div>
 			<?php
 			if ( ( ! empty( $show_navigation ) && 'side' !== $navigation_position ) && ! ( empty( $show_sorting ) && 'top' === $navigation_position ) ) {
+				$prev_icon_bottom = $navigation_arrows_prev_icon ?? array();
+				$next_icon_bottom = $navigation_arrows_next_icon ?? array();
 				?>
 				<div class="ms_lms_courses_carousel__navigation">
 					<button class="ms_lms_courses_carousel__navigation_prev <?php echo ( ! empty( $navigation_presets ) ) ? esc_attr( $navigation_presets ) : 'style_1'; ?>">
-						<i class="stmlms-chevron-left"></i>
+						<?php
+						if ( ! empty( $prev_icon_bottom['value'] ) ) {
+							\Elementor\Icons_Manager::render_icon( $prev_icon_bottom, array( 'aria-hidden' => 'true' ) );
+						} else {
+							echo '<i class="stmlms-chevron-left" aria-hidden="true"></i>';
+						}
+						?>
 					</button>
 					<button class="ms_lms_courses_carousel__navigation_next <?php echo ( ! empty( $navigation_presets ) ) ? esc_attr( $navigation_presets ) : 'style_1'; ?>">
-						<i class="stmlms-chevron-right"></i>
+						<?php
+						if ( ! empty( $next_icon_bottom['value'] ) ) {
+							\Elementor\Icons_Manager::render_icon( $next_icon_bottom, array( 'aria-hidden' => 'true' ) );
+						} else {
+							echo '<i class="stmlms-chevron-right" aria-hidden="true"></i>';
+						}
+						?>
 					</button>
 				</div>
 			<?php } ?>
 		</div>
-		<?php if ( ! empty( $show_navigation ) && 'side' === $navigation_position ) { ?>
+		<?php
+		if ( ! empty( $show_navigation ) && 'side' === $navigation_position ) {
+			$next_icon_side = $navigation_arrows_next_icon ?? array();
+			?>
 			<button class="ms_lms_courses_carousel__navigation_next side-nav <?php echo ( ! empty( $navigation_presets ) ) ? esc_attr( $navigation_presets ) : 'style_1'; ?>">
-				<i class="stmlms-chevron-right"></i>
+				<?php
+				if ( ! empty( $next_icon_side['value'] ) ) {
+					\Elementor\Icons_Manager::render_icon( $next_icon_side, array( 'aria-hidden' => 'true' ) );
+				} else {
+					echo '<i class="stmlms-chevron-right" aria-hidden="true"></i>';
+				}
+				?>
 			</button>
 		<?php } ?>
 	</div>
