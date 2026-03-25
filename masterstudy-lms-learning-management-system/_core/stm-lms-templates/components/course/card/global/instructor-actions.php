@@ -10,6 +10,7 @@ $course_statuses = array(
 	'draft'    => esc_html__( 'In draft', 'masterstudy-lms-learning-management-system' ),
 	'rejected' => esc_html__( 'Rejected', 'masterstudy-lms-learning-management-system' ),
 	'pending'  => esc_html__( 'Pending', 'masterstudy-lms-learning-management-system' ),
+	'private'  => esc_html__( 'Private', 'masterstudy-lms-learning-management-system' ),
 );
 ?>
 
@@ -21,7 +22,7 @@ $course_statuses = array(
 					<?php echo esc_html__( 'Course status', 'masterstudy-lms-learning-management-system' ); ?>:
 				</span>
 				<span class="masterstudy-instructor-course-actions__status masterstudy-instructor-course-actions__status_<?php echo esc_attr( $current_status ); ?>">
-					<?php echo esc_html( $course_statuses[ $current_status ] ); ?>
+					<?php echo esc_html( $course_statuses[ $current_status ] ?? ucfirst( $current_status ) ); ?>
 				</span>
 			</div>
 			<div class="masterstudy-instructor-course-actions__item">

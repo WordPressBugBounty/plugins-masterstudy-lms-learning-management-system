@@ -146,6 +146,82 @@ add_action(
 	100003
 );
 
+add_action(
+	'admin_menu',
+	function () {
+		global $submenu, $wpdb;
+
+		if ( empty( $submenu['stm-lms-settings'] ) || ! is_array( $submenu['stm-lms-settings'] ) ) {
+			return;
+		}
+
+		$reviews = wp_count_posts( 'stm-reviews' );
+		$courses = wp_count_posts( 'stm-courses' );
+
+		$badges = array(
+			'reviews'     => array(
+				'count'  => isset( $reviews->pending ) ? (int) $reviews->pending : 0,
+				'match'  => static function ( $slug ) {
+					return false !== strpos( $slug, 'post_type=stm-reviews' );
+				},
+				'label'  => static function ( $count ) {
+					return esc_html( sprintf( _n( '%d pending review', '%d pending reviews', $count, 'masterstudy-lms-learning-management-system' ), $count ) );
+				},
+			),
+			'instructors' => array(
+				'count' => (int) $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT COUNT(DISTINCT user_id)
+						FROM {$wpdb->usermeta}
+						WHERE meta_key = %s
+						AND meta_value = %s",
+						'submission_status',
+						'pending'
+					)
+				),
+				'match' => static function ( $slug ) {
+					return 'manage_users' === $slug || false !== strpos( $slug, 'page=manage_users' );
+				},
+				'label' => static function ( $count ) {
+					return esc_html( sprintf( _n( '%d pending instructor', '%d pending instructors', $count, 'masterstudy-lms-learning-management-system' ), $count ) );
+				},
+			),
+			'courses'     => array(
+				'count' => isset( $courses->pending ) ? (int) $courses->pending : 0,
+				'match' => static function ( $slug ) {
+					return 'stm-lms-courses-link' === $slug || false !== strpos( $slug, 'post_type=stm-courses' );
+				},
+				'label' => static function ( $count ) {
+					return esc_html( sprintf( _n( '%d pending course', '%d pending courses', $count, 'masterstudy-lms-learning-management-system' ), $count ) );
+				},
+			),
+		);
+
+		foreach ( $submenu['stm-lms-settings'] as &$item ) {
+			$slug = $item[2] ?? '';
+
+			foreach ( $badges as $key => $badge ) {
+				if ( $badge['count'] <= 0 || ! $badge['match']( $slug ) ) {
+					continue;
+				}
+
+				$item[0] .= sprintf(
+					' <span class="awaiting-mod update-plugins count-%1$d"><span class="pending-count" aria-hidden="true">%1$d</span><span class="screen-reader-text">%2$s</span></span>',
+					$badge['count'],
+					$badge['label']( $badge['count'] )
+				);
+				unset( $badges[ $key ] );
+				break;
+			}
+
+			if ( empty( $badges ) ) {
+				break;
+			}
+		}
+	},
+	999999
+);
+
 if ( ! STM_LMS_Helpers::is_pro() && ! STM_LMS_Helpers::is_pro_plus() ) {
 	add_action( 'admin_menu', 'add_submenu_pages', 100002 );
 

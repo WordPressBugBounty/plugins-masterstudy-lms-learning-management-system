@@ -288,7 +288,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         html = "<span data-error-id=\"".concat(error.id, "\" class=\"masterstudy-authorization__form-field-error\">").concat(error.text, "</span>");
       if (inputField.length > 0) {
         if (error.field === 'privacy_policy' || error.field === 'recaptcha') {
-          if (formContainer.find('.masterstudy-authorization').find("span[data-error-id=\"".concat(error.id, "\"]")).length === 0) {
+          if (formContainer.find("span[data-error-id=\"".concat(error.id, "\"]")).length === 0) {
             var errorElement = $(html);
             errorElement.addClass("masterstudy-authorization__form-field-error_main masterstudy-authorization__form-field-error_".concat(error.field));
             formContainer.find('.masterstudy-authorization__actions').before(errorElement);

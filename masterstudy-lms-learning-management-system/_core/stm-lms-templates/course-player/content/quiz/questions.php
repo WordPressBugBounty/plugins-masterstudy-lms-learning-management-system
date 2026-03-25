@@ -4,6 +4,7 @@
  * @var int $quiz_id
  * @var boolean $dark_mode
  * */
+
 ?>
 
 <div class="masterstudy-course-player-quiz__questions <?php echo esc_attr( 'pagination' === $quiz_data['quiz_style'] ? 'masterstudy-course-player-quiz__questions_pagination' : '' ); ?>">

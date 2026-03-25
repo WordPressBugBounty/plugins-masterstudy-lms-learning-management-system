@@ -414,6 +414,13 @@ function stm_lms_account_scripts() {
 				'not_featured'    => esc_html__( 'Make Featured', 'masterstudy-lms-learning-management-system' ),
 				'featured_status' => esc_html__( 'Featured', 'masterstudy-lms-learning-management-system' ),
 				'featured_limit'  => esc_html__( 'You have reached the limit of featured courses.', 'masterstudy-lms-learning-management-system' ),
+				'status_labels'   => array(
+					'publish'  => esc_html__( 'Published', 'masterstudy-lms-learning-management-system' ),
+					'draft'    => esc_html__( 'In draft', 'masterstudy-lms-learning-management-system' ),
+					'pending'  => esc_html__( 'Pending', 'masterstudy-lms-learning-management-system' ),
+					'rejected' => esc_html__( 'Rejected', 'masterstudy-lms-learning-management-system' ),
+					'private'  => esc_html__( 'Private', 'masterstudy-lms-learning-management-system' ),
+				),
 			),
 		)
 	);

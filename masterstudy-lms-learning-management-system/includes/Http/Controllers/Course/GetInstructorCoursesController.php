@@ -13,19 +13,31 @@ class GetInstructorCoursesController {
 		$status   = (string) ( $request->get_param( 'status' ) ?? '' );
 		$render   = (string) ( $request->get_param( 'render' ) ?? 'json' );
 		$user_id  = (int) ( $request->get_param( 'user' ) ?? 0 );
+		$current_user_id = \get_current_user_id();
+		$is_author_query = ( $user_id > 0 && $user_id === $current_user_id );
+		$include_private = $is_author_query;
 
 		$page     = max( 1, $page );
 		$per_page = max( 1, $per_page );
 
 		$post_status = 'published' === $status ? 'publish' : $status;
+		$available_statuses = array( 'publish', 'draft', 'pending', 'rejected' );
+
+		if ( $include_private ) {
+			$available_statuses[] = 'private';
+		}
 
 		$args = array(
 			'author'         => $user_id,
 			'post_type'      => PostType::COURSE,
 			'posts_per_page' => $per_page,
 			'paged'          => $page,
-			'post_status'    => empty( $post_status ) ? array( 'publish', 'draft', 'pending', 'rejected' ) : $post_status,
+			'post_status'    => empty( $post_status ) ? $available_statuses : $post_status,
 		);
+
+		if ( ! empty( $post_status ) && 'private' === $post_status && ! $include_private ) {
+			$args['post_status'] = $available_statuses;
+		}
 
 		if ( ! empty( $post_status ) && 'coming_soon_status' === $post_status ) {
 			$args['meta_query'][] = array(

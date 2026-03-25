@@ -21,6 +21,29 @@ wp_set_script_translations( 'ms-lms-course-builder-translations', 'masterstudy-l
 $scripts = wp_scripts();
 $styles  = wp_styles();
 
+$ms_lms_get_asset_src = static function ( $asset, $dependencies ) {
+	if ( empty( $asset ) || empty( $asset->src ) ) {
+		return '';
+	}
+
+	$src = filter_var( $asset->src, FILTER_VALIDATE_URL ) ? $asset->src : site_url( $asset->src );
+	$ver = $asset->ver ?? $dependencies->default_version;
+
+	if ( false === $ver ) {
+		return $src;
+	}
+
+	if ( empty( $ver ) ) {
+		$ver = $dependencies->default_version;
+	}
+
+	if ( ! empty( $ver ) ) {
+		$src = add_query_arg( 'ver', $ver, $src );
+	}
+
+	return $src;
+};
+
 $load_scripts = array(
 	'wp-polyfill-inert',
 	'regenerator-runtime',
@@ -37,9 +60,9 @@ do_action( 'stm_lms_template_main' );
 <head>
 	<title><?php esc_html_e( 'Course Builder', 'masterstudy-lms-learning-management-system' ); ?></title>
 	<link rel="shortcut icon" type="image/x-icon" href="<?php echo esc_url( ms_plugin_favicon_url() ); ?>" />
-	<link href="<?php echo esc_url( site_url( $styles->registered['dashicons']->src ) ); // phpcs:ignore ?>" rel="stylesheet">
-	<link href="<?php echo esc_url( site_url( $styles->registered['editor-buttons']->src ) ); // phpcs:ignore ?>" rel="stylesheet">
-	<link href="<?php echo esc_url( $styles->registered['ms-lms-course-builder']->src ); // phpcs:ignore ?>" rel="stylesheet">
+	<link href="<?php echo esc_url( $ms_lms_get_asset_src( $styles->registered['dashicons'], $styles ) ); // phpcs:ignore ?>" rel="stylesheet">
+	<link href="<?php echo esc_url( $ms_lms_get_asset_src( $styles->registered['editor-buttons'], $styles ) ); // phpcs:ignore ?>" rel="stylesheet">
+	<link href="<?php echo esc_url( $ms_lms_get_asset_src( $styles->registered['ms-lms-course-builder'], $styles ) ); // phpcs:ignore ?>" rel="stylesheet">
 	<?php
 	if ( ! empty( $additional_styles ) ) {
 		foreach ( $additional_styles as $style_url ) {
@@ -54,8 +77,7 @@ do_action( 'stm_lms_template_main' );
 <div id="ms_plugin_root"></div>
 <?php
 foreach ( $load_scripts as $handle ) {
-	$handle_src = $scripts->registered[ $handle ]->src;
-	$src_url    = filter_var( $handle_src, FILTER_VALIDATE_URL ) ? $handle_src : site_url( $handle_src );
+	$src_url = $ms_lms_get_asset_src( $scripts->registered[ $handle ], $scripts );
 	?>
 	<script src="<?php echo esc_url( $src_url ); // phpcs:ignore ?>"></script>
 <?php } ?>
@@ -83,10 +105,10 @@ if ( ! class_exists( '\_WP_Editors', false ) ) {
 	require ABSPATH . WPINC . '/class-wp-editor.php';
 }
 ?>
-<script src="<?php echo esc_url( $scripts->registered['ms-lms-course-builder-tinymce']->src ); // phpcs:ignore ?>"></script>
-<script src="<?php echo esc_url( $scripts->registered['ms-lms-course-builder']->src ); // phpcs:ignore ?>"></script>
-<script src="<?php echo esc_url( $scripts->registered['ms-lms-course-builder-vendors']->src ); // phpcs:ignore ?>"></script>
-<script src="<?php echo esc_url( $scripts->registered['ms-lms-course-builder-translations']->src ); // phpcs:ignore ?>"></script>
+<script src="<?php echo esc_url( $ms_lms_get_asset_src( $scripts->registered['ms-lms-course-builder-tinymce'], $scripts ) ); // phpcs:ignore ?>"></script>
+<script src="<?php echo esc_url( $ms_lms_get_asset_src( $scripts->registered['ms-lms-course-builder'], $scripts ) ); // phpcs:ignore ?>"></script>
+<script src="<?php echo esc_url( $ms_lms_get_asset_src( $scripts->registered['ms-lms-course-builder-vendors'], $scripts ) ); // phpcs:ignore ?>"></script>
+<script src="<?php echo esc_url( $ms_lms_get_asset_src( $scripts->registered['ms-lms-course-builder-translations'], $scripts ) ); // phpcs:ignore ?>"></script>
 <?php
 if ( ! empty( $additional_scripts ) ) {
 	foreach ( $additional_scripts as $script_url ) {

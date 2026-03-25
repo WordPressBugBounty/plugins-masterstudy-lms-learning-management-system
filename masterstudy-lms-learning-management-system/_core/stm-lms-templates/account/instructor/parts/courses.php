@@ -58,7 +58,7 @@ $args = array(
 	'post_type'      => PostType::COURSE,
 	'posts_per_page' => $courses_per_page,
 	'paged'          => $initial_page,
-	'post_status'    => array( 'publish', 'draft', 'pending', 'rejected' ),
+	'post_status'    => array( 'publish', 'draft', 'pending', 'rejected', 'private' ),
 );
 
 if ( function_exists( 'pll_current_language' ) ) {

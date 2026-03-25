@@ -7,6 +7,7 @@ STM_LMS_Instructor::init();
 class STM_LMS_Instructor extends STM_LMS_User {
 	public static function init() {
 		add_filter( 'map_meta_cap', array( self::class, 'meta_cap' ), 10, 4 );
+		add_filter( 'user_has_cap', array( self::class, 'user_has_cap' ), 10, 4 );
 
 		add_action( 'wp_ajax_stm_lms_get_instructor_courses', 'STM_LMS_Instructor::get_courses' );
 
@@ -366,6 +367,84 @@ class STM_LMS_Instructor extends STM_LMS_User {
 		return $caps;
 	}
 
+	private static $private_course_access = null;
+
+	public static function user_has_cap( $allcaps, $caps, $args, $user ) {
+		if ( is_admin() || empty( $user->ID ) ) {
+			return $allcaps;
+		}
+
+		if ( ! in_array( 'read_private_stm_lms_posts', (array) $caps, true ) ) {
+			return $allcaps;
+		}
+
+		if ( null === self::$private_course_access ) {
+			self::$private_course_access = self::resolve_private_course_access( $user->ID );
+		}
+
+		if ( self::$private_course_access ) {
+			$allcaps['read_private_stm_lms_posts'] = true;
+		}
+
+		return $allcaps;
+	}
+
+	private static function resolve_private_course_access( $user_id ) {
+		global $wpdb;
+		$post = null;
+
+		// Plain query URL: /?post_type=stm-courses&p=14
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! empty( $_GET['post_type'] ) && 'stm-courses' === sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) && ! empty( $_GET['p'] ) ) {
+			$candidate = get_post( intval( $_GET['p'] ) );
+			if ( $candidate && 'stm-courses' === $candidate->post_type && 'private' === $candidate->post_status ) {
+				$post = $candidate;
+			}
+		}
+
+		// Pretty permalink: query var 'stm-courses' holds the post slug after rewrite parsing.
+		if ( ! $post ) {
+			global $wp;
+			if ( ! empty( $wp->query_vars['stm-courses'] ) ) {
+				$slug = sanitize_title( $wp->query_vars['stm-courses'] );
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				$course_id = (int) $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT ID FROM {$wpdb->posts} WHERE post_name = %s AND post_type = 'stm-courses' AND post_status = 'private' LIMIT 1",
+						$slug
+					)
+				);
+				if ( $course_id ) {
+					$post = get_post( $course_id );
+				}
+			}
+		}
+
+		if ( ! $post ) {
+			return false;
+		}
+
+		if ( (int) $post->post_author === $user_id ) {
+			return true;
+		}
+
+		$co_instructors = array();
+		$co_meta        = get_post_meta( $post->ID, 'co_instructor', false );
+		foreach ( (array) $co_meta as $co_instructor ) {
+			if ( is_array( $co_instructor ) ) {
+				$co_instructors = array_merge( $co_instructors, $co_instructor );
+			} else {
+				$co_instructors[] = $co_instructor;
+			}
+		}
+
+		if ( in_array( $user_id, array_filter( array_map( 'intval', $co_instructors ) ), true ) ) {
+			return true;
+		}
+
+		return (bool) \STM_LMS_User::has_course_access( (int) $post->ID, '', false );
+	}
+
 	public static function role(): string {
 		return 'stm_lms_instructor';
 	}
@@ -506,6 +585,9 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					case 'publish':
 						$status_label = esc_html__( 'Published', 'masterstudy-lms-learning-management-system' );
 						break;
+					case 'private':
+						$status_label = esc_html__( 'Private', 'masterstudy-lms-learning-management-system' );
+						break;
 					case 'pending':
 						$status_label = esc_html__( 'Pending', 'masterstudy-lms-learning-management-system' );
 						break;
@@ -617,6 +699,9 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				switch ( $status ) {
 					case 'publish':
 						$status_label = esc_html__( 'Published', 'masterstudy-lms-learning-management-system' );
+						break;
+					case 'private':
+						$status_label = esc_html__( 'Private', 'masterstudy-lms-learning-management-system' );
 						break;
 					case 'pending':
 						$status_label = esc_html__( 'Pending', 'masterstudy-lms-learning-management-system' );

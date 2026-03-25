@@ -51,7 +51,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         publish: "Published",
         draft: "In draft",
         pending: "Pending",
-        rejected: "Rejected"
+        rejected: "Rejected",
+        "private": "Private"
       };
     }
     function getStatusLabel(status) {
