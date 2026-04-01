@@ -195,24 +195,27 @@ class STM_LMS_Subscriptions {
 					'login'           => $login,
 					'user_login'      => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 					'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_permalink( $course_id ) ),
+					'student_email'   => $user['email'],
 				);
 
-				$message = sprintf(
-				/* translators: %1$s Course Title, %2$s User Login */
-					esc_html__( 'Course %1$s was added to %2$s. with %3$s', 'masterstudy-lms-learning-management-system' ),
-					$course_title,
-					$login,
-					$membership_plan
-				);
-				STM_LMS_Helpers::send_email( '', 'Course added.', $message, 'stm_lms_membership_course_available_for_admin', $email_data );
+				$subject = esc_html__( '{{user_login}} Added to {{course_title}} via {{membership_plan}}', 'masterstudy-lms-learning-management-system' );
+				$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
 
-				$message = sprintf(
-				/* translators: %1$s Course Title, %2$s User Login */
-					esc_html__( 'Course %1$s is now available to learn with %2$s', 'masterstudy-lms-learning-management-system' ),
-					$course_title,
-					$membership_plan
-				);
-				STM_LMS_Helpers::send_email( $user['email'], 'Course added to User', $message, 'stm_lms_membership_course_available_for_user', $email_data );
+				$message = 'A student {{user_login}} has been added to the course {{course_title}} under the {{membership_plan}} membership plan.<br>
+				<b>Course URL</b>: {{course_title}} <br>
+				<b>Enrollment Date</b>: {{date}}.';
+				$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_data );
+
+				STM_LMS_Helpers::send_email( '', $subject, $message, 'stm_lms_membership_course_available_for_admin', $email_data );
+
+				//email for student
+				$subject = esc_html__( 'Welcome to {{course_title}} via {{membership_plan}}', 'masterstudy-lms-learning-management-system' );
+				$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
+				$message = 'We are excited to inform you that you have been added to the course {{course_title}} under the {{membership_plan}} membership plan. <br>
+				You can access the course and start learning using the following link: {{course_title}}';
+				$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_data );
+
+				STM_LMS_Helpers::send_email( $user['email'], $subject, $message, 'stm_lms_membership_course_available_for_user', $email_data );
 			}
 		}
 

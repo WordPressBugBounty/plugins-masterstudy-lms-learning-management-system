@@ -1,10 +1,15 @@
 <?php
 $course_free_status = masterstudy_lms_course_free_status( $course['id'], $course['price'] );
 $is_sale            = ! empty( $course['sale_price'] ) && $course['is_sale_active'];
+$is_affiliate       = 'affiliate' === ( $course['pricing_mode'] ?? '' ) && '' !== (string) ( $course['affiliate_course_price'] ?? '' );
 ?>
 
 <div class="ms_lms_courses_card_item_info_price">
-	<?php if ( $course['single_sale'] && ! $course_free_status['zero_price'] ) { ?>
+	<?php if ( $is_affiliate ) { ?>
+		<div class="ms_lms_courses_card_item_info_price_single">
+			<span><?php echo esc_html( STM_LMS_Helpers::display_price( $course['affiliate_course_price'] ) ); ?></span>
+		</div>
+	<?php } elseif ( $course['single_sale'] && ! $course_free_status['zero_price'] ) { ?>
 		<?php if ( $is_sale ) { ?>
 			<div class="ms_lms_courses_card_item_info_price_sale">
 				<span><?php echo esc_html( STM_LMS_Helpers::display_price_with_taxes( $course['sale_price'] ) ); ?></span>

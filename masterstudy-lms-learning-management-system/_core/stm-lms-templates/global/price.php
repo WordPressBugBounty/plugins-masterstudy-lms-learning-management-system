@@ -6,12 +6,18 @@
 
 $course_id          = get_the_ID();
 $single_sale        = get_post_meta( $course_id, 'single_sale', true );
+$pricing_mode       = get_post_meta( $course_id, 'pricing_mode', true );
+$affiliate_price    = get_post_meta( $course_id, 'affiliate_course_price', true );
 $is_udemy_course    = get_post_meta( $course_id, 'udemy_course_id', true );
 $not_in_membership  = get_post_meta( $course_id, 'not_in_membership', true );
 $members_only       = ! $single_sale && STM_LMS_Subscriptions::subscription_enabled() && ! $not_in_membership;
 $course_free_status = masterstudy_lms_course_free_status( $course_id, $price );
 
-if ( $members_only ) { ?>
+if ( 'affiliate' === $pricing_mode && '' !== (string) $affiliate_price ) { ?>
+	<div class="stm_lms_courses__single--price heading_font">
+		<strong><?php echo esc_html( STM_LMS_Helpers::display_price( $affiliate_price ) ); ?></strong>
+	</div>
+<?php } elseif ( $members_only ) { ?>
 	<div class="stm_lms_courses__single--price heading_font stm_lms_courses__single--price-membership">
 		<strong><?php echo esc_html__( 'Members only', 'masterstudy-lms-learning-management-system' ); ?></strong>
 	</div>

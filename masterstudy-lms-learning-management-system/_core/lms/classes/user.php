@@ -2438,6 +2438,24 @@ class STM_LMS_User {
 		$user = get_user_by( 'id', $user_id );
 
 		if ( $user ) {
+
+			$subject = esc_html__( 'Password change', 'masterstudy-lms-learning-management-system' );
+			$message = esc_html__( 'Password changed successfully.', 'masterstudy-lms-learning-management-system' );
+
+			$email_data = array(
+				'blog_name'  => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'date'       => gmdate( 'Y-m-d H:i:s' ),
+				'user_login' => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
+			);
+
+			STM_LMS_Helpers::send_email(
+				$user->user_email,
+				$subject,
+				$message,
+				'stm_lms_password_change',
+				$email_data
+			);
 			wp_set_password( $password, $user_id );
 			delete_user_meta( $user_id, 'restore_password_token' );
 

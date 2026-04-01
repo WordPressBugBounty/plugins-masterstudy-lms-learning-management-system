@@ -29,6 +29,7 @@
         <custom-field action="copy">affiliate_course</custom-field>
         <custom-field action="copy">affiliate_course_link</custom-field>
         <custom-field action="translate">affiliate_course_text</custom-field>
+        <custom-field action="copy">affiliate_course_price</custom-field>
         <custom-field action="copy">expiration_course</custom-field>
         <custom-field action="copy">end_time</custom-field>
         <custom-field action="copy">type</custom-field>

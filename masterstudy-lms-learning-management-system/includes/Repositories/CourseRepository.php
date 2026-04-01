@@ -644,6 +644,8 @@ final class CourseRepository extends AbstractRepository {
 			}
 
 			$extra_fields = array(
+				'pricing_mode'           => $meta['pricing_mode'][0] ?? '',
+				'affiliate_course_price' => $meta['affiliate_course_price'][0] ?? '',
 				'price'                  => $meta['price'][0] ?? '',
 				'sale_price'             => \STM_LMS_Course::get_sale_price( $post->ID ),
 				'single_sale'            => $meta['single_sale'][0] ?? '',

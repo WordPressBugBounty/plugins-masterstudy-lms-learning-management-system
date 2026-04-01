@@ -5,6 +5,8 @@ stm_lms_register_script( 'fast_login' );
 $restrict_registration          = STM_LMS_Options::get_option( 'restrict_registration', false );
 $registration_strength_password = STM_LMS_Options::get_option( 'registration_strength_password', false );
 
+$premoderation = STM_LMS_Options::get_option( 'user_premoderation', false );
+
 wp_localize_script(
 	'stm-lms-fast_login',
 	'stm_lms_fast_login',
@@ -15,6 +17,7 @@ wp_localize_script(
 		),
 		'restrict_registration'          => $restrict_registration,
 		'registration_strength_password' => $registration_strength_password,
+		'user_premoderation'             => (bool) $premoderation,
 	)
 );
 
@@ -36,6 +39,9 @@ wp_enqueue_style( 'masterstudy-button' );
 				</div>
 			</div>
 			<?php endif; ?>
+		</div>
+		<div class="stm_lms_fast_login__message" role="status" aria-live="polite" style="display:none;">
+			<div class="text-message-register"></div>
 		</div>
 		<div class="stm_lms_fast_login__body">
 			<div class="stm_lms_fast_login__field stm_lms_fast_login__email">

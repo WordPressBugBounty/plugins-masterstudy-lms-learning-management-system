@@ -38,7 +38,9 @@ class STM_LMS_Courses {
 				MAX(CASE WHEN pm.meta_key = 'not_membership' THEN pm.meta_value END) AS not_in_membership,
 				MAX(CASE WHEN pm.meta_key = 'featured' THEN pm.meta_value END) AS featured,
 				MAX(CASE WHEN pm.meta_key = 'duration_info' THEN pm.meta_value END) AS duration_info,
-				MAX(CASE WHEN pm.meta_key = 'course_marks' THEN pm.meta_value END) AS course_marks
+				MAX(CASE WHEN pm.meta_key = 'course_marks' THEN pm.meta_value END) AS course_marks,
+				MAX(CASE WHEN pm.meta_key = 'pricing_mode' THEN pm.meta_value END) AS pricing_mode,
+				MAX(CASE WHEN pm.meta_key = 'affiliate_course_price' THEN pm.meta_value END) AS affiliate_course_price
 				FROM {$wpdb->prefix}posts AS p
 				LEFT JOIN {$wpdb->prefix}postmeta AS pm ON pm.post_id = p.ID
 				WHERE p.post_type = %s AND p.ID IN ( $courses )

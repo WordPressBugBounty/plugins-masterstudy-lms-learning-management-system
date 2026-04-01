@@ -47,7 +47,7 @@ final class PricingRepository {
 		'affiliate_course'                       => 'bool',
 		'affiliate_course_link'                  => 'string',
 		'affiliate_course_text'                  => 'string',
-		'affiliate_course_rice'                  => 'numeric',
+		'affiliate_course_price'                 => 'numeric',
 
 		'pricing_mode'                           => 'string',
 	);

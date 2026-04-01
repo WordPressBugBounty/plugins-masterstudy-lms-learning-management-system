@@ -1118,12 +1118,22 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			$username = sanitize_title( $email );
 			$password = wp_generate_password();
 			$user_id  = wp_create_user( $username, $password, $email );
-			$subject  = esc_html__( 'You have been registered on the website', 'masterstudy-lms-learning-management-system' );
+			$subject  = esc_html__( 'Welcome to {{blog_name}}. Your student account is ready', 'masterstudy-lms-learning-management-system' );
 
 			$template = wp_kses_post(
-				'Login: {{username}}, <br>
-					Password: {{password}} <br>
-					Site URL:: {{site_url}} <br>'
+				'
+					Hello {{username}},
+					Welcome to {{blog_name}}<br><br>
+					Your instructor has created an account for you so you can access your courses and start learning.<br>
+					Here are your login details:<br>
+					<b>Username</b>: {{username}}<br>
+					<b>Password</b>: {{password}}<br>
+					<b>Login page</b>: {{login_url}}<br>
+					To get started, visit the login page and sign in using the credentials above. For security reasons, we recommend changing your password after your first login.<br>
+					If you have any questions or experience issues accessing your account, please contact your instructor or the site administrator.<br>
+					We are glad to have you with us and wish you a great learning experience.<br><br>
+					Best regards,<br>
+					The {{blog_name}} Team'
 			);
 
 			$email_data = array(
@@ -1136,6 +1146,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			);
 
 			$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );
+			$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
 
 			STM_LMS_Helpers::send_email( $email, $subject, $message, 'stm_lms_user_added_via_manage_students', $email_data );
 

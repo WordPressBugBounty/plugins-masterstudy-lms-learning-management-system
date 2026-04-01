@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.7.22
+Stable tag: 3.7.23
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.23 - 2026-04-01 =
+- **Fixed:** Fixed affiliate price not displaying in course cards
+- **Fixed:** Fixed user login not displaying in account activation emails
+
 = 3.7.22 - 2026-03-25 =
 - **New:** Added visual notifications for the Courses and Instructors admin panel sections when there are pending actions required from the administrator
 - **Fixed:** Fixed duplicate Privacy Policy message on the registration form

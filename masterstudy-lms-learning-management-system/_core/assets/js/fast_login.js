@@ -20,6 +20,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var showPasswordBtn = $('.stm_lms_fast_login__input-show-pass');
     var fastLoginSubmitBtn = $('.stm_lms_fast_login__submit .masterstudy-button');
     var fastLoginSubmitBtnTitle = fastLoginSubmitBtn.find('.masterstudy-button__title');
+    var userPremoderation = !!stm_lms_fast_login['user_premoderation'];
+    var formBody = $('.stm_lms_fast_login__body');
+    var formHead = $('.stm_lms_fast_login__head');
+    var messageWrap = $('.stm_lms_fast_login__message');
+    var messageBox = messageWrap.find('.text-message-register');
     var translations = stm_lms_fast_login['translations'];
     var restrictRegistration = stm_lms_fast_login['restrict_registration'];
     var registrationStrengthPassword = stm_lms_fast_login['registration_strength_password'];
@@ -30,6 +35,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       password: ''
     };
     function changeForm(method) {
+      hideGuestCheckoutEmailMessage();
+      formHead.show();
+      formBody.show();
       if (method === 'sign-up') {
         currentMethod = 'sign-up';
         currentMethodEl.text(translations.sign_up);
@@ -200,6 +208,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }));
       return _login.apply(this, arguments);
     }
+    function hideGuestCheckoutEmailMessage() {
+      messageBox.text('');
+      messageWrap.hide();
+    }
+    function showGuestCheckoutEmailMessage(text) {
+      messageBox.text(text);
+      messageWrap.show();
+    }
     function register() {
       return _register.apply(this, arguments);
     }
@@ -235,27 +251,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               response = _context2.sent;
               errors = (_response$errors2 = response['errors']) !== null && _response$errors2 !== void 0 ? _response$errors2 : [];
               renderErrors();
-              if (response.status !== 'error') {
-                $.removeCookie('stm_lms_notauth_cart', {
-                  path: '/'
-                });
-                location.reload();
+              if (!(response.status !== 'error')) {
+                _context2.next = 22;
+                break;
               }
-              _context2.next = 20;
+              $.removeCookie('stm_lms_notauth_cart', {
+                path: '/'
+              });
+              if (!userPremoderation) {
+                _context2.next = 21;
+                break;
+              }
+              formHead.hide();
+              formBody.hide();
+              showGuestCheckoutEmailMessage(response.message || 'Confirmation link sent. Please follow the instructions sent to your email address.');
+              return _context2.abrupt("return");
+            case 21:
+              location.reload();
+            case 22:
+              _context2.next = 27;
               break;
-            case 17:
-              _context2.prev = 17;
+            case 24:
+              _context2.prev = 24;
               _context2.t0 = _context2["catch"](3);
               console.error(_context2.t0);
-            case 20:
-              _context2.prev = 20;
+            case 27:
+              _context2.prev = 27;
               setIsLoading(false);
-              return _context2.finish(20);
-            case 23:
+              return _context2.finish(27);
+            case 30:
             case "end":
               return _context2.stop();
           }
-        }, _callee2, null, [[3, 17, 20, 23]]);
+        }, _callee2, null, [[3, 24, 27, 30]]);
       }));
       return _register.apply(this, arguments);
     }

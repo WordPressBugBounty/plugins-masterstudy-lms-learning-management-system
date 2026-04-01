@@ -14,6 +14,110 @@ class STM_LMS_Guest_Checkout {
 		add_action( 'wp_ajax_nopriv_stm_lms_add_to_cart_guest', array( $this, 'guest_checkout_process' ) );
 		add_action( 'wp_ajax_nopriv_stm_lms_fast_login', array( $this, 'fast_login' ) );
 		add_action( 'wp_ajax_nopriv_stm_lms_fast_register', array( $this, 'fast_register' ) );
+
+		add_action( 'init', array( $this, 'handle_guest_activation_link' ) );
+	}
+
+	private static function build_activation_checkout_url( $token ) {
+		$base = STM_LMS_Cart::woocommerce_checkout_enabled() ? wc_get_checkout_url() : STM_LMS_Cart::checkout_url();
+
+		return add_query_arg(
+			array(
+				'stm_lms_guest_activate' => 1,
+				'token'                  => rawurlencode( (string) $token ),
+			),
+			$base
+		);
+	}
+
+	private static function get_guest_cart_item_ids_from_cookie() {
+		if ( empty( $_COOKIE['stm_lms_notauth_cart'] ) ) {
+			return array();
+		}
+
+		$decoded = json_decode( wp_unslash( $_COOKIE['stm_lms_notauth_cart'] ), true );
+
+		if ( ! is_array( $decoded ) ) {
+			return array();
+		}
+
+		return array_values(
+			array_filter(
+				array_map( 'absint', $decoded )
+			)
+		);
+	}
+	private static function restore_cart_items_for_user( $user_id, $item_ids ) {
+		if ( empty( $user_id ) || empty( $item_ids ) || ! is_array( $item_ids ) ) {
+			return;
+		}
+
+		if ( STM_LMS_Cart::woocommerce_checkout_enabled() && function_exists( 'WC' ) && WC()->cart ) {
+			foreach ( $item_ids as $item_id ) {
+				$item_id = absint( $item_id );
+				if ( ! $item_id ) {
+					continue;
+				}
+
+				STM_LMS_Woocommerce::add_to_cart( $item_id );
+			}
+
+			return;
+		}
+
+		foreach ( $item_ids as $item_id ) {
+			$item_id = absint( $item_id );
+			if ( ! $item_id ) {
+				continue;
+			}
+
+			if (
+				'stm-course-bundles' === get_post_type( $item_id )
+				&& class_exists( '\MasterStudy\Lms\Pro\addons\CourseBundle\Utility\CourseBundleCheckout' )
+			) {
+				CourseBundleCheckout::add_to_cart( $item_id, $user_id );
+			} else {
+				STM_LMS_Cart::masterstudy_add_to_cart( $item_id, $user_id );
+			}
+		}
+	}
+
+	/**
+	 * Handle activation link click: activate -> login -> restore cart -> redirect to checkout.
+	 */
+	public function handle_guest_activation_link() {
+		if ( empty( $_GET['stm_lms_guest_activate'] ) || empty( $_GET['token'] ) ) {
+			return;
+		}
+
+		$token = sanitize_text_field( wp_unslash( $_GET['token'] ) );
+		if ( empty( $token ) ) {
+			return;
+		}
+
+		$transient_key = 'stm_lms_guest_activate_' . $token;
+		$payload       = get_transient( $transient_key );
+
+		if ( empty( $payload ) || ! is_array( $payload ) ) {
+			return;
+		}
+
+		$user_id  = ! empty( $payload['user_id'] ) ? absint( $payload['user_id'] ) : 0;
+		$item_ids = ! empty( $payload['item_ids'] ) && is_array( $payload['item_ids'] ) ? $payload['item_ids'] : array();
+
+		if ( ! $user_id || ! get_user_by( 'id', $user_id ) ) {
+			delete_transient( $transient_key );
+			return;
+		}
+
+		delete_user_meta( $user_id, 'stm_lms_guest_pending' );
+		delete_transient( $transient_key );
+		wp_set_current_user( $user_id );
+		wp_set_auth_cookie( $user_id, true, is_ssl() );
+		self::restore_cart_items_for_user( $user_id, $item_ids );
+		$redirect_url = STM_LMS_Cart::woocommerce_checkout_enabled() ? wc_get_checkout_url() : STM_LMS_Cart::checkout_url();
+		wp_safe_redirect( $redirect_url );
+		exit;
 	}
 
 	public static function guest_enabled() {
@@ -36,24 +140,52 @@ class STM_LMS_Guest_Checkout {
 	public function guest_checkout_process() {
 		check_ajax_referer( 'stm_lms_add_to_cart_guest', 'nonce' );
 
-		$is_woocommerce = STM_LMS_Cart::woocommerce_checkout_enabled();
+		if ( is_user_logged_in() || ! self::guest_enabled() ) {
+			wp_send_json(
+				array(
+					'added'    => false,
+					'message'  => esc_html__( 'Guest checkout is not available.', 'masterstudy-lms-learning-management-system' ),
+					'redirect' => false,
+				)
+			);
 
-		$r = array();
-
-		if ( ! $is_woocommerce ) {
-			$r['text']     = esc_html__( 'Go to Cart', 'masterstudy-lms-learning-management-system' );
-			$r['cart_url'] = esc_url( STM_LMS_Cart::checkout_url() );
-		} else {
-			$item_id = intval( $_GET['item_id'] );
-
-			$r['added']    = STM_LMS_Woocommerce::add_to_cart( $item_id );
-			$r['text']     = esc_html__( 'Go to Cart', 'masterstudy-lms-learning-management-system' );
-			$r['cart_url'] = esc_url( wc_get_cart_url() );
+			return;
 		}
 
-		$r['redirect'] = STM_LMS_Options::get_option( 'redirect_after_purchase', false );
+		$is_woocommerce = STM_LMS_Cart::woocommerce_checkout_enabled();
+		$item_id        = isset( $_GET['item_id'] ) ? absint( $_GET['item_id'] ) : 0;
 
-		wp_send_json( $r );
+		if ( ! $item_id ) {
+			wp_send_json(
+				array(
+					'added'    => false,
+					'message'  => esc_html__( 'Invalid item.', 'masterstudy-lms-learning-management-system' ),
+					'redirect' => false,
+				)
+			);
+
+			return;
+		}
+
+		$response = array(
+			'text'     => esc_html__( 'Go to Cart', 'masterstudy-lms-learning-management-system' ),
+			'redirect' => STM_LMS_Options::get_option( 'redirect_after_purchase', false ),
+		);
+
+		if ( ! $is_woocommerce ) {
+			$response['added']    = true;
+			$response['cart_url'] = esc_url( STM_LMS_Cart::checkout_url() );
+
+			wp_send_json( $response );
+			return;
+		}
+
+		$added = STM_LMS_Woocommerce::add_to_cart( $item_id );
+
+		$response['added']    = (bool) $added;
+		$response['cart_url'] = esc_url( wc_get_cart_url() );
+
+		wp_send_json( $response );
 	}
 
 	public static function get_cart_items() {
@@ -109,6 +241,7 @@ class STM_LMS_Guest_Checkout {
 
 	public function fast_register() {
 		check_ajax_referer( 'stm_lms_fast_register', 'nonce' );
+		$premoderation = STM_LMS_Options::get_option( 'user_premoderation', false );
 
 		$response = array(
 			'status' => 'error',
@@ -117,63 +250,58 @@ class STM_LMS_Guest_Checkout {
 		$request_body = file_get_contents( 'php://input' );
 		$data         = json_decode( $request_body, true );
 
-		if ( empty( $data['email'] ) ) {
+		$email    = ! empty( $data['email'] ) ? sanitize_email( $data['email'] ) : '';
+		$password = ! empty( $data['password'] ) ? (string) $data['password'] : '';
+
+		if ( empty( $email ) ) {
 			$response['errors'][] = array(
 				'id'    => 'empty_email',
 				'field' => 'email',
 				'text'  => esc_html__( 'Field is required', 'masterstudy-lms-learning-management-system' ),
 			);
-		} else {
-			if ( ! is_email( $data['email'] ) ) {
-				$response['errors'][] = array(
-					'id'    => 'wrong_email',
-					'field' => 'email',
-					'text'  => esc_html__( 'Enter valid email', 'masterstudy-lms-learning-management-system' ),
-				);
-			}
-
-			if ( email_exists( $data['email'] ) ) {
-				$response['errors'][] = array(
-					'id'    => 'exists_email',
-					'field' => 'email',
-					'text'  => esc_html__( 'User with this email address already exists', 'masterstudy-lms-learning-management-system' ),
-				);
-			}
+		} elseif ( ! is_email( $email ) ) {
+			$response['errors'][] = array(
+				'id'    => 'wrong_email',
+				'field' => 'email',
+				'text'  => esc_html__( 'Enter valid email', 'masterstudy-lms-learning-management-system' ),
+			);
+		} elseif ( email_exists( $email ) ) {
+			$response['errors'][] = array(
+				'id'    => 'exists_email',
+				'field' => 'email',
+				'text'  => esc_html__( 'User with this email address already exists', 'masterstudy-lms-learning-management-system' ),
+			);
 		}
 
 		$weak_password = STM_LMS_Options::get_option( 'registration_weak_password', false );
 
-		if ( ! $weak_password && ! empty( $data['password'] ) ) {
-			/* If Password shorter than 8 characters*/
-			if ( strlen( $data['password'] ) < 8 ) {
+		if ( ! $weak_password && ! empty( $password ) ) {
+			if ( strlen( $password ) < 8 ) {
 				$response['errors'][] = array(
 					'id'    => 'characters',
 					'field' => 'password',
 					'text'  => esc_html__( 'Password must have at least 8 characters', 'masterstudy-lms-learning-management-system' ),
 				);
 			}
-			/* if contains letter */
-			if ( ! preg_match( '#[a-z]+#', $data['password'] ) ) {
+			if ( ! preg_match( '#[a-z]+#', $password ) ) {
 				$response['errors'][] = array(
 					'id'    => 'lowercase',
 					'field' => 'password',
 					'text'  => esc_html__( 'Password must include at least one lowercase letter!', 'masterstudy-lms-learning-management-system' ),
 				);
 			}
-			/* if contains number */
-			if ( ! preg_match( '#[0-9]+#', $data['password'] ) ) {
+			if ( ! preg_match( '#[0-9]+#', $password ) ) {
 				$response['errors'][] = array(
 					'id'    => 'number',
 					'field' => 'password',
 					'text'  => esc_html__( 'Password must include at least one number!', 'masterstudy-lms-learning-management-system' ),
 				);
 			}
-			/* if contains CAPS */
-			if ( ! preg_match( '#[A-Z]+#', $data['password'] ) ) {
+			if ( ! preg_match( '#[A-Z]+#', $password ) ) {
 				$response['errors'][] = array(
 					'id'    => 'capital',
 					'field' => 'password',
-					'text'  => esc_html__( 'Password must include at least one capital letter! one number!', 'masterstudy-lms-learning-management-system' ),
+					'text'  => esc_html__( 'Password must include at least one capital letter!', 'masterstudy-lms-learning-management-system' ),
 				);
 			}
 		}
@@ -182,28 +310,110 @@ class STM_LMS_Guest_Checkout {
 			return wp_send_json( $response );
 		}
 
-		$user = wp_create_user( sanitize_title( $data['email'] ), $data['password'], $data['email'] );
+		$username = sanitize_user( current( explode( '@', $email ) ), true );
+		if ( empty( $username ) ) {
+			$username = 'user';
+		}
 
-		if ( is_wp_error( $user ) ) {
+		// Ensure unique username.
+		$base_username = $username;
+		$i             = 1;
+		while ( username_exists( $username ) ) {
+			$username = $base_username . $i;
+			$i++;
+		}
+
+		$user_id = wp_create_user( $username, $password, $email );
+
+		if ( is_wp_error( $user_id ) ) {
 			$response['errors'][] = array(
 				'id'    => 'user_error',
 				'field' => 'email',
-				'text'  => $user->get_error_message(),
+				'text'  => $user_id->get_error_message(),
 			);
-		} else {
-			wp_signon(
+			return wp_send_json( $response );
+		}
+
+		$user_id = absint( $user_id );
+		if ( ! $premoderation ) {
+			$user = wp_signon(
 				array(
-					'user_login'    => $data['email'],
-					'user_password' => $data['password'],
+					'user_login'    => $email,
+					'user_password' => $password,
 				),
 				is_ssl()
 			);
 
-			$response['items']  = self::add_cart( $user );
+			if ( is_wp_error( $user ) ) {
+				$response['errors'][] = array(
+					'id'    => 'login_error',
+					'field' => 'email',
+					'text'  => esc_html__( 'Unable to sign in after registration.', 'masterstudy-lms-learning-management-system' ),
+				);
+
+				wp_send_json( $response );
+				return;
+			}
+
+			// Add items from guest cookie into the user cart.
+			$response['items']  = self::add_cart( $user->ID );
 			$response['status'] = 'success';
+
+			wp_send_json( $response );
+			return;
 		}
 
-		wp_send_json( $response );
+		update_user_meta( $user_id, 'stm_lms_guest_pending', 1 );
+
+		$token         = bin2hex( random_bytes( 16 ) );
+		$transient_key = 'stm_lms_guest_activate_' . $token;
+
+		$item_ids = self::get_guest_cart_item_ids_from_cookie();
+
+		set_transient(
+			$transient_key,
+			array(
+				'user_id'  => $user_id,
+				'item_ids' => $item_ids,
+			),
+			3 * DAY_IN_SECONDS
+		);
+
+		$checkout_url = self::build_activation_checkout_url( $token );
+		$blog_name    = get_bloginfo( 'name' );
+
+		$subject = esc_html__( 'Activate your account', 'masterstudy-lms-learning-management-system' );
+
+		$template = wp_kses_post(
+			'Hi {{user_login}}, <br>
+			Welcome to {{blog_name}} <br>
+			To activate your account and continue to checkout, please click the link below: <br>
+			Checkout Link: {{checkout_url}} <br>'
+		);
+
+		$email_data = array(
+			'user_login'   => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
+			'blog_name'    => $blog_name,
+			'checkout_url' => \MS_LMS_Email_Template_Helpers::link( $checkout_url ),
+			'site_url'     => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+			'date'         => gmdate( 'Y-m-d H:i:s' ),
+		);
+
+		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );
+		$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
+
+		STM_LMS_Helpers::send_email(
+			$email,
+			$subject,
+			$message,
+			'stm_lms_guest_checkout_activation',
+			$email_data
+		);
+
+		$response['status']  = 'success';
+		$response['message'] = esc_html__( 'Please check your email to activate your account and continue to checkout.', 'masterstudy-lms-learning-management-system' );
+
+		return wp_send_json( $response );
 	}
 
 	public function fast_login() {

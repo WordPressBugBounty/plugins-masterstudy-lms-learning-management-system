@@ -160,8 +160,8 @@ class STM_LMS_Mails {
 		$template = $settings['stm_lms_new_order_accepted'] ?? 'Your Order has been Accepted.';
 		$message  = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );
 
-		$order_title   = \MS_LMS_Email_Template_Helpers::render( $settings['stm_lms_new_order_accepted_title'], $email_data );
-		$order_subject = \MS_LMS_Email_Template_Helpers::render( $settings['stm_lms_new_order_accepted_subject'], $email_data );
+		$order_title   = \MS_LMS_Email_Template_Helpers::render( $settings['stm_lms_new_order_accepted_title'] ?? 'Thank you for purchase!', $email_data );
+		$order_subject = \MS_LMS_Email_Template_Helpers::render( $settings['stm_lms_new_order_accepted_subject'] ?? 'Thank you for purchase!', $email_data );
 
 		if ( empty( $order_subject ) && ! is_ms_lms_addon_enabled( 'email_manager' ) ) {
 			$order_subject = 'Thank you for purchase!';
@@ -275,12 +275,13 @@ class STM_LMS_Mails {
 
 		$course_title = get_the_title( $course_id );
 		$login        = $user['login'];
-		$message      = sprintf(
-			/* translators: %1$s Course Title, %2$s User Login */
-			esc_html__( 'Course %1$s was added to %2$s.', 'masterstudy-lms-learning-management-system' ),
-			$course_title,
-			$login
-		);
+		$message      = 'Hello admin, <br>
+		This is to notify you that a student account {{login}} has been successfully enrolled in the course {{course_title}}.<br>
+		Here are the event details:<br>
+		<b>Student</b>: {{login}}<br>
+		<b>Course</b>: {{course_title}} <b>url</b>: {{course_url}}<br>
+		<b>Date</b>: {{date}}<br>
+		If everything is OK, no further actions are required.';
 
 		$email_data = array(
 			'course_title' => $course_title,
@@ -292,17 +293,29 @@ class STM_LMS_Mails {
 			'user_login'   => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 		);
 
+		$subject = 'Student enrolled in {{course_title}}';
+		$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
+		$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_data );
+
 		if ( apply_filters( 'stm_lms_send_admin_course_notice', true ) ) {
-			self::send_email( 'Course added to User', $message, '', $authors, 'stm_lms_course_added_to_user', $email_data );
+			self::send_email( $subject, $message, '', $authors, 'stm_lms_course_added_to_user', $email_data );
 		}
 
-		$message = sprintf(
-			/* translators: %s Course Title */
-			esc_html__( 'Course %s is now available to learn.', 'masterstudy-lms-learning-management-system' ),
-			$course_title
+		$subject = esc_html__(
+			'You have Been Added to {{course_title}}!',
+			'masterstudy-lms-learning-management-system-pro'
 		);
 
-		self::send_email( 'Course added.', $message, $user['email'], array(), 'stm_lms_course_available_for_user', $email_data );
+		$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
+
+		$message = 'Hello {{user_login}},<br>
+		We\'re excited to inform you that you have added to the course {{course_title}}.<br>
+		You can access the course content and resources using the following link:<br>
+		<b>Course Link</b>:  {{course_url}} <br>
+		Enjoy your learning journey!';
+		$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_data );
+
+		self::send_email( $subject, $message, $user['email'], array(), 'stm_lms_course_available_for_user', $email_data );
 
 		$template = wp_kses_post(
 			'Great news! <br>

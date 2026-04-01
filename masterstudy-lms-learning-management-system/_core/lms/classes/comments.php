@@ -166,6 +166,7 @@ class STM_LMS_Comments {
 
 			$email_new_lesson_comment = array(
 				'user_login'      => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user['id'] ),
+				'instructor_name' => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( \STM_LMS_Helpers::masterstudy_lms_get_post_author_id_by_post_id( $course_id ) ),
 				'comment_content' => $comment_content,
 				'lesson_title'    => $lesson_title,
 				'lesson_url'      => \MS_LMS_Email_Template_Helpers::link( STM_LMS_Lesson::get_lesson_url( $course_id, $lesson_id ) ),
@@ -175,6 +176,8 @@ class STM_LMS_Comments {
 				'date'            => gmdate( 'Y-m-d H:i:s' ),
 				'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_the_permalink( $course_id ) ),
 			);
+
+			$is_reply_to_own_comment = false;
 
 			if ( $parent_comment && intval( $parent_comment->comment_post_ID ) === $lesson_id ) {
 				/*Send message to user who has been answered in Q&A*/
@@ -191,26 +194,41 @@ class STM_LMS_Comments {
 
 				$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_new_lesson_comment );
 				$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_new_lesson_comment );
+
+				$is_reply                = ( $parent_comment && (int) $parent_comment->comment_post_ID === (int) $lesson_id );
+				$is_reply_to_own_comment = (
+					$is_reply
+					&& (
+						( ! empty( $parent_comment->user_id ) && (int) $parent_comment->user_id === (int) $user['id'] )
+						|| ( ! empty( $parent_comment->comment_author_email ) && strtolower( $parent_comment->comment_author_email ) === strtolower( $user['email'] ) )
+					)
+				);
 			} else {
 				/*Send message to instructor*/
 				$author_data = get_userdata( get_post_field( 'post_author', $lesson_id ) );
 				$user_email  = $author_data->user_email;
 				$filter      = 'stm_lms_lesson_comment';
-				$subject     = esc_html__( 'New lesson comment', 'masterstudy-lms-learning-management-system' );
-				$template    = esc_html__( '{{user_login}} commented - "{{comment_content}}" on lesson {{lesson_title}} in the course {{course_title}}', 'masterstudy-lms-learning-management-system' );
+				$subject     = 'New Comment on {{lesson_title}} in {{course_title}}';
+				$template    = wp_kses_post(
+					'Hi {{instructor_name}},<br>
+				{{user_login}} has left a new comment on the lesson {{lesson_title}} in your course {{course_title}}. <br>
+				You can view and respond to the comment here: {{lesson_url}}. <br>
+				Thank you for engaging with your students!'
+				);
 
 				$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_new_lesson_comment );
 				$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_new_lesson_comment );
 			}
 
-			STM_LMS_Helpers::send_email(
-				$user_email,
-				$subject,
-				$message,
-				$filter,
-				$email_new_lesson_comment
-			);
-
+			if ( ! $is_reply_to_own_comment ) {
+				STM_LMS_Helpers::send_email(
+					$user_email,
+					$subject,
+					$message,
+					$filter,
+					$email_new_lesson_comment
+				);
+			}
 		}
 
 		return $r;
