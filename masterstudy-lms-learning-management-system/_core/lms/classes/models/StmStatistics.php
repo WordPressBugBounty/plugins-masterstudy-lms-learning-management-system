@@ -17,7 +17,7 @@ class StmStatistics {
 		$hook = add_submenu_page(
 			'stm-lms-settings',
 			__( 'Statistics', 'masterstudy-lms-learning-management-system' ),
-			__( 'Statistics', 'masterstudy-lms-learning-management-system' ),
+			__( '⤷ Statistics', 'masterstudy-lms-learning-management-system' ),
 			'manage_options',
 			'stm_lms_statistics',
 			array( $this, 'render_statistics' )

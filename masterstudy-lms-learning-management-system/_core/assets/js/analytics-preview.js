@@ -2,19 +2,35 @@
 
 (function ($) {
   $(document).ready(function () {
-    var originalSrc = $('#masterstudy-analytics-preview-video').attr('src');
-    $('[data-id="analytics-watch-video"]').click(function (event) {
+    $(document).on('click', '[data-id="analytics-watch-video"]', function (event) {
       event.preventDefault();
-      var currentSrc = $('#masterstudy-analytics-preview-video').attr('src');
-      if (!currentSrc) {
-        $('#masterstudy-analytics-preview-video').attr('src', originalSrc);
+      var $trigger = $(this);
+      var $box = $trigger.closest('.wpcfto-box');
+      var $popup = $box.find('.masterstudy-analytics-preview-page__popup').first();
+      if (!$popup.length) {
+        $popup = $box.siblings('.masterstudy-analytics-preview-page__popup').first();
       }
-      $('.masterstudy-analytics-preview-page__popup').addClass('masterstudy-analytics-preview-page__popup_show');
+      if (!$popup.length) {
+        $popup = $('.masterstudy-analytics-preview-page__popup').first();
+      }
+      var $iframe = $popup.find('iframe').first();
+      if (!$iframe.length) {
+        return;
+      }
+      var originalSrc = $iframe.data('original-src') || $iframe.attr('src');
+      if (originalSrc) {
+        $iframe.data('original-src', originalSrc);
+      }
+      if (!$iframe.attr('src') && originalSrc) {
+        $iframe.attr('src', originalSrc);
+      }
+      $popup.addClass('masterstudy-analytics-preview-page__popup_show');
     });
-    $('.masterstudy-analytics-preview-page__popup').click(function (event) {
+    $(document).on('click', '.masterstudy-analytics-preview-page__popup', function (event) {
+      var $popup = $(this);
       if (!$(event.target).closest('.masterstudy-analytics-preview-page__popup-video').length) {
-        $('#masterstudy-analytics-preview-video').attr('src', '');
-        $('.masterstudy-analytics-preview-page__popup').removeClass('masterstudy-analytics-preview-page__popup_show');
+        $popup.find('iframe').first().attr('src', '');
+        $popup.removeClass('masterstudy-analytics-preview-page__popup_show');
       }
     });
   });

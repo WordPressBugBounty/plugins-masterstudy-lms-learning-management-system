@@ -5,6 +5,8 @@
  * @var $section_name
  */
 
+use MasterStudy\Lms\Plugin\Addons;
+
 $is_enable   = $field_data['is_enable'] ?? false;
 $is_pro_plus = $field_data['is_pro_plus'] ?? false;
 $is_pro      = STM_LMS_Helpers::is_pro();
@@ -15,6 +17,8 @@ if ( $is_pro && ! $is_enable && ! $is_pro_plus ) {
 
 $version = ( WP_DEBUG ) ? time() : STM_LMS_VERSION;
 wp_enqueue_style( 'stm_lms_unlock_addons', STM_LMS_URL . 'assets/css/stm_lms_unlock_addons.css', null, $version );
+wp_enqueue_style( 'stm_lms_unlock_nuxy_banners', STM_LMS_URL . 'assets/css/stm_lms_unlock_nuxy_banners.css', null, $version );
+wp_enqueue_script( 'masterstudy-analytics-preview-page' );
 
 $label         = $field_data['label'] ?? '';
 $img           = $field_data['img'] ?? '';
@@ -22,6 +26,42 @@ $description   = $field_data['desc'] ?? '';
 $search_addon  = $field_data['search'] ?? '';
 $utm_url       = $field_data['utm_url'] ?? '';
 $slug          = str_replace( ' ', '-', mb_strtolower( $label ) );
+$video_url     = '';
+
+foreach ( Addons::list() as $addon_data ) {
+	if ( mb_strtolower( (string) ( $addon_data['name'] ?? '' ) ) === mb_strtolower( (string) $label ) ) {
+		$video_url = $addon_data['video_url'] ?? '';
+		break;
+	}
+}
+
+if ( empty( $video_url ) ) {
+	switch ( trim( html_entity_decode( (string) $label, ENT_QUOTES, 'UTF-8' ) ) ) {
+		case 'Reports & Analytics':
+			$video_url = 'https://www.youtube.com/embed/7NqPcDGVOZM?rel=0&autoplay=1';
+			break;
+		case 'Audio Lesson Addon':
+		case 'Audio Lesson':
+			$video_url = 'https://www.youtube.com/embed/sNmXeINHDFI?rel=0&autoplay=1';
+			break;
+		case 'Woocommerce Checkout':
+			$video_url = 'https://www.youtube.com/embed/Vg5Ex82FEdQ?rel=0&autoplay=1';
+			break;
+		case 'Upcoming Course Status Addon':
+			$video_url = 'https://www.youtube.com/embed/wlZ3BnmpHkk?rel=0&autoplay=1';
+			break;
+		case 'Payouts':
+			$video_url = 'https://www.youtube.com/embed/98LKgphFSCY?start=1023&rel=0&autoplay=1';
+			break;
+		case 'Social Login':
+			$video_url = 'https://www.youtube.com/embed/NCE3ynXKzGI?rel=0&autoplay=1';
+			break;
+		case 'Grades':
+			$video_url = 'https://www.youtube.com/embed/OfDtaP-u6SE?rel=0&autoplay=1';
+			break;
+	}
+}
+
 $redirect_link = admin_url( 'admin.php?page=' . ( $is_enable ? "stm-addons&search={$search_addon}" : "stm-lms-go-pro&source=button-{$slug}-settings" ) );
 $redirect_link = ! $is_enable && $is_pro_plus && $utm_url && $is_pro ? $utm_url : $redirect_link;
 
@@ -35,6 +75,15 @@ if ( STM_LMS_Helpers::is_pro() && ! STM_LMS_Helpers::is_pro_plus() ) {
 
 $link_text = $is_enable ? esc_html__( 'Enable addon', 'masterstudy-lms-learning-management-system' ) : $text;
 ?>
+<?php if ( ! empty( $video_url ) ) : ?>
+	<div class="masterstudy-analytics-preview-page__popup">
+		<div class="masterstudy-analytics-preview-page__popup-video-wrapper">
+			<div class="masterstudy-analytics-preview-page__popup-video">
+				<iframe id="masterstudy-analytics-preview-video" frameborder="0" allowfullscreen="" src="<?php echo esc_url( $video_url ); ?>"></iframe>
+			</div>
+		</div>
+	</div>
+<?php endif; ?>
 <div
 	class="stm-lms-unlock-pro-banner<?php echo esc_attr( $is_enable || ! $is_enable && $is_pro_plus ? ' addon_disabled' : '' ); ?>">
 	<div class="stm-lms-unlock-banner-wrapper">
@@ -69,6 +118,11 @@ $link_text = $is_enable ? esc_html__( 'Enable addon', 'masterstudy-lms-learning-
 		<?php } else { ?>
 			<div class="unlock-banner-image">
 				<img src="<?php echo esc_url( $img ); ?>">
+				<?php if ( ! empty( $video_url ) ) : ?>
+					<a href="#" class="play-btn" data-id="analytics-watch-video" aria-label="">
+						<span class="play-btn__icon" aria-hidden="true"></span>
+					</a>
+				<?php endif; ?>
 			</div>
 			<?php
 		}

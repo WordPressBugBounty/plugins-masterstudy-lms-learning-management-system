@@ -456,7 +456,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         url: ajaxurl,
         data: {
           action: 'stm_lms_add_assignment_attachment',
-          attachment: attachment,
+          attachment: buildAttachmentPayload(attachment),
           attachment_id: attachment.id,
           post_id: media_data.assignment_id,
           is_created: isCreated,
@@ -487,6 +487,12 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
           }
         }
       });
+    }
+    function buildAttachmentPayload(attachment) {
+      return {
+        id: attachment && attachment.id ? attachment.id : 0,
+        author: attachment && attachment.author ? attachment.author : 0
+      };
     }
     function getFileType(url, formats) {
       var fileExtension = url.split('.').pop();

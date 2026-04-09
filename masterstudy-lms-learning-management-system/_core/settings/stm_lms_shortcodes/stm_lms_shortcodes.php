@@ -245,4 +245,12 @@
 			<li><?php echo esc_html__( 'This shortcode is available only when the Membership feature is enabled', 'masterstudy-lms-learning-management-system' ); ?></li>
 		</ul>
 	</div>
+	<div class="stm_lms_guide">
+		<label><?php echo esc_html__( 'Online Testing (pro version)', 'masterstudy-lms-learning-management-system' ); ?></label>
+		<input type="text" value='[stm_lms_quiz_online id=QUIZ_ID_HERE]' disabled />
+		<ul class="params">
+			<li><?php esc_html_e( 'This shortcode is available only when the Online Testing addon is enabled' ); ?></li>
+			<li><?php esc_html_e( 'Create quiz and insert shortcode with quiz id on a page' ); ?></li>
+		</ul>
+	</div>
 </div>

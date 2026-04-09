@@ -2343,7 +2343,20 @@ class STM_LMS_User {
 		}
 
 		if ( apply_filters( 'stm_lms_update_user_cover', true ) ) {
-			wp_delete_attachment( intval( $_POST['file_id'] ), true );
+			$file_id       = absint( $_POST['file_id'] );
+			$user_cover_id = absint( get_user_meta( $user['id'], 'stm_lms_user_cover', true ) );
+
+			// Prevent IDOR: users can delete only their currently assigned cover attachment.
+			if ( empty( $file_id ) || empty( $user_cover_id ) || $file_id !== $user_cover_id ) {
+				return wp_send_json( 'ERROR' );
+			}
+
+			$attachment = get_post( $file_id );
+			if ( empty( $attachment ) || 'attachment' !== $attachment->post_type ) {
+				return wp_send_json( 'ERROR' );
+			}
+
+			wp_delete_attachment( $file_id, true );
 			update_user_meta( $user['id'], 'stm_lms_user_cover', '' );
 		}
 

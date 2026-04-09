@@ -3,7 +3,17 @@
 use MasterStudy\Lms\Plugin\Addons;
 
 $banner = Addons::list()[ $addon ];
+$video_url = $banner['video_url'] ?? '';
 ?>
+<?php if ( ! empty( $video_url ) ) : ?>
+	<div class="masterstudy-analytics-preview-page__popup">
+		<div class="masterstudy-analytics-preview-page__popup-video-wrapper">
+			<div class="masterstudy-analytics-preview-page__popup-video">
+				<iframe id="masterstudy-analytics-preview-video" frameborder="0" allowfullscreen="" src="<?php echo esc_url( $video_url ); ?>"></iframe>
+			</div>
+		</div>
+	</div>
+<?php endif; ?>
 <div class="masterstudy-lms-unlock-addons-wrapper">
 	<div class="unlock-addons-inner-wrapper">
 		<div class="unlock-wrapper-content">
@@ -33,6 +43,11 @@ $banner = Addons::list()[ $addon ];
 		</div>
 		<div class="unlock-wrapper-illustration">
 			<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pro-features/addons/' . ( $banner['documentation'] ?? 'default' ) . '.png' ); ?>">
+			<?php if ( ! empty( $video_url ) ) : ?>
+				<a href="#" class="play-btn" data-id="analytics-watch-video" aria-label="">
+					<span class="play-btn__icon" aria-hidden="true"></span>
+				</a>
+			<?php endif; ?>
 		</div>
 	</div>
 </div>

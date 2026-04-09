@@ -116,7 +116,7 @@ function stm_lms_settings_course_section() {
 			'description' => esc_html__( 'Set different levels for courses (like beginner, intermediate, advanced)', 'masterstudy-lms-learning-management-system' ),
 			'fields'      => array(
 				'id'    => array(
-					'type'    => 'text',
+					'type'    => 'hidden',
 					'label'   => esc_html__( 'Level ID', 'masterstudy-lms-learning-management-system' ),
 					'columns' => '50',
 				),
@@ -147,7 +147,7 @@ function stm_lms_settings_course_section() {
 			'description' => esc_html__( 'Set different statuses for courses to highlight them among others (e.g. Hot, Special, Popular)', 'masterstudy-lms-learning-management-system' ),
 			'fields'      => array(
 				'id'         => array(
-					'type'    => 'text',
+					'type'    => 'hidden',
 					'label'   => esc_html__( 'Status ID', 'masterstudy-lms-learning-management-system' ),
 					'columns' => '50',
 				),

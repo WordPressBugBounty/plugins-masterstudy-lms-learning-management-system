@@ -53,6 +53,14 @@ class Taxonomy {
 			2
 		);
 		add_filter( 'term_link', array( __CLASS__, 'overwrite_taxonomy_term_link' ), 10, 3 );
+
+		if ( self::COURSE_CATEGORY === $taxonomy ) {
+			add_filter( 'manage_' . PostType::COURSE . '_posts_columns', array( __CLASS__, 'normalize_course_category_column_header' ) );
+		}
+
+		if ( self::QUESTION_CATEGORY === $taxonomy ) {
+			add_filter( 'manage_' . PostType::QUESTION . '_posts_columns', array( __CLASS__, 'normalize_question_category_column_header' ) );
+		}
 	}
 
 	/**
@@ -66,7 +74,7 @@ class Taxonomy {
 				'args'      => array(
 					'hierarchical'      => true,
 					'labels'            => array(
-						'name'              => _x( 'Courses Category', 'taxonomy general name', Plugin::TRANSLATION_DOMAIN ),
+						'name'              => _x( '⤷ Course Category', 'taxonomy general name', Plugin::TRANSLATION_DOMAIN ),
 						'singular_name'     => _x( 'Course Category', 'taxonomy singular name', Plugin::TRANSLATION_DOMAIN ),
 						'search_items'      => __( 'Search Courses Category', Plugin::TRANSLATION_DOMAIN ),
 						'all_items'         => __( 'All Courses Category', Plugin::TRANSLATION_DOMAIN ),
@@ -81,6 +89,7 @@ class Taxonomy {
 					'show_ui'           => true,
 					'show_admin_column' => true,
 					'query_var'         => true,
+					'hidden'            => true,
 				),
 			),
 			self::QUESTION_CATEGORY => array(
@@ -89,7 +98,7 @@ class Taxonomy {
 					'public'            => false,
 					'hierarchical'      => true,
 					'labels'            => array(
-						'name'              => _x( 'Questions Category', 'taxonomy general name', Plugin::TRANSLATION_DOMAIN ),
+						'name'              => _x( '⤷ Question Category', 'taxonomy general name', Plugin::TRANSLATION_DOMAIN ),
 						'singular_name'     => _x( 'Question Category', 'taxonomy singular name', Plugin::TRANSLATION_DOMAIN ),
 						'search_items'      => __( 'Search Questions Category', Plugin::TRANSLATION_DOMAIN ),
 						'all_items'         => __( 'All Questions Category', Plugin::TRANSLATION_DOMAIN ),
@@ -284,6 +293,26 @@ class Taxonomy {
 			$columns['masterstudy_courses_count'] = __( 'Count', 'masterstudy-lms-learning-management-system' );
 		} elseif ( 'stm_lms_question_taxonomy' === $taxonomy ) {
 			$columns['masterstudy_questions_count'] = __( 'Count', 'masterstudy-lms-learning-management-system' );
+		}
+
+		return $columns;
+	}
+
+	public static function normalize_course_category_column_header( $columns ) {
+		$taxonomy_column = 'taxonomy-' . self::COURSE_CATEGORY;
+
+		if ( isset( $columns[ $taxonomy_column ] ) ) {
+			$columns[ $taxonomy_column ] = __( 'Course Category', 'masterstudy-lms-learning-management-system' );
+		}
+
+		return $columns;
+	}
+
+	public static function normalize_question_category_column_header( $columns ) {
+		$taxonomy_column = 'taxonomy-' . self::QUESTION_CATEGORY;
+
+		if ( isset( $columns[ $taxonomy_column ] ) ) {
+			$columns[ $taxonomy_column ] = __( 'Question Category', 'masterstudy-lms-learning-management-syste,' );
 		}
 
 		return $columns;

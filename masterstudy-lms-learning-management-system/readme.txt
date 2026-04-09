@@ -3,9 +3,9 @@ Contributors: Stylemix
 Donate link: https://stylemixthemes.com/
 Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.23
+Stable tag: 3.7.25
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.25 - 2026-04-09 =
+- **Fixed:** Minor Fixes
+
+= 3.7.24 - 2026-04-08 =
+- **Update:** Reorganized plugin settings into logical groups, making it easier to find related options in one place and freeing up dashboard space
+- **Update:** Removed the internal ID fields from custom course status and level settings for a cleaner interface
+- **Update:** WordPress 7.0 Compatibility
+
 = 3.7.23 - 2026-04-01 =
 - **Fixed:** Fixed affiliate price not displaying in course cards
 - **Fixed:** Fixed user login not displaying in account activation emails
@@ -337,46 +345,6 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fixed:** Minor bugfix
 
 = 3.7.19 - 2026-03-13 =
-- **Fixed:** Minor bugfix
-
-= 3.7.18 - 2026-03-12 =
-- **New:** Added the ability to set deadlines for Assignments (PRO)
-- **Fixed:** Fixed WPML compatibility issue when editing pages with Elementor
-- **Fixed:** Fixed an issue with the Ordering question type where answer options were not displayed after a retake
-- **Fixed:** Time and date formats in "Upcoming Courses" are now synchronized with the WordPress settings
-
-= 3.7.17 - 2026-03-03 =
-- **Update:** Updated the design of the Instructor and Student profile pages with a more modern interface and improved usability.
-- **Fixed:** Last Name was not displayed on the Thank You page when using Woo Checkout.
-
-= 3.7.16 - 2026-02-19 =
-- **Fixed:** Resolved an issue where the Enrolled Students page content failed to load for some users.
-- **Fixed:** Month names were not translated in date filter calendars.
-- **Fixed:** Course progress was not reset after removing a student from a course.
-
-= 3.7.15 - 2026-02-10 =
-- **Update:** The UI of the "Pricing" tab in Course Builder has been improved. Course access types are now organized into separate tabs.
-- **Update:** The "Pricing Info" field has been added to all course purchase methods.
-- **New:** Added ability to issue certificates based on the course purchase method, such as issuing certificates only for One-Time purchases [PRO].
-- **Fixed:** When adding a student via "Manage Students" with the Subscriptions add-on enabled, the "Start Course" button was not displayed on the Single Course page for the student [PRO].
-
-= 3.7.14 - 2026-01-29 =
-- **Fixed:** Minor bugfix
-
-= 3.7.13 - 2026-01-28 =
-- **New:** Added a new "Ordering" question type for quizzes
-- **New:** Added alphabetical sorting for categories in the courses page filter
-- **Update:** Improved the layout of email blocks in the Email Manager add-on (Pro)
-- **Update:** Prompt character limits in the AI Lab add-on are now determined by the selected model instead of a shared global limit (Pro)
-- **Fixed:** Importing a large number of students via Import/Export in Manage Students occasionally returned server errors and failed to complete
-- **Fixed:** Single Course pages returned 404 errors when using the Polylang plugin
-- **Fixed:** The course count filter in the Students section did not function correctly
-- **Fixed:** Question categories were reset on page reload when using the standalone question editor in the admin panel
-- **Fixed:** When purchasing LMS products using Japanese Yen with Stripe, extra zeros were added to the payment amount
-- **Fixed:** Stripe did not allow completing a purchase when a 100% discount coupon was applied (Pro)
-- **Fixed:** Calendar events were not created for students from Google Meet lessons (Pro)
-
-= 3.7.12 - 2026-01-09 =
 - **Fixed:** Minor bugfix
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

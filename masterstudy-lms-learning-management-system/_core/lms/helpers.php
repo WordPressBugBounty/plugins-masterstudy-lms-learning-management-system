@@ -750,7 +750,7 @@ function stm_lms_available_addons() {
 		'online_testing'          => array(
 			'name'          => esc_html__( 'Online Testing', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/mst.png' ),
-			'settings'      => admin_url( 'admin.php?page=stm-lms-online-testing' ),
+			'settings'      => admin_url( 'admin.php?page=stm-lms-settings#stm_lms_shortcodes' ),
 			'description'   => esc_html__( 'Easily paste any quizzes through the shortcode to any page and check the quizzes’ performance.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-onlinetestings&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'online-testing',
@@ -766,7 +766,7 @@ function stm_lms_available_addons() {
 		'shareware'               => array(
 			'name'          => esc_html__( 'Trial Courses', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/trial_courses.png' ),
-			'settings'      => admin_url( 'admin.php?page=stm-lms-shareware' ),
+			'settings'      => admin_url( 'admin.php?page=stm-lms-settings&submenu=trial-courses#section_2' ),
 			'description'   => esc_html__( 'Enable free trial lessons, so that your students could try some of the modules before taking the course.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-trial&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'trial-courses',
@@ -774,7 +774,7 @@ function stm_lms_available_addons() {
 		'sequential_drip_content' => array(
 			'name'          => esc_html__( 'Drip Content', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/sequential.png' ),
-			'settings'      => admin_url( 'admin.php?page=sequential_drip_content' ),
+			'settings'      => admin_url( 'admin.php?page=stm-lms-settings&submenu=drip_content#section_2' ),
 			'description'   => esc_html__( 'Use this tool to provide a proper flow of the education process, regulate the sequence of the lessons, in order, by date or in your own sequence.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-dripcontent&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'drip-content',
@@ -796,7 +796,7 @@ function stm_lms_available_addons() {
 		'enterprise_courses'      => array(
 			'name'          => esc_html__( 'Group Courses', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/enterprise-groups.png' ),
-			'settings'      => admin_url( 'admin.php?page=enterprise_courses' ),
+			'settings'      => admin_url( 'admin.php?page=stm-lms-settings&submenu=group_courses#section_2' ),
 			'description'   => esc_html__( 'Distribute courses to a group of people. You can sell them to enterprises, or to a group of company employees.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-groupcourses&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'group-courses',
@@ -804,7 +804,7 @@ function stm_lms_available_addons() {
 		'assignments'             => array(
 			'name'          => esc_html__( 'Assignments', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/assignment.png' ),
-			'settings'      => admin_url( 'admin.php?page=assignments_settings' ),
+			'settings'      => admin_url( 'admin.php?page=stm-lms-settings&submenu=assignments#section_2' ),
 			'description'   => esc_html__( 'Use assignments to test your students, create interesting tasks for them, ask them to upload essays.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-assignments&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'assignments',
@@ -812,7 +812,7 @@ function stm_lms_available_addons() {
 		'point_system'            => array(
 			'name'          => esc_html__( 'Point system', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/points.png' ),
-			'settings'      => admin_url( 'admin.php?page=point_system_settings' ),
+			'settings'      => admin_url( 'admin.php?page=stm-lms-settings&submenu=interface#section_point_system' ),
 			'description'   => esc_html__( 'Motivate and engage students by awarding them points for their progress and activity on the website.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-points&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'point-system',
@@ -820,7 +820,7 @@ function stm_lms_available_addons() {
 		'course_bundle'           => array(
 			'name'          => esc_html__( 'Course Bundle', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/bundle.png' ),
-			'settings'      => admin_url( 'admin.php?page=course_bundle_settings' ),
+			'settings'      => admin_url( 'admin.php?page=stm-lms-settings&submenu=course_bundles#section_2' ),
 			'description'   => esc_html__( 'Add similar or related courses to the one bundle and sell them as a package at a discount price.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-bundles&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'course-bundles',
@@ -843,7 +843,7 @@ function stm_lms_available_addons() {
 		'zoom_conference'         => array(
 			'name'          => esc_html__( 'Zoom Conference', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/zoom_conference.png' ),
-			'settings'      => admin_url( 'admin.php?page=mslms_zoom_settings' ),
+			'settings'      => admin_url( 'admin.php?page=stm-lms-settings&submenu=zoom#section_2' ),
 			'description'   => esc_html__( 'Enjoy the new type of lesson — connect Zoom Video Conferencing with your website and interact with your students in real-time.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-zoom&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'zoom-video-conferencing',
@@ -851,7 +851,7 @@ function stm_lms_available_addons() {
 		'scorm'                   => array(
 			'name'          => esc_html__( 'Scorm', 'masterstudy-lms-learning-management-system' ),
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/scorm.png' ),
-			'settings'      => admin_url( 'admin.php?page=scorm_settings' ),
+			'settings'      => admin_url( 'admin.php?page=stm-lms-settings&submenu=scorm#section_2' ),
 			'description'   => esc_html__( 'Easily upload to your LMS any course that was created with the help of different content authoring tools.', 'masterstudy-lms-learning-management-system' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ms-scorm&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 			'documentation' => 'scorm',
@@ -895,7 +895,7 @@ function stm_lms_available_addons() {
 			'url'           => esc_url( STM_LMS_URL . 'assets/addons/media_library.jpg' ),
 			'description'   => esc_html__( 'Manage, keep and load files of various formats while creating e-learning content in the front-end.', 'masterstudy-lms-learning-management-system' ),
 			'documentation' => 'media-file-manager',
-			'settings'      => admin_url( 'admin.php?page=media_library_settings' ),
+			'settings'      => admin_url( 'admin.php?page=stm-lms-settings#section_media_library' ),
 			'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/',
 		),
 		'google_meet'             => array(
@@ -1746,6 +1746,141 @@ function masterstudy_lms_personal_data_display_options( $user_id ) {
 		'personal_fields'     => masterstudy_lms_personal_data_fields(),
 	);
 }
+// generate levels and statuses ids for nuxy
+function masterstudy_lms_generate_levels_statuses_ids( $settings, $id ) {
+	$levels     = STM_LMS_Options::get_option( 'course_levels_config' );
+	$new_levels = $settings['course_levels_config'] ?? array();
+
+	$levels     = is_array( $levels ) ? $levels : array();
+	$new_levels = is_array( $new_levels ) ? $new_levels : array();
+
+	$existing_map = array();
+
+	foreach ( $levels as $level ) {
+		if ( ! empty( $level['label'] ) && ! empty( $level['id'] ) ) {
+			$existing_map[ $level['label'] ] = $level['id'];
+		}
+	}
+
+	$merged_levels = array();
+
+	foreach ( $new_levels as $level ) {
+
+		$label = trim( $level['label'] ?? '' );
+
+		if ( '' === $label ) {
+			continue;
+		}
+
+		if ( isset( $existing_map[ $label ] ) ) {
+			$new_id = $existing_map[ $label ];
+		} else {
+			$new_id = 'ms_lms_' . str_replace( '-', '_', wp_generate_uuid4() );
+		}
+
+		$level['id']    = $new_id;
+		$level['label'] = $label;
+
+		$merged_levels[] = $level;
+	}
+
+	$settings['course_levels_config'] = $merged_levels;
+
+	$statuses     = STM_LMS_Options::get_option( 'course_statuses_config' );
+	$new_statuses = $settings['course_statuses_config'] ?? array();
+
+	$statuses     = is_array( $statuses ) ? $statuses : array();
+	$new_statuses = is_array( $new_statuses ) ? $new_statuses : array();
+
+	$existing_status_map = array();
+
+	foreach ( $statuses as $status ) {
+		if ( ! empty( $status['label'] ) && ! empty( $status['id'] ) ) {
+			$existing_status_map[ $status['label'] ] = $status['id'];
+		}
+	}
+
+	$merged_statuses = array();
+
+	foreach ( $new_statuses as $status ) {
+
+		$label = trim( $status['label'] ?? '' );
+
+		if ( '' === $label ) {
+			continue;
+		}
+
+		if ( isset( $existing_status_map[ $label ] ) ) {
+			$new_id = $existing_status_map[ $label ];
+		} else {
+			$new_id = 'ms_lms_' . str_replace( '-', '_', wp_generate_uuid4() );
+		}
+
+		$status['id']    = $new_id;
+		$status['label'] = $label;
+
+		$merged_statuses[] = $status;
+	}
+
+	$settings['course_statuses_config'] = $merged_statuses;
+
+	return $settings;
+}
+
+add_filter(
+	'wpcfto_masterstudy_settings_before_update_option',
+	'masterstudy_lms_generate_levels_statuses_ids',
+	10,
+	2
+);
+
+function masterstudy_lms_custom_post_types_custom_title_link( $link, $post_id, $context ) {
+	if ( ! is_admin() ) {
+		return $link;
+	}
+
+	$post = get_post( $post_id );
+	if ( ! $post ) {
+		return $link;
+	}
+
+	$map = array(
+		'stm-courses'     => array(
+			'screen_id' => 'edit-stm-courses',
+			'path'      => '/user-account/edit-course/',
+		),
+		'stm-lessons'     => array(
+			'screen_id' => 'edit-stm-lessons',
+			'path'      => '/user-account/edit-lesson/',
+		),
+		'stm-quizzes'     => array(
+			'screen_id' => 'edit-stm-quizzes',
+			'path'      => '/user-account/edit-quiz/',
+		),
+		'stm-questions'   => array(
+			'screen_id' => 'edit-stm-questions',
+			'path'      => '/user-account/edit-question/',
+		),
+		'stm-assignments' => array(
+			'screen_id' => 'edit-stm-assignments',
+			'path'      => '/user-account/edit-assignment/',
+		),
+	);
+
+	if ( empty( $map[ $post->post_type ] ) ) {
+		return $link;
+	}
+
+	// Limit this change to the specific CPT list screen only.
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( ! $screen || $map[ $post->post_type ]['screen_id'] !== $screen->id ) {
+		return $link;
+	}
+
+	return home_url( $map[ $post->post_type ]['path'] . absint( $post_id ) . '/' );
+}
+
+add_filter( 'get_edit_post_link', 'masterstudy_lms_custom_post_types_custom_title_link', 10, 3 );
 
 function stm_lms_wpml_object_id_safe( $object_id, $type = 'post' ) {
 	$object_id = is_numeric( $object_id ) ? (int) $object_id : 0;
@@ -1765,4 +1900,3 @@ function stm_lms_wpml_object_id_safe( $object_id, $type = 'post' ) {
 
 	return ! empty( $translated_id ) ? (int) $translated_id : $object_id;
 }
-
