@@ -52,6 +52,18 @@ class StmStatistics {
 		return $author_fee ? $author_fee : 10;
 	}
 
+	private static function normalize_order_direction( $order ) {
+		$order = strtoupper( trim( sanitize_text_field( (string) $order ) ) );
+
+		return in_array( $order, array( 'ASC', 'DESC' ), true ) ? $order : 'ASC';
+	}
+
+	private static function normalize_orderby( $orderby, $allowed_columns, $default_column ) {
+		$orderby = sanitize_key( (string) $orderby );
+
+		return $allowed_columns[ $orderby ] ?? $default_column;
+	}
+
 	/**
 	 * @param $offset
 	 * @param $limit
@@ -107,11 +119,14 @@ class StmStatistics {
 			$query->where( 'course.`post_author`', (int) $params['post_author'] );
 		}
 
-		if ( ! empty( $params['orderby'] ) ) {
-			$query->sort_by( esc_sql( $params['orderby'] ) )->order( ! empty( $params['order'] ) ? ' ' . esc_sql( $params['order'] ) : ' ASC' );
-		} else {
-			$query->sort_by( 'ID' )->order( ' DESC ' );
-		}
+		$allowed_orderby = array(
+			'id'        => 'ID',
+			'post_date' => 'post_date',
+		);
+		$orderby         = self::normalize_orderby( $params['orderby'] ?? '', $allowed_orderby, 'ID' );
+		$order           = self::normalize_order_direction( $params['order'] ?? 'DESC' );
+
+		$query->sort_by( $orderby )->order( $order );
 
 		$query_total = clone $query;
 
@@ -198,11 +213,17 @@ class StmStatistics {
 				->where_raw( ' (  meta_status.post_id = _order.ID OR order_status.ID = _order.ID )  ' );
 		}
 
-		if ( ! empty( $params['orderby'] ) ) {
-			$query->sort_by( esc_sql( $params['orderby'] ) )->order( ! empty( $params['order'] ) ? ' ' . esc_sql( $params['order'] ) : ' ASC' );
-		} else {
-			$query->sort_by( 'ID' )->order( ' DESC ' );
-		}
+		$allowed_orderby = array(
+			'id'           => 'id',
+			'date_created' => 'date_created',
+			'name'         => 'name',
+			'status'       => 'status',
+			'payment_code' => 'payment_code',
+		);
+		$orderby         = self::normalize_orderby( $params['orderby'] ?? '', $allowed_orderby, 'id' );
+		$order           = self::normalize_order_direction( $params['order'] ?? 'DESC' );
+
+		$query->sort_by( $orderby )->order( $order );
 
 		$query_total          = clone $query;
 		$user_orders['total'] = $query_total->select( ' COUNT(DISTINCT lms_order_items.id) as count ' )->findOne()->count ?? 0;
@@ -239,9 +260,13 @@ class StmStatistics {
 
 		$params['completed'] = true;
 
-		if ( $params['author_id'] ) {
+		if ( ! empty( $params['author_id'] ) ) {
+			$params['author_id'] = (int) $params['author_id'];
+
 			return self::get_user_order_items( $offset, $limit, $params );
 		}
+
+		return array();
 	}
 
 	/**

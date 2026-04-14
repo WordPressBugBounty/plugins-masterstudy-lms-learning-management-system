@@ -72,7 +72,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				'course_title'    => $course_title,
 				'blog_name'       => \STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 				'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-				'date'            => gmdate( 'Y-m-d H:i:s' ),
+				'date'            => current_time( 'mysql' ),
 				'course_edit_url' => \MS_LMS_Email_Template_Helpers::link( ms_plugin_manage_course_url( $post_id ) ),
 				'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_permalink( $post_id ) ),
 			);
@@ -865,7 +865,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					$email_data = array(
 						'user_login' => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 						'user_id'    => $user_id,
-						'date'       => gmdate( 'Y-m-d H:i:s' ),
+						'date'       => current_time( 'mysql' ),
 					);
 
 					foreach ( $data['fields'] as $field ) {
@@ -950,7 +950,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 				$instructor_premoderation = STM_LMS_Options::get_option( 'instructor_premoderation', false );
 
-				$date       = wp_date( 'Y-m-d H:i:s' );
+				$date       = current_time( 'mysql' );
 				$user_email = $user['email'];
 
 				$message = esc_html__( 'You have received a new instructor application from ', 'masterstudy-lms-learning-management-system-pro' ) . $user_login . ', <br/>' . // phpcs:disable
@@ -1141,7 +1141,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				'password'  => $password,
 				'site_url'  => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
 				'blog_name' => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
-				'date'      => gmdate( 'Y-m-d H:i:s' ),
+				'date'      => current_time( 'mysql' ),
 				'login_url' => \MS_LMS_Email_Template_Helpers::link( STM_LMS_Helpers::masterstudy_lms_get_login_url() ),
 			);
 
@@ -1300,7 +1300,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 					'login_url'       => STM_LMS_Helpers::masterstudy_lms_get_login_url(),
 					'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-					'date'            => gmdate( 'Y-m-d H:i:s' ),
+					'date'            => current_time( 'mysql' ),
 					'admin_comment'   => $admin_message,
 				);
 
@@ -1331,7 +1331,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					'user_login'    => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 					'blog_name'     => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 					'site_url'      => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-					'date'          => gmdate( 'Y-m-d H:i:s' ),
+					'date'          => current_time( 'mysql' ),
 					'admin_comment' => $admin_message,
 				);
 

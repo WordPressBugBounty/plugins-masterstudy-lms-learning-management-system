@@ -315,7 +315,7 @@ if ( ! function_exists( 'ms_parse_duration_to_seconds' ) ) { // phpcs:ignoreFile
 			'site_url'               => class_exists( 'MS_LMS_Email_Template_Helpers' )
 				? MS_LMS_Email_Template_Helpers::link( home_url( '/' ) )
 				: home_url( '/' ),
-			'date'                   => gmdate( 'Y-m-d H:i:s' ),
+			'date'                   => current_time( 'mysql' ),
 		);
 
 		if ( class_exists( 'STM_LMS_Helpers' ) && method_exists( 'STM_LMS_Helpers', 'send_email' ) ) {

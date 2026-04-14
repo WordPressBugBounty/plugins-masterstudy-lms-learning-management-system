@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile
 
 namespace stmLms\Classes\Vendor;
 
@@ -214,12 +215,63 @@ class Query
      * @param  string $order
      * @return self
      */
-    public function order($order)
-    {
-        $this->order = $order;
+	public function order($order)
+	{
+		$this->order = $order;
 
-        return $this;
-    }
+		return $this;
+	}
+
+	private function sanitize_order_direction( $order ) {
+		$order = strtoupper( trim( (string) $order ) );
+
+		if ( in_array( $order, array( self::ORDER_ASCENDING, self::ORDER_DESCENDING ), true ) ) {
+			return $order;
+		}
+
+		return self::ORDER_ASCENDING;
+	}
+
+	private function sanitize_sort_by( $sort_by, $asTable_ = '' ) {
+		$sort_by = trim( (string) $sort_by );
+
+		if ( empty( $sort_by ) ) {
+			$sort_by = ! empty( $this->primary_key ) ? $this->primary_key : 'id';
+		}
+
+		$columns           = preg_split( '/\s*,\s*/', $sort_by );
+		$sanitized_columns = array();
+
+		foreach ( $columns as $column ) {
+			$column = trim( $column );
+
+			if ( empty( $column ) ) {
+				continue;
+			}
+
+			if ( ! preg_match( '/^[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)?$/', $column ) ) {
+				continue;
+			}
+
+			if ( strpos( $column, '.' ) === false && ! empty( $asTable_ ) ) {
+				$column = $asTable_ . $column;
+			}
+
+			$sanitized_columns[] = $column;
+		}
+
+		if ( empty( $sanitized_columns ) ) {
+			$fallback = ! empty( $this->primary_key ) ? $this->primary_key : 'id';
+
+			if ( strpos( $fallback, '.' ) === false && ! empty( $asTable_ ) ) {
+				$fallback = $asTable_ . $fallback;
+			}
+
+			$sanitized_columns[] = $fallback;
+		}
+
+		return implode( ', ', $sanitized_columns );
+	}
 
 	/**
 	 * @param $group_by string
@@ -669,13 +721,8 @@ class Query
 			$where = ' WHERE ' . substr($where, 5);
 		}
 
-		// Order
-		if (strstr($this->sort_by, '(') !== false && strstr($this->sort_by, ')') !== false) {
-			// The sort column contains () so we assume its a function, therefore
-			// don't quote it
-			$order = ' ORDER BY ' . $this->sort_by . ' ' . $this->order;
-		} else
-			$order = ' ORDER BY '.$asTable_. $this->sort_by . ' ' . $this->order;
+			// Order
+			$order = ' ORDER BY ' . $this->sanitize_sort_by( $this->sort_by, $asTable_ ) . ' ' . $this->sanitize_order_direction( $this->order );
 
 		if( !empty($this->group_by) )
 			$group_by = " GROUP BY ".$this->group_by;
@@ -706,6 +753,5 @@ class Query
 	}
 
 }
-
 
 

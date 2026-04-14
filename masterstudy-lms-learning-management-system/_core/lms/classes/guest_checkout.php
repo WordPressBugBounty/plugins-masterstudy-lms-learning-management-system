@@ -396,7 +396,7 @@ class STM_LMS_Guest_Checkout {
 			'blog_name'    => $blog_name,
 			'checkout_url' => \MS_LMS_Email_Template_Helpers::link( $checkout_url ),
 			'site_url'     => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-			'date'         => gmdate( 'Y-m-d H:i:s' ),
+			'date'         => current_time( 'mysql' ),
 		);
 
 		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );

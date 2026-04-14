@@ -93,7 +93,7 @@ class STM_LMS_Lesson {
 			'course_url'   => get_permalink( $course_id ),
 			'course_title' => get_the_title( $course_id ),
 			'lesson_title' => get_the_title( $lesson_id ),
-			'date'         => gmdate( 'Y-m-d H:i:s' ),
+			'date'         => current_time( 'mysql' ),
 			'blog_name'    => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 			'site_url'     => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
 		);

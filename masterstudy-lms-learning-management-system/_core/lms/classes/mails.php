@@ -68,7 +68,7 @@ class STM_LMS_Mails {
 			'blog_name'     => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 			'site_url'      => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
 			'student_email' => STM_LMS_Helpers::masterstudy_lms_get_user_email_by_user_id( $user_id ),
-			'date'          => gmdate( 'Y-m-d H:i:s' ),
+			'date'          => current_time( 'mysql' ),
 		);
 
 		$template = $settings['stm_lms_new_order_instructor'] ?? 'You made a Sale';
@@ -109,7 +109,7 @@ class STM_LMS_Mails {
 			'student_email' => STM_LMS_Helpers::masterstudy_lms_get_user_email_by_user_id( $user_id ),
 			'blog_name'     => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 			'site_url'      => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-			'date'          => gmdate( 'Y-m-d H:i:s' ),
+			'date'          => current_time( 'mysql' ),
 		);
 
 		$template = $settings['stm_lms_new_order'] ?? 'New Order';
@@ -154,7 +154,7 @@ class STM_LMS_Mails {
 			'user_login' => $user_value,
 			'blog_name'  => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 			'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-			'date'       => gmdate( 'Y-m-d H:i:s' ),
+			'date'       => current_time( 'mysql' ),
 		);
 
 		$template = $settings['stm_lms_new_order_accepted'] ?? 'Your Order has been Accepted.';
@@ -288,7 +288,7 @@ class STM_LMS_Mails {
 			'login'        => $login,
 			'blog_name'    => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 			'site_url'     => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-			'date'         => gmdate( 'Y-m-d H:i:s' ),
+			'date'         => current_time( 'mysql' ),
 			'course_url'   => \MS_LMS_Email_Template_Helpers::link( get_permalink( $course_id ) ),
 			'user_login'   => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 		);
@@ -326,7 +326,7 @@ class STM_LMS_Mails {
 		$email_data_enrollment = array(
 			'user_login'    => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 			'course_title'  => $course_title,
-			'date' => gmdate( 'Y-m-d H:i:s' ),
+			'date' => current_time( 'mysql' ),
 		);
 		$search                = array( '{{user_login}}', '{{course_title}}', '{{date}}' );
 		$replace               = array(
@@ -362,7 +362,7 @@ class STM_LMS_Mails {
 			'course_title'    => $title,
 			'blog_name'       => \STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 			'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-			'date'            => gmdate( 'Y-m-d H:i:s' ),
+			'date'            => current_time( 'mysql' ),
 			'dashboard_url'   => \MS_LMS_Email_Template_Helpers::link( admin_url() ),
 			'course_edit_url' => \MS_LMS_Email_Template_Helpers::link( ms_plugin_manage_course_url( $post_id ) ),
 			'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_permalink( $post_id ) ),

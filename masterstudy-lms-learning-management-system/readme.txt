@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.25
+Stable tag: 3.7.26
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.26 - 2026-04-14 =
+- **Fixed:** Minor bugfix
+
 = 3.7.25 - 2026-04-09 =
 - **Fixed:** Minor Fixes
 
@@ -331,20 +334,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fixed:** Fixed navigation to a private course
 - **Fixed:** Fixed string translation in Course Builder → Drip Content
 - **Fixed:** Fixed Course Builder file caching issue with CDN
-
-= 3.7.21 - 2026-03-18 =
-- **New:** Added new Elementor widget – FAQ
-- **New:** Added a new Elementor widget – Mega Menu
-- **New:** Added a new card style for the Elementor Courses widget
-- **New:** Added a new style for course categories in the Elementor Courses Categories widget
-- **New:** Added a new style for the Elementor Testimonials widget
-- **Update:** Added dynamic redirect for the “Back” button in the Course Player
-- **Fixed:** Fixed Guest Checkout functionality
-
-= 3.7.20 - 2026-03-16 =
-- **Fixed:** Minor bugfix
-
-= 3.7.19 - 2026-03-13 =
-- **Fixed:** Minor bugfix
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

@@ -191,7 +191,7 @@ class STM_LMS_Subscriptions {
 					'course_title'    => $course_title,
 					'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 					'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-					'date'            => gmdate( 'Y-m-d H:i:s' ),
+					'date'            => current_time( 'mysql' ),
 					'login'           => $login,
 					'user_login'      => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 					'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_permalink( $course_id ) ),

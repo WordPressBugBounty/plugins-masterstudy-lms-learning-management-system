@@ -127,14 +127,16 @@ class StmStatisticsListTable extends WP_List_Table {
 
 		$this->total_price = ( ! empty( $one ) ) ? $one->total_price : 0;
 
-		$request_order_by = $_REQUEST['orderby'] ?? null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$request_order    = $_REQUEST['order'] ?? null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$request_order_by = sanitize_key( $_REQUEST['orderby'] ?? '' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$request_order    = strtoupper( trim( sanitize_text_field( $_REQUEST['order'] ?? '' ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$allowed_orderby  = array(
+			'id'        => 'ID',
+			'post_date' => 'post_date',
+		);
+		$order_by         = $allowed_orderby[ $request_order_by ] ?? 'ID';
+		$order            = in_array( $request_order, array( 'ASC', 'DESC' ), true ) ? $request_order : 'DESC';
 
-		if ( ! empty( $request_order_by ) ) {
-			$query->sort_by( esc_sql( $request_order_by ) )->order( ! empty( $request_order ) ? ' ' . esc_sql( $request_order ) : ' ASC' );
-		} else {
-			$query->sort_by( 'ID' )->order( ' DESC ' );
-		}
+		$query->sort_by( $order_by )->order( $order );
 
 		$query->join( ' left join ' . $prefix . 'postmeta as meta on (meta.post_id = _order.ID)' )
 			->group_by( '_order.ID' )
@@ -471,5 +473,3 @@ class StmStatisticsListTable extends WP_List_Table {
 	}
 
 }
-
-

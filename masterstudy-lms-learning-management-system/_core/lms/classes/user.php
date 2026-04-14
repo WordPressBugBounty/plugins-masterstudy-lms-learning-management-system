@@ -559,7 +559,7 @@ class STM_LMS_User {
 			'blog_name'  => $blog_name,
 			'reset_url'  => $reset_url,
 			'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-			'date'       => gmdate( 'Y-m-d H:i:s' ),
+			'date'       => current_time( 'mysql' ),
 		);
 
 		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data_account_premoderation );
@@ -673,7 +673,7 @@ class STM_LMS_User {
 			'user_login' => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user ),
 			'login_url'  => $login_url,
 			'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-			'date'       => gmdate( 'Y-m-d H:i:s' ),
+			'date'       => current_time( 'mysql' ),
 			'user_id'    => $user,
 		);
 
@@ -720,7 +720,7 @@ class STM_LMS_User {
 		$email_data = array(
 			'user_login'        => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user ),
 			'user_email'        => $user_email,
-			'registration_date' => gmdate( 'Y-m-d H:i:s' ),
+			'registration_date' => current_time( 'mysql' ),
 			'blog_name'         => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 			'site_url'          => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
 		);
@@ -1767,7 +1767,7 @@ class STM_LMS_User {
 			$email_data = array(
 				'blog_name'  => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 				'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-				'date'       => gmdate( 'Y-m-d H:i:s' ),
+				'date'       => current_time( 'mysql' ),
 				'user_login' => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 			);
 
@@ -1960,7 +1960,7 @@ class STM_LMS_User {
 			$message   = '';
 			$subject   = esc_html__( 'Enterprise Request', 'masterstudy-lms-learning-management-system' );
 			$user_data = array(
-				'date'      => date( 'Y-m-d H:i:s' ),
+				'date'      => current_time( 'mysql' ),
 				'site_url'  => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
 				'blog_name' => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 			);
@@ -2019,7 +2019,7 @@ class STM_LMS_User {
 			$name    = $data['fields']['enterprise_name'];
 			$email   = $data['fields']['enterprise_email'];
 			$text    = $data['fields']['enterprise_text'];
-			$date    = gmdate( 'Y-m-d H:i:s' );
+			$date    = current_time( 'mysql' );
 			$subject = esc_html__( 'Enterprise Request', 'masterstudy-lms-learning-management-system' );
 
 			$message = esc_html__( 'You have received a new enterprise inquiry', 'masterstudy-lms-learning-management-system' ) . ' <br/>' . // phpcs:disable
@@ -2037,7 +2037,7 @@ class STM_LMS_User {
 				'text'      => $text,
 				'blog_name' => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 				'site_url'  => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-				'date'      => gmdate( 'Y-m-d H:i:s' ),
+				'date'      => current_time( 'mysql' ),
 			);
 
 			STM_LMS_Helpers::send_email(
@@ -2128,7 +2128,7 @@ class STM_LMS_User {
 			'reset_url'  => $reset_url,
 			'blog_name'  => $site_name,
 			'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-			'date'       => gmdate( 'Y-m-d H:i:s' ),
+			'date'       => current_time( 'mysql' ),
 		);
 
 		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );
@@ -2458,7 +2458,7 @@ class STM_LMS_User {
 			$email_data = array(
 				'blog_name'  => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 				'site_url'   => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-				'date'       => gmdate( 'Y-m-d H:i:s' ),
+				'date'       => current_time( 'mysql' ),
 				'user_login' => \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
 			);
 

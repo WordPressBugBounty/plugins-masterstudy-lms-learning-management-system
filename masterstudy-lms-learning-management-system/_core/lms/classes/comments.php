@@ -173,7 +173,7 @@ class STM_LMS_Comments {
 				'course_title'    => $course_title,
 				'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 				'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-				'date'            => gmdate( 'Y-m-d H:i:s' ),
+				'date'            => current_time( 'mysql' ),
 				'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_the_permalink( $course_id ) ),
 			);
 
