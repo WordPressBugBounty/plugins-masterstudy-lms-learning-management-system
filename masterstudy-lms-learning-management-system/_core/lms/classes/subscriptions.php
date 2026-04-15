@@ -49,15 +49,39 @@ class STM_LMS_Subscriptions {
 	public static function admin_toggle_buying() {
 		check_ajax_referer( 'stm_lms_toggle_buying', 'nonce' );
 
-		$method   = sanitize_text_field( $_GET['m'] );
-		$category = sanitize_text_field( $_GET['c'] );
-		$terms    = explode( ',', $category );
-		$r        = array(
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Unauthorized request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
+
+		$method   = sanitize_text_field( $_GET['m'] ?? '' );
+		$category = sanitize_text_field( $_GET['c'] ?? '' );
+
+		if ( empty( $method ) || empty( $category ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Invalid parameters.', 'masterstudy-lms-learning-management-system' ),
+				),
+				400
+			);
+		}
+
+		$terms = array_map( 'intval', explode( ',', $category ) );
+
+		$r = array(
 			'next'    => '',
 			'message' => '',
 		);
 
 		foreach ( $terms as $term ) {
+			if ( empty( $term ) ) {
+				continue;
+			}
+
 			$args = array(
 				'post_type'      => 'stm-courses',
 				'posts_per_page' => 1,
@@ -97,16 +121,23 @@ class STM_LMS_Subscriptions {
 					$id        = get_the_ID();
 					$r['next'] = 'going_next';
 
-					update_post_meta( $id, 'single_sale', ( 'disable' === $method ) ? '' : 'on' );
+					update_post_meta(
+						$id,
+						'single_sale',
+						( 'disable' === $method ) ? '' : 'on'
+					);
 				}
 				wp_reset_postdata();
 			}
 		}
 
 		if ( 'disable' === $method ) {
-			$r['message'] = sprintf( esc_html__( 'All courses in the selected categories are disabled.', 'masterstudy-lms-learning-management-system' ) );
+			$r['message'] = esc_html__(
+				'All courses in the selected categories are disabled.',
+				'masterstudy-lms-learning-management-system'
+			);
 		} else {
-			$r['message'] = sprintf( esc_html__( 'All courses in the selected categories are enabled.', 'masterstudy-lms-learning-management-system' ) );
+			$r['message'] = esc_html__( 'All courses in the selected categories are enabled.', 'masterstudy-lms-learning-management-system' );
 		}
 
 		wp_send_json( $r );
@@ -583,13 +614,31 @@ class STM_LMS_Subscriptions {
 	public static function featured_status() {
 		check_ajax_referer( 'stm_lms_change_featured', 'nonce' );
 
-		$user = STM_LMS_User::get_current_user();
+		$user_id = get_current_user_id();
+		$post_id = absint( $_REQUEST['post_id'] ?? 0 );
 
-		if ( empty( $user['id'] ) || empty( $_GET['post_id'] ) ) {
-			die;
+		if ( empty( $user_id ) || empty( $post_id ) || 'stm-courses' !== get_post_type( $post_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Invalid request!', 'masterstudy-lms-learning-management-system' ),
+				),
+				400
+			);
 		}
 
-		$post_id  = intval( $_GET['post_id'] );
+		$can_manage = current_user_can( 'manage_options' );
+		$can_edit   = current_user_can( 'edit_post', $post_id );
+		$is_author  = STM_LMS_Course::check_course_author( $post_id, $user_id );
+
+		if ( ! $can_manage && ! $can_edit && ! $is_author ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Unauthorized request!', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
+
 		$featured = get_post_meta( $post_id, 'featured', true );
 		$featured = ( empty( $featured ) ) ? 'on' : '';
 		$quota    = self::get_featured_quota();

@@ -20,14 +20,24 @@ class STM_LMS_User_Manager_Add_User {
 		}
 
 		$email     = sanitize_text_field( $data['email'] );
-		$course_id = intval( $data['course_id'] );
+		$course_id = absint( $data['course_id'] ?? 0 );
+		$user_id   = get_current_user_id();
 
-		if ( ! is_email( $email ) ) {
+		if ( ! is_email( $email ) || empty( $course_id ) || empty( $user_id ) ) {
 			wp_send_json(
 				array(
 					'status'  => 'error',
-					'message' => esc_html__( 'Enter valid email', 'masterstudy-lms-learning-management-system' ),
+					'message' => esc_html__( 'Invalid request.', 'masterstudy-lms-learning-management-system' ),
 				)
+			);
+		}
+
+		if ( ! STM_LMS_Course::check_course_author( $course_id, $user_id ) && ! current_user_can( 'edit_post', $course_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Unauthorized request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
 			);
 		}
 

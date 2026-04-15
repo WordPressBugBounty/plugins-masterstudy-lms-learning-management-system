@@ -13,7 +13,26 @@ class STM_LMS_User_Manager_Course {
 	public function students() {
 		check_ajax_referer( 'stm_lms_dashboard_get_course_students', 'nonce' );
 
-		$course_id = intval( $_GET['course_id'] );
+		$course_id       = absint( $_GET['course_id'] ?? 0 );
+		$current_user_id = get_current_user_id();
+
+		if ( empty( $course_id ) || empty( $current_user_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Invalid request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				400
+			);
+		}
+
+		if ( ! STM_LMS_Course::check_course_author( $course_id, $current_user_id ) && ! current_user_can( 'edit_post', $course_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Unauthorized request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
 
 		$data               = array_reverse( array_map( array( $this, 'map_students' ), stm_lms_get_course_users( $course_id ) ) );
 		$coming_soon_emails = get_post_meta( $course_id, 'coming_soon_student_emails', true );
@@ -126,9 +145,28 @@ class STM_LMS_User_Manager_Course {
 	public function delete_user() {
 		check_ajax_referer( 'stm_lms_dashboard_delete_user_from_course', 'nonce' );
 
-		$course_id        = intval( $_GET['course_id'] );
-		$user_id          = intval( $_GET['user_id'] );
-		$subscribed_email = sanitize_text_field( $_GET['user_email'] );
+		$course_id        = absint( $_GET['course_id'] ?? 0 );
+		$user_id          = absint( $_GET['user_id'] ?? 0 );
+		$subscribed_email = sanitize_text_field( $_GET['user_email'] ?? '' );
+		$current_user_id  = get_current_user_id();
+
+		if ( empty( $course_id ) || empty( $current_user_id ) || ( empty( $user_id ) && empty( $subscribed_email ) ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Invalid request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				400
+			);
+		}
+
+		if ( ! STM_LMS_Course::check_course_author( $course_id, $current_user_id ) && ! current_user_can( 'edit_post', $course_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Unauthorized request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
 
 		if ( ! empty( $subscribed_email ) && is_ms_lms_addon_enabled( 'coming_soon' ) ) {
 			$coming_soon_emails      = get_post_meta( $course_id, 'coming_soon_student_emails', true ) ?? array();
@@ -138,9 +176,6 @@ class STM_LMS_User_Manager_Course {
 			update_post_meta( $course_id, 'coming_soon_student_emails', array_values( $coming_soon_emails ) );
 		}
 
-		if ( ! STM_LMS_Course::check_course_author( $course_id, get_current_user_id() ) ) {
-			die;
-		}
 		$option_key = "masterstudy_plugin_course_completion_{$user_id}_{$course_id}";
 		update_option( $option_key, false );
 		stm_lms_get_delete_user_course( $user_id, $course_id );

@@ -109,12 +109,26 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 		$user_id = $user['id'];
 
-		if ( empty( $_GET['post_id'] ) || ( empty( $_GET['status'] ) || ! in_array( $_GET['status'], $statuses, true ) ) ) {
-			die;
+		$course_id = absint( $_GET['post_id'] ?? 0 );
+		$status    = sanitize_text_field( $_GET['status'] ?? '' );
+
+		if ( empty( $course_id ) || empty( $status ) || ! in_array( $status, $statuses, true ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Invalid request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				400
+			);
 		}
 
-		$course_id = intval( $_GET['post_id'] );
-		$status    = sanitize_text_field( $_GET['status'] );
+		if ( ! STM_LMS_Course::check_course_author( $course_id, $user_id ) && ! current_user_can( 'edit_post', $course_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Unauthorized request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
 
 		if ( apply_filters( 'stm_lms_before_change_course_status', false ) ) {
 			do_action( 'stm_lms_change_course_status', $status );
@@ -1056,9 +1070,16 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 		foreach ( $raw_courses as $course ) {
 			$course = intval( $course );
-			if ( STM_LMS_Course::check_course_author( $course, $instructor_id ) ) {
+			if ( STM_LMS_Course::check_course_author( $course, $instructor_id ) || current_user_can( 'edit_post', $course ) ) {
 				$courses[] = $course;
 			}
+		}
+
+		if ( empty( $courses ) ) {
+			return array(
+				'error'   => true,
+				'message' => esc_html__( 'Unauthorized request.', 'masterstudy-lms-learning-management-system' ),
+			);
 		}
 
 		/*Now we checked all courses and emails, we can add users to site*/
@@ -1095,8 +1116,26 @@ class STM_LMS_Instructor extends STM_LMS_User {
 	public static function add_student_manually() {
 		check_ajax_referer( 'stm_lms_add_student_manually', 'nonce' );
 
-		$raw_courses = $_POST['courses'];
+		$raw_courses = $_POST['courses'] ?? array();
 		$raw_emails  = $_POST['emails'];
+
+		if ( empty( get_current_user_id() ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Unauthorized request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
+
+		if ( empty( $raw_courses ) || ! is_array( $raw_courses ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Invalid request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				400
+			);
+		}
 
 		$data = self::add_student_to_course( $raw_courses, $raw_emails );
 
