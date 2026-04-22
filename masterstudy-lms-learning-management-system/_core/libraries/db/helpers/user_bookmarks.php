@@ -44,12 +44,13 @@ function stm_lms_add_user_bookmark( $user_id, $page_num, $title, $course_id, $le
 	);
 }
 
-function stm_lms_remove_user_bookmark( $bookmark_id ) {
+function stm_lms_remove_user_bookmark( $bookmark_id, $user_id ) {
 	global $wpdb;
 	$table  = stm_lms_user_bookmarks_name( $wpdb );
-	$sql    = "DELETE FROM {$table} WHERE id=%d";
+	$sql    = "DELETE FROM {$table} WHERE id=%d AND user_id=%d";
 	$params = array(
 		$bookmark_id,
+		$user_id,
 	);
 
 	$result = $wpdb->query(
@@ -62,14 +63,15 @@ function stm_lms_remove_user_bookmark( $bookmark_id ) {
 	);
 }
 
-function stm_lms_update_user_bookmark( $bookmark_id, $title, $page_num ) {
+function stm_lms_update_user_bookmark( $bookmark_id, $title, $page_num, $user_id ) {
 	global $wpdb;
 	$table  = stm_lms_user_bookmarks_name( $wpdb );
-	$sql    = "UPDATE {$table} SET title=%s, page_number=%d WHERE id=%d";
+	$sql    = "UPDATE {$table} SET title=%s, page_number=%d WHERE id=%d AND user_id=%d";
 	$params = array(
 		$title,
 		$page_num,
 		$bookmark_id,
+		$user_id,
 	);
 
 	$result = $wpdb->query(

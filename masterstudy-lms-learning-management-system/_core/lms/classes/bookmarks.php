@@ -67,14 +67,14 @@ class STM_LMS_Bookmarks {
 			);
 		}
 
-		$bookmark_id = $_GET['id'];
+		$bookmark_id = absint( $_GET['id'] );
 		$user_id     = get_current_user_id();
 
 		if ( ! $user_id ) {
 			wp_send_json_error( array( 'message' => 'Unauthorized' ) );
 		}
 
-		$result = stm_lms_remove_user_bookmark( $bookmark_id );
+		$result = stm_lms_remove_user_bookmark( $bookmark_id, $user_id );
 
 		if ( false !== $result['success'] ) {
 			wp_send_json_success(
@@ -105,16 +105,16 @@ class STM_LMS_Bookmarks {
 			);
 		}
 
-		$title       = $_GET['title'];
-		$page_num    = $_GET['page_number'];
-		$bookmark_id = $_GET['id'];
+		$title       = sanitize_text_field( $_GET['title'] );
+		$page_num    = absint( $_GET['page_number'] );
+		$bookmark_id = absint( $_GET['id'] );
 		$user_id     = get_current_user_id();
 
 		if ( ! $user_id ) {
 			wp_send_json_error( array( 'message' => 'Unauthorized' ) );
 		}
 
-		$result = stm_lms_update_user_bookmark( $bookmark_id, $title, $page_num );
+		$result = stm_lms_update_user_bookmark( $bookmark_id, $title, $page_num, $user_id );
 
 		if ( false !== $result['success'] ) {
 			wp_send_json_success(

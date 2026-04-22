@@ -13,17 +13,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var assignmentItemTemplate = document.querySelector('#masterstudy-account-enrolled-assignments__item');
     var paginationContainer = $('.masterstudy-account-enrolled-assignments__pagination');
     var navigationContainer = $('.masterstudy-account-enrolled-assignments__navigation');
+    var perPageSelectInput = $('#masterstudy-account-enrolled-assignments__per-page-select');
     var loading = false;
     var currentPage = 1;
-    var currentPerPage = 10;
+    var currentPerPage = Number(perPageSelectInput.val()) || 10;
     var search = '';
     var status = '';
     var assignments = [];
     var totalPages = 0;
     var searchTimeout = 0;
+    function updateNavigationAlignment() {
+      navigationContainer.css('justify-content', totalPages > 1 ? '' : 'flex-end');
+    }
     function setIsLoading(val) {
       loading = val;
       assignmentsLoader.css('display', val ? 'flex' : 'none');
+      if (val) {
+        paginationContainer.find('.masterstudy-pagination').remove();
+      }
+      assignmentsGrid.find('.masterstudy-account-enrolled-assignments__item, .masterstudy-account-enrolled-assignments-no-found__info').css('display', val ? 'none' : '');
     }
     function updatePagination(pagination) {
       window._masterstudy_utils.pagination.renderPagination({
@@ -31,11 +39,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         paginationContainer: paginationContainer,
         totalPages: totalPages,
         currentPage: currentPage,
-        onPageChange: getAssignments,
+        onPageChange: function onPageChange(_, page) {
+          return getAssignments(currentPerPage, page);
+        },
         getPerPageSelector: function getPerPageSelector() {
           return '#masterstudy-account-enrolled-assignments__per-page-select';
         }
       });
+    }
+    function formatGradeNumber(value) {
+      var numericValue = Number(value);
+      return Number.isFinite(numericValue) ? numericValue.toFixed(2) : '0.00';
     }
     function renderAssignments() {
       assignmentsGrid.find('.masterstudy-account-enrolled-assignments__item, .masterstudy-account-enrolled-assignments-no-found__info').remove();
@@ -50,10 +64,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         clone.querySelector("".concat(itemClass, "-last-update-value")).textContent = assignment.updated_at;
         clone.querySelector("".concat(itemClass, "-status-value")).textContent = assignment.status.label;
         if (assignment.grade) {
+          var _assignment$grade$max;
           var gradeScore = clone.querySelector("".concat(itemClass, "-grade-score"));
           gradeScore.style.backgroundColor = assignment.grade.color;
           gradeScore.textContent = assignment.grade.grade;
-          clone.querySelector("".concat(itemClass, "-grade-value")).textContent = "(".concat(assignment.grade.point.toFixed(2), "/").concat(assignment.grade.max.point.toFixed(2), ")");
+          clone.querySelector("".concat(itemClass, "-grade-value")).textContent = "(".concat(formatGradeNumber(assignment.grade.point), "/").concat(formatGradeNumber((_assignment$grade$max = assignment.grade.max) === null || _assignment$grade$max === void 0 ? void 0 : _assignment$grade$max.point), ")");
           clone.querySelector("".concat(itemClass, "-grade-percent-value")).textContent = "".concat(assignment.grade.percent, "%");
         } else {
           var _clone$querySelector;
@@ -77,7 +92,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           res,
           response,
           hasItems,
-          $pagination,
           renderNoAssignments,
           _args = arguments;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -92,7 +106,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 assignmentsGrid.find('.masterstudy-account-enrolled-assignments__item, .masterstudy-account-enrolled-assignments-no-found__info').remove();
                 assignmentsGrid.append(clone);
               };
-              perPage = _args.length > 0 && _args[0] !== undefined ? _args[0] : 10;
+              perPage = _args.length > 0 && _args[0] !== undefined ? _args[0] : currentPerPage;
               page = _args.length > 1 && _args[1] !== undefined ? _args[1] : 1;
               if (!loading) {
                 _context.next = 5;
@@ -139,18 +153,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               assignments = response.assignments;
               hasItems = assignments.length > 0;
               if (hasItems) {
-                _context.next = 28;
+                _context.next = 29;
                 break;
               }
+              navigationContainer.css('justify-content', '');
               navigationContainer.hide();
               renderNoAssignments();
               return _context.abrupt("return");
-            case 28:
+            case 29:
               navigationContainer.show();
               totalPages = (_assignments$0$pages = (_assignments$ = assignments[0]) === null || _assignments$ === void 0 ? void 0 : _assignments$.pages) !== null && _assignments$0$pages !== void 0 ? _assignments$0$pages : 1;
-              $pagination = $(paginationContainer).find('.masterstudy-pagination');
-              $pagination.toggle(totalPages > 1);
               updatePagination(response.pagination);
+              updateNavigationAlignment();
               renderAssignments();
               _context.next = 39;
               break;

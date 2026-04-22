@@ -83,7 +83,7 @@ class GetInstructorCoursesController {
 						'is_queryable'      => false,
 						'done_indicator'    => false,
 						'is_api'            => true,
-						'thin'              => true,
+						'thin'              => false,
 					)
 				);
 				$pagination = ob_get_clean();

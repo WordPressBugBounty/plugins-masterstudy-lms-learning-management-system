@@ -790,6 +790,10 @@ class STM_LMS_Order {
 				return esc_html__( 'Cash', 'masterstudy-lms-learning-management-system' );
 			case 'wire_transfer':
 				return esc_html__( 'Wire transfer', 'masterstudy-lms-learning-management-system' );
+			case 'mollie':
+				return esc_html__( 'Mollie', 'masterstudy-lms-learning-management-system' );
+			case 'paystack':
+				return esc_html__( 'Paystack', 'masterstudy-lms-learning-management-system' );
 			default:
 				return $method;
 		}

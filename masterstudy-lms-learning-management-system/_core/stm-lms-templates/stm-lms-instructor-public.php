@@ -271,7 +271,7 @@ STM_LMS_Templates::show_lms_template(
 		</div>
 		<div class="masterstudy-instructor-public__list-pagination">
 			<?php
-			if ( ! empty( $courses ) && $courses['total_pages'] > 0 ) {
+			if ( ! empty( $courses ) && $courses['total_pages'] > 1 ) {
 				STM_LMS_Templates::show_lms_template(
 					'components/pagination',
 					array(

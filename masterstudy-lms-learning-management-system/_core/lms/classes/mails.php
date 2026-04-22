@@ -190,6 +190,10 @@ class STM_LMS_Mails {
 	}
 
 	public static function masterstudy_lms_order_completed( $user, $cart_items, $payment_code, $order_id ) {
+		if ( empty( $order_id ) || ! get_post( (int) $order_id ) ) {
+			return;
+		}
+
 		$settings      = class_exists( 'STM_LMS_Email_Manager' ) ? STM_LMS_Email_Manager::stm_lms_get_settings() : array();
 		$template_name = 'emails/order-template';
 

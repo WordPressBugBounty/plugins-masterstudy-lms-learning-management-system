@@ -135,7 +135,7 @@ $links = STM_LMS_Instructor::instructor_links();
 					'is_queryable'      => false,
 					'done_indicator'    => false,
 					'is_api'            => true,
-					'thin'              => true,
+					'thin'              => false,
 				)
 			);
 		}

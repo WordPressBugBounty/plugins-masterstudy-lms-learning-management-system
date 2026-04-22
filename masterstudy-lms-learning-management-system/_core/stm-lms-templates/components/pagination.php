@@ -41,10 +41,17 @@ wp_localize_script(
 );
 ?>
 
-<div class="masterstudy-pagination <?php echo esc_attr( $dark_mode ? 'masterstudy-pagination_dark-mode' : '' ); ?> <?php echo esc_attr( $thin ? 'masterstudy-pagination_thin' : '' ); ?>">
+<div
+	class="masterstudy-pagination <?php echo esc_attr( $dark_mode ? 'masterstudy-pagination_dark-mode' : '' ); ?> <?php echo esc_attr( $thin ? 'masterstudy-pagination_thin' : '' ); ?>"
+	data-max-visible-pages="<?php echo esc_attr( $max_visible_pages ); ?>"
+	data-total-pages="<?php echo esc_attr( $total_pages ); ?>"
+	data-current-page="<?php echo esc_attr( $current_page ); ?>"
+	data-item-width="<?php echo esc_attr( $item_width ); ?>"
+	data-is-queryable="<?php echo esc_attr( ! empty( $is_queryable ) ? '1' : '0' ); ?>"
+>
 	<span class="masterstudy-pagination__button-prev <?php echo esc_attr( 1 === $current_page ? 'masterstudy-pagination__button_disabled' : '' ); ?>"></span>
 	<div class="masterstudy-pagination__wrapper"
-		data-width="<?php echo esc_attr( ( $max_visible_pages < $total_pages ? ( $item_width + 10 ) * $max_visible_pages : ( $item_width + 10 ) * $total_pages ) . 'px' ); ?>">
+		data-width="<?php echo esc_attr( ( min( $max_visible_pages, $total_pages ) * $item_width ) . 'px' ); ?>">
 		<ul class="masterstudy-pagination__list">
 			<?php foreach ( range( 1, $total_pages ) as $index ) { ?>
 				<li class="masterstudy-pagination__item <?php echo esc_attr( ( $index ) === $current_page ? 'masterstudy-pagination__item_current' : '' ); ?>">

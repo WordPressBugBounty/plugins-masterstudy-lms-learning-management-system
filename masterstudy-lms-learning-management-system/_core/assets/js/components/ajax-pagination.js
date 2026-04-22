@@ -159,10 +159,11 @@ var MasterstudyPagination = /*#__PURE__*/function () {
     key: "centerActivePaginationButton",
     value: function centerActivePaginationButton() {
       if (this.pagesNumbers && this.visibleNumber % 2 !== 0) {
-        this.maxPosition = this.pagesNumbers.clientWidth - this.itemWidth * this.visibleNumber;
+        var pageStep = this.getPageStepWidth();
+        this.maxPosition = this.pagesNumbers.clientWidth - pageStep * this.visibleNumber;
         var containerCenter = Math.ceil(this.visibleNumber / 2);
         if (this.currentPage > containerCenter) {
-          this.centeredPos = (this.currentPage - containerCenter) * this.itemWidth;
+          this.centeredPos = (this.currentPage - containerCenter) * pageStep;
         } else {
           this.centeredPos = 0;
         }
@@ -202,9 +203,16 @@ var MasterstudyPagination = /*#__PURE__*/function () {
         this.pageIndex = page;
       }
       this.pagesNumbers.appendChild(fragment);
-      this.wrapper.style.width = itemNumber * this.itemWidth + "px";
+      this.wrapper.style.width = itemNumber * this.getPageStepWidth() + "px";
       this.container.classList.remove('masterstudy-pagination_hidden');
       this.centerActivePaginationButton();
+    }
+  }, {
+    key: "getPageStepWidth",
+    value: function getPageStepWidth() {
+      var firstPage = this.pagesNumbers.querySelector('.masterstudy-pagination__item');
+      var pageWidth = firstPage ? Math.round(firstPage.getBoundingClientRect().width) : 0;
+      return pageWidth > 0 ? pageWidth : this.itemWidth;
     }
   }, {
     key: "pageButton",

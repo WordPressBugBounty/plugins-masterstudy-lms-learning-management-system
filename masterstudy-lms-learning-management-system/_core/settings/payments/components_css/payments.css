@@ -188,6 +188,52 @@
 	border-radius: 10px;
 }
 
+.stm-lms-payment_method.is-pro-locked .stm-lms-payment_header {
+	background: #f6f8fb;
+}
+
+.stm-lms-payment_method.is-pro-locked .stm-lms-payment_header_img img {
+	opacity: 0.5;
+}
+
+.stm-lms-payment_method.is-pro-locked .stm-lms-payment_header_title {
+	color: #8c99a5;
+}
+
+.stm-lms-payment_method.is-pro-locked .stm-lms-payment_header-toggle-arrow {
+	background-color: #e8edf4;
+}
+
+.stm-lms-payment_method.is-pro-locked .stm-lms-payment_info {
+	background: #f6f8fb;
+}
+
+.stm-lms-payment_method.is-pro-locked .stm-lms-payment_info input,
+.stm-lms-payment_method.is-pro-locked .stm-lms-payment_info textarea,
+.stm-lms-payment_method.is-pro-locked .stm-lms-payment_info select {
+	background-color: #f9fbfe !important;
+	color: #8c99a5;
+	border-color: #dbe0e9;
+}
+
+.stm-lms-payment_method.is-pro-locked .stm-lms-payment_header .wpcfto-admin-checkbox-wrapper.is_toggle {
+	opacity: 0.6;
+}
+
+.stm-lms-payment_method.is-pro-locked .stm-lms-payment_header .wpcfto-admin-checkbox-wrapper.is_toggle input {
+	cursor: not-allowed;
+}
+
+.stm-lms-payment_method.is-pro-locked .pro-notice {
+	font-size: 13px;
+	color: #8c99a5;
+}
+
+.stm-lms-payment_method.is-pro-locked .pro-notice a {
+	color: #2985f7;
+	font-weight: 500;
+}
+
 .stm-lms-payment_header-toggle {
 	display: flex;
 	gap: 20px;

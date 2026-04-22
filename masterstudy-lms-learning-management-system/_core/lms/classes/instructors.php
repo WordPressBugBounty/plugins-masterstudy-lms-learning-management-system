@@ -1216,6 +1216,13 @@ class STM_LMS_Instructor extends STM_LMS_User {
 	public static function get_submissions() {
 		check_ajax_referer( 'stm_lms_get_users_submissions', 'nonce' );
 
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array( 'message' => 'Forbidden' ),
+				403
+			);
+		}
+
 		$page        = ! empty( $_GET['page'] ) ? intval( $_GET['page'] ) : 1;
 		$args        = array(
 			'role__in'   => array( 'subscriber', 'stm_lms_instructor' ),
@@ -1243,9 +1250,31 @@ class STM_LMS_Instructor extends STM_LMS_User {
 				$user_id         = $user->ID;
 				$submission_data = get_user_meta( $user_id, 'become_instructor', true );
 
-				$submission_date    = get_user_meta( $user_id, 'submission_date', true );
-				$degree             = ! empty( $submission_data['degree'] ) ? $submission_data['degree'] : esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
-				$custom_fields      = ! empty( $submission_data['fields'] ) ? $submission_data['fields'] : array();
+					$submission_date = get_user_meta( $user_id, 'submission_date', true );
+					$degree          = ! empty( $submission_data['degree'] ) ? $submission_data['degree'] : esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
+					$custom_fields   = ! empty( $submission_data['fields'] ) && is_array( $submission_data['fields'] ) ? $submission_data['fields'] : array();
+					$custom_fields   = array_map(
+						function( $field ) {
+							if ( ! is_array( $field ) ) {
+								return array();
+							}
+
+							$value = $field['value'] ?? '';
+							if ( is_array( $value ) ) {
+								$value = implode( ', ', array_map( 'sanitize_text_field', $value ) );
+							} else {
+								$value = is_scalar( $value ) ? sanitize_text_field( (string) $value ) : '';
+							}
+
+							return array(
+								'label'      => isset( $field['label'] ) && is_scalar( $field['label'] ) ? sanitize_text_field( (string) $field['label'] ) : '',
+								'slug'       => isset( $field['slug'] ) && is_scalar( $field['slug'] ) ? sanitize_key( (string) $field['slug'] ) : '',
+								'field_name' => isset( $field['field_name'] ) && is_scalar( $field['field_name'] ) ? sanitize_text_field( (string) $field['field_name'] ) : '',
+								'value'      => $value,
+							);
+						},
+						$custom_fields
+					);
 				$expertize          = ! empty( $submission_data['expertize'] ) ? $submission_data['expertize'] : esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
 				$submission_history = get_user_meta( $user_id, 'submission_history', true );
 				if ( empty( $submission_history ) || ! is_array( $submission_history ) ) {
@@ -1300,9 +1329,9 @@ class STM_LMS_Instructor extends STM_LMS_User {
 			$submission_date = get_user_meta( $user_id, 'submission_date', true );
 			$user_email      = $user->user_email;
 			$user_login      = $user->user_login;
-			$submission_data = get_user_meta( $user_id, 'become_instructor', true );
-			$custom_fields   = ! empty( $submission_data['fields'] ) ? $submission_data['fields'] : array();
-			update_user_meta( $user_id, 'submission_status', sanitize_text_field( $status ) );
+				$submission_data = get_user_meta( $user_id, 'become_instructor', true );
+				$custom_fields   = ! empty( $submission_data['fields'] ) && is_array( $submission_data['fields'] ) ? $submission_data['fields'] : array();
+				update_user_meta( $user_id, 'submission_status', sanitize_text_field( $status ) );
 			$date_format = 'M j, Y - H:i';
 			$email_data  = array(
 				'user_login'    => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
@@ -1317,13 +1346,19 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 				$label = '';
 				if ( ! empty( $field['label'] ) ) {
-					$label = $field['label'];
+					$label = sanitize_text_field( $field['label'] );
 				} elseif ( ! empty( $field['slug'] ) ) {
-					$label = $field['slug'];
+					$label = sanitize_key( $field['slug'] );
 				} elseif ( ! empty( $field['field_name'] ) ) {
-					$label = $field['field_name'];
+					$label = sanitize_text_field( $field['field_name'] );
 				}
-				$email_data[ $label ] = $field['value'];
+				$value = $field['value'] ?? '';
+				if ( is_array( $value ) ) {
+					$value = implode( ', ', array_map( 'sanitize_text_field', $value ) );
+				} else {
+					$value = is_scalar( $value ) ? sanitize_text_field( (string) $value ) : '';
+				}
+				$email_data[ $label ] = $value;
 			}
 
 			if ( 'approved' === $status ) {

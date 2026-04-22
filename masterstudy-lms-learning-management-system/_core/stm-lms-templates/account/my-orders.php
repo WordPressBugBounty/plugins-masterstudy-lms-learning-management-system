@@ -21,6 +21,8 @@ wp_localize_script(
 		'courses_page'               => esc_url( STM_LMS_Course::courses_page_url() ),
 		'payment_code_wire_transfer' => esc_html__( 'Wire Transfer', 'masterstudy-lms-learning-management-system' ),
 		'payment_code_cash'          => esc_html__( 'Cash', 'masterstudy-lms-learning-management-system' ),
+		'payment_code_mollie'        => esc_html__( 'Mollie', 'masterstudy-lms-learning-management-system' ),
+		'payment_code_paystack'      => esc_html__( 'Paystack', 'masterstudy-lms-learning-management-system' ),
 		'bundle'                     => esc_html__( 'Bundle', 'masterstudy-lms-learning-management-system' ),
 		'enterprise'                 => esc_html__( 'Enterprise', 'masterstudy-lms-learning-management-system' ),
 		'subscription'               => esc_html__( 'Subscription', 'masterstudy-lms-learning-management-system' ),

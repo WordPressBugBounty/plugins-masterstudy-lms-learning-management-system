@@ -548,7 +548,7 @@ class MsLmsCourseMaterials extends Widget_Base {
 				'label'     => esc_html__( 'Playback Speed Text Color', 'masterstudy-lms-learning-management-system' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .masterstudy-audio-player select#playback-speed' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .masterstudy-audio-player select.masterstudy-audio-player__playback-speed-select' => 'color: {{VALUE}};',
 				),
 			)
 		);
@@ -558,7 +558,7 @@ class MsLmsCourseMaterials extends Widget_Base {
 				'label'     => esc_html__( 'Playback Speed Background Color', 'masterstudy-lms-learning-management-system' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .masterstudy-audio-player select#playback-speed' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .masterstudy-audio-player select.masterstudy-audio-player__playback-speed-select' => 'background-color: {{VALUE}};',
 				),
 			)
 		);
@@ -566,7 +566,7 @@ class MsLmsCourseMaterials extends Widget_Base {
 			Group_Control_Border::get_type(),
 			array(
 				'name'     => 'audio_player_playspeed_border',
-				'selector' => '{{WRAPPER}} .masterstudy-audio-player select#playback-speed',
+				'selector' => '{{WRAPPER}} .masterstudy-audio-player select.masterstudy-audio-player__playback-speed-select',
 			)
 		);
 		$this->add_control(
@@ -576,7 +576,7 @@ class MsLmsCourseMaterials extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%' ),
 				'selectors'  => array(
-					'{{WRAPPER}} .masterstudy-audio-player select#playback-speed' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .masterstudy-audio-player select.masterstudy-audio-player__playback-speed-select' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);

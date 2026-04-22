@@ -251,7 +251,7 @@ if ( $is_pro_plus && $settings['student_reports'] ) : ?>
 					'is_queryable'      => false,
 					'done_indicator'    => false,
 					'is_api'            => true,
-					'thin'              => true,
+					'thin'              => false,
 				)
 			);
 			?>

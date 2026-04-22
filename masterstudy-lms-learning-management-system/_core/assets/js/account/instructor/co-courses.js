@@ -7,6 +7,7 @@
     var cfg = window.masterstudy_instructor_co_courses;
     var state = {
       page: 1,
+      total_pages: 1,
       per_page: parseInt(cfg.per_page, 10) || 6,
       user_id: parseInt(cfg.user_id, 10) || 0,
       loading: false,
@@ -59,7 +60,8 @@
         window.pages_data.is_queryable = !!window.pages_data.is_queryable;
       }
       if (typeof window.initializePagination === "function") {
-        window.initializePagination(parseInt(page, 10) || 1, parseInt(totalPages, 10) || 0, parseInt(window.pages_data.item_width, 10) || 30);
+        var _window$pages_data$it, _window$pages_data;
+        window.initializePagination(parseInt(page, 10) || 1, parseInt(totalPages, 10) || 0, parseInt((_window$pages_data$it = (_window$pages_data = window.pages_data) === null || _window$pages_data === void 0 ? void 0 : _window$pages_data.item_width) !== null && _window$pages_data$it !== void 0 ? _window$pages_data$it : "30", 10) || 30);
       }
     }
     function getCardFromEl($el) {
@@ -129,6 +131,7 @@
       var html = data && data.html ? data.html : "";
       var paginationHtml = data && data.pagination ? data.pagination : "";
       var totalPages = parseInt(data && ((_data$total_pages = data.total_pages) !== null && _data$total_pages !== void 0 ? _data$total_pages : data.pages), 10) || 0;
+      state.total_pages = totalPages || 1;
       $list.empty();
       $pagination.empty();
       if (html && $.trim(html).length) {
@@ -201,9 +204,11 @@
     $root.on("click", ".masterstudy-pagination__button-prev, .masterstudy-pagination__button-next", function (e) {
       e.preventDefault();
       var $btn = $(this);
-      if ($btn.hasClass("masterstudy-pagination__button_disabled")) return;
-      var currentPage = parseInt($root.find(".masterstudy-pagination__item_current .masterstudy-pagination__item-block").data("id"), 10) || state.page || 1;
+      var currentPage = state.page || 1;
       var nextPage = $btn.hasClass("masterstudy-pagination__button-next") ? currentPage + 1 : currentPage - 1;
+      if (nextPage < 1) nextPage = 1;
+      if (state.total_pages > 1 && nextPage > state.total_pages) nextPage = state.total_pages;
+      if (nextPage === state.page) return;
       loadCourses(nextPage, true);
     });
     $root.on("click", SEL.modalBtn, function (e) {

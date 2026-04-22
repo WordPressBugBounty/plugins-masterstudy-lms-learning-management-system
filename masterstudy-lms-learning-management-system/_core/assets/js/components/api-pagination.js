@@ -1,33 +1,39 @@
 "use strict";
 
 function initializePagination(currentPage, totalPages) {
+  var _containerData$maxVis, _ref, _totalPages, _ref2, _currentPage, _ref3;
   var itemWidth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 50;
-  var pagesContainer = jQuery(".masterstudy-pagination");
+  var container = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var pagesContainer = container ? jQuery(container).first() : jQuery(".masterstudy-pagination").first();
+  if (!pagesContainer.length) {
+    return;
+  }
   var pagesWrapper = pagesContainer.find(".masterstudy-pagination__wrapper");
   var pagesList = pagesContainer.find(".masterstudy-pagination__list");
   var scrollButtonNext = pagesContainer.find(".masterstudy-pagination__button-next");
   var scrollButtonPrev = pagesContainer.find(".masterstudy-pagination__button-prev");
-  var numericFields = ["max_visible_pages", "total_pages", "current_page", "item_width"];
-  if (typeof pages_data === 'undefined') {
-    var pages_data = {
-      'max_visible_pages': 5,
-      'total_pages': totalPages,
-      'current_page': currentPage,
-      'is_queryable': false,
-      'item_width': itemWidth
-    };
+  var localizedPagesData = typeof window.pages_data !== "undefined" && window.pages_data ? window.pages_data : {};
+  var containerData = pagesContainer.data();
+  function parseNumber(value, fallback) {
+    var parsed = parseInt(value, 10);
+    return Number.isFinite(parsed) ? parsed : fallback;
   }
-  numericFields.forEach(function (field) {
-    pages_data[field] = parseInt(pages_data[field]);
-  });
-  var containerWidth = pagesWrapper.data('width'),
-    currentPosition = 0,
-    centeredPage = Math.round(pages_data.max_visible_pages / 2),
-    maxPosition = pages_data.item_width * (totalPages - pages_data.max_visible_pages),
-    noScroll = totalPages <= pages_data.max_visible_pages;
-  if (containerWidth) {
-    pagesWrapper.css("width", containerWidth);
+  var pagesData = {
+    max_visible_pages: parseNumber((_containerData$maxVis = containerData.maxVisiblePages) !== null && _containerData$maxVis !== void 0 ? _containerData$maxVis : localizedPagesData.max_visible_pages, 5),
+    total_pages: parseNumber((_ref = (_totalPages = totalPages) !== null && _totalPages !== void 0 ? _totalPages : containerData.totalPages) !== null && _ref !== void 0 ? _ref : localizedPagesData.total_pages, 0),
+    current_page: parseNumber((_ref2 = (_currentPage = currentPage) !== null && _currentPage !== void 0 ? _currentPage : containerData.currentPage) !== null && _ref2 !== void 0 ? _ref2 : localizedPagesData.current_page, 1),
+    is_queryable: ["1", 1, true, "true"].includes(containerData.isQueryable) || typeof containerData.isQueryable === "undefined" && !!localizedPagesData.is_queryable,
+    item_width: parseNumber((_ref3 = itemWidth !== null && itemWidth !== void 0 ? itemWidth : containerData.itemWidth) !== null && _ref3 !== void 0 ? _ref3 : localizedPagesData.item_width, 50)
+  };
+  if (pagesData.total_pages < 1) {
+    return;
   }
+  var wrapperWidth = parseNumber(pagesWrapper.data("width"), 0);
+  var pageStep = getPageStepWidth(pagesList, pagesData.item_width);
+  var containerWidth = wrapperWidth || pageStep * Math.min(pagesData.max_visible_pages, pagesData.total_pages);
+  pagesWrapper.css("width", containerWidth);
+  currentPage = pagesData.current_page;
+  totalPages = pagesData.total_pages;
   prevNextButtonState(pagesContainer, currentPage, totalPages);
   setCurrentPage(pagesList, currentPage, 'masterstudy-pagination__item_current');
   centerActivePage(pagesWrapper, pagesList, currentPage);
@@ -38,7 +44,7 @@ function initializePagination(currentPage, totalPages) {
     prevNextButtonState(pagesContainer, currentPage, totalPages);
     setCurrentPage(pagesList, currentPage, 'masterstudy-pagination__item_current');
     centerActivePage(pagesWrapper, pagesList, currentPage);
-    if (pages_data.is_queryable) updatePageQueryParam(currentPage);
+    if (pagesData.is_queryable) updatePageQueryParam(currentPage);
   });
   scrollButtonPrev.off('click').on('click', function (e) {
     e.preventDefault();
@@ -47,7 +53,7 @@ function initializePagination(currentPage, totalPages) {
     prevNextButtonState(pagesContainer, currentPage, totalPages);
     setCurrentPage(pagesList, currentPage, 'masterstudy-pagination__item_current');
     centerActivePage(pagesWrapper, pagesList, currentPage);
-    if (pages_data.is_queryable) updatePageQueryParam(currentPage);
+    if (pagesData.is_queryable) updatePageQueryParam(currentPage);
   });
   function clamp(n, min, max) {
     return Math.max(min, Math.min(max, n));
@@ -66,12 +72,17 @@ function initializePagination(currentPage, totalPages) {
       left: -targetLeft + "px"
     }, 120);
   }
-  jQuery(".masterstudy-pagination__item-block").off('click').on('click', function () {
+  function getPageStepWidth(pagesList, fallbackWidth) {
+    var firstPage = pagesList.find(".masterstudy-pagination__item").first();
+    var pageWidth = Math.round(firstPage.outerWidth());
+    return pageWidth > 0 ? pageWidth : fallbackWidth;
+  }
+  pagesContainer.find(".masterstudy-pagination__item-block").off('click').on('click', function () {
     currentPage = parseInt(jQuery(this).data("id"), 10);
     prevNextButtonState(pagesContainer, currentPage, totalPages);
     setCurrentPage(pagesList, currentPage, 'masterstudy-pagination__item_current');
     centerActivePage(pagesWrapper, pagesList, currentPage);
-    if (pages_data.is_queryable) {
+    if (pagesData.is_queryable) {
       updatePageQueryParam(currentPage);
     }
   });
@@ -135,7 +146,7 @@ function prevNextButtonState(container, currentPage, totalPages) {
   container.find(btnClassNext).toggleClass("masterstudy-pagination__button_disabled", currentPage === totalPages || totalPages === 1);
 }
 jQuery(document).ready(function () {
-  if (typeof pages_data !== 'undefined') {
-    initializePagination(parseInt(pages_data.current_page), parseInt(pages_data.total_pages), parseInt(pages_data.item_width));
-  }
+  jQuery(".masterstudy-pagination").each(function () {
+    initializePagination(null, null, null, this);
+  });
 });

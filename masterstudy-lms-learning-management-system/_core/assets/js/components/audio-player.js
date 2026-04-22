@@ -56,7 +56,7 @@ var MasterstudyAudioPlayer = /*#__PURE__*/function () {
     this.enableKeystrokes = opts.enableKeystrokes || false;
     this.showTooltips = opts.showTooltips || false;
     this.showDeleteButton = opts.showDeleteButton || false;
-    this.playbackSpeedSelect = document.getElementById('playback-speed');
+    this.playbackSpeedSelect = this.audioPlayer.querySelector('.masterstudy-audio-player__playback-speed-select') || this.audioPlayer.querySelector('#playback-speed');
     if (this.playbackSpeedSelect) {
       this.playbackSpeedSelect.addEventListener('change', this.changePlaybackSpeed.bind(this));
     }

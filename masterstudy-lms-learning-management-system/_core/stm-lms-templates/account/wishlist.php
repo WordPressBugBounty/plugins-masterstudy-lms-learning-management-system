@@ -94,7 +94,7 @@ $wishlist_posts       = $wishlist['posts'] ?? array();
 							'is_queryable'      => false,
 							'done_indicator'    => false,
 							'is_api'            => true,
-							'thin'              => true,
+							'thin'              => false,
 						)
 					);
 				}

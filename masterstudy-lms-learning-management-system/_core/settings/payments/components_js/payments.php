@@ -1,6 +1,8 @@
 <?php
 use MasterStudy\Lms\Plugin\Addons;
 $is_subscription_enabled = is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS );
+$is_plus_enabled         = defined( 'STM_LMS_PLUS_ENABLED' ) && STM_LMS_PLUS_ENABLED;
+$go_pro_url              = admin_url( 'admin.php?page=stm-lms-go-pro' );
 ?>
 
 <script type="text/javascript">
@@ -10,6 +12,7 @@ $is_subscription_enabled = is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS );
 	$template = preg_replace( "/\r|\n/", '', addslashes( ob_get_clean() ) );
 	?>
 	const IS_SUBS_ENABLED = <?php echo $is_subscription_enabled ? 'true' : 'false'; ?>;
+	const IS_PLUS_ENABLED = <?php echo $is_plus_enabled ? 'true' : 'false'; ?>;
 
 	Vue.component('stm-payments', {
 		props: ['saved_payments'],
@@ -119,6 +122,66 @@ $is_subscription_enabled = is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS );
 							},
 						},
 					},
+					mollie: {
+						enabled: '',
+						displayShow: false,
+						name: "<?php esc_html_e( 'Mollie', 'masterstudy-lms-learning-management-system' ); ?>",
+						img: 'mollie.svg',
+						pro: true,
+						pro_url: '<?php echo esc_url( $go_pro_url ); ?>',
+						payment_description: '',
+						fields: {
+							masterstudy_mollie_api_key: {
+								type: 'text',
+								placeholder: '<?php esc_html_e( 'Enter Mollie API key', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'API key', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php echo wp_kses_post( __( 'Use your Mollie API key (for example, <strong>test_...</strong> for testing or <strong>live_...</strong> for real payments).', 'masterstudy-lms-learning-management-system' ) ); ?>',
+							},
+							webhook_url: {
+								type: 'text',
+								info_title: '<?php esc_html_e( 'Webhook URL', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Put this URL to the Webhook URL in your Mollie dashboard.', 'masterstudy-lms-learning-management-system' ); ?>',
+								value: '<?php echo esc_url( rest_url( '/masterstudy-lms/v2/payments-webhook/mollie/' ) ); ?>',
+								readonly: true,
+							},
+							description: {
+								type: 'textarea',
+								placeholder: '<?php esc_html_e( 'Enter payment method description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Checkout description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Shown to users during checkout. Add a short message (e.g. “Pay securely with Mollie”).', 'masterstudy-lms-learning-management-system' ); ?>',
+							},
+						},
+					},
+					paystack: {
+						enabled: '',
+						displayShow: false,
+						name: "<?php esc_html_e( 'Paystack', 'masterstudy-lms-learning-management-system' ); ?>",
+						img: 'paystack.svg',
+						pro: true,
+						pro_url: '<?php echo esc_url( $go_pro_url ); ?>',
+						payment_description: '',
+						fields: {
+							masterstudy_paystack_secret_key: {
+								type: 'text',
+								placeholder: '<?php esc_html_e( 'Enter Paystack secret key', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Secret key', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php echo wp_kses_post( __( 'Use your Paystack secret key (for example, <strong>sk_test_...</strong> or <strong>sk_live_...</strong>).', 'masterstudy-lms-learning-management-system' ) ); ?>',
+							},
+							webhook_url: {
+								type: 'text',
+								info_title: '<?php esc_html_e( 'Webhook URL', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Put this URL in your Paystack dashboard webhook settings.', 'masterstudy-lms-learning-management-system' ); ?>',
+								value: '<?php echo esc_url( rest_url( '/masterstudy-lms/v2/payments-webhook/paystack/' ) ); ?>',
+								readonly: true,
+							},
+							description: {
+								type: 'textarea',
+								placeholder: '<?php esc_html_e( 'Enter payment method description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_title: '<?php esc_html_e( 'Checkout description', 'masterstudy-lms-learning-management-system' ); ?>',
+								info_description: '<?php esc_html_e( 'Shown to users during checkout. Add a short message (e.g. “Pay securely with Paystack”).', 'masterstudy-lms-learning-management-system' ); ?>',
+							},
+						},
+					},
 					wire_transfer: {
 						enabled: '',
 						displayShow: false,
@@ -168,6 +231,7 @@ $is_subscription_enabled = is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS );
 								placeholder: '<?php esc_html_e( 'Enter payment method description', 'masterstudy-lms-learning-management-system' ); ?>',
 								info_title: '<?php esc_html_e( 'Offline payment processing', 'masterstudy-lms-learning-management-system' ); ?>',
 								info_description: '<?php esc_html_e( 'Accept payments offline. Orders will be created and stored in the system for your manual approval.', 'masterstudy-lms-learning-management-system' ); ?>',
+								pro: true
 							},
 						},
 					},
@@ -235,13 +299,18 @@ $is_subscription_enabled = is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS );
 			setPaymentValues() {
 				var vm = this;
 				for(var payment_method in vm.payments) {
-					if (!vm.payments.hasOwnProperty(payment_method) && !vm.saved_payments.hasOwnProperty(payment_method)) continue;
-					vm.payments[payment_method]['enabled'] = vm.saved_payments[payment_method]['enabled'];
+					if (!vm.payments.hasOwnProperty(payment_method)) continue;
+
+					const saved_payment = (vm.saved_payments && vm.saved_payments[payment_method]) ? vm.saved_payments[payment_method] : {};
+					const saved_fields  = (saved_payment && saved_payment.fields) ? saved_payment.fields : {};
+					const saved_enabled = (saved_payment && typeof saved_payment.enabled !== 'undefined') ? saved_payment.enabled : '';
+
+					vm.payments[payment_method]['enabled'] = vm.isProLocked(vm.payments[payment_method]) ? '' : saved_enabled;
 
 					for(var field_name in vm.payments[payment_method]['fields']) {
-						const saved_value   = vm.saved_payments[payment_method]['fields'][field_name];
+						const saved_value   = saved_fields[field_name];
 						const default_value = vm.payments[payment_method]['fields'][field_name]['value'];
-						const field_value   = (typeof saved_value === 'undefined' || ! saved_value) ? default_value : saved_value;
+						const field_value   = (typeof saved_value === 'undefined' || '' === saved_value || null === saved_value) ? default_value : saved_value;
 
 						vm.$set(vm.payments[payment_method]['fields'][field_name], 'value', field_value);
 					}
@@ -251,8 +320,9 @@ $is_subscription_enabled = is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS );
 				var vm = this;
 				for (var payment_method in vm.payments) {
 					if (!vm.payments.hasOwnProperty(payment_method)) continue;
+					const is_locked = vm.isProLocked(vm.payments[payment_method]);
 					vm.payment_values[payment_method] = {
-						'enabled' : vm.payments[payment_method]['enabled'],
+						'enabled' : is_locked ? '' : vm.payments[payment_method]['enabled'],
 					};
 
 					if (typeof vm.payment_values[payment_method]['fields'] === 'undefined') vm.payment_values[payment_method]['fields'] = {};
@@ -269,6 +339,9 @@ $is_subscription_enabled = is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS );
 			},
 			togglePayment(paymentKey, event) {
 				this.payments[paymentKey].displayShow = !this.payments[paymentKey].displayShow;
+			},
+			isProLocked(paymentInfo) {
+				return !!(paymentInfo && paymentInfo.pro && !IS_PLUS_ENABLED);
 			},
 			handleInputClick(field, field_id) {
 				if (field && field.readonly) {

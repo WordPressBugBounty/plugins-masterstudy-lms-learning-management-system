@@ -964,7 +964,7 @@ class STM_LMS_User {
 				'is_queryable'      => false,
 				'done_indicator'    => false,
 				'is_api'            => true,
-				'thin'              => true,
+				'thin'              => false,
 			)
 		);
 
@@ -1296,7 +1296,7 @@ class STM_LMS_User {
 				'is_queryable'      => false,
 				'done_indicator'    => false,
 				'is_api'            => true,
-				'thin'              => true,
+				'thin'              => false,
 			)
 		);
 
@@ -1899,14 +1899,41 @@ class STM_LMS_User {
 			'fields_type'       => isset( $_POST['fields_type'] ) ? sanitize_text_field( wp_unslash( $_POST['fields_type'] ) ) : 'default',
 		);
 
-		if ( 'custom' === $_POST['fields_type'] && isset( $_POST['fields'] ) ) {
-			$data['fields'] = $_POST['fields'];
+		if ( 'custom' === $data['fields_type'] && isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) ) {
+			$raw_fields  = wp_unslash( $_POST['fields'] );
+			$data_fields = array();
+
+			foreach ( $raw_fields as $field ) {
+				if ( ! is_array( $field ) ) {
+					continue;
+				}
+
+				$slug       = isset( $field['slug'] ) && is_scalar( $field['slug'] ) ? sanitize_key( (string) $field['slug'] ) : '';
+				$label      = isset( $field['label'] ) && is_scalar( $field['label'] ) ? sanitize_text_field( (string) $field['label'] ) : '';
+				$field_name = isset( $field['field_name'] ) && is_scalar( $field['field_name'] ) ? sanitize_text_field( (string) $field['field_name'] ) : '';
+				$value      = $field['value'] ?? '';
+				if ( is_array( $value ) ) {
+					$value = implode( ', ', array_map( 'sanitize_text_field', $value ) );
+				} else {
+					$value = is_scalar( $value ) ? sanitize_text_field( (string) $value ) : '';
+				}
+
+				$data_fields[] = array(
+					'slug'       => $slug,
+					'label'      => $label,
+					'field_name' => $field_name,
+					'value'      => $value,
+					'required'   => ! empty( $field['required'] ) && '0' !== (string) $field['required'] ? 1 : 0,
+				);
+			}
+
+			$data['fields'] = $data_fields;
 			if ( ! empty( $data['fields'] ) ) {
 				foreach ( $data['fields'] as $field ) {
 					if ( ! empty( $field['required'] ) && $field['required'] && empty( $field['value'] ) ) {
 						$response['errors'][] = array(
 							'id'    => 'required',
-							'field' => $field['slug'],
+							'field' => $field['slug'] ?? '',
 							'text'  => esc_html__( 'Field is required', 'masterstudy-lms-learning-management-system' ),
 						);
 					}

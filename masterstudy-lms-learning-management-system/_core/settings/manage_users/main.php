@@ -47,23 +47,23 @@ $is_ai_addon_enabled = is_ms_lms_addon_enabled( Addons::AI_LAB );
 		</thead>
 		<tbody>
 		<tr v-for="(user, key) in computedUsers">
-			<td v-html="'#' + user.id"></td>
-			<td><a :href="user.edit_link" v-html="user.display_name"></a></td>
-			<td v-html="user.user_email"></td>
+			<td>{{ '#' + user.id }}</td>
+			<td><a :href="user.edit_link">{{ user.display_name }}</a></td>
+			<td>{{ user.user_email }}</td>
 			<td v-if="typeof user.custom_fields !== 'undefined' && user.custom_fields.length">
 				<span v-for="field in user.custom_fields">
-					<span v-if="field.label" v-html="field.label"></span>
-					<span v-else-if="field.slug" v-html="field.slug"></span>
-					<span v-else="field.field_name" v-html="field.field_name"></span>
+					<span v-if="field.label">{{ field.label }}</span>
+					<span v-else-if="field.slug">{{ field.slug }}</span>
+					<span v-else>{{ field.field_name }}</span>
 					-
-					<span v-html="field.value + '; '"></span>
+					<span>{{ field.value + '; ' }}</span>
 				</span>
 			</td>
 			<td v-else>
 				<?php esc_html_e( 'Degree - ', 'masterstudy-lms-learning-management-system' ); ?>{{user.degree}},
 				<?php esc_html_e( 'Expertize - ', 'masterstudy-lms-learning-management-system' ); ?>{{user.expertize}}
 			</td>
-			<td v-html="user.submission_date"></td>
+			<td>{{ user.submission_date }}</td>
 			<?php if ( $is_ai_addon_enabled ) : ?>
 				<td>
 					<input type="checkbox" v-model="user.ai_enabled" @change="toggleUserAI(user.id, user.ai_enabled)"/>
@@ -74,7 +74,7 @@ $is_ai_addon_enabled = is_ms_lms_addon_enabled( Addons::AI_LAB );
 				<button class="button-primary" @click="updateUserStatus(user.id, key, 'approved')"><?php esc_html_e( 'Approve', 'masterstudy-lms-learning-management-system' ); ?></button>
 				<button class="button-secondary" @click="updateUserStatus(user.id, key, 'rejected')"><?php esc_html_e( 'Decline', 'masterstudy-lms-learning-management-system' ); ?></button>
 			</td>
-			<td v-else v-html="user.status" :class="'status ' + user.status"></td>
+			<td v-else :class="'status ' + user.status">{{ user.status }}</td>
 			<td>
 				<a href="#" v-if="user.submission_history.length > 0" @click.prevent="showHistory(key)"><?php esc_html_e( 'History', 'masterstudy-lms-learning-management-system' ); ?></a>
 			</td>
@@ -100,10 +100,10 @@ $is_ai_addon_enabled = is_ms_lms_addon_enabled( Addons::AI_LAB );
 					</thead>
 					<tbody>
 					<tr v-for="data in historyModal.history">
-						<td v-html="data.request_display_date"></td>
-						<td :class="data.status + ' status'" v-html="data.status"></td>
-						<td v-html="data.message"></td>
-						<td v-html="data.answer_display_date"></td>
+						<td>{{ data.request_display_date }}</td>
+						<td :class="data.status + ' status'">{{ data.status }}</td>
+						<td>{{ data.message }}</td>
+						<td>{{ data.answer_display_date }}</td>
 					</tr>
 					</tbody>
 				</table>
@@ -113,8 +113,8 @@ $is_ai_addon_enabled = is_ms_lms_addon_enabled( Addons::AI_LAB );
 	<div class="users-pagination" v-if="total > 1">
 		<ul>
 			<li v-for="page in total">
-				<a href="#" v-if="currentPage !== page" v-html="page" @click.prevent="changePage(page)"></a>
-				<span v-else v-html="page"></span>
+					<a href="#" v-if="currentPage !== page" @click.prevent="changePage(page)">{{ page }}</a>
+					<span v-else>{{ page }}</span>
 			</li>
 		</ul>
 	</div>

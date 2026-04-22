@@ -451,18 +451,20 @@ final class CourseRepository extends AbstractRepository {
 				);
 			}
 
-			$response['pagination']  = \STM_LMS_Templates::load_lms_template(
-				'components/pagination',
-				array(
-					'max_visible_pages' => 5,
-					'total_pages'       => $courses['total_pages'],
-					'current_page'      => $args['page'],
-					'dark_mode'         => false,
-					'is_queryable'      => false,
-					'done_indicator'    => false,
-					'is_api'            => true,
-				)
-			);
+			if ( $courses['total_pages'] > 1 ) {
+				$response['pagination'] = \STM_LMS_Templates::load_lms_template(
+					'components/pagination',
+					array(
+						'max_visible_pages' => 5,
+						'total_pages'       => $courses['total_pages'],
+						'current_page'      => $args['page'],
+						'dark_mode'         => false,
+						'is_queryable'      => false,
+						'done_indicator'    => false,
+						'is_api'            => true,
+					)
+				);
+			}
 			$response['total_pages'] = $courses['total_pages'];
 			$response['total_posts'] = $courses['total_posts'];
 		}

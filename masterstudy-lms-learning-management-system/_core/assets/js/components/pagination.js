@@ -11,18 +11,16 @@
     numericFields.forEach(function (field) {
       pages_data[field] = parseInt(pages_data[field]);
     });
-    var containerWidth = pages_data.item_width * pages_data.max_visible_pages,
+    var pageStep = getPageStepWidth(pagesList, pages_data.item_width);
+    var wrapperWidth = pagesWrapper.data("width");
+    var containerWidth = wrapperWidth || pageStep * Math.min(pages_data.max_visible_pages, pages_data.total_pages),
       currentPosition = 0,
       currentPage = pages_data.current_page,
       totalPages = pages_data.total_pages,
       centeredPage = Math.round(pages_data.max_visible_pages / 2),
-      maxPosition = pages_data.item_width * (totalPages - pages_data.max_visible_pages),
+      maxPosition = pageStep * Math.max(totalPages - pages_data.max_visible_pages, 0),
       noScroll = totalPages <= pages_data.max_visible_pages;
-    if (pages_data.max_visible_pages < totalPages) {
-      pagesWrapper.css("width", containerWidth);
-    } else {
-      pagesWrapper.css("width", totalPages * pages_data.item_width);
-    }
+    pagesWrapper.css("width", containerWidth);
 
     // Page onload
     prevNextButtonState($('.masterstudy-pagination'), currentPage, totalPages);
@@ -48,7 +46,7 @@
         $(this).parent().find(".masterstudy-pagination__button-prev").removeClass("masterstudy-pagination__button_disabled");
       }
       if (currentPage > centeredPage && currentPosition < maxPosition) {
-        currentPosition += pages_data.item_width;
+        currentPosition += pageStep;
         pagesList.animate({
           left: -currentPosition + "px"
         }, 50);
@@ -71,8 +69,8 @@
       if (currentPage !== totalPages) {
         $(this).parent().find(".masterstudy-pagination__button-next").removeClass("masterstudy-pagination__button_disabled");
       }
-      if (!currentPage < centeredPage && currentPage < totalPages - centeredPage + 1 && currentPosition > 0) {
-        currentPosition -= pages_data.item_width;
+      if (currentPage >= centeredPage && currentPage < totalPages - centeredPage + 1 && currentPosition > 0) {
+        currentPosition -= pageStep;
         pagesList.animate({
           left: -currentPosition + "px"
         }, 50);
@@ -87,7 +85,7 @@
       } else if (currentPage > totalPages - centeredPage + 1) {
         currentPosition = noScroll ? 0 : maxPosition;
       } else {
-        currentPosition = (currentPage - centeredPage) * pages_data.item_width;
+        currentPosition = (currentPage - centeredPage) * pageStep;
       }
       prevNextButtonState(container, currentPage, totalPages);
       $(this).parent().siblings().removeClass("masterstudy-pagination__item_current");
@@ -106,9 +104,14 @@
       } else if (currentPage > totalPages - centeredPage) {
         position = maxPosition;
       } else {
-        position = (currentPage - centeredPage) * pages_data.item_width;
+        position = (currentPage - centeredPage) * pageStep;
       }
       return position;
+    }
+    function getPageStepWidth(pagesList, fallbackWidth) {
+      var firstPage = pagesList.find(".masterstudy-pagination__item").first();
+      var pageWidth = Math.round(firstPage.outerWidth());
+      return pageWidth > 0 ? pageWidth : fallbackWidth;
     }
     function setCurrentPage(pagesList, currentPage, className) {
       pagesList.find("[data-id=\"".concat(currentPage, "\"]")).parent().siblings().removeClass(className);

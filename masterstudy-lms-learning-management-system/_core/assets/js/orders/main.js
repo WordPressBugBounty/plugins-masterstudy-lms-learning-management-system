@@ -15,6 +15,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return masterstudy_orders.payment_code_wire_transfer;
       case 'cash':
         return masterstudy_orders.payment_code_cash;
+      case 'mollie':
+        return masterstudy_orders.payment_code_mollie;
+      case 'paystack':
+        return masterstudy_orders.payment_code_paystack;
       default:
         return paymentCode;
     }

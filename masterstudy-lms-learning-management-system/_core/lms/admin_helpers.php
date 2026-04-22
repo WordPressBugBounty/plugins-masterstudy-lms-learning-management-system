@@ -281,6 +281,29 @@ add_action(
 			return $actions;
 		}
 
+		$default_wp_edit_post_types = array(
+			PostType::COURSE,
+			PostType::LESSON,
+			PostType::QUIZ,
+			PostType::QUESTION,
+			PostType::ASSIGNMENT,
+		);
+
+		if ( in_array( $post->post_type, $default_wp_edit_post_types, true ) && isset( $actions['edit'] ) ) {
+			$actions['edit'] = sprintf(
+				'<a href="%s" aria-label="%s">%s</a>',
+				esc_url( admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) ),
+				esc_attr(
+					sprintf(
+						/* translators: %s: Post title. */
+						__( 'Edit &#8220;%s&#8221;' ),
+						_draft_or_post_title( $post->ID )
+					)
+				),
+				__( 'Edit' )
+			);
+		}
+
 		$edit_url = ms_plugin_edit_course_builder_url( $post->post_type );
 
 		if ( ! empty( $edit_url ) && home_url( '/' ) !== $edit_url ) {

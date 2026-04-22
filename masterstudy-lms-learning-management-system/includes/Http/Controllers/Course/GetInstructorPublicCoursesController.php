@@ -29,6 +29,7 @@ class GetInstructorPublicCoursesController {
 			'posts_per_page' => $validated['pp'],
 			'paged'          => $validated['page'],
 			'author__in'     => $validated['user'],
+			'page'           => $validated['page'],
 		);
 
 		$courses = ( new CourseRepository() )->instructor_courses( $args );

@@ -147,16 +147,17 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       return url;
     }
     function initPagination(page, totalPages) {
+      var $paginationContainer = $pagination.find(".masterstudy-pagination").first();
       if (typeof window.pages_data !== "undefined" && window.pages_data) {
         window.pages_data.current_page = parseInt(page, 10) || 1;
         window.pages_data.total_pages = parseInt(totalPages, 10) || 0;
         window.pages_data.max_visible_pages = parseInt(window.pages_data.max_visible_pages, 10) || 5;
-        window.pages_data.item_width = parseInt(window.pages_data.item_width, 10) || 30;
+        window.pages_data.item_width = parseInt(window.pages_data.item_width, 10) || 40;
         window.pages_data.is_queryable = !!window.pages_data.is_queryable;
       }
-      if (typeof window.initializePagination === "function") {
+      if (typeof window.initializePagination === "function" && $paginationContainer.length) {
         var _window$pages_data$it, _window$pages_data;
-        window.initializePagination(parseInt(page, 10) || 1, parseInt(totalPages, 10) || 0, parseInt((_window$pages_data$it = (_window$pages_data = window.pages_data) === null || _window$pages_data === void 0 ? void 0 : _window$pages_data.item_width) !== null && _window$pages_data$it !== void 0 ? _window$pages_data$it : '30', 10) || 30);
+        window.initializePagination(parseInt(page, 10) || 1, parseInt(totalPages, 10) || 0, parseInt((_window$pages_data$it = (_window$pages_data = window.pages_data) === null || _window$pages_data === void 0 ? void 0 : _window$pages_data.item_width) !== null && _window$pages_data$it !== void 0 ? _window$pages_data$it : "40", 10) || 40, $paginationContainer);
       }
     }
     function renderResponse(data, page) {

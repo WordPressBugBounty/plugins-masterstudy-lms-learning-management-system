@@ -1877,7 +1877,13 @@ function masterstudy_lms_custom_post_types_custom_title_link( $link, $post_id, $
 		return $link;
 	}
 
-	return home_url( $map[ $post->post_type ]['path'] . absint( $post_id ) . '/' );
+	$path = $map[ $post->post_type ]['path'] . absint( $post_id ) . '/';
+
+	if ( 'stm-courses' === $post->post_type ) {
+		$path .= 'curriculum/';
+	}
+
+	return home_url( $path );
 }
 
 add_filter( 'get_edit_post_link', 'masterstudy_lms_custom_post_types_custom_title_link', 10, 3 );

@@ -90,7 +90,7 @@ wp_localize_script(
 	</div>
 
 	<div class="masterstudy-audio-player__playback-speed">
-		<select id="playback-speed">
+		<select class="masterstudy-audio-player__playback-speed-select disable-select">
 			<option value="0.25">0.25x</option>
 			<option value="0.5">0.5x</option>
 			<option value="1" selected>1.0x</option>

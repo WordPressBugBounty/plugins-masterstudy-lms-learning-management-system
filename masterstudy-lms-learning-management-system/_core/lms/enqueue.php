@@ -425,6 +425,21 @@ function stm_lms_account_scripts() {
 		)
 	);
 	wp_register_script( 'masterstudy-account-instructor-co-courses', STM_LMS_URL . 'assets/js/account/instructor/co-courses.js', array( 'jquery' ), MS_LMS_VERSION, true );
+	wp_localize_script(
+		'masterstudy-account-instructor-co-courses',
+		'masterstudy_instructor_co_courses',
+		array(
+			'nonce'    => wp_create_nonce( 'wp_rest' ),
+			'user_id'  => get_current_user_id(),
+			'per_page' => 6,
+			'rest_url' => esc_url_raw( rest_url( 'masterstudy-lms/v2' ) ),
+			'strings'  => array(
+				'error' => esc_html__( 'Something went wrong. Please try again.', 'masterstudy-lms-learning-management-system' ),
+				'edit'  => esc_html__( 'Edit', 'masterstudy-lms-learning-management-system' ),
+				'view'  => esc_html__( 'View', 'masterstudy-lms-learning-management-system' ),
+			),
+		)
+	);
 	wp_register_style( 'masterstudy-account-enterprise-groups', STM_LMS_URL . 'assets/css/account/enterprise-groups.css', null, MS_LMS_VERSION );
 	wp_register_style( 'masterstudy-account-enterprise-groups-create-edit-drawer', STM_LMS_URL . 'assets/css/account/parts/enterprise-groups/create-edit-drawer.css', null, MS_LMS_VERSION );
 	wp_register_style( 'masterstudy-account-enterprise-groups-view-drawer', STM_LMS_URL . 'assets/css/account/parts/enterprise-groups/view-drawer.css', null, MS_LMS_VERSION );
