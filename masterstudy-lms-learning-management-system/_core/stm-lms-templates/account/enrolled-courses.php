@@ -13,6 +13,12 @@ wp_enqueue_style( 'masterstudy-account-enrolled-courses' );
 wp_enqueue_script( 'masterstudy-account-enrolled-courses' );
 wp_enqueue_script( 'stm-lms-countdown' );
 
+if ( is_ms_lms_addon_enabled( 'coming_soon' ) ) {
+	stm_lms_register_style( 'coming_soon/coming_soon' );
+	wp_enqueue_style( 'masterstudy-countdown' );
+	wp_enqueue_script( 'masterstudy-countdown' );
+}
+
 $is_pro_plus = STM_LMS_Helpers::is_pro_plus();
 $settings    = get_option( 'stm_lms_settings', array() );
 $student_id  = ! empty( $current_user['id'] ) ? (int) $current_user['id'] : 0;

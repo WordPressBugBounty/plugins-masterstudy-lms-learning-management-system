@@ -64,16 +64,18 @@
       }, 250);
     }
     function startCountdowns() {
-      if (typeof window.stmLmsStartTimers === "function") {
-        window.stmLmsStartTimers();
-        return;
-      }
       if ($.fn.countdown) {
         $root.find(".masterstudy-countdown").each(function () {
-          $(this).countdown({
-            timestamp: $(this).data("timer")
+          var $timer = $(this);
+          var timerValue = $timer.data("timer");
+          if (timerValue <= 0 || new Date() > timerValue) return;
+          $timer.countdown({
+            timestamp: timerValue
           });
         });
+      }
+      if (typeof window.stmLmsStartTimers === "function") {
+        window.stmLmsStartTimers();
       }
     }
     function initPagination(page, totalPages) {

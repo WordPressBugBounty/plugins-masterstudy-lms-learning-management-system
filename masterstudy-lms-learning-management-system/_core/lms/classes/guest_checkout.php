@@ -153,7 +153,11 @@ class STM_LMS_Guest_Checkout {
 		}
 
 		$is_woocommerce = STM_LMS_Cart::woocommerce_checkout_enabled();
-		$item_id        = isset( $_GET['item_id'] ) ? absint( $_GET['item_id'] ) : 0;
+		$item_id        = isset( $_REQUEST['item_id'] ) ? absint( wp_unslash( $_REQUEST['item_id'] ) ) : 0;
+
+		if ( ! $item_id && isset( $_REQUEST['plan_id'] ) ) {
+			$item_id = absint( wp_unslash( $_REQUEST['plan_id'] ) );
+		}
 
 		if ( ! $item_id ) {
 			wp_send_json(

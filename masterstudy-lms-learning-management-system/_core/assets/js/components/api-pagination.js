@@ -61,12 +61,24 @@ function initializePagination(currentPage, totalPages) {
   function centerActivePage(pagesWrapper, pagesList, pageNumber) {
     var activeBlock = pagesList.find("[data-id=\"".concat(pageNumber, "\"]"));
     if (!activeBlock.length) return;
+    if (parseInt(pageNumber, 10) <= 1) {
+      pagesList.stop(true).animate({
+        left: "0px"
+      }, 120);
+      return;
+    }
     var wrapperWidth = pagesWrapper[0].getBoundingClientRect().width;
+    var maxScroll = Math.max(0, pagesList[0].scrollWidth - wrapperWidth);
+    if (maxScroll <= 0) {
+      pagesList.stop(true).animate({
+        left: "0px"
+      }, 120);
+      return;
+    }
     var blockRect = activeBlock[0].getBoundingClientRect();
     var listRect = pagesList[0].getBoundingClientRect();
     var blockCenter = blockRect.left - listRect.left + blockRect.width / 2;
     var targetLeft = blockCenter - wrapperWidth / 2;
-    var maxScroll = Math.max(0, pagesList[0].scrollWidth - wrapperWidth);
     targetLeft = clamp(targetLeft, 0, maxScroll);
     pagesList.stop(true).animate({
       left: -targetLeft + "px"

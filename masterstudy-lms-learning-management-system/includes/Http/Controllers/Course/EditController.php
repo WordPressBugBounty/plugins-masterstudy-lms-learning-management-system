@@ -76,7 +76,7 @@ class EditController {
 					'assets_url'        => STM_LMS_URL . 'assets',
 				),
 				'lesson_types'        => apply_filters( 'masterstudy_lms_lesson_types', array_map( 'strval', LessonType::cases() ) ),
-				'course_statuses'     => get_option( 'course_statuses_config', array() ),
+				'course_statuses'     => \STM_LMS_Helpers::get_course_statuses(),
 				'video_sources'       => apply_filters( 'masterstudy_lms_lesson_video_sources', array() ),
 				'audio_sources'       => apply_filters( 'masterstudy_lms_lesson_audio_sources', array() ),
 				'presto_player_posts' => apply_filters( 'ms_plugin_presto_player_posts', array() ),

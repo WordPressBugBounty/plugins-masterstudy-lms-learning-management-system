@@ -72,6 +72,12 @@ $initial_posts       = (array) $courses['posts'];
 wp_enqueue_style( 'masterstudy-account-instructor-courses' );
 wp_enqueue_script( 'masterstudy-account-instructor-courses' );
 
+if ( is_ms_lms_addon_enabled( 'coming_soon' ) ) {
+	stm_lms_register_style( 'coming_soon/coming_soon' );
+	wp_enqueue_style( 'masterstudy-countdown' );
+	wp_enqueue_script( 'masterstudy-countdown' );
+}
+
 $links = STM_LMS_Instructor::instructor_links();
 ?>
 

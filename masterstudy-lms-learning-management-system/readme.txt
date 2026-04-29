@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.28
+Stable tag: 3.7.29
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.29 - 2026-04-29 =
+- **Fix:** Countdown timer was not displayed in the Upcoming section after switching pagination pages
+- **Fix:** Coupons were not displayed and not working with custom date format
+- **Fix:** Unable to proceed to cart/checkout via guest checkout in Subscriptions addon
+- **Fix:** Adding a new status deleted existing ones, levels were not updating
+
 = 3.7.28 - 2026-04-21 =
 - **New:** Mollie payment gateway [PRO]
 - **New:** Paystack payment gateway [PRO]

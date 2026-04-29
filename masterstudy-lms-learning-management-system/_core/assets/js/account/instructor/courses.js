@@ -100,6 +100,19 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         scrollTop: offset.top - 90
       }, 250);
     }
+    function startCountdowns() {
+      if (typeof window.stmLmsStartTimers === "function") {
+        window.stmLmsStartTimers();
+        return;
+      }
+      if ($.fn.countdown) {
+        $root.find(".masterstudy-countdown").each(function () {
+          $(this).countdown({
+            timestamp: $(this).data("timer")
+          });
+        });
+      }
+    }
     function getCardFromEl($el) {
       return $el.closest(SEL.card);
     }
@@ -219,6 +232,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         return response.json();
       }).then(function (data) {
         renderResponse(data, state.page);
+        startCountdowns();
         $(document).trigger("masterstudy:instructor_courses:updated", [data]);
       })["catch"](function (err) {
         if (err && (err.name === "AbortError" || err.code === 20)) return;

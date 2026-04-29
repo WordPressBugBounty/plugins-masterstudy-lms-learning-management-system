@@ -762,16 +762,38 @@ class STM_LMS_Helpers {
 		echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
+	private static function get_course_config_id( array $config, string $prefix, array $used_ids ): string {
+		if ( ! empty( $config['id'] ) ) {
+			return $config['id'];
+		}
+
+		$label = sanitize_title( $config['label'] ?? '' );
+		$id    = ! empty( $label ) ? $label : uniqid( $prefix, false );
+		$id    = str_replace( '-', '_', $id );
+
+		if ( ! in_array( $id, $used_ids, true ) ) {
+			return $id;
+		}
+
+		$suffix = 2;
+		while ( in_array( "{$id}_{$suffix}", $used_ids, true ) ) {
+			++$suffix;
+		}
+
+		return "{$id}_{$suffix}";
+	}
+
 	public static function get_course_levels() {
 		$levels      = STM_LMS_Options::get_option( 'course_levels_config' );
 		$user_levels = array();
 		if ( ! empty( $levels ) ) {
 			foreach ( $levels as $level ) {
-				if ( empty( $level['id'] ) || empty( $level['label'] ) ) {
+				if ( empty( $level['label'] ) ) {
 					continue;
 				}
 
-				$user_levels[ $level['id'] ] = $level['label'];
+				$level_id                 = self::get_course_config_id( $level, 'level_', array_keys( $user_levels ) );
+				$user_levels[ $level_id ] = $level['label'];
 			}
 		}
 
@@ -802,13 +824,15 @@ class STM_LMS_Helpers {
 		$user_statuses = array();
 		if ( ! empty( $statuses ) ) {
 			foreach ( $statuses as $status ) {
-				if ( empty( $status['id'] ) || empty( $status['label'] ) ) {
+				if ( empty( $status['label'] ) ) {
 					continue;
 				}
 
+				$status_id       = self::get_course_config_id( $status, 'status_', array_keys( $user_statuses ) );
+				$status['id']    = $status_id;
 				$status['label'] = $translations[ $status['label'] ] ?? $status['label'];
 
-				$user_statuses[ $status['id'] ] = $status;
+				$user_statuses[ $status_id ] = $status;
 			}
 		}
 
