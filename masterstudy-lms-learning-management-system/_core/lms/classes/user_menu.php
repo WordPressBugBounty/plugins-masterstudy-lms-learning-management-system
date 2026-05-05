@@ -21,6 +21,30 @@ class STM_LMS_User_Menu {
 		}
 	}
 
+	public static function is_account_page(): bool {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$path        = wp_parse_url( $request_uri, PHP_URL_PATH );
+		$path        = trim( (string) $path, '/' );
+
+		if ( empty( $path ) ) {
+			return false;
+		}
+
+		$account_base_url  = STM_LMS_User::login_page_url();
+		$account_base_path = wp_parse_url( $account_base_url, PHP_URL_PATH );
+		$account_base_path = trim( (string) $account_base_path, '/' );
+
+		if ( ! empty( $account_base_path ) && ( $path === $account_base_path || 0 === strpos( $path, "{$account_base_path}/" ) ) ) {
+			return true;
+		}
+
+		$wishlist_url  = STM_LMS_User::wishlist_url();
+		$wishlist_path = wp_parse_url( $wishlist_url, PHP_URL_PATH );
+		$wishlist_path = trim( (string) $wishlist_path, '/' );
+
+		return ! empty( $wishlist_path ) && $path === $wishlist_path;
+	}
+
 	public function float_menu_styles() {
 		$float_background_color      = esc_attr( STM_LMS_Options::get_option( 'float_background_color', 'rgba(255, 255, 255, 1)' ) );
 		$float_text_color            = esc_attr( STM_LMS_Options::get_option( 'float_text_color', 'rgba(39, 48, 68, 1)' ) );
@@ -186,6 +210,10 @@ class STM_LMS_User_Menu {
 	public static function float_menu_enabled() {
 		$float_menu       = STM_LMS_Options::get_option( 'float_menu', false );
 		$float_menu_guest = STM_LMS_Options::get_option( 'float_menu_guest', true );
+
+		if ( self::is_account_page() ) {
+			return false;
+		}
 
 		if ( ! is_user_logged_in() && $float_menu ) {
 			return $float_menu_guest;
@@ -360,13 +388,54 @@ class STM_LMS_User_Menu {
 	public static function stm_lms_user_menu_display() {
 		$menu_items = self::float_menu_items();
 
+		if ( STM_LMS_Instructor::is_instructor() && self::float_menu_enabled() ) {
+			return self::get_instructor_float_menu_items( $menu_items );
+		}
+
 		if ( STM_LMS_Instructor::is_instructor() ) {
-			$selected_menu = self::float_menu_enabled() ? 'sorting_full_float_menu' : 'sorting_the_menu';
+			$selected_menu = 'sorting_the_menu';
 		} else {
 			$selected_menu = self::float_menu_enabled() ? 'sorting_float_menu_learning' : 'sorting_the_menu_student';
 		}
 
 		return apply_filters( 'stm_lms_sorted_menu', $menu_items, $selected_menu );
+	}
+
+	public static function get_instructor_float_menu_items( $menu_items ) {
+		$legacy_float_menu = self::get_menu_options( STM_LMS_Options::get_option( 'sorting_full_float_menu' ) );
+
+		if ( false !== $legacy_float_menu ) {
+			return apply_filters( 'stm_lms_sorted_menu', $menu_items, 'sorting_full_float_menu' );
+		}
+
+		$main_items     = apply_filters(
+			'stm_lms_sorted_menu',
+			apply_filters( 'stm_lms_float_menu_placed_items', $menu_items, 'main' ),
+			'sorting_float_menu_main'
+		);
+		$learning_items = apply_filters(
+			'stm_lms_sorted_menu',
+			apply_filters( 'stm_lms_float_menu_placed_items', $menu_items, 'learning' ),
+			'sorting_float_menu_learning'
+		);
+
+		return array_values(
+			array_reduce(
+				(array) array_merge( $main_items, $learning_items ),
+				function ( $items, $menu_item ) {
+					$menu_id = $menu_item['id'] ?? '';
+
+					if ( empty( $menu_id ) || isset( $items[ $menu_id ] ) ) {
+						return $items;
+					}
+
+					$items[ $menu_id ] = $menu_item;
+
+					return $items;
+				},
+				array()
+			)
+		);
 	}
 
 	/**
@@ -550,7 +619,7 @@ class STM_LMS_User_Menu {
 		return array_values(
 			array_filter(
 				$menu_items,
-				function( $menu_item ) use ( $disabled_items ) {
+				function ( $menu_item ) use ( $disabled_items ) {
 					$menu_id = $menu_item['id'] ?? null;
 
 					return ! empty( $menu_id ) && ! in_array( $menu_id, $disabled_items, true );

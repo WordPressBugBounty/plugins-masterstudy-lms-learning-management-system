@@ -64,6 +64,14 @@ class StmStatistics {
 		return $allowed_columns[ $orderby ] ?? $default_column;
 	}
 
+	private static function normalize_scalar_text_filter( $value ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return '';
+		}
+
+		return sanitize_text_field( (string) $value );
+	}
+
 	/**
 	 * @param $offset
 	 * @param $limit
@@ -87,30 +95,57 @@ class StmStatistics {
 		}
 
 		if ( ! empty( trim( $params['created_date_from'] ?? '' ) ) && ! empty( trim( $params['created_date_to'] ?? '' ) ) ) {
-			$query->where_raw( ' DATE(_order.post_date) >= "' . gmdate( 'Y-m-d', strtotime( $params['created_date_from'] ) ) . '" AND DATE(_order.post_date) <= "' . gmdate( 'Y-m-d', strtotime( $params['created_date_to'] ) ) . '" ' );
-		}
-
-		if ( ! empty( $params['total_price'] ) ) {
-			$query->where_raw( ' ( meta.meta_key = "_order_total" AND meta.meta_value = "' . $params['total_price'] . '" ) ' );
-		}
-
-		if ( ! empty( $params['status'] ) ) {
 			$query->where_raw(
-				' (
-					( meta.meta_key = "status" AND meta.meta_value = "' . $params['status'] . '" ) OR
-					( _order.post_status = "' . $params['status'] . '" )
-				) '
+				$wpdb->prepare(
+					' DATE(_order.post_date) >= %s AND DATE(_order.post_date) <= %s ',
+					gmdate( 'Y-m-d', strtotime( $params['created_date_from'] ) ),
+					gmdate( 'Y-m-d', strtotime( $params['created_date_to'] ) )
+				)
 			);
 		}
 
-		if ( ! empty( $params['user'] ) ) {
-			$ids = array( $params['user'] );
-			if ( ! empty( $ids ) ) {
+		if ( ! empty( $params['total_price'] ) ) {
+			$total_price = self::normalize_scalar_text_filter( $params['total_price'] );
+
+			if ( '' !== $total_price ) {
 				$query->where_raw(
-					' (
-					(meta.meta_key = "user_id" AND meta.meta_value in (' . implode( ',', $ids ) . ')) OR
-					(meta.meta_key = "_customer_user" AND meta.meta_value in (' . implode( ',', $ids ) . '))
-				) '
+					$wpdb->prepare(
+						' ( meta.meta_key = "_order_total" AND meta.meta_value = %s ) ',
+						$total_price
+					)
+				);
+			}
+		}
+
+		if ( ! empty( $params['status'] ) ) {
+			$status = self::normalize_scalar_text_filter( $params['status'] );
+
+			if ( '' !== $status ) {
+				$query->where_raw(
+					$wpdb->prepare(
+						' (
+							( meta.meta_key = "status" AND meta.meta_value = %s ) OR
+							( _order.post_status = %s )
+						) ',
+						$status,
+						$status
+					)
+				);
+			}
+		}
+
+		if ( ! empty( $params['user'] ) ) {
+			$user_id = intval( $params['user'] );
+			if ( ! empty( $user_id ) ) {
+				$query->where_raw(
+					$wpdb->prepare(
+						' (
+							(meta.meta_key = "user_id" AND meta.meta_value in (%d)) OR
+							(meta.meta_key = "_customer_user" AND meta.meta_value in (%d))
+						) ',
+						$user_id,
+						$user_id
+					)
 				);
 			}
 		}
@@ -170,31 +205,56 @@ class StmStatistics {
 
 		if ( ! empty( trim( $params['date_from'] ?? '' ) ) && ! empty( trim( $params['date_to'] ?? '' ) ) ) {
 			$query->where_raw(
-				' DATE(_order.post_date) >= "' . gmdate( 'Y-m-d', strtotime( $params['date_from'] ) ) . '" AND DATE(_order.post_date) <= "' . gmdate( 'Y-m-d', strtotime( $params['date_to'] ) ) . '" '
+				$wpdb->prepare(
+					' DATE(_order.post_date) >= %s AND DATE(_order.post_date) <= %s ',
+					gmdate( 'Y-m-d', strtotime( $params['date_from'] ) ),
+					gmdate( 'Y-m-d', strtotime( $params['date_to'] ) )
+				)
 			);
 		}
 
 		if ( ! empty( $params['total_price'] ) ) {
-			$query->where_raw( ' ( meta.meta_key = "_order_total" AND meta.meta_value = "' . $params['total_price'] . '" ) ' );
+			$total_price = self::normalize_scalar_text_filter( $params['total_price'] );
+
+			if ( '' !== $total_price ) {
+				$query->where_raw(
+					$wpdb->prepare(
+						' ( meta.meta_key = "_order_total" AND meta.meta_value = %s ) ',
+						$total_price
+					)
+				);
+			}
 		}
 
 		if ( ! empty( $params['status'] ) ) {
-			$query->where_raw(
-				' (
-					( meta.meta_key = "status" AND meta.meta_value = "' . $params['status'] . '" ) OR
-					( _order.post_status = "' . $params['status'] . '" )
-				) '
-			);
+			$status = self::normalize_scalar_text_filter( $params['status'] );
+
+			if ( '' !== $status ) {
+				$query->where_raw(
+					$wpdb->prepare(
+						' (
+							( meta.meta_key = "status" AND meta.meta_value = %s ) OR
+							( _order.post_status = %s )
+						) ',
+						$status,
+						$status
+					)
+				);
+			}
 		}
 
 		if ( ! empty( $params['user'] ) ) {
 			$user_id = intval( $params['user'] );
 			if ( ! empty( $user_id ) ) {
 				$query->where_raw(
-					' (
-					(meta.meta_key = "user_id" AND meta.meta_value in (' . $user_id . ')) OR
-					(meta.meta_key = "_customer_user" AND meta.meta_value in (' . $user_id . '))
-				) '
+					$wpdb->prepare(
+						' (
+							(meta.meta_key = "user_id" AND meta.meta_value in (%d)) OR
+							(meta.meta_key = "_customer_user" AND meta.meta_value in (%d))
+						) ',
+						$user_id,
+						$user_id
+					)
 				);
 			}
 		}
@@ -248,15 +308,16 @@ class StmStatistics {
 		$offset = 0;
 		$limit  = 10;
 
-		if ( ! empty( $_POST['offset'] ) ) {
-			$offset = intval( $_POST['offset'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$params = wp_unslash( $_POST );
+
+		if ( ! empty( $params['offset'] ) ) {
+			$offset = intval( $params['offset'] );
 		}
 
-		if ( ! empty( $_POST['limit'] ) ) {
-			$limit = intval( $_POST['limit'] );
+		if ( ! empty( $params['limit'] ) ) {
+			$limit = intval( $params['limit'] );
 		}
-
-		$params = $_POST;
 
 		$params['completed'] = true;
 
@@ -290,7 +351,13 @@ class StmStatistics {
 			->where( 'course.post_author', $user_id )
 			->where_raw( " ( course.post_type = 'stm-courses' OR course.post_type = 'stm-course-bundles' OR course.post_type = 'stm-orders' ) " )
 			->where_raw( " (_order.`post_status` = 'wc-completed' OR meta_status.post_id = _order.ID) " )
-			->where_raw( " (DATE(_order.`post_date`) BETWEEN '" . $date_start . "' AND '" . $date_end . "') " )
+			->where_raw(
+				$wpdb->prepare(
+					' (DATE(_order.`post_date`) BETWEEN %s AND %s) ',
+					$date_start,
+					$date_end
+				)
+			)
 			->group_by( " course.ID, DATE_FORMAT(_order.post_date, '%m-%Y') " );
 
 		if ( null !== $course_id ) {

@@ -101,17 +101,20 @@ add_action(
 		/**
 		 * Hook:Action to add admin notice popup scripts.
 		 */
-		function stm_lms_add_notice_popup_script() {
-			wp_enqueue_script( 'ms_lms_notice-popup', STM_LMS_URL . 'assets/js/notices/notices.js', array(), STM_LMS_VERSION, true );
-			wp_localize_script(
-				'ms_lms_notice-popup',
-				'ms_lms_notice_data',
-				array(
-					'nonce'    => wp_create_nonce( 'skip_cb_popup' ),
-					'ajax_url' => admin_url( 'admin-ajax.php' ),
-				)
-			);
+		if ( ! function_exists( 'stm_lms_add_notice_popup_script' ) ) {
+			function stm_lms_add_notice_popup_script() {
+				wp_enqueue_script( 'ms_lms_notice-popup', STM_LMS_URL . 'assets/js/notices/notices.js', array(), STM_LMS_VERSION, true );
+				wp_localize_script(
+					'ms_lms_notice-popup',
+					'ms_lms_notice_data',
+					array(
+						'nonce'    => wp_create_nonce( 'skip_cb_popup' ),
+						'ajax_url' => admin_url( 'admin-ajax.php' ),
+					)
+				);
+			}
 		}
+
 		add_action( 'admin_enqueue_scripts', 'stm_lms_add_notice_popup_script' );
 
 		global $pagenow;

@@ -100,17 +100,27 @@ class StmStatisticsListTable extends WP_List_Table {
 		}
 
 		if ( isset( $filter['created_date_from'] ) && ! empty( trim( $filter['created_date_from'] ) ) && isset( $filter['created_date_to'] ) && ! empty( trim( $filter['created_date_to'] ) ) ) {
-			$query->where_raw( ' DATE(_order.post_date) >= "' . gmdate( 'Y-m-d', strtotime( $filter['created_date_from'] ) ) . '" AND DATE(_order.post_date) <= "' . gmdate( 'Y-m-d', strtotime( $filter['created_date_to'] ) ) . '" ' );
+			$query->where_raw(
+				$wpdb->prepare(
+					' DATE(_order.post_date) >= %s AND DATE(_order.post_date) <= %s ',
+					gmdate( 'Y-m-d', strtotime( $filter['created_date_from'] ) ),
+					gmdate( 'Y-m-d', strtotime( $filter['created_date_to'] ) )
+				)
+			);
 		}
 
 		if ( isset( $filter['user'] ) && ! empty( $filter['user'] ) ) {
-			$ids = array( $filter['user'] );
-			if ( ! empty( $ids ) ) {
+			$user_id = intval( $filter['user'] );
+			if ( ! empty( $user_id ) ) {
 				$query->where_raw(
-					' (
-								(meta.meta_key = "user_id" AND meta.meta_value in (' . implode( ',', $ids ) . ')) OR
-								(meta.meta_key = "_customer_user" AND meta.meta_value in (' . implode( ',', $ids ) . '))
-							) '
+					$wpdb->prepare(
+						' (
+							(meta.meta_key = "user_id" AND meta.meta_value in (%d)) OR
+							(meta.meta_key = "_customer_user" AND meta.meta_value in (%d))
+						) ',
+						$user_id,
+						$user_id
+					)
 				);
 			}
 		}
