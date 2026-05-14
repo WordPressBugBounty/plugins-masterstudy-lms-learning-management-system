@@ -8,6 +8,7 @@
  * @var boolean $dark_mode
  * @var boolean $is_api
  * @var boolean $thin
+ * @var int $item_width
  *
  * masterstudy-pagination_dark-mode - for dark mode
  * masterstudy-pagination__item_current - for current page
@@ -17,7 +18,9 @@ $is_ajax = $is_ajax ?? false;
 $is_api  = $is_api ?? false;
 $thin    = $thin ?? false;
 
-$item_width = $thin ? 30 : 40;
+$default_item_width = $thin ? 30 : 40;
+$item_width         = isset( $item_width ) ? absint( $item_width ) : $default_item_width;
+$item_width         = $item_width > 0 ? $item_width : $default_item_width;
 
 wp_enqueue_style( 'masterstudy-pagination' );
 if ( $is_ajax ) {

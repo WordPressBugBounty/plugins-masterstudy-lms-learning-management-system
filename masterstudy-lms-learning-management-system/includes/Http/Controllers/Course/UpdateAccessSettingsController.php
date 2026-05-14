@@ -47,6 +47,7 @@ class UpdateAccessSettingsController {
 		}
 
 		$data = $validator->get_validated();
+		$data = $this->filter_coming_soon_data( $data );
 
 		$this->course_repository->update_access( $course_id, $data );
 
@@ -62,5 +63,17 @@ class UpdateAccessSettingsController {
 		( new ComingSoonRepository() )->save( $course_id, $data );
 
 		return WpResponseFactory::ok();
+	}
+
+	private function filter_coming_soon_data( array $data ): array {
+		if ( \STM_LMS_Helpers::is_pro_plus() && is_ms_lms_addon_enabled( 'coming_soon' ) ) {
+			return $data;
+		}
+
+		foreach ( ComingSoonRepository::META_FIELDS as $field ) {
+			unset( $data[ $field ] );
+		}
+
+		return $data;
 	}
 }

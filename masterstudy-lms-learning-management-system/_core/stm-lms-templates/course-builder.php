@@ -9,17 +9,24 @@ $translations_path  = ! empty( $ms_lms_loaded_textdomain_path ) ? $ms_lms_loaded
 $additional_styles  = apply_filters( 'ms_lms_course_builder_additional_styles', array() );
 $additional_scripts = apply_filters( 'ms_lms_course_builder_additional_scripts', array() );
 $wp_referer         = wp_get_referer();
+$manifest_assets    = masterstudy_lms_resolve_manifest_assets( 'course-builder', 'main' );
+$manifest_assets    = is_array( $manifest_assets ) ? $manifest_assets : array();
+$entry_script_url   = ! empty( $manifest_assets['entry_url'] ) ? $manifest_assets['entry_url'] : '';
 
-wp_register_style( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_css', MS_LMS_URL . 'assets/course-builder/css/main.css' ), array(), MS_LMS_VERSION );
-wp_register_script( 'ms-lms-course-builder-vendors', apply_filters( 'ms_lms_course_builder_vendors_js', MS_LMS_URL . 'assets/course-builder/js/vendors.js' ), array(), MS_LMS_VERSION, true );
-wp_register_script( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_js', MS_LMS_URL . 'assets/course-builder/js/main.js' ), array(), MS_LMS_VERSION, true );
-wp_register_script( 'ms-lms-course-builder-tinymce', MS_LMS_URL . '/assets/course-builder/tinymce/hugerte.min.js', array(), MS_LMS_VERSION, true );
-wp_register_script( 'ms-lms-course-builder-translations', apply_filters( 'ms_lms_course_builder_translations_js', MS_LMS_URL . 'assets/course-builder/js/i18n-translations.js' ), array(), MS_LMS_VERSION, true );
+wp_register_style( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_css', MS_LMS_URL . 'assets/react/course-builder/css/main.css' ), array(), MS_LMS_VERSION );
+wp_register_script( 'ms-lms-course-builder-translations', apply_filters( 'ms_lms_course_builder_translations_js', MS_LMS_URL . 'assets/react/course-builder/js/i18n-translations.js' ), array(), MS_LMS_VERSION, true );
 
 wp_set_script_translations( 'ms-lms-course-builder-translations', 'masterstudy-lms-learning-management-system', $translations_path );
 
-$scripts = wp_scripts();
-$styles  = wp_styles();
+$scripts        = wp_scripts();
+$styles         = wp_styles();
+$append_version = static function ( $url, $ver ) {
+	if ( null === $ver || '' === (string) $ver ) {
+		return $url;
+	}
+
+	return add_query_arg( 'ver', (string) $ver, $url );
+};
 
 $ms_lms_get_asset_src = static function ( $asset, $dependencies ) {
 	if ( empty( $asset ) || empty( $asset->src ) ) {
@@ -72,6 +79,11 @@ do_action( 'stm_lms_template_main' );
 		}
 	}
 	?>
+	<?php if ( ! empty( $manifest_assets['imports'] ) && is_array( $manifest_assets['imports'] ) ) { ?>
+		<?php foreach ( $manifest_assets['imports'] as $import_url ) { ?>
+			<link rel="modulepreload" href="<?php echo esc_url( $import_url ); ?>">
+		<?php } ?>
+	<?php } ?>
 </head>
 <body>
 <div id="ms_plugin_root"></div>
@@ -82,6 +94,11 @@ foreach ( $load_scripts as $handle ) {
 	<script src="<?php echo esc_url( $src_url ); // phpcs:ignore ?>"></script>
 <?php } ?>
 <script>
+	window.react_default_vars = {
+		...( window.react_default_vars || {} ),
+		admin_url: '<?php echo esc_url_raw( admin_url() ); ?>',
+	};
+
 	window.lmsApiSettings = {
 		lmsUrl: '<?php echo esc_url_raw( rest_url( 'masterstudy-lms/v2' ) ); ?>',
 		wpUrl: '<?php echo esc_url_raw( rest_url( 'wp/v2' ) ); ?>',
@@ -105,9 +122,7 @@ if ( ! class_exists( '\_WP_Editors', false ) ) {
 	require ABSPATH . WPINC . '/class-wp-editor.php';
 }
 ?>
-<script src="<?php echo esc_url( $ms_lms_get_asset_src( $scripts->registered['ms-lms-course-builder-tinymce'], $scripts ) ); // phpcs:ignore ?>"></script>
-<script src="<?php echo esc_url( $ms_lms_get_asset_src( $scripts->registered['ms-lms-course-builder'], $scripts ) ); // phpcs:ignore ?>"></script>
-<script src="<?php echo esc_url( $ms_lms_get_asset_src( $scripts->registered['ms-lms-course-builder-vendors'], $scripts ) ); // phpcs:ignore ?>"></script>
+<script type="module" src="<?php echo esc_url( $entry_script_url ); // phpcs:ignore ?>"></script>
 <script src="<?php echo esc_url( $ms_lms_get_asset_src( $scripts->registered['ms-lms-course-builder-translations'], $scripts ) ); // phpcs:ignore ?>"></script>
 <?php
 if ( ! empty( $additional_scripts ) ) {

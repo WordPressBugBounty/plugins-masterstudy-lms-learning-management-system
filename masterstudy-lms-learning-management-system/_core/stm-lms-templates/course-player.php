@@ -28,6 +28,7 @@ if ( $post instanceof \WP_Post ) {
 
 $course_player = new CoursePlayerRepository();
 $data          = $course_player->get_main_data( $lms_page_path, (int) $lesson_id );
+
 $quiz_data     = 'quiz' === $data['lesson_type']
 	? $course_player->get_quiz_data( $data['item_id'], $data['user_id'], $data['post_id'] )
 	: array();
@@ -190,8 +191,10 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 					}
 				}
 
+				$content = apply_filters( 'stm_lms_course_item_content', '', $data['post_id'], $data['item_id'], $data );
+
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo apply_filters( 'stm_lms_course_item_content', $content = '', $data['post_id'], $data['item_id'], $data );
+				echo $content;
 
 				if ( ! empty( $data['lesson_attachments'] ) && ! $data['lesson_lock_before_start'] ) {
 					STM_LMS_Templates::show_lms_template(

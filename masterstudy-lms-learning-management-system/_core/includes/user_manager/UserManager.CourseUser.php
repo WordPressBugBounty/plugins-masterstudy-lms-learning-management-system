@@ -1,69 +1,9 @@
 <?php
 
 use MasterStudy\Lms\Pro\addons\assignments\Repositories\AssignmentStudentRepository;
-use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Repositories\CurriculumRepository;
 
-new STM_LMS_User_Manager_Course_User();
-
 class STM_LMS_User_Manager_Course_User {
-
-	public function __construct() {
-		add_action( 'wp_ajax_stm_lms_dashboard_reset_student_progress', array( $this, 'reset_student_progress' ) );
-		add_action( 'wp_ajax_stm_lms_dashboard_get_student_progress', array( $this, 'student_progress' ) );
-		add_action( 'wp_ajax_stm_lms_dashboard_set_student_item_progress', array( $this, 'set_student_progress' ) );
-	}
-
-	public function reset_student_progress() {
-		check_ajax_referer( 'stm_lms_dashboard_reset_student_progress', 'nonce' );
-
-		if ( ! STM_LMS_User_Manager_Interface::isInstructor() ) {
-			die;
-		}
-
-		$request_body = file_get_contents( 'php://input' );
-
-		$data = json_decode( $request_body, true );
-
-		if ( empty( $data['user_id'] ) || empty( $data['course_id'] ) ) {
-			die;
-		}
-
-		$course_id  = intval( $data['course_id'] );
-		$student_id = intval( $data['user_id'] );
-
-		$curriculum = ( new CurriculumRepository() )->get_curriculum( $course_id );
-
-		if ( empty( $curriculum['materials'] ) ) {
-			die;
-		}
-
-		foreach ( $curriculum['materials'] as $material ) {
-			switch ( $material['post_type'] ) {
-				case 'stm-lessons':
-					self::reset_lesson( $student_id, $course_id, $material['post_id'] );
-					break;
-				case 'stm-assignments':
-					self::reset_assignment( $student_id, $course_id, $material['post_id'] );
-					break;
-				case 'stm-quizzes':
-					self::reset_quiz( $student_id, $course_id, $material['post_id'] );
-					break;
-			}
-		}
-
-		stm_lms_reset_user_answers( $course_id, $student_id );
-		stm_lms_reset_marker_answers( $course_id, $student_id );
-
-		$flag_key = 'masterstudy_lms_email_sent_' . (int) $course_id . '_' . (int) $student_id;
-
-		update_option( $flag_key, 0 );
-
-		STM_LMS_Course::update_course_progress( $student_id, $course_id, true );
-
-		wp_send_json( self::_student_progress( $course_id, $student_id ) );
-	}
-
 	// phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
 	public static function _student_progress( $course_id, $student_id ) {
 		$curriculum = ( new CurriculumRepository() )->get_curriculum( $course_id );
@@ -99,80 +39,6 @@ class STM_LMS_User_Manager_Course_User {
 		$curriculum['course_title'] = get_the_title( $course_id );
 
 		return $curriculum;
-	}
-
-	public function student_progress() {
-		check_ajax_referer( 'stm_lms_dashboard_get_student_progress', 'nonce' );
-
-		if ( ! STM_LMS_User_Manager_Interface::isInstructor() ) {
-			die;
-		}
-
-		$request_body = file_get_contents( 'php://input' );
-
-		$data = json_decode( $request_body, true );
-
-		if ( empty( $data['user_id'] ) || empty( $data['course_id'] ) ) {
-			die;
-		}
-
-		$course_id  = intval( $data['course_id'] );
-		$student_id = intval( $data['user_id'] );
-
-		wp_send_json( self::_student_progress( $course_id, $student_id ) );
-	}
-
-	public function set_student_progress() {
-		check_ajax_referer( 'stm_lms_dashboard_set_student_item_progress', 'nonce' );
-
-		if ( ! STM_LMS_User_Manager_Interface::isInstructor() ) {
-			die;
-		}
-
-		$request_body = file_get_contents( 'php://input' );
-
-		$data = json_decode( $request_body, true );
-
-		if ( empty( $data['user_id'] ) || empty( $data['course_id'] ) || empty( $data['item_id'] ) ) {
-			die;
-		}
-
-		$course_id  = intval( $data['course_id'] );
-		$student_id = intval( $data['user_id'] );
-		$item_id    = intval( $data['item_id'] );
-		$completed  = boolval( $data['completed'] );
-
-		/*For various item types*/
-		/*Check item in curriculum*/
-		$course_materials = ( new CurriculumMaterialRepository() )->get_course_materials( $course_id );
-
-		if ( empty( $course_materials ) ) {
-			die;
-		}
-
-		if ( ! in_array( $item_id, $course_materials, true ) ) {
-			die;
-		}
-
-		switch ( get_post_type( $item_id ) ) {
-			case 'stm-lessons':
-				self::complete_lesson( $student_id, $course_id, $item_id );
-				break;
-			case 'stm-assignments':
-				self::complete_assignment( $student_id, $course_id, $item_id, $completed );
-				break;
-			case 'stm-quizzes':
-				self::complete_quiz( $student_id, $course_id, $item_id, $completed );
-				break;
-		}
-
-		if ( ! $completed ) {
-			stm_lms_reset_marker_answers( $course_id, $student_id );
-		}
-
-		STM_LMS_Course::update_course_progress( $student_id, $course_id );
-
-		wp_send_json( self::_student_progress( $course_id, $student_id ) );
 	}
 
 	public static function complete_lesson( $user_id, $course_id, $lesson_id ) {

@@ -10,9 +10,11 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 final class GetSettingsController {
 	public function __invoke(): \WP_REST_Response {
-		$user_id   = get_current_user_id();
-		$timezones = apply_filters( 'masterstudy_lms_timezones', array() );
-		$options   = apply_filters(
+		$user_id              = get_current_user_id();
+		$timezones            = apply_filters( 'masterstudy_lms_timezones', array() );
+		$course_premoderation = \STM_LMS_Helpers::is_pro()
+			&& \STM_LMS_Options::get_option( 'course_premoderation', false );
+		$options              = apply_filters(
 			'masterstudy_lms_course_options',
 			array(
 				'max_upload_size'                => wp_max_upload_size(),
@@ -22,7 +24,7 @@ final class GetSettingsController {
 				'course_allow_requirements_info' => \STM_LMS_Options::get_option( 'course_allow_requirements_info', false ),
 				'course_allow_intended_audience' => \STM_LMS_Options::get_option( 'course_allow_intended_audience', false ),
 				'question_category_allowed'      => \STM_LMS_Options::get_option( 'course_allow_new_question_categories', false ),
-				'course_premoderation'           => \STM_LMS_Options::get_option( 'course_premoderation', false ),
+				'course_premoderation'           => $course_premoderation,
 				'course_page_urls'               => STM_LMS_URL . 'assets/img/course',
 				'currency_symbol'                => \STM_LMS_Options::get_option( 'currency_symbol', '$' ),
 				'decimals_num'                   => \STM_LMS_Options::get_option( 'decimals_num', '2' ),

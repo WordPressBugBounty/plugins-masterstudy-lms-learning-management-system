@@ -14,6 +14,10 @@ class CreateCategory extends Route implements RequestInterface, ResponseInterfac
 				'type'     => 'string',
 				'required' => true,
 			),
+			'description'     => array(
+				'type'     => 'string',
+				'required' => false,
+			),
 			'parent_category' => array(
 				'type'     => 'integer',
 				'required' => false,

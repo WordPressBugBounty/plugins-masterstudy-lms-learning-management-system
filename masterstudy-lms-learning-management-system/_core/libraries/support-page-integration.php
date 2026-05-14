@@ -1,4 +1,12 @@
 <?php
+function masterstudy_lms_render_support_page() {
+	if ( ! current_user_can( 'manage_options' ) || ! class_exists( 'STM_Support_Page' ) ) {
+		return;
+	}
+
+	STM_Support_Page::render_support_page( 'masterstudy-lms-learning-management-system' );
+}
+
 add_action(
 	'admin_init',
 	function() {

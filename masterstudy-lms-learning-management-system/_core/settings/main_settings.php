@@ -7,18 +7,18 @@ require_once STM_LMS_PATH . '/settings/main_settings/settings.php';
 add_filter(
 	'wpcfto_options_page_setup',
 	function ( $setups ) {
-		$fields = array(
-			'section_1'          => stm_lms_settings_general_section(),
-			'section_2'          => stm_lms_settings_courses_section(),
-			'section_course'     => stm_lms_settings_course_section(),
+		$fields        = array(
+			'section_1'             => stm_lms_settings_general_section(),
+			'section_2'             => stm_lms_settings_courses_section(),
+			'section_course'        => stm_lms_settings_course_section(),
 			'section_course_player' => stm_lms_settings_course_player_section(),
-			'section_quiz'       => stm_lms_settings_quiz_section(),
-			'section_ecommerce'  => stm_lms_settings_ecommerce_section(),
-			'section_4'          => stm_lms_settings_profiles_section(),
-			'section_7'          => stm_lms_settings_grades_section(),
-			'ai_lab'             => stm_lms_settings_ai_lab_section(),
-			'section_6'          => stm_lms_settings_certificates_section(),
-			'section_analytics'  => stm_lms_settings_analytics_section(),
+			'section_quiz'          => stm_lms_settings_quiz_section(),
+			'section_ecommerce'     => stm_lms_settings_ecommerce_section(),
+			'section_4'             => stm_lms_settings_profiles_section(),
+			'section_7'             => stm_lms_settings_grades_section(),
+			'ai_lab'                => stm_lms_settings_ai_lab_section(),
+			'section_6'             => stm_lms_settings_certificates_section(),
+			'section_analytics'     => stm_lms_settings_analytics_section(),
 		);
 		$footer_fields = array(
 			'section_routes'     => stm_lms_settings_route_section(),
@@ -26,7 +26,7 @@ add_filter(
 			'stm_lms_shortcodes' => stm_lms_settings_shortcodes_section(),
 			'section_5'          => stm_lms_settings_google_api_section(),
 		);
-		$fields = array_merge(
+		$fields        = array_merge(
 			apply_filters( 'stm_lms_main_settings_fields', $fields ),
 			$footer_fields
 		);
@@ -64,7 +64,7 @@ add_filter(
 		};
 
 		if ( isset( $fields['section_2']['fields'] ) && is_array( $fields['section_2']['fields'] ) ) {
-			$merged_fields       = array();
+			$merged_fields = array();
 
 			foreach ( $course_section_submenus as $section_key => $submenu_name ) {
 				if ( empty( $fields[ $section_key ]['fields'] ) || ! is_array( $fields[ $section_key ]['fields'] ) ) {
@@ -148,132 +148,6 @@ add_filter(
 add_action(
 	'admin_menu',
 	function () {
-		add_submenu_page(
-			'stm-lms-settings',
-			__( 'Courses', 'masterstudy-lms-learning-management-system' ),
-			__( 'Courses', 'masterstudy-lms-learning-management-system' ),
-			'manage_options',
-			'stm-lms-courses-link',
-			'stm_lms_render_courses_menu_redirect',
-			1
-		);
-
-		// Course Categories under Courses
-		add_submenu_page(
-			'edit.php?post_type=stm-courses',
-			__( 'Course Categories1', 'masterstudy-lms-learning-management-system' ),
-			__( 'Course Categories1', 'masterstudy-lms-learning-management-system' ),
-			'manage_options',
-			'edit-tags.php?taxonomy=stm_lms_course_taxonomy&post_type=stm-courses'
-		);
-
-		// Question Categories under Questions
-		add_submenu_page(
-			'edit.php?post_type=stm-questions',
-			__( 'Question Categories', 'masterstudy-lms-learning-management-system' ),
-			__( 'Question Categories', 'masterstudy-lms-learning-management-system' ),
-			'manage_options',
-			'edit-tags.php?taxonomy=stm_lms_question_taxonomy&post_type=stm-questions'
-		);
-
-	},
-	20
-);
-
-function stm_lms_render_courses_menu_redirect() {
-	wp_safe_redirect( admin_url( 'edit.php?post_type=stm-courses' ) );
-	exit;
-}
-
-add_action(
-	'wpcfto_screen_stm_lms_settings_added',
-	function () {
-
-		$post_types = array(
-			'stm-courses',
-			'stm-lessons',
-			'stm-quizzes',
-			'stm-questions',
-			'stm-assignments',
-			'stm-google-meets',
-			'stm-user-assignment',
-			'stm-reviews',
-		);
-		if ( class_exists( 'Stm_Lms_Statistics' ) ) {
-			$post_types[] = 'stm-payout';
-		}
-
-		$taxonomies = array(
-			'stm_lms_course_taxonomy',
-			'stm_lms_question_taxonomy',
-		);
-
-		foreach ( $post_types as $post_type ) {
-			$post_type_data = get_post_type_object( $post_type );
-
-			if ( empty( $post_type_data ) ) {
-				continue;
-			}
-
-			add_submenu_page(
-				'stm-lms-settings',
-				$post_type_data->label,
-				$post_type_data->label,
-				'manage_options',
-				'/edit.php?post_type=' . $post_type
-			);
-		}
-
-		foreach ( $taxonomies as $taxonomy ) {
-			$tax_data = get_taxonomy( $taxonomy );
-
-			add_submenu_page(
-				'stm-lms-settings',
-				$tax_data->label,
-				$tax_data->label,
-				'manage_options',
-				'edit-tags.php?taxonomy=' . $taxonomy,
-			);
-		}
-
-		add_submenu_page(
-			'stm-lms-settings',
-			'MasterStudy',
-			'<span class="stm-lms-settings-menu-title">' . esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ) . '</span>',
-			'manage_options',
-			'stm-lms-settings',
-			null,
-			1000001
-		);
-
-		add_submenu_page(
-			'stm-lms-settings',
-			esc_html__( 'Help Center', 'masterstudy-lms-learning-management-system' ),
-			esc_html__( 'Help Center', 'masterstudy-lms-learning-management-system' ),
-			'manage_options',
-			'stm-support-page-masterstudy',
-			function () {
-				STM_Support_Page::render_support_page( 'masterstudy-lms-learning-management-system' );
-			}
-		);
-
-		if ( ! STM_LMS_Helpers::is_theme_activated() ) {
-			add_submenu_page(
-				'stm-lms-settings',
-				esc_html__( 'MasterStudy templates', 'masterstudy-lms-learning-management-system' ),
-				'<span class="stm-lms-templates-menu-title">' . esc_html__( 'MasterStudy', 'masterstudy-lms-learning-management-system' ) . ' <strong>' . esc_html__( 'Templates', 'masterstudy-lms-learning-management-system' ) . '</strong></span>',
-				'manage_options',
-				'admin.php?page=masterstudy-starter-demo-import',
-			);
-		}
-	},
-	-1,
-	10
-);
-
-add_action(
-	'admin_menu',
-	function () {
 		$post_type_data = get_post_type_object( 'stm-ent-groups' );
 
 		if ( empty( $post_type_data ) ) {
@@ -308,82 +182,6 @@ add_action(
 		}
 	},
 	100003
-);
-
-add_action(
-	'admin_menu',
-	function () {
-		global $submenu, $wpdb;
-
-		if ( empty( $submenu['stm-lms-settings'] ) || ! is_array( $submenu['stm-lms-settings'] ) ) {
-			return;
-		}
-
-		$reviews = wp_count_posts( 'stm-reviews' );
-		$courses = wp_count_posts( 'stm-courses' );
-
-		$badges = array(
-			'reviews'     => array(
-				'count'  => isset( $reviews->pending ) ? (int) $reviews->pending : 0,
-				'match'  => static function ( $slug ) {
-					return false !== strpos( $slug, 'post_type=stm-reviews' );
-				},
-				'label'  => static function ( $count ) {
-					return esc_html( sprintf( _n( '%d pending review', '%d pending reviews', $count, 'masterstudy-lms-learning-management-system' ), $count ) );
-				},
-			),
-			'instructors' => array(
-				'count' => (int) $wpdb->get_var(
-					$wpdb->prepare(
-						"SELECT COUNT(DISTINCT user_id)
-						FROM {$wpdb->usermeta}
-						WHERE meta_key = %s
-						AND meta_value = %s",
-						'submission_status',
-						'pending'
-					)
-				),
-				'match' => static function ( $slug ) {
-					return 'manage_users' === $slug || false !== strpos( $slug, 'page=manage_users' );
-				},
-				'label' => static function ( $count ) {
-					return esc_html( sprintf( _n( '%d pending instructor', '%d pending instructors', $count, 'masterstudy-lms-learning-management-system' ), $count ) );
-				},
-			),
-			'courses'     => array(
-				'count' => isset( $courses->pending ) ? (int) $courses->pending : 0,
-				'match' => static function ( $slug ) {
-					return 'stm-lms-courses-link' === $slug || false !== strpos( $slug, 'post_type=stm-courses' );
-				},
-				'label' => static function ( $count ) {
-					return esc_html( sprintf( _n( '%d pending course', '%d pending courses', $count, 'masterstudy-lms-learning-management-system' ), $count ) );
-				},
-			),
-		);
-
-		foreach ( $submenu['stm-lms-settings'] as &$item ) {
-			$slug = $item[2] ?? '';
-
-			foreach ( $badges as $key => $badge ) {
-				if ( $badge['count'] <= 0 || ! $badge['match']( $slug ) ) {
-					continue;
-				}
-
-				$item[0] .= sprintf(
-					' <span class="awaiting-mod update-plugins count-%1$d"><span class="pending-count" aria-hidden="true">%1$d</span><span class="screen-reader-text">%2$s</span></span>',
-					$badge['count'],
-					$badge['label']( $badge['count'] )
-				);
-				unset( $badges[ $key ] );
-				break;
-			}
-
-			if ( empty( $badges ) ) {
-				break;
-			}
-		}
-	},
-	999999
 );
 
 if ( ! STM_LMS_Helpers::is_pro() && ! STM_LMS_Helpers::is_pro_plus() ) {
@@ -446,29 +244,33 @@ add_filter(
 add_action(
 	'admin_menu',
 	function () {
+		if ( function_exists( 'masterstudy_lms_sort_admin_submenu_pages' ) ) {
+			return;
+		}
+
 		global $submenu;
 
 		if ( empty( $submenu['stm-lms-settings'] ) || ! is_array( $submenu['stm-lms-settings'] ) ) {
 			return;
 		}
 
-		$settings_item    = null;
-		$help_center_item = null;
-		$templates_item   = null;
-		$addons_item      = null;
-		$unlock_pro_item  = null;
-		$statistics_item  = null;
-		$reviews_item     = null;
-		$payouts_item     = null;
-		$coupons_item     = null;
-		$orders_item      = null;
-		$students_item    = null;
-		$point_statistics_item = null;
-		$courses_item     = null;
-		$course_category_item = null;
+		$settings_item          = null;
+		$help_center_item       = null;
+		$templates_item         = null;
+		$addons_item            = null;
+		$unlock_pro_item        = null;
+		$statistics_item        = null;
+		$reviews_item           = null;
+		$payouts_item           = null;
+		$coupons_item           = null;
+		$orders_item            = null;
+		$students_item          = null;
+		$point_statistics_item  = null;
+		$courses_item           = null;
+		$course_category_item   = null;
 		$question_category_item = null;
-		$reordered_items  = array();
-		$has_submissions_item = false;
+		$reordered_items        = array();
+		$has_submissions_item   = false;
 
 		foreach ( $submenu['stm-lms-settings'] as $item ) {
 			$item_slug = $item[2] ?? '';
@@ -571,7 +373,7 @@ add_action(
 
 			if ( null !== $course_category_item ) {
 				$submenu['stm-lms-settings'][] = $course_category_item;
-				$course_category_item         = null;
+				$course_category_item          = null;
 			}
 		}
 
@@ -580,7 +382,7 @@ add_action(
 
 			if ( false !== strpos( $item[2] ?? '', 'post_type=stm-questions' ) && null !== $question_category_item ) {
 				$submenu['stm-lms-settings'][] = $question_category_item;
-				$question_category_item       = null;
+				$question_category_item        = null;
 			}
 
 			if (

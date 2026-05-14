@@ -111,6 +111,7 @@ class Taxonomy {
 						'menu_name'         => __( 'Question Category', Plugin::TRANSLATION_DOMAIN ),
 					),
 					'show_ui'           => true,
+					'show_in_menu'      => false,
 					'show_admin_column' => true,
 					'query_var'         => true,
 				),

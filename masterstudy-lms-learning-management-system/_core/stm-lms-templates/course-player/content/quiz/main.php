@@ -157,6 +157,7 @@ $grade         = is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_inst
 							'current_page'      => 1,
 							'done_indicator'    => true,
 							'dark_mode'         => $dark_mode,
+							'item_width'        => 50,
 						)
 					);
 					?>

@@ -15,12 +15,6 @@ if ( ! class_exists( 'STM_Lms_Post_Type' ) ) {
 			$post_types = $this->post_types();
 
 			foreach ( $post_types as $post_type => $post_type_info ) {
-				$current_user = STM_LMS_User::get_current_user( null, true );
-
-				if ( ! empty( $current_user['id'] ) && in_array( STM_LMS_Instructor::role(), $current_user['roles'], true ) ) {
-					$post_type_info['args']['show_in_menu'] = true;
-				}
-
 				$add_args = ( ! empty( $post_type_info['args'] ) ) ? $post_type_info['args'] : array();
 				$args     = $this->post_type_args(
 					$this->post_types_labels( $post_type_info['single'], $post_type_info['plural'] ),

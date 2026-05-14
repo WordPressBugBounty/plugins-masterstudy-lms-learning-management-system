@@ -42,7 +42,7 @@ final class CourseSerializer extends AbstractSerializer {
 				'owner'             => array(
 					'id'     => $course->owner->ID,
 					'name'   => $course->owner->display_name,
-					'avatar' => $this->get_avatar_url( $course->owner->ID ),
+					'avatar' => \STM_LMS_User::get_avatar_url( $course->owner->ID ),
 				),
 				'level'             => $course->level,
 				'prerequisites'     => $course->prerequisites,
@@ -61,13 +61,4 @@ final class CourseSerializer extends AbstractSerializer {
 		);
 	}
 
-	private function get_avatar_url( int $user_id ) {
-		$url = get_user_meta( $user_id, 'stm_lms_user_avatar', true );
-
-		if ( empty( $url ) ) {
-			$url = get_avatar_url( $user_id );
-		}
-
-		return $url;
-	}
 }

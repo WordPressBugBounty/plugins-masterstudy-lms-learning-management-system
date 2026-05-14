@@ -19,6 +19,7 @@ wp_localize_script(
 	array(
 		'select_id'      => $select_id,
 		'select_on_load' => $select_on_load ?? false,
+		'post_types'     => $post_types ?? array(),
 	)
 );
 

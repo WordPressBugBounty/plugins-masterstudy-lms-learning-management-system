@@ -237,7 +237,7 @@ class StmLmsPayout extends StmBaseModel {
 			->where_raw( ' order_items.`payout_id` IS NULL ' )
 			->where_in( '_order.`post_type`', array( 'shop_order', 'stm-orders' ) )
 			->where_raw( " ( DATE(_order.post_date) <= DATE('" . gmdate( 'Y-m-d' ) . "') ) " )
-			->where_in( 'course.`post_type`', array( 'stm-courses', 'product' ) )
+			->where_in( 'course.`post_type`', array( 'stm-courses', 'stm-course-bundles', 'product' ) )
 			->where_raw( "( ( meta.`meta_key` = 'status' AND meta.`meta_value` = 'completed')  OR ( _order.`post_status` = 'wc-completed' ) )" )
 			->group_by( ' order_items.id ' )
 			->find();

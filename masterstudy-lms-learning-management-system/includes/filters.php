@@ -48,7 +48,7 @@ function masterstudy_lms_rest_api_user( $data, $user, $request ) {
 	$user_meta         = get_user_meta( $user->ID );
 	$instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', true );
 
-	$data->data['avatar']            = ! empty( $user_meta['stm_lms_user_avatar'] ) ? $user_meta['stm_lms_user_avatar'][0] : get_avatar_url( $user->ID );
+	$data->data['avatar']            = STM_LMS_User::get_avatar_url( $user->ID );
 	$data->data['position']          = $user_meta['position'][0] ?? '';
 	$data->data['facebook']          = $user_meta['facebook'][0] ?? '';
 	$data->data['twitter']           = $user_meta['twitter'][0] ?? '';

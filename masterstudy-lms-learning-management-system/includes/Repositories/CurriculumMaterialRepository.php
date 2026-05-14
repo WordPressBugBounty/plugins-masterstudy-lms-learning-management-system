@@ -47,6 +47,15 @@ final class CurriculumMaterialRepository extends CurriculumRepository {
 			: 0;
 	}
 
+	public function count_by_types( array $section_ids, array $post_types ): int {
+		return ! empty( $section_ids ) && ! empty( $post_types )
+			? ( new CurriculumMaterial() )->query()
+				->where_in( 'section_id', $section_ids )
+				->where_in( 'post_type', $post_types )
+				->find( true )
+			: 0;
+	}
+
 	public function get_course_materials( int $course_id, bool $only_ids = true ): array {
 		$section_ids = ( new CurriculumSectionRepository() )->get_course_section_ids( $course_id );
 		$order_ids   = implode( ',', $section_ids );
@@ -123,6 +132,16 @@ final class CurriculumMaterialRepository extends CurriculumRepository {
 		}
 
 		return false;
+	}
+
+	public function delete_by_post( int $post_id ): void {
+		$materials = $this->find_by_post( $post_id );
+
+		foreach ( $materials as $material ) {
+			if ( ! empty( $material->id ) ) {
+				$this->delete( (int) $material->id );
+			}
+		}
 	}
 
 	public function import( array $data ): array {

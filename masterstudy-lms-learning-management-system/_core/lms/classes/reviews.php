@@ -150,7 +150,7 @@ class STM_LMS_Reviews {
 						continue;
 					}
 					$user_name = ( ! empty( $user_data->data->display_name ) ) ? $user_data->data->display_name : $user_data->data->user_nicename;
-					$avatar    = get_avatar_url( $user );
+					$avatar    = STM_LMS_User::get_avatar_url( $user );
 
 					if ( ! empty( $user_class['avatar_url'] ) ) {
 						$avatar = $user_class['avatar_url'];

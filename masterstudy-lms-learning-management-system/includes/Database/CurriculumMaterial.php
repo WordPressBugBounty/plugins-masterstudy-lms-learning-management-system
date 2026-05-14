@@ -36,7 +36,7 @@ class CurriculumMaterial extends AbstractQuery {
 			->asTable( 'materials' )
 			->join(
 				sprintf(
-					'left join %sposts as posts on (posts.ID = materials.post_id)',
+					'inner join %sposts as posts on (posts.ID = materials.post_id)',
 					$wpdb->prefix
 				)
 			)

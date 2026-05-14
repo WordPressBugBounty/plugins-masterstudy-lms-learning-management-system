@@ -128,7 +128,16 @@ class STM_LMS_Order {
 		$cart_items = array();
 		$total      = 0;
 
-		if ( is_ms_lms_addon_enabled( 'subscriptions' ) ) {
+		$can_load_subscription_plans = STM_LMS_Helpers::is_pro_plus()
+			&& is_ms_lms_addon_enabled( 'subscriptions' )
+			&& class_exists( 'MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository' )
+			&& function_exists( 'stm_lms_subscription_plans_table_name' );
+		$can_load_subscriptions      = STM_LMS_Helpers::is_pro_plus()
+			&& is_ms_lms_addon_enabled( 'subscriptions' )
+			&& class_exists( 'MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionRepository' )
+			&& function_exists( 'stm_lms_subscriptions_table_name' );
+
+		if ( $can_load_subscription_plans ) {
 			if ( isset( $order_meta['subscription_id'] ) && intval( $order_meta['subscription_id'] ) ) {
 				$order_meta['subscription_order_count'] = ( new SubscriptionPlanRepository() )->get_subscription_orders_with_queue( $order_id, intval( $order_meta['subscription_id'] ) );
 			}
@@ -161,7 +170,7 @@ class STM_LMS_Order {
 					$cart_item['image']      = get_the_post_thumbnail( $item_id, 'img-300-225' );
 					$cart_item['image_url']  = get_the_post_thumbnail_url( $item_id, 'img-300-225' );
 					$cart_item['image_full'] = get_the_post_thumbnail( $item_id, 'full' );
-				} elseif ( is_ms_lms_addon_enabled( 'subscriptions' ) && class_exists( 'MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository' ) ) {
+				} elseif ( $can_load_subscription_plans ) {
 					$subscription_plan              = ( new SubscriptionPlanRepository() )->get( $item_id );
 					$cart_item['title']             = $subscription_plan['name'] ?? esc_html__( 'N/A', 'masterstudy-lms-learning-management-system' );
 					$cart_item['subscription_type'] = SubscriptionPlanRepository::get_plan_type( $subscription_plan['type'] ?? '' );
@@ -224,9 +233,9 @@ class STM_LMS_Order {
 
 		if ( $is_result_empty || $should_check_for_coupon ) {
 			$subs_id = get_post_meta( $order_id, 'subscription_id', true );
-			if ( null !== $subs_id && '' !== $subs_id && is_ms_lms_addon_enabled( 'subscriptions' ) ) {
+			if ( null !== $subs_id && '' !== $subs_id && $can_load_subscriptions ) {
 				$get_subscription = ( new SubscriptionRepository() )->get( intval( $subs_id ) );
-				$first_order_id   = $get_subscription['first_order_id'];
+				$first_order_id   = $get_subscription['first_order_id'] ?? 0;
 
 				if ( $is_result_empty ) {
 					$result = get_post_meta( $first_order_id, 'personal_data', true ) ?? array();

@@ -50,8 +50,10 @@ class STM_LMS_Students {
 
 		if ( STM_LMS_Helpers::is_pro_plus() && ! empty( $student_id ) ) {
 			STM_LMS_Templates::show_lms_template( 'account/instructor/enrolled-student' );
-		} else {
+		} elseif ( ! empty( $student_id ) ) {
 			STM_LMS_Templates::show_lms_template( 'account/instructor/parts/students-list' );
+		} else {
+			STM_LMS_Templates::show_lms_template( 'components/admin-react-app/main' );
 		}
 	}
 }

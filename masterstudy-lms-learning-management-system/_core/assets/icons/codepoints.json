@@ -482,5 +482,7 @@
   "subs-menu": "EBE1",
   "upload-3": "EBE2",
   "upload-svg": "EBE3",
-  "mega-menu-widget": "EBE4"
+  "mega-menu-widget": "EBE4",
+  "placeholder": "EBE5",
+  "menu-my-certificates-filled": "EBE6"
 }

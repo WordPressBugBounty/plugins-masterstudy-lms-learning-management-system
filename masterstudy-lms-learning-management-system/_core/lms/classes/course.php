@@ -131,7 +131,7 @@ class STM_LMS_Course {
 			$course['for_points']      = $for_points;
 			$course['subscription_id'] = $subscription_id;
 
-			if ( is_ms_lms_addon_enabled( 'grades' ) && masterstudy_lms_is_course_gradable( $course_id ) ) {
+			if ( is_ms_lms_addon_enabled( 'grades' ) && function_exists( 'masterstudy_lms_is_course_gradable' ) && masterstudy_lms_is_course_gradable( $course_id ) ) {
 				$course['is_gradable'] = 1;
 			}
 
@@ -385,9 +385,15 @@ class STM_LMS_Course {
 
 		return array(
 			'sections'    => count( $section_ids ),
-			'lessons'     => $materials->count_by_type( $section_ids, 'stm-lessons' ),
-			'quizzes'     => $materials->count_by_type( $section_ids, 'stm-quizzes' ),
-			'assignments' => $materials->count_by_type( $section_ids, 'stm-assignments' ),
+			'lessons'     => $materials->count_by_types(
+				$section_ids,
+				array(
+					PostType::LESSON,
+					PostType::GOOGLE_MEET,
+				)
+			),
+			'quizzes'     => $materials->count_by_type( $section_ids, PostType::QUIZ ),
+			'assignments' => $materials->count_by_type( $section_ids, PostType::ASSIGNMENT ),
 		);
 	}
 

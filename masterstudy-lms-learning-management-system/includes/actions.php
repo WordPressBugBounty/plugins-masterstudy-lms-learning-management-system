@@ -3,6 +3,7 @@
 /** @var \MasterStudy\Lms\Plugin $plugin */
 
 use MasterStudy\Lms\Repositories\CurriculumRepository;
+use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Repositories\CurriculumSectionRepository;
 use MasterStudy\Lms\Plugin\PostType;
 
@@ -31,6 +32,17 @@ add_action(
 	function ( int $post_id, \WP_Post $post ) {
 		if ( PostType::COURSE === $post->post_type ) {
 			( new CurriculumSectionRepository() )->delete_course_sections( $post_id );
+			return;
+		}
+
+		if (
+			in_array(
+				$post->post_type,
+				array( PostType::LESSON, PostType::QUIZ, PostType::ASSIGNMENT, PostType::GOOGLE_MEET ),
+				true
+			)
+		) {
+			( new CurriculumMaterialRepository() )->delete_by_post( $post_id );
 		}
 	},
 	10,
@@ -149,66 +161,6 @@ function masterstudy_lms_gutenberg_blocks_init() {
 }
 add_action( 'init', 'masterstudy_lms_gutenberg_blocks_init' );
 
-function masterstudy_analytics_main_page() {
-	add_menu_page(
-		esc_html__( 'Revenue', 'masterstudy-lms-learning-management-system' ),
-		esc_html__( 'Analytics', 'masterstudy-lms-learning-management-system' ),
-		'manage_options',
-		'revenue',
-		'masterstudy_analytics_revenue_page',
-		'dashicons-chart-area',
-		4
-	);
-}
-add_action( 'admin_menu', 'masterstudy_analytics_main_page' );
-
-function masterstudy_analytics_revenue_page() {
-	if ( STM_LMS_Helpers::is_pro_plus() ) {
-		if ( ! empty( $_GET['course_id'] ) ) {
-			STM_LMS_Templates::show_lms_template( 'analytics/course' );
-
-			return;
-		}
-
-		if ( ! empty( $_GET['bundle_id'] ) ) {
-			STM_LMS_Templates::show_lms_template( 'analytics/bundle' );
-
-			return;
-		}
-
-		if ( ! empty( $_GET['user_id'] ) ) {
-			STM_LMS_Templates::show_lms_template( 'analytics/student' );
-
-			return;
-		}
-
-		STM_LMS_Templates::show_lms_template( 'analytics/revenue' );
-	} else {
-		STM_LMS_Templates::show_lms_template( 'analytics-preview' );
-	}
-}
-
-function masterstudy_remove_admin_notices() {
-	$screen = get_current_screen();
-	$pages  = array(
-		'toplevel_page_revenue',
-		'analytics_page_engagement',
-		'analytics_page_users',
-		'analytics_page_reviews',
-		'toplevel_page_grades',
-		'masterstudy_page_manage_orders',
-		'masterstudy_page_manage_memberships',
-		'masterstudy_page_manage_membership_plans',
-		'masterstudy_page_manage_coupons',
-	);
-
-	if ( in_array( $screen->id, $pages, true ) ) {
-		remove_all_actions( 'admin_notices' );
-		remove_all_actions( 'all_admin_notices' );
-	}
-}
-add_action( 'admin_head', 'masterstudy_remove_admin_notices' );
-
 /**
  * Hook for enrolling a user in courses after completing a WooCommerce checkout as a guest.
  *
@@ -263,17 +215,3 @@ add_action(
 	10,
 	1
 );
-
-function masterstudy_add_orders_page() {
-	add_submenu_page(
-		'stm-lms-settings',
-		esc_html__( 'Orders', 'masterstudy-lms-learning-management-system' ),
-		'<span class="stm-lms-students-menu-title"><span class="stm-lms-menu-text">' . esc_html__( 'Orders', 'masterstudy-lms-learning-management-system' ) . '</span><span class="stm-lms-menu-status">' . esc_html__( 'new', 'masterstudy-lms-learning-management-system' ) . '</span></span>',
-		'manage_options',
-		'manage_orders',
-		fn () => STM_LMS_Templates::show_lms_template( 'orders' ),
-		stm_lms_addons_menu_position()
-	);
-}
-
-add_action( 'admin_menu', 'masterstudy_add_orders_page', 100001 );

@@ -1,7 +1,9 @@
 <?php
+use MasterStudy\Lms\Enums\PricingMode;
 use MasterStudy\Lms\Plugin\Addons;
 use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Services\CourseService;
+use MasterStudy\Lms\Repositories\PricingRepository;
 
 STM_LMS_User::init();
 
@@ -753,6 +755,26 @@ class STM_LMS_User {
 		}
 	}
 
+	public static function get_avatar_url( $user_id, $args = array() ) {
+		$user_id = absint( $user_id );
+
+		if ( empty( $user_id ) ) {
+			return '';
+		}
+
+		$charset = get_bloginfo( 'charset' );
+		if ( empty( $charset ) ) {
+			$charset = 'UTF-8';
+		}
+		$avatar_url = get_user_meta( $user_id, 'stm_lms_user_avatar', true );
+
+		if ( empty( $avatar_url ) ) {
+			$avatar_url = get_avatar_url( $user_id, $args );
+		}
+
+		return esc_url_raw( html_entity_decode( (string) $avatar_url, ENT_QUOTES, $charset ) );
+	}
+
 	public static function get_current_user( $id = '', $get_role = false, $get_meta = false, $no_avatar = false, $avatar_size = 215, $for_student = false ) {
 		$user = array(
 			'id' => 0,
@@ -768,17 +790,17 @@ class STM_LMS_User {
 				/*Get Meta*/
 				$stm_lms_user_avatar = get_user_meta( $current_user->ID, 'stm_lms_user_avatar', true );
 				if ( ! empty( $stm_lms_user_avatar ) ) {
-					$avatar     = "<img src='{$stm_lms_user_avatar}' class='avatar photo' width='{$avatar_size}' />";
-					$avatar_url = $stm_lms_user_avatar;
+					$avatar = "<img src='{$stm_lms_user_avatar}' class='avatar photo' width='{$avatar_size}' />";
 				} else {
 					$avatar = get_avatar( $current_user->ID, $avatar_size );
-
-					if ( preg_match( '/src=["\']([^"\']+)["\']/', $avatar, $match ) ) {
-						$avatar_url = $match[1]; // Extract the URL directly
-					} else {
-						$avatar_url = $stm_lms_user_avatar; // Default to empty string if no match found
-					}
 				}
+
+				$avatar_url = self::get_avatar_url(
+					$current_user->ID,
+					array(
+						'size' => absint( $avatar_size ),
+					)
+				);
 			} else {
 				$avatar = '';
 			}
@@ -860,12 +882,12 @@ class STM_LMS_User {
 		}
 		$page = max( 1, $page );
 
-		$r = self::_get_user_courses( $page, $status );
+		$r = self::get_user_courses_data( $page, $status );
 
 		wp_send_json( apply_filters( 'stm_lms_get_user_courses_filter', $r ) );
 	}
 
-	public static function _get_user_courses( $page, $status = 'all' ) {
+	public static function get_user_courses_data( $page, $status = 'all' ) {
 		$user     = self::get_current_user();
 		$response = array(
 			'courses'      => array(),
@@ -1075,7 +1097,7 @@ class STM_LMS_User {
 				$id,
 				false
 			);
-		} elseif ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
+		} elseif ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) && class_exists( CourseService::class ) && function_exists( 'stm_lms_subscriptions_table_name' ) ) {
 			$state = ( new CourseService() )->get_course_access_state( (int) $user_id, $course, (int) $id );
 		} else {
 			$state = array();
@@ -1120,7 +1142,7 @@ class STM_LMS_User {
 		$columns = array( 'user_course_id', 'enterprise_id', 'subscription_id', 'bundle_id', 'for_points' );
 		$course  = stm_lms_get_user_course( $user_id, $course_id, $columns );
 
-		if ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
+		if ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) && class_exists( CourseService::class ) && function_exists( 'stm_lms_subscriptions_table_name' ) ) {
 			$subscription_info = ( new CourseService() )->has_access_to_course( $user_id, $course, $course_id, $add );
 			$condition         = $add ? $subscription_info['only_for_membership'] && $subscription_info['bought_by_membership'] : $subscription_info['only_for_membership'] && ! empty( $subscription_info['subscription_id'] );
 			if ( $condition ) {
@@ -1138,7 +1160,8 @@ class STM_LMS_User {
 		if ( ! count( $course ) ) {
 			/*If course is free*/
 			$prerequisite_passed = true;
-			$is_free             = ( get_post_meta( $course_id, 'single_sale', true ) && empty( STM_LMS_Course::get_course_price( $course_id ) ) );
+			$pricing             = ( new PricingRepository() )->get( (int) $course_id );
+			$is_free             = PricingMode::FREE === $pricing['pricing_mode'];
 			if ( class_exists( 'STM_LMS_Prerequisites' ) ) {
 				$prerequisite_passed = STM_LMS_Prerequisites::is_prerequisite( true, $course_id );
 			}

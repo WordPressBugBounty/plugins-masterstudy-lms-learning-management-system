@@ -20,6 +20,7 @@ final class QuestionCategorySerializer extends AbstractSerializer {
 			'taxonomy'         => $data->taxonomy,
 			'description'      => $data->description,
 			'parent'           => $data->parent,
+			'parent_name'      => $data->parent ? html_entity_decode( get_term( $data->parent, \MasterStudy\Lms\Plugin\Taxonomy::QUESTION_CATEGORY )->name ?? '' ) : null,
 			'count'            => $data->count,
 		);
 	}

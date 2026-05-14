@@ -2,7 +2,6 @@
 
 namespace MasterStudy\Lms\Repositories;
 
-use MasterStudy\Lms\Http\WpResponseFactory;
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 use MasterStudy\Lms\Plugin\PostType;
 use STM_LMS_Helpers;
@@ -74,6 +73,7 @@ final class StudentsRepository {
 
 		foreach ( $students as &$data ) {
 			$data                  = ( new \STM_LMS_User_Manager_Course() )->map_students( $data );
+			$data['student']       = $this->normalize_student_avatar_data( $data['student'] );
 			$student_id            = $data['user_id'];
 			$data['progress_link'] = \STM_LMS_Instructor::instructor_manage_students_url() . "/?course_id=$course_id&student_id=$student_id";
 		}
@@ -99,11 +99,12 @@ final class StudentsRepository {
 
 		$students = array_slice( $students, $offset, $per_page );
 		$output   = array(
-			'students'  => $students,
-			'page'      => $page,
-			'total'     => $total,
-			'per_page'  => $per_page,
-			'max_pages' => ceil( $total / $per_page ),
+			'students'     => $students,
+			'page'         => $page,
+			'total'        => $total,
+			'per_page'     => $per_page,
+			'max_pages'    => ceil( $total / $per_page ),
+			'course_title' => get_the_title( $course_id ),
 		);
 
 		return $output;
@@ -176,13 +177,13 @@ final class StudentsRepository {
 			$subscribed_guest_emails = array_diff( $subscribed_user_emails, $course_enrolled_emails );
 
 			foreach ( $subscribed_guest_emails as $guest_email ) {
-				$total++;
+				++$total;
 
 				$user       = get_user_by( 'email', $guest_email );
 				$avatar_url = get_avatar_url( 'guest@example.com' );
 
 				if ( $user ) {
-					$avatar_url = get_avatar_url( $user->ID );
+					$avatar_url = \STM_LMS_User::get_avatar_url( $user->ID );
 				}
 
 				$avatar_img = "<img src='" . esc_url( $avatar_url ) . "' class='avatar' alt='User Avatar'>";
@@ -192,11 +193,12 @@ final class StudentsRepository {
 						'course_id'     => $course_id,
 						'progress_link' => esc_url( \STM_LMS_Instructor::instructor_manage_students_url() . "/?course_id=$course_id&student_id=$user->ID" ),
 						'student'       => array(
-							'id'     => $user->ID,
-							'login'  => $user->user_login,
-							'email'  => $guest_email,
-							'avatar' => $avatar_img,
-							'url'    => esc_url( \STM_LMS_User::student_public_page_url( $user->ID ) ),
+							'id'         => $user->ID,
+							'login'      => $user->user_login,
+							'email'      => $guest_email,
+							'avatar'     => $avatar_img,
+							'avatar_url' => $this->normalize_avatar_url( $avatar_url ),
+							'url'        => esc_url( \STM_LMS_User::student_public_page_url( $user->ID ) ),
 						),
 					);
 				} else {
@@ -204,11 +206,12 @@ final class StudentsRepository {
 						'course_id'     => $course_id,
 						'progress_link' => '#',
 						'student'       => array(
-							'id'     => 0,
-							'login'  => esc_html__( 'Guest', 'masterstudy-lms-learning-management-system' ),
-							'email'  => $guest_email,
-							'avatar' => $avatar_img,
-							'url'    => '',
+							'id'         => 0,
+							'login'      => esc_html__( 'Guest', 'masterstudy-lms-learning-management-system' ),
+							'email'      => $guest_email,
+							'avatar'     => $avatar_img,
+							'avatar_url' => $this->normalize_avatar_url( $avatar_url ),
+							'url'        => '',
 						),
 					);
 				}
@@ -236,10 +239,42 @@ final class StudentsRepository {
 		);
 	}
 
+	private function normalize_student_avatar_data( array $student ): array {
+		$user_id = absint( $student['id'] ?? 0 );
+
+		if ( $user_id && ! empty( $student['no_avatar'] ) ) {
+			$student['avatar_url'] = $this->normalize_avatar_url( \STM_LMS_User::get_avatar_url( $user_id, array( 'size' => 96 ) ) );
+
+			return $student;
+		}
+
+		if ( ! empty( $student['avatar_url'] ) ) {
+			$student['avatar_url'] = $this->normalize_avatar_url( $student['avatar_url'] );
+
+			return $student;
+		}
+
+		if ( ! empty( $student['avatar'] ) && preg_match( '/src=["\']([^"\']+)["\']/', $student['avatar'], $matches ) ) {
+			$student['avatar_url'] = $this->normalize_avatar_url( $matches[1] );
+		}
+
+		return $student;
+	}
+
+	private function normalize_avatar_url( string $url ): string {
+		$charset = get_bloginfo( 'charset' );
+		if ( empty( $charset ) ) {
+			$charset = 'UTF-8';
+		}
+		$url = html_entity_decode( $url, ENT_QUOTES, $charset );
+
+		return esc_url_raw( $url );
+	}
+
 	private function sort_students( $students, $params, $order ) {
 		usort(
 			$students,
-			function( $a, $b ) use ( $params, $order ) {
+			function ( $a, $b ) use ( $params, $order ) {
 				switch ( $params['orderby'] ) {
 					case 'username':
 						$value_a = strtolower( $a['student']['login'] ?? '' );
@@ -277,6 +312,59 @@ final class StudentsRepository {
 				$course_id
 			)
 		);
+	}
+
+	public function get_course_students_stats( int $course_id ): array {
+		global $wpdb;
+
+		$course_table = stm_lms_user_courses_name( $wpdb );
+		$threshold    = (int) \STM_LMS_Options::get_option( 'certificate_threshold', 70 );
+
+		$stats = $wpdb->get_row(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT COUNT(*) AS total_students, SUM(CASE WHEN progress_percent >= %d THEN 1 ELSE 0 END) AS completed, SUM(CASE WHEN progress_percent > 0 AND progress_percent < %d THEN 1 ELSE 0 END) AS in_progress FROM {$course_table}
+				WHERE course_id = %d",
+				$threshold,
+				$threshold,
+				$course_id
+			),
+			ARRAY_A
+		);
+
+		return array(
+			'total_students' => (int) ( $stats['total_students'] ?? 0 ),
+			'completed'      => (int) ( $stats['completed'] ?? 0 ),
+			'in_progress'    => (int) ( $stats['in_progress'] ?? 0 ),
+		);
+	}
+
+	public function is_student_enrolled_in_course( int $course_id, int $student_id ): bool {
+		if ( $course_id <= 0 || $student_id <= 0 ) {
+			return false;
+		}
+
+		$user_course = \STM_LMS_Course::get_user_course( $student_id, $course_id );
+
+		return ! empty( $user_course ) && (int) ( $user_course['course_id'] ?? 0 ) === $course_id;
+	}
+
+	public function course_has_material( int $course_id, int $material_id ): bool {
+		$course_materials = ( new CurriculumMaterialRepository() )->get_course_materials( $course_id );
+
+		if ( empty( $course_materials ) ) {
+			return false;
+		}
+
+		return in_array( $material_id, array_map( 'intval', $course_materials ), true );
+	}
+
+	public function get_student_progress( int $course_id, int $student_id ): array {
+		return ( new StudentProgressRepository() )->get_student_progress( $course_id, $student_id );
+	}
+
+	public function get_student_progress_material_details( int $course_id, int $student_id, int $material_id ): array {
+		return ( new StudentProgressRepository() )->get_student_progress_material_details( $course_id, $student_id, $material_id );
 	}
 
 	public function add_student( $course_id, $data ) {
@@ -475,7 +563,9 @@ final class StudentsRepository {
 				continue;
 			}
 
-			if ( ! \STM_LMS_Course::check_course_author( $item['course_id'], get_current_user_id() ) ) {
+			$is_course_author = \STM_LMS_Course::check_course_author( $item['course_id'], get_current_user_id() );
+
+			if ( ! current_user_can( 'administrator' ) && ! $is_course_author ) {
 				continue;
 			}
 
@@ -673,18 +763,18 @@ final class StudentsRepository {
 			$course_passed = intval( \STM_LMS_Options::get_option( 'certificate_threshold', 70 ) ) <= intval( $course['progress_percent'] );
 
 			if ( ! empty( $lesson_completed ) && ! $course_passed ) {
-				$statuses['failed']++;
+				++$statuses['failed'];
 			} elseif ( intval( $course['progress_percent'] ) > 0 ) {
 				if ( $course_passed ) {
-					$statuses['completed']++;
+					++$statuses['completed'];
 				} else {
-					$statuses['in_progress']++;
+					++$statuses['in_progress'];
 				}
 			} else {
-				$statuses['not_started']++;
+				++$statuses['not_started'];
 			}
 
-			$statuses['summary']++;
+			++$statuses['summary'];
 		}
 
 		return $statuses;

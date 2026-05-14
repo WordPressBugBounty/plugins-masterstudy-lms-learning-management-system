@@ -406,10 +406,17 @@ function stm_lms_lazyload_image( $image ) {
 }
 
 function masterstudy_get_image( $post_id, $lazyload = false, $class = null, $width = null, $height = null ) {
-	$width     = ! empty( $width ) ? $width : 330;
-	$height    = ! empty( $height ) ? $height : 185;
-	$image_url = wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), array( $width, $height ) );
-	$image_url = ( ! empty( $image_url ) ) ? $image_url[0] : '';
+	$width        = ! empty( $width ) ? $width : 330;
+	$height       = ! empty( $height ) ? $height : 185;
+	$thumbnail_id = get_post_thumbnail_id( $post_id );
+	$image_src    = wp_get_attachment_image_src( $thumbnail_id, array( $width, $height ) );
+
+	if ( ! empty( $image_src ) && isset( $image_src[2] ) && (int) $image_src[2] < ( (int) $height / 2 ) ) {
+		$full_image_src = wp_get_attachment_image_src( $thumbnail_id, 'full' );
+		$image_src      = ! empty( $full_image_src ) ? $full_image_src : $image_src;
+	}
+
+	$image_url = ( ! empty( $image_src ) ) ? $image_src[0] : '';
 	$image     = '<img src="' . esc_url( $image_url ?? '' ) . '" class="' . esc_attr( $class ?? '' ) . '">';
 
 	if ( $lazyload ) {
@@ -1492,7 +1499,7 @@ add_action( 'install_plugins_pre_masterstudy_addons', 'masterstudy_addons_plugin
 function masterstudy_lms_course_has_certificate( $course_id ) {
 	global $wpdb;
 
-	if ( is_ms_lms_addon_enabled( 'subscriptions' ) && class_exists( 'MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Services\CourseService' ) ) {
+	if ( is_ms_lms_addon_enabled( 'subscriptions' ) && class_exists( CourseService::class ) && function_exists( 'stm_lms_subscriptions_table_name' ) ) {
 		$is_provided = ( new CourseService() )->is_certificate_provided( get_current_user_id(), $course_id );
 		if ( ! $is_provided ) {
 			return false;

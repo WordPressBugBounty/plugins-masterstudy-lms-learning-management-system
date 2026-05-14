@@ -48,7 +48,7 @@ class STM_LMS_User_Manager_Course {
 				$avatar_url = get_avatar_url( 'guest@example.com' );
 
 				if ( $user ) {
-					$avatar_url = get_avatar_url( $user->ID );
+					$avatar_url = STM_LMS_User::get_avatar_url( $user->ID );
 				}
 				$avatar_img = "<img src='" . esc_url( $avatar_url ) . "' class='avatar' alt='User Avatar'>";
 

@@ -29,6 +29,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       currentPost = '',
       currentCourse = '',
       postToDuplicate = '';
+
+    // Listen for React CustomEvent to open the template modal
+    window.addEventListener('masterstudy-open-course-templates', function (e) {
+      var _e$detail;
+      mainContainer.addClass('masterstudy-course-templates_open');
+      $('body').addClass('masterstudy-course-templates_open');
+      currentPlace = 'react_drawer';
+      open_active_template(((_e$detail = e.detail) === null || _e$detail === void 0 ? void 0 : _e$detail.currentStyle) || 'default');
+    });
     $(document).on('click', '#masterstudy-settings-course-change', function () {
       mainContainer.addClass('masterstudy-course-templates_open');
       $('body').addClass('masterstudy-course-templates_open');
@@ -502,7 +511,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }());
     $(document).on('click', '[data-id="masterstudy-save-course-template"]', /*#__PURE__*/function () {
       var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(e) {
-        var selectedValue, _this, data, response, responseData, input, _selectedValue, selectedTitle, _this2, _data, _response, _responseData, buttonTitle, buttonPopup, _input, _selectedValue2, _selectedTitle, _buttonTitle2, _buttonPopup2, _input2, _selectedValue3, _selectedTitle2, _buttonTitle3, _buttonPopup3, _input3, _selectedValue4, _selectedTitle3, _this3, _data2, _response2, _responseData2, button;
+        var selectedValue, _this, data, response, responseData, input, _selectedValue, selectedTitle, _this2, _data, _response, _responseData, buttonTitle, buttonPopup, _input, _selectedValue2, _selectedTitle, _buttonTitle2, _buttonPopup2, _input2, _selectedValue3, _selectedTitle2, _buttonTitle3, _buttonPopup3, _input3, _selectedValue4, _selectedTitle3, _input4, _selectedValue5, _selectedTitle4, _this3, _data2, _response2, _responseData2, button;
         return _regeneratorRuntime().wrap(function _callee5$(_context5) {
           while (1) switch (_context5.prev = _context5.next) {
             case 0:
@@ -562,7 +571,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _this.removeClass('masterstudy-button_loading');
               return _context5.finish(21);
             case 24:
-              _context5.next = 104;
+              _context5.next = 113;
               break;
             case 26:
               if (!(currentPlace === 'edit_category')) {
@@ -625,7 +634,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _this2.removeClass('masterstudy-button_loading');
               return _context5.finish(48);
             case 51:
-              _context5.next = 104;
+              _context5.next = 113;
               break;
             case 53:
               if (!(currentPlace === 'new_category')) {
@@ -645,7 +654,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               $('#course_page_style').val(_selectedValue2);
               mainContainer.removeClass('masterstudy-course-templates_open');
               $('body').removeClass('masterstudy-course-templates_open');
-              _context5.next = 104;
+              _context5.next = 113;
               break;
             case 66:
               if (!(currentPlace === 'edit_category_inside')) {
@@ -665,31 +674,49 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               $('#course_page_style').val(_selectedValue3);
               mainContainer.removeClass('masterstudy-course-templates_open');
               $('body').removeClass('masterstudy-course-templates_open');
-              _context5.next = 104;
+              _context5.next = 113;
               break;
             case 79:
-              if (!(currentPlace === 'edit_page')) {
-                _context5.next = 104;
+              if (!(currentPlace === 'react_drawer')) {
+                _context5.next = 88;
                 break;
               }
               _input3 = $('input[name="masterstudy_course_style"]:checked');
               _selectedValue4 = _input3.val();
               _selectedTitle3 = _input3.closest('.masterstudy-course-templates__item-bottom').find('.masterstudy-course-templates__item-title-text').text();
+              window.dispatchEvent(new CustomEvent('masterstudy-course-template-selected', {
+                detail: {
+                  style: _selectedValue4,
+                  title: _selectedTitle3.trim()
+                }
+              }));
+              mainContainer.removeClass('masterstudy-course-templates_open');
+              $('body').removeClass('masterstudy-course-templates_open');
+              _context5.next = 113;
+              break;
+            case 88:
+              if (!(currentPlace === 'edit_page')) {
+                _context5.next = 113;
+                break;
+              }
+              _input4 = $('input[name="masterstudy_course_style"]:checked');
+              _selectedValue5 = _input4.val();
+              _selectedTitle4 = _input4.closest('.masterstudy-course-templates__item-bottom').find('.masterstudy-course-templates__item-title-text').text();
               _this3 = $(this);
-              if (_selectedValue4) {
-                _context5.next = 86;
+              if (_selectedValue5) {
+                _context5.next = 95;
                 break;
               }
               return _context5.abrupt("return");
-            case 86:
+            case 95:
               _data2 = {
-                course_style: _selectedValue4,
+                course_style: _selectedValue5,
                 course_id: parseInt(courseSelect.val()),
                 post_id: parseInt(currentPost)
               };
               _this3.addClass('masterstudy-button_loading');
-              _context5.prev = 88;
-              _context5.next = 91;
+              _context5.prev = 97;
+              _context5.next = 100;
               return fetch("".concat(ms_lms_resturl, "/course-templates/page-to-course-template"), {
                 method: 'POST',
                 headers: {
@@ -698,17 +725,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 },
                 body: JSON.stringify(_data2)
               });
-            case 91:
+            case 100:
               _response2 = _context5.sent;
-              _context5.next = 94;
+              _context5.next = 103;
               return _response2.json();
-            case 94:
+            case 103:
               _responseData2 = _context5.sent;
               if (_responseData2.status === 'success') {
                 button = $("[data-post-id=\"".concat(currentPost, "\"]"));
                 if (button.length) {
-                  button.find('.masterstudy-templates-page-button__template').text(_selectedTitle3);
-                  button.data('current-style', _selectedValue4);
+                  button.find('.masterstudy-templates-page-button__template').text(_selectedTitle4);
+                  button.data('current-style', _selectedValue5);
                   button.data('current-course', courseSelect.val());
                   if (_responseData2.course) {
                     button.find('.masterstudy-templates-page-button__course').text(_responseData2.course);
@@ -720,21 +747,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               } else {
                 console.error('Error updating template:', _responseData2.errors);
               }
-              _context5.next = 101;
+              _context5.next = 110;
               break;
-            case 98:
-              _context5.prev = 98;
-              _context5.t2 = _context5["catch"](88);
+            case 107:
+              _context5.prev = 107;
+              _context5.t2 = _context5["catch"](97);
               console.error('Error updating template:', _context5.t2);
-            case 101:
-              _context5.prev = 101;
+            case 110:
+              _context5.prev = 110;
               _this3.removeClass('masterstudy-button_loading');
-              return _context5.finish(101);
-            case 104:
+              return _context5.finish(110);
+            case 113:
             case "end":
               return _context5.stop();
           }
-        }, _callee5, this, [[8, 18, 21, 24], [35, 45, 48, 51], [88, 98, 101, 104]]);
+        }, _callee5, this, [[8, 18, 21, 24], [35, 45, 48, 51], [97, 107, 110, 113]]);
       }));
       return function (_x4) {
         return _ref5.apply(this, arguments);

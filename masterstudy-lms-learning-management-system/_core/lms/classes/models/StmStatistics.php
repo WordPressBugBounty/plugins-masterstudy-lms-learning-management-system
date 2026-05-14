@@ -10,24 +10,30 @@ class StmStatistics {
 	public $object;
 
 	public function admin_menu() {
-		add_action( 'wpcfto_screen_stm_lms_settings_added', array( $this, 'add_order_list' ), 100, 1 );
+		add_action( 'admin_menu', array( $this, 'add_order_list' ), 100001 );
 	}
 
 	public function add_order_list() {
-		$hook = add_submenu_page(
+		if ( function_exists( 'masterstudy_lms_resolve_admin_submenu_items' ) ) {
+			$registered_items = masterstudy_lms_resolve_admin_submenu_items( true );
+
+			if ( isset( $registered_items['stm_lms_statistics'] ) ) {
+				return;
+			}
+		}
+
+		add_submenu_page(
 			'stm-lms-settings',
 			__( 'Statistics', 'masterstudy-lms-learning-management-system' ),
 			__( '⤷ Statistics', 'masterstudy-lms-learning-management-system' ),
 			'manage_options',
 			'stm_lms_statistics',
-			array( $this, 'render_statistics' )
+			'masterstudy_lms_render_admin_react_page'
 		);
-
-		add_action( "load-$hook", array( $this, 'stm_lms_statistics_screen_option' ) );
 	}
 
 	public function render_statistics() {
-		stm_lms_render( STM_LMS_PATH . '/lms/views/statistics/statistics', array(), true );
+		\STM_LMS_Templates::show_lms_template( 'components/admin-react-app/main' );
 	}
 
 	public function stm_lms_statistics_screen_option() {

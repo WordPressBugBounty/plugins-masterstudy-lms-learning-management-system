@@ -491,7 +491,9 @@ function stm_lms_account_scripts() {
 
 function masterstudy_enqueue_students_page( string $hook_suffix ) {
 	$lms_template          = get_query_var( 'lms_template' );
-	$is_student_admin_page = ( 'masterstudy_page_manage_students' === $hook_suffix );
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$student_id            = absint( is_admin() ? ( isset( $_GET['user_id'] ) ? wp_unslash( $_GET['user_id'] ) : 0 ) : get_query_var( 'student_id' ) );
+	$is_student_admin_page = ( 'masterstudy_page_manage_students' === $hook_suffix ) && ! empty( $student_id );
 	$is_student_list       = ( 'account/instructor/enrolled-students' === $lms_template );
 	$is_student_item       = ( 'account/instructor/enrolled-student' === $lms_template );
 
@@ -526,9 +528,6 @@ function masterstudy_enqueue_students_page( string $hook_suffix ) {
 	}
 
 	if ( $is_student_admin_page || $is_student_list || $is_student_item ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$student_id = absint( is_admin() ? ( isset( $_GET['user_id'] ) ? wp_unslash( $_GET['user_id'] ) : 0 ) : get_query_var( 'student_id' ) );
-
 		if ( empty( $student_id ) ) {
 			wp_localize_script(
 				'masterstudy-list-students',
@@ -674,11 +673,6 @@ function stm_lms_nonces() {
 		'stm_lms_save_forms',
 		'stm_lms_get_forms',
 		'stm_lms_upload_form_file',
-		'stm_lms_dashboard_get_course_students',
-		'stm_lms_dashboard_delete_user_from_course',
-		'stm_lms_dashboard_add_user_to_course',
-		'stm_lms_dashboard_import_users_to_course',
-		'stm_lms_dashboard_export_course_students_to_csv',
 		'stm_lms_add_to_cart_guest',
 		'stm_lms_fast_login',
 		'stm_lms_fast_register',
@@ -692,13 +686,6 @@ function stm_lms_nonces() {
 		'stm_lms_restore_password',
 		'stm_lms_hide_announcement',
 		'stm_lms_get_curriculum_v2',
-		'stm_lms_dashboard_get_student_progress',
-		'stm_lms_dashboard_set_student_item_progress',
-		'stm_lms_dashboard_reset_student_progress',
-		'stm_lms_dashboard_get_courses_list',
-		'stm_lms_dashboard_get_student_assignments',
-		'stm_lms_dashboard_get_student_quizzes',
-		'stm_lms_dashboard_get_student_quiz',
 		'stm_lms_wizard_save_settings',
 		'stm_lms_wizard_save_business_type',
 		'stm_lms_get_enrolled_assingments',

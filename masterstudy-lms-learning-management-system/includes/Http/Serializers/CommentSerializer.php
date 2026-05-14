@@ -28,14 +28,11 @@ final class CommentSerializer extends AbstractSerializer {
 	}
 
 	private function get_avatar_url( WP_Comment $comment ): ?string {
-		$url = get_user_meta( $comment->user_id, 'stm_lms_user_avatar', true );
-
-		if ( $url ) {
-			return $url;
+		if ( $comment->user_id ) {
+			return \STM_LMS_User::get_avatar_url( $comment->user_id, array( 'size' => 96 ) );
 		}
 
-		$id_or_email = $comment->user_id ? $comment->user_id : $comment->comment_author_email;
-		$url         = get_avatar_url( $id_or_email, array( 'size' => 96 ) );
+		$url = get_avatar_url( $comment->comment_author_email, array( 'size' => 96 ) );
 
 		return $url ? $url : null;
 	}

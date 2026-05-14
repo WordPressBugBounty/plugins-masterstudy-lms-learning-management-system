@@ -17,6 +17,21 @@
         });
     }
 
+	$(document).on('click', '.core-ms-plugins', function (e) {
+		e.preventDefault();
+
+		const $btn = $(this);
+		const key = $(this).data('key');
+
+		$.post(ajaxurl, {
+			action: 'masterstudy_ms_stm_set_discard_transient',
+			key: key
+		});
+		$btn.closest('.notice').fadeOut(200, function () {
+			$(this).remove();
+		});
+	});
+
     $(document).on('click', '[data-type="discard"]', function (e) {
         if($(this).attr('data-key') != 'starter_theme') {
             e.preventDefault();

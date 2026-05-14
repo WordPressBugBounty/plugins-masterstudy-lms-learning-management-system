@@ -11,14 +11,11 @@ use WP_REST_Response;
 
 final class CreateCategoryController {
 	public function __invoke( WP_REST_Request $request ): WP_REST_Response {
-		if ( ! current_user_can( 'administrator' ) && ! \STM_LMS_Options::get_option( 'course_allow_new_question_categories', false ) ) {
-			return WpResponseFactory::forbidden();
-		}
-
 		$validator = new Validator(
 			$request->get_json_params(),
 			array(
 				'category'        => 'required|string',
+				'description'     => 'nullable|string',
 				'parent_category' => 'nullable|integer',
 			)
 		);

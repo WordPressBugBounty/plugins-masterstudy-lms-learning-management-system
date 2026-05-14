@@ -96,7 +96,7 @@ $status_tabs = array(
 	),
 );
 
-$courses_data = STM_LMS_User::_get_user_courses( 1, 'all' );
+$courses_data = STM_LMS_User::get_user_courses_data( 1, 'all' );
 $courses_data = apply_filters( 'stm_lms_get_user_courses_filter', $courses_data );
 
 $initial_total_pages = ! empty( $courses_data['total_pages'] ) ? (int) $courses_data['total_pages'] : 0;

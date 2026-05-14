@@ -2,7 +2,7 @@
 
 (function ($) {
   $(document).ready(function () {
-    var classes = ['post-type-stm-courses', 'post-type-stm-lessons', 'post-type-stm-quizzes', 'post-type-stm-questions', 'post-type-stm-assignments', 'post-type-stm-google-meets', 'post-type-stm-user-assignment', 'post-type-stm-reviews', 'post-type-stm-orders', 'post-type-stm-ent-groups', 'post-type-stm-payout', 'taxonomy-stm_lms_course_taxonomy', 'taxonomy-stm_lms_question_taxonomy', 'stm-lms_page_stm-lms-online-testing', 'admin_page_stm_lms_scorm_settings', 'toplevel_page_stm-lms-dashboard'];
+    var classes = ['post-type-stm-courses', 'post-type-stm-lessons', 'post-type-stm-quizzes', 'post-type-stm-questions', 'post-type-stm-assignments', 'post-type-stm-google-meets', 'post-type-stm-user-assignment', 'post-type-stm-reviews', 'post-type-stm-orders', 'post-type-stm-ent-groups', 'post-type-stm-payout', 'taxonomy-stm_lms_course_taxonomy', 'taxonomy-stm_lms_question_taxonomy', 'stm-lms_page_stm-lms-online-testing', 'admin_page_stm_lms_scorm_settings'];
     var setupSettingsMenu = function setupSettingsMenu() {
       var $settingsParent = $('.stm-lms-settings-menu-title').closest('li');
       $settingsParent.addClass('stm-lms-settings-menu');
@@ -22,9 +22,13 @@
         $settings_parent.addClass('stm-lms-settings-menu');
       }
       var $templatesParent = $templates.closest('li');
-      if (!$templatesParent.length) return;
+      if (!$templatesParent.length) {
+        $templatesParent = $settings_parent.next('li');
+      }
       var li_addon_last = $('li.stm-lms-pro-addons-menu:last');
-      $templatesParent.addClass('stm-lms-templates-menu');
+      if (!$templatesParent.hasClass('stm-lms-help-support')) {
+        $templatesParent.addClass('stm-lms-templates-menu');
+      }
       $templatesParent.next('li').addClass('stm-lms-addons-page-menu');
       $templatesParent.nextAll('li').addClass('stm-lms-pro-addons-menu');
       if (li_addon_last.find('span.stm-lms-unlock-pro-btn').length) {
@@ -38,57 +42,83 @@
         link.href = "https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/";
       }
     };
-    var setupCourseCategorySubmenu = function setupCourseCategorySubmenu() {
+    var routeChangeEventName = 'masterstudy:lms-admin-route-change';
+    var currentSearch = window.location.search || '';
+    var escapeRegExp = function escapeRegExp(value) {
+      return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    };
+    var getCurrentSearch = function getCurrentSearch() {
+      return currentSearch || window.location.search || '';
+    };
+    var setCurrentSearch = function setCurrentSearch(search) {
+      currentSearch = typeof search === 'string' ? search : window.location.search || '';
+    };
+    var hasPage = function hasPage(page) {
+      return new RegExp("(?:[?&])page=".concat(escapeRegExp(page), "(?:&|$)")).test(getCurrentSearch());
+    };
+    var hasAnyPage = function hasAnyPage(pages) {
+      return pages.some(function (page) {
+        return hasPage(page);
+      });
+    };
+    var refreshInnerSubmenus = function refreshInnerSubmenus(search) {
       var $submenu = $('#toplevel_page_stm-lms-settings .wp-submenu');
-      var $coursesLink = $submenu.find('li a[href*="page=stm-lms-courses-link"], li a[href*="post_type=stm-courses"]').first();
-      var $courseCategoryLink = $submenu.find('li a[href*="taxonomy=stm_lms_course_taxonomy"]').first();
-      var $questionLink = $submenu.find('li a[href*="post_type=stm-questions"]').first();
-      var $questionCategoryLink = $submenu.find('li a[href*="taxonomy=stm_lms_question_taxonomy"]').first();
-      var $studentsLink = $submenu.find('li a[href*="page=manage_students"]').first();
-      var $pointStatisticsLink = $submenu.find('li a[href*="page=point_system_statistics"]').first();
-      var $payoutsLink = $submenu.find('li a[href*="post_type=stm-payout"]').first();
-      var $statisticsLink = $submenu.find('li a[href*="page=stm_lms_statistics"]').first();
+      var visibleClass = 'stm-lms-contextual-submenu-visible';
       if (!$submenu.length) {
         return;
       }
-      var $courseCategoryItem = $courseCategoryLink.closest('li').detach();
-      var $questionCategoryItem = $questionCategoryLink.closest('li').detach();
-      var $pointStatisticsItem = $pointStatisticsLink.closest('li').detach();
-      var $statisticsItem = $statisticsLink.closest('li').detach();
-      var attachUnderParent = function attachUnderParent($parentLink, $childItem) {
-        if (!$parentLink.length || !$childItem.length) {
+      setCurrentSearch(search);
+      var rules = [{
+        parentSelector: 'li a[href*="page=stm-lms-courses-link"], li a[href*="page=manage_courses"], li a[href*="post_type=stm-courses"]',
+        childSelector: 'li a[href*="page=manage_courses_categories"], li a[href*="taxonomy=stm_lms_course_taxonomy"]',
+        isContext: function isContext() {
+          return $('body').hasClass('post-type-stm-courses') || $('body').hasClass('taxonomy-stm_lms_course_taxonomy') || hasAnyPage(['manage_courses', 'manage_courses_categories']);
+        }
+      }, {
+        parentSelector: 'li a[href*="page=manage_questions"], li a[href*="post_type=stm-questions"]',
+        childSelector: 'li a[href*="page=manage_questions_categories"], li a[href*="taxonomy=stm_lms_question_taxonomy"]',
+        isContext: function isContext() {
+          return $('body').hasClass('post-type-stm-questions') || $('body').hasClass('taxonomy-stm_lms_question_taxonomy') || hasAnyPage(['manage_questions', 'manage_questions_categories']);
+        }
+      }, {
+        parentSelector: 'li a[href$="page=manage_students"], li a[href*="page=manage_students&"]',
+        childSelector: 'li a[href*="page=point_system_statistics"]',
+        isContext: function isContext() {
+          return hasAnyPage(['manage_students', 'point_system_statistics']);
+        }
+      }, {
+        parentSelector: 'li a[href*="page=manage_payouts"], li a[href*="post_type=stm-payout"]',
+        childSelector: 'li a[href*="page=stm_lms_statistics"]',
+        isContext: function isContext() {
+          return $('body').hasClass('post-type-stm-payout') || hasAnyPage(['manage_payouts', 'stm_lms_statistics']);
+        }
+      }];
+      var attachAfterParent = function attachAfterParent($parentItem, $childItem) {
+        if (!$parentItem.length || !$childItem.length) {
           return;
         }
-        var $parentItem = $parentLink.closest('li');
         $parentItem.after($childItem);
       };
-      var isCourseContext = $('body').hasClass('post-type-stm-courses') || $('body').hasClass('taxonomy-stm_lms_course_taxonomy');
-      var isQuestionContext = $('body').hasClass('post-type-stm-questions') || $('body').hasClass('taxonomy-stm_lms_question_taxonomy');
-      var isPointStatisticsContext = window.location.search.indexOf('page=manage_students') !== -1 || window.location.search.indexOf('page=point_system_statistics') !== -1;
-      var isStatisticsContext = $('body').hasClass('post-type-stm-payout') || window.location.search.indexOf('page=stm_lms_statistics') !== -1;
-      if (isCourseContext) {
-        attachUnderParent($coursesLink, $courseCategoryItem);
-      }
-      if (isQuestionContext) {
-        attachUnderParent($questionLink, $questionCategoryItem);
-      }
-      if (isPointStatisticsContext) {
-        attachUnderParent($studentsLink, $pointStatisticsItem);
-      }
-      if (isStatisticsContext) {
-        attachUnderParent($payoutsLink, $statisticsItem);
-      }
-      $coursesLink.on('click', function () {
-        attachUnderParent($coursesLink, $courseCategoryItem);
+      rules.forEach(function (rule) {
+        var $parentLink = $submenu.find(rule.parentSelector).first();
+        var $childLink = $submenu.find(rule.childSelector).first();
+        var $parentItem = $parentLink.closest('li');
+        var $childItem = $childLink.closest('li');
+        if (!$parentItem.length || !$childItem.length) {
+          return;
+        }
+        $childItem.removeClass(visibleClass);
+        if (rule.isContext()) {
+          attachAfterParent($parentItem, $childItem);
+          $childItem.addClass(visibleClass);
+        }
       });
-      $questionLink.on('click', function () {
-        attachUnderParent($questionLink, $questionCategoryItem);
-      });
-      $studentsLink.on('click', function () {
-        attachUnderParent($studentsLink, $pointStatisticsItem);
-      });
-      $payoutsLink.on('click', function () {
-        attachUnderParent($payoutsLink, $statisticsItem);
+    };
+    var setupInnerSubmenus = function setupInnerSubmenus() {
+      refreshInnerSubmenus();
+      window.addEventListener(routeChangeEventName, function (event) {
+        var nextSearch = event && event.detail ? event.detail.search : null;
+        refreshInnerSubmenus(nextSearch);
       });
     };
     var setupClassroomsAndCertificatesOrder = function setupClassroomsAndCertificatesOrder() {
@@ -107,7 +137,7 @@
           });
         }).first();
       };
-      var $googleMeetItem = findMenuItemByKeyword(['google meet']);
+      var $googleMeetItem = findMenuItemByKeyword(['google meet', 'meetings', 'meeting']);
       var $analyticsItem = findMenuItemByKeyword(['analytics']);
       var $classroomsItem = findMenuItemByKeyword(['classrooms', 'classroom']);
       var $certificatesItem = findMenuItemByKeyword(['certificates', 'certificate builder', 'certificate']);
@@ -180,7 +210,9 @@
       });
     };
     var highlightMenu = function highlightMenu() {
-      if ($('body').is("." + classes.join(', .'))) {
+      var pageClasses = "." + classes.join(', .');
+      var lmsAdminPages = ['manage_courses', 'manage_courses_categories', 'manage_bundles', 'manage_lessons', 'manage_quizzes', 'manage_questions', 'manage_questions_categories', 'manage_assignments', 'manage_students_assignments', 'manage_orders', 'manage_coupons', 'manage_reviews', 'manage_instructors', 'manage_students', 'manage_enterprise_groups', 'manage_payouts', 'stm_lms_statistics', 'point_system_statistics'];
+      if ($('body').is(pageClasses) || hasAnyPage(lmsAdminPages)) {
         $('#adminmenu > li').removeClass('wp-has-current-submenu wp-menu-open').find('.wp-submenu').css('margin-right', 0);
         $('#toplevel_page_stm-lms-settings').addClass('wp-has-current-submenu wp-menu-open').removeClass('wp-not-current-submenu');
         $('.toplevel_page_stm-lms-settings').addClass('wp-has-current-submenu').removeClass('wp-not-current-submenu');
@@ -217,7 +249,6 @@
         if ($guide.length) {
           var selectedField = $guide.get(0);
           selectedField.classList.remove('selected-field');
-          // Force reflow to restart animation on repeated opens.
           void selectedField.offsetWidth;
           selectedField.classList.add('selected-field');
           smoothScrollToGuide(selectedField);
@@ -267,16 +298,12 @@
     setupSettingsMenu();
     setupUsersMenu();
     setupTemplatesMenu();
-    setupCourseCategorySubmenu();
+    updateDemoLink();
+    setupInnerSubmenus();
     setupClassroomsAndCertificatesOrder();
     setupTopLevelLmsMenusOrder();
-    setTimeout(setupTopLevelLmsMenusOrder, 250);
-    $(window).on('load', setupTopLevelLmsMenusOrder);
-    updateDemoLink();
     highlightMenu();
     scrollToShortcodesGuide();
-    $(window).on('load', scrollToShortcodesGuide);
-    $(window).on('hashchange', scrollToShortcodesGuide);
   });
   $(window).on('load', function () {
     if (!$('body').hasClass('post-type-stm-questions')) return;

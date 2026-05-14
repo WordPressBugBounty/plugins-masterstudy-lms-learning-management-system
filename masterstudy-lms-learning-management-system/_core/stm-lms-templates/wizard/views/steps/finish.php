@@ -13,7 +13,7 @@
 					<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/wizard/run_demo.svg' ); ?>"/>
 					<?php esc_html_e( 'Import Demo Courses', 'masterstudy-lms-learning-management-system' ); ?>
 				</a>
-				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=stm-courses' ) ); ?>" class="wizard-finish__welcome_button">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=manage_courses' ) ); ?>" class="wizard-finish__welcome_button">
 					<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/wizard/add_course.svg' ); ?>"/>
 					<?php esc_html_e( 'Create a course', 'masterstudy-lms-learning-management-system' ); ?>
 				</a>

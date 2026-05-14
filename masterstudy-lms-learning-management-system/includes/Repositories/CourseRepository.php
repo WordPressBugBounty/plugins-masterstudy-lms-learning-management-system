@@ -2,12 +2,17 @@
 
 namespace MasterStudy\Lms\Repositories;
 
+use MasterStudy\Lms\Enums\PricingMode;
 use MasterStudy\Lms\Models\Course;
 use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Plugin\Taxonomy;
 use MasterStudy\Lms\Utility\Sanitizer;
+use MasterStudy\Lms\Utility\WpDate;
+use RuntimeException;
 
 final class CourseRepository extends AbstractRepository {
+	private const ERROR_FORBIDDEN = 403;
+
 	/**
 	 * course_property => meta_key
 	 */
@@ -197,6 +202,170 @@ final class CourseRepository extends AbstractRepository {
 		return null;
 	}
 
+	public function get_admin_list( array $params ): array {
+		$per_page       = min( 100, max( 1, (int) ( $params['per_page'] ?? 10 ) ) );
+		$page           = max( 1, (int) ( $params['page'] ?? 1 ) );
+		$search         = isset( $params['search'] ) ? trim( (string) $params['search'] ) : '';
+		$category       = isset( $params['category'] ) ? trim( (string) $params['category'] ) : '';
+		$lesson_id      = isset( $params['lesson_id'] ) ? absint( $params['lesson_id'] ) : 0;
+		$quiz_id        = isset( $params['quiz_id'] ) ? absint( $params['quiz_id'] ) : 0;
+		$google_meet_id = isset( $params['google_meet_id'] ) ? absint( $params['google_meet_id'] ) : 0;
+		$status         = isset( $params['status'] ) ? (string) $params['status'] : 'any';
+
+		$query_args = array(
+			'post_type'              => PostType::COURSE,
+			'post_status'            => 'any' === $status ? array( 'publish', 'pending', 'draft', 'trash', 'private' ) : $status,
+			'ignore_sticky_posts'    => true,
+			'posts_per_page'         => $per_page,
+			'paged'                  => $page,
+			'no_found_rows'          => false,
+			'update_post_meta_cache' => true,
+			'update_post_term_cache' => false,
+		);
+
+		if ( '' !== $search ) {
+			$query_args['s'] = $search;
+		}
+
+		if ( '' !== $category ) {
+			$query_args['tax_query'] = array(
+				array(
+					'taxonomy' => Taxonomy::COURSE_CATEGORY,
+					'field'    => is_numeric( $category ) ? 'term_id' : 'slug',
+					'terms'    => array( is_numeric( $category ) ? (int) $category : $category ),
+				),
+			);
+		}
+
+		$curriculum = new CurriculumRepository();
+		$post__in   = null;
+
+		if ( $lesson_id > 0 ) {
+			$lesson_course_ids = PostType::LESSON === get_post_type( $lesson_id )
+				? $curriculum->get_post_course_ids( $lesson_id )
+				: array();
+
+			$post__in = array_map( 'intval', $lesson_course_ids );
+		}
+
+		if ( $quiz_id > 0 ) {
+			$quiz_course_ids = PostType::QUIZ === get_post_type( $quiz_id )
+				? $curriculum->get_post_course_ids( $quiz_id )
+				: array();
+
+			$post__in = is_array( $post__in )
+				? array_values( array_intersect( $post__in, array_map( 'intval', $quiz_course_ids ) ) )
+				: array_map( 'intval', $quiz_course_ids );
+		}
+
+		if ( $google_meet_id > 0 ) {
+			$google_meet_course_ids = PostType::GOOGLE_MEET === get_post_type( $google_meet_id )
+				? $curriculum->get_post_course_ids( $google_meet_id )
+				: array();
+
+			$post__in = is_array( $post__in )
+				? array_values( array_intersect( $post__in, array_map( 'intval', $google_meet_course_ids ) ) )
+				: array_map( 'intval', $google_meet_course_ids );
+		}
+
+		if ( is_array( $post__in ) ) {
+			$query_args['post__in'] = ! empty( $post__in )
+				? array_values( array_unique( $post__in ) )
+				: array( 0 );
+		}
+
+		$post_type = get_post_type_object( PostType::COURSE );
+		if ( $post_type && ! current_user_can( $post_type->cap->edit_others_posts ) ) {
+			$query_args['author'] = get_current_user_id();
+		}
+
+		$date_range = isset( $params['date_range'] ) ? trim( (string) $params['date_range'] ) : '';
+		if ( '' !== $date_range ) {
+			$range = WpDate::date_range_to_site_bounds( $date_range );
+
+			if ( $range['after'] || $range['before'] ) {
+				$date_query = array(
+					'inclusive' => true,
+					'column'    => 'post_modified',
+				);
+
+				if ( $range['after'] ) {
+					$date_query['after'] = $range['after'];
+				}
+
+				if ( $range['before'] ) {
+					$date_query['before'] = $range['before'];
+				}
+
+				$query_args['date_query'] = array( $date_query );
+			}
+		}
+
+		$sort               = isset( $params['sort'] ) ? trim( (string) $params['sort'] ) : '';
+		$modified_order     = 'DESC';
+		$use_modified_order = false;
+
+		if ( '' !== $sort && class_exists( 'STM_LMS_Helpers' ) ) {
+			$sort_params = \STM_LMS_Helpers::get_sort_params_by_string( $sort );
+			$key         = $sort_params['key'] ?? '';
+			$direction   = strtoupper( (string) ( $sort_params['direction'] ?? 'desc' ) );
+			$direction   = in_array( $direction, array( 'ASC', 'DESC' ), true ) ? $direction : 'DESC';
+
+			switch ( $key ) {
+				case 'id':
+					$query_args['orderby'] = 'ID';
+					$query_args['order']   = $direction;
+					break;
+				case 'title':
+					$query_args['orderby'] = 'title';
+					$query_args['order']   = $direction;
+					break;
+				case 'date':
+				default:
+					$query_args['orderby'] = 'none';
+					$query_args['order']   = $direction;
+					$modified_order        = $direction;
+					$use_modified_order    = true;
+			}
+		} else {
+			$query_args['orderby'] = 'none';
+			$query_args['order']   = 'DESC';
+			$use_modified_order    = true;
+		}
+
+		$query = $this->get_admin_list_query( $query_args, $use_modified_order, $modified_order );
+
+		return array(
+			'posts' => $query->posts,
+			'pages' => (int) $query->max_num_pages,
+			'total' => (int) $query->found_posts,
+		);
+	}
+
+	private function get_admin_list_query( array $query_args, bool $use_modified_order, string $direction ): \WP_Query {
+		if ( ! $use_modified_order ) {
+			return new \WP_Query( $query_args );
+		}
+
+		$query_args['masterstudy_modified_order'] = true;
+
+		$orderby_filter = static function ( $orderby, $query ) use ( $direction ) {
+			if ( ! $query->get( 'masterstudy_modified_order' ) ) {
+				return $orderby;
+			}
+
+			return WpDate::modified_posts_orderby_sql( $direction );
+		};
+
+		add_filter( 'posts_orderby', $orderby_filter, 10, 2 );
+
+		try {
+			return new \WP_Query( $query_args );
+		} finally {
+			remove_filter( 'posts_orderby', $orderby_filter, 10 );
+		}
+	}
+
 	/**
 	 * Get all Courses
 	 *
@@ -323,6 +492,7 @@ final class CourseRepository extends AbstractRepository {
 
 		update_post_meta( $post_id, 'featured', '' );
 		update_post_meta( $post_id, 'coming_soon_status', '' );
+		update_post_meta( $post_id, 'pricing_mode', PricingMode::FREE );
 
 		if ( \STM_LMS_Subscriptions::subscription_enabled() && \STM_LMS_Course::course_in_plan( $post_id ) ) {
 			update_post_meta( $post_id, 'single_sale', '' );
@@ -391,6 +561,84 @@ final class CourseRepository extends AbstractRepository {
 		);
 	}
 
+	public function bulk_delete( array $course_ids ): void {
+		foreach ( $course_ids as $course_id ) {
+			if ( ! $this->can_delete_course( $course_id ) ) {
+				throw new RuntimeException(
+					esc_html__( 'You do not have permission to delete this course.', 'masterstudy-lms-learning-management-system' ),
+					self::ERROR_FORBIDDEN
+				);
+			}
+
+			$this->delete_permanently( $course_id );
+		}
+	}
+
+	private function can_delete_course( int $course_id ): bool {
+		if ( current_user_can( 'delete_post', $course_id ) ) {
+			return true;
+		}
+
+		$post = get_post( $course_id );
+
+		if ( ! $post || PostType::COURSE !== $post->post_type ) {
+			return false;
+		}
+
+		return current_user_can( 'stm_lms_instructor' ) && get_current_user_id() === (int) $post->post_author;
+	}
+
+	private function delete_permanently( int $course_id ): void {
+		if ( 'trash' !== get_post_status( $course_id ) ) {
+			$trashed = wp_trash_post( $course_id );
+
+			if ( false === $trashed || null === $trashed ) {
+				throw new RuntimeException(
+					sprintf(
+						/* translators: %d: course ID. */
+						esc_html__( 'Unable to move course %d to trash before deletion.', 'masterstudy-lms-learning-management-system' ),
+						$course_id
+					)
+				);
+			}
+		}
+
+		$deleted = wp_delete_post( $course_id, true );
+
+		if ( false === $deleted || null === $deleted ) {
+			throw new RuntimeException(
+				sprintf(
+					/* translators: %d: course ID. */
+					esc_html__( 'Unable to permanently delete course %d.', 'masterstudy-lms-learning-management-system' ),
+					$course_id
+				)
+			);
+		}
+	}
+
+	public function bulk_update_status( array $course_ids, string $status ): void {
+		foreach ( $course_ids as $course_id ) {
+			if ( ! current_user_can( 'edit_post', $course_id ) ) {
+				continue;
+			}
+
+			if ( 'trash' === $status ) {
+				wp_trash_post( $course_id );
+			} else {
+				if ( 'trash' === get_post_status( $course_id ) ) {
+					wp_untrash_post( $course_id );
+				}
+
+				wp_update_post(
+					array(
+						'ID'          => $course_id,
+						'post_status' => $status,
+					)
+				);
+			}
+		}
+	}
+
 	public function update_access( int $course_id, array $data ): void {
 		foreach ( $data as $key => $value ) {
 			if ( isset( self::FIELDS_META_MAPPING[ $key ] ) ) {
@@ -404,6 +652,7 @@ final class CourseRepository extends AbstractRepository {
 	public function moderate_post_status( string $post_status ): ?string {
 		if ( 'publish' === $post_status
 			&& ! current_user_can( 'administrator' )
+			&& \STM_LMS_Helpers::is_pro()
 			&& \STM_LMS_Options::get_option( 'course_premoderation', false ) ) {
 			return 'pending';
 		}
@@ -590,7 +839,7 @@ final class CourseRepository extends AbstractRepository {
 			return (object) array(
 				'id'     => $author->ID,
 				'name'   => $author->display_name,
-				'avatar' => get_avatar_url( $author->ID ),
+				'avatar' => \STM_LMS_User::get_avatar_url( $author->ID ),
 			);
 		}
 
@@ -618,12 +867,12 @@ final class CourseRepository extends AbstractRepository {
 		$is_featured_enabled    = \STM_LMS_Options::get_option( 'enable_featured_courses', false );
 
 		foreach ( $posts as &$post ) {
-			$meta           = get_post_meta( $post->ID );
-			$section_ids    = ( new CurriculumSectionRepository() )->get_course_section_ids( $post->ID );
-			$is_in_wishlist = is_null( $user_wishlist ) ? 'not-authorized' : in_array( $post->ID, $user_wishlist, true );
-			$status_value   = $meta['status'][0] ?? null;
-			$status_data    = null;
-			$coming_soon_start_time = $is_coming_soon_enabled ? intval( masterstudy_lms_coming_soon_start_time( $post->ID ) ) : false;
+			$meta                       = get_post_meta( $post->ID );
+			$section_ids                = ( new CurriculumSectionRepository() )->get_course_section_ids( $post->ID );
+			$is_in_wishlist             = is_null( $user_wishlist ) ? 'not-authorized' : in_array( $post->ID, $user_wishlist, true );
+			$status_value               = $meta['status'][0] ?? null;
+			$status_data                = null;
+			$coming_soon_start_time     = $is_coming_soon_enabled ? intval( masterstudy_lms_coming_soon_start_time( $post->ID ) ) : false;
 			$coming_soon_date_formatted = ! empty( $coming_soon_start_time )
 				? \STM_LMS_Helpers::format_date( '@' . $coming_soon_start_time )
 				: array();
@@ -646,39 +895,39 @@ final class CourseRepository extends AbstractRepository {
 			}
 
 			$extra_fields = array(
-				'pricing_mode'           => $meta['pricing_mode'][0] ?? '',
-				'affiliate_course_price' => $meta['affiliate_course_price'][0] ?? '',
-				'price'                  => $meta['price'][0] ?? '',
-				'sale_price'             => \STM_LMS_Course::get_sale_price( $post->ID ),
-				'single_sale'            => $meta['single_sale'][0] ?? '',
-				'symbol'                 => \STM_LMS_Options::get_option( 'currency_symbol', '$' ),
-				'rating_visibility'      => \STM_LMS_Options::get_option( 'course_tab_reviews', true ),
-				'rating'                 => $meta['course_mark_average'][0] ?? 0,
-				'categories'             => wp_get_post_terms( $post->ID, Taxonomy::COURSE_CATEGORY ),
-				'image'                  => $this->get_course_image( $post ),
-				'lazy_load'              => \STM_LMS_Options::get_option( 'enable_lazyload', false ) ?? '',
-				'duration_info'          => $meta['duration_info'][0] ?? '',
-				'members'                => $meta['current_students'][0] ?? '',
-				'end_time'               => intval( $meta['end_time'][0] ?? 0 ),
-				'featured'               => ( $meta['featured'][0] ?? null ) === 'on' && $is_featured_enabled,
-				'lock_lesson'            => ( $meta['lock_lesson'][0] ?? null ) === 'on',
-				'level'                  => $meta['level'][0] ?? null,
-				'status'                 => $status_value,
-				'status_data'            => $status_data,
-				'views'                  => $meta['views'][0] ?? 0,
-				'access_duration'        => $meta['access_duration'][0] ?? '',
-				'access_devices'         => $meta['access_devices'][0] ?? '',
-				'author'                 => $this->get_author_info( $post->post_author ),
-				'lessons'                => ( new CurriculumMaterialRepository() )->count_by_type( $section_ids, PostType::LESSON ),
-				'permalink'              => get_permalink( $post->ID ),
-				'user_wishlist'          => $is_in_wishlist,
-				'user_url'               => \STM_LMS_User::user_page_url(),
-				'user_avatar'            => get_user_meta( get_current_user_id(), 'stm_lms_user_avatar', true ),
-				'coming_soon_status'     => $meta['coming_soon_status'][0] ?? '',
-				'coming_soon_start_time' => $coming_soon_start_time,
+				'pricing_mode'               => $meta['pricing_mode'][0] ?? '',
+				'affiliate_course_price'     => $meta['affiliate_course_price'][0] ?? '',
+				'price'                      => $meta['price'][0] ?? '',
+				'sale_price'                 => \STM_LMS_Course::get_sale_price( $post->ID ),
+				'single_sale'                => $meta['single_sale'][0] ?? '',
+				'symbol'                     => \STM_LMS_Options::get_option( 'currency_symbol', '$' ),
+				'rating_visibility'          => \STM_LMS_Options::get_option( 'course_tab_reviews', true ),
+				'rating'                     => $meta['course_mark_average'][0] ?? 0,
+				'categories'                 => wp_get_post_terms( $post->ID, Taxonomy::COURSE_CATEGORY ),
+				'image'                      => $this->get_course_image( $post ),
+				'lazy_load'                  => \STM_LMS_Options::get_option( 'enable_lazyload', false ) ?? '',
+				'duration_info'              => $meta['duration_info'][0] ?? '',
+				'members'                    => $meta['current_students'][0] ?? '',
+				'end_time'                   => intval( $meta['end_time'][0] ?? 0 ),
+				'featured'                   => ( $meta['featured'][0] ?? null ) === 'on' && $is_featured_enabled,
+				'lock_lesson'                => ( $meta['lock_lesson'][0] ?? null ) === 'on',
+				'level'                      => $meta['level'][0] ?? null,
+				'status'                     => $status_value,
+				'status_data'                => $status_data,
+				'views'                      => $meta['views'][0] ?? 0,
+				'access_duration'            => $meta['access_duration'][0] ?? '',
+				'access_devices'             => $meta['access_devices'][0] ?? '',
+				'author'                     => $this->get_author_info( $post->post_author ),
+				'lessons'                    => ( new CurriculumMaterialRepository() )->count_by_type( $section_ids, PostType::LESSON ),
+				'permalink'                  => get_permalink( $post->ID ),
+				'user_wishlist'              => $is_in_wishlist,
+				'user_url'                   => \STM_LMS_User::user_page_url(),
+				'user_avatar'                => get_user_meta( get_current_user_id(), 'stm_lms_user_avatar', true ),
+				'coming_soon_status'         => $meta['coming_soon_status'][0] ?? '',
+				'coming_soon_start_time'     => $coming_soon_start_time,
 				'coming_soon_date_formatted' => $coming_soon_date_formatted,
-				'membership'             => $subscription_enabled && ! $meta['not_membership'][0] && ! $meta['single_sale'][0],
-				'trial'                  => $meta['shareware'][0] ?? null,
+				'membership'                 => $subscription_enabled && ! $meta['not_membership'][0] && ! $meta['single_sale'][0],
+				'trial'                      => $meta['shareware'][0] ?? null,
 			);
 
 			$post = (object) array_merge( (array) $post, $extra_fields );

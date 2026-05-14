@@ -313,14 +313,15 @@ function stm_lms_delete_users_in_courses( array $user_ids ): array {
 
 	if ( empty( $user_ids ) ) {
 		return array(
-			'data'           => array(),
-			'total'          => 0,
+			'data'            => array(),
+			'total'           => 0,
 			'lessons_deleted' => 0,
 		);
 	}
 
-	$user_ids     = array_map( 'absint', $user_ids );
-	$current_user = (int) get_current_user_id();
+	$user_ids      = array_map( 'absint', $user_ids );
+	$is_admin      = current_user_can( 'administrator' );
+	$author_filter = $is_admin ? '' : 'AND p.post_author = %d';
 
 	$courses_table = stm_lms_user_courses_name( $wpdb );
 	$lessons_table = stm_lms_user_lessons_name( $wpdb );
@@ -328,14 +329,14 @@ function stm_lms_delete_users_in_courses( array $user_ids ): array {
 	$answers_table = stm_lms_user_answers_name( $wpdb );
 
 	$placeholders = implode( ',', array_fill( 0, count( $user_ids ), '%d' ) );
-	$params       = array_merge( $user_ids, array( $current_user ) );
+	$params       = $is_admin ? $user_ids : array_merge( $user_ids, array( (int) get_current_user_id() ) );
 
 	$delete_quizzes_sql = "
 	DELETE uq
 	FROM {$quizzes_table} AS uq
 	INNER JOIN {$wpdb->posts} AS p ON uq.course_id = p.ID
 	WHERE uq.user_id IN ( {$placeholders} )
-		AND p.post_author = %d
+		{$author_filter}
 	";
 
 	$delete_answers_sql = "
@@ -343,7 +344,7 @@ function stm_lms_delete_users_in_courses( array $user_ids ): array {
 	FROM {$answers_table} AS ua
 	INNER JOIN {$wpdb->posts} AS p ON ua.course_id = p.ID
 	WHERE ua.user_id IN ( {$placeholders} )
-		AND p.post_author = %d
+		{$author_filter}
 	";
 
 	$select_sql = "
@@ -351,7 +352,7 @@ function stm_lms_delete_users_in_courses( array $user_ids ): array {
 		FROM {$courses_table} AS uc
 		INNER JOIN {$wpdb->posts} AS p ON uc.course_id = p.ID
 		WHERE uc.user_id IN ( {$placeholders} )
-			AND p.post_author = %d
+			{$author_filter}
 	";
 
 	$delete_lessons_sql = "
@@ -362,7 +363,7 @@ function stm_lms_delete_users_in_courses( array $user_ids ): array {
 			AND ul.course_id = uc.course_id
 		INNER JOIN {$wpdb->posts} AS p ON uc.course_id = p.ID
 		WHERE uc.user_id IN ( {$placeholders} )
-			AND p.post_author = %d
+			{$author_filter}
 	";
 
 	$delete_courses_sql = "
@@ -370,7 +371,7 @@ function stm_lms_delete_users_in_courses( array $user_ids ): array {
 		FROM {$courses_table} AS uc
 		INNER JOIN {$wpdb->posts} AS p ON uc.course_id = p.ID
 		WHERE uc.user_id IN ( {$placeholders} )
-			AND p.post_author = %d
+			{$author_filter}
 	";
 
 	$data = $wpdb->get_results(
@@ -524,13 +525,13 @@ function stm_lms_build_enrolled_query_parts( string $search = '', int $course_id
 
 	// Validate and sanitize orderby parameter to prevent SQL injection
 	$allowed_orderby_fields = array(
-		'joined'    => 'u.user_registered',
-		'enrolled'  => 'c.enrolled',
-		'points'    => 'p.points',
-		'id'        => 'u.ID',
-		'name'      => 'u.display_name',
-		'email'     => 'u.user_email',
-		'login'     => 'u.user_login',
+		'joined'   => 'u.user_registered',
+		'enrolled' => 'c.enrolled',
+		'points'   => 'p.points',
+		'id'       => 'u.ID',
+		'name'     => 'u.display_name',
+		'email'    => 'u.user_email',
+		'login'    => 'u.user_login',
 	);
 
 	// Default to safe field if orderby is not in whitelist
@@ -680,7 +681,7 @@ function stm_lms_get_users_enrolled_export( string $search = '', int $course_id 
 	}
 
 	return array_map(
-		fn( $uid) => array(
+		fn( $uid ) => array(
 			'ID'      => $uid,
 			'courses' => $grouped[ $uid ] ?? array(),
 		),

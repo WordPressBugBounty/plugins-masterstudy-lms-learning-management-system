@@ -101,7 +101,7 @@ $columns = array(
 					STM_LMS_Templates::show_lms_template(
 						'components/button',
 						array(
-							'title'         => esc_html__( 'Remove Selected', 'masterstudy-lms-learning-management-system' ),
+							'title'         => esc_html__( 'Unenroll Selected', 'masterstudy-lms-learning-management-system' ),
 							'link'          => '#',
 							'style'         => 'secondary',
 							'size'          => 'sm',
@@ -297,9 +297,9 @@ $columns = array(
 		'components/alert',
 		array(
 			'id'                  => 'masterstudy-delete-students',
-			'title'               => esc_html__( 'Removing Students', 'masterstudy-lms-learning-management-system' ),
-			'text'                => esc_html__( 'Are you sure you want to remove the selected students from the course? This action cannot be undone. All course progress for the selected students will be permanently lost.', 'masterstudy-lms-learning-management-system' ),
-			'submit_button_text'  => esc_html__( 'Delete', 'masterstudy-lms-learning-management-system' ),
+			'title'               => esc_html__( 'Unenrolling Students', 'masterstudy-lms-learning-management-system' ),
+			'text'                => esc_html__( 'Are you sure you want to unenroll the selected students from your courses? This action cannot be undone. All course progress for the selected students will be permanently lost.', 'masterstudy-lms-learning-management-system' ),
+			'submit_button_text'  => esc_html__( 'Unenroll', 'masterstudy-lms-learning-management-system' ),
 			'cancel_button_text'  => esc_html__( 'Cancel', 'masterstudy-lms-learning-management-system' ),
 			'submit_button_style' => 'danger',
 			'cancel_button_style' => 'tertiary',

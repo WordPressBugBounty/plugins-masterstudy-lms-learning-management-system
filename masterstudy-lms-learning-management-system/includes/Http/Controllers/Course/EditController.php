@@ -21,9 +21,11 @@ class EditController {
 
 		// builder settings extracted to separate controller
 		// consider to deprecte and remove data from this controller
-		$user_id   = get_current_user_id();
-		$timezones = apply_filters( 'masterstudy_lms_timezones', array() );
-		$options   = apply_filters(
+		$user_id              = get_current_user_id();
+		$timezones            = apply_filters( 'masterstudy_lms_timezones', array() );
+		$course_premoderation = \STM_LMS_Helpers::is_pro()
+			&& \STM_LMS_Options::get_option( 'course_premoderation', false );
+		$options              = apply_filters(
 			'masterstudy_lms_course_options',
 			array(
 				'max_upload_size'                => wp_max_upload_size(),
@@ -33,7 +35,7 @@ class EditController {
 				'course_allow_intended_audience' => \STM_LMS_Options::get_option( 'course_allow_intended_audience', false ),
 				'course_allow_requirements_info' => \STM_LMS_Options::get_option( 'course_allow_requirements_info', false ),
 				'question_category_allowed'      => \STM_LMS_Options::get_option( 'course_allow_new_question_categories', false ),
-				'course_premoderation'           => \STM_LMS_Options::get_option( 'course_premoderation', false ),
+				'course_premoderation'           => $course_premoderation,
 				'course_style'                   => \STM_LMS_Options::get_option( 'course_style', false ),
 				'currency_symbol'                => \STM_LMS_Options::get_option( 'currency_symbol', '$' ),
 				'decimals_num'                   => \STM_LMS_Options::get_option( 'decimals_num', '2' ),
@@ -67,7 +69,7 @@ class EditController {
 				'urls'                => array(
 					'courses'           => $courses_page ? get_permalink( $courses_page ) : home_url( \STM_LMS_Options::courses_page_slug() . '/' ),
 					'user_account'      => \STM_LMS_User::user_page_url(),
-					'dashboard_courses' => admin_url( 'edit.php?post_type=stm-courses' ),
+					'dashboard_courses' => admin_url( 'admin.php?page=manage_courses' ),
 					'addons'            => \STM_LMS_Helpers::is_pro()
 						? admin_url( 'admin.php?page=stm-addons' )
 						: admin_url( 'admin.php?page=stm-lms-go-pro' ),

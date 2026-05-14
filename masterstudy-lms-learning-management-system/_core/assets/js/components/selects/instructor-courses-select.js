@@ -15,6 +15,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var scrollThreshold = 24;
     var data = (_window$instructor_co = window.instructor_courses_data) !== null && _window$instructor_co !== void 0 ? _window$instructor_co : {};
     var selectOnLoad = data['select_on_load'];
+    var postTypes = Array.isArray(data.post_types) ? data.post_types.filter(Boolean).join(',') : '';
     var container = $("[data-id=\"".concat(data.select_id, "\"]"));
     var input = $(container).find('.masterstudy-select__input');
     var selectOptions = $(container).find('.masterstudy-select__options');
@@ -93,7 +94,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
     function _getCourses() {
       _getCourses = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var url, _response$posts, _response$found, res, response, posts, _posts$0$id, _posts$;
+        var postTypesParam, url, _response$posts, _response$found, res, response, posts, _posts$0$id, _posts$;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
@@ -105,23 +106,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 2:
               isLoading = true;
               toggleLoader(true);
-              url = stm_lms_ajaxurl + '?action=stm_lms_get_instructor_courses&nonce=' + stm_lms_nonces['stm_lms_get_instructor_courses'] + '&offset=' + offset + '&status=publish&pp=' + perPage;
-              _context.prev = 5;
-              _context.next = 8;
+              postTypesParam = postTypes ? '&post_types=' + encodeURIComponent(postTypes) : '';
+              url = stm_lms_ajaxurl + '?action=stm_lms_get_instructor_courses&nonce=' + stm_lms_nonces['stm_lms_get_instructor_courses'] + '&offset=' + offset + '&status=publish&pp=' + perPage + postTypesParam;
+              _context.prev = 6;
+              _context.next = 9;
               return fetch(url, {
                 method: 'GET'
               });
-            case 8:
+            case 9:
               res = _context.sent;
               if (res.ok) {
-                _context.next = 11;
+                _context.next = 12;
                 break;
               }
               return _context.abrupt("return");
-            case 11:
-              _context.next = 13;
+            case 12:
+              _context.next = 14;
               return res.json();
-            case 13:
+            case 14:
               response = _context.sent;
               posts = (_response$posts = response['posts']) !== null && _response$posts !== void 0 ? _response$posts : [];
               total = (_response$found = response['found']) !== null && _response$found !== void 0 ? _response$found : 0;
@@ -139,23 +141,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   dispatchEvent: 'true'
                 });
               }
-              _context.next = 26;
+              _context.next = 27;
               break;
-            case 23:
-              _context.prev = 23;
-              _context.t0 = _context["catch"](5);
+            case 24:
+              _context.prev = 24;
+              _context.t0 = _context["catch"](6);
               console.error(_context.t0);
-            case 26:
-              _context.prev = 26;
+            case 27:
+              _context.prev = 27;
               isLoading = false;
               toggleLoader(false);
               ensureScrollableList();
-              return _context.finish(26);
-            case 31:
+              return _context.finish(27);
+            case 32:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[5, 23, 26, 31]]);
+        }, _callee, null, [[6, 24, 27, 32]]);
       }));
       return _getCourses.apply(this, arguments);
     }
