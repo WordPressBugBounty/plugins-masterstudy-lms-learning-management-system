@@ -6,6 +6,7 @@ class STMHandler
 
 	protected function __construct() {
 		add_action( 'wp_ajax_stm_notice_status', array( $this, 'updateNoticeAction' ) );
+		add_action( 'wp_ajax_masterstudy_ms_stm_set_discard_transient', array( $this, 'setDiscardTransientAction' ) );
 	}
 
 	public function __wakeup()
@@ -51,4 +52,14 @@ class STMHandler
 		return self::$instances[$cls];
 	}
 
+	public function setDiscardTransientAction() {
+		if ( empty( $_POST['key'] ) ) {
+			wp_send_json_error();
+		}
+
+		$key = sanitize_text_field( wp_unslash( $_POST['key'] ) );
+		set_transient( $key, 1, 0 );
+
+		wp_send_json_success();
+	}
 }

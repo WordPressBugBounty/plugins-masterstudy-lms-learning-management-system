@@ -234,4 +234,25 @@
     }
     checkTextLength();
 
+    $(document).on('click', '.stm-notice-mailchimp-notice .btn-first, .stm-notice-mailchimp-notice .btn-second', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let $btn    = $(this);
+        let href    = $btn.attr('href');
+        let $notice = $btn.closest('.stm-notice');
+
+        if (!href || $btn.data('sending')) return;
+        $btn.data('sending', true).addClass('disabled');
+
+        $notice.stop(true, true).fadeOut(200, function () {
+            $(this).remove();
+        });
+
+        $.ajax({
+            url: href,
+            type: 'GET',
+            timeout: 2500
+        });
+    });
 })(jQuery);

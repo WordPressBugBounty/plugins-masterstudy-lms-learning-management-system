@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.31
+Stable tag: 3.7.32
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,8 +312,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.32 - 2026-05-19 =
+- **Update:** Compatibility with WordPress 7.0
+- **Update:** Compatibility with PHP 8.3
+- **Fix:** Point Label was not changing in analytics [PRO]
+- **Fix:** Sale Price was not displayed during Sale Period [PRO]
+
 = 3.7.31 - 2026-05-14 =
-- **Update:** Redesigned the MasterStudy LMS plugin admin pages with a modern interface, replacing the default WordPress layout and tables. 
+- **Update:** Redesigned the MasterStudy LMS plugin admin pages with a modern interface, replacing the default WordPress layout and tables.
 - **Fix:** Pagination in quizzes was not displayed when the number of questions exceeded 8
 
 = 3.7.30 - 2026-05-05 =

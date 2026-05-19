@@ -30,7 +30,13 @@ $course_bundle   = is_ms_lms_addon_enabled( 'course_bundle' );
 $enterprise      = is_ms_lms_addon_enabled( 'enterprise_courses' );
 $certificate     = is_ms_lms_addon_enabled( 'certificate_builder' );
 $point           = is_ms_lms_addon_enabled( 'point_system' );
+$point_label     = esc_html__( 'Points', 'masterstudy-lms-learning-management-system' );
 $not_empty_stats = ( $settings['course_tab_reviews'] || $point || $certificate || $enterprise || $course_bundle );
+
+if ( $point && class_exists( 'STM_LMS_Point_System' ) ) {
+	$point_settings = get_option( 'stm_lms_point_system_settings', array() );
+	$point_label    = ! empty( $point_settings['point_label'] ) ? $point_settings['point_label'] : $point_label;
+}
 
 $stats = array(
 	'reviews'          => 0,
@@ -187,7 +193,7 @@ if ( $is_pro_plus && $settings['student_reports'] ) : ?>
 					<div class="masterstudy-enrolled-courses-sorting__block-icon masterstudy-enrolled-courses-sorting__block-icon_points"></div>
 					<div class="masterstudy-enrolled-courses-sorting__block-content">
 						<span class="masterstudy-enrolled-courses-sorting__block-title">
-							<?php echo esc_html__( 'Points', 'masterstudy-lms-learning-management-system' ); ?>
+							<?php echo esc_html( $point_label ); ?>
 						</span>
 						<span class="masterstudy-enrolled-courses-sorting__block-value">
 							<?php echo esc_html( (string) ( $stats['total_points'] ?? 0 ) ); ?>

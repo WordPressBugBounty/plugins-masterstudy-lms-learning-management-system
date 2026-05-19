@@ -49,7 +49,7 @@ $is_instructor = STM_LMS_Instructor::is_instructor();
 						array(
 							'select_id'    => 'announcement-course-select',
 							'select_name'  => 'announcement_course',
-							'placeholder'  => esc_html__( '- Choose Course for Announcement -', 'masterstudy-lms-learning-management-system-pro' ),
+							'placeholder'  => esc_html__( '- Choose Course for Announcement -', 'masterstudy-lms-learning-management-system' ),
 							'is_queryable' => false,
 							'clearable'    => false,
 							'options'      => array(),
@@ -58,13 +58,13 @@ $is_instructor = STM_LMS_Instructor::is_instructor();
 					?>
 				</div>
 
-				<textarea class="masterstudy-account-announcement__message-input" placeholder="<?php esc_attr_e( 'Enter message for students', 'masterstudy-lms-learning-management-system-pro' ); ?>"></textarea>
+				<textarea class="masterstudy-account-announcement__message-input" placeholder="<?php esc_attr_e( 'Enter message for students', 'masterstudy-lms-learning-management-system' ); ?>"></textarea>
 
 				<?php
 				STM_LMS_Templates::show_lms_template(
 					'components/button',
 					array(
-						'title' => esc_html__( 'Submit', 'masterstudy-lms-learning-management-system-pro' ),
+						'title' => esc_html__( 'Submit', 'masterstudy-lms-learning-management-system' ),
 						'style' => 'primary',
 						'size'  => 'sm',
 						'class' => 'masterstudy-account-announcement__create-announcement-btn',

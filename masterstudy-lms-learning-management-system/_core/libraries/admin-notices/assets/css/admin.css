@@ -60,7 +60,7 @@ body.about-php .stm-notice, body.credits-php .stm-notice, body.freedoms-php .stm
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 1;
+  z-index: 0;
 }
 .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden) .text-wrap,
 .wp-core-ui .stm-notice .text-wrap {
@@ -68,7 +68,7 @@ body.about-php .stm-notice, body.credits-php .stm-notice, body.freedoms-php .stm
 }
 .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden) .notice-dismiss,
 .wp-core-ui .stm-notice .notice-dismiss {
-  margin-top: 11px;
+  right: 0;
 }
 .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-animate-circle-notice, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-animate-triangle-notice, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-attent-info, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-attent_triangle, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-cog-notice, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-check, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-attent_circle, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-cog,
 .wp-core-ui .stm-notice.stm-notice-animate-circle-notice,
@@ -92,17 +92,6 @@ body.about-php .stm-notice, body.credits-php .stm-notice, body.freedoms-php .stm
 .wp-core-ui .stm-notice.stm-notice-cog .img img {
   max-width: 18px;
   max-height: 18px;
-}
-.wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-animate-circle-notice button, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-animate-triangle-notice button, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-attent-info button, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-attent_triangle button, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-cog-notice button, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-check button, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-attent_circle button, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-cog button,
-.wp-core-ui .stm-notice.stm-notice-animate-circle-notice button,
-.wp-core-ui .stm-notice.stm-notice-animate-triangle-notice button,
-.wp-core-ui .stm-notice.stm-notice-attent-info button,
-.wp-core-ui .stm-notice.stm-notice-attent_triangle button,
-.wp-core-ui .stm-notice.stm-notice-cog-notice button,
-.wp-core-ui .stm-notice.stm-notice-check button,
-.wp-core-ui .stm-notice.stm-notice-attent_circle button,
-.wp-core-ui .stm-notice.stm-notice-cog button {
-  margin-top: 7px;
 }
 .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-animate-circle-notice.only-title, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-animate-triangle-notice.only-title, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-attent-info.only-title, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-attent_triangle.only-title, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-cog-notice.only-title, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-check.only-title, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-attent_circle.only-title, .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden).stm-notice-cog.only-title,
 .wp-core-ui .stm-notice.stm-notice-animate-circle-notice.only-title,
@@ -211,6 +200,7 @@ body.about-php .stm-notice, body.credits-php .stm-notice, body.freedoms-php .stm
   line-height: 17px;
   color: #ffffff;
   border: none;
+  min-height: 35px;
 }
 .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden) a.button.btn-second,
 .wp-core-ui .stm-notice a.button.btn-second {
@@ -240,6 +230,10 @@ body.about-php .stm-notice, body.credits-php .stm-notice, body.freedoms-php .stm
 .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden) button:before,
 .wp-core-ui .stm-notice button:before {
   content: "\f335";
+  color: #787c82;
+  font: normal 16px/20px dashicons;
+  width: 20px;
+  height: 20px;
 }
 @media (max-width: 767px) {
   .wp-core-ui .about-wrap .stm-notice.notice:not(.hidden),
@@ -263,6 +257,13 @@ body.about-php .stm-notice, body.credits-php .stm-notice, body.freedoms-php .stm
     top: 10px;
     right: 10px;
   }
+}
+.wp-core-ui .notice-wrapper .button {
+  min-height: 35px;
+  max-height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .wp-core-ui .popup-dash-promo {
   position: absolute;
