@@ -16,12 +16,22 @@ if ( ! is_array( $personal_data ) ) {
 	$personal_data = array();
 }
 
+$session_management_enabled = masterstudy_lms_can_manage_user_sessions();
+
 wp_localize_script(
 	'masterstudy-account-settings',
 	'masterstudy_account_settings_data',
 	array(
 		'account_info'  => $current_user,
 		'personal_data' => $personal_data,
+		'sessions'      => $session_management_enabled ? STM_LMS_User_Sessions::get_current_user_sessions_payload() : array(),
+		'i18n'          => array(
+			'empty_sessions'    => esc_html__( 'No active sessions found.', 'masterstudy-lms-learning-management-system' ),
+			'sign_out_error'    => esc_html__( 'Unable to sign out this session.', 'masterstudy-lms-learning-management-system' ),
+			'clear_all_error'   => esc_html__( 'Unable to clear active sessions.', 'masterstudy-lms-learning-management-system' ),
+			'sign_out_confirm'  => esc_html__( 'Are you sure you want to sign out this session?', 'masterstudy-lms-learning-management-system' ),
+			'clear_all_confirm' => esc_html__( 'Are you sure you want to clear all other active sessions?', 'masterstudy-lms-learning-management-system' ),
+		),
 	)
 );
 ?>
@@ -79,6 +89,9 @@ wp_localize_script(
 		STM_LMS_Templates::show_lms_template( 'account/parts/settings/socials' );
 	}
 
+	if ( $session_management_enabled ) {
+		STM_LMS_Templates::show_lms_template( 'account/parts/settings/login-sessions', array( 'current_user' => $current_user ) );
+	}
 	STM_LMS_Templates::show_lms_template( 'account/parts/settings/change-password' );
 	?>
 

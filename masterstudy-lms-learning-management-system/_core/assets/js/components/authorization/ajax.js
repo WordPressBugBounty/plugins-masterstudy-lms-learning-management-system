@@ -7,6 +7,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   $(document).ready(function () {
     $('.masterstudy-authorization').each(function () {
       var formContainer = $(this);
+      var initialRecoveryToken = authorization_data.session_limit_recovery || '';
+      var sessionNotice = formContainer.find('.masterstudy-authorization__session-notice').first();
+      var sessionNoticeComponent = createSessionNoticeComponent(formContainer, sessionNotice, initialRecoveryToken);
+      formContainer.data('session-notice-component', sessionNoticeComponent);
+      if (sessionNoticeComponent && authorization_data.session_limit_active === '1') {
+        sessionNoticeComponent.render('', 'warning', !isEmpty(initialRecoveryToken));
+      }
       formContainer.find('[data-id="masterstudy-authorization-restore-button"]').click(function (e) {
         e.preventDefault();
         restore(formContainer);
@@ -19,6 +26,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             formContainer.find('[data-id="masterstudy-authorization-register-button"]').trigger('click');
           }
         }
+      });
+      formContainer.find('.masterstudy-authorization__form-input').on('input', function () {
+        clearFieldError($(this), formContainer);
       });
       var $strengthContainer = $('.masterstudy-authorization__strength-password');
       var $separators = $strengthContainer.find('.masterstudy-authorization__strength-password__separator');
@@ -59,6 +69,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
       formContainer.find('[data-id="masterstudy-authorization-login-button"]').click(function (e) {
         e.preventDefault();
+        resetErrors(formContainer);
         var login_data = {
           'user_login': formContainer.find('input[name="user_login"]').val(),
           'user_password': formContainer.find('input[name="user_password"]').val(),
@@ -79,6 +90,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
       formContainer.find('[data-id="masterstudy-authorization-register-button"]').click(function (e) {
         e.preventDefault();
+        resetErrors(formContainer);
         if (Object.keys(authorization_data.default_fields).length > 0) {
           for (var fieldName in authorization_data.default_fields) {
             if (authorization_data.default_fields.hasOwnProperty(fieldName)) {
@@ -121,6 +133,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
       formContainer.find('[data-id="masterstudy-authorization-instructor-confirm"]').click(function (e) {
         e.preventDefault();
+        resetErrors(formContainer);
         var request_data = {
           'fields_type': 'default',
           'fields': {
@@ -137,6 +150,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     });
   });
+  function createSessionNoticeComponent(formContainer, sessionNotice, initialRecoveryToken) {
+    if (!window.masterstudySessionNotice || !sessionNotice.length) {
+      return null;
+    }
+    return window.masterstudySessionNotice.create({
+      notice: sessionNotice,
+      initialRecoveryToken: initialRecoveryToken,
+      getRequestData: function getRequestData(api) {
+        return {
+          'user_login': formContainer.find('input[name="user_login"]').val(),
+          'user_password': formContainer.find('input[name="user_password"]').val(),
+          'recovery_token': api.getRecoveryToken()
+        };
+      }
+    });
+  }
   function getPasswordStrength(password) {
     if (!password) return 0;
     var length = password.length;
@@ -207,6 +236,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       throw new Error('not ok');
     }).then(function (data) {
       formContainer.find('[data-id="masterstudy-authorization-login-button"]').removeClass('masterstudy-button_loading');
+      if (data.session_limit) {
+        var sessionNoticeComponent = formContainer.data('session-notice-component');
+        if (sessionNoticeComponent) {
+          sessionNoticeComponent.setRecoveryToken(data.recovery_token || sessionNoticeComponent.getRecoveryToken()).render('', 'warning', true);
+        }
+        return;
+      }
       if (data.status === 'error') {
         data.errors.forEach(function (error) {
           var inputField = formContainer.find("input[name=\"".concat(error.field, "\"]"));
@@ -223,6 +259,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       if (data.status === 'success') {
         redirect ? window.location = data.user_page : location.reload();
       }
+    })["catch"](function () {
+      formContainer.find('[data-id="masterstudy-authorization-login-button"]').removeClass('masterstudy-button_loading');
     });
   }
   function register(register_data, redirect, formContainer) {
@@ -256,6 +294,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }
         redirect ? window.location = data.user_page : location.reload();
       }
+    })["catch"](function () {
+      formContainer.find('[data-id="masterstudy-authorization-register-button"]').removeClass('masterstudy-button_loading');
     });
   }
   function instructor_request(request_data, formContainer) {
@@ -281,6 +321,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }
       }
     });
+  }
+  function resetErrors(formContainer) {
+    formContainer.find('.masterstudy-authorization__form-field').removeClass('masterstudy-authorization__form-field_has-error');
+    formContainer.find('.masterstudy-authorization__form-field-error').remove();
+  }
+  function clearFieldError(inputField, formContainer) {
+    var field = inputField.closest('.masterstudy-authorization__form-field');
+    if (!field.length) {
+      return;
+    }
+    field.removeClass('masterstudy-authorization__form-field_has-error');
+    field.find('.masterstudy-authorization__form-field-error').remove();
+    formContainer.find(".masterstudy-authorization__form-field-error_".concat(inputField.attr('name'))).remove();
+  }
+  function isEmpty(value) {
+    return typeof value === 'undefined' || value === null || value === '';
   }
   function error_handling(errors, formContainer) {
     errors.forEach(function (error) {
@@ -355,6 +411,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       restore_data = JSON.stringify({
         'restore_user_login': user_mail
       });
+    resetErrors(formContainer);
     formContainer.find('[data-id="masterstudy-authorization-restore-button"]').addClass('masterstudy-button_loading');
     fetch(url, {
       method: 'POST',
@@ -390,6 +447,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         formContainer.find('#masterstudy-authorization-restore-pass').addClass('masterstudy-authorization__send-mail_show');
         formContainer.find('.masterstudy-authorization__switch').addClass('masterstudy-authorization__switch_hide');
       }
+    })["catch"](function () {
+      formContainer.find('[data-id="masterstudy-authorization-restore-button"]').removeClass('masterstudy-button_loading');
     });
   }
   function open_confirmation_form(for_instructor, formContainer) {

@@ -1109,4 +1109,20 @@ abstract class LmsUpdateCallbacks {
 			stm_lms_user_assignments_times_table();
 		}
 	}
+
+	public static function lms_update_point_system_table() {
+		if ( ! defined( 'STM_LMS_PRO_ADDONS' ) || ! function_exists( 'is_ms_lms_addon_enabled' ) ) {
+			return;
+		}
+
+		if ( ! is_ms_lms_addon_enabled( 'point_system' ) ) {
+			return;
+		}
+
+		require_once STM_LMS_PRO_ADDONS . '/point_system/db.php';
+
+		if ( function_exists( 'stm_lms_point_system_table' ) ) {
+			stm_lms_point_system_table();
+		}
+	}
 }

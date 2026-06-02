@@ -13,6 +13,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
 
+if ( ! function_exists( 'masterstudy_lms_user_sessions_available' ) ) {
+	function masterstudy_lms_user_sessions_available() {
+		return defined( 'STM_LMS_PLUS_ENABLED' )
+			&& class_exists( 'STM_LMS_User_Sessions' )
+			&& class_exists( 'WP_Session_Tokens' );
+	}
+}
+
+if ( ! function_exists( 'masterstudy_lms_user_sessions_limit_enabled' ) ) {
+	function masterstudy_lms_user_sessions_limit_enabled() {
+		return masterstudy_lms_user_sessions_available()
+			&& STM_LMS_User_Sessions::is_limit_enabled();
+	}
+}
+
+if ( ! function_exists( 'masterstudy_lms_can_manage_user_sessions' ) ) {
+	function masterstudy_lms_can_manage_user_sessions() {
+		return masterstudy_lms_user_sessions_available()
+			&& STM_LMS_User_Sessions::can_manage_sessions();
+	}
+}
+
+if ( ! function_exists( 'masterstudy_lms_user_session_limit_reached' ) ) {
+	function masterstudy_lms_user_session_limit_reached( $user ) {
+		return masterstudy_lms_user_sessions_available()
+			&& STM_LMS_User_Sessions::is_limit_reached( $user );
+	}
+}
+
 function stm_lms_str_replace_once( $str_pattern, $str_replacement, $string ) {
 	if ( strpos( $string, $str_pattern ) !== false ) {
 		$occurrence = strpos( $string, $str_pattern );

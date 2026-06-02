@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.32
+Stable tag: 3.7.33
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.33 - 2026-06-02 =
+- **New:** Active Sessions Limit for Students [PRO]
+- **Update:** Updated the design of the Certificates page in User Profile for instructors [PRO]
+- **Fix:** Points were accumulated for every Quiz retake [PRO]
+- **Fix:** Lesson start date from Drip Settings was displayed one day earlier than the actual date for the Pacific timezone [PRO]
+
 = 3.7.32 - 2026-05-19 =
 - **Update:** Compatibility with WordPress 7.0
 - **Update:** Compatibility with PHP 8.3

@@ -24,7 +24,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var formBody = $('.stm_lms_fast_login__body');
     var formHead = $('.stm_lms_fast_login__head');
     var messageWrap = $('.stm_lms_fast_login__message');
+    var sessionNotice = messageWrap.find('.masterstudy-authorization__session-notice');
     var messageBox = messageWrap.find('.text-message-register');
+    var sessionNoticeComponent = createSessionNoticeComponent();
     var translations = stm_lms_fast_login['translations'];
     var restrictRegistration = stm_lms_fast_login['restrict_registration'];
     var registrationStrengthPassword = stm_lms_fast_login['registration_strength_password'];
@@ -34,8 +36,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       email: '',
       password: ''
     };
+    function updateMessageVisibility() {
+      var hasVisibleSessionNotice = sessionNotice.length && !sessionNotice.hasClass('masterstudy-authorization__session-notice_hidden');
+      var hasVisibleMessage = messageBox.css('display') !== 'none' && messageBox.text().trim() !== '';
+      messageWrap.toggle(hasVisibleSessionNotice || hasVisibleMessage);
+    }
+    function createSessionNoticeComponent() {
+      if (!window.masterstudySessionNotice || !sessionNotice.length) {
+        return null;
+      }
+      return window.masterstudySessionNotice.create({
+        notice: sessionNotice,
+        onBeforeRender: hideGuestCheckoutEmailMessage,
+        onChange: updateMessageVisibility,
+        getRequestData: function getRequestData(api) {
+          return {
+            user_login: emailFieldInput.val(),
+            user_password: passwordFieldInput.val(),
+            recovery_token: api.getRecoveryToken()
+          };
+        }
+      });
+    }
+    function renderSessionLimitNotice(recoveryToken) {
+      hideGuestCheckoutEmailMessage();
+      if (!sessionNoticeComponent) {
+        updateMessageVisibility();
+        return;
+      }
+      sessionNoticeComponent.setRecoveryToken(recoveryToken || sessionNoticeComponent.getRecoveryToken()).render('', 'warning', true);
+    }
     function changeForm(method) {
       hideGuestCheckoutEmailMessage();
+      hideSessionNotice();
       formHead.show();
       formBody.show();
       if (method === 'sign-up') {
@@ -164,57 +197,80 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 user_password: formData.password
               };
               renderErrors([]);
-              _context.prev = 4;
-              _context.next = 7;
+              hideGuestCheckoutEmailMessage();
+              _context.prev = 5;
+              _context.next = 8;
               return fetch(url, {
                 method: 'POST',
                 body: JSON.stringify(data)
               });
-            case 7:
+            case 8:
               res = _context.sent;
               if (res.ok) {
-                _context.next = 10;
+                _context.next = 11;
                 break;
               }
               return _context.abrupt("return");
-            case 10:
-              _context.next = 12;
+            case 11:
+              _context.next = 13;
               return res.json();
-            case 12:
+            case 13:
               response = _context.sent;
               errors = (_response$errors = response['errors']) !== null && _response$errors !== void 0 ? _response$errors : [];
               renderErrors();
-              if (response['status'] !== 'error') {
-                $.removeCookie('stm_lms_notauth_cart', {
-                  path: '/'
-                });
-                location.reload();
+              if (!response['session_limit']) {
+                _context.next = 19;
+                break;
               }
-              _context.next = 21;
-              break;
-            case 18:
-              _context.prev = 18;
-              _context.t0 = _context["catch"](4);
-              console.error(_context.t0);
-            case 21:
-              _context.prev = 21;
-              setIsLoading(false);
-              return _context.finish(21);
+              renderSessionLimitNotice(response['recovery_token']);
+              return _context.abrupt("return");
+            case 19:
+              if (!(response['status'] !== 'error')) {
+                _context.next = 24;
+                break;
+              }
+              hideSessionNotice();
+              $.removeCookie('stm_lms_notauth_cart', {
+                path: '/'
+              });
+              location.reload();
+              return _context.abrupt("return");
             case 24:
+              hideSessionNotice();
+              _context.next = 30;
+              break;
+            case 27:
+              _context.prev = 27;
+              _context.t0 = _context["catch"](5);
+              console.error(_context.t0);
+            case 30:
+              _context.prev = 30;
+              setIsLoading(false);
+              return _context.finish(30);
+            case 33:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[4, 18, 21, 24]]);
+        }, _callee, null, [[5, 27, 30, 33]]);
       }));
       return _login.apply(this, arguments);
     }
     function hideGuestCheckoutEmailMessage() {
       messageBox.text('');
-      messageWrap.hide();
+      messageBox.hide();
+      updateMessageVisibility();
     }
     function showGuestCheckoutEmailMessage(text) {
+      hideSessionNotice();
       messageBox.text(text);
-      messageWrap.show();
+      messageBox.show();
+      updateMessageVisibility();
+    }
+    function hideSessionNotice() {
+      if (sessionNoticeComponent) {
+        sessionNoticeComponent.hide();
+      }
+      updateMessageVisibility();
     }
     function register() {
       return _register.apply(this, arguments);
@@ -264,7 +320,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }
               formHead.hide();
               formBody.hide();
-              showGuestCheckoutEmailMessage(response.message || 'Confirmation link sent. Please follow the instructions sent to your email address.');
+              showGuestCheckoutEmailMessage(response.message || stm_lms_fast_login['confirmation_message']);
               return _context2.abrupt("return");
             case 21:
               location.reload();

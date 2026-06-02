@@ -394,7 +394,10 @@ final class AdminReactSettingsRepository {
 	 * @return array<string, mixed>
 	 */
 	private static function students_vars(): array {
-		return array();
+		return array(
+			'can_clear_student_sessions' => masterstudy_lms_can_manage_user_sessions()
+				&& current_user_can( 'manage_options' ),
+		);
 	}
 
 	/**

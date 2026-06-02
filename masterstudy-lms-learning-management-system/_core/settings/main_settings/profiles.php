@@ -210,6 +210,28 @@ function stm_lms_settings_profiles_section() {
 			),
 			'submenu'     => $submenu_general,
 		),
+		'masterstudy_limit_active_sessions' => array(
+			'group'       => 'started',
+			'group_title' => esc_html__( 'Active Login Sessions', 'masterstudy-lms-learning-management-system' ),
+			'type'        => 'checkbox',
+			'label'       => esc_html__( 'Limit Active Sessions', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Enable to limit how many active login sessions a user can have at the same time.', 'masterstudy-lms-learning-management-system' ),
+			'submenu'     => $submenu_auth,
+			'value'       => false,
+		),
+		'masterstudy_max_active_sessions'   => array(
+			'group'       => 'ended',
+			'type'        => 'number',
+			'label'       => esc_html__( 'Max Active Sessions', 'masterstudy-lms-learning-management-system' ),
+			'description' => esc_html__( 'Set the maximum number of active login sessions allowed per user.', 'masterstudy-lms-learning-management-system' ),
+			'submenu'     => $submenu_auth,
+			'value'       => 2,
+			'min'         => 1,
+			'dependency'  => array(
+				'key'   => 'masterstudy_limit_active_sessions',
+				'value' => 'not_empty',
+			),
+		),
 		'user_premoderation'                => array(
 			'type'    => 'checkbox',
 			'label'   => esc_html__( 'Email confirmation', 'masterstudy-lms-learning-management-system' ),
@@ -327,6 +349,16 @@ function stm_lms_settings_profiles_section() {
 			'value'   => false,
 		),
 	);
+
+	if ( ! $is_pro_plus ) {
+		$general_fields = array_diff_key(
+			$general_fields,
+			array(
+				'masterstudy_limit_active_sessions' => true,
+				'masterstudy_max_active_sessions'   => true,
+			)
+		);
+	}
 
 	$is_social_login_enabled = is_ms_lms_addon_enabled( 'social_login' );
 

@@ -181,6 +181,15 @@ class STM_LMS_User {
 	public static function wsl_new_register_redirect_url( $user_id ) {
 		if ( null != $user_id ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 			do_action( 'wsl_clear_user_php_session' );
+
+			if ( masterstudy_lms_user_session_limit_reached( $user_id ) ) {
+				wp_destroy_current_session();
+				wp_clear_auth_cookie();
+				wp_set_current_user( 0 );
+				wp_safe_redirect( STM_LMS_User_Sessions::get_session_limit_redirect_url( $user_id ) );
+				die();
+			}
+
 			wp_safe_redirect( STM_LMS_USER::user_page_url( $user_id ) );
 			die();
 		}
@@ -282,6 +291,19 @@ class STM_LMS_User {
 			);
 
 			return wp_send_json( $response );
+		}
+
+		if ( ! wp_check_password( $data['user_password'], $is_registered->user_pass, $is_registered->ID ) ) {
+			$response['errors'][] = array(
+				'id'    => 'wrong_password',
+				'field' => 'user_password',
+				'text'  => esc_html__( 'Wrong password', 'masterstudy-lms-learning-management-system' ),
+			);
+			return wp_send_json( $response );
+		}
+
+		if ( masterstudy_lms_user_session_limit_reached( $is_registered ) ) {
+			return wp_send_json( STM_LMS_User_Sessions::build_limit_response( $is_registered->ID ) );
 		}
 
 		/* remove login failed redirect */
@@ -2526,6 +2548,13 @@ class STM_LMS_User {
 				'user_login'    => $user->user_login,
 				'user_password' => $password,
 			);
+
+			if ( masterstudy_lms_user_session_limit_reached( $user ) ) {
+				$response['status']       = 'success';
+				$response['redirect_url'] = STM_LMS_User_Sessions::get_session_limit_redirect_url( $user_id );
+
+				return wp_send_json( $response );
+			}
 
 			$user_signon = wp_signon( $user_data, is_ssl() );
 

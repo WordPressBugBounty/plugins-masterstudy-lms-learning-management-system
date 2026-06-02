@@ -1,3 +1,6 @@
+<?php
+$session_limit_enabled = masterstudy_lms_user_sessions_limit_enabled();
+?>
 <div id="masterstudy-authorization-form-login" class="masterstudy-authorization__form">
 	<div class="masterstudy-authorization__form-wrapper">
 		<div class="masterstudy-authorization__form-field">
@@ -8,4 +11,7 @@
 			<span class="masterstudy-authorization__form-show-pass"></span>
 		</div>
 	</div>
+	<?php if ( $session_limit_enabled ) : ?>
+		<?php STM_LMS_Templates::show_lms_template( 'components/authorization/session-notice' ); ?>
+	<?php endif; ?>
 </div>

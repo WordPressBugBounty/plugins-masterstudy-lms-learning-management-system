@@ -462,6 +462,19 @@ class STM_LMS_Guest_Checkout {
 			return wp_send_json( $response );
 		}
 
+		if ( ! wp_check_password( $data['user_password'], $is_registered->user_pass, $is_registered->ID ) ) {
+			$response['errors'][] = array(
+				'id'    => 'wrong_password',
+				'field' => 'password',
+				'text'  => esc_html__( 'Wrong password', 'masterstudy-lms-learning-management-system' ),
+			);
+			return wp_send_json( $response );
+		}
+
+		if ( masterstudy_lms_user_session_limit_reached( $is_registered ) ) {
+			return wp_send_json( STM_LMS_User_Sessions::build_limit_response( $is_registered->ID ) );
+		}
+
 		$user = wp_signon( $data, is_ssl() );
 
 		if ( is_wp_error( $user ) ) {

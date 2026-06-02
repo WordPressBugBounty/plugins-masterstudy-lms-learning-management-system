@@ -1,11 +1,13 @@
 <?php
 wp_enqueue_script( 'jquery.cookie' );
 stm_lms_register_script( 'fast_login' );
+wp_enqueue_style( 'masterstudy-authorization' );
 
 $restrict_registration          = STM_LMS_Options::get_option( 'restrict_registration', false );
 $registration_strength_password = STM_LMS_Options::get_option( 'registration_strength_password', false );
 
-$premoderation = STM_LMS_Options::get_option( 'user_premoderation', false );
+$premoderation          = STM_LMS_Options::get_option( 'user_premoderation', false );
+$session_notice_enabled = masterstudy_lms_user_sessions_limit_enabled();
 
 wp_localize_script(
 	'stm-lms-fast_login',
@@ -15,6 +17,7 @@ wp_localize_script(
 			'sign_up' => esc_html__( 'Sign Up', 'masterstudy-lms-learning-management-system' ),
 			'sign_in' => esc_html__( 'Sign In', 'masterstudy-lms-learning-management-system' ),
 		),
+		'confirmation_message'           => esc_html__( 'Confirmation link sent. Please follow the instructions sent to your email address.', 'masterstudy-lms-learning-management-system' ),
 		'restrict_registration'          => $restrict_registration,
 		'registration_strength_password' => $registration_strength_password,
 		'user_premoderation'             => (bool) $premoderation,
@@ -41,7 +44,10 @@ wp_enqueue_style( 'masterstudy-button' );
 			<?php endif; ?>
 		</div>
 		<div class="stm_lms_fast_login__message" role="status" aria-live="polite" style="display:none;">
-			<div class="text-message-register"></div>
+			<?php if ( $session_notice_enabled ) : ?>
+				<?php STM_LMS_Templates::show_lms_template( 'components/authorization/session-notice' ); ?>
+			<?php endif; ?>
+			<div class="text-message-register" style="display:none;"></div>
 		</div>
 		<div class="stm_lms_fast_login__body">
 			<div class="stm_lms_fast_login__field stm_lms_fast_login__email">

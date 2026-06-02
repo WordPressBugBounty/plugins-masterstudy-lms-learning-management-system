@@ -144,14 +144,15 @@ final class StudentsRepository {
 				}
 
 				$student = array(
-					'user_id'        => $user->ID,
-					'display_name'   => $display_name,
-					'email'          => $user->user_email,
-					'registered'     => $user->user_registered,
-					'enrolled'       => $student['enrolled'] ?? 0,
-					'points'         => $student['points'] ?? 0,
-					'url'            => $url,
-					'date_formatted' => STM_LMS_Helpers::format_date( $user->user_registered ),
+					'user_id'            => $user->ID,
+					'display_name'       => $display_name,
+					'email'              => $user->user_email,
+					'registered'         => $user->user_registered,
+					'enrolled'           => $student['enrolled'] ?? 0,
+					'points'             => $student['points'] ?? 0,
+					'url'                => $url,
+					'date_formatted'     => STM_LMS_Helpers::format_date( $user->user_registered ),
+					'can_clear_sessions' => masterstudy_lms_can_manage_user_sessions() && ! \STM_LMS_User_Sessions::is_exempt_user( $user ),
 				);
 			}
 		}

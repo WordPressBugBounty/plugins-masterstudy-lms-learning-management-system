@@ -56,8 +56,15 @@ $settings['restrict_registration']            = $settings['restrict_registration
 $recaptcha_enabled                            = STM_LMS_Helpers::g_recaptcha_enabled();
 $recaptcha                                    = $recaptcha_enabled ? STM_LMS_Helpers::g_recaptcha_keys() : '';
 $recaptcha_site_key                           = ! empty( $recaptcha['public'] ) ? stm_lms_filtered_output( $recaptcha['public'] ) : false;
+$session_feature_enabled                      = masterstudy_lms_user_sessions_limit_enabled();
+$session_limit_recovery                       = isset( $_GET['masterstudy_session_limit_recovery'] ) ? sanitize_text_field( wp_unslash( $_GET['masterstudy_session_limit_recovery'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$session_limit_notice                         = ( ! empty( $_GET['masterstudy_session_limit'] ) && $session_feature_enabled ) ? STM_LMS_User_Sessions::get_notice_text() : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 $auth_type = $settings['restrict_registration'] ? 'login' : $type;
+
+if ( $session_feature_enabled && ! empty( $session_limit_recovery ) ) {
+	$auth_type = 'login';
+}
 
 if ( $is_logged_in && ! $only_for_instructor ) {
 	STM_LMS_Templates::show_lms_template(
@@ -118,6 +125,8 @@ if (typeof authorization_data === 'undefined') {
 		'only_for_instructor': '<?php echo esc_html( $only_for_instructor ); ?>',
 		'user_account_page': '<?php echo esc_url( STM_LMS_User::user_page_url( get_current_user_id() ) ); ?>',
 		'instructor_premoderation': '<?php echo esc_html( $settings['instructor_premoderation'] ); ?>',
+		'session_limit_active': '<?php echo esc_html( ! empty( $session_limit_notice ) ); ?>',
+		'session_limit_recovery': '<?php echo esc_html( $session_limit_recovery ); ?>',
 	};
 }
 if (typeof authorization_settings === 'undefined') {

@@ -46,8 +46,14 @@
               return;
             }
             if (data.status === 'success') {
+              if (data.redirect_url) {
+                window.location = data.redirect_url;
+                return;
+              }
               location.reload();
             }
+          })["catch"](function () {
+            formContainer.find('[data-id="masterstudy-authorization-new-pass-button"]').removeClass('masterstudy-button_loading');
           });
         }
       });
