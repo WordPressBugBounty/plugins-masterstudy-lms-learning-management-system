@@ -16,7 +16,7 @@ $purchase_link = STM_LMS_Helpers::is_pro() && ! STM_LMS_Helpers::is_pro_plus() ?
 <div class="masterstudy-analytics-preview-page__popup">
 	<div class="masterstudy-analytics-preview-page__popup-video-wrapper">
 		<div class="masterstudy-analytics-preview-page__popup-video">
-			<iframe id="masterstudy-analytics-preview-video" frameborder="0" allowfullscreen="" src="https://www.youtube.com/embed/7NqPcDGVOZM?rel=0&amp;autoplay=1"></iframe>
+			<iframe id="masterstudy-analytics-preview-video" frameborder="0" allowfullscreen="" data-original-src="https://www.youtube.com/embed/7NqPcDGVOZM?rel=0&amp;autoplay=1"></iframe>
 		</div>
 	</div>
 </div>

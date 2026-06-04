@@ -79,7 +79,7 @@ $link_text = $is_enable ? esc_html__( 'Enable addon', 'masterstudy-lms-learning-
 	<div class="masterstudy-analytics-preview-page__popup">
 		<div class="masterstudy-analytics-preview-page__popup-video-wrapper">
 			<div class="masterstudy-analytics-preview-page__popup-video">
-				<iframe id="masterstudy-analytics-preview-video" frameborder="0" allowfullscreen="" src="<?php echo esc_url( $video_url ); ?>"></iframe>
+				<iframe id="masterstudy-analytics-preview-video" frameborder="0" allowfullscreen="" data-original-src="<?php echo esc_url( $video_url ); ?>"></iframe>
 			</div>
 		</div>
 	</div>
