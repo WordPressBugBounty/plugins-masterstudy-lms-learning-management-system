@@ -98,6 +98,8 @@
               window.location.href = queryUrl;
             }
           });
+          alreadySeen.add(data);
+
           // If value set on url params
           if ($(option).data('value') == urlParams.get(selectName)) {
             placeholder.html($(option).html());

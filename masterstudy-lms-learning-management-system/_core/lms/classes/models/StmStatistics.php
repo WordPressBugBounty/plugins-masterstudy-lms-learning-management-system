@@ -295,8 +295,17 @@ class StmStatistics {
 		$user_orders['total'] = $query_total->select( ' COUNT(DISTINCT lms_order_items.id) as count ' )->findOne()->count ?? 0;
 
 		$query_total_price = clone $query;
-		$query_total_price->select( ' SUM( lms_order_items.`price` * lms_order_items.`quantity`) as total_price ' );
-		$total_price                    = $query_total_price->findOne()->total_price ?? 0;
+		$query_total_price->select( ' lms_order_items.id, ( lms_order_items.`price` * lms_order_items.`quantity` ) as total_price ' )
+			->group_by( 'lms_order_items.id' );
+		$total_price_rows = $query_total_price->find();
+		$total_price      = 0;
+
+		if ( ! empty( $total_price_rows ) ) {
+			foreach ( $total_price_rows as $total_price_row ) {
+				$total_price += (float) ( $total_price_row->total_price ?? 0 );
+			}
+		}
+
 		$user_orders['total_price']     = ( $total_price ) ? $total_price : 0;
 		$user_orders['formatted_price'] = STM_LMS_Helpers::display_price( $user_orders['total_price'] );
 		$query->group_by( 'lms_order_items.id' )
@@ -341,11 +350,15 @@ class StmStatistics {
 	 * @param $date_end
 	 * @param $user_id
 	 * @param null $course_id
+	 * @param string $group_by
 	 *
 	 * @return array
 	 */
-	public static function get_course_statisticas( $date_start, $date_end, $user_id, $course_id = null ) {
+	public static function get_course_statisticas( $date_start, $date_end, $user_id, $course_id = null, $group_by = 'month' ) {
 		global $wpdb;
+
+		$group_by         = 'day' === $group_by ? 'day' : 'month';
+		$date_group_field = 'day' === $group_by ? 'DATE(_order.post_date)' : "DATE_FORMAT(_order.post_date, '%m-%Y')";
 
 		$data    = array();
 		$courses = StmLmsCourse::query()
@@ -364,7 +377,7 @@ class StmStatistics {
 					$date_end
 				)
 			)
-			->group_by( " course.ID, DATE_FORMAT(_order.post_date, '%m-%Y') " );
+			->group_by( " course.ID, {$date_group_field} " );
 
 		if ( null !== $course_id ) {
 			$courses->where( 'course.ID', $course_id )->findOne();

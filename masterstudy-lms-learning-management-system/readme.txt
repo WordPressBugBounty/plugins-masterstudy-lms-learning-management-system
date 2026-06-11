@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.34
+Stable tag: 3.7.35
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.35 - 2026-06-10 =
+- **Update:** Improved responsiveness of tables in the admin dashboard
+- **Fix:** Payouts total on the profile page was displaying a significantly higher amount than actual [PRO]
+- **Fix:** MS Templates header was duplicated in the Instructor profile in Order Details [PRO]
+
 = 3.7.34 - 2026-06-04 =
 - **Fix:** Questions generated through AI Lab were not being saved automatically.
 

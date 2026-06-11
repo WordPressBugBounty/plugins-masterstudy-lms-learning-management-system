@@ -9,7 +9,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var _window$instructor_co;
     var total = 0;
     var offset = 0;
-    var perPage = 5;
+    var perPage = 15;
     var isLoading = false;
     var hasMore = true;
     var scrollThreshold = 24;
