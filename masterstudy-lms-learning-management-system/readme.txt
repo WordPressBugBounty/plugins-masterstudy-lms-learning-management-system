@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.35
+Stable tag: 3.7.36
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.36 - 2026-06-18 =
+- **Fix:** Minor bugfixes
+
 = 3.7.35 - 2026-06-10 =
 - **Update:** Improved responsiveness of tables in the admin dashboard
 - **Fix:** Payouts total on the profile page was displaying a significantly higher amount than actual [PRO]
@@ -331,18 +334,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Update:** Compatibility with PHP 8.3
 - **Fix:** Point Label was not changing in analytics [PRO]
 - **Fix:** Sale Price was not displayed during Sale Period [PRO]
-
-= 3.7.31 - 2026-05-14 =
-- **Update:** Redesigned the MasterStudy LMS plugin admin pages with a modern interface, replacing the default WordPress layout and tables.
-- **Fix:** Pagination in quizzes was not displayed when the number of questions exceeded 8
-
-= 3.7.30 - 2026-05-05 =
-- **Fix:** Settings and Messages tab were disappearing in Profile menu reorder for Instructors
-- **Fix:** Membership dropdown in course player was not opening on mobile devices
-- **Fix:** Sticky side profile menu is no longer displayed on the user profile page
-- **Fix:** Incorrect layout of My Certificates page on narrow mobile screens
-- **Fix:** Fixed fatal error when using BeBuilder editor with LMS
-- **Fix:** MS Templates header was overlapping the Add New Group form in User Account
-
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).
