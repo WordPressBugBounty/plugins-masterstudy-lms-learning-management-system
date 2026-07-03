@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.36
+Stable tag: 3.7.37
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,8 +17,8 @@ MasterStudy is a free WordPress LMS plugin for online learning business. The Wor
 
 MasterStudy is the best free Learning Management System  WordPress plugin for online coaching, instructors, trainers, tutors, schools, colleges, marketplaces and any type of learning website.
 
-⭐ [MasterStudy Free version](https://masterstudy.stylemixthemes.com/lms-plugin/)
-⭐ [MasterStudy PRO version](https://stylemixthemes.com/wordpress-lms-plugin/?utm_source=wporg-lms&utm_medium=en&utm_campaign=2021)
+⭐ [Live Demo](https://masterstudy.stylemixthemes.com/lms-plugin/)
+⭐ [MasterStudy LMS PRO](https://stylemixthemes.com/wordpress-lms-plugin/?utm_source=wporg-lms&utm_medium=referral&utm_campaign=plugin-description)
 ⭐ [Documentation](https://docs.stylemixthemes.com/masterstudy-lms/)
 ⭐ [MasterStudy Templates](https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/)
 ⭐ [Join Facebook Community](https://www.facebook.com/groups/masterstudylms)
@@ -55,7 +55,7 @@ There is a step-by-step video tutorial on how to use the MasterStudy WordPress P
 
 ### Create a Course Easily with Our Powerful Builder:
 
-Creating a curriculum is simple with the MasterStudy WordPress LMS plugin. Our LMS builder is user-friendly and beautifully designed, divided into easy-to-follow sections for WordPress. Once you’ve created, you can add lessons, quizzes, and assignments to your LMS. You can also customize the sequence of lessons on LMS, preview specific ones, set pricing options, and add FAQs on the WordPress website.
+Creating a curriculum is simple with the MasterStudy WordPress LMS plugin. Our [LMS builder](https://stylemixthemes.com/wordpress-lms-plugin/course-builder/) is user-friendly and beautifully designed, divided into easy-to-follow sections for WordPress. Once you’ve created, you can add lessons, quizzes, and assignments to your LMS. You can also customize the sequence of lessons on LMS, preview specific ones, set pricing options, and add FAQs on the WordPress website.
 
 Easily  include all the details you need in one place of your LMS, such as the title, descriptions, curriculum, duration, price, skill level, and the number of active students on your WordPress website. Plus, you can add videos to your LMS, attachments, teachers on WordPress, and rewards.
 
@@ -83,7 +83,7 @@ With our Course builder, you have unlimited options for managing your LMS course
 
 ### ADDING LESSONS
 
-Once your curriculum and sections are set up on your LMS, it’s time to add different lesson types on WordPress. You have the flexibility to create four types of LMS lessons: text, audio, video, online streams, and slideshows on your WordPress website. Plus, you can easily incorporate previously created LMS content with our library of lessons and quizzes on WordPress.
+Once your curriculum and sections are set up on your LMS, it’s time to add different [lesson types](https://stylemixthemes.com/wordpress-lms-plugin/online-lessons/) on WordPress. You have the flexibility to create 6 types of LMS lessons: text, audio, video, live meetings, online streams, and PDF on your WordPress website. Plus, you can easily incorporate previously created LMS content with our library of lessons and quizzes on WordPress.
 
 ***Here's what you can manage with LMS lessons on WordPress:***
 
@@ -108,7 +108,7 @@ With our MasterStudy LMS WordPress plugin, adding videos is simple. It’s fully
 
 ### QUIZZES
 
-You can add questions to quizzes manually or select from the preset LMS questions library on WordPress. Then, simply input your first question to the LMS. We offer eight LMS question types to suit your needs: single-choice, multi-choice, true or false, item match, image match, image choice, keywords, and fill-in-the-gap.
+You can add questions to quizzes manually or select from the preset LMS questions library on WordPress. Then, simply input your first question to the LMS. We offer eight LMS [question types](https://stylemixthemes.com/wordpress-lms-plugin/quizzes/) to suit your needs: single-choice, multi-choice, true or false, item match, image match, image choice, keywords, and fill-in-the-gap.
 
 ***Here are the features of our quizzes:***
 
@@ -125,7 +125,7 @@ You can add questions to quizzes manually or select from the preset LMS question
 
 ### Course Player: Better Learning Experience
 
-Improve your students' learning journey with our Course Player. It's distraction-free, sleek, and user-friendly. Students can easily navigate through the LMS curriculum, switch between light and dark modes, and take part in discussions. Progressing through lessons is effortless—students can just click "Complete" to move to the next one.
+Improve your students' learning journey with our [Course Player](https://stylemixthemes.com/wordpress-lms-plugin/online-lessons/). It's distraction-free, sleek, and user-friendly. Students can easily navigate through the LMS curriculum, switch between light and dark modes, and take part in discussions. Progressing through lessons is effortless—students can just click "Complete" to move to the next one.
 
 **Key Features of MasterStudy Free Plugin:**
 
@@ -172,38 +172,40 @@ For more details, please visit [our website](https://stylemixthemes.com/wordpres
 
 **MasterStudy Premium Plugin Features**
 
-- **AI Lab**: Empowers you to generate complete courses, lessons, quizzes, and assignments with rich content and visuals from a single prompt.
-- **Subscriptions**: Offer recurring access to courses with automatic renewals.
-- **Memberships**: Give students instant access to unlock selected courses, categories, or your entire site.
-- **Taxes**: Apply country-specific tax rates to your course prices, choose how they’re displayed, and manage with a simple on/off toggle.
-- **Coupons**: Create powerful discount codes to boost enrollments and sales.
-- **Custom Course Pages**: Craft your conversion focused course pages with 50+ MasterStudy Elementor Widgets
-- **Email Manager**: Personalize email templates.
-- **Certificate Builder**: Make custom certificates easily.
-- **Grades**: Assign, manage, and review grades for courses, quizzes, and assignments seamlessly.
-- **Reports and Analytics**: Track your course performance, monitor student progress and manage earnings—all in one place.
-- **Prerequisites**: Set required courses before new enrollments.
-- **Quizzes**: Add different types of questions to tests.
-- **Sequential Drip Content**: Plan lessons step by step.
-- **Live Streaming**: Conduct live lessons.
-- **Group Courses**: Sell to companies and manage members.
-- **Assignments**: Students submit work and get grades.
-- **Question Media**: Add videos, audio, and images to quizzes.
-- **Point system**: Reward learners for achievements.
-- **Statistics and Payouts**: Analyze data and manage payments for instructors.
-- **Trial Courses**: Offer courses as trials or demos for new users.
-- **Co-instructors**: Assign multiple instructors to a course.
-- **Course Bundles**: Bundle courses together and offer discounts.
-- **Google Classrooms**: Import classes from Google Classrooms.
-- **Zoom Conference**: Conduct Zoom lessons, meetings, and webinars on your site.
-- **Google Meet**: Schedule and host Google Meet meetings.
-- **Audio Lessons**: Upload audio files or add from Spotify or SoundCloud as a lesson.
-- **SCORM**: Import pre-built e-learning content using SCORM standards.
-- **LMS Forms Editor**: Customize website forms with an easy-to-use editor.
-- **File Upload Manager**: Manage various file types in courses and lessons.
-- **Upcoming Course Status**: Promote courses that are not yet open for enrollment.
-- **Online Testing**: Embed quizzes anywhere and conduct tests online.
-- **Gradebook**: Monitor students' progress and performance.
+- [**AI Lab**](https://stylemixthemes.com/wordpress-lms-plugin/addons/ai-lab/): Empowers you to generate complete courses, lessons, quizzes, and assignments with rich content and visuals from a single prompt.
+- [**Subscriptions**](https://stylemixthemes.com/wordpress-lms-plugin/addons/subscriptions/): Offer recurring access to courses with automatic renewals.
+- [**Memberships**](https://stylemixthemes.com/wordpress-lms-plugin/addons/memberships/): Give students instant access to unlock selected courses, categories, or your entire site.
+- [**Taxes**](https://stylemixthemes.com/wordpress-lms-plugin/addons/taxes/): Apply country-specific tax rates to your course prices, choose how they’re displayed, and manage with a simple on/off toggle.
+- [**Coupons**](https://stylemixthemes.com/wordpress-lms-plugin/monetize/): Create powerful discount codes to boost enrollments and sales.
+- [**Custom Course Pages**](https://stylemixthemes.com/wordpress-lms-plugin/course-style/): Craft your conversion focused course pages with 50+ MasterStudy Elementor Widgets
+- [**Email Manager**](https://stylemixthemes.com/wordpress-lms-plugin/email-management/): Personalize email templates.
+- [**Certificate Builder**](https://stylemixthemes.com/wordpress-lms-plugin/certificates/): Make custom certificates easily.
+- [**Grades**](https://stylemixthemes.com/wordpress-lms-plugin/grades/): Assign, manage, and review grades for courses, quizzes, and assignments seamlessly.
+- [**Reports and Analytics**](https://stylemixthemes.com/wordpress-lms-plugin/reports-and-analytics/): Track your course performance, monitor student progress and manage earnings—all in one place.
+- [**Prerequisites**](https://stylemixthemes.com/wordpress-lms-plugin/addons/prerequisites/): Set required courses before new enrollments.
+- [**Quizzes**](https://stylemixthemes.com/wordpress-lms-plugin/quizzes/): Add different types of questions to tests.
+- [**Sequential Drip Content**](https://stylemixthemes.com/wordpress-lms-plugin/addons/drip-content/): Plan lessons step by step.
+- [**Live Streaming**](https://stylemixthemes.com/wordpress-lms-plugin/zoom-live/): Conduct live lessons.
+- [**Group Courses**](https://stylemixthemes.com/wordpress-lms-plugin/addons/group-courses/): Sell to companies and manage members.
+- [**Assignments**](https://stylemixthemes.com/wordpress-lms-plugin/addons/assignments/): Students submit work and get grades.
+- [**Question Media**](https://stylemixthemes.com/wordpress-lms-plugin/addons/question-media/): Add videos, audio, and images to quizzes.
+- [**Point system**](https://stylemixthemes.com/wordpress-lms-plugin/addons/point-system/): Reward learners for achievements.
+- [**Statistics and Payouts**](https://stylemixthemes.com/wordpress-lms-plugin/addons/statistics-payouts/): Analyze data and manage payments for instructors.
+- [**Trial Courses**](https://stylemixthemes.com/wordpress-lms-plugin/addons/trial-courses/): Offer courses as trials or demos for new users.
+- [**Co-instructors**](https://stylemixthemes.com/wordpress-lms-plugin/addons/co-instructors/): Assign multiple instructors to a course.
+- [**Course Bundles**](https://stylemixthemes.com/wordpress-lms-plugin/addons/course-bundles/): Bundle courses together and offer discounts.
+- [**Google Classrooms**](https://stylemixthemes.com/wordpress-lms-plugin/addons/google-classrooms/): Import classes from Google Classrooms.
+- [**Zoom Conference**](https://stylemixthemes.com/wordpress-lms-plugin/addons/zoom-conference/): Conduct Zoom lessons, meetings, and webinars on your site.
+- [**Google Meet**](https://stylemixthemes.com/wordpress-lms-plugin/addons/zoom-google-meet-live-streams/): Schedule and host Google Meet meetings.
+- [**Audio Lessons**](https://stylemixthemes.com/wordpress-lms-plugin/addons/audio-lessons/): Upload audio files or add from Spotify or SoundCloud as a lesson.
+- [**PDF Lessons**](https://stylemixthemes.com/wordpress-lms-plugin/addons/pdf-lessons/): Share downloadable lesson content students can read, bookmark, and open offline in a built-in viewer.
+- [**SCORM**](https://stylemixthemes.com/wordpress-lms-plugin/addons/scorm/): Import pre-built e-learning content using SCORM standards.
+- [**LMS Forms Editor**](https://stylemixthemes.com/wordpress-lms-plugin/addons/lms-form-editor/): Customize website forms with an easy-to-use editor.
+- [**File Upload Manager**](https://stylemixthemes.com/wordpress-lms-plugin/addons/file-upload-manager/): Manage various file types in courses and lessons.
+- [**Upcoming Course Status**](https://stylemixthemes.com/wordpress-lms-plugin/addons/upcoming-course-status/): Promote courses that are not yet open for enrollment.
+- [**Online Testing**](https://stylemixthemes.com/wordpress-lms-plugin/addons/online-testing/): Embed quizzes anywhere and conduct tests online.
+- [**Gradebook**](https://stylemixthemes.com/wordpress-lms-plugin/addons/gradebook/): Monitor students' progress and performance.
+- [**Social Login**](https://stylemixthemes.com/wordpress-lms-plugin/addons/social-login/): Let students sign in with their Google or Facebook account, no separate registration.
 
 [youtube https://youtu.be/98LKgphFSCY]
 
@@ -267,9 +269,7 @@ Yes, MasterStudy WordPress LMS Plugin is compatible with free and premium WordPr
 
 = Do I need a Membership Plugin? =
 
-This only depends on the purpose you follow. If you are planning to implement membership plans on the platform, then you have to install the Membership Plugin. But, you do not need to search for the options.
-
-MasterStudy WordPress LMS plugin already integrates with WooCommerce and Paid Membership PRO. These are the best items that will help you to establish a great membership system and create smart plans.
+No. MasterStudy has memberships and subscriptions built in, so you can sell recurring access without a separate plugin. If you already use WooCommerce or Paid Memberships Pro, MasterStudy works with both.
 
 = Does MasterStudy WordPress LMS plugin support webinars and live stream sessions? =
 
@@ -289,7 +289,7 @@ There is a detailed text [guide](https://support.stylemixthemes.com/manuals/mast
 
 = How can I get support or talk to someone from the team? =
 
-Our support team is available 24/7. To submit about the problem please follow to [your account](https://support.stylemixthemes.com/tickets/new) to submit a support ticket. If you have some pre-sale questions you can always use live-chat on our website: stylemixthemes.com
+Our support team is available 24/7. To submit about the problem please follow to [your account](https://support.stylemixthemes.com/tickets/new) to submit a support ticket. If you have some pre-sale questions you can always use live-chat on our website: [stylemixthemes.com](https://stylemixthemes.com/wordpress-lms-plugin/)
 
 = Can I translate the plugin to a different language? =
 
@@ -297,11 +297,11 @@ Yes, however MasterStudy WordPress LMS plugin already translated into 8 language
 
 = What kind of media can be used in courses? =
 
-The plugin allows uploading absolutely different formats of files. There are three types of lessons available, where you can present various types of content such as text, video, slides. Besides this, we have an option of course/lesson attachments, where you can upload different files including images, audio files, zip folders, and more.
+The plugin allows uploading absolutely different formats of files. There are four types of lessons available, where you can present various types of content such as text, video, audio and PDF. Besides this, we have an option of course/lesson attachments, where you can upload different files including images, audio files, zip folders, and more.
 
-= Is it a one-time fee for the Pro version or do I need to extend my license? =
+= Is the Pro version a one-time payment or a yearly subscription? =
 
-No, you don’t have to extend your license, the core features will be available. In case you want to receive further updates and support you need to renew your license. The MasterStudy WordPress LMS plugin Pro is available at $89.
+Both, and you choose. The annual license gives you one year of updates and priority support from the date of purchase, and renews each year. The lifetime license is a single payment that covers updates and support with no renewals. Every plan unlocks all Pro features; the only difference between plans is how many sites you can use them on.
 
 = How can I report security bugs? =
 
@@ -312,6 +312,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.37 - 2026-07-03 =
+- **Fix:** Minor bugfixes
+
 = 3.7.36 - 2026-06-18 =
 - **Fix:** Minor bugfixes
 
