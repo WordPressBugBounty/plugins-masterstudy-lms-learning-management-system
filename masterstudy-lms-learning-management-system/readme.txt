@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.37
+Stable tag: 3.7.38
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.38 - 2026-07-23 =
+- **Update:** New AI Models (OpenAI, Gemini, Claude, Grok, Mistral) added for AI Lab Addon [PRO]
+
 = 3.7.37 - 2026-07-03 =
 - **Fix:** Minor bugfixes
 
