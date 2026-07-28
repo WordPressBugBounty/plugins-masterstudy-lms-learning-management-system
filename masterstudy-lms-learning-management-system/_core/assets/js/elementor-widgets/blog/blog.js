@@ -20,7 +20,8 @@ jQuery(document).ready(function ($) {
         action: "ms_lms_blog_pagination",
         nonce: ms_lms_blog.nonce,
         current_page: currentPage,
-        posts_per_page: $paginationList.data("per-page")
+        posts_per_page: $paginationList.data("per-page"),
+        blog_style: $paginationList.data("blog-style") || "cards"
       },
       success: function success(response) {
         if (response.success) {

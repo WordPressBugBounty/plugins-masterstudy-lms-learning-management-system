@@ -27,7 +27,18 @@ $this->add_responsive_control(
 		'type'       => Controls_Manager::SLIDER,
 		'size_units' => array( '%', 'px' ),
 		'selectors'  => array(
-			'{{WRAPPER}} .ms_lms_slider_custom' => 'height: {{SIZE}}{{UNIT}};',
+			'{{WRAPPER}} .ms_lms_slider_custom' => 'height: {{SIZE}}{{UNIT}} !important;',
+		),
+	)
+);
+$this->add_responsive_control(
+	'style_slider_image_min_height',
+	array(
+		'label'      => esc_html__( 'Image Min Height', 'masterstudy-lms-learning-management-system' ),
+		'type'       => Controls_Manager::SLIDER,
+		'size_units' => array( '%', 'px', 'vh' ),
+		'selectors'  => array(
+			'{{WRAPPER}} .ms_lms_slider_custom__slide > img' => 'min-height: {{SIZE}}{{UNIT}};',
 		),
 	)
 );
@@ -125,7 +136,7 @@ $repeater->add_responsive_control(
 		'selectors'  => array(
 			'{{WRAPPER}} {{CURRENT_ITEM}} .ms_lms_slider_custom__slide_infoblock_wrapper' => 'width: {{SIZE}}{{UNIT}};',
 		),
-		'conditions'  => array(
+		'conditions' => array(
 			'terms' => array(
 				array(
 					'name'     => 'show_info_block',

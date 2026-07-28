@@ -813,51 +813,53 @@ class MsLmsCoursesCategories extends Widget_Base {
 			)
 		);
 
-		$this->add_responsive_control(
-			'card_width',
-			array(
-				'label'      => esc_html__( 'Card width', 'masterstudy-lms-learning-management-system' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px', '%' ),
-				'selectors'  => array(
-					$container => '--card-width: {{SIZE}}{{UNIT}};',
-				),
-				'condition'  => $condition,
-				'range'      => array(
-					'px' => array(
-						'max'  => 1000,
-						'step' => 0.1,
+		if ( 'normal' === $tab ) {
+			$this->add_responsive_control(
+				'card_width',
+				array(
+					'label'      => esc_html__( 'Card width', 'masterstudy-lms-learning-management-system' ),
+					'type'       => Controls_Manager::SLIDER,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						$container => '--card-width: {{SIZE}}{{UNIT}};',
 					),
-					'%'  => array(
-						'max'  => 100,
-						'step' => 1,
+					'condition'  => $condition,
+					'range'      => array(
+						'px' => array(
+							'max'  => 1000,
+							'step' => 0.1,
+						),
+						'%'  => array(
+							'max'  => 100,
+							'step' => 1,
+						),
 					),
-				),
-			)
-		);
+				)
+			);
 
-		$this->add_responsive_control(
-			'card_height',
-			array(
-				'label'      => esc_html__( 'Card height', 'masterstudy-lms-learning-management-system' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px', '%' ),
-				'selectors'  => array(
-					$category => 'height: {{SIZE}}{{UNIT}};',
-				),
-				'condition'  => $condition,
-				'range'      => array(
-					'px' => array(
-						'max'  => 1000,
-						'step' => 0.1,
+			$this->add_responsive_control(
+				'card_height',
+				array(
+					'label'      => esc_html__( 'Card height', 'masterstudy-lms-learning-management-system' ),
+					'type'       => Controls_Manager::SLIDER,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						$category => 'height: {{SIZE}}{{UNIT}};',
 					),
-					'%'  => array(
-						'max'  => 100,
-						'step' => 1,
+					'condition'  => $condition,
+					'range'      => array(
+						'px' => array(
+							'max'  => 1000,
+							'step' => 0.1,
+						),
+						'%'  => array(
+							'max'  => 100,
+							'step' => 1,
+						),
 					),
-				),
-			)
-		);
+				)
+			);
+		}
 	}
 
 	private function card_style_second_variant_controls( string $tab ) {

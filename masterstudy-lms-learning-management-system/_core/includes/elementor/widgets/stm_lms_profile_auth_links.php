@@ -700,6 +700,7 @@ class StmLmsProfileAuthLinks extends Widget_Base {
 					'{{WRAPPER}} .masterstudy-dropdown-menu__learning-column h3' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .masterstudy-dropdown-menu__learning-column .masterstudy-dropdown-menu__list li a .dropdown_menu_item__title' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .masterstudy-dropdown-menu__learning-column .masterstudy-dropdown-menu__logout a' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-dropdown-menu__learning-column .masterstudy-dropdown-menu__logout a span' => 'color: {{VALUE}}',
 				),
 			)
 		);
@@ -720,6 +721,7 @@ class StmLmsProfileAuthLinks extends Widget_Base {
 				'selectors' => array(
 					'{{WRAPPER}} .masterstudy-dropdown-menu__learning-column .masterstudy-dropdown-menu__list li a:hover .dropdown_menu_item__title' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .masterstudy-dropdown-menu__learning-column .masterstudy-dropdown-menu__logout a:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-dropdown-menu__learning-column .masterstudy-dropdown-menu__logout a:hover span' => 'color: {{VALUE}}',
 				),
 			)
 		);
@@ -787,6 +789,7 @@ class StmLmsProfileAuthLinks extends Widget_Base {
 					'{{WRAPPER}} .masterstudy-dropdown-menu__main-column h3' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .masterstudy-dropdown-menu__main-column .masterstudy-dropdown-menu__list li a' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .masterstudy-dropdown-menu__main-column .masterstudy-dropdown-menu__logout a' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-dropdown-menu__main-column .masterstudy-dropdown-menu__logout a span' => 'color: {{VALUE}}',
 				),
 			)
 		);
@@ -806,6 +809,8 @@ class StmLmsProfileAuthLinks extends Widget_Base {
 				'selectors' => array(
 					'{{WRAPPER}} .masterstudy-dropdown-menu__main-column .masterstudy-dropdown-menu__list li a:hover' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .masterstudy-dropdown-menu__main-column .masterstudy-dropdown-menu__logout a:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-dropdown-menu__main-column .masterstudy-dropdown-menu__logout a:hover span' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .masterstudy-dropdown-menu__main-column .masterstudy-dropdown-menu__list li a:hover span' => 'color: {{VALUE}}',
 				),
 			)
 		);

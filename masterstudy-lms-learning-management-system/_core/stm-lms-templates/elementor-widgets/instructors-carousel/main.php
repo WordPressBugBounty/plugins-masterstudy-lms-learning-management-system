@@ -69,6 +69,9 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 						foreach ( $instructors as $instructor ) {
 							$user_profile_url = STM_LMS_User::instructor_public_page_url( $instructor->ID );
 							$user             = STM_LMS_User::get_current_user( $instructor->ID, false, true );
+							$instructor_description = ! empty( $user['meta']['description'] )
+								? $user['meta']['description']
+								: get_the_author_meta( 'description', $instructor->ID );
 							$reviews          = STM_LMS_Options::get_option( 'course_tab_reviews', true );
 							$rating           = STM_LMS_Instructor::my_rating_v2( $user );
 							?>
@@ -112,6 +115,13 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 													'user' => $user,
 												)
 											);
+										}
+										if ( ! empty( $show_instructor_description ) && ! empty( $instructor_description ) ) {
+											?>
+											<p class="ms_lms_instructors_carousel__item_description">
+												<?php echo esc_html( $instructor_description ); ?>
+											</p>
+											<?php
 										}
 										if ( ! empty( $show_instructor_course_quantity ) && ! empty( $instructor->course_quantity ) ) {
 											STM_LMS_Templates::show_lms_template(

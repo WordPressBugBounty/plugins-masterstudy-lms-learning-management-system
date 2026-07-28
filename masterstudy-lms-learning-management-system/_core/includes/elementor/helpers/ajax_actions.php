@@ -286,6 +286,8 @@ function ms_lms_blog_pagination() {
 
 	$posts_per_page = ( isset( $_POST['posts_per_page'] ) ) ? intval( $_POST['posts_per_page'] ) : 10;
 	$current_page   = ( isset( $_POST['current_page'] ) ) ? intval( $_POST['current_page'] ) : ( isset( $_GET['current-page'] ) ? intval( $_GET['current-page'] ) : 1 );
+	$blog_style     = ( isset( $_POST['blog_style'] ) ) ? sanitize_text_field( wp_unslash( $_POST['blog_style'] ) ) : 'cards';
+	$blog_style     = in_array( $blog_style, array( 'classic', 'cards', 'masterstudy' ), true ) ? $blog_style : 'cards';
 	$offset         = ( $current_page - 1 ) * $posts_per_page;
 
 	$args = array(
@@ -302,7 +304,7 @@ function ms_lms_blog_pagination() {
 
 		while ( $posts->have_posts() ) {
 			$posts->the_post();
-			\STM_LMS_Templates::show_lms_template( 'elementor-widgets/blog/styles/cards', array() );
+			\STM_LMS_Templates::show_lms_template( 'elementor-widgets/blog/styles/' . $blog_style, array() );
 		}
 		$posts_html = ob_get_clean();
 
@@ -316,6 +318,7 @@ function ms_lms_blog_pagination() {
 					'total_posts'    => $posts->found_posts,
 					'posts_per_page' => $posts_per_page,
 					'offset'         => $offset,
+					'blog_style'     => $blog_style,
 				),
 			)
 		);

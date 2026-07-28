@@ -84,17 +84,6 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 			)
 		);
 		$this->add_control(
-			'show_title',
-			array(
-				'label'        => esc_html__( 'Title', 'masterstudy-lms-learning-management-system' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
-				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			)
-		);
-		$this->add_control(
 			'courses_per_page',
 			array(
 				'label'   => esc_html__( 'Number of Courses', 'masterstudy-lms-learning-management-system' ),
@@ -105,36 +94,60 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 				'default' => 4,
 			)
 		);
+		$this->add_control(
+			'show_item_block',
+			array(
+				'label'        => esc_html__( 'Course Meta Block', 'masterstudy-lms-learning-management-system' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
+				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			)
+		);
 		$this->end_controls_section();
 		$this->start_controls_section(
 			'title_section',
 			array(
-				'label'      => esc_html__( 'Title', 'masterstudy-lms-learning-management-system' ),
-				'tab'        => Controls_Manager::TAB_STYLE,
-				'conditions' => array(
-					'terms' => array(
-						array(
-							'name'     => 'show_title',
-							'operator' => '===',
-							'value'    => 'yes',
-						),
-					),
-				),
+				'label' => esc_html__( 'Title', 'masterstudy-lms-learning-management-system' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			)
+		);
+		$this->add_control(
+			'show_title',
+			array(
+				'label'        => esc_html__( 'Title', 'masterstudy-lms-learning-management-system' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
+				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			)
+		);
+		$title_style_conditions = array(
+			'terms' => array(
+				array(
+					'name'     => 'show_title',
+					'operator' => '===',
+					'value'    => 'yes',
+				),
+			),
 		);
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			array(
-				'name'     => 'title_typography',
-				'selector' => '{{WRAPPER}} .masterstudy-popular-courses__title',
+				'name'       => 'title_typography',
+				'selector'   => '{{WRAPPER}} .masterstudy-popular-courses__title',
+				'conditions' => $title_style_conditions,
 			)
 		);
 		$this->add_control(
 			'title_color',
 			array(
-				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => array(
+				'label'      => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::COLOR,
+				'conditions' => $title_style_conditions,
+				'selectors'  => array(
 					'{{WRAPPER}} .masterstudy-popular-courses__title' => 'color: {{VALUE}}',
 				),
 			)
@@ -145,8 +158,39 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 				'label'      => esc_html__( 'Margin', 'masterstudy-lms-learning-management-system' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%' ),
+				'conditions' => $title_style_conditions,
 				'selectors'  => array(
 					'{{WRAPPER}} .masterstudy-popular-courses__title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_section();
+		$this->start_controls_section(
+			'item_section',
+			array(
+				'label' => esc_html__( 'Course Item', 'masterstudy-lms-learning-management-system' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+		$this->add_responsive_control(
+			'item_padding',
+			array(
+				'label'      => esc_html__( 'Padding', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .masterstudy-popular-courses__item' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'item_margin',
+			array(
+				'label'      => esc_html__( 'Margin', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .masterstudy-popular-courses__item' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
@@ -358,6 +402,7 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
+					'{{WRAPPER}} .masterstudy-popular-courses__image-wrapper' => 'width: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}} img.masterstudy-popular-courses__image' => 'width: {{SIZE}}{{UNIT}};',
 				),
 			)
@@ -579,18 +624,24 @@ class MsLmsCoursePopularCourses extends Widget_Base {
 		$course_id        = ! empty( $masterstudy_single_page_course_id ) ? $masterstudy_single_page_course_id : $settings['course'] ?? null;
 		$courses_per_page = $settings['courses_per_page'] ?? 4;
 		$course_data      = masterstudy_get_elementor_course_data( intval( $course_id ) );
+		$course           = $course_data['course'] ?? null;
 
-		if ( empty( $course_data ) || ! isset( $course_data['course'] ) ) {
-			return;
+		if ( empty( $course ) && ! empty( $course_id ) ) {
+			$course = ( new \MasterStudy\Lms\Repositories\CourseRepository() )->find( intval( $course_id ) );
+		}
+
+		if ( empty( $course ) ) {
+			$course = (object) array( 'id' => 0 );
 		}
 
 		\STM_LMS_Templates::show_lms_template(
 			'components/course/popular-courses',
 			array(
-				'course'           => $course_data['course'],
+				'course'           => $course,
 				'courses_per_page' => $courses_per_page,
 				'style'            => $settings['preset'] ?? '',
 				'show_title'       => 'yes' === $settings['show_title'],
+				'show_item_block'  => 'yes' === $settings['show_item_block'],
 			)
 		);
 	}

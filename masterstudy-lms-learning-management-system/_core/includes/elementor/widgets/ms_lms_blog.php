@@ -41,12 +41,163 @@ class MsLmsBlog extends Widget_Base {
 
 	/** Register General Controls */
 	protected function register_controls() {
+		$this->register_section_heading_controls();
 		$this->register_general_content_controls();
 		$this->register_style_controls_layout();
 		$this->register_style_controls_date();
 		$this->register_style_controls_title();
 		$this->register_style_controls_taxonomy();
 		$this->register_style_controls_pagination();
+		$this->register_style_controls_section_heading();
+	}
+
+	protected function register_section_heading_controls() {
+		$this->start_controls_section(
+			'section_heading',
+			array(
+				'label' => esc_html__( 'Section Title', 'masterstudy-lms-learning-management-system' ),
+			)
+		);
+
+		$this->add_control(
+			'heading_title',
+			array(
+				'label'       => esc_html__( 'Title', 'masterstudy-lms-learning-management-system' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => '',
+				'placeholder' => esc_html__( 'Enter title…', 'masterstudy-lms-learning-management-system' ),
+				'dynamic'     => array( 'active' => true ),
+			)
+		);
+
+		$this->add_control(
+			'heading_tag',
+			array(
+				'label'     => esc_html__( 'HTML Tag', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::SELECT,
+				'options'   => array(
+					'h1' => 'H1',
+					'h2' => 'H2',
+					'h3' => 'H3',
+					'h4' => 'H4',
+					'h5' => 'H5',
+					'h6' => 'H6',
+				),
+				'default'   => 'h2',
+				'condition' => array( 'heading_title!' => '' ),
+			)
+		);
+
+		$this->add_control(
+			'heading_align',
+			array(
+				'label'     => esc_html__( 'Alignment', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => array(
+					'left'   => array(
+						'title' => esc_html__( 'Left', 'masterstudy-lms-learning-management-system' ),
+						'icon'  => 'eicon-text-align-left',
+					),
+					'center' => array(
+						'title' => esc_html__( 'Center', 'masterstudy-lms-learning-management-system' ),
+						'icon'  => 'eicon-text-align-center',
+					),
+					'right'  => array(
+						'title' => esc_html__( 'Right', 'masterstudy-lms-learning-management-system' ),
+						'icon'  => 'eicon-text-align-right',
+					),
+				),
+				'default'   => 'center',
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-blog-heading' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .masterstudy-blog-heading .masterstudy-blog-heading__separator-wrap' => 'justify-content: {{VALUE}};',
+				),
+				'condition' => array( 'heading_title!' => '' ),
+			)
+		);
+
+		$this->add_control(
+			'heading_show_separator',
+			array(
+				'label'        => esc_html__( 'Show Separator', 'masterstudy-lms-learning-management-system' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
+				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'condition'    => array( 'heading_title!' => '' ),
+			)
+		);
+
+		$this->end_controls_section();
+	}
+
+	protected function register_style_controls_section_heading() {
+		$this->start_controls_section(
+			'style_section_heading',
+			array(
+				'label'     => esc_html__( 'Section Title', 'masterstudy-lms-learning-management-system' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => array( 'heading_title!' => '' ),
+			)
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'heading_typography',
+				'selector' => '{{WRAPPER}} .masterstudy-blog-heading__title',
+			)
+		);
+
+		$this->add_control(
+			'heading_color',
+			array(
+				'label'     => esc_html__( 'Title Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-blog-heading__title' => 'color: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'heading_margin',
+			array(
+				'label'      => esc_html__( 'Margin', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'default'    => array(
+					'top'    => '0',
+					'right'  => '0',
+					'bottom' => '40',
+					'left'   => '0',
+					'unit'   => 'px',
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .masterstudy-blog-heading' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'heading_separator_color',
+			array(
+				'label'     => esc_html__( 'Separator Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#eab830',
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-blog-heading__separator.triangled_colored_separator::before' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .masterstudy-blog-heading__separator.triangled_colored_separator::after'  => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .masterstudy-blog-heading__separator-triangle.triangle::before'            => 'border-color: {{VALUE}};',
+				),
+				'condition' => array(
+					'heading_show_separator' => 'yes',
+				),
+			)
+		);
+
+		$this->end_controls_section();
 	}
 
 	protected function register_general_content_controls() {
@@ -63,8 +214,9 @@ class MsLmsBlog extends Widget_Base {
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'classic',
 				'options' => array(
-					'classic' => esc_html__( 'Classic', 'masterstudy-lms-learning-management-system' ),
-					'cards'   => esc_html__( 'Cards', 'masterstudy-lms-learning-management-system' ),
+					'classic'     => esc_html__( 'Classic', 'masterstudy-lms-learning-management-system' ),
+					'cards'       => esc_html__( 'Cards', 'masterstudy-lms-learning-management-system' ),
+					'masterstudy' => esc_html__( 'MasterStudy', 'masterstudy-lms-learning-management-system' ),
 				),
 			)
 		);
@@ -108,6 +260,20 @@ class MsLmsBlog extends Widget_Base {
 				'return_value'       => 'yes',
 				'default'            => false,
 				'frontend_available' => true,
+			)
+		);
+		$this->add_control(
+			'show_card_separator',
+			array(
+				'label'        => esc_html__( 'Show Card Separator', 'masterstudy-lms-learning-management-system' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
+				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'condition'    => array(
+					'blog_style' => 'masterstudy',
+				),
 			)
 		);
 		$this->end_controls_section();
@@ -196,7 +362,7 @@ class MsLmsBlog extends Widget_Base {
 				'label'     => esc_html__( 'Date', 'masterstudy-lms-learning-management-system' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => array(
-					'blog_style' => 'classic',
+					'blog_style' => array( 'classic', 'masterstudy' ),
 				),
 			)
 		);
@@ -228,6 +394,23 @@ class MsLmsBlog extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .masterstudy-post-template-main-info .masterstudy-post-date' => 'background-color: {{VALUE}};',
+				),
+			)
+		);
+		$this->add_control(
+			'section_masterstudy_accent_color',
+			array(
+				'label'     => esc_html__( 'Accent Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .masterstudy-post-template.post-layout-masterstudy .masterstudy-post-date .date-d'                 => 'color: {{VALUE}};',
+					'{{WRAPPER}} .masterstudy-post-template.post-layout-masterstudy .masterstudy-post-date .date-m'                 => 'color: {{VALUE}};',
+					'{{WRAPPER}} .masterstudy-post-template.post-layout-masterstudy .masterstudy-post-date .masterstudy-post-comments' => 'color: {{VALUE}}; border-top-color: {{VALUE}};',
+					'{{WRAPPER}} .masterstudy-post-template.post-layout-masterstudy .masterstudy-post-short-separator'              => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .masterstudy-post-template.post-layout-masterstudy .masterstudy-post-template-main:after'          => 'background-color: {{VALUE}};',
+				),
+				'condition' => array(
+					'blog_style' => 'masterstudy',
 				),
 			)
 		);
@@ -693,6 +876,32 @@ class MsLmsBlog extends Widget_Base {
 
 		extract( $settings );
 
+		$heading_title          = ! empty( $settings['heading_title'] ) ? $settings['heading_title'] : '';
+		$heading_tag            = ! empty( $settings['heading_tag'] ) ? $settings['heading_tag'] : 'h2';
+		$heading_show_separator = ! empty( $settings['heading_show_separator'] ) && 'yes' === $settings['heading_show_separator'];
+
+		$allowed_tags = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
+		if ( ! in_array( $heading_tag, $allowed_tags, true ) ) {
+			$heading_tag = 'h2';
+		}
+
+		if ( ! empty( $heading_title ) ) : ?>
+		<div class="masterstudy-blog-heading">
+			<<?php echo esc_attr( $heading_tag ); ?> class="masterstudy-blog-heading__title">
+				<?php echo esc_html( $heading_title ); ?>
+			</<?php echo esc_attr( $heading_tag ); ?>>
+
+			<?php if ( $heading_show_separator ) : ?>
+				<div class="masterstudy-blog-heading__separator-wrap">
+					<div class="masterstudy-blog-heading__separator triangled_colored_separator">
+						<div class="triangle masterstudy-blog-heading__separator-triangle"></div>
+					</div>
+				</div>
+			<?php endif; ?>
+		</div>
+			<?php
+		endif;
+
 		$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
 		$posts = new WP_Query(
@@ -702,8 +911,12 @@ class MsLmsBlog extends Widget_Base {
 				'paged'          => $paged,
 			)
 		);
-		if ( $posts->have_posts() ) : ?>
-		<div class="masterstudy-post-template post-layout-<?php echo esc_attr( $blog_style ); ?> desktop-columns-<?php echo esc_attr( $blog_columns ); ?> tablet-columns-<?php echo esc_attr( $blog_columns_tablet ); ?> mobile-columns-<?php echo esc_attr( $blog_columns_mobile ); ?>">
+
+		$hide_separator = empty( $settings['show_card_separator'] ) || 'yes' !== $settings['show_card_separator'];
+
+		if ( $posts->have_posts() ) :
+			?>
+		<div class="masterstudy-post-template post-layout-<?php echo esc_attr( $blog_style ); ?> desktop-columns-<?php echo esc_attr( $blog_columns ); ?> tablet-columns-<?php echo esc_attr( $blog_columns_tablet ); ?> mobile-columns-<?php echo esc_attr( $blog_columns_mobile ); ?><?php echo ( $hide_separator && 'masterstudy' === $blog_style ) ? ' masterstudy-post-template--no-card-separator' : ''; ?>">
 			<div class="masterstudy-post-template__wrap">
 			<?php
 			while ( $posts->have_posts() ) {
@@ -726,6 +939,7 @@ class MsLmsBlog extends Widget_Base {
 								'total_posts'    => $posts->found_posts,
 								'posts_per_page' => $blog_per_page,
 								'offset'         => ( $paged - 1 ) * $blog_per_page,
+								'blog_style'     => $blog_style,
 							),
 						)
 					);

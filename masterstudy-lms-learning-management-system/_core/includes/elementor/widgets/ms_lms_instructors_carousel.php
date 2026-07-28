@@ -57,6 +57,7 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 		$this->register_style_controls_instructor_card();
 		$this->register_style_controls_instructor_name();
 		$this->register_style_controls_instructor_position();
+		$this->register_style_controls_instructor_description();
 		$this->register_style_controls_instructor_courses();
 		$this->register_style_controls_instructor_picture();
 		if ( self::show_reviews() ) {
@@ -221,6 +222,17 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
+			)
+		);
+		$this->add_control(
+			'show_instructor_description',
+			array(
+				'label'        => esc_html__( 'Description', 'masterstudy-lms-learning-management-system' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Show', 'masterstudy-lms-learning-management-system' ),
+				'label_off'    => esc_html__( 'Hide', 'masterstudy-lms-learning-management-system' ),
+				'return_value' => 'yes',
+				'default'      => '',
 			)
 		);
 		$this->add_control(
@@ -767,6 +779,30 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 				),
 			)
 		);
+		$this->add_responsive_control(
+			'instructor_card_content_position',
+			array(
+				'label'   => esc_html__( 'Content Position', 'masterstudy-lms-learning-management-system' ),
+				'type'    => Controls_Manager::CHOOSE,
+				'options' => array(
+					'flex-start' => array(
+						'title' => esc_html__( 'Start', 'masterstudy-lms-learning-management-system' ),
+						'icon'  => 'eicon-h-align-left',
+					),
+					'center'     => array(
+						'title' => esc_html__( 'Center', 'masterstudy-lms-learning-management-system' ),
+						'icon'  => 'eicon-h-align-center',
+					),
+					'flex-end'   => array(
+						'title' => esc_html__( 'End', 'masterstudy-lms-learning-management-system' ),
+						'icon'  => 'eicon-h-align-right',
+					),
+				),
+				'selectors' => array(
+					'{{WRAPPER}} .ms_lms_instructors_carousel__item_info' => 'align-items: {{VALUE}};',
+				),
+			)
+		);
 		$this->end_controls_section();
 	}
 
@@ -879,6 +915,74 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 				),
 				'default'    => array(
 					'top'    => '5',
+					'right'  => '0',
+					'bottom' => '0',
+					'left'   => '0',
+					'unit'   => 'px',
+				),
+			)
+		);
+		$this->end_controls_section();
+	}
+
+	protected function register_style_controls_instructor_description() {
+
+		$this->start_controls_section(
+			'section_instructor_description',
+			array(
+				'label'     => esc_html__( 'Instructor\'s Description', 'masterstudy-lms-learning-management-system' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => array(
+					'show_instructor_description' => 'yes',
+				),
+			)
+		);
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'instructor_description_typography',
+				'selector' => '{{WRAPPER}} .ms_lms_instructors_carousel__item_description',
+			)
+		);
+		$this->add_control(
+			'instructor_description_color',
+			array(
+				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .ms_lms_instructors_carousel__item_description' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'instructor_description_padding',
+			array(
+				'label'      => esc_html__( 'Padding', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .ms_lms_instructors_carousel__item_description' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+				'default'    => array(
+					'top'    => '5',
+					'right'  => '10',
+					'bottom' => '0',
+					'left'   => '10',
+					'unit'   => 'px',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'instructor_description_margin',
+			array(
+				'label'      => esc_html__( 'Margin', 'masterstudy-lms-learning-management-system' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .ms_lms_instructors_carousel__item_description' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+				'default'    => array(
+					'top'    => '10',
 					'right'  => '0',
 					'bottom' => '0',
 					'left'   => '0',
@@ -1752,6 +1856,7 @@ class MsLmsInstructorsCarousel extends Widget_Base {
 			'widget_description'              => $settings['widget_description'],
 			'show_avatars'                    => $settings['show_avatars'],
 			'show_instructor_position'        => $settings['show_instructor_position'],
+			'show_instructor_description'     => $settings['show_instructor_description'] ?? false,
 			'show_instructor_course_quantity' => $settings['show_instructor_course_quantity'],
 			'show_reviews'                    => $settings['show_reviews'] ?? false,
 			'show_reviews_count'              => $settings['show_reviews_count'] ?? false,

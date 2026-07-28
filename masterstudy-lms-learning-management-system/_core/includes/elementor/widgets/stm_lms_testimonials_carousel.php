@@ -79,9 +79,11 @@ class StmLmsProTestimonials extends Widget_Base {
 				'default' => 'style_1',
 				'options' => array(
 					'style_1' => esc_html__( 'Centered', 'masterstudy-lms-learning-management-system' ),
+					'style_6' => esc_html__( 'Centered 2', 'masterstudy-lms-learning-management-system' ),
 					'style_2' => esc_html__( 'Outlined', 'masterstudy-lms-learning-management-system' ),
 					'style_3' => esc_html__( 'Classic', 'masterstudy-lms-learning-management-system' ),
 					'style_4' => esc_html__( 'Compact', 'masterstudy-lms-learning-management-system' ),
+					'style_5' => esc_html__( 'Classic 2', 'masterstudy-lms-learning-management-system' ),
 				),
 			)
 		);
@@ -111,7 +113,7 @@ class StmLmsProTestimonials extends Widget_Base {
 				'mobile_default'     => '1',
 				'frontend_available' => true,
 				'condition'          => array(
-					'testimonials_style' => array( 'style_1', 'style_3', 'style_4' ),
+					'testimonials_style' => array( 'style_1', 'style_6', 'style_3', 'style_4', 'style_5' ),
 				),
 			)
 		);
@@ -380,7 +382,32 @@ class StmLmsProTestimonials extends Widget_Base {
 				'global'   => array(
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
 				),
-				'selector' => '{{WRAPPER}} .ms-lms-testimonials-header p',
+				'selector' => '{{WRAPPER}} .ms-lms-testimonials-header p, {{WRAPPER}} .ms-lms-testimonials-header .testimonials_main_title_6',
+			)
+		);
+		$this->add_responsive_control(
+			'testimonials_title_alignment',
+			array(
+				'label'                => esc_html__( 'Alignment', 'masterstudy-lms-learning-management-system' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'options'              => array(
+					'left'   => array(
+						'title' => esc_html__( 'Left', 'masterstudy-lms-learning-management-system' ),
+						'icon'  => 'eicon-text-align-left',
+					),
+					'center' => array(
+						'title' => esc_html__( 'Center', 'masterstudy-lms-learning-management-system' ),
+						'icon'  => 'eicon-text-align-center',
+					),
+					'right'  => array(
+						'title' => esc_html__( 'Right', 'masterstudy-lms-learning-management-system' ),
+						'icon'  => 'eicon-text-align-right',
+					),
+				),
+				'default'              => 'center',
+				'selectors'            => array(
+					'{{WRAPPER}} .ms-lms-testimonials-header p, {{WRAPPER}} .ms-lms-testimonials-header .testimonials_main_title_6' => 'width: 100%; text-align: {{VALUE}};',
+				),
 			)
 		);
 		$this->add_responsive_control(
@@ -390,7 +417,7 @@ class StmLmsProTestimonials extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%', 'em' ),
 				'selectors'  => array(
-					'{{WRAPPER}} .ms-lms-testimonials-header p' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .ms-lms-testimonials-header p, {{WRAPPER}} .ms-lms-testimonials-header .testimonials_main_title_6' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
@@ -409,7 +436,7 @@ class StmLmsProTestimonials extends Widget_Base {
 				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .ms-lms-testimonials-header p' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .ms-lms-testimonials-header p, {{WRAPPER}} .ms-lms-testimonials-header .testimonials_main_title_6' => 'color: {{VALUE}};',
 				),
 			)
 		);
@@ -420,9 +447,10 @@ class StmLmsProTestimonials extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .ms-lms-testimonials-header .ms-lms-testimonials-icon .ms-lms-testimonials-icon__fillable' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .ms-lms-testimonials-header .testimonials_style_6_quote i' => 'color: {{VALUE}};',
 				),
 				'condition' => array(
-					'testimonials_style' => array( 'style_1' ),
+					'testimonials_style' => array( 'style_1', 'style_6' ),
 				),
 			)
 		);
@@ -439,7 +467,7 @@ class StmLmsProTestimonials extends Widget_Base {
 				'label'     => esc_html__( 'Color', 'masterstudy-lms-learning-management-system' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .ms-lms-testimonials-header p:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .ms-lms-testimonials-header p:hover, {{WRAPPER}} .ms-lms-testimonials-header .testimonials_main_title_6:hover' => 'color: {{VALUE}};',
 				),
 			)
 		);
@@ -452,12 +480,15 @@ class StmLmsProTestimonials extends Widget_Base {
 		$this->start_controls_section(
 			'section_heading_star',
 			array(
-				'label' => esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label'     => esc_html__( 'Reviews', 'masterstudy-lms-learning-management-system' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => array(
+					'testimonials_style' => array( 'style_1', 'style_2', 'style_3', 'style_4', 'style_5' ),
+				),
 			)
 		);
 		$this->add_control(
-			'testimonials_icon_color',
+			'testimonials_star_icon_color',
 			array(
 				'type'      => Controls_Manager::COLOR,
 				'label'     => esc_html__( 'Star Icon', 'masterstudy-lms-learning-management-system' ),
@@ -644,7 +675,8 @@ class StmLmsProTestimonials extends Widget_Base {
 				'label'     => esc_html__( 'Nav Arrows', 'masterstudy-lms-learning-management-system' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => array(
-					'arrows' => 'yes',
+					'arrows'             => 'yes',
+					'testimonials_style' => array( 'style_1', 'style_2', 'style_3', 'style_4', 'style_5' ),
 				),
 			)
 		);
@@ -840,7 +872,7 @@ class StmLmsProTestimonials extends Widget_Base {
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => array(
 					'pagination'         => 'yes',
-					'testimonials_style' => array( 'style_1', 'style_3' ),
+					'testimonials_style' => array( 'style_1', 'style_3', 'style_6' ),
 				),
 			)
 		);
@@ -1052,7 +1084,7 @@ class StmLmsProTestimonials extends Widget_Base {
 		}
 		extract( $settings );
 		if ( ! empty( $testimonials ) ) {
-			$allowed_styles     = array( 'style_1', 'style_2', 'style_3', 'style_4' );
+			$allowed_styles     = array( 'style_1', 'style_2', 'style_3', 'style_4', 'style_5', 'style_6' );
 			$testimonials_style = ( ! empty( $testimonials_style ) && in_array( $testimonials_style, $allowed_styles, true ) )
 				? $testimonials_style
 				: 'style_1';

@@ -4,12 +4,14 @@
  * @var integer $courses_per_page
  * @var string $style
  * @var boolean $show_title
+ * @var boolean $show_item_block
  */
 
 use MasterStudy\Lms\Repositories\CourseRepository;
 
 $style            = $style ?? '';
 $show_title       = $show_title ?? true;
+$show_item_block  = $show_item_block ?? true;
 $courses_per_page = isset( $courses_per_page ) ? $courses_per_page : 4;
 $query_args       = array(
 	'posts_per_page' => $courses_per_page,
@@ -70,52 +72,54 @@ $instructor_public = STM_LMS_Options::get_option( 'instructor_public_profile', t
 							<a href="<?php echo esc_url( $course_url ); ?>" target="_blank" class="masterstudy-popular-courses__item-title">
 								<?php echo esc_html( stm_lms_minimize_word( $popular_course->title, 40 ) ); ?>
 							</a>
-							<div class="masterstudy-popular-courses__item-block">
-								<?php if ( ! $popular_course->single_sale && ! $popular_course->not_in_membership ) { ?>
-									<div class="masterstudy-popular-courses__subscription">
-										<img class="masterstudy-popular-courses__subscription-image" src="<?php echo esc_url( STM_LMS_URL . 'assets/img/members_only.svg' ); ?>" alt="<?php esc_attr_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>"/>
-										<div class="masterstudy-popular-courses__subscription-title">
-											<?php esc_html_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>
+							<?php if ( $show_item_block ) { ?>
+								<div class="masterstudy-popular-courses__item-block">
+									<?php if ( ! $popular_course->single_sale && ! $popular_course->not_in_membership ) { ?>
+										<div class="masterstudy-popular-courses__subscription">
+											<img class="masterstudy-popular-courses__subscription-image" src="<?php echo esc_url( STM_LMS_URL . 'assets/img/members_only.svg' ); ?>" alt="<?php esc_attr_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>"/>
+											<div class="masterstudy-popular-courses__subscription-title">
+												<?php esc_html_e( 'Members only', 'masterstudy-lms-learning-management-system' ); ?>
+											</div>
 										</div>
-									</div>
-								<?php } elseif ( $popular_course->is_udemy_course && ! $course_free_status['zero_price'] ) { ?>
-									<div class="masterstudy-popular-courses__price <?php echo $sale_price ? 'masterstudy-popular-courses__price_sale' : ''; ?>">
-										<?php echo esc_html( STM_LMS_Helpers::display_price( $popular_course->price ) ); ?>
-									</div>
-								<?php } elseif ( $popular_course->single_sale && ! $course_free_status['zero_price'] ) { ?>
-									<div class="masterstudy-popular-courses__price <?php echo $sale_price ? 'masterstudy-popular-courses__price_sale' : ''; ?>">
-										<?php echo esc_html( STM_LMS_Helpers::display_price( $popular_course->price ) ); ?>
-									</div>
-									<?php
-									if ( $sale_price ) {
+									<?php } elseif ( $popular_course->is_udemy_course && ! $course_free_status['zero_price'] ) { ?>
+										<div class="masterstudy-popular-courses__price <?php echo $sale_price ? 'masterstudy-popular-courses__price_sale' : ''; ?>">
+											<?php echo esc_html( STM_LMS_Helpers::display_price( $popular_course->price ) ); ?>
+										</div>
+									<?php } elseif ( $popular_course->single_sale && ! $course_free_status['zero_price'] ) { ?>
+										<div class="masterstudy-popular-courses__price <?php echo $sale_price ? 'masterstudy-popular-courses__price_sale' : ''; ?>">
+											<?php echo esc_html( STM_LMS_Helpers::display_price( $popular_course->price ) ); ?>
+										</div>
+										<?php
+										if ( $sale_price ) {
+											?>
+											<div class="masterstudy-popular-courses__price-sale">
+												<?php echo esc_html( STM_LMS_Helpers::display_price( $popular_course->sale_price ) ); ?>
+											</div>
+											<?php
+										}
+									} elseif ( $course_free_status['is_free'] ) {
 										?>
-										<div class="masterstudy-popular-courses__price-sale">
-											<?php echo esc_html( STM_LMS_Helpers::display_price( $popular_course->sale_price ) ); ?>
+										<div class="masterstudy-related-courses__price">
+											<?php echo esc_html__( 'Free', 'masterstudy-lms-learning-management-system' ); ?>
 										</div>
 										<?php
 									}
-								} elseif ( $course_free_status['is_free'] ) {
-									?>
-									<div class="masterstudy-related-courses__price">
-										<?php echo esc_html__( 'Free', 'masterstudy-lms-learning-management-system' ); ?>
-									</div>
-									<?php
-								}
-								if ( ! empty( $popular_course->rate ) && ! $popular_course->is_udemy_course && $course_reviews ) {
-									?>
-									<div class="masterstudy-popular-courses__rating">
-										<?php foreach ( $stars as $star ) { ?>
-											<span class="masterstudy-popular-courses__rating-star <?php echo esc_attr( ( $star <= floor( $popular_course->rate['average'] ) ) ? 'masterstudy-popular-courses__rating-star_filled' : '' ); ?>"></span>
-										<?php } ?>
-									</div>
-								<?php } elseif ( ! empty( $popular_course->rate ) && $popular_course->is_udemy_course && $course_reviews ) { ?>
-									<div class="masterstudy-popular-courses__rating">
-										<?php foreach ( $stars as $star ) { ?>
-											<span class="masterstudy-popular-courses__rating-star <?php echo esc_attr( ( $star <= floor( $popular_course->udemy_rate ) ) ? 'masterstudy-popular-courses__rating-star_filled' : '' ); ?>"></span>
-										<?php } ?>
-									</div>
-								<?php } ?>
-							</div>
+									if ( ! empty( $popular_course->rate ) && ! $popular_course->is_udemy_course && $course_reviews ) {
+										?>
+										<div class="masterstudy-popular-courses__rating">
+											<?php foreach ( $stars as $star ) { ?>
+												<span class="masterstudy-popular-courses__rating-star <?php echo esc_attr( ( $star <= floor( $popular_course->rate['average'] ) ) ? 'masterstudy-popular-courses__rating-star_filled' : '' ); ?>"></span>
+											<?php } ?>
+										</div>
+									<?php } elseif ( ! empty( $popular_course->rate ) && $popular_course->is_udemy_course && $course_reviews ) { ?>
+										<div class="masterstudy-popular-courses__rating">
+											<?php foreach ( $stars as $star ) { ?>
+												<span class="masterstudy-popular-courses__rating-star <?php echo esc_attr( ( $star <= floor( $popular_course->udemy_rate ) ) ? 'masterstudy-popular-courses__rating-star_filled' : '' ); ?>"></span>
+											<?php } ?>
+										</div>
+									<?php } ?>
+								</div>
+							<?php } ?>
 							<a
 								<?php if ( $instructor_public ) { ?>
 									href="<?php echo esc_url( $popular_course->is_udemy_course ? $course_url : STM_LMS_User::instructor_public_page_url( $popular_course->owner->ID ) ); ?>"

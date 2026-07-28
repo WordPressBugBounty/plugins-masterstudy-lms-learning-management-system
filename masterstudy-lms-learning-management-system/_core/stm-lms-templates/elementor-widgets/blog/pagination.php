@@ -13,8 +13,9 @@ $paginate = paginate_links(
 	)
 );
 if ( is_array( $paginate ) ) {
+	$blog_style = ! empty( $pagination_data['blog_style'] ) ? $pagination_data['blog_style'] : 'cards';
 	?>
-	<ul class="masterstudy-post-template__pagination_list" data-per-page="<?php echo esc_attr( $pagination_data['posts_per_page'] ); ?>" data-current-page="<?php echo esc_attr( $pagination_data['current_page'] ); ?>">
+	<ul class="masterstudy-post-template__pagination_list" data-per-page="<?php echo esc_attr( $pagination_data['posts_per_page'] ); ?>" data-current-page="<?php echo esc_attr( $pagination_data['current_page'] ); ?>" data-blog-style="<?php echo esc_attr( $blog_style ); ?>">
 	<?php foreach ( $paginate as $item ) { ?>
 		<li class="masterstudy-post-template__pagination_list_item">
 			<?php echo wp_kses_post( $item ); ?>
