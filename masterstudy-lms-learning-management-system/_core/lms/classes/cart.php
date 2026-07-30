@@ -443,6 +443,8 @@ class STM_LMS_Cart {
 				$invoice,
 				$user['email']
 			);
+			update_post_meta( $invoice, 'masterstudy_paypal_currency', $paypal->currency_code );
+			update_post_meta( $invoice, 'masterstudy_paypal_receiver', $paypal->email );
 			$r['url']     = $paypal->generate_payment_url();
 			$r['message'] = esc_html__( 'Order created, redirecting to PayPal', 'masterstudy-lms-learning-management-system' );
 		} elseif ( 'stripe' === $payment_code ) {

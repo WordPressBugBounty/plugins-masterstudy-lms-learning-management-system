@@ -56,46 +56,121 @@ class STM_LMS_PayPal {
 	}
 
 	function check_payment( $data = array() ) {
+		$order_id = isset( $data['invoice'] ) && is_scalar( $data['invoice'] ) ? absint( $data['invoice'] ) : 0;
 
-		$order_id = $data['invoice'];
-		$req      = 'cmd=_notify-validate';
-
-		foreach ($data as $key => $value) {
-			$value = urlencode( stripslashes( $value ) );
-			$req  .= "&$key=$value";
-		}
-		$ch = curl_init( 'https://' . $this->url . '/cgi-bin/webscr' );
-		curl_setopt( $ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1 );
-		curl_setopt( $ch, CURLOPT_POST, 1 );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, $req );
-		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 1 );
-		curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 2 );
-		curl_setopt( $ch, CURLOPT_FORBID_REUSE, 1 );
-		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Connection: Close' ) );
-		if ( ! ( $res = curl_exec( $ch ) ) ) {
-			echo esc_html( 'Got ' . curl_error( $ch ) . ' when processing IPN data' );
-			curl_close( $ch );
+		if ( ! $this->is_valid_payment( $order_id, $data ) ) {
 			return false;
 		}
-		curl_close( $ch );
 
-		$user_id         = get_post_meta( $order_id, 'user_id', true );
-		$previous_status = get_post_meta( $order_id, 'status', true );
+		$req = 'cmd=_notify-validate';
+		foreach ($data as $key => $value) {
+			if ( ! is_scalar( $value ) ) {
+				return false;
+			}
 
-		if ( strcmp( $res, "VERIFIED" ) == 0 ) {
+			$key   = urlencode( (string) $key );
+			$value = urlencode( (string) $value );
+			$req  .= "&$key=$value";
+		}
 
-			if ( 'completed' !== $previous_status ) {
-				update_post_meta( $order_id, 'status', 'completed' );
-				STM_LMS_Order::accept_order( $user_id, $order_id );
+		$response = wp_remote_post(
+			'https://' . $this->url . '/cgi-bin/webscr',
+			array(
+				'body'        => $req,
+				'headers'     => array(
+					'Connection'   => 'Close',
+					'Content-Type' => 'application/x-www-form-urlencoded',
+				),
+				'httpversion' => '1.1',
+				'sslverify'   => true,
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+
+		$res = wp_remote_retrieve_body( $response );
+
+		if ( 'VERIFIED' !== trim( $res ) || 'pending' !== get_post_meta( $order_id, 'status', true ) ) {
+			return false;
+		}
+
+		$user_id = absint( get_post_meta( $order_id, 'user_id', true ) );
+		if ( empty( $user_id ) ) {
+			return false;
+		}
+
+		update_post_meta( $order_id, 'masterstudy_paypal_txn_id', sanitize_text_field( $data['txn_id'] ) );
+		update_post_meta( $order_id, 'status', 'completed' );
+		STM_LMS_Order::accept_order( $user_id, $order_id );
+
+		return true;
+	}
+
+	private function is_valid_payment( $order_id, $data ) {
+		if ( empty( $order_id )
+			|| 'stm-orders' !== get_post_type( $order_id )
+			|| 'paypal' !== get_post_meta( $order_id, 'payment_code', true )
+			|| 'pending' !== get_post_meta( $order_id, 'status', true )
+		) {
+			return false;
+		}
+
+		$required_fields = array( 'payment_status', 'mc_gross', 'mc_currency', 'txn_id' );
+		foreach ( $required_fields as $field ) {
+			if ( ! isset( $data[ $field ] ) || ! is_scalar( $data[ $field ] ) || '' === trim( (string) $data[ $field ] ) ) {
+				return false;
 			}
 		}
+
+		$expected_amount   = get_post_meta( $order_id, '_order_total', true );
+		$expected_currency = get_post_meta( $order_id, 'masterstudy_paypal_currency', true );
+		$expected_receiver = get_post_meta( $order_id, 'masterstudy_paypal_receiver', true );
+
+		if ( empty( $expected_currency ) ) {
+			$expected_currency = $this->currency_code;
+		}
+
+		if ( empty( $expected_receiver ) ) {
+			$expected_receiver = $this->email;
+		}
+
+		if ( 'completed' !== strtolower( trim( (string) $data['payment_status'] ) )
+			|| ! is_numeric( $expected_amount )
+			|| ! is_numeric( $data['mc_gross'] )
+			|| abs( (float) $expected_amount - (float) $data['mc_gross'] ) > 0.00001
+			|| 0 !== strcasecmp( trim( (string) $expected_currency ), trim( (string) $data['mc_currency'] ) )
+			|| ! $this->receiver_matches( $expected_receiver, $data )
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private function receiver_matches( $expected_receiver, $data ) {
+		$expected_receiver = strtolower( trim( (string) $expected_receiver ) );
+		if ( empty( $expected_receiver ) ) {
+			return false;
+		}
+
+		foreach ( array( 'receiver_email', 'business' ) as $field ) {
+			if ( isset( $data[ $field ] )
+				&& is_scalar( $data[ $field ] )
+				&& hash_equals( $expected_receiver, strtolower( trim( (string) $data[ $field ] ) ) )
+			) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
 
 if ( ! empty( $_GET['stm_lms_check_ipn'] ) ) {
 	$paypal = new STM_LMS_PayPal();
-	$paypal->check_payment( $_REQUEST );
+	$paypal->check_payment( wp_unslash( $_POST ) );
 	header( 'HTTP/1.1 200 OK' );
 	exit;
 }
