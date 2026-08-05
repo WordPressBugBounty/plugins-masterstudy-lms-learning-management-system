@@ -97,6 +97,12 @@ function stm_lms_settings_course_player_section() {
 				'value'       => esc_html__( 'Bookmarks', 'masterstudy-lms-learning-management-system' ),
 				'description' => esc_html__( 'Set the title for the bookmarks section in the Course Player.', 'masterstudy-lms-learning-management-system' ),
 			),
+			'course_player_lesson_notes'      => array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__( 'Lesson Notes', 'masterstudy-lms-learning-management-system' ),
+				'description' => esc_html__( 'Students will be able to create notes for the lessons they study and access them later from their profile', 'masterstudy-lms-learning-management-system' ),
+				'value'       => false,
+			),
 		);
 
 		$course_player_settings['fields'] = array_merge( $course_player_primary_fields, $course_player_pro_fields );

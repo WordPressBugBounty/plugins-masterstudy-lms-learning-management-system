@@ -484,5 +484,7 @@
   "upload-svg": "EBE3",
   "mega-menu-widget": "EBE4",
   "placeholder": "EBE5",
-  "menu-my-certificates-filled": "EBE6"
+  "menu-my-certificates-filled": "EBE6",
+  "menu-notes": "EBE7",
+  "lesson-text": "EBE8"
 }

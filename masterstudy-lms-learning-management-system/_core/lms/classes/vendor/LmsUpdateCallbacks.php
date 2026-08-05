@@ -105,6 +105,12 @@ abstract class LmsUpdateCallbacks {
 		stm_lms_curriculum_materials();
 	}
 
+	public static function lms_create_lesson_notes_table(): void {
+		if ( defined( 'STM_LMS_PLUS_ENABLED' ) && function_exists( 'masterstudy_lesson_notes_maybe_upgrade_table' ) ) {
+			masterstudy_lesson_notes_maybe_upgrade_table();
+		}
+	}
+
 	public static function lms_migrate_course_data(): void {
 		$section_repository  = new CurriculumSectionRepository();
 		$material_repository = new CurriculumMaterialRepository();

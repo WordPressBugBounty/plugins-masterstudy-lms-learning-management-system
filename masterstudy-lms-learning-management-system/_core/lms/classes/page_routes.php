@@ -404,6 +404,14 @@ class STM_LMS_Page_Router {
 			),
 		);
 
+		if ( STM_LMS_Helpers::is_pro_plus() && ! empty( $settings['course_player_lesson_notes'] ) ) {
+			$page_routes['user_url']['sub_pages']['notes_url'] = array(
+				'template'  => 'account/notes',
+				'protected' => true,
+				'url'       => 'notes',
+			);
+		}
+
 		self::fill_subpages_url( $page_routes, $settings );
 
 		return apply_filters( 'stm_lms_custom_routes_config', $page_routes );

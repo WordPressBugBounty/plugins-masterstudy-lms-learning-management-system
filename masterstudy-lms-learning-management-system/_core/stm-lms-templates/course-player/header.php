@@ -17,7 +17,9 @@
  * @var boolean $discussions_sidebar
  * @var int $user_id
  * @var int $course_id
+ * @var int $item_id
  * @var array $quiz_data
+ * @var boolean $lesson_locked_by_drip
  */
 
 use MasterStudy\Lms\Repositories\QuizRepository;
@@ -134,20 +136,43 @@ $back_link_url = ( ! empty( $referrer_url ) && ! $is_course_referrer && untraili
 	</div>
 	<div class="masterstudy-course-player-header__navigation">
 		<?php
+		$course_player_header_tabs = array(
+			array(
+				'id'    => 'lesson',
+				'title' => __( 'Lesson', 'masterstudy-lms-learning-management-system' ),
+			),
+		);
+
 		if ( ! empty( $attachments ) && $has_access && ! $lesson_lock_before_start ) {
+			$course_player_header_tabs[] = array(
+				'id'    => 'materials',
+				'title' => __( 'Materials', 'masterstudy-lms-learning-management-system' ),
+			);
+		}
+		$course_player_header_tabs = apply_filters(
+			'masterstudy_lms_course_player_header_tabs',
+			$course_player_header_tabs,
+			array(
+				'attachments'              => $attachments,
+				'lesson_type'              => $lesson_type,
+				'course_title'             => $course_title,
+				'course_url'               => $course_url,
+				'has_access'               => $has_access,
+				'has_preview'              => $has_preview,
+				'lesson_lock_before_start' => $lesson_lock_before_start,
+				'lesson_locked_by_drip'    => $lesson_locked_by_drip ?? false,
+				'dark_mode'                => $dark_mode,
+				'user_id'                  => $user_id,
+				'course_id'                => $course_id,
+				'item_id'                  => $item_id ?? get_the_ID(),
+			)
+		);
+
+		if ( count( $course_player_header_tabs ) > 1 ) {
 			STM_LMS_Templates::show_lms_template(
 				'components/tabs',
 				array(
-					'items'            => array(
-						array(
-							'id'    => 'lesson',
-							'title' => __( 'Lesson', 'masterstudy-lms-learning-management-system' ),
-						),
-						array(
-							'id'    => 'materials',
-							'title' => __( 'Materials', 'masterstudy-lms-learning-management-system' ),
-						),
-					),
+					'items'            => $course_player_header_tabs,
 					'style'            => 'nav-sm',
 					'active_tab_index' => 0,
 					'dark_mode'        => $dark_mode,

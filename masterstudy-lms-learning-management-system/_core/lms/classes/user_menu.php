@@ -324,6 +324,21 @@ class STM_LMS_User_Menu {
 			'section'      => 'main',
 		);
 
+		if ( STM_LMS_Helpers::is_pro_plus() && ! empty( $settings['course_player_lesson_notes'] ) ) {
+			$menus[] = array(
+				'order'        => 145,
+				'id'           => 'lesson_notes',
+				'slug'         => 'notes',
+				'lms_template' => 'account/notes',
+				'menu_title'   => esc_html__( 'Notes', 'masterstudy-lms-learning-management-system' ),
+				'menu_icon'    => 'stmlms-menu-notes',
+				'menu_url'     => ms_plugin_user_account_url( 'notes' ),
+				'menu_place'   => 'learning',
+				'is_active'    => 'notes' === $current_slug,
+				'section'      => 'main',
+			);
+		}
+
 		$menus[] = array(
 			'order'        => 150,
 			'id'           => 'my_orders',
@@ -541,6 +556,9 @@ class STM_LMS_User_Menu {
 						break;
 					case 'my-grades':
 						$add_element = STM_LMS_Helpers::is_pro_plus() && $full_menu;
+						break;
+					case 'lesson_notes':
+						$add_element = STM_LMS_Helpers::is_pro_plus() && ! empty( $settings['course_player_lesson_notes'] ) && $full_menu;
 						break;
 					case 'my-subscriptions':
 						$add_element = is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) && $full_menu;

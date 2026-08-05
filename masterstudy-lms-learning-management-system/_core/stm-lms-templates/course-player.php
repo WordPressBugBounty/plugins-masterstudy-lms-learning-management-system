@@ -72,7 +72,9 @@ STM_LMS_Templates::show_lms_template(
 		'discussions_sidebar'      => $data['discussions_sidebar'],
 		'user_id'                  => $data['user_id'],
 		'course_id'                => $data['post_id'],
+		'item_id'                  => $data['item_id'],
 		'quiz_data'                => $quiz_data,
+		'lesson_locked_by_drip'    => $data['lesson_locked_by_drip'],
 	)
 );
 

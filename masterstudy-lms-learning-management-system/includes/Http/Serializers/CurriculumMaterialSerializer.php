@@ -10,7 +10,7 @@ final class CurriculumMaterialSerializer extends AbstractSerializer {
 			'post_id'     => $data->post_id,
 			'post_type'   => $data->post_type,
 			'post_name'   => $data->post_name ?? '',
-			'lesson_type' => $data->lesson_type ?? 'text',
+			'lesson_type' => ! empty( $data->lesson_type ) ? $data->lesson_type : 'text',
 			'section_id'  => $data->section_id,
 			'order'       => $data->order,
 		);

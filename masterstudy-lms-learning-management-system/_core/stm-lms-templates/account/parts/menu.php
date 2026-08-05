@@ -66,6 +66,7 @@ $sections      = STM_LMS_User_Menu::get_account_menu_sections( $menu_items );
 					$url   = isset( $menu_item['menu_url'] ) ? (string) $menu_item['menu_url'] : '';
 					$label = isset( $menu_item['menu_title'] ) ? (string) $menu_item['menu_title'] : '';
 					$icon  = isset( $menu_item['menu_icon'] ) ? (string) $menu_item['menu_icon'] : '';
+					$id    = isset( $menu_item['id'] ) ? (string) $menu_item['id'] : '';
 					$badge = $menu_item['badge_count'] ?? null;
 
 					$slug       = $menu_item['slug'] ?? '';
@@ -83,7 +84,16 @@ $sections      = STM_LMS_User_Menu::get_account_menu_sections( $menu_items );
 					}
 					?>
 					<a class="<?php echo esc_attr( $item_cls ); ?>" href="<?php echo esc_url( $url ); ?>" data-menu-place="<?php echo esc_attr( $menu_place ); ?>">
-						<i class="<?php echo esc_attr( $icon ); ?>"></i>
+						<?php if ( 'lesson_notes' === $id ) { ?>
+							<svg class="<?php echo esc_attr( $icon ); ?>" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+								<path class="masterstudy-account-menu__notes-icon-fill" d="M12.69 17H7v-5.69l6.18-6.18a4 4 0 0 1 5.66 5.66L12.69 17z"/>
+								<path d="M20.28 3.72a6.02 6.02 0 0 0-8.52 0L5 10.48V19h8.52l6.76-6.76a6.02 6.02 0 0 0 0-8.52zM12.69 17H7v-5.69l6.18-6.18a4 4 0 0 1 5.66 5.66L12.69 17z"/>
+								<path d="M17.71 6.29a1 1 0 0 1 0 1.42l-14 14a1 1 0 0 1-1.42-1.42l14-14a1 1 0 0 1 1.42 0z"/>
+								<path d="M18.5 15a1 1 0 0 1-1 1H9a1 1 0 1 1 0-2h8.5a1 1 0 0 1 1 1z"/>
+							</svg>
+						<?php } else { ?>
+							<i class="<?php echo esc_attr( $icon ); ?>"></i>
+						<?php } ?>
 						<span class="masterstudy-account-menu__list-item-label">
 							<?php echo esc_html( $label ); ?>
 						</span>

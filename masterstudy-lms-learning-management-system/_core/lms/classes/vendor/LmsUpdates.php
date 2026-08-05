@@ -63,6 +63,7 @@ abstract class LmsUpdates {
 		'3.7.17' => array( 'lms_flush_rewrite_rules', 'lms_reset_page_routes' ),
 		'3.7.18' => array( 'lms_add_assignments_times_table' ), // Add times table for assignments
 		'3.7.32' => array( 'lms_update_point_system_table' ), // Add course context to point system table
+		'3.7.34' => array( 'lms_create_lesson_notes_table' ), // Create Pro Plus lesson notes table
 	);
 
 	/**

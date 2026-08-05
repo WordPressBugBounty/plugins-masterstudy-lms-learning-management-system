@@ -80,6 +80,10 @@ final class CoursePlayerRepository {
 			? get_post_meta( $lesson_id, 'type', true )
 			: $this->data['content_type'];
 
+		if ( 'lesson' === $this->data['content_type'] && empty( $this->data['lesson_type'] ) ) {
+			$this->data['lesson_type'] = 'text';
+		}
+
 		$this->data['lesson_type_label'] = $lesson_types_labels[ $this->data['lesson_type'] ] ?? '';
 
 		if ( LessonType::VIDEO === $this->data['lesson_type'] ) {
