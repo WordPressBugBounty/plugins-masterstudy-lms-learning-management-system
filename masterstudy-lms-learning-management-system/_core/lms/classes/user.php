@@ -76,7 +76,7 @@ class STM_LMS_User {
 				STM_LMS_Templates::show_lms_template( 'account/parts/profile', array( 'current_user' => $current_user ) );
 				STM_LMS_Templates::show_lms_template( 'account/parts/menu', array( 'current_user' => $current_user ) );
 
-				$register_as_instructor = STM_LMS_Options::get_option( 'register_as_instructor', true );
+				$register_as_instructor = STM_LMS_Options::instructor_registration_enabled();
 				$show_form              = STM_LMS_Options::get_option( 'have_a_question_form', true );
 				$show_become_instructor = false;
 
@@ -660,7 +660,7 @@ class STM_LMS_User {
 		}
 
 		/*If everything is right, check for Instructor application*/
-		if ( STM_LMS_Options::get_option( 'register_as_instructor', false ) ) {
+		if ( STM_LMS_Options::instructor_registration_enabled() ) {
 			STM_LMS_Instructor::become_instructor( $data, $user );
 		}
 
@@ -763,8 +763,8 @@ class STM_LMS_User {
 
 	public static function stm_lms_set_user_role( $user, $data ) {
 		if ( ! empty( $data['become_instructor'] ) && $data['become_instructor'] ) {
-			$register_as_instructor   = STM_LMS_Options::get_option( 'register_as_instructor', false );
-			$instructor_premoderation = STM_LMS_Options::get_option( 'instructor_premoderation', false );
+			$register_as_instructor   = STM_LMS_Options::instructor_registration_enabled();
+			$instructor_premoderation = STM_LMS_Options::instructor_premoderation_enabled();
 
 			if ( $register_as_instructor && ! $instructor_premoderation ) {
 				wp_update_user(
@@ -1929,6 +1929,16 @@ class STM_LMS_User {
 			'status' => 'error',
 		);
 
+		if ( ! STM_LMS_Options::instructor_registration_enabled() ) {
+			$response['errors'][] = array(
+				'id'    => 'forbidden',
+				'field' => 'become_instructor',
+				'text'  => esc_html__( 'Instructor registration is disabled.', 'masterstudy-lms-learning-management-system' ),
+			);
+
+			return wp_send_json( $response, 403 );
+		}
+
 		if ( get_user_meta( $user_id, 'stm_lms_user_banned', true ) ) {
 			$response['errors'][] = array(
 				'id'    => 'banned',
@@ -2582,7 +2592,7 @@ class STM_LMS_User {
 		if ( empty( $current_user['roles'] ) ) {
 			$current_user = self::get_current_user( '', true, true );
 		}
-		$register_as_instructor = STM_LMS_Options::get_option( 'register_as_instructor', true );
+		$register_as_instructor = STM_LMS_Options::instructor_registration_enabled();
 
 		if ( ! empty( $current_user ) && ! empty( $register_as_instructor ) && ! empty( $current_user['roles'] ) ) {
 			if ( ! in_array( 'stm_lms_instructor', $current_user['roles'], true ) && ! in_array( 'administrator', $current_user['roles'], true ) ) {

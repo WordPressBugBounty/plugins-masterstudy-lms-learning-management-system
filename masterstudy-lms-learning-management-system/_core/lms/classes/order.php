@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Enums\SubscriptionPlanType;
 use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository;
@@ -88,21 +93,99 @@ class STM_LMS_Order {
 	public static function ajax_get_order_info() {
 		check_ajax_referer( 'get_order_info', 'nonce' );
 
-		$order = self::get_order_info( intval( $_GET['order_id'] ?? 0 ) );
+		$order_id = absint( wp_unslash( $_GET['order_id'] ?? 0 ) );
+
+		if ( ! self::user_can_view_order( $order_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'You are not allowed to view this order.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
+
+		$order = self::get_order_info( $order_id );
 
 		wp_send_json( $order );
+	}
+
+	public static function user_can_view_order( $order_id, $order = null ) {
+		$order_id = absint( $order_id );
+		if ( empty( $order_id ) ) {
+			return false;
+		}
+
+		if ( null === $order && STM_LMS_Cart::woocommerce_checkout_enabled() && function_exists( 'wc_get_order' ) ) {
+			$order = wc_get_order( $order_id );
+		}
+
+		$woocommerce_order = $order instanceof WC_Order;
+		if ( ! $woocommerce_order && PostType::ORDER !== get_post_type( $order_id ) ) {
+			return false;
+		}
+
+		if ( current_user_can( 'manage_options' ) ) {
+			return true;
+		}
+
+		$current_user_id = get_current_user_id();
+		$order_owner_id  = $woocommerce_order ? $order->get_user_id() : get_post_meta( $order_id, 'user_id', true );
+
+		return 0 < $current_user_id && absint( $order_owner_id ) === $current_user_id;
+	}
+
+	public static function instructor_can_access_order( $order_id, $user_id = 0 ) {
+		$order_id = absint( $order_id );
+		$user_id  = absint( $user_id ? $user_id : get_current_user_id() );
+
+		if ( empty( $order_id ) || empty( $user_id ) || ! STM_LMS_Instructor::is_instructor( $user_id ) ) {
+			return false;
+		}
+
+		global $wpdb;
+
+		if ( STM_LMS_Cart::woocommerce_checkout_enabled() && function_exists( 'wc_get_order' ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$course_id = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT p.ID
+					FROM {$wpdb->posts} p
+					INNER JOIN {$wpdb->prefix}wc_order_product_lookup product_lookup ON product_lookup.product_id = p.ID
+					WHERE product_lookup.order_id = %d
+					AND p.post_type IN ( %s, %s )
+					AND p.post_author = %d
+					LIMIT 1",
+					$order_id,
+					PostType::COURSE,
+					'stm-course-bundles',
+					$user_id
+				)
+			);
+		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$course_id = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT p.ID
+					FROM {$wpdb->prefix}stm_lms_order_items order_item
+					INNER JOIN {$wpdb->posts} p ON order_item.object_id = p.ID
+					WHERE order_item.order_id = %d
+					AND p.post_author = %d
+					LIMIT 1",
+					$order_id,
+					$user_id
+				)
+			);
+		}
+
+		return ! empty( $course_id );
 	}
 
 	public static function get_order_info( $order_id = '' ) {
 		$checkout_enabled  = STM_LMS_Cart::woocommerce_checkout_enabled();
 		$order             = $checkout_enabled ? wc_get_order( $order_id ) : null;
 		$woocommerce_order = $order instanceof WC_Order;
-		$author_id         = $woocommerce_order ? $order->get_user_id() : get_post_field( 'user_id', $order_id );
 
-		if ( empty( $order_id )
-			|| ( get_current_user_id() !== intval( $author_id )
-			&& ! current_user_can( 'manage_options' )
-			&& ! STM_LMS_Instructor::is_instructor() ) ) {
+		if ( ! self::user_can_view_order( $order_id, $order ) ) {
 			if ( ! $woocommerce_order ) {
 				STM_LMS_Templates::show_lms_template( 'stm-lms-login' );
 
@@ -279,12 +362,16 @@ class STM_LMS_Order {
 
 	//Get pagination for orders
 	public static function get_pagination() {
+		// This public endpoint only renders pagination markup from integer values and does not read or change stored data.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! isset( $_POST['total_pages'] ) || ! isset( $_POST['current_page'] ) ) {
 			wp_send_json_error( 'Invalid data', 400 );
 		}
 
-		$total_pages  = intval( $_POST['total_pages'] );
-		$current_page = intval( $_POST['current_page'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$total_pages = absint( wp_unslash( $_POST['total_pages'] ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$current_page = absint( wp_unslash( $_POST['current_page'] ) );
 
 		ob_start();
 
@@ -329,6 +416,7 @@ class STM_LMS_Order {
 		$total      = 0;
 
 		if ( STM_LMS_Cart::woocommerce_checkout_enabled() && function_exists( 'wc_get_order' ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$courses = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT
@@ -349,6 +437,7 @@ class STM_LMS_Order {
 				)
 			);
 		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$courses = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT oi.object_id AS course_id, oi.price, pm.meta_value as items
@@ -361,6 +450,10 @@ class STM_LMS_Order {
 					$current_user_id
 				)
 			);
+		}
+
+		if ( empty( $courses ) && ! current_user_can( 'manage_options' ) ) {
+			die;
 		}
 
 		foreach ( $courses as $course ) {
@@ -552,29 +645,29 @@ class STM_LMS_Order {
 	public static function ajax_save_order() {
 		check_ajax_referer( 'save_order', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) && ! STM_LMS_Instructor::is_instructor() ) {
+		$order_id = absint( wp_unslash( $_POST['order_id'] ?? 0 ) );
+		if ( empty( $order_id ) || PostType::ORDER !== get_post_type( $order_id ) ) {
 			wp_send_json_error(
 				array(
-					'message' => 'Not enough permissions',
-				)
+					'message' => esc_html__( 'Invalid order.', 'masterstudy-lms-learning-management-system' ),
+				),
+				400
 			);
-
-			return;
 		}
 
-		if ( empty( $_POST['order_id'] ) ) {
+		if ( ! current_user_can( 'manage_options' ) && ! self::instructor_can_access_order( $order_id ) ) {
 			wp_send_json_error(
 				array(
-					'message' => 'No order id provided',
-				)
+					'message' => esc_html__( 'You are not allowed to update this order.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
 			);
-
-			return;
 		}
 
 		$order_note = wp_kses_post( wp_unslash( $_POST['order_note'] ?? '' ) );
+		$status     = sanitize_text_field( get_post_meta( $order_id, 'status', true ) );
 
-		self::save_order( intval( $_POST['order_id'] ), null, $order_note );
+		self::save_order( $order_id, $status, $order_note );
 
 		wp_send_json( array( 'success' => true ) );
 	}
@@ -585,7 +678,7 @@ class STM_LMS_Order {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$status = sanitize_text_field( $order_status ?? $_POST['order_status'] ?? '' );
+		$status = sanitize_text_field( wp_unslash( $order_status ?? $_POST['order_status'] ?? '' ) );
 
 		$user_id         = get_post_meta( $post_id, 'user_id', true );
 		$previous_status = get_post_meta( $post_id, 'status', true );

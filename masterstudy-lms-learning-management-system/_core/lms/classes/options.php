@@ -38,6 +38,14 @@ class STM_LMS_Options {
 		return ! empty( $options[ $option_name ] ) ? $options[ $option_name ] : $default;
 	}
 
+	public static function instructor_registration_enabled() {
+		return (bool) self::get_option( 'register_as_instructor', true );
+	}
+
+	public static function instructor_premoderation_enabled() {
+		return (bool) self::get_option( 'instructor_premoderation', true );
+	}
+
 	public static function courses_page() {
 		return apply_filters( 'stm_lms_courses_page', self::get_option( 'courses_page' ) );
 	}

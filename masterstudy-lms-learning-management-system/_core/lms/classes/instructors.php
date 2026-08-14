@@ -913,7 +913,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					update_user_meta( $user_id, 'submission_status', 'pending' );
 					update_user_meta( $user_id, 'stm_lms_ai_enabled', $is_ai_enabled );
 
-					$instructor_premoderation = STM_LMS_Options::get_option( 'instructor_premoderation', true );
+					$instructor_premoderation = STM_LMS_Options::instructor_premoderation_enabled();
 
 					$message = sprintf(
 						/* translators: %s User Login, User ID */
@@ -980,7 +980,7 @@ class STM_LMS_Instructor extends STM_LMS_User {
 
 				$user_login = $display_name ?? $user['login'];
 
-				$instructor_premoderation = STM_LMS_Options::get_option( 'instructor_premoderation', false );
+				$instructor_premoderation = STM_LMS_Options::instructor_premoderation_enabled();
 
 				$date       = current_time( 'mysql' );
 				$user_email = $user['email'];
