@@ -334,6 +334,15 @@ class STM_LMS_User {
 			'status' => 'error',
 		);
 
+		if ( ! get_option( 'users_can_register' ) ) {
+			$response['errors'][] = array(
+				'id'   => 'registration_restriction',
+				'text' => esc_html__( 'Registration is currently restricted. Please try again later.', 'masterstudy-lms-learning-management-system' ),
+			);
+
+			return wp_send_json( $response );
+		}
+
 		$recaptcha_passed = STM_LMS_Helpers::check_recaptcha();
 		if ( ! $recaptcha_passed ) {
 			$response['errors'][] = array(
@@ -550,6 +559,9 @@ class STM_LMS_User {
 
 	public static function _handle_premoderation( $user, $data, $user_email ) { // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
 		$token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
+		$data  = self::prepare_premoderation_data( $data );
+
+		$data['redirect_page'] = wp_validate_redirect( $data['redirect_page'] ?? '', self::login_page_url() );
 
 		/*Setting link for 3 days*/
 		set_transient( $token, $data, 3 * 24 * 60 * 60 );
@@ -595,6 +607,30 @@ class STM_LMS_User {
 			$message,
 			'stm_lms_account_premoderation',
 			$email_data_account_premoderation
+		);
+	}
+
+	private static function prepare_premoderation_data( $data ) {
+		return array_intersect_key(
+			$data,
+			array_flip(
+				array(
+					'register_user_login',
+					'register_user_email',
+					'register_user_password',
+					'register_user_password_re',
+					'profile_default_fields_for_register',
+					'become_instructor',
+					'additional',
+					'additional_instructors',
+					'privacy_policy',
+					'redirect_page',
+					'degree',
+					'expertize',
+					'fields_type',
+					'fields',
+				)
+			)
 		);
 	}
 

@@ -14,17 +14,28 @@ class STMHandlerNotification
 	}
 
 	public function updateNoticeAction() {
-		check_ajax_referer( 'anp_nonce', 'security');
+		check_ajax_referer( 'anp_nonce', 'security' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array( 'message' => esc_html__( 'You are not allowed to update notifications.', 'masterstudy-lms-learning-management-system' ) ),
+				403
+			);
+		}
 
 		if ( isset( $_POST['notice_id'] ) && isset( $_POST['notice_status'] ) ) {
-			$notification_data = $this->getNotificationData('notification_data');
-			$notice_id         = $_POST['notice_id'];
-			$impressions       = $notification_data[$notice_id]['impressions'] ?? 0;
+			$notification_data = $this->getNotificationData( 'notification_data' );
+			$notice_id         = sanitize_key( wp_unslash( $_POST['notice_id'] ) );
+			if ( empty( $notice_id ) ) {
+				return 'error';
+			}
 
-			$notification_data[sanitize_key( $notice_id )]['notice_status'] = sanitize_text_field( $_POST['notice_status'] );
-			$notification_data[$notice_id]['last_shown_time']               = time();
-			$notification_data[$notice_id]['impressions']                   = $impressions + 1;
-			$notification_data[$notice_id]['status_click']                  = 'clicked';
+			$impressions = $notification_data[ $notice_id ]['impressions'] ?? 0;
+
+			$notification_data[ $notice_id ]['notice_status']   = sanitize_text_field( wp_unslash( $_POST['notice_status'] ) );
+			$notification_data[ $notice_id ]['last_shown_time'] = time();
+			$notification_data[ $notice_id ]['impressions']     = $impressions + 1;
+			$notification_data[ $notice_id ]['status_click']    = 'clicked';
 
 			update_option( 'notification_data', $notification_data, false );
 			return 'success';

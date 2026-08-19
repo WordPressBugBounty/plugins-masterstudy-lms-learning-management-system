@@ -627,7 +627,6 @@ function stm_lms_nonces() {
 		'stm_lms_get_user_conversations',
 		'stm_lms_get_user_messages',
 		'stm_lms_clear_new_messages',
-		'wpcfto_save_settings',
 		'stm_lms_tables_update',
 		'stm_lms_get_enterprise_groups',
 		'stm_lms_get_enterprise_member_groups',

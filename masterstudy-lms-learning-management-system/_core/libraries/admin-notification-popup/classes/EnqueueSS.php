@@ -10,6 +10,9 @@ class EnqueueSS {
 	}
 
 	public static function load_admin_ss() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 
 		$anp_nonce = wp_create_nonce( 'anp_nonce' );
 
