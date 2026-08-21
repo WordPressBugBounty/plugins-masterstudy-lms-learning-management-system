@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.43
+Stable tag: 3.7.44
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ MasterStudy is a free WordPress LMS plugin for online learning business. The Wor
 
 MasterStudy is the best free Learning Management System  WordPress plugin for online coaching, instructors, trainers, tutors, schools, colleges, marketplaces and any type of learning website.
 
-⭐ [Live Demo](https://masterstudy.stylemixthemes.com/lms-plugin/)
+⭐ [Live Demo](https://masterstudy.stylemixthemes.com/marketing/)
 ⭐ [MasterStudy LMS PRO](https://stylemixthemes.com/wordpress-lms-plugin/?utm_source=wporg-lms&utm_medium=referral&utm_campaign=plugin-description)
 ⭐ [Documentation](https://docs.stylemixthemes.com/masterstudy-lms/)
 ⭐ [MasterStudy Templates](https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/)
@@ -312,6 +312,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.44 - 2026-08-21 =
+- **Fix:** Minor bugfixes
+
 = 3.7.43 - 2026-08-19 =
 - **Fix:** Minor bugfixes
 

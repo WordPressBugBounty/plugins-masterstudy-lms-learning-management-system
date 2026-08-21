@@ -49,8 +49,8 @@ function get_freemius_info() {
 			),
 			'product' => array(
 				'icon'        => 'browser.svg',
-				'description' => __( 'Starter Theme', 'masterstudy-lms-learning-management-system' ),
-				'link'        => 'https://stylemixthemes.com/wordpress-lms-plugin/starter/',
+				'description' => __( '20 Prebuilt Websites', 'masterstudy-lms-learning-management-system' ),
+				'link'        => 'https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/',
 			),
 		);
 
