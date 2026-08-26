@@ -62,12 +62,15 @@ if ( ! empty( $quizzes ) ) {
 }
 
 if ( ! empty( $course->level ) ) {
-	$levels               = STM_LMS_Helpers::get_course_levels();
-	$meta_fields['level'] = array(
-		'label'      => esc_html__( 'Level', 'masterstudy-lms-learning-management-system' ),
-		'text'       => $levels[ $course->level ],
-		'icon_class' => 'masterstudy-single-course-details__icon_level',
-	);
+	$levels = STM_LMS_Helpers::get_course_levels();
+
+	if ( isset( $levels[ $course->level ] ) ) {
+		$meta_fields['level'] = array(
+			'label'      => esc_html__( 'Level', 'masterstudy-lms-learning-management-system' ),
+			'text'       => $levels[ $course->level ],
+			'icon_class' => 'masterstudy-single-course-details__icon_level',
+		);
+	}
 }
 
 if ( ! empty( $course->udemy_video ) ) {

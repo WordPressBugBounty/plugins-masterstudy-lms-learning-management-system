@@ -50,6 +50,10 @@ function stm_lms_tables_update() {
 		if ( is_ms_lms_addon_enabled( 'subscriptions' ) ) {
 			stm_lms_subscription_tables();
 		}
+
+		if ( function_exists( 'masterstudy_lms_notifications_tables' ) && is_ms_lms_addon_enabled( 'notifications' ) ) {
+			masterstudy_lms_notifications_tables();
+		}
 	}
 
 	update_option( 'stm_lms_db_version', STM_LMS_DB_VERSION );

@@ -661,11 +661,7 @@ final class StudentsRepository {
 	public function reset_student_progress( $course_id, $student_id ) {
 		$curriculum = ( new CurriculumRepository() )->get_curriculum( $course_id );
 
-		if ( empty( $curriculum['materials'] ) ) {
-			return array();
-		}
-
-		foreach ( $curriculum['materials'] as $material ) {
+		foreach ( $curriculum['materials'] ?? array() as $material ) {
 			switch ( $material['post_type'] ) {
 				case 'stm-lessons':
 					\STM_LMS_User_Manager_Course_User::reset_lesson( $student_id, $course_id, $material['post_id'] );
@@ -678,6 +674,8 @@ final class StudentsRepository {
 					break;
 			}
 		}
+
+		do_action( 'masterstudy_lms_student_progress_reset', $course_id, $student_id );
 
 		stm_lms_reset_user_answers( $course_id, $student_id );
 

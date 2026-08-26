@@ -26,27 +26,46 @@ $menus = array(
 	),
 );
 
-$current_url = trailingslashit( home_url( add_query_arg( array(), $wp->request ) ) );
+$menus = apply_filters( 'masterstudy_account_mobile_menu_items', $menus, $current_user ?? array() );
+
+$current_url       = trailingslashit( home_url( add_query_arg( array(), $wp->request ) ) );
+$mobile_menu_class = 'masterstudy-account-mobile-menu';
+
+if ( isset( $menus['notifications'] ) ) {
+	$mobile_menu_class .= ' masterstudy-account-mobile-menu_has-notifications';
+}
 ?>
 
-<div class="masterstudy-account-mobile-menu">
+<div class="<?php echo esc_attr( $mobile_menu_class ); ?>">
 	<?php foreach ( $menus as $key => $item ) : ?>
 		<?php
-		$item_url  = trailingslashit( strtok( $item['url'], '?#' ) );
+		$url       = isset( $item['url'] ) ? (string) $item['url'] : '#';
+		$title     = isset( $item['title'] ) ? (string) $item['title'] : '';
+		$item_url  = trailingslashit( strtok( $url, '?#' ) );
 		$is_active = ( $item_url && $item_url === $current_url );
+		$icon      = isset( $item['icon'] ) ? (string) $item['icon'] : ( 'menu' === $key ? 'stmlms-mobile-menu-hamburger' : 'stmlms-mobile-menu-' . $key );
+		$badge     = $item['badge_count'] ?? null;
+
+		$badge_count = is_numeric( $badge ) ? absint( $badge ) : 0;
+		$badge_label = $badge_count > 99 ? '99+' : (string) $badge_count;
 
 		$link_class = 'masterstudy-account-mobile-menu__link';
 		if ( $is_active ) {
 			$link_class .= ' masterstudy-account-mobile-menu__link_active';
 		}
 		?>
-		<a href="<?php echo esc_url( $item['url'] ); ?>"
+		<a href="<?php echo esc_url( $url ); ?>"
 			class="<?php echo esc_attr( $link_class ); ?>"
 			data-id="<?php echo esc_attr( $key ); ?>">
-			<i class="<?php echo esc_attr( 'menu' === $key ? 'stmlms-mobile-menu-hamburger' : 'stmlms-mobile-menu-' . $key ); ?>"></i>
+			<i class="<?php echo esc_attr( $icon ); ?>"></i>
 			<div class="masterstudy-account-mobile-menu__item">
-				<?php echo esc_html( $item['title'] ); ?>
+				<?php echo esc_html( $title ); ?>
 			</div>
+			<?php if ( $badge_count > 0 ) : ?>
+				<span class="masterstudy-account-mobile-menu__badge">
+					<?php echo esc_html( $badge_label ); ?>
+				</span>
+			<?php endif; ?>
 		</a>
 	<?php endforeach; ?>
 </div>

@@ -60,30 +60,55 @@ final class Question {
 			$order = $order_json;
 		}
 
-		$buckets = array();
-		foreach ( $answers as $row ) {
-			$row_val               = self::get_sort_value_by_type( $type, $row );
-			$buckets[ $row_val ][] = $row;
-		}
-
 		$sorted = array();
 		foreach ( $order as $txt ) {
-			if ( ! empty( $buckets[ $txt ] ) ) {
-				$sorted[] = array_shift( $buckets[ $txt ] );
+			foreach ( $answers as $index => $row ) {
+				$sort_values = array_map( 'strval', self::get_sort_values_by_type( $type, $row ) );
+
+				if ( in_array( (string) $txt, $sort_values, true ) ) {
+					$sorted[] = $row;
+					unset( $answers[ $index ] );
+					break;
+				}
 			}
 		}
-		return $sorted;
+
+		return array_merge( $sorted, array_values( $answers ) );
 	}
 
 	public static function get_sort_value_by_type( string $type, array $arr ) {
 		switch ( $type ) {
 			case QuestionType::ITEM_MATCH:
-				return $arr['question'];
+				return $arr['question'] ?? '';
 			case QuestionType::IMAGE_MATCH:
-				return $arr['question_image']['id'];
+				return $arr['question_image']['id'] ?? '';
 			default:
-				return $arr['text'];
+				$text  = $arr['text'] ?? '';
+				$value = trim( rawurldecode( $text ) );
+
+				if ( ! empty( $arr['text_image']['url'] ) ) {
+					$value = trim( rawurldecode( "{$text}|{$arr['text_image']['url']}" ) );
+				}
+
+				return $value;
 		}
+	}
+
+	private static function get_sort_values_by_type( string $type, array $arr ): array {
+		$values = array( self::get_sort_value_by_type( $type, $arr ) );
+
+		if ( QuestionType::ITEM_MATCH === $type || QuestionType::IMAGE_MATCH === $type ) {
+			return $values;
+		}
+
+		$text = $arr['text'] ?? '';
+
+		if ( '' !== $text ) {
+			$values[] = trim( rawurldecode( $text ) );
+			$values[] = $text;
+		}
+
+		return array_values( array_unique( $values, SORT_REGULAR ) );
 	}
 
 	public static function get_sorted_answers_ids( string $type, $answers ): string {
@@ -94,19 +119,12 @@ final class Question {
 			return '';
 		}
 
-		$sort_key = 'text';
-
-		switch ( $type ) {
-			case QuestionType::ITEM_MATCH:
-				$sort_key = 'question';
-				break;
-			case QuestionType::IMAGE_MATCH:
-				$sort_key = 'id';
-				$answers  = array_column( $answers, 'question_image' );
-				break;
-		}
-
-		$values = array_column( $answers, $sort_key );
+		$values = array_map(
+			function ( $answer ) use ( $type ) {
+				return is_array( $answer ) ? self::get_sort_value_by_type( $type, $answer ) : '';
+			},
+			$answers
+		);
 
 		return wp_json_encode(
 			$values,

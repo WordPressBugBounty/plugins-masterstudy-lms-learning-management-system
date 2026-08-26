@@ -267,22 +267,20 @@ function stm_lms_get_delete_user_course( $user_id, $item_id ) {
 
 	$curriculum = ( new CurriculumRepository() )->get_curriculum( $course_id );
 
-	if ( empty( $curriculum['materials'] ) ) {
-		die;
-	}
-
-	$user_manage_class = new STM_LMS_User_Manager_Course_User();
-	foreach ( $curriculum['materials'] as $material ) {
-		switch ( $material['post_type'] ) {
-			case 'stm-lessons':
-				$user_manage_class::reset_lesson( $student_id, $course_id, $material['post_id'] );
-				break;
-			case 'stm-assignments':
-				$user_manage_class::reset_assignment( $student_id, $course_id, $material['post_id'] );
-				break;
-			case 'stm-quizzes':
-				$user_manage_class::reset_quiz( $student_id, $course_id, $material['post_id'] );
-				break;
+	if ( ! empty( $curriculum['materials'] ) ) {
+		$user_manage_class = new STM_LMS_User_Manager_Course_User();
+		foreach ( $curriculum['materials'] as $material ) {
+			switch ( $material['post_type'] ) {
+				case 'stm-lessons':
+					$user_manage_class::reset_lesson( $student_id, $course_id, $material['post_id'] );
+					break;
+				case 'stm-assignments':
+					$user_manage_class::reset_assignment( $student_id, $course_id, $material['post_id'] );
+					break;
+				case 'stm-quizzes':
+					$user_manage_class::reset_quiz( $student_id, $course_id, $material['post_id'] );
+					break;
+			}
 		}
 	}
 
@@ -378,6 +376,17 @@ function stm_lms_delete_users_in_courses( array $user_ids ): array {
 		$wpdb->prepare( $select_sql, ...$params ), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		ARRAY_A
 	);
+
+	foreach ( $data as $user_course ) {
+		$user_id   = absint( $user_course['user_id'] ?? 0 );
+		$course_id = absint( $user_course['course_id'] ?? 0 );
+
+		if ( $user_id <= 0 || $course_id <= 0 ) {
+			continue;
+		}
+
+		do_action( 'masterstudy_lms_before_delete_user_course', $user_id, $course_id );
+	}
 
 	$lessons_deleted = (int) $wpdb->query(
 		$wpdb->prepare( $delete_lessons_sql, ...$params ) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared

@@ -29,6 +29,7 @@ $sections      = STM_LMS_User_Menu::get_account_menu_sections( $menu_items );
 ?>
 
 <div class="masterstudy-account-menu">
+	<?php do_action( 'masterstudy_account_menu_before_mode', $current_user ); ?>
 	<?php if ( $is_instructor ) { ?>
 		<div class="masterstudy-account-menu__mode">
 			<?php

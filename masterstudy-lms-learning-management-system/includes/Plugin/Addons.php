@@ -34,6 +34,7 @@ class Addons {
 	public const GRADES              = 'grades';
 	public const AI_LAB              = 'ai_lab';
 	public const SUBSCRIPTIONS       = 'subscriptions';
+	public const NOTIFICATIONS       = 'notifications';
 
 	public static function all(): array {
 		return array(
@@ -65,6 +66,7 @@ class Addons {
 			self::GRADES,
 			self::AI_LAB,
 			self::SUBSCRIPTIONS,
+			self::NOTIFICATIONS,
 		);
 	}
 
@@ -97,6 +99,15 @@ class Addons {
 				'pro_plus'      => true,
 				'documentation' => 'subscriptions',
 				'video_url' => 'https://www.youtube.com/embed/7NqPcDGVOZM?rel=0&amp;autoplay=1',
+			),
+			self::NOTIFICATIONS       => array(
+				'name'          => esc_html__( 'Notifications', 'masterstudy-lms-learning-management-system' ),
+				'url'           => esc_url( STM_LMS_URL . 'assets/addons/notifications.png' ),
+				'settings'      => admin_url( 'admin.php?page=stm-lms-settings#section_notifications' ),
+				'description'   => esc_html__( 'Keep students, instructors, and admins informed with on-site and push notifications for key LMS events.', 'masterstudy-lms-learning-management-system' ),
+				'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin-ms&utm_medium=addons&utm_campaign=get-now-addons',
+				'pro_plus'      => true,
+				'documentation' => 'notifications',
 			),
 			self::EMAIL_MANAGER       => array(
 				'name'          => esc_html__( 'Email Manager', 'masterstudy-lms-learning-management-system' ),

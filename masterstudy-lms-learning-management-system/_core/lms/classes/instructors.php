@@ -1032,6 +1032,12 @@ class STM_LMS_Instructor extends STM_LMS_User {
 					$email_data
 				);
 			}
+
+			$submission_status = get_user_meta( $user_id, 'submission_status', true );
+
+			if ( ! empty( $submission_status ) ) {
+				do_action( 'masterstudy_lms_instructor_application_submitted', $user_id, $submission_status, $data );
+			}
 		}
 	}
 

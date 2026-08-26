@@ -280,6 +280,8 @@ final class AdminInstructorRepository {
 		array_unshift( $submission_history, $submission_info );
 		update_user_meta( $user_id, 'submission_history', $submission_history );
 
+		do_action( 'masterstudy_lms_instructor_application_status_updated', $user_id, $status, $admin_message, $submission_history );
+
 		return array(
 			'status'             => $status,
 			'submission_history' => $submission_history,

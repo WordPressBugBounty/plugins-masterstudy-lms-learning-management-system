@@ -29,6 +29,7 @@
     { "properties": { "name": "back-arrow" } },
     { "properties": { "name": "back" } },
     { "properties": { "name": "ban" } },
+    { "properties": { "name": "bell-outlined" } },
     { "properties": { "name": "bell" } },
     { "properties": { "name": "bold" } },
     { "properties": { "name": "book-2" } },

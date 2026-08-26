@@ -173,7 +173,8 @@ if ( apply_filters( 'stm_lms_stop_item_output', false, $data['post_id'] ) ) {
 							'video_questions'       => $data['video_questions'] ?? array(),
 							'video_questions_stats' => $data['video_questions_stats'] ?? array(),
 							'dark_mode'             => $data['dark_mode'],
-							'has_attempts'          => $quiz_data['has_attempts'] ?? false,
+							'has_attempts'           => $quiz_data['has_attempts'] ?? false,
+							'render_retake_template' => 'quiz' === $data['content_type'],
 						)
 					);
 					if ( 'quiz' === $data['content_type'] && $quiz_data['show_attempts_history'] && ! empty( $quiz_data['has_attempts'] ) ) {

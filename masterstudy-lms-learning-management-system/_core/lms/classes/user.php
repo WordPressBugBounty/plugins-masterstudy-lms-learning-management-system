@@ -2167,6 +2167,8 @@ class STM_LMS_User {
 			);
 		}
 
+		do_action( 'masterstudy_lms_enterprise_request_received', $data['fields'] );
+
 		$response['status'] = 'success';
 
 		return wp_send_json( $response );

@@ -4,7 +4,11 @@
 	$new_messages         = apply_filters( 'stm_lms_header_messages_counter', STM_LMS_Chat::user_new_messages( $user['id'] ) );
 	$lms_template_current = get_query_var( 'lms_template' );
 	$object_id            = get_queried_object_id();
-	$menu_items           = STM_LMS_User_Menu::stm_lms_user_menu_display( $user, $lms_template_current, $object_id );
+	$menu_items           = apply_filters(
+		'masterstudy_lms_account_dropdown_menu_items',
+		STM_LMS_User_Menu::stm_lms_user_menu_display( $user, $lms_template_current, $object_id ),
+		$user
+	);
 
 	$learning_menu = array_filter(
 		$menu_items,

@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.44
+Stable tag: 3.7.45
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,13 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.45 - 2026-08-26 =
+- **New**: Added a new Notifications addon[PRO].
+- **Update:** Updated the design of the Single Bundle page [PRO].
+- **Fix:** Cancelling a course bundle via a WooCommerce order was not working correctly [PRO].
+- **Fix:** SCORM course progress could not be reset [PRO].
+- **Fix:** Randomized answer images were not displayed after Quiz retake.
+
 = 3.7.44 - 2026-08-21 =
 - **Fix:** Minor bugfixes
 
@@ -323,40 +330,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.7.41 - 2026-08-04 =
 - **New:** Added Lesson Notes feature in Course Player, students can create, save and manage notes for lessons directly from their profile [PRO]
-
-= 3.7.40 - 2026-07-30 =
-- **Fix:** Minor bugfixes
-
-= 3.7.39 - 2026-07-28 =
-- **New:** 10 Premium Prebuilt Website Templates added [PRO]
-
-= 3.7.38 - 2026-07-23 =
-- **Update:** New AI Models (OpenAI, Gemini, Claude, Grok, Mistral) added for AI Lab Addon [PRO]
-
-= 3.7.37 - 2026-07-03 =
-- **Fix:** Minor bugfixes
-
-= 3.7.36 - 2026-06-18 =
-- **Fix:** Minor bugfixes
-
-= 3.7.35 - 2026-06-10 =
-- **Update:** Improved responsiveness of tables in the admin dashboard
-- **Fix:** Payouts total on the profile page was displaying a significantly higher amount than actual [PRO]
-- **Fix:** MS Templates header was duplicated in the Instructor profile in Order Details [PRO]
-
-= 3.7.34 - 2026-06-04 =
-- **Fix:** Questions generated through AI Lab were not being saved automatically.
-
-= 3.7.33 - 2026-06-02 =
-- **New:** Active Sessions Limit for Students [PRO]
-- **Update:** Updated the design of the Certificates page in User Profile for instructors [PRO]
-- **Fix:** Points were accumulated for every Quiz retake [PRO]
-- **Fix:** Lesson start date from Drip Settings was displayed one day earlier than the actual date for the Pacific timezone [PRO]
-
-= 3.7.32 - 2026-05-19 =
-- **Update:** Compatibility with WordPress 7.0
-- **Update:** Compatibility with PHP 8.3
-- **Fix:** Point Label was not changing in analytics [PRO]
-- **Fix:** Sale Price was not displayed during Sale Period [PRO]
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

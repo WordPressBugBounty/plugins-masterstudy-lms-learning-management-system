@@ -229,6 +229,16 @@ class STM_LMS_Comments {
 					$email_new_lesson_comment
 				);
 			}
+
+			do_action(
+				'masterstudy_lms_after_lesson_comment_added',
+				$r['comment'],
+				$parent_comment,
+				$lesson_id,
+				$course_id,
+				$user,
+				$is_reply_to_own_comment
+			);
 		}
 
 		return $r;
