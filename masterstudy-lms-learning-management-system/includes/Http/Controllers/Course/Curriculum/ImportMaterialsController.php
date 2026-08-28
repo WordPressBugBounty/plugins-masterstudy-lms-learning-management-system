@@ -36,7 +36,7 @@ class ImportMaterialsController {
 
 		$data = $validator->get_validated();
 
-		if ( empty( ( new CurriculumSectionRepository() )->find( $data['section_id'] ) ) ) {
+		if ( false === ( new CurriculumSectionRepository() )->find_for_course( (int) $data['section_id'], (int) $course_id ) ) {
 			return new \WP_REST_Response(
 				array(
 					'error_code' => 'course_curriculum_validation_error',

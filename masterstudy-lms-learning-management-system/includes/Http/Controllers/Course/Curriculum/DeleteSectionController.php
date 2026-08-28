@@ -12,7 +12,13 @@ class DeleteSectionController {
 			return WpResponseFactory::not_found();
 		}
 
-		( new CurriculumSectionRepository() )->delete( $section_id );
+		$repository = new CurriculumSectionRepository();
+
+		if ( false === $repository->find_for_course( (int) $section_id, (int) $course_id ) ) {
+			return WpResponseFactory::not_found();
+		}
+
+		$repository->delete( $section_id );
 
 		return WpResponseFactory::ok();
 	}

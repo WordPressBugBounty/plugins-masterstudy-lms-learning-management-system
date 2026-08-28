@@ -336,13 +336,17 @@ class StmStatistics {
 
 		$params['completed'] = true;
 
-		if ( ! empty( $params['author_id'] ) ) {
-			$params['author_id'] = (int) $params['author_id'];
+		if ( current_user_can( 'manage_options' ) ) {
+			if ( empty( $params['author_id'] ) ) {
+				return array();
+			}
 
-			return self::get_user_order_items( $offset, $limit, $params );
+			$params['author_id'] = (int) $params['author_id'];
+		} else {
+			$params['author_id'] = get_current_user_id();
 		}
 
-		return array();
+		return self::get_user_order_items( $offset, $limit, $params );
 	}
 
 	/**

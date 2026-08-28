@@ -429,6 +429,7 @@ return array(
     'MasterStudy\\Lms\\Utility\\Sanitizer' => $baseDir . '/includes/Utility/Sanitizer.php',
     'MasterStudy\\Lms\\Utility\\TemplateAssetCapture' => $baseDir . '/includes/Utility/TemplateAssetCapture.php',
     'MasterStudy\\Lms\\Utility\\Traits\\VideoTrait' => $baseDir . '/includes/Utility/Traits/VideoTrait.php',
+    'MasterStudy\\Lms\\Utility\\UserAuthorization' => $baseDir . '/includes/Utility/UserAuthorization.php',
     'MasterStudy\\Lms\\Utility\\WpDate' => $baseDir . '/includes/Utility/WpDate.php',
     'MasterStudy\\Lms\\Validation\\ConditionalRules' => $baseDir . '/includes/Validation/ConditionalRules.php',
     'MasterStudy\\Lms\\Validation\\Validator' => $baseDir . '/includes/Validation/Validator.php',

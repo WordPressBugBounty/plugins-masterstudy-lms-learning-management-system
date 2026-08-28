@@ -12,7 +12,13 @@ class DeleteMaterialController {
 			return WpResponseFactory::not_found();
 		}
 
-		( new CurriculumMaterialRepository() )->delete( $material_id );
+		$repository = new CurriculumMaterialRepository();
+
+		if ( false === $repository->find_for_course( (int) $material_id, (int) $course_id ) ) {
+			return WpResponseFactory::not_found();
+		}
+
+		$repository->delete( $material_id );
 
 		return WpResponseFactory::ok();
 

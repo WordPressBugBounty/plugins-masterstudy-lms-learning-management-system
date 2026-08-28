@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.45
+Stable tag: 3.7.46
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.46 - 2026-08-28 =
+- **Fix:** Minor bugfixes
+
 = 3.7.45 - 2026-08-26 =
 - **New**: Added a new Notifications addon[PRO].
 - **Update:** Updated the design of the Single Bundle page [PRO].
@@ -327,8 +330,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.7.42 - 2026-08-13 =
 - **Fix:** Minor bugfixes
-
-= 3.7.41 - 2026-08-04 =
-- **New:** Added Lesson Notes feature in Course Player, students can create, save and manage notes for lessons directly from their profile [PRO]
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

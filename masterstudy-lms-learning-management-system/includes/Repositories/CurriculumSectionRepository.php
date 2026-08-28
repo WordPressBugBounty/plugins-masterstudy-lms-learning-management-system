@@ -13,6 +13,15 @@ final class CurriculumSectionRepository extends CurriculumRepository {
 	}
 
 	/**
+	 * @return false|CurriculumSection
+	 */
+	public function find_for_course( int $id, int $course_id ) {
+		$section = $this->find( $id );
+
+		return ! empty( $section ) && (int) $section->course_id === $course_id ? $section : false;
+	}
+
+	/**
 	 * @return array|object
 	 */
 	public function find_by_ids( array $ids ) {

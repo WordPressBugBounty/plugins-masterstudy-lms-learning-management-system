@@ -2,6 +2,8 @@
 
 namespace MasterStudy\Lms\Http\Controllers\Student;
 
+use MasterStudy\Lms\Http\WpResponseFactory;
+use MasterStudy\Lms\Utility\UserAuthorization;
 use WP_REST_Request;
 use WP_REST_Response;
 use MasterStudy\Lms\Repositories\StudentsRepository;
@@ -14,6 +16,12 @@ class GetStudentStatsController {
 	}
 
 	public function __invoke( $student_id, WP_REST_Request $request ): \WP_REST_Response {
+		$student_id = (int) $student_id;
+
+		if ( ! UserAuthorization::can_access_private_data( $student_id ) ) {
+			return WpResponseFactory::forbidden();
+		}
+
 		$courses = $this->students_repository->student_completed_courses( $student_id, array( 'course_id' ), -1 );
 
 		return new \WP_REST_Response(

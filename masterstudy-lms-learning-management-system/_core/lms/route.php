@@ -62,7 +62,7 @@ add_action(
 						// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 						$user        = new \stmLms\Classes\Models\StmUser( sanitize_text_field( $_GET['author_id'] ) );
 						$course_list = array();
-						$courses     = $user->get_courses();
+						$courses     = $user->get_courses( 'publish' );
 						foreach ( $courses as $course ) {
 							$course_list[] = array(
 								'id'    => $course->ID,

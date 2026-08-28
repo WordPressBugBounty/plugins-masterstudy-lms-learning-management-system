@@ -13,6 +13,21 @@ final class CurriculumMaterialRepository extends CurriculumRepository {
 		return ( new CurriculumMaterial() )->find_one( $id );
 	}
 
+	/**
+	 * @return false|CurriculumMaterial
+	 */
+	public function find_for_course( int $id, int $course_id ) {
+		$material = $this->find( $id );
+
+		if ( empty( $material ) ) {
+			return false;
+		}
+
+		$section = ( new CurriculumSectionRepository() )->find_for_course( (int) $material->section_id, $course_id );
+
+		return false === $section ? false : $material;
+	}
+
 	public function find_by_post( int $post_id ) {
 		return ( new CurriculumMaterial() )->query()
 			->where( 'post_id', $post_id )

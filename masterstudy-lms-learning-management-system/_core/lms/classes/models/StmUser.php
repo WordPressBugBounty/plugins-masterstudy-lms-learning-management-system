@@ -55,12 +55,17 @@ class StmUser extends StmBaseModelUser {
 			: false;
 	}
 
-	public function get_courses() {
-		return StmLmsCourse::query()
+	public function get_courses( $post_status = null ) {
+		$query = StmLmsCourse::query()
 			->asTable( 'course' )
 			->where_in( 'course.`post_type`', array( 'stm-courses', 'stm-course-bundles' ) )
-			->where( 'course.`post_author`', intval( $this->ID ) )
-			->find();
+			->where( 'course.`post_author`', intval( $this->ID ) );
+
+		if ( null !== $post_status ) {
+			$query->where( 'course.`post_status`', sanitize_key( $post_status ) );
+		}
+
+		return $query->find();
 	}
 
 	public function get_course_by_id( $id ) {

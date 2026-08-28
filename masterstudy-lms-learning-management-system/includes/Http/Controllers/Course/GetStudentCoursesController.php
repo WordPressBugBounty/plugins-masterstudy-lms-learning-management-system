@@ -5,6 +5,7 @@ namespace MasterStudy\Lms\Http\Controllers\Course;
 use MasterStudy\Lms\Repositories\CourseRepository;
 use MasterStudy\Lms\Http\Serializers\StudentCoursesSerializer;
 use MasterStudy\Lms\Http\WpResponseFactory;
+use MasterStudy\Lms\Utility\UserAuthorization;
 use MasterStudy\Lms\Validation\Validator;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -25,7 +26,13 @@ class GetStudentCoursesController {
 			return WpResponseFactory::validation_failed( $validator->get_errors_array() );
 		}
 
-		$courses = ( new CourseRepository() )->student_courses( $validator->get_validated() );
+		$params = $validator->get_validated();
+
+		if ( ! UserAuthorization::can_access_private_data( (int) $params['user'] ) ) {
+			return WpResponseFactory::forbidden();
+		}
+
+		$courses = ( new CourseRepository() )->student_courses( $params );
 
 		return new WP_REST_Response(
 			( new StudentCoursesSerializer() )->toArray( $courses )

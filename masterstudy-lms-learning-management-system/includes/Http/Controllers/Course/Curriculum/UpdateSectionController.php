@@ -34,8 +34,14 @@ class UpdateSectionController {
 			);
 		}
 
-		$data    = $validator->get_validated();
-		$section = ( new CurriculumSectionRepository() )->save( $data );
+		$data       = $validator->get_validated();
+		$repository = new CurriculumSectionRepository();
+
+		if ( false === $repository->find_for_course( (int) $data['id'], (int) $course_id ) ) {
+			return WpResponseFactory::not_found();
+		}
+
+		$section = $repository->save( $data );
 
 		return new \WP_REST_Response(
 			array(

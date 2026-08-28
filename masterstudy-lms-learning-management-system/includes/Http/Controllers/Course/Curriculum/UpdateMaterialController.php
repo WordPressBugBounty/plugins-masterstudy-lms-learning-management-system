@@ -6,6 +6,7 @@ use MasterStudy\Lms\Http\Serializers\CurriculumMaterialSerializer;
 use MasterStudy\Lms\Http\WpResponseFactory;
 use MasterStudy\Lms\Repositories\CourseRepository;
 use MasterStudy\Lms\Repositories\CurriculumMaterialRepository;
+use MasterStudy\Lms\Repositories\CurriculumSectionRepository;
 use MasterStudy\Lms\Validation\Validator;
 use WP_REST_Request;
 
@@ -34,8 +35,17 @@ class UpdateMaterialController {
 			);
 		}
 
-		$data     = $validator->get_validated();
-		$material = ( new CurriculumMaterialRepository() )->save( $data );
+		$data       = $validator->get_validated();
+		$repository = new CurriculumMaterialRepository();
+
+		if (
+			false === $repository->find_for_course( (int) $data['id'], (int) $course_id )
+			|| false === ( new CurriculumSectionRepository() )->find_for_course( (int) $data['section_id'], (int) $course_id )
+		) {
+			return WpResponseFactory::not_found();
+		}
+
+		$material = $repository->save( $data );
 
 		return new \WP_REST_Response(
 			array(

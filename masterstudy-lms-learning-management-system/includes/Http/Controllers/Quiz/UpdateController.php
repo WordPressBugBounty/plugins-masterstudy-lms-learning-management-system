@@ -50,6 +50,10 @@ class UpdateController {
 
 		$data = $validator->get_validated();
 
+		if ( array_key_exists( 'questions', $data ) ) {
+			$data['questions'] = QuestionUtility::filter_allow_access( get_current_user_id(), $data['questions'] );
+		}
+
 		$repo->update( $quiz_id, $data );
 
 		if ( ! empty( $data['custom_fields'] ) ) {
