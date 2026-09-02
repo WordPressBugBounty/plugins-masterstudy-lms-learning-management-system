@@ -24,7 +24,8 @@ function stm_lms_user_assignments_table() {
 		grade tinyint(4) DEFAULT NULL,
 		status varchar(45) NOT NULL DEFAULT '',
 		updated_at int(11) NOT NULL,
-		PRIMARY KEY (id)
+		PRIMARY KEY (id),
+		KEY ix_user_assignments_calendar (user_id, user_assignment_id, course_id)
 	) $charset_collate;";
 
 	dbDelta( $sql );

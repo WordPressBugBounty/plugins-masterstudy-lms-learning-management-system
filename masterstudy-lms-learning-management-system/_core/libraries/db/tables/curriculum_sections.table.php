@@ -18,7 +18,8 @@ function stm_lms_curriculum_sections() {
 		title varchar(255) NOT NULL DEFAULT '',
 		course_id bigint NOT NULL,
 		`order` SMALLINT NOT NULL DEFAULT 0,
-		PRIMARY KEY  (id)
+		PRIMARY KEY  (id),
+		KEY ix_curriculum_sections_course (course_id)
 	) $charset_collate;";
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';

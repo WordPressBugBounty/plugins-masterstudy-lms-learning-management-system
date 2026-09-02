@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.46
+Stable tag: 3.7.47
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.47 - 2026-09-02 =
+- **New:** Added a new Calendar addon [PRO].
+- **Update:** Added translations for LMS inner pages.
+- **Fix:** Fixed compatibility issues with WPML.
+- **Fix:** Fixed UI issues with buttons in the WPML admin dashboard.
+
 = 3.7.46 - 2026-08-28 =
 - **Fix:** Minor bugfixes
 
@@ -326,9 +332,6 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fix:** Minor bugfixes
 
 = 3.7.43 - 2026-08-19 =
-- **Fix:** Minor bugfixes
-
-= 3.7.42 - 2026-08-13 =
 - **Fix:** Minor bugfixes
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

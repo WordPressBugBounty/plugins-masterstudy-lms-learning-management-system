@@ -4,6 +4,7 @@ namespace MasterStudy\Lms\Repositories;
 
 use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Utility\WpDate;
+use MasterStudy\Lms\Utility\Wpml;
 use RuntimeException;
 use WP_Query;
 use WP_User;
@@ -21,6 +22,7 @@ final class LessonAdminRepository {
 		$page      = max( 1, (int) ( $params['page'] ?? 1 ) );
 		$search    = isset( $params['search'] ) ? trim( (string) $params['search'] ) : '';
 		$status    = isset( $params['status'] ) ? (string) $params['status'] : 'any';
+		$lang      = isset( $params['lang'] ) ? sanitize_key( (string) $params['lang'] ) : '';
 		$post_type = get_post_type_object( PostType::LESSON );
 
 		$query_args = array(
@@ -33,6 +35,8 @@ final class LessonAdminRepository {
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
 		);
+
+		$query_args = array_merge( $query_args, Wpml::query_language_args( $lang ) );
 
 		if ( '' !== $search ) {
 			$query_args['s'] = $search;

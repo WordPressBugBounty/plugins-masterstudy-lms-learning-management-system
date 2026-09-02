@@ -3,6 +3,7 @@
 namespace MasterStudy\Lms\Http\Serializers;
 
 use MasterStudy\Lms\Plugin\Taxonomy;
+use MasterStudy\Lms\Utility\Wpml;
 use MasterStudy\Lms\Utility\WpDate;
 
 final class CourseListSerializer extends AbstractSerializer {
@@ -42,6 +43,7 @@ final class CourseListSerializer extends AbstractSerializer {
 			'quizzes_count'      => (int) $curriculum_info['quizzes'],
 			'assignments_count'  => (int) $curriculum_info['assignments'],
 			'pricing'            => $this->get_pricing( $course->ID ),
+			'wpml'               => Wpml::post_translations( (int) $course->ID, (string) $course->post_type ),
 			'author'             => $author ? array(
 				'id'   => (int) $author->ID,
 				'name' => (string) $author->display_name,

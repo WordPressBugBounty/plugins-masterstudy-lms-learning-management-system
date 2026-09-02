@@ -2,8 +2,14 @@
 
 use MasterStudy\Lms\Plugin\Addons;
 
-$banner = Addons::list()[ $addon ];
-$video_url = $banner['video_url'] ?? '';
+$banner        = Addons::list()[ $addon ];
+$documentation = $banner['documentation'] ?? 'default';
+$video_url     = $banner['video_url'] ?? '';
+$image_url     = $banner['pro_feature_url'] ?? sprintf(
+	'%sassets/img/pro-features/addons/%s.png',
+	STM_LMS_URL,
+	$documentation
+);
 ?>
 <?php if ( ! empty( $video_url ) ) : ?>
 	<div class="masterstudy-analytics-preview-page__popup">
@@ -33,16 +39,16 @@ $video_url = $banner['video_url'] ?? '';
 			</h2>
 			<p><?php echo esc_html( ( $banner['description'] ?? 'default' ) ); ?> </p>
 			<div class="unlock-addons-buttons">
-				<a href="<?php echo esc_url( admin_url( "admin.php?page=stm-lms-go-pro&source={$banner['documentation']}" ) ); ?>" target="_blank" class="primary button btn">
+				<a href="<?php echo esc_url( admin_url( "admin.php?page=stm-lms-go-pro&source={$documentation}" ) ); ?>" target="_blank" class="primary button btn">
 					<?php echo esc_html__( 'Upgrade to PRO', 'masterstudy-lms-learning-management-system' ); ?>
 				</a>
-				<a href="<?php echo esc_url( masterstudy_lms_addons_dynamic_url( $banner['documentation'] ) ); ?>" target="_blank" class="secondary button btn">
+				<a href="<?php echo esc_url( masterstudy_lms_addons_dynamic_url( $documentation ) ); ?>" target="_blank" class="secondary button btn">
 					<?php echo esc_html__( 'Learn more', 'masterstudy-lms-learning-management-system' ); ?>
 				</a>
 			</div>
 		</div>
 		<div class="unlock-wrapper-illustration">
-			<img src="<?php echo esc_url( STM_LMS_URL . 'assets/img/pro-features/addons/' . ( $banner['documentation'] ?? 'default' ) . '.png' ); ?>">
+			<img src="<?php echo esc_url( $image_url ); ?>">
 			<?php if ( ! empty( $video_url ) ) : ?>
 				<a href="#" class="play-btn" data-id="analytics-watch-video" aria-label="">
 					<span class="play-btn__icon" aria-hidden="true"></span>

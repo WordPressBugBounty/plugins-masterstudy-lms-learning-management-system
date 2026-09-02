@@ -2,6 +2,7 @@
 
 namespace MasterStudy\Lms\Http\Serializers;
 
+use MasterStudy\Lms\Utility\Wpml;
 use MasterStudy\Lms\Utility\WpDate;
 
 final class LessonListSerializer extends AbstractSerializer {
@@ -41,6 +42,7 @@ final class LessonListSerializer extends AbstractSerializer {
 			'view_url'             => $this->get_view_url( $post ),
 			'comment_count'        => (int) $post->comment_count,
 			'linked_courses_count' => isset( $post->linked_courses_count ) ? (int) $post->linked_courses_count : 0,
+			'wpml'                 => Wpml::post_translations( (int) $post->ID, (string) $post->post_type ),
 			'author'               => array(
 				'id'    => $author_id,
 				'label' => $author,

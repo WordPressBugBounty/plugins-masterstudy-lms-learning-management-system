@@ -46,6 +46,10 @@ class GetAdminCourses extends Route implements RequestInterface, ResponseInterfa
 				'type'        => 'string',
 				'description' => 'Date range filter.',
 			),
+			'lang'       => array(
+				'type'        => 'string',
+				'description' => 'WPML language code or all.',
+			),
 		);
 	}
 

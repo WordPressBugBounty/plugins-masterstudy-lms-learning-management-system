@@ -35,6 +35,7 @@ class Addons {
 	public const AI_LAB              = 'ai_lab';
 	public const SUBSCRIPTIONS       = 'subscriptions';
 	public const NOTIFICATIONS       = 'notifications';
+	public const CALENDAR            = 'calendar';
 
 	public static function all(): array {
 		return array(
@@ -67,6 +68,7 @@ class Addons {
 			self::AI_LAB,
 			self::SUBSCRIPTIONS,
 			self::NOTIFICATIONS,
+			self::CALENDAR,
 		);
 	}
 
@@ -134,6 +136,14 @@ class Addons {
 				'pro_url'       => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=ai_lab&utm_campaign=masterstudy-plugin&licenses=1&billing_cycle=annual',
 				'documentation' => 'ai-lab',
 				'pro_plus'      => true,
+			),
+			self::CALENDAR            => array(
+				'name'            => esc_html__( 'Calendar', 'masterstudy-lms-learning-management-system' ),
+				'url'             => esc_url( STM_LMS_URL . 'assets/addons/calendar.webp' ),
+				'pro_feature_url' => esc_url( STM_LMS_URL . 'assets/img/pro-features/addons/calendar.webp' ),
+				'description'     => esc_html__( 'Give students a clear view of their schedule — live lessons, quizzes, assignment deadlines, and new course launches in one calendar.', 'masterstudy-lms-learning-management-system' ),
+				'documentation'   => 'calendar',
+				'pro_plus'        => true,
 			),
 			self::GRADES              => array(
 				'name'          => esc_html__( 'Grades', 'masterstudy-lms-learning-management-system' ),

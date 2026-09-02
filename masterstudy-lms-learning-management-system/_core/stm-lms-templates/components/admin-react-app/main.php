@@ -22,6 +22,11 @@ $entry_script_url    = ! empty( $manifest_assets['entry_url'] )
 $entry_key           = sanitize_key( str_replace( '-', '_', $react_entry ) );
 $react_app_id        = ! empty( $entry_key ) ? 'ms_wp_react_' . $entry_key : 'ms_wp_react_wp_admin';
 $translations_handle = $react_app_id . '-translations';
+$current_language    = (string) apply_filters( 'wpml_current_language', null );
+
+if ( '' === $current_language && function_exists( 'pll_current_language' ) ) {
+	$current_language = (string) pll_current_language();
+}
 
 wp_enqueue_style(
 	$react_app_id . '-style',
@@ -58,8 +63,8 @@ $load_scripts = array(
 		isWpAdmin: true
 	};
 
-	<?php if ( function_exists( 'pll_current_language' ) ) { ?>
-	window.lmsApiSettings.lang = '<?php echo esc_js( pll_current_language() ); ?>';
+	<?php if ( '' !== $current_language ) { ?>
+	window.lmsApiSettings.lang = '<?php echo esc_js( $current_language ); ?>';
 	<?php } ?>
 
 	window.lmsApiSettings.locale = '<?php echo esc_attr( get_locale() ); ?>';

@@ -110,7 +110,7 @@ $recurring_interval = '';
 							<span><?php echo esc_html( STM_LMS_Helpers::display_price_with_taxes( $price ) ); ?></span>
 							<?php if ( ! empty( $plan['recurring_interval'] ) ) : ?>
 								<span class="masterstudy-checkout-course-info__cost-price-interval">
-									/<?php echo esc_html( $plan['recurring_interval'] ); ?>
+									/<?php echo esc_html( STM_LMS_Helpers::masterstudy_lms_get_recurring_interval_label( $plan['recurring_interval'] ) ); ?>
 								</span>
 							<?php endif; ?>
 						</div>
@@ -227,7 +227,8 @@ $recurring_interval = '';
 								$timestamp = strtotime( "$start_date +" . ( $i - 1 ) . " $interval" );
 							}
 
-							echo esc_html( date( 'd F Y', $timestamp ) );
+							$date = gmdate( 'd F Y', $timestamp );
+							echo esc_html( STM_LMS_Helpers::format_date( $date )['date'] ?? $date );
 							?>
 
 						</span>

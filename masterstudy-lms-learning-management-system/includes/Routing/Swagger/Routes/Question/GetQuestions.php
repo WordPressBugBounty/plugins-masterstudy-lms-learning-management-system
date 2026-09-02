@@ -39,6 +39,10 @@ class GetQuestions extends Route implements RequestInterface, ResponseInterface 
 				'type'        => 'string',
 				'description' => 'Date range. Comma-separated YYYY-MM-DD,YYYY-MM-DD',
 			),
+			'lang'       => array(
+				'type'        => 'string',
+				'description' => 'WPML language code or all.',
+			),
 		);
 	}
 

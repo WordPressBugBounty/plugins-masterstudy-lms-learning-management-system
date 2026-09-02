@@ -233,4 +233,54 @@ class CurriculumRepository {
 			}
 		}
 	}
+
+	public function sync_wpml_material_translation(
+		int $original_post_id,
+		int $translated_post_id,
+		string $target_lang
+	): void {
+		$material_repository = new CurriculumMaterialRepository();
+		$section_repository  = new CurriculumSectionRepository();
+		$original_materials  = $material_repository->find_by_post( $original_post_id );
+
+		foreach ( $original_materials as $original_material ) {
+			$original_section = $section_repository->find( (int) $original_material->section_id );
+
+			if ( empty( $original_section ) ) {
+				continue;
+			}
+
+			$translated_course_id = (int) apply_filters(
+				'wpml_object_id',
+				$original_section->course_id,
+				'post',
+				false,
+				$target_lang
+			);
+
+			if (
+				empty( $translated_course_id )
+				|| $material_repository->find_by_course_lesson( $translated_course_id, $translated_post_id )
+			) {
+				continue;
+			}
+
+			$translated_section = $section_repository->find_by_course_and_order(
+				$translated_course_id,
+				(int) $original_section->order
+			);
+
+			if ( empty( $translated_section ) ) {
+				continue;
+			}
+
+			$material_repository->create(
+				array(
+					'post_id'    => $translated_post_id,
+					'section_id' => $translated_section->id,
+					'order'      => $original_material->order,
+				)
+			);
+		}
+	}
 }

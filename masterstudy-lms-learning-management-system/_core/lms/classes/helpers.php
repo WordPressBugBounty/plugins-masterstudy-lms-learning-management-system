@@ -1215,6 +1215,17 @@ class STM_LMS_Helpers {
 		return $interval_label;
 	}
 
+	public static function masterstudy_lms_get_recurring_interval_label( $recurring_interval ) {
+		$labels = array(
+			'month' => esc_html__( 'Month', 'masterstudy-lms-learning-management-system' ),
+			'year'  => esc_html__( 'Year', 'masterstudy-lms-learning-management-system' ),
+			'week'  => esc_html__( 'Week', 'masterstudy-lms-learning-management-system' ),
+			'day'   => esc_html__( 'Day', 'masterstudy-lms-learning-management-system' ),
+		);
+
+		return $labels[ $recurring_interval ] ?? $recurring_interval;
+	}
+
 	public static function enqueue_font_awesome_icons() {
 		$elementor_main = WP_PLUGIN_DIR . '/elementor/elementor.php';
 		$wpbakery       = WP_PLUGIN_DIR . '/js_composer/js_composer.php';

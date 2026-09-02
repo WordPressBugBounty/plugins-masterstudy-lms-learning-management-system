@@ -55,7 +55,7 @@ if ( ! empty( $order_info ) ) :
 			'renew'           => array(
 				'label' => esc_html__( 'Renew', 'masterstudy-lms-learning-management-system' ),
 				'value' => ( ! empty( $order_info['items'][0]['price'] ) && ! empty( $order_info['plan']['recurring_interval'] ) )
-					? STM_LMS_Helpers::display_price_with_taxes( $renew_price, $order_info['user']['id'] ) . '/' . $order_info['plan']['recurring_interval']
+					? STM_LMS_Helpers::display_price_with_taxes( $renew_price, $order_info['user']['id'] ) . '/' . STM_LMS_Helpers::masterstudy_lms_get_recurring_interval_label( $order_info['plan']['recurring_interval'] )
 					: '',
 			),
 			'trial_end_date'  => array(
@@ -276,7 +276,8 @@ if ( ! empty( $order_info ) ) :
 																	$timestamp = strtotime( "$start_date +" . ( $i - 1 ) . " $interval" );
 																}
 
-																echo esc_html( gmdate( 'd F Y', $timestamp ) );
+																$date = gmdate( 'd F Y', $timestamp );
+																echo esc_html( STM_LMS_Helpers::format_date( $date )['date'] ?? $date );
 																?>
 
 															</span>

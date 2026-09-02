@@ -8,6 +8,7 @@ use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Plugin\Taxonomy;
 use MasterStudy\Lms\Utility\Sanitizer;
 use MasterStudy\Lms\Utility\WpDate;
+use MasterStudy\Lms\Utility\Wpml;
 use RuntimeException;
 
 final class CourseRepository extends AbstractRepository {
@@ -211,6 +212,7 @@ final class CourseRepository extends AbstractRepository {
 		$quiz_id        = isset( $params['quiz_id'] ) ? absint( $params['quiz_id'] ) : 0;
 		$google_meet_id = isset( $params['google_meet_id'] ) ? absint( $params['google_meet_id'] ) : 0;
 		$status         = isset( $params['status'] ) ? (string) $params['status'] : 'any';
+		$lang           = isset( $params['lang'] ) ? sanitize_key( (string) $params['lang'] ) : '';
 
 		$query_args = array(
 			'post_type'              => PostType::COURSE,
@@ -222,6 +224,8 @@ final class CourseRepository extends AbstractRepository {
 			'update_post_meta_cache' => true,
 			'update_post_term_cache' => false,
 		);
+
+		$query_args = array_merge( $query_args, Wpml::query_language_args( $lang ) );
 
 		if ( '' !== $search ) {
 			$query_args['s'] = $search;

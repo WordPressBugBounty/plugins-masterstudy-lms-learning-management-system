@@ -20,7 +20,8 @@ function stm_lms_user_assignments_times_table() {
 		start_time DATETIME NOT NULL,
 		end_time DATETIME NOT NULL,
 		PRIMARY KEY (user_assignment_time_id),
-		KEY end_time (end_time)
+		KEY end_time (end_time),
+		KEY ix_user_assignment_times_calendar (user_id, end_time, assignment_id)
 	) $charset_collate;";
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';

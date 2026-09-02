@@ -16,6 +16,11 @@ class GetSettings extends Route implements RequestInterface, ResponseInterface {
 				'enum'        => AdminReactSettingsRepository::allowed_app_slugs(),
 				'required'    => true,
 			),
+			'lang'     => array(
+				'type'        => 'string',
+				'description' => 'WPML language code or all.',
+				'required'    => false,
+			),
 		);
 	}
 

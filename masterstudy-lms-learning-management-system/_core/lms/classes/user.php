@@ -720,12 +720,7 @@ class STM_LMS_User {
 		$subject = esc_html__( 'You have successfully registered on the website.', 'masterstudy-lms-learning-management-system' );
 
 		$template = wp_kses_post(
-			'Hi {{user_login}}, <br>
-					Welcome to {{blog_name}} <br>
-					Your registration was successful. <br>
-					You can now log in to your account using the following link: <br>
-					Login URL: {{login_url}}<br>
-					We are thrilled to have you on board!<br>'
+			__( 'Hi {{user_login}}, <br>Welcome to {{blog_name}} <br>Your registration was successful. <br>You can now log in to your account using the following link: <br>Login URL: {{login_url}}<br>We are thrilled to have you on board!<br>', 'masterstudy-lms-learning-management-system' )
 		);
 
 		$email_data_register = array(

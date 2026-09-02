@@ -5,6 +5,7 @@ namespace MasterStudy\Lms\Http\Controllers\Course;
 use MasterStudy\Lms\Http\Serializers\CourseListSerializer;
 use MasterStudy\Lms\Http\WpResponseFactory;
 use MasterStudy\Lms\Repositories\CourseRepository;
+use MasterStudy\Lms\Utility\Wpml;
 use MasterStudy\Lms\Validation\Validator;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -24,6 +25,7 @@ final class GetAdminCoursesController {
 				'status'     => 'nullable|string|contains_list,any;publish;pending;draft;trash;private',
 				'sort'       => 'nullable|string',
 				'date_range' => 'nullable|string',
+				'lang'       => 'nullable|string',
 			)
 		);
 
@@ -31,9 +33,17 @@ final class GetAdminCoursesController {
 			return WpResponseFactory::validation_failed( $validator->get_errors_array() );
 		}
 
-		$data            = ( new CourseRepository() )->get_admin_list( $validator->get_validated() );
-		$data['courses'] = ( new CourseListSerializer() )->collectionToArray( $data['posts'] );
-		unset( $data['posts'] );
+		$params = $validator->get_validated();
+		$data   = Wpml::with_language(
+			(string) ( $params['lang'] ?? '' ),
+			static function () use ( $params ) {
+				$data            = ( new CourseRepository() )->get_admin_list( $params );
+				$data['courses'] = ( new CourseListSerializer() )->collectionToArray( $data['posts'] );
+				unset( $data['posts'] );
+
+				return $data;
+			}
+		);
 
 		return new WP_REST_Response( $data );
 	}

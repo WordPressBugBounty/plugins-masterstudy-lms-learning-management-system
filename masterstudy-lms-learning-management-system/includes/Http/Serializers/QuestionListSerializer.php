@@ -3,6 +3,7 @@
 namespace MasterStudy\Lms\Http\Serializers;
 
 use MasterStudy\Lms\Plugin\Taxonomy;
+use MasterStudy\Lms\Utility\Wpml;
 
 final class QuestionListSerializer extends AbstractSerializer {
 
@@ -27,6 +28,7 @@ final class QuestionListSerializer extends AbstractSerializer {
 			'date'           => (string) $post->post_date,
 			'date_formatted' => \STM_LMS_Helpers::format_date( $post->post_date ),
 			'status'         => (string) $post->post_status,
+			'wpml'           => Wpml::post_translations( (int) $post->ID, (string) $post->post_type ),
 		);
 	}
 }

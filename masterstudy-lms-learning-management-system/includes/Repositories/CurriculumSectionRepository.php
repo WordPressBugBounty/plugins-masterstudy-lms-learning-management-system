@@ -48,6 +48,18 @@ final class CurriculumSectionRepository extends CurriculumRepository {
 		return array_column( $sections, 'id' );
 	}
 
+	/**
+	 * @return false|CurriculumSection
+	 */
+	public function find_by_course_and_order( int $course_id, int $order ) {
+		$sections = ( new CurriculumSection() )->query()
+			->where( 'course_id', $course_id )
+			->where( 'order', $order )
+			->find();
+
+		return ! empty( $sections ) ? reset( $sections ) : false;
+	}
+
 	public function create( array $data ): CurriculumSection {
 		$section            = new CurriculumSection();
 		$section->title     = $data['title'];

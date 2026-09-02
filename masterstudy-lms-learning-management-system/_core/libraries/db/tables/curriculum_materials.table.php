@@ -19,7 +19,9 @@ function stm_lms_curriculum_materials() {
 		post_type varchar(50) NOT NULL DEFAULT '',
 		section_id mediumint(9) NOT NULL DEFAULT 0,
 		`order` SMALLINT NOT NULL DEFAULT 0,
-		PRIMARY KEY  (id)
+		PRIMARY KEY  (id),
+		KEY ix_curriculum_materials_section_order (section_id, `order`),
+		KEY ix_curriculum_materials_post (post_id)
 	) $charset_collate;";
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';

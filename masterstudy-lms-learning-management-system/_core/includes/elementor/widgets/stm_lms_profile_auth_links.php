@@ -868,6 +868,10 @@ class StmLmsProfileAuthLinks extends Widget_Base {
 
 		$settings = $this->get_settings_for_display();
 		if ( ! is_user_logged_in() ) {
+			$button_text = $settings['auth_links_btn_text'] ?? '';
+			if ( 'Login/Sign Up' === $button_text ) {
+				$button_text = esc_html__( 'Login/Sign Up', 'masterstudy-lms-learning-management-system' );
+			}
 			?>
 			<a href="<?php echo esc_url( $settings['auth_links_btn_link']['url'] ); ?>" class="ms-lms-authorization">
 				<span class="ms-lms-authorization-icon">
@@ -875,7 +879,7 @@ class StmLmsProfileAuthLinks extends Widget_Base {
 				</span>
 				<a href="<?php echo esc_url( $settings['auth_links_btn_link']['url'] ); ?>">
 					<span class="ms-lms-authorization-title">
-						<?php echo esc_html( $settings['auth_links_btn_text'] ); ?>
+						<?php echo esc_html( $button_text ); ?>
 					</span>
 				</a>
 			</a>

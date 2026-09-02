@@ -1131,4 +1131,91 @@ abstract class LmsUpdateCallbacks {
 			stm_lms_point_system_table();
 		}
 	}
+
+	public static function lms_add_calendar_performance_indexes(): void {
+		require_once STM_LMS_LIBRARY . '/db/tables.php';
+
+		self::ensure_calendar_indexes(
+			'stm_lms_curriculum_sections_name',
+			'stm_lms_curriculum_sections',
+			array( 'ix_curriculum_sections_course' )
+		);
+
+		self::ensure_calendar_indexes(
+			'stm_lms_curriculum_materials_name',
+			'stm_lms_curriculum_materials',
+			array( 'ix_curriculum_materials_section_order', 'ix_curriculum_materials_post' )
+		);
+
+		self::ensure_calendar_indexes(
+			'stm_lms_user_assignments_times_name',
+			'stm_lms_user_assignments_times_table',
+			array( 'ix_user_assignment_times_calendar' )
+		);
+
+		self::ensure_calendar_indexes(
+			'stm_lms_user_assignments_name',
+			'stm_lms_user_assignments_table',
+			array( 'ix_user_assignments_calendar' )
+		);
+	}
+
+	private static function ensure_calendar_indexes( string $name_function, string $update_function, array $indexes ): void {
+		global $wpdb;
+
+		if ( ! function_exists( $name_function ) ) {
+			return;
+		}
+
+		if ( ! function_exists( $update_function ) ) {
+			return;
+		}
+
+		$table_name      = call_user_func( $name_function, $wpdb );
+		$missing_indexes = array();
+
+		if ( ! self::table_exists( $table_name ) ) {
+			return;
+		}
+
+		foreach ( $indexes as $index_name ) {
+			if ( self::index_exists( $table_name, $index_name ) ) {
+				continue;
+			}
+
+			$missing_indexes[] = $index_name;
+		}
+
+		if ( empty( $missing_indexes ) ) {
+			return;
+		}
+
+		call_user_func( $update_function );
+	}
+
+	private static function index_exists( string $table_name, string $index_name ): bool {
+		global $wpdb;
+
+		if ( ! self::table_exists( $table_name ) ) {
+			return false;
+		}
+
+		return ! empty(
+			$wpdb->get_var(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SHOW INDEX FROM `{$table_name}` WHERE Key_name = %s",
+					$index_name
+				)
+			)
+		);
+	}
+
+	private static function table_exists( string $table_name ): bool {
+		global $wpdb;
+
+		return $table_name === $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) );
+	}
+
+
 }

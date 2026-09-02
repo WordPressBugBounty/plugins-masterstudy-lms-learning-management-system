@@ -4,10 +4,11 @@ namespace MasterStudy\Lms\Http\Controllers\AdminReactApp;
 
 use MasterStudy\Lms\Http\WpResponseFactory;
 use MasterStudy\Lms\Repositories\AdminReactSettingsRepository;
+use WP_REST_Request;
 use WP_REST_Response;
 
 final class GetSettingsController {
-	public function __invoke( string $app_slug ): WP_REST_Response {
+	public function __invoke( string $app_slug, WP_REST_Request $request ): WP_REST_Response {
 		if ( ! in_array( $app_slug, AdminReactSettingsRepository::allowed_app_slugs(), true ) ) {
 			return WpResponseFactory::not_found();
 		}
@@ -20,7 +21,9 @@ final class GetSettingsController {
 
 		return WpResponseFactory::ok_with_data(
 			array(
-				'react_default_vars' => AdminReactSettingsRepository::default_vars(),
+				'react_default_vars' => AdminReactSettingsRepository::default_vars(
+					sanitize_key( (string) $request->get_param( 'lang' ) )
+				),
 				'app_settings'       => null === $app_vars ? array() : $app_vars,
 			)
 		);

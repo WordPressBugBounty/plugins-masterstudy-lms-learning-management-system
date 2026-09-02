@@ -241,6 +241,19 @@ add_action(
 			return;
 		}
 
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! post_type_supports( $post->post_type, 'editor' ) ) {
+			?>
+			<textarea id="content" name="content" hidden><?php echo esc_textarea( $post->post_content ); ?></textarea>
+			<script>
+				window.edCanvas = document.getElementById('content');
+				window.edInsertContent = window.edInsertContent || function(editor, content) {
+					editor.value += content;
+					editor.dispatchEvent(new Event('change', { bubbles: true }));
+				};
+			</script>
+			<?php
+		}
+
 		if ( PostType::QUESTION === $post->post_type ) {
 			?>
 			<div class="inside">

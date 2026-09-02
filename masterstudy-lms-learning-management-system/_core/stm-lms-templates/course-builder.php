@@ -12,6 +12,11 @@ $wp_referer         = wp_get_referer();
 $manifest_assets    = masterstudy_lms_resolve_manifest_assets( 'course-builder', 'main' );
 $manifest_assets    = is_array( $manifest_assets ) ? $manifest_assets : array();
 $entry_script_url   = ! empty( $manifest_assets['entry_url'] ) ? $manifest_assets['entry_url'] : '';
+$current_language   = (string) apply_filters( 'wpml_current_language', null );
+
+if ( '' === $current_language && function_exists( 'pll_current_language' ) ) {
+	$current_language = (string) pll_current_language();
+}
 
 wp_register_style( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builder_css', MS_LMS_URL . 'assets/react/course-builder/css/main.css' ), array(), MS_LMS_VERSION );
 wp_register_script( 'ms-lms-course-builder-translations', apply_filters( 'ms_lms_course_builder_translations_js', MS_LMS_URL . 'assets/react/course-builder/js/i18n-translations.js' ), array(), MS_LMS_VERSION, true );
@@ -107,8 +112,8 @@ foreach ( $load_scripts as $handle ) {
 		wp_time_format: '<?php echo esc_attr( get_option( 'time_format' ) ); ?>',
 		locale: '<?php echo esc_attr( get_locale() ); ?>',
 	};
-	<?php if ( function_exists( 'pll_current_language' ) ) { ?>
-	window.lmsApiSettings.lang = '<?php echo esc_js( pll_current_language() ); ?>';
+	<?php if ( '' !== $current_language ) { ?>
+	window.lmsApiSettings.lang = '<?php echo esc_js( $current_language ); ?>';
 	<?php } ?>
 
 	<?php if ( ! empty( $wp_referer ) ) : ?>

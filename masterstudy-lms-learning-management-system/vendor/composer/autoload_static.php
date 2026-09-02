@@ -446,6 +446,7 @@ class ComposerStaticInitec50079b4c6a8950529d4e9c66db1c51
         'MasterStudy\\Lms\\Utility\\Traits\\VideoTrait' => __DIR__ . '/../..' . '/includes/Utility/Traits/VideoTrait.php',
         'MasterStudy\\Lms\\Utility\\UserAuthorization' => __DIR__ . '/../..' . '/includes/Utility/UserAuthorization.php',
         'MasterStudy\\Lms\\Utility\\WpDate' => __DIR__ . '/../..' . '/includes/Utility/WpDate.php',
+        'MasterStudy\\Lms\\Utility\\Wpml' => __DIR__ . '/../..' . '/includes/Utility/Wpml.php',
         'MasterStudy\\Lms\\Validation\\ConditionalRules' => __DIR__ . '/../..' . '/includes/Validation/ConditionalRules.php',
         'MasterStudy\\Lms\\Validation\\Validator' => __DIR__ . '/../..' . '/includes/Validation/Validator.php',
     );

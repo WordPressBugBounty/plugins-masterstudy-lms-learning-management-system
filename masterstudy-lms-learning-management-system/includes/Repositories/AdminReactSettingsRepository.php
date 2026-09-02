@@ -3,6 +3,7 @@
 namespace MasterStudy\Lms\Repositories;
 
 use MasterStudy\Lms\Plugin\Addons;
+use MasterStudy\Lms\Utility\Wpml;
 
 final class AdminReactSettingsRepository {
 	private const APP_SLUGS = array(
@@ -55,7 +56,7 @@ final class AdminReactSettingsRepository {
 	 *     enabled_addons: array<string, mixed>
 	 * }
 	 */
-	public static function default_vars(): array {
+	public static function default_vars( string $language = '' ): array {
 		return array(
 			'admin_url'          => admin_url(),
 			'wp_time_format'     => get_option( 'time_format' ),
@@ -73,6 +74,7 @@ final class AdminReactSettingsRepository {
 			),
 			'enabled_addons'     => Addons::enabled_addons(),
 			'media_library'      => self::media_library_vars(),
+			'multilingual'       => Wpml::settings( $language ),
 		);
 	}
 

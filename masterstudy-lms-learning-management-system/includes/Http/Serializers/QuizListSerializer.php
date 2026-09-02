@@ -2,6 +2,7 @@
 
 namespace MasterStudy\Lms\Http\Serializers;
 
+use MasterStudy\Lms\Utility\Wpml;
 use MasterStudy\Lms\Utility\WpDate;
 
 final class QuizListSerializer extends AbstractSerializer {
@@ -29,6 +30,7 @@ final class QuizListSerializer extends AbstractSerializer {
 			'question_banks_count' => isset( $post->question_banks_count ) ? (int) $post->question_banks_count : 0,
 			'questions_count'      => isset( $post->questions_count ) ? (int) $post->questions_count : 0,
 			'linked_courses_count' => isset( $post->linked_courses_count ) ? (int) $post->linked_courses_count : 0,
+			'wpml'                 => Wpml::post_translations( (int) $post->ID, (string) $post->post_type ),
 			'author'               => array(
 				'id'    => $author_id,
 				'label' => $author ? (string) $author->user_login : '',
