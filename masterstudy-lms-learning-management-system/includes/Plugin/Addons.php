@@ -141,7 +141,7 @@ class Addons {
 				'name'            => esc_html__( 'Calendar', 'masterstudy-lms-learning-management-system' ),
 				'url'             => esc_url( STM_LMS_URL . 'assets/addons/calendar.webp' ),
 				'pro_feature_url' => esc_url( STM_LMS_URL . 'assets/img/pro-features/addons/calendar.webp' ),
-				'description'     => esc_html__( 'Give students a clear view of their schedule — live lessons, quizzes, assignment deadlines, and new course launches in one calendar.', 'masterstudy-lms-learning-management-system' ),
+				'description'     => esc_html__( 'Show students all upcoming events from their courses in one place.', 'masterstudy-lms-learning-management-system' ),
 				'documentation'   => 'calendar',
 				'pro_plus'        => true,
 			),

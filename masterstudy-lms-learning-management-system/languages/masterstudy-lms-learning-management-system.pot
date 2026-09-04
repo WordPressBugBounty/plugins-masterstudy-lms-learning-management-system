@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the MasterStudy LMS WordPress Plugin – for Online Courses and Education plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.7.47\n"
+"Project-Id-Version: MasterStudy LMS WordPress Plugin – for Online Courses and Education 3.7.48\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/masterstudy-lms-learning-management-system\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
