@@ -37,8 +37,8 @@ wp_enqueue_style( 'premium-templates' );
 		STM_LMS_Templates::show_lms_template(
 			'components/button',
 			array(
-				'title'  => esc_html__( 'Start for Free', 'masterstudy-lms-learning-management-system' ),
-				'link'   => 'https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/',
+				'title'  => esc_html__( 'Buy Now', 'masterstudy-lms-learning-management-system' ),
+				'link'   => 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/',
 				'style'  => 'secondary',
 				'size'   => 'sm',
 				'id'     => 'start-for-free-lms-wizard',

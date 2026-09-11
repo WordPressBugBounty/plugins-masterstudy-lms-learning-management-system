@@ -207,15 +207,11 @@ if ( $is_promotion ) {
 		<div class="container">
 			<div class="stm_go_pro_plugin">
 				<h2 class="stm_go_pro_plugin__title">
-					<?php esc_html_e( 'Unlock all MasterStudy PRO features', 'masterstudy-lms-learning-management-system' ); ?>
+					<img src="<?php echo esc_url( STM_LMS_URL . '/assets/img/masterstudy-logo.png' ); ?>" width="300" height="53">
 				</h2>
 				<p class="stm_go_pro_plugin__content">
 					<?php if ( isset( $freemius_info['info'] ) ) : ?>
-						<?php
-						if ( isset( $freemius_info['info']->short_description ) ) {
-							nl2br( $freemius_info['info']->short_description );
-						}
-						?>
+						<?php esc_html_e( 'Create a feature-rich and powerful LMS platform with different lesson and quiz types with MasterStudy Pro. And easily sell your courses with different payment integrations.', 'masterstudy-lms-learning-management-system' ); ?>
 						<?php if ( $freemius_info['info']->url ) : ?>
 							<a href="<?php echo esc_url( $freemius_info['info']->url ) . '?utm_source=wpadmin-ms&utm_medium=buynow&utm_campaign=learn-more'; ?>">
 								<?php esc_html_e( 'Learn more.', 'masterstudy-lms-learning-management-system' ); ?>
@@ -287,8 +283,6 @@ if ( $is_promotion ) {
 									</small>
 									<?php endif; ?>
 								</div>
-								<p class="stm_plan__title"><?php echo esc_html( $plan->data['text'] ); ?></p>
-
 								<?php if ( ! empty( $plan->data['features'] ) ) : ?>
 									<ul class="stm_plan__features">
 										<?php foreach ( $plan->data['features'] as $license_type => $features ) : ?>
@@ -398,6 +392,269 @@ if ( $is_promotion ) {
 				</ul>
 				<?php
 			endif;
+			?>
+		</div>
+	</section>
+	<?php
+
+	$feature_list_free = array(
+		array(
+			'label' => __( '1 Free Prebuilt Website', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/',
+		),
+		array(
+			'label' => __( 'Frontend Course Builder', 'masterstudy-lms-learning-management-system' ),
+		),
+		array(
+			'label' => __( '1 Free Signle Course Layout', 'masterstudy-lms-learning-management-system' ),
+		),
+		array(
+			'label' => __( 'Course Player', 'masterstudy-lms-learning-management-system' ),
+		),
+		array(
+			'label' => __( 'Page Builders Compatibility', 'masterstudy-lms-learning-management-system' ),
+		),
+		array(
+			'label' => __( '4 Payment Methods', 'masterstudy-lms-learning-management-system' ),
+		),
+		array(
+			'label' => __( 'Unlimited Courses', 'masterstudy-lms-learning-management-system' ),
+		),
+		array(
+			'label' => __( '3 Lesson Types', 'masterstudy-lms-learning-management-system' ),
+		),
+		array(
+			'label' => __( '8 Question Types', 'masterstudy-lms-learning-management-system' ),
+		),
+	);
+
+	$feature_list_pro = array(
+		array(
+			'label' => __( '20 Prebuilt Websites', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/starter-templates/',
+		),
+		array(
+			'label' => __( 'AI Lab', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/ai-lab/',
+		),
+		array(
+			'label' => __( 'Grades', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/grades/',
+		),
+		array(
+			'label' => __( 'Reports & Analytics', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/reports-and-analytics/',
+		),
+		array(
+			'label' => __( 'Subscriptions & Memberships', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/monetize/',
+		),
+		array(
+			'label' => __( 'Taxes', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/taxes/',
+		),
+		array(
+			'label' => __( 'Coupons', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/coupons/',
+		),
+		array(
+			'label' => __( 'Elementor Custom Course Pages', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/course-style/',
+		),
+		array(
+			'label' => __( 'Prerequisites', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/prerequisites/',
+		),
+		array(
+			'label' => __( 'Drip Content', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/drip-content/',
+		),
+		array(
+			'label' => __( 'Assignments', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/assignments/',
+		),
+		array(
+			'label' => __( 'Certificates', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/certificates/',
+		),
+		array(
+			'label' => __( 'Email Manager', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/email-manager/',
+		),
+		array(
+			'label' => __( 'Lesson Notes', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/lesson-notes/',
+		),
+		array(
+			'label' => __( 'PDF Lesson', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/pdf-lessons/',
+		),
+		array(
+			'label' => __( 'Notifications', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/notifications/',
+		),
+		array(
+			'label' => __( 'Calendar', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/calendar/',
+		),
+		array(
+			'label' => __( 'Group Courses', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/group-courses/',
+		),
+		array(
+			'label' => __( 'Point System', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/point-system/',
+		),
+		array(
+			'label' => __( 'Course Bundles', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/course-bundles/',
+		),
+		array(
+			'label' => __( 'Live Stream', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/zoom-google-meet-live-streams/',
+		),
+		array(
+			'label' => __( 'Gradebook', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/gradebook/',
+		),
+		array(
+			'label' => __( 'Woocommerce Checkout', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/monetize/',
+		),
+		array(
+			'label' => __( 'Google Meet', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/zoom-google-meet-live-streams/',
+		),
+		array(
+			'label' => __( 'Google Classrooms', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/google-classrooms/',
+		),
+		array(
+			'label' => __( 'File Upload Manager', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/file-upload-manager/',
+		),
+		array(
+			'label' => __( 'Zoom Conference', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/zoom-conference/',
+		),
+		array(
+			'label' => __( 'Statistics and Payouts', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/statistics-payouts/',
+		),
+		array(
+			'label' => __( 'LMS Forms Editor', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/lms-form-editor/',
+		),
+		array(
+			'label' => __( 'Question Media', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/question-media/',
+		),
+		array(
+			'label' => __( 'Trial Courses', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/trial-courses/',
+		),
+		array(
+			'label' => __( 'Audio Lessons', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/audio-lessons/',
+		),
+		array(
+			'label' => __( 'Upcoming Course Status', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/upcoming-course-status/',
+		),
+		array(
+			'label' => __( 'SCORM', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/scorm/',
+		),
+		array(
+			'label' => __( 'Social Login', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/social-login/',
+		),
+		array(
+			'label' => __( 'Co-Instructors', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/co-instructors/',
+		),
+		array(
+			'label' => __( 'Online Testing', 'masterstudy-lms-learning-management-system' ),
+			'link'  => 'https://stylemixthemes.com/wordpress-lms-plugin/addons/online-testing/',
+		),
+	);
+	?>
+	<section class="stm-compare">
+		<div class="container">
+			<div class="stm-compare-wrapper">
+				<div class="stm-compare-title">
+					<h2 class="heading stm-compare-heading"><?php esc_html_e( 'Сomparison Table', 'stm_vehicle_listings' ); ?></h2>
+					<p class="stm-compare-subtitle">
+						<?php esc_html_e( 'Choose the best option. Upgrade to Pro version just for', 'stm_vehicle_listings' ); ?>
+						<?php if ( $is_promotion ) : ?>
+							<span class="stm-compare-price">
+								<?php echo esc_html( '$' . number_format( $freemius_info['plan']['licenses_1']->annual_price * 0.70, 0, '.', '' ) ); ?>
+							</span>
+						<?php else : ?>
+							<span class="stm-compare-price">
+								<?php echo esc_html( '$' . number_format( $freemius_info['plan']['licenses_1']->annual_price, 0, '.', '' ) ); ?>
+							</span>
+						<?php endif; ?>
+					</p>
+				</div>
+				<div class="stm-compare-items-header-wrapper">
+					<div class="stm-compare-items-header-wrapper-item">
+						<h1 class="heading stm-compare-item-name"><?php esc_html_e( 'Free', 'stm_vehicle_listings' ); ?></h1>
+						<p class="stm-compare-item-descr"><?php esc_html_e( 'MasterStudy', 'stm_vehicle_listings' ); ?></p>
+					</div>
+					<div class="stm-compare-items-header-wrapper-item pro">
+						<h1 class="heading stm-compare-item-name"><?php esc_html_e( 'Pro', 'stm_vehicle_listings' ); ?></h1>
+						<p class="stm-compare-item-descr"><?php esc_html_e( 'including everything in the Free Plan plus:', 'stm_vehicle_listings' ); ?></p>
+					</div>
+				</div>
+				<div class="stm-compare-table-wrapper">
+					<div class="stm-compare-table-item">
+						<div class="stm-compare-lists">
+							<ul class="stm-compare-features-list">
+								<?php foreach ( $feature_list_free as $index => $feature ) : ?>
+									<li class="stm-compare-features-list-item">
+										<?php if ( 0 === $index ) : ?>
+											<a class="stm-compare-features-list-item-name" href="<?php echo esc_url( $feature['link'] ); ?>" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;"><i class="fa-solid fa-circle-check"></i><?php echo esc_html( $feature['label'] ); ?></a>
+										<?php else : ?>
+											<span class="stm-compare-features-list-item-name"><i class="fa-solid fa-circle-check"></i><?php echo esc_html( $feature['label'] ); ?></span>
+										<?php endif; ?>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						</div>
+					</div>
+					<div class="stm-compare-table-item pro">
+						<div class="stm-compare-lists">
+							<ul class="stm-compare-features-list">
+								<?php foreach ( $feature_list_pro as $index => $feature ) : ?>
+									<li class="stm-compare-features-list-item <?php echo $index >= count( $feature_list_pro ) - 1 ? 'full-width' : ''; ?>">
+										<a class="stm-compare-features-list-item-name" href="<?php echo esc_url( $feature['link'] ); ?>" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;"><i class="fa-solid fa-circle-check"></i><?php echo esc_html( $feature['label'] ); ?></a>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						</div>
+						<div class="stm-compare-get-wrapper">
+							<a href="<?php echo esc_url( 'https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=mswpadmin&utm_campaign=masterstudy-plugin&licenses=1' ); ?>" class="stm-compare-get-btn" target="_blank">
+								<?php esc_html_e( 'Get From', 'stm_vehicle_listings' ); ?>
+								<?php if ( $is_promotion ) : ?>
+									<span class="stm-compare-price">
+										<?php echo esc_html( '$' . number_format( $freemius_info['plan']['licenses_1']->annual_price * 0.70, 0, '.', '' ) ); ?>
+									</span>
+								<?php else : ?>
+									<span class="stm-compare-price">
+										<?php echo esc_html( '$' . number_format( $freemius_info['plan']['licenses_1']->annual_price, 0, '.', '' ) ); ?>
+									</span>
+								<?php endif; ?>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="container">
+			<?php
 			if ( ! \STM_LMS_Helpers::is_theme_activated() ) {
 				STM_LMS_Templates::show_lms_template(
 					'premium-templates/banners/banner-templates',

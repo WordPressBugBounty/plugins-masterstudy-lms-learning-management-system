@@ -160,3 +160,13 @@ add_action(
 		RateNotification::init( $rate_data );
 	}
 );
+
+add_action(
+	'admin_head',
+	function() {
+		if ( isset( $_GET['page'] ) && 'stm-lms-go-pro' === $_GET['page'] ) {
+			remove_all_actions( 'admin_notices' );
+			remove_all_actions( 'all_admin_notices' );
+		}
+	}
+);
