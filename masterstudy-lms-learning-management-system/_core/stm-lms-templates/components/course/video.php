@@ -78,6 +78,10 @@ switch ( $video_type ) {
 		break;
 }
 
+if ( 'none' === $video_type ) {
+	return;
+}
+
 wp_enqueue_style( 'masterstudy-single-course-video-plyr' );
 wp_enqueue_style( 'masterstudy-single-course-video' );
 wp_enqueue_script( 'masterstudy-single-course-video' );

@@ -228,6 +228,12 @@ class STM_LMS_Templates {
 
 	public static function stm_lms_locate_vc_element( $templates, $template_name = '', $custom_path = '' ) {
 		$located = false;
+		if ( ! empty( $template_name ) ) {
+			$template_name = self::sanitize_template_name( (string) $template_name );
+			if ( false === $template_name ) {
+				return false;
+			}
+		}
 
 		foreach ( (array) $templates as $template ) {
 
@@ -264,6 +270,10 @@ class STM_LMS_Templates {
 	public static function stm_lms_load_vc_element( $__template, $__vars = array(), $__template_name = '', $custom_path = '' ) {
 		extract( $__vars ); // phpcs:ignore WordPress.PHP.DontExtract
 		$element = self::stm_lms_locate_vc_element( $__template, $__template_name, $custom_path );
+		if ( false === $element ) {
+			echo esc_html__( 'Element not found', 'masterstudy-lms-learning-management-system' );
+			return;
+		}
 		if ( ! file_exists( $element ) && strpos( $__template_name, 'style_' ) !== false ) {
 			$element = str_replace( $__template_name, 'style_1', $element );
 		}

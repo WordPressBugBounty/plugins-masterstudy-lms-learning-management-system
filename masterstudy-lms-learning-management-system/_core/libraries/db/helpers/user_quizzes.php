@@ -417,10 +417,13 @@ function stm_lms_get_attempt( int $attempt_id, int $user_id, int $quiz_id = 0, i
 			WHERE user_id = %d AND quiz_id = %d AND course_id = %d AND user_quiz_id <= %d
 		) AS t
 		WHERE q.user_quiz_id = %d
+			AND q.user_id = %d
+			AND q.quiz_id = %d
+			AND q.course_id = %d
 		LIMIT 1";
 
 	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$result = $wpdb->get_row( $wpdb->prepare( $request, $user_id, $quiz_id, $course_id, $attempt_id, $attempt_id ), ARRAY_A );
+	$result = $wpdb->get_row( $wpdb->prepare( $request, $user_id, $quiz_id, $course_id, $attempt_id, $attempt_id, $user_id, $quiz_id, $course_id ), ARRAY_A );
 
 	if ( empty( $result ) ) {
 		return array();

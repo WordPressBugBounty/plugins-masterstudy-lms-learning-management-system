@@ -69,7 +69,11 @@ class STM_LMS_Lesson {
 		$user_id   = $user['id'];
 		$course_id = intval( $_GET['course'] );
 		$lesson_id = intval( $_GET['lesson'] );
-		$progress  = ! empty( $_GET['progress'] ) ? intval( $_GET['progress'] ) : null;
+		$progress  = isset( $_GET['progress'] ) ? max( 0, min( 100, intval( $_GET['progress'] ) ) ) : null;
+
+		if ( ! masterstudy_lms_user_can_write_course_progress( $user_id, $course_id ) ) {
+			die;
+		}
 
 		/*Check if already passed*/
 		if ( self::is_lesson_completed( $user_id, $course_id, $lesson_id ) ) {

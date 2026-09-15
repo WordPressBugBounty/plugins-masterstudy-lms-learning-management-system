@@ -692,6 +692,7 @@ function stm_lms_nonces() {
 		'stm_lms_get_curriculum_v2',
 		'stm_lms_wizard_save_settings',
 		'stm_lms_wizard_save_business_type',
+		'stm_lms_import_sample_data',
 		'stm_lms_get_enrolled_assingments',
 		'stm-lms-starter-theme-install',
 		'stm_lms_enrolled_quizzes',

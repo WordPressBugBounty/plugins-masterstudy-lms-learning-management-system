@@ -156,101 +156,175 @@ class STM_LMS_Subscriptions {
 	}
 
 	public static function _use_membership( $user_id, $course_id, $membership_id ) { // phpcs:ignore
-		$r = array();
+		$r             = array();
+		$user_id       = absint( $user_id );
+		$course_id     = absint( $course_id );
+		$membership_id = absint( $membership_id );
 
-		/*Check if user already has course*/
 		$courses = stm_lms_get_user_course( $user_id, $course_id, array( 'user_course_id' ) );
 		if ( ! empty( $courses ) ) {
 			stm_lms_update_start_time_in_user_course( $user_id, $course_id );
-			$info = masterstudy_lms_get_user_course_membership( (int) $user_id, (int) $course_id );
 
-			if ( null !== $info && (int) ( $info['subscription_id'] ?? 0 ) !== (int) $membership_id ) {
-				masterstudy_lms_update_user_course_membership(
-					(int) $user_id,
-					(int) $course_id,
-					(int) $membership_id
-				);
-			}
-		} else {
-			$sub = self::user_subscriptions( null, null, $membership_id );
+			$info                    = masterstudy_lms_get_user_course_membership( $user_id, $course_id );
+			$current_sub_id          = (int) ( $info['subscription_id'] ?? 0 );
+			$requested_membership_id = ! empty( $membership_id ) ? $membership_id : $current_sub_id;
+			$sub                     = self::get_available_membership_for_course( $user_id, $course_id, $requested_membership_id, false );
+			$requested_sub_id        = $sub instanceof stdClass ? self::get_membership_subscription_id( $sub ) : 0;
 
-			$r['sub'] = $sub;
-
-			$subs = self::user_subscription_levels();
-
-			$sub = null;
-			if ( ! empty( $membership_id ) && ! empty( $subs ) ) {
-				foreach ( $subs as $subscription ) {
-					if ( intval( $subscription->ID ) === intval( $membership_id ) ) {
-						$sub = $subscription;
-						break;
-					}
-				}
+			if ( empty( $requested_sub_id ) ) {
+				return $r;
 			}
 
-			if ( is_null( $sub ) && ! empty( $subs ) ) {
-				$sub = reset( $subs );
-			}
-
-			if ( $sub instanceof stdClass && ! empty( $sub->quotas_left ) ) {
-				$progress_percent          = 0;
-				$current_lesson_id         = 0;
-				$status                    = 'enrolled';
-				$subscription_id           = $membership_id;
-				$user_course               = compact( 'user_id', 'course_id', 'current_lesson_id', 'status', 'progress_percent', 'subscription_id' );
-				$user_course['start_time'] = time();
-
-				if ( is_ms_lms_addon_enabled( 'grades' ) && function_exists( 'masterstudy_lms_is_course_gradable' ) && masterstudy_lms_is_course_gradable( $course_id ) ) {
-					$user_course['is_gradable'] = 1;
+			if ( $current_sub_id !== $requested_sub_id ) {
+				if ( empty( $sub->quotas_left ) ) {
+					return $r;
 				}
 
-				stm_lms_add_user_course( $user_course );
-
-				STM_LMS_Course::add_student( $course_id );
-
-				$r['url'] = get_the_permalink( $course_id );
+				masterstudy_lms_update_user_course_membership( $user_id, $course_id, $requested_sub_id );
 			}
 
-			if ( class_exists( 'STM_LMS_Mails' ) ) {
-				$user            = STM_LMS_User::get_current_user( $user_id );
-				$login           = $user['login'];
-				$course_title    = get_the_title( $course_id );
-				$membership_plan = $sub->name;
+			$r['url'] = get_the_permalink( $course_id );
 
-				$email_data = array(
-					'membership_plan' => $membership_plan,
-					'course_title'    => $course_title,
-					'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
-					'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
-					'date'            => current_time( 'mysql' ),
-					'login'           => $login,
-					'user_login'      => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
-					'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_permalink( $course_id ) ),
-					'student_email'   => $user['email'],
-				);
+			return $r;
+		}
 
-				$subject = esc_html__( '{{user_login}} Added to {{course_title}} via {{membership_plan}}', 'masterstudy-lms-learning-management-system' );
-				$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
+		$sub      = self::get_available_membership_for_course( $user_id, $course_id, $membership_id, true );
+		$r['sub'] = $sub;
 
-				$message = 'A student {{user_login}} has been added to the course {{course_title}} under the {{membership_plan}} membership plan.<br>
-				<b>Course URL</b>: {{course_title}} <br>
-				<b>Enrollment Date</b>: {{date}}.';
-				$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_data );
+		if ( ! $sub instanceof stdClass ) {
+			return $r;
+		}
 
-				STM_LMS_Helpers::send_email( '', $subject, $message, 'stm_lms_membership_course_available_for_admin', $email_data );
+		$progress_percent          = 0;
+		$current_lesson_id         = 0;
+		$status                    = 'enrolled';
+		$subscription_id           = self::get_membership_subscription_id( $sub );
+		$user_course               = compact( 'user_id', 'course_id', 'current_lesson_id', 'status', 'progress_percent', 'subscription_id' );
+		$user_course['start_time'] = time();
 
-				//email for student
-				$subject = esc_html__( 'Welcome to {{course_title}} via {{membership_plan}}', 'masterstudy-lms-learning-management-system' );
-				$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
-				$message = 'We are excited to inform you that you have been added to the course {{course_title}} under the {{membership_plan}} membership plan. <br>
-				You can access the course and start learning using the following link: {{course_title}}';
-				$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_data );
+		if ( is_ms_lms_addon_enabled( 'grades' ) && function_exists( 'masterstudy_lms_is_course_gradable' ) && masterstudy_lms_is_course_gradable( $course_id ) ) {
+			$user_course['is_gradable'] = 1;
+		}
 
-				STM_LMS_Helpers::send_email( $user['email'], $subject, $message, 'stm_lms_membership_course_available_for_user', $email_data );
-			}
+		stm_lms_add_user_course( $user_course );
+
+		STM_LMS_Course::add_student( $course_id );
+
+		$r['url'] = get_the_permalink( $course_id );
+
+		if ( class_exists( 'STM_LMS_Mails' ) ) {
+			$user            = STM_LMS_User::get_current_user( $user_id );
+			$login           = $user['login'];
+			$course_title    = get_the_title( $course_id );
+			$membership_plan = $sub->name ?? '';
+
+			$email_data = array(
+				'membership_plan' => $membership_plan,
+				'course_title'    => $course_title,
+				'blog_name'       => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
+				'site_url'        => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
+				'date'            => current_time( 'mysql' ),
+				'login'           => $login,
+				'user_login'      => STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user_id ),
+				'course_url'      => \MS_LMS_Email_Template_Helpers::link( get_permalink( $course_id ) ),
+				'student_email'   => $user['email'],
+			);
+
+			$subject = esc_html__( '{{user_login}} Added to {{course_title}} via {{membership_plan}}', 'masterstudy-lms-learning-management-system' );
+			$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
+
+			$message = 'A student {{user_login}} has been added to the course {{course_title}} under the {{membership_plan}} membership plan.<br>
+			<b>Course URL</b>: {{course_title}} <br>
+			<b>Enrollment Date</b>: {{date}}.';
+			$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_data );
+
+			STM_LMS_Helpers::send_email( '', $subject, $message, 'stm_lms_membership_course_available_for_admin', $email_data );
+
+			$subject = esc_html__( 'Welcome to {{course_title}} via {{membership_plan}}', 'masterstudy-lms-learning-management-system' );
+			$subject = \MS_LMS_Email_Template_Helpers::render( $subject, $email_data );
+			$message = 'We are excited to inform you that you have been added to the course {{course_title}} under the {{membership_plan}} membership plan. <br>
+			You can access the course and start learning using the following link: {{course_title}}';
+			$message = \MS_LMS_Email_Template_Helpers::render( $message, $email_data );
+
+			STM_LMS_Helpers::send_email( $user['email'], $subject, $message, 'stm_lms_membership_course_available_for_user', $email_data );
 		}
 
 		return $r;
+	}
+
+	private static function get_available_membership_for_course( int $user_id, int $course_id, int $requested_membership_id = 0, bool $require_quota = true ) {
+		$levels = self::user_subscription_levels( false, $user_id );
+		if ( empty( $levels ) || ! is_array( $levels ) ) {
+			return null;
+		}
+
+		$available = array();
+		foreach ( $levels as $level ) {
+			if ( ! $level instanceof stdClass ) {
+				continue;
+			}
+
+			if ( $require_quota && empty( $level->quotas_left ) ) {
+				continue;
+			}
+
+			if ( ! self::membership_level_allows_course( $level, $course_id ) ) {
+				continue;
+			}
+
+			if (
+				! empty( $requested_membership_id )
+				&& (
+					self::get_membership_level_id( $level ) === $requested_membership_id
+					|| self::get_membership_subscription_id( $level ) === $requested_membership_id
+				)
+			) {
+				return $level;
+			}
+
+			$available[] = $level;
+		}
+
+		return $available[0] ?? null;
+	}
+
+	private static function membership_level_allows_course( stdClass $level, int $course_id ): bool {
+		$level_id = self::get_membership_level_id( $level );
+		if ( empty( $level_id ) ) {
+			return false;
+		}
+
+		$allowed_categories = self::get_plan_private_category( $level_id );
+		if ( empty( $allowed_categories ) ) {
+			return true;
+		}
+
+		$allowed_categories = array_filter( array_map( 'absint', (array) $allowed_categories ) );
+		if ( empty( $allowed_categories ) ) {
+			return true;
+		}
+
+		$course_categories = wp_get_post_terms(
+			$course_id,
+			'stm_lms_course_taxonomy',
+			array(
+				'fields' => 'ids',
+			)
+		);
+
+		if ( is_wp_error( $course_categories ) || empty( $course_categories ) ) {
+			return false;
+		}
+
+		return ! empty( array_intersect( $allowed_categories, array_map( 'absint', $course_categories ) ) );
+	}
+
+	private static function get_membership_level_id( stdClass $level ): int {
+		return absint( $level->ID ?? $level->id ?? 0 );
+	}
+
+	private static function get_membership_subscription_id( stdClass $level ): int {
+		return absint( $level->subscription_id ?? $level->id ?? self::get_membership_level_id( $level ) );
 	}
 
 	public static function use_membership() {

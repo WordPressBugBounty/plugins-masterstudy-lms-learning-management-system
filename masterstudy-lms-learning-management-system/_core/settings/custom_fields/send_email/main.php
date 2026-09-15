@@ -1,9 +1,20 @@
 <?php
 add_action( 'wp_ajax_stm_lms_send_test_email_ajax', 'stm_lms_send_test_email_ajax' );
 function stm_lms_send_test_email_ajax() {
+	check_ajax_referer( 'stm_lms_send_test_email_ajax', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error(
+			array(
+				'message' => esc_html__( 'Unauthorized request.', 'masterstudy-lms-learning-management-system' ),
+			),
+			403
+		);
+	}
+
 	if ( ! empty( $_POST['emailId'] ) ) {
 		$email_manager = STM_LMS_Email_Manager::stm_lms_get_settings();
-		$email_id      = $_POST['emailId'];
+		$email_id      = sanitize_key( wp_unslash( $_POST['emailId'] ) );
 
 		$email_roles = array(
 			'stm_lms_reports_student_checked'    => array(

@@ -10,7 +10,7 @@ use WP_REST_Response;
 
 class AddStudentsBulkController {
 
-	public function __invoke( WP_REST_Request $request ) {
+	public function __invoke( $course_id, WP_REST_Request $request ) {
 		$raw  = (string) $request->get_body();
 		$body = json_decode( $raw, true );
 
@@ -22,13 +22,22 @@ class AddStudentsBulkController {
 			);
 		}
 
-		$course_id = isset( $body['course_id'] ) ? absint( $body['course_id'] ) : 0;
-		$students  = isset( $body['students'] ) && is_array( $body['students'] ) ? $body['students'] : array();
+		$course_id      = absint( $course_id );
+		$body_course_id = isset( $body['course_id'] ) ? absint( $body['course_id'] ) : 0;
+		$students       = isset( $body['students'] ) && is_array( $body['students'] ) ? $body['students'] : array();
 
 		if ( ! $course_id ) {
 			return WpResponseFactory::validation_failed(
 				array(
 					'course_id' => array( esc_html__( 'Course ID is required.', 'masterstudy-lms-learning-management-system' ) ),
+				)
+			);
+		}
+
+		if ( $body_course_id && $body_course_id !== $course_id ) {
+			return WpResponseFactory::validation_failed(
+				array(
+					'course_id' => array( esc_html__( 'Course ID does not match the route.', 'masterstudy-lms-learning-management-system' ) ),
 				)
 			);
 		}
@@ -43,6 +52,10 @@ class AddStudentsBulkController {
 
 		if ( ! ( new CourseRepository() )->exists( $course_id ) ) {
 			return WpResponseFactory::not_found();
+		}
+
+		if ( ! \STM_LMS_Course::check_course_author( $course_id, get_current_user_id() ) ) {
+			return WpResponseFactory::forbidden();
 		}
 
 		$sanitized = array();

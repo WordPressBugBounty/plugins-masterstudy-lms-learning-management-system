@@ -2,6 +2,7 @@
 
 use MasterStudy\Lms\Pro\AddonsPlus\Grades\Services\GradeCalculator;
 use MasterStudy\Lms\Repositories\CoursePlayerRepository;
+use MasterStudy\Lms\Repositories\CurriculumRepository;
 use MasterStudy\Lms\Utility\Question;
 
 STM_LMS_Quiz::init();
@@ -67,6 +68,11 @@ class STM_LMS_Quiz {
 		$quiz_id         = intval( $_GET['quiz_id'] );
 		$user            = STM_LMS_User::get_current_user();
 		$user_id         = $user['id'] ?? null;
+
+		if ( empty( $user_id ) || ! self::user_can_write_quiz_progress( $user_id, $quiz_id ) ) {
+			die;
+		}
+
 		$duration        = self::get_quiz_duration( $quiz_id );
 		$already_started = STM_LMS_Helpers::simplify_db_array( stm_lms_get_user_quizzes_time( $user['id'], $quiz_id, array( 'end_time' ) ) );
 		$count_to        = ! empty( $duration ) ? time() + $duration : 0;
@@ -112,6 +118,10 @@ class STM_LMS_Quiz {
 		$quiz_id   = intval( $_POST['quiz_id'] ?? 0 );
 
 		if ( empty( $course_id ) || empty( $quiz_id ) ) {
+			wp_die();
+		}
+
+		if ( empty( $user_id ) || ! masterstudy_lms_user_can_write_course_progress( $user_id, $course_id ) || ! self::quiz_belongs_to_course( $quiz_id, $course_id ) ) {
 			wp_die();
 		}
 
@@ -264,6 +274,11 @@ class STM_LMS_Quiz {
 		$course_id = intval( $_POST['sources']['post_id'] );
 		$quiz_id   = intval( $_POST['sources']['item_id'] );
 		$user_id   = get_current_user_id();
+
+		if ( empty( $user_id ) || ! masterstudy_lms_user_can_write_course_progress( $user_id, $course_id ) || ! self::quiz_belongs_to_course( $quiz_id, $course_id ) ) {
+			wp_send_json( $res );
+		}
+
 		$last_quiz = stm_lms_get_user_last_quiz( $user_id, $quiz_id, array( 'progress', 'status' ) );
 
 		if ( ! empty( $last_quiz ) && ! empty( $last_quiz['status'] ) && 'passed' === $last_quiz['status'] ) {
@@ -298,6 +313,28 @@ class STM_LMS_Quiz {
 		}
 
 		wp_send_json( $res );
+	}
+
+	private static function user_can_write_quiz_progress( int $user_id, int $quiz_id ): bool {
+		$course_ids = ( new CurriculumRepository() )->get_lesson_course_ids( $quiz_id );
+
+		if ( empty( $course_ids ) ) {
+			return true;
+		}
+
+		foreach ( $course_ids as $course_id ) {
+			if ( masterstudy_lms_user_can_write_course_progress( $user_id, (int) $course_id ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static function quiz_belongs_to_course( int $quiz_id, int $course_id ): bool {
+		$course_ids = ( new CurriculumRepository() )->get_lesson_course_ids( $quiz_id );
+
+		return empty( $course_ids ) || in_array( $course_id, array_map( 'intval', $course_ids ), true );
 	}
 
 	public static function deslash( $content ) {

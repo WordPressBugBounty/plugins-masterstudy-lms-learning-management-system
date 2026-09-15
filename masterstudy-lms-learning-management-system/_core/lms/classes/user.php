@@ -9,6 +9,12 @@ STM_LMS_User::init();
 
 class STM_LMS_User {
 
+	private static function users_can_register(): bool {
+		return function_exists( 'masterstudy_lms_users_can_register' )
+			? masterstudy_lms_users_can_register()
+			: (bool) get_option( 'users_can_register' );
+	}
+
 	public static function init() {
 		$instance = new self();
 
@@ -334,7 +340,7 @@ class STM_LMS_User {
 			'status' => 'error',
 		);
 
-		if ( ! get_option( 'users_can_register' ) ) {
+		if ( ! self::users_can_register() ) {
 			$response['errors'][] = array(
 				'id'   => 'registration_restriction',
 				'text' => esc_html__( 'Registration is currently restricted. Please try again later.', 'masterstudy-lms-learning-management-system' ),
@@ -640,6 +646,11 @@ class STM_LMS_User {
 		$data = get_transient( $token );
 
 		if ( ! empty( $data ) ) {
+			if ( ! self::users_can_register() || STM_LMS_Options::get_option( 'restrict_registration', false ) ) {
+				wp_safe_redirect( $data['redirect_page'] ?? home_url( '/' ) );
+				exit();
+			}
+
 			extract( $data ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
 
 			/**

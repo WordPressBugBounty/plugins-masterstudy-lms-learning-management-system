@@ -1059,7 +1059,7 @@ abstract class LmsUpdateCallbacks {
 
 		foreach ( $rows as $row ) {
 			$course_id    = (int) $row['course_id'];
-			$pricing_info = $row['price_info'] ?? '';
+			$pricing_info = (string) ( $row['price_info'] ?? '' );
 
 			// Pricing is affiliate
 			if (
@@ -1095,19 +1095,27 @@ abstract class LmsUpdateCallbacks {
 
 			if ( ! $is_zero_price && ( $has_single_sale_price || $has_enterprise_price || $has_points_price || $has_membership_enabled || $has_subscriptions_plans ) ) {
 				update_post_meta( $course_id, 'pricing_mode', PricingMode::PAID );
-				update_post_meta( $course_id, 'single_sale_price_info', $pricing_info );
-				update_post_meta( $course_id, 'enterprise_price_info', $pricing_info );
-				update_post_meta( $course_id, 'points_price_info', $pricing_info );
-				update_post_meta( $course_id, 'subscriptions_price_info', $pricing_info );
-				update_post_meta( $course_id, 'membership_price_info', $pricing_info );
+				self::maybe_migrate_price_info( $course_id, 'single_sale_price_info', $pricing_info );
+				self::maybe_migrate_price_info( $course_id, 'enterprise_price_info', $pricing_info );
+				self::maybe_migrate_price_info( $course_id, 'points_price_info', $pricing_info );
+				self::maybe_migrate_price_info( $course_id, 'subscriptions_price_info', $pricing_info );
+				self::maybe_migrate_price_info( $course_id, 'membership_price_info', $pricing_info );
 
 				continue;
 			}
 
 			// Pricing is free
 			update_post_meta( $course_id, 'pricing_mode', PricingMode::FREE );
-			update_post_meta( $course_id, 'free_price_info', $pricing_info );
+			self::maybe_migrate_price_info( $course_id, 'free_price_info', $pricing_info );
 		}
+	}
+
+	private static function maybe_migrate_price_info( int $course_id, string $meta_key, string $pricing_info ): void {
+		if ( '' === $pricing_info || '' !== get_post_meta( $course_id, $meta_key, true ) ) {
+			return;
+		}
+
+		update_post_meta( $course_id, $meta_key, $pricing_info );
 	}
 
 	public static function lms_add_assignments_times_table() {

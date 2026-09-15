@@ -15,6 +15,10 @@ add_filter(
 add_filter(
 	'rest_user_query',
 	function ( array $prepared_args, \WP_REST_Request $request ) {
+		if ( 0 !== strpos( $request->get_route(), '/masterstudy-lms/v2/' ) ) {
+			return $prepared_args;
+		}
+
 		unset( $prepared_args['has_published_posts'] );
 
 		if ( isset( $request['orderby'] ) && 'rating' === $request['orderby'] ) {
@@ -90,7 +94,17 @@ function masterstudy_lms_double_slash_api_data( $value, $key ) {
 }
 add_filter( 'masterstudy_lms_map_api_data', 'masterstudy_lms_double_slash_api_data', 10, 2 );
 
-function masterstudy_lms_allow_iframe_to_instructor( $allowed_tags ) {
+function masterstudy_lms_allow_iframe_to_instructor( $allowed_tags, $context = '' ) {
+	if (
+		'post' !== $context
+		|| (
+			! current_user_can( 'manage_options' )
+			&& ( ! class_exists( 'STM_LMS_Instructor' ) || ! STM_LMS_Instructor::is_instructor() )
+		)
+	) {
+		return $allowed_tags;
+	}
+
 	$allowed_tags['iframe'] = array(
 		'src'             => true,
 		'width'           => true,
@@ -101,7 +115,7 @@ function masterstudy_lms_allow_iframe_to_instructor( $allowed_tags ) {
 
 	return $allowed_tags;
 }
-add_filter( 'wp_kses_allowed_html', 'masterstudy_lms_allow_iframe_to_instructor', 1 );
+add_filter( 'wp_kses_allowed_html', 'masterstudy_lms_allow_iframe_to_instructor', 1, 2 );
 
 /**
  * Register Blocks Category class.

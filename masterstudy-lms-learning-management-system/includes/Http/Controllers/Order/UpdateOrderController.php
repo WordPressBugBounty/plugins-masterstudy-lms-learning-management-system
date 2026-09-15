@@ -3,6 +3,7 @@
 namespace MasterStudy\Lms\Http\Controllers\Order;
 
 use MasterStudy\Lms\Http\WpResponseFactory;
+use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Repositories\OrderRepository;
 use MasterStudy\Lms\Validation\Validator;
 use WP_REST_Request;
@@ -20,6 +21,14 @@ final class UpdateOrderController {
 
 		if ( $validator->fails() ) {
 			return WpResponseFactory::validation_failed( $validator->get_errors_array() );
+		}
+
+		if ( PostType::ORDER !== get_post_type( $order_id ) ) {
+			return WpResponseFactory::not_found();
+		}
+
+		if ( ! current_user_can( 'manage_options' ) && ! \STM_LMS_Order::instructor_can_access_order( $order_id ) ) {
+			return WpResponseFactory::forbidden();
 		}
 
 		$success = ( new OrderRepository() )->update_order( $order_id, $validator->get_validated() );

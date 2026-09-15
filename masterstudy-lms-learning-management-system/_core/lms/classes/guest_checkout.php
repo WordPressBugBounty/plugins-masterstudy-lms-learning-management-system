@@ -18,6 +18,12 @@ class STM_LMS_Guest_Checkout {
 		add_action( 'init', array( $this, 'handle_guest_activation_link' ) );
 	}
 
+	private function users_can_register(): bool {
+		return function_exists( 'masterstudy_lms_users_can_register' )
+			? masterstudy_lms_users_can_register()
+			: (bool) get_option( 'users_can_register' );
+	}
+
 	private static function build_activation_checkout_url( $token ) {
 		$base = STM_LMS_Cart::woocommerce_checkout_enabled() ? wc_get_checkout_url() : STM_LMS_Cart::checkout_url();
 
@@ -250,6 +256,35 @@ class STM_LMS_Guest_Checkout {
 		$response = array(
 			'status' => 'error',
 		);
+
+		if ( ! $this->users_can_register() ) {
+			$response['errors'][] = array(
+				'id'   => 'registration_restriction',
+				'text' => esc_html__( 'Registration is currently restricted. Please try again later.', 'masterstudy-lms-learning-management-system' ),
+			);
+
+			return wp_send_json( $response );
+		}
+
+		if ( STM_LMS_Options::get_option( 'restrict_registration', false ) ) {
+			$response['errors'][] = array(
+				'id'   => 'registration_restriction',
+				'text' => esc_html__( 'Registration is currently restricted. Please try again later.', 'masterstudy-lms-learning-management-system' ),
+			);
+
+			return wp_send_json( $response );
+		}
+
+		$recaptcha_passed = STM_LMS_Helpers::check_recaptcha();
+		if ( ! $recaptcha_passed ) {
+			$response['errors'][] = array(
+				'id'    => 'recaptcha',
+				'field' => 'recaptcha',
+				'text'  => esc_html__( 'CAPTCHA verification failed.', 'masterstudy-lms-learning-management-system' ),
+			);
+
+			return wp_send_json( $response );
+		}
 
 		$request_body = file_get_contents( 'php://input' );
 		$data         = json_decode( $request_body, true );

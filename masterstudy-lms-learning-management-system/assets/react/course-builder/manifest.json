@@ -1102,8 +1102,8 @@
       "_hugerte-skin-ui-oxide-skin-shadowdom.BnEVygYP.js"
     ]
   },
-  "_api-provider.PCyD3tsy.js": {
-    "file": "js/api-provider.PCyD3tsy.js",
+  "_api-provider.CxRL7yuI.js": {
+    "file": "js/api-provider.CxRL7yuI.js",
     "name": "api-provider",
     "imports": [
       "_rolldown-runtime.WmLfqUcM.js",
@@ -1528,7 +1528,7 @@
     ]
   },
   "src/App.tsx": {
-    "file": "js/App.DbzX8R5L.js",
+    "file": "js/App.Bm1Dnw85.js",
     "name": "App",
     "src": "src/App.tsx",
     "isDynamicEntry": true,
@@ -1536,7 +1536,7 @@
       "_rolldown-runtime.WmLfqUcM.js",
       "_vendors.BxProy2S.js",
       "_vendor-date-fns.Ddwv2xzM.js",
-      "_api-provider.PCyD3tsy.js",
+      "_api-provider.CxRL7yuI.js",
       "_vendor-ui.DkqwCPQs.js",
       "_vendor-query.D0cRDCdp.js",
       "_vendor-react.CbckTPjg.js"
@@ -1566,14 +1566,14 @@
     ]
   },
   "src/index.tsx": {
-    "file": "js/main.DvgFM4SM.js",
+    "file": "js/main.BnGzXl9w.js",
     "name": "index",
     "src": "src/index.tsx",
     "isEntry": true,
     "imports": [
       "_rolldown-runtime.WmLfqUcM.js",
       "_vendors.BxProy2S.js",
-      "_api-provider.PCyD3tsy.js",
+      "_api-provider.CxRL7yuI.js",
       "_vendor-query.D0cRDCdp.js",
       "_vendor-react.CbckTPjg.js"
     ],

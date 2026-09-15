@@ -30,12 +30,22 @@ class ExportStudentsController {
 		$params = $validator->get_validated();
 
 		if ( empty( $params['show_all_enrolled'] ) ) {
-			if ( ! ( new CourseRepository() )->exists( $params['course_id'] ) ) {
+			$course_id = $params['course_id'] ?? 0;
+
+			if ( ! ( new CourseRepository() )->exists( $course_id ) ) {
 				return WpResponseFactory::not_found();
 			}
 
-			$students = $repo->export_students_by_course( $params['course_id'] );
+			if ( ! \STM_LMS_Course::check_course_author( $course_id, get_current_user_id() ) ) {
+				return WpResponseFactory::forbidden();
+			}
+
+			$students = $repo->export_students_by_course( $course_id );
 		} else {
+			if ( ! \STM_LMS_Instructor::is_instructor( get_current_user_id() ) ) {
+				return WpResponseFactory::forbidden();
+			}
+
 			$students = $repo->export_students( $params );
 		}
 

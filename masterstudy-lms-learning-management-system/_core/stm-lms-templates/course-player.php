@@ -29,6 +29,21 @@ if ( $post instanceof \WP_Post ) {
 $course_player = new CoursePlayerRepository();
 $data          = $course_player->get_main_data( $lms_page_path, (int) $lesson_id );
 
+if ( empty( $data ) ) {
+	global $wp_query;
+
+	$wp_query->set_404();
+	status_header( 404 );
+	nocache_headers();
+
+	$template_404 = get_404_template();
+	if ( ! empty( $template_404 ) ) {
+		include $template_404;
+	}
+
+	exit;
+}
+
 $quiz_data     = 'quiz' === $data['lesson_type']
 	? $course_player->get_quiz_data( $data['item_id'], $data['user_id'], $data['post_id'] )
 	: array();

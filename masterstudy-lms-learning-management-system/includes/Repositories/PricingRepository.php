@@ -147,13 +147,19 @@ final class PricingRepository {
 	}
 
 	public static function get_price_info( int $post_id ): array {
+		$membership_price_info = get_post_meta( $post_id, 'membership_price_info', true );
+
+		if ( '' === $membership_price_info ) {
+			$membership_price_info = get_post_meta( $post_id, 'not_membership_price_info', true );
+		}
+
 		return array(
 			'free_price_info'          => get_post_meta( $post_id, 'free_price_info', true ) ?? '',
 			'single_sale_price_info'   => get_post_meta( $post_id, 'single_sale_price_info', true ) ?? '',
 			'enterprise_price_info'    => get_post_meta( $post_id, 'enterprise_price_info', true ) ?? '',
 			'points_price_info'        => get_post_meta( $post_id, 'points_price_info', true ) ?? '',
 			'subscriptions_price_info' => get_post_meta( $post_id, 'subscriptions_price_info', true ) ?? '',
-			'membership_price_info'    => get_post_meta( $post_id, 'not_membership_price_info', true ) ?? '',
+			'membership_price_info'    => $membership_price_info ?? '',
 		);
 	}
 

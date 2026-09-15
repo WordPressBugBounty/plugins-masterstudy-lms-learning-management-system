@@ -42,6 +42,29 @@ if ( ! function_exists( 'masterstudy_lms_user_session_limit_reached' ) ) {
 	}
 }
 
+if ( ! function_exists( 'masterstudy_lms_users_can_register' ) ) {
+	function masterstudy_lms_users_can_register(): bool {
+		if ( is_multisite() ) {
+			$network_registration = get_site_option( 'registration', 'none' );
+			if ( ! in_array( $network_registration, array( 'user', 'all' ), true ) ) {
+				return false;
+			}
+		}
+
+		return (bool) get_option( 'users_can_register' );
+	}
+}
+
+if ( ! function_exists( 'masterstudy_lms_user_can_write_course_progress' ) ) {
+	function masterstudy_lms_user_can_write_course_progress( int $user_id, int $course_id ): bool {
+		if ( empty( $user_id ) || empty( $course_id ) ) {
+			return false;
+		}
+
+		return ! empty( stm_lms_get_user_course( $user_id, $course_id, array( 'user_course_id' ) ) );
+	}
+}
+
 function stm_lms_str_replace_once( $str_pattern, $str_replacement, $string ) {
 	if ( strpos( $string, $str_pattern ) !== false ) {
 		$occurrence = strpos( $string, $str_pattern );
@@ -1782,83 +1805,75 @@ function masterstudy_lms_personal_data_display_options( $user_id ) {
 		'personal_fields'     => masterstudy_lms_personal_data_fields(),
 	);
 }
+function masterstudy_lms_normalize_levels_statuses_config( array $new_items, array $stored_items ): array {
+	$stored_ids_by_label = array();
+
+	foreach ( $stored_items as $stored_item ) {
+		$stored_label = trim( $stored_item['label'] ?? '' );
+		$stored_id    = sanitize_key( $stored_item['id'] ?? '' );
+
+		if ( '' !== $stored_label && '' !== $stored_id && ! isset( $stored_ids_by_label[ $stored_label ] ) ) {
+			$stored_ids_by_label[ $stored_label ] = $stored_id;
+		}
+	}
+
+	$merged_items = array();
+	$used_ids     = array();
+
+	foreach ( array_values( $new_items ) as $index => $item ) {
+		if ( ! is_array( $item ) ) {
+			continue;
+		}
+
+		$label = trim( $item['label'] ?? '' );
+
+		if ( '' === $label ) {
+			continue;
+		}
+
+		$item_id = sanitize_key( $item['id'] ?? '' );
+
+		if ( '' === $item_id && ! empty( $stored_items[ $index ]['id'] ) ) {
+			$item_id = sanitize_key( $stored_items[ $index ]['id'] );
+		}
+
+		if ( '' === $item_id && ! empty( $stored_ids_by_label[ $label ] ) ) {
+			$item_id = $stored_ids_by_label[ $label ];
+		}
+
+		if ( '' === $item_id || in_array( $item_id, $used_ids, true ) ) {
+			do {
+				$item_id = 'ms_lms_' . str_replace( '-', '_', wp_generate_uuid4() );
+			} while ( in_array( $item_id, $used_ids, true ) );
+		}
+
+		$item['id']    = $item_id;
+		$item['label'] = $label;
+
+		$merged_items[] = $item;
+		$used_ids[]     = $item_id;
+	}
+
+	return $merged_items;
+}
+
 // generate levels and statuses ids for nuxy
 function masterstudy_lms_generate_levels_statuses_ids( $settings, $id ) {
-	$levels     = STM_LMS_Options::get_option( 'course_levels_config' );
-	$new_levels = $settings['course_levels_config'] ?? array();
+	if ( isset( $settings['course_levels_config'] ) ) {
+		$levels     = STM_LMS_Options::get_option( 'course_levels_config' );
+		$levels     = is_array( $levels ) ? array_values( $levels ) : array();
+		$new_levels = is_array( $settings['course_levels_config'] ) ? $settings['course_levels_config'] : array();
 
-	$levels     = is_array( $levels ) ? $levels : array();
-	$new_levels = is_array( $new_levels ) ? $new_levels : array();
-
-	$existing_map = array();
-
-	foreach ( $levels as $level ) {
-		if ( ! empty( $level['label'] ) && ! empty( $level['id'] ) ) {
-			$existing_map[ $level['label'] ] = $level['id'];
-		}
+		$settings['course_levels_config'] = masterstudy_lms_normalize_levels_statuses_config( $new_levels, $levels );
 	}
 
-	$merged_levels = array();
+	if ( isset( $settings['course_statuses_config'] ) ) {
+		$statuses     = STM_LMS_Options::get_option( 'course_statuses_config' );
+		$statuses     = is_array( $statuses ) ? array_values( $statuses ) : array();
+		$new_statuses = is_array( $settings['course_statuses_config'] ) ? $settings['course_statuses_config'] : array();
 
-	foreach ( $new_levels as $level ) {
-
-		$label = trim( $level['label'] ?? '' );
-
-		if ( '' === $label ) {
-			continue;
-		}
-
-		if ( isset( $existing_map[ $label ] ) ) {
-			$new_id = $existing_map[ $label ];
-		} else {
-			$new_id = 'ms_lms_' . str_replace( '-', '_', wp_generate_uuid4() );
-		}
-
-		$level['id']    = $new_id;
-		$level['label'] = $label;
-
-		$merged_levels[] = $level;
+		$settings['course_statuses_config'] = masterstudy_lms_normalize_levels_statuses_config( $new_statuses, $statuses );
 	}
-
-	$settings['course_levels_config'] = $merged_levels;
-
-	$statuses     = STM_LMS_Options::get_option( 'course_statuses_config' );
-	$new_statuses = $settings['course_statuses_config'] ?? array();
-
-	$statuses     = is_array( $statuses ) ? $statuses : array();
-	$new_statuses = is_array( $new_statuses ) ? $new_statuses : array();
-
-	$existing_status_map = array();
-
-	foreach ( $statuses as $status ) {
-		if ( ! empty( $status['label'] ) && ! empty( $status['id'] ) ) {
-			$existing_status_map[ $status['label'] ] = $status['id'];
-		}
-	}
-
-	$merged_statuses = array();
-
-	foreach ( $new_statuses as $status ) {
-
-		$label = trim( $status['label'] ?? '' );
-
-		if ( '' === $label ) {
-			continue;
-		}
-
-		if ( isset( $existing_status_map[ $label ] ) ) {
-			$new_id = $existing_status_map[ $label ];
-		} else {
-			$new_id = 'ms_lms_' . str_replace( '-', '_', wp_generate_uuid4() );
-		}
-
-		$status['id']    = $new_id;
-		$status['label'] = $label;
-
-		$merged_statuses[] = $status;
-	}
-
-	$settings['course_statuses_config'] = $merged_statuses;
 
 	return $settings;
 }

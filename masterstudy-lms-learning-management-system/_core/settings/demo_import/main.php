@@ -29,8 +29,35 @@ add_action( 'wp_ajax_stm_lms_import_sample_data', 'stm_lms_import_sample_data' )
  * @param bool   $die       Whether to terminate the process with JSON response (optional).
  */
 function stm_lms_import_sample_data( $post_type = '', $die = true ) {
+	if ( $die ) {
+		check_ajax_referer( 'stm_lms_import_sample_data', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Unauthorized request.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
+	}
+
+	$allowed_steps = array( 'archive_gutenberg', 'courses', 'lessons', 'questions', 'quizzes' );
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$step = ! empty( $_GET['stm_lms_step'] ) ? sanitize_text_field( wp_unslash( $_GET['stm_lms_step'] ) ) : $post_type;
+	$step = ! empty( $_GET['stm_lms_step'] ) ? sanitize_key( wp_unslash( $_GET['stm_lms_step'] ) ) : sanitize_key( $post_type );
+	if ( ! in_array( $step, $allowed_steps, true ) ) {
+		if ( $die ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Invalid import step.', 'masterstudy-lms-learning-management-system' ),
+				),
+				400
+			);
+		}
+
+		return;
+	}
+
 	if ( ! empty( $step ) ) {
 
 		if ( ! defined( 'WP_LOAD_IMPORTERS' ) ) {

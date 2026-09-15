@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.49
+Stable tag: 3.7.50
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,18 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.50 - 2026-09-15 =
+- **Fix:** Added hardening and authorization fixes for reported issues.
+- **Fix:** Fixed instructor order status [PRO].
+- **Fix:** Fixed an `_load_textdomain_just_in_time` notices.
+- **Fix:** Fixed the Courses admin page not loading when the site language was set to Deutsch (Sie).
+- **Fix:** Fixed pagination in the Events Grid widget.
+- **Fix:** Fixed course statuses and levels not being applied or displayed correctly in Elementor widgets.
+- **Fix:** Fixed the Upcoming Course card display for instructors in the user account [PRO].
+- **Fix:** Fixed the Preview Video showing a “Video source is missing or invalid” error after changing the video source option.
+- **Fix:** Fixed the `Allow Instructors to Create Course Subscriptions` setting not being applied correctly [PRO].
+- **Fix:** Fixed course price information disappearing from the backend and frontend after updating a course.
+
 = 3.7.49 - 2026-09-11 =
 - **Fix:** Minor bugfixes
 
@@ -325,19 +337,6 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fix:** Fixed UI issues with buttons in the WPML admin dashboard.
 
 = 3.7.46 - 2026-08-28 =
-- **Fix:** Minor bugfixes
-
-= 3.7.45 - 2026-08-26 =
-- **New**: Added a new Notifications addon[PRO].
-- **Update:** Updated the design of the Single Bundle page [PRO].
-- **Fix:** Cancelling a course bundle via a WooCommerce order was not working correctly [PRO].
-- **Fix:** SCORM course progress could not be reset [PRO].
-- **Fix:** Randomized answer images were not displayed after Quiz retake.
-
-= 3.7.44 - 2026-08-21 =
-- **Fix:** Minor bugfixes
-
-= 3.7.43 - 2026-08-19 =
 - **Fix:** Minor bugfixes
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

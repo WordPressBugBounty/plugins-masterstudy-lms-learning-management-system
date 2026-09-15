@@ -2,6 +2,9 @@
 
 /**
  * @var $course_id
+ * @var $course
+ * @var $has_bottom
+ * @var $instructor_card
  * @var $mode
  * @var $show_title
  */
@@ -9,6 +12,10 @@ $coming_soon                    = get_post_meta( $course_id, 'coming_soon_status
 $coming_soon_start_date         = get_post_meta( $course_id, 'coming_soon_date', true );
 $coming_soon_email_notification = get_post_meta( $course_id, 'coming_soon_email_notification', true );
 $is_course_coming_soon          = STM_LMS_Helpers::masterstudy_lms_is_course_coming_soon( $course_id );
+$course                         = ( isset( $course ) && is_array( $course ) ) ? $course : array();
+$has_bottom                     = (bool) ( $has_bottom ?? false );
+$instructor_card                = (bool) ( $instructor_card ?? false );
+$mode                           = $mode ?? '';
 $show_title                     = $show_title ?? true;
 
 if ( ! $is_course_coming_soon || empty( $coming_soon_start_date ) ) {
@@ -43,6 +50,13 @@ wp_localize_script(
 $coming_soon_message = get_post_meta( $course_id, 'coming_soon_message', true );
 $count_down_id       = "countdown_$course_id";
 $start_time          = intval( masterstudy_lms_coming_soon_start_time( $course_id ) );
+$formatted_date      = wp_date( get_option( 'date_format' ), $start_time );
+$last_updated        = $course['updated'] ?? '';
+
+if ( $instructor_card && empty( $last_updated ) ) {
+	$course_post  = get_post( $course_id );
+	$last_updated = $course_post ? stm_lms_time_elapsed_string( $course_post->post_modified ) : '';
+}
 
 $user_subscribed   = false;
 $subscribed_emails = get_post_meta( $course_id, 'coming_soon_student_emails', true );
@@ -53,12 +67,61 @@ if ( empty( $subscribed_emails ) ) {
 }
 
 if ( 'card' === $mode ) {
+	if ( $instructor_card && ! empty( $course ) ) {
+		?>
+		<div class="masterstudy-coming-soon-card <?php echo esc_attr( $has_bottom ? 'masterstudy-coming-soon-card_has-bottom' : '' ); ?>">
+			<div class="masterstudy-coming-soon-card__header">
+				<div class="masterstudy-coming-soon-card__column">
+					<div class="masterstudy-coming-soon-card__status">
+						<span class="masterstudy-coming-soon-card__status-title">
+							<?php echo esc_html__( 'Course status', 'masterstudy-lms-learning-management-system' ); ?>:
+						</span>
+						<span class="masterstudy-coming-soon-card__status-value">
+							<?php echo esc_html__( 'Coming Soon', 'masterstudy-lms-learning-management-system' ); ?>
+						</span>
+					</div>
+					<div class="masterstudy-coming-soon-card__date">
+						<?php echo esc_html( $formatted_date ); ?>
+					</div>
+				</div>
+				<span class="masterstudy-coming-soon-card__action-button masterstudy-instructor-course-actions__modal-btn">
+					<i class="stmlms-course-modal-menu"></i>
+				</span>
+			</div>
+			<div class="masterstudy-coming-soon-card__timer coming-soon-card-countdown-container">
+				<?php
+				STM_LMS_Templates::show_lms_template(
+					'components/countdown',
+					array(
+						'id'         => $count_down_id,
+						'start_time' => $start_time * 1000,
+						'dark_mode'  => false,
+						'style'      => 'default',
+					),
+				);
+				?>
+			</div>
+			<?php if ( ! empty( $last_updated ) ) { ?>
+				<div class="masterstudy-coming-soon-card__updated">
+					<span class="masterstudy-coming-soon-card__updated-title">
+						<?php echo esc_html__( 'Last updated', 'masterstudy-lms-learning-management-system' ); ?>:
+					</span>
+					<span class="masterstudy-coming-soon-card__updated-value">
+						<?php echo esc_html( $last_updated ); ?>
+					</span>
+				</div>
+			<?php } ?>
+		</div>
+		<?php
+
+		return;
+	}
 	?>
 	<div class="coming-soon-card-countdown-container">
 		<div class="coming-soon-card-details">
 			<?php esc_html_e( 'Coming soon:', 'masterstudy-lms-learning-management-system' ); ?>
 			<span>
-				<?php echo esc_html( wp_date( get_option( 'date_format' ), $start_time ) ); ?>
+				<?php echo esc_html( $formatted_date ); ?>
 			</span>
 		</div>
 		<?php

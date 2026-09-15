@@ -6,7 +6,14 @@ use WP_REST_Request;
 
 class UserController extends \WP_REST_Users_Controller {
 	public function search( WP_REST_Request $request ) {
-		return $this->get_items( $this->prepare_wp_request( $request ) );
+		$wp_request = $this->prepare_wp_request( $request );
+		$permission = $this->get_items_permissions_check( $wp_request );
+
+		if ( is_wp_error( $permission ) || true !== $permission ) {
+			return $permission;
+		}
+
+		return $this->get_items( $wp_request );
 	}
 
 	/**

@@ -372,6 +372,7 @@ final class StudentsRepository {
 		$course_id          = (int) $course_id;
 		$email              = sanitize_email( $data['email'] ?? '' );
 		$user               = $email ? get_user_by( 'email', $email ) : false;
+		$user_existed       = ! empty( $user );
 		$is_enrolled        = false;
 		$is_enrolled_before = false;
 
@@ -389,7 +390,7 @@ final class StudentsRepository {
 			$user        = get_user_by( 'email', $email );
 			$is_enrolled = true;
 
-			if ( $user && ( $first_name || $last_name ) ) {
+			if ( $user && ( ! $user_existed || $is_enrolled_before ) && ( $first_name || $last_name ) ) {
 				wp_update_user(
 					array(
 						'ID'           => $user->ID,
@@ -411,12 +412,14 @@ final class StudentsRepository {
 
 	public function add_students_bulk( int $course_id, array $students ): array {
 		$emails_map = array(); // email => student row.
+		$user_existed = array();
 		foreach ( $students as $row ) {
 			$email = sanitize_email( $row['email'] ?? '' );
 			if ( empty( $email ) ) {
 				continue;
 			}
 			$emails_map[ $email ] = $row; // de-duplicate by email.
+			$user_existed[ $email ] = (bool) get_user_by( 'email', $email );
 		}
 
 		$emails = array_keys( $emails_map );
@@ -446,8 +449,14 @@ final class StudentsRepository {
 
 		// If the LMS function returns per-email errors, map them; otherwise treat as success.
 		$failed = array();
-		if ( ! empty( $added['error'] ) && ! empty( $added['errors'] ) && is_array( $added['errors'] ) ) {
-			$failed = $added['errors'];
+		if ( ! empty( $added['error'] ) ) {
+			if ( ! empty( $added['errors'] ) && is_array( $added['errors'] ) ) {
+				$failed = $added['errors'];
+			} else {
+				foreach ( $emails as $email ) {
+					$failed[ $email ] = $added['message'] ?? esc_html__( 'Unable to add student to course.', 'masterstudy-lms-learning-management-system' );
+				}
+			}
 		}
 
 		$results = array();
@@ -470,7 +479,7 @@ final class StudentsRepository {
 			$first_name = sanitize_text_field( trim( (string) ( $row['first_name'] ?? '' ) ) );
 			$last_name  = sanitize_text_field( trim( (string) ( $row['last_name'] ?? '' ) ) );
 
-			if ( $user && ( $first_name || $last_name ) ) {
+			if ( $user && ( empty( $user_existed[ $email ] ) || ! empty( $enrolled_before[ $email ] ) ) && ( $first_name || $last_name ) ) {
 				wp_update_user(
 					array(
 						'ID'           => $user->ID,

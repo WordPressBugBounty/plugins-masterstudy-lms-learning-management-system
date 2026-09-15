@@ -784,8 +784,9 @@ class STM_LMS_Helpers {
 	}
 
 	public static function get_course_levels() {
-		$levels      = STM_LMS_Options::get_option( 'course_levels_config' );
-		$user_levels = array();
+		$levels       = STM_LMS_Options::get_option( 'course_levels_config' );
+		$translations = self::translations_for_levels();
+		$user_levels  = array();
 		if ( ! empty( $levels ) ) {
 			foreach ( $levels as $level ) {
 				if ( empty( $level['label'] ) ) {
@@ -793,7 +794,7 @@ class STM_LMS_Helpers {
 				}
 
 				$level_id                 = self::get_course_config_id( $level, 'level_', array_keys( $user_levels ) );
-				$user_levels[ $level_id ] = $level['label'];
+				$user_levels[ $level_id ] = $translations[ $level['label'] ] ?? $level['label'];
 			}
 		}
 
@@ -808,6 +809,14 @@ class STM_LMS_Helpers {
 		}
 
 		return $user_levels;
+	}
+
+	private static function translations_for_levels(): array {
+		return array(
+			'Beginner'     => esc_html__( 'Beginner', 'masterstudy-lms-learning-management-system' ),
+			'Intermediate' => esc_html__( 'Intermediate', 'masterstudy-lms-learning-management-system' ),
+			'Advanced'     => esc_html__( 'Advanced', 'masterstudy-lms-learning-management-system' ),
+		);
 	}
 
 	private static function translations_for_statuses(): array {

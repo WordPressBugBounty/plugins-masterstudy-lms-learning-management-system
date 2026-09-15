@@ -27,6 +27,10 @@ final class CoursePlayerRepository {
 
 	public function get_main_data( string $page_path, int $lesson_id ): array {
 		$course           = get_page_by_path( $page_path, OBJECT, PostType::COURSE );
+		if ( ! $course instanceof \WP_Post ) {
+			return array();
+		}
+
 		$post_id          = apply_filters( 'wpml_object_id', $course->ID, 'post' ) ?? $course->ID;
 		$user_id          = get_current_user_id();
 		$settings         = get_option( 'stm_lms_settings' );

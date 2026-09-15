@@ -118,6 +118,15 @@ final class EnrolledQuizzesRepository {
 		$page      = $request['current_page'] ?? 1;
 		$offset    = ( $page - 1 ) * $per_page;
 
+		if ( ! $this->can_view_attempts( $course_id, $quiz_id, $user_id ) ) {
+			return array(
+				'attempts'     => array(),
+				'pages'        => 0,
+				'current_page' => (int) $page,
+				'total'        => true,
+			);
+		}
+
 		$quiz_attempts = stm_lms_get_quiz_all_attempts( $user_id, $course_id, $quiz_id, $per_page, $offset );
 		$total         = stm_lms_get_quiz_all_attempts( $user_id, $course_id, $quiz_id, $per_page, $offset, true );
 
@@ -160,6 +169,10 @@ final class EnrolledQuizzesRepository {
 		$course_id  = $request['course_id'] ?? null;
 		$quiz_id    = $request['quiz_id'] ?? null;
 
+		if ( ! $this->can_view_attempts( $course_id, $quiz_id, $user_id ) ) {
+			return array();
+		}
+
 		$attempt = stm_lms_get_attempt( $attempt_id, $user_id, $quiz_id, $course_id );
 
 		if ( empty( $attempt ) ) {
@@ -167,6 +180,10 @@ final class EnrolledQuizzesRepository {
 		}
 
 		$quiz_data  = ( new CoursePlayerRepository() )->get_quiz_data( $quiz_id, $user_id, $course_id );
+		if ( empty( $quiz_data ) ) {
+			return array();
+		}
+
 		$emoji_type = $attempt['progress'] < $quiz_data['passing_grade'] ? 'assignments_quiz_failed_emoji' : 'assignments_quiz_passed_emoji';
 
 		return wp_parse_args(
@@ -202,6 +219,10 @@ final class EnrolledQuizzesRepository {
 		$dark_mode    = $request['dark_mode'] ?? false;
 		$show_answers = $request['show_answers'] ?? false;
 
+		if ( ! $this->can_view_attempts( $course_id, $quiz_id, $user_id ) ) {
+			return array();
+		}
+
 		$attempt = stm_lms_get_attempt( $attempt_id, $user_id, $quiz_id, $course_id );
 
 		if ( empty( $attempt ) ) {
@@ -213,6 +234,10 @@ final class EnrolledQuizzesRepository {
 		}
 
 		$quiz_data          = $this->course_player->get_quiz_data( $quiz_id );
+		if ( empty( $quiz_data ) ) {
+			return array();
+		}
+
 		$questions_quantity = count( $attempt['answers'] );
 		$correct_answers    = count( array_filter( $attempt['answers'], fn( $item ) => isset( $item['correct_answer'] ) && '1' === $item['correct_answer'] ) );
 		$incorrect_answers  = count( array_filter( $attempt['answers'], fn( $item ) => isset( $item['correct_answer'] ) && '0' === $item['correct_answer'] ) );
@@ -298,5 +323,20 @@ final class EnrolledQuizzesRepository {
 
 	private function get_grade_point( int $progress ) {
 		return is_ms_lms_addon_enabled( 'grades' ) ? GradeCalculator::get_instance()->calculate( $progress )['point'] : '';
+	}
+
+	private function can_view_attempts( $course_id, $quiz_id, int $user_id ): bool {
+		$course_id = absint( $course_id );
+		$quiz_id   = absint( $quiz_id );
+
+		if ( empty( $course_id ) || empty( $quiz_id ) || empty( $user_id ) ) {
+			return false;
+		}
+
+		if ( ! ( new StudentsRepository() )->is_student_enrolled_in_course( $course_id, $user_id ) ) {
+			return false;
+		}
+
+		return stm_lms_attempts_exists( $course_id, $quiz_id, $user_id );
 	}
 }

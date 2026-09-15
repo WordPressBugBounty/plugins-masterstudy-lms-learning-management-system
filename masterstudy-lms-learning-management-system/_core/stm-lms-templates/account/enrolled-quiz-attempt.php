@@ -22,6 +22,11 @@ wp_enqueue_style( 'masterstudy-account-enrolled-quiz-attempt' );
 $quiz_data   = ( new EnrolledQuizzesRepository() )->get_attempt( compact( 'quiz_id', 'course_id', 'attempt_id' ) );
 $is_answered = ! empty( $quiz_data['last_answers'] );
 
+if ( empty( $quiz_data ) ) {
+	wp_safe_redirect( ms_plugin_user_account_url( 'enrolled-quizzes' ) );
+	exit;
+}
+
 do_action( 'masterstudy_lms_course_player_register_assets' );
 ?>
 
