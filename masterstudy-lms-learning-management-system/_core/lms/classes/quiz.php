@@ -162,6 +162,9 @@ class STM_LMS_Quiz {
 			}
 
 			$user_answer    = is_array( $answer ) ? implode( ',', $answer ) : $answer;
+			if ( 'multi_choice' === $type && is_array( $answer ) ) {
+				$user_answer = implode( ',', self::encode_answers( $answer ) );
+			}
 			$correct_answer = self::check_answer( $question_id, $answer, array(), $questions_order );
 			$progress      += $correct_answer ? $score_per_question : 0;
 			$user_answer_id = stm_lms_add_user_answer( compact( 'user_id', 'course_id', 'quiz_id', 'question_id', 'attempt_number', 'user_answer', 'correct_answer', 'questions_order' ) );
@@ -359,6 +362,99 @@ class STM_LMS_Quiz {
 			$answers = wp_kses_post( rawurlencode( $answers ) );
 		}
 		return $answers;
+	}
+
+	public static function parse_multi_choice_user_answers( string $stored_answer, array $options ): array {
+		if ( '' === trim( $stored_answer ) ) {
+			return array();
+		}
+
+		$normalized_options = array_values(
+			array_filter(
+				array_map( 'strval', $options ),
+				static function ( string $option ): bool {
+					return '' !== trim( $option );
+				}
+			)
+		);
+
+		if ( empty( $normalized_options ) ) {
+			return array();
+		}
+
+		$decoded_answers = array_values(
+			array_filter(
+				array_map(
+					'trim',
+					array_map( 'rawurldecode', explode( ',', $stored_answer ) )
+				),
+				static function ( string $value ): bool {
+					return '' !== $value;
+				}
+			)
+		);
+
+		if ( self::contains_only_known_multi_choice_answers( $decoded_answers, $normalized_options ) ) {
+			return $decoded_answers;
+		}
+
+		$legacy_answers = self::parse_legacy_multi_choice_user_answers( $stored_answer, $normalized_options );
+		if ( ! empty( $legacy_answers ) ) {
+			return $legacy_answers;
+		}
+
+		return $decoded_answers;
+	}
+
+	private static function contains_only_known_multi_choice_answers( array $answers, array $options ): bool {
+		if ( empty( $answers ) ) {
+			return true;
+		}
+
+		foreach ( $answers as $answer ) {
+			if ( ! in_array( $answer, $options, true ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private static function parse_legacy_multi_choice_user_answers( string $stored_answer, array $options ): array {
+		$memo    = array();
+		$matcher = function ( int $option_index, int $offset, bool $has_selected ) use ( $stored_answer, $options, &$matcher, &$memo ) {
+			$key = "{$option_index}|{$offset}|" . ( $has_selected ? '1' : '0' );
+			if ( array_key_exists( $key, $memo ) ) {
+				return $memo[ $key ];
+			}
+
+			if ( $option_index >= count( $options ) ) {
+				$memo[ $key ] = strlen( $stored_answer ) === $offset ? array() : false;
+				return $memo[ $key ];
+			}
+
+			$skip = $matcher( $option_index + 1, $offset, $has_selected );
+			if ( false !== $skip ) {
+				$memo[ $key ] = $skip;
+				return $memo[ $key ];
+			}
+
+			$piece = ( $has_selected ? ',' : '' ) . $options[ $option_index ];
+			$size  = strlen( $piece );
+			if ( substr( $stored_answer, $offset, $size ) === $piece ) {
+				$rest = $matcher( $option_index + 1, $offset + $size, true );
+				if ( false !== $rest ) {
+					$memo[ $key ] = array_merge( array( $options[ $option_index ] ), $rest );
+					return $memo[ $key ];
+				}
+			}
+
+			$memo[ $key ] = false;
+			return false;
+		};
+
+		$matches = $matcher( 0, 0, false );
+		return false === $matches ? array() : $matches;
 	}
 
 	public static function sanitize_answers( $answers ) {

@@ -19,9 +19,13 @@ class STM_LMS_Guest_Checkout {
 	}
 
 	private function users_can_register(): bool {
-		return function_exists( 'masterstudy_lms_users_can_register' )
-			? masterstudy_lms_users_can_register()
-			: (bool) get_option( 'users_can_register' );
+		if ( function_exists( 'masterstudy_lms_users_can_register' ) ) {
+			return masterstudy_lms_users_can_register();
+		}
+
+		$settings = get_option( 'stm_lms_settings', array() );
+
+		return empty( $settings['restrict_registration'] );
 	}
 
 	private static function build_activation_checkout_url( $token ) {

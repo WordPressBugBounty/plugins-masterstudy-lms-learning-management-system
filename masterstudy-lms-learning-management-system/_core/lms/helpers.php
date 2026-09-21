@@ -44,14 +44,9 @@ if ( ! function_exists( 'masterstudy_lms_user_session_limit_reached' ) ) {
 
 if ( ! function_exists( 'masterstudy_lms_users_can_register' ) ) {
 	function masterstudy_lms_users_can_register(): bool {
-		if ( is_multisite() ) {
-			$network_registration = get_site_option( 'registration', 'none' );
-			if ( ! in_array( $network_registration, array( 'user', 'all' ), true ) ) {
-				return false;
-			}
-		}
+		$settings = get_option( 'stm_lms_settings', array() );
 
-		return (bool) get_option( 'users_can_register' );
+		return empty( $settings['restrict_registration'] );
 	}
 }
 
@@ -1615,16 +1610,97 @@ function masterstudy_lms_admin_bar_settings_menu( $wp_admin_bar ) {
 		return;
 	}
 
+	$is_free_version = ! STM_LMS_Helpers::is_pro();
+
 	$wp_admin_bar->add_node(
 		array(
 			'id'    => 'lms-settings',
-			'title' => '<img src="' . STM_LMS_URL . 'assets/admin/icon.svg" /> ' . esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ),
+			'title' => '<img src="' . STM_LMS_URL . 'assets/admin/icon.svg" /> ' . esc_html__( 'MasterStudy', 'masterstudy-lms-learning-management-system' ),
 			'href'  => admin_url( 'admin.php?page=stm-lms-settings' ),
 			'meta'  => array(
-				'title' => esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ),
+				'class' => 'ms-lms-admin-menu',
+				'title' => esc_html__( 'MasterStudy', 'masterstudy-lms-learning-management-system' ),
 			),
 		)
 	);
+
+	$wp_admin_bar->add_node(
+		array(
+			'id'     => 'lms-settings-courses',
+			'parent' => 'lms-settings',
+			'title'  => esc_html__( 'Courses', 'masterstudy-lms-learning-management-system' ),
+			'href'   => admin_url( 'edit.php?post_type=stm-courses' ),
+			'meta'   => array(
+				'class' => 'ms-lms-admin-menu-item',
+			),
+		)
+	);
+
+	$wp_admin_bar->add_node(
+		array(
+			'id'     => 'lms-settings-add-new-course',
+			'parent' => 'lms-settings',
+			'title'  => esc_html__( 'Add New Course', 'masterstudy-lms-learning-management-system' ),
+			'href'   => admin_url( 'post-new.php?post_type=stm-courses' ),
+			'meta'   => array(
+				'class' => 'ms-lms-admin-menu-item',
+			),
+		)
+	);
+
+	$wp_admin_bar->add_node(
+		array(
+			'id'     => 'lms-settings-global-settings',
+			'parent' => 'lms-settings',
+			'title'  => esc_html__( 'Settings', 'masterstudy-lms-learning-management-system' ),
+			'href'   => admin_url( 'admin.php?page=stm-lms-settings' ),
+			'meta'   => array(
+				'class' => 'ms-lms-admin-menu-item',
+			),
+		)
+	);
+
+	$wp_admin_bar->add_node(
+		array(
+			'id'     => 'lms-settings-community',
+			'parent' => 'lms-settings',
+			'title'  => esc_html__( 'Community', 'masterstudy-lms-learning-management-system' ),
+			'href'   => 'https://www.facebook.com/groups/masterstudylms',
+			'meta'   => array(
+				'class'  => 'ms-lms-admin-menu-item',
+				'target' => '_blank',
+				'rel'    => 'noopener noreferrer',
+			),
+		)
+	);
+
+	$wp_admin_bar->add_node(
+		array(
+			'id'     => 'lms-settings-documentation',
+			'parent' => 'lms-settings',
+			'title'  => esc_html__( 'Documentation', 'masterstudy-lms-learning-management-system' ),
+			'href'   => 'https://docs.stylemixthemes.com/masterstudy-lms/',
+			'meta'   => array(
+				'class'  => 'ms-lms-admin-menu-item',
+				'target' => '_blank',
+				'rel'    => 'noopener noreferrer',
+			),
+		)
+	);
+
+	if ( $is_free_version ) {
+		$wp_admin_bar->add_node(
+			array(
+				'id'     => 'lms-settings-upgrade',
+				'parent' => 'lms-settings',
+				'title'  => esc_html__( 'Upgrade', 'masterstudy-lms-learning-management-system' ),
+				'href'   => admin_url( 'admin.php?page=stm-lms-go-pro' ),
+				'meta'   => array(
+					'class' => 'ms-lms-admin-menu-item ms-lms-admin-menu-item-upgrade',
+				),
+			)
+		);
+	}
 }
 add_action( 'admin_bar_menu', 'masterstudy_lms_admin_bar_settings_menu', 40 );
 

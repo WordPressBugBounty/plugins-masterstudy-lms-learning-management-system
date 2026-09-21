@@ -25,7 +25,11 @@ final class CourseListSerializer extends AbstractSerializer {
 
 		return array(
 			'id'                 => (int) $course->ID,
-			'title'              => get_the_title( $course->ID ),
+			'title'              => html_entity_decode(
+				get_the_title( $course->ID ),
+				ENT_QUOTES | ENT_HTML5,
+				'UTF-8'
+			),
 			'category'           => $term ? array(
 				'id'   => (int) $term->term_id,
 				'name' => (string) $term->name,

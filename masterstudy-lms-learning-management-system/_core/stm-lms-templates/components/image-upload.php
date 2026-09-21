@@ -48,16 +48,7 @@ wp_localize_script(
 		</span>
 		<div class="masterstudy-image-upload__field-text">
 			<p>
-				<?php
-				$label = __( 'file', 'masterstudy-lms-learning-management-system' );
-				echo esc_html(
-					sprintf(
-					/* translators: %s string */
-						__( 'Drag %s here or click the button.', 'masterstudy-lms-learning-management-system' ),
-						$label
-					),
-				);
-				?>
+				<?php echo esc_html__( 'Drag file here or click the button.', 'masterstudy-lms-learning-management-system' ); ?>
 			</p>
 			<?php
 			if ( ! empty( $allowed_extensions ) ) {

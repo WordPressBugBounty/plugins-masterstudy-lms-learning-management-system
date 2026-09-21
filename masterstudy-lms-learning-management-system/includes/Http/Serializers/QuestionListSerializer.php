@@ -18,7 +18,11 @@ final class QuestionListSerializer extends AbstractSerializer {
 
 		return array(
 			'id'       => (int) $post->ID,
-			'title'    => get_the_title( $post->ID ),
+			'title'    => html_entity_decode(
+				get_the_title( $post->ID ),
+				ENT_QUOTES | ENT_HTML5,
+				'UTF-8'
+			),
 			'type'     => (string) get_post_meta( $post->ID, 'type', true ),
 			'category' => $term ? array(
 				'id'   => (int) $term->term_id,

@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.50
+Stable tag: 3.7.51
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,25 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.51 - 2026-09-21 =
+- **New:** Added Quick Links to the top admin bar for MasterStudy plugin pages.
+- **Fix:** Fixed PDF Lesson rendering issues for Latin characters when Arabic (RTL) text is present.
+- **Fix:** Fixed hover notification display for Instructors, Reviews, and Courses in the admin panel.
+- **Fix:** Fixed an issue where multiple-choice questions marked correct answers as incorrect when an answer contained a comma.
+- **Fix:** Fixed custom course status display in the user account.
+- **Fix:** Fixed an issue where Unlimited Attempts in quizzes always displayed 0 attempts.
+- **Fix:** Fixed student statistics not loading on public student profiles due to REST API authorization.
+- **Fix:** Fixed Composer autoloader warnings caused by unavailable AI Lab files in the PRO package [PRO].
+- **Fix:** Fixed the file upload instruction in account settings not being translatable.
+- **Fix:** Fixed HTML entities appearing in Course, Lesson, Assignment, Quiz, and Question titles in the admin dashboard.
+- **Fix:** Fixed the AI Lab quiz prompt placeholder not being translatable [PRO].
+- **Fix:** Fixed translations for trial duration and localized dates on the checkout and Thank You pages [PRO].
+- **Fix:** Fixed bulk orders not being deleted from the admin dashboard.
+- **Fix:** Fixed quiz pagination disappearing after retaking a quiz.
+- **Fix:** Fixed scrolling in the File Manager when selecting an image for a quiz question [PRO].
+- **Fix:** Fixed MasterStudy registration incorrectly depending on the WordPress `Anyone can register` setting.
+- **Fix:** Fixed Course Builder strings not being discoverable in WPML String Translation.
+
 = 3.7.50 - 2026-09-15 =
 - **Fix:** Added hardening and authorization fixes for reported issues.
 - **Fix:** Fixed instructor order status [PRO].
@@ -335,8 +354,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Update:** Added translations for LMS inner pages.
 - **Fix:** Fixed compatibility issues with WPML.
 - **Fix:** Fixed UI issues with buttons in the WPML admin dashboard.
-
-= 3.7.46 - 2026-08-28 =
-- **Fix:** Minor bugfixes
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

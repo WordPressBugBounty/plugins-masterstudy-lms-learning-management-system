@@ -16,6 +16,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       if (window.MasterstudyCoursePlayerQuestions && typeof window.MasterstudyCoursePlayerQuestions.init === 'function') {
         window.MasterstudyCoursePlayerQuestions.init($scope);
       }
+      if (window.MasterstudyPagination && typeof window.MasterstudyPagination.init === 'function') {
+        window.MasterstudyPagination.init($scope);
+      }
     }
     function showQuizInterface() {
       $('.masterstudy-course-player-quiz__form').removeClass('masterstudy-course-player-quiz__form_hide');

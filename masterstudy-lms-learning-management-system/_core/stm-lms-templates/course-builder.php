@@ -121,14 +121,12 @@ foreach ( $load_scripts as $handle ) {
 	<?php endif; ?>
 </script>
 <?php
-$scripts->print_translations( 'ms-lms-course-builder-translations' );
-
 if ( ! class_exists( '\_WP_Editors', false ) ) {
 	require ABSPATH . WPINC . '/class-wp-editor.php';
 }
 ?>
 <script type="module" src="<?php echo esc_url( $entry_script_url ); // phpcs:ignore ?>"></script>
-<script src="<?php echo esc_url( $ms_lms_get_asset_src( $scripts->registered['ms-lms-course-builder-translations'], $scripts ) ); // phpcs:ignore ?>"></script>
+<?php wp_print_scripts( 'ms-lms-course-builder-translations' ); ?>
 <?php
 if ( ! empty( $additional_scripts ) ) {
 	foreach ( $additional_scripts as $script_url ) {

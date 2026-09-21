@@ -17,6 +17,14 @@ if ( ! empty( $data['last_answers']['questions_order'] ) ) {
 
 $is_multi_choice = 'multi' === $choice;
 $input_type      = $is_multi_choice ? 'checkbox' : 'radio';
+$option_values   = array_map(
+	static function ( array $answer ): string {
+		return ! empty( $answer['text_image']['url'] )
+			? trim( rawurldecode( (string) $answer['text'] ) ) . '|' . (string) $answer['text_image']['url']
+			: trim( rawurldecode( (string) $answer['text'] ) );
+	},
+	$data['answers']
+);
 
 foreach ( $data['answers'] as $answer ) {
 	$correctly    = false;
@@ -31,7 +39,7 @@ foreach ( $data['answers'] as $answer ) {
 
 		if ( $is_multi_choice ) {
 			$last_answers = ! empty( $user_answer )
-				? array_map( 'rawurldecode', explode( ',', $user_answer ) )
+				? STM_LMS_Quiz::parse_multi_choice_user_answers( (string) $user_answer, $option_values )
 				: array();
 		} else {
 			$last_answers = ! empty( $user_answer )

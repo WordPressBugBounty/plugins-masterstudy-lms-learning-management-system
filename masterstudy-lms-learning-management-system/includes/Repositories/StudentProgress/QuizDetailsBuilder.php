@@ -205,8 +205,16 @@ final class QuizDetailsBuilder {
 	}
 
 	private function normalize_multiple_choice_answers( array $answers, array $last_answers, bool $show_correct_answer ): array {
-		$user_answers = ! empty( $last_answers['user_answer'] )
-			? array_map( 'rawurldecode', explode( ',', (string) $last_answers['user_answer'] ) )
+		$option_values = array_map(
+			static function ( array $answer ): string {
+				return ! empty( $answer['text_image']['url'] )
+					? trim( rawurldecode( (string) $answer['text'] ) ) . '|' . (string) $answer['text_image']['url']
+					: trim( rawurldecode( (string) $answer['text'] ) );
+			},
+			$answers
+		);
+		$user_answers  = ! empty( $last_answers['user_answer'] )
+			? \STM_LMS_Quiz::parse_multi_choice_user_answers( (string) $last_answers['user_answer'], $option_values )
 			: array();
 		$normalized   = array();
 

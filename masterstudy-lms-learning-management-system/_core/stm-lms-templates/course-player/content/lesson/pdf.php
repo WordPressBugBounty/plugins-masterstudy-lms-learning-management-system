@@ -61,7 +61,7 @@ if ( $allow_bookmarks ) {
 				<button class="masterstudy-pdf-btn masterstudy-pdf-container__back-btn">
 					<span class="stmlms-arrow-left"></span>
 				</button>
-				<div class="masterstudy-pdf-container__canvas" style="--scale-factor: 1">
+				<div class="masterstudy-pdf-container__canvas" dir="ltr" style="--scale-factor: 1">
 					<canvas class="masterstudy-pdf-container__pdf-view"></canvas>
 					<div class="textLayer"></div>
 				</div>

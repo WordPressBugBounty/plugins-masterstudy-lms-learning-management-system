@@ -96,14 +96,17 @@ $classes        .= $dark_mode ? ' masterstudy-file-upload_dark-mode' : '';
 			<div class="masterstudy-file-upload__field-text">
 				<p>
 					<?php
-					$label = $multiple ? __( 'files', 'masterstudy-lms-learning-management-system' ) : __( 'file', 'masterstudy-lms-learning-management-system' );
-					echo esc_html(
-						sprintf(
-						/* translators: %s string */
-							__( 'Drag %s here or click the button.', 'masterstudy-lms-learning-management-system' ),
-							$label
-						),
-					);
+					if ( $multiple ) {
+						echo esc_html(
+							sprintf(
+							/* translators: %s: files. */
+								__( 'Drag %s here or click the button.', 'masterstudy-lms-learning-management-system' ),
+								__( 'files', 'masterstudy-lms-learning-management-system' )
+							)
+						);
+					} else {
+						echo esc_html__( 'Drag file here or click the button.', 'masterstudy-lms-learning-management-system' );
+					}
 					?>
 				</p>
 				<?php

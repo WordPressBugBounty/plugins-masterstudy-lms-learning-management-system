@@ -20,7 +20,11 @@ final class QuizListSerializer extends AbstractSerializer {
 
 		return array(
 			'id'                   => (int) $post->ID,
-			'title'                => get_the_title( $post->ID ),
+			'title'                => html_entity_decode(
+				get_the_title( $post->ID ),
+				ENT_QUOTES | ENT_HTML5,
+				'UTF-8'
+			),
 			'date'                 => (string) $post->post_date,
 			'date_formatted'       => \STM_LMS_Helpers::format_date( $post->post_date ),
 			'modified'             => $modified['datetime'],

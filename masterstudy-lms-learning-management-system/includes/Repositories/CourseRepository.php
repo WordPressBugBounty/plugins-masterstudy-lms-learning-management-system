@@ -868,6 +868,7 @@ final class CourseRepository extends AbstractRepository {
 		$is_coming_soon_enabled = is_ms_lms_addon_enabled( 'coming_soon' ) && function_exists( 'masterstudy_lms_coming_soon_start_time' );
 		$subscription_enabled   = \STM_LMS_Subscriptions::subscription_enabled();
 		$courses_statuses       = \STM_LMS_Helpers::get_course_statuses();
+		$course_levels          = \STM_LMS_Helpers::get_course_levels();
 		$is_featured_enabled    = \STM_LMS_Options::get_option( 'enable_featured_courses', false );
 
 		foreach ( $posts as &$post ) {
@@ -875,6 +876,7 @@ final class CourseRepository extends AbstractRepository {
 			$section_ids                = ( new CurriculumSectionRepository() )->get_course_section_ids( $post->ID );
 			$is_in_wishlist             = is_null( $user_wishlist ) ? 'not-authorized' : in_array( $post->ID, $user_wishlist, true );
 			$status_value               = $meta['status'][0] ?? null;
+			$level_value                = $meta['level'][0] ?? null;
 			$status_data                = null;
 			$coming_soon_start_time     = $is_coming_soon_enabled ? intval( masterstudy_lms_coming_soon_start_time( $post->ID ) ) : false;
 			$coming_soon_date_formatted = ! empty( $coming_soon_start_time )
@@ -915,7 +917,9 @@ final class CourseRepository extends AbstractRepository {
 				'end_time'                   => intval( $meta['end_time'][0] ?? 0 ),
 				'featured'                   => ( $meta['featured'][0] ?? null ) === 'on' && $is_featured_enabled,
 				'lock_lesson'                => ( $meta['lock_lesson'][0] ?? null ) === 'on',
-				'level'                      => $meta['level'][0] ?? null,
+				'level'                      => $level_value,
+				'level_id'                   => $level_value,
+				'level_label'                => ! empty( $level_value ) && isset( $course_levels[ $level_value ] ) ? $course_levels[ $level_value ] : $level_value,
 				'status'                     => $status_value,
 				'status_data'                => $status_data,
 				'views'                      => $meta['views'][0] ?? 0,

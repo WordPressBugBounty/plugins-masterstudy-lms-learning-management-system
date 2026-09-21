@@ -18,7 +18,10 @@ class GetStudentStatsController {
 	public function __invoke( $student_id, WP_REST_Request $request ): \WP_REST_Response {
 		$student_id = (int) $student_id;
 
-		if ( ! UserAuthorization::can_access_private_data( $student_id ) ) {
+		if (
+			! UserAuthorization::can_access_private_data( $student_id )
+			&& ! UserAuthorization::can_access_public_student_stats( $student_id )
+		) {
 			return WpResponseFactory::forbidden();
 		}
 

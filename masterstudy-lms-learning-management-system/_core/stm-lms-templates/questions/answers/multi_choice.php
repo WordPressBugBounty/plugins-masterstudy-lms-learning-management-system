@@ -19,10 +19,18 @@ if ( ! empty( $user_answer['questions_order'] ) ) {
 $question_id                = get_the_ID();
 $show_correct_answer        = get_post_meta( $item_id, 'correct_answer', true );
 $is_correct                 = ( ! empty( $user_answer['correct_answer'] ) ) ? true : false;
-$user_answer['user_answer'] = ( ! empty( $user_answer['user_answer'] ) ) ? explode( ',', $user_answer['user_answer'] ) : array();
-$user_answer                = $user_answer['user_answer'];
 $is_image                   = (bool) ( ! empty( $question_view_type ) && 'image' === $question_view_type );
-$user_answer                = array_map( 'rawurldecode', $user_answer );
+$option_values              = array_map(
+	static function ( array $answer ): string {
+		return ! empty( $answer['text_image']['url'] )
+			? trim( rawurldecode( (string) $answer['text'] ) ) . '|' . (string) $answer['text_image']['url']
+			: trim( rawurldecode( (string) $answer['text'] ) );
+	},
+	$answers
+);
+$user_answer                = ! empty( $user_answer['user_answer'] )
+	? STM_LMS_Quiz::parse_multi_choice_user_answers( (string) $user_answer['user_answer'], $option_values )
+	: array();
 
 foreach ( $answers as $answer ) {
 	$answer_class = array();

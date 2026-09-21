@@ -58,7 +58,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   var nextBtn = $('.masterstudy-pdf-container__next-btn:visible');
   var textLayerDiv = document.querySelector('.textLayer');
   var linkService;
+  var applyPdfBidiIsolation = function applyPdfBidiIsolation() {
+    if (!canvasContainerRef) {
+      return;
+    }
+    canvasContainerRef.setAttribute('dir', 'ltr');
+    if (textLayerDiv) {
+      textLayerDiv.style.direction = 'ltr';
+      textLayerDiv.style.unicodeBidi = 'isolate';
+      textLayerDiv.querySelectorAll('span, br').forEach(function (el) {
+        el.style.color = 'transparent';
+        el.style.webkitTextFillColor = 'transparent';
+        el.style.textShadow = 'none';
+      });
+    }
+    var annotationLayer = canvasContainerRef.querySelector('.annotationLayer');
+    if (!annotationLayer) {
+      return;
+    }
+    annotationLayer.setAttribute('dir', 'ltr');
+    annotationLayer.style.direction = 'ltr';
+    annotationLayer.style.unicodeBidi = 'isolate';
+    annotationLayer.querySelectorAll('input, textarea, select').forEach(function (field) {
+      field.setAttribute('dir', 'auto');
+      field.style.unicodeBidi = 'plaintext';
+      field.style.textAlign = 'start';
+    });
+  };
   $(toolbarTooltipRef).appendTo('.masterstudy-course-player-content');
+  applyPdfBidiIsolation();
   if (pdfReadAll) {
     submitButton.attr('disabled', 1);
     submitButton.addClass('masterstudy-button_disabled');
@@ -194,6 +222,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _context.next = 24;
               return annoBuilder.render(viewport);
             case 24:
+              applyPdfBidiIsolation();
+            case 25:
             case "end":
               return _context.stop();
           }

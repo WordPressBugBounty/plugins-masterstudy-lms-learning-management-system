@@ -129,14 +129,22 @@ use MasterStudy\Lms\Pro\AddonsPlus\Grades\Services\GradeDisplay;
 								<?php printf( /* translators: %d: number */ wp_kses_post( __( 'Passing grade <strong>%s</strong>', 'masterstudy-lms-learning-management-system' ) ), esc_html( $passing_grade_text ) ); ?>
 							</span>
 						<?php } ?>
-						<?php if ( $attempts_left >= 0 && 'limited' === $quiz_attempts && $progress < $passing_grade ) { ?>
+						<?php if ( $progress < $passing_grade ) { ?>
 							<span class="masterstudy-course-player-quiz__result-attempts-left">
 								<?php
-								printf(
-								/* translators: %d: number */
-									wp_kses_post( _n( '<strong>%d</strong> attempt left', '<strong>%d</strong> attempts left', $attempts_left, 'masterstudy-lms-learning-management-system' ) ),
-									esc_html( $attempts_left )
-								);
+								$has_limited_attempts = 'limited' === $quiz_attempts && ! empty( $quiz_data['attempts'] ) && (int) $quiz_data['attempts'] > 0;
+
+								if ( ! $has_limited_attempts ) {
+									esc_html_e( 'Unlimited attempts remaining', 'masterstudy-lms-learning-management-system' );
+								} else {
+									$attempts_left = max( 0, (int) $attempts_left );
+
+									printf(
+									/* translators: %d: number */
+										wp_kses_post( _n( '<strong>%d</strong> attempt left', '<strong>%d</strong> attempts left', $attempts_left, 'masterstudy-lms-learning-management-system' ) ),
+										esc_html( $attempts_left )
+									);
+								}
 								?>
 							</span>
 						<?php } ?>

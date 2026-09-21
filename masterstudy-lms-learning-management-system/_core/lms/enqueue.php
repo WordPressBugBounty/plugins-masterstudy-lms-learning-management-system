@@ -20,9 +20,47 @@ function stm_lms_wp_head() {
 		.vue_is_disabled {
 			display: none;
 		}
-		#wp-admin-bar-lms-settings img {
-			max-width: 16px;
-			vertical-align: sub;
+		
+		#wp-admin-bar-lms-settings .ab-item {
+			font-size: 14px;
+			padding-left: 20px !important;
+			padding-right: 20px !important;
+			display: flex !important;
+			align-items: center;
+		}
+		#wp-admin-bar-lms-settings .ab-item img {
+			margin-right: 10px;
+			width: 20px;
+			max-width: 20px;
+		}
+		#wpadminbar #wp-admin-bar-lms-settings > .ab-sub-wrapper > .ab-submenu {
+			padding: 0 !important;
+		}
+		#wp-admin-bar-lms-settings-global-settings {
+			max-width: 100%;
+			overflow: hidden;
+		}
+		.ms-lms-admin-menu-item .ab-item {
+			height: 100% !important;
+			font-size: 14px !important;
+			line-height: 17px !important;
+			padding: 6px 0 !important;
+			transition: 200ms ease;
+			color: rgba(255, 255, 255, 0.7);
+		}
+		#wp-admin-bar-lms-settings-upgrade .ab-item {
+			background-color: #227aff !important;
+			color: #fff !important;
+		}
+		#wp-admin-bar-lms-settings-upgrade .ab-item:hover {
+			background-color: #227aff !important;
+		}
+		.ms-lms-admin-menu-item:hover {
+			background-color: #227aff !important;
+		}
+		.ms-lms-admin-menu-item:hover a {
+			background-color: #227aff !important;
+			color: #fff !important;
 		}
 	</style>
 	<?php

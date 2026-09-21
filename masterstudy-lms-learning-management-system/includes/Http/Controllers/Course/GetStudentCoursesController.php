@@ -28,7 +28,10 @@ class GetStudentCoursesController {
 
 		$params = $validator->get_validated();
 
-		if ( ! UserAuthorization::can_access_private_data( (int) $params['user'] ) ) {
+		$student_id        = (int) $params['user'];
+		$is_public_request = UserAuthorization::can_access_public_student_courses( $student_id, $params['status'] ?? '' );
+
+		if ( ! UserAuthorization::can_access_private_data( $student_id ) && ! $is_public_request ) {
 			return WpResponseFactory::forbidden();
 		}
 

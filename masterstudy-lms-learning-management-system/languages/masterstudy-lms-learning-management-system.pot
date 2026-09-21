@@ -19511,12 +19511,14 @@ msgstr ""
 msgid "%1$s %2$s"
 msgstr ""
 
-#. translators: %s - trial period days
+#. translators: %s: Number of trial days.
 #: _core/stm-lms-templates/checkout/subscription-item.php:197
 #: _core/stm-lms-templates/checkout/thankyou.php:247
 #, php-format
-msgid "Trial %s day(s)"
-msgstr ""
+msgid "Trial %s day"
+msgid_plural "Trial %s days"
+msgstr[0] ""
+msgstr[1] ""
 
 #. translators: %s - payment number
 #: _core/stm-lms-templates/checkout/subscription-item.php:203
