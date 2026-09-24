@@ -7,6 +7,7 @@ use MasterStudy\Lms\Enums\LessonVideoType;
 use MasterStudy\Lms\Enums\QuestionType;
 use MasterStudy\Lms\Plugin\PostType;
 use MasterStudy\Lms\Plugin\Taxonomy;
+use MasterStudy\Lms\Utility\Question;
 use MasterStudy\Lms\Utility\Traits\VideoTrait;
 use MasterStudy\Lms\Utility\Wpml;
 use RuntimeException;
@@ -448,16 +449,19 @@ final class QuestionRepository extends AbstractRepository {
 						? stripslashes( rawurldecode( $data['user_answer'][ $match_index ] ) )
 						: null;
 
-					$user_answer  = trim( strtolower( stripslashes( rawurldecode( $data['user_answer'][ $match_index ] ) ) ) );
-					$match_answer = trim( strtolower( stripslashes( rawurldecode( html_entity_decode( $match_answer, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) ) ) );
-
-					$correct = ( isset( $data['user_answer'][ $match_index ] ) && $match_answer === $user_answer || $data['is_correct'] )
+					$correct = (
+						(
+							isset( $data['user_answer'][ $match_index ] )
+							&& Question::text_answers_match( $match_answer, $data['user_answer'][ $match_index ] )
+						)
+						|| $data['is_correct']
+					)
 						? 'masterstudy-course-player-fill-the-gap__check-correct'
 						: 'masterstudy-course-player-fill-the-gap__check-incorrect';
 
 					$data['correct_answer'][ $match_index ]           = "{$correct}";
 					$data['correct_user_answer'][ $match_index ]      = $data['is_correct'] ? $match['answer'] : "{$data['user_answer'][ $match_index ]}";
-					$data['show_correct_user_answer'][ $match_index ] = "{$match_answer}";
+					$data['show_correct_user_answer'][ $match_index ] = Question::normalize_answer_text( $match_answer );
 				}
 			}
 		}

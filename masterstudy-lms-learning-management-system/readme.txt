@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.51
+Stable tag: 3.7.52
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.52 - 2026-09-23 =
+- **Fix:** Fixed LMS Form Builder custom fields not being available in Email Manager registration templates [PRO].
+- **Fix:** Fixed the Group Course student limit setting not being applied correctly [PRO].
+- **Fix:** Fixed formatted Quiz Builder answers being marked as incorrect in Fill in the Gap and Keywords questions.
+- **Fix:** Fixed Course Builder notice dismissal interfering with other admin notices, including TranslatePress notices.
+
 = 3.7.51 - 2026-09-21 =
 - **New:** Added Quick Links to the top admin bar for MasterStudy plugin pages.
 - **Fix:** Fixed PDF Lesson rendering issues for Latin characters when Arabic (RTL) text is present.
@@ -348,11 +354,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 
 = 3.7.48 - 2026-09-04 =
 - **Fix:** Minor bugfixes
-
-= 3.7.47 - 2026-09-02 =
-- **New:** Added a new Calendar addon [PRO].
-- **Update:** Added translations for LMS inner pages.
-- **Fix:** Fixed compatibility issues with WPML.
-- **Fix:** Fixed UI issues with buttons in the WPML admin dashboard.
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

@@ -573,7 +573,7 @@ class STM_LMS_Quiz {
 
 					foreach ( $answers as $i => $correct_answer ) {
 						$correct = true;
-						if ( strtolower( $correct_answer['text'] ) !== strtolower( $answer[ $i ] ) ) {
+						if ( ! Question::text_answers_match( $correct_answer['text'], $answer[ $i ] ?? '' ) ) {
 							$correct = false;
 							break;
 						}
@@ -592,10 +592,7 @@ class STM_LMS_Quiz {
 								break;
 							}
 
-							$user_ans    = trim( strtolower( stripslashes( rawurldecode( $answer[ $i ] ) ) ) );
-							$correct_ans = trim( strtolower( stripslashes( rawurldecode( html_entity_decode( $correct_answer['answer'], ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) ) ) );
-
-							if ( $correct_ans !== $user_ans ) {
+							if ( ! Question::text_answers_match( $correct_answer['answer'], $answer[ $i ] ) ) {
 								$correct = false;
 								break;
 							}

@@ -698,6 +698,30 @@ class STM_LMS_User {
 		return $result;
 	}
 
+	private static function add_registration_form_fields_to_email_data( $email_data, $data ) {
+		if ( ! empty( $data['profile_default_fields_for_register'] ) && is_array( $data['profile_default_fields_for_register'] ) ) {
+			foreach ( $data['profile_default_fields_for_register'] as $field_key => $field ) {
+				if ( isset( $field['value'] ) ) {
+					$email_data[ $field_key ] = is_array( $field['value'] )
+						? implode( ', ', array_map( 'sanitize_text_field', $field['value'] ) )
+						: sanitize_text_field( $field['value'] );
+				}
+			}
+		}
+
+		if ( ! empty( $data['additional'] ) && is_array( $data['additional'] ) ) {
+			foreach ( $data['additional'] as $field ) {
+				if ( ! empty( $field['slug'] ) && isset( $field['value'] ) ) {
+					$email_data[ $field['slug'] ] = is_array( $field['value'] )
+						? implode( ', ', array_map( 'sanitize_text_field', $field['value'] ) )
+						: sanitize_text_field( $field['value'] );
+				}
+			}
+		}
+
+		return $email_data;
+	}
+
 	public static function _register_user( $user, $data, $user_email ) { // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
 		$login_data = array(
 			'user_login'    => $data['register_user_login'],
@@ -746,6 +770,7 @@ class STM_LMS_User {
 			'date'       => current_time( 'mysql' ),
 			'user_id'    => $user,
 		);
+		$email_data_register = self::add_registration_form_fields_to_email_data( $email_data_register, $data );
 
 		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data_register );
 
@@ -794,6 +819,7 @@ class STM_LMS_User {
 			'blog_name'         => STM_LMS_Helpers::masterstudy_lms_get_site_name(),
 			'site_url'          => \MS_LMS_Email_Template_Helpers::link( \STM_LMS_Helpers::masterstudy_lms_get_site_url() ),
 		);
+		$email_data = self::add_registration_form_fields_to_email_data( $email_data, $data );
 
 		$message = \MS_LMS_Email_Template_Helpers::render( $template, $email_data );
 

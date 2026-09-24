@@ -8,9 +8,11 @@
  * @var string $question_hint
  * @var string $item_id
  */
+use MasterStudy\Lms\Utility\Question;
+
 $question_id         = get_the_ID();
 $show_correct_answer = get_post_meta( $item_id, 'correct_answer', true );
-$answers_for         = ( ! empty( $answers ) ) ? wp_list_pluck( $answers, 'text' ) : array();
+$answers_for         = ( ! empty( $answers ) ) ? array_map( array( Question::class, 'normalize_answer_text' ), wp_list_pluck( $answers, 'text' ) ) : array();
 
 $uniq_id        = uniqid( 'quiz_' );
 $uniq_id_script = 'var ' . $uniq_id . ' = ' . wp_json_encode( array_map( 'strtolower', $answers_for ) );
@@ -29,7 +31,7 @@ if ( ! empty( $answers ) ) : ?>
 		<div class="stm_lms_question_item_keywords__answers">
 			<?php
 			foreach ( $answers as $i => $correct_answer ) :
-				$is_correct = ( ! empty( $user_answers[ $i ] ) && strtolower( $user_answers[ $i ] ) === strtolower( $correct_answer['text'] ) ) ? 'correct' : 'incorrect';
+				$is_correct = Question::text_answers_match( $correct_answer['text'], $user_answers[ $i ] ?? '' ) ? 'correct' : 'incorrect';
 				?>
 				<div class="stm_lms_question_item_keywords__answer stm_lms_question_item_keywords__answer_<?php echo esc_attr( $i ); ?> <?php echo esc_attr( $is_correct ); ?>">
 					<h5 class="label_keyword">

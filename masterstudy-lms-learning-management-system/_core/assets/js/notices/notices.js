@@ -5,7 +5,7 @@
 
   $(document).ready(function () {
     $('body').on('click', '.notice-dismiss', function (e) {
-      if ($(this).closest('.stm-notice-cb-info')) {
+      if ($(this).closest('.stm-notice-cb-info').length) {
         e.preventDefault();
         $.ajax({
           url: ms_lms_notice_data.ajax_url,

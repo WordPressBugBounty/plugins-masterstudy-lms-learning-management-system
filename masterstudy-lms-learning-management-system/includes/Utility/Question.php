@@ -140,4 +140,25 @@ final class Question {
 			explode( '[stm_lms_sep]', str_replace( '[stm_lms_sortable]', '', $data['last_answers']['user_answer'] ) )
 		);
 	}
+
+	public static function normalize_answer_text( $answer ): string {
+		if ( is_array( $answer ) ) {
+			$answer = implode( ' ', $answer );
+		}
+
+		$answer = stripslashes( rawurldecode( (string) $answer ) );
+		$answer = html_entity_decode( $answer, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		$answer = strip_tags( $answer );
+		$answer = str_replace( "\xc2\xa0", ' ', $answer );
+		$answer = preg_replace( '/\s+/u', ' ', $answer );
+
+		return trim( null === $answer ? '' : $answer );
+	}
+
+	public static function text_answers_match( $expected, $actual ): bool {
+		$expected = self::normalize_answer_text( $expected );
+		$actual   = self::normalize_answer_text( $actual );
+
+		return '' !== $actual && 0 === strcasecmp( $actual, $expected );
+	}
 }

@@ -8,6 +8,8 @@
  * @var string $question_hint
  * @var string $item_id
  */
+use MasterStudy\Lms\Utility\Question;
+
 $question_id = get_the_ID();
 
 stm_lms_register_style( 'fill_the_gap' );
@@ -29,7 +31,10 @@ if ( ! empty( $answers[0] ) && ! empty( $answers[0]['text'] ) ) :
 			$width = 'width: ' . ( strlen( $match_answer ) * 8 + 16 ) . 'px';
 			$name  = "{$question_id}[{$match_index}]";
 
-			$correct = ( isset( $user_answer[ $match_index ] ) && strtolower( $match_answer ) === strtolower( $user_answer[ $match_index ] ) ) ? 'correct' : 'incorrect';
+			$correct = (
+				isset( $user_answer[ $match_index ] )
+				&& Question::text_answers_match( $match_answer, $user_answer[ $match_index ] )
+			) ? 'correct' : 'incorrect';
 			if ( ! isset( $user_answer[ $match_index ] ) || empty( $user_answer[ $match_index ] ) ) {
 				$correct                     = 'incorrect empty';
 				$user_answer[ $match_index ] = '';
