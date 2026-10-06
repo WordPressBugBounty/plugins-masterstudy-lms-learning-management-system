@@ -96,6 +96,7 @@ class StmLmsPayout extends StmBaseModel {
 
 	public static function init() {
 		add_filter( 'stm_lms_post_types_array', array( self::class, 'payout_post_type' ), 10, 1 );
+		add_action( 'init', array( self::class, 'register_payout_meta' ) );
 
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( self::class, 'payment_settings_page' ), 1000 );
@@ -194,8 +195,7 @@ class StmLmsPayout extends StmBaseModel {
 		if ( 'transaction' === $column_name ) {
 			$transaction = get_post_meta( $post_ID, 'transaction_id', true );
 			if ( $transaction ) {
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo stm_lms_filtered_output( $transaction );
+				echo esc_html( stm_lms_filtered_output( $transaction ) );
 			} else {
 				echo '-------------';
 			}
@@ -214,10 +214,39 @@ class StmLmsPayout extends StmBaseModel {
 				'show_ui'             => true,
 				'show_in_menu'        => 'admin.php?page=stm-lms-settings',
 				'supports'            => array( 'title' ),
+				'capabilities'        => array(
+					'create_posts'           => 'manage_options',
+					'edit_posts'             => 'manage_options',
+					'edit_others_posts'      => 'manage_options',
+					'edit_private_posts'     => 'manage_options',
+					'edit_published_posts'   => 'manage_options',
+					'publish_posts'          => 'manage_options',
+					'read_private_posts'     => 'manage_options',
+					'delete_posts'           => 'manage_options',
+					'delete_others_posts'    => 'manage_options',
+					'delete_private_posts'   => 'manage_options',
+					'delete_published_posts' => 'manage_options',
+				),
 			),
 		);
 
 		return $posts;
+	}
+
+	public static function register_payout_meta() {
+		$meta_keys = array( 'transaction_id', 'status', 'paid', 'author_payout', 'amounts', 'fee_amounts' );
+
+		foreach ( $meta_keys as $meta_key ) {
+			register_post_meta(
+				'stm-payout',
+				$meta_key,
+				array(
+					'auth_callback' => function () {
+						return current_user_can( 'manage_options' );
+					},
+				)
+			);
+		}
 	}
 
 	/**

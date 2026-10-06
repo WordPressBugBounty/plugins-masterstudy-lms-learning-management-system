@@ -53,6 +53,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         selectOptions.append("\n                <li class=\"masterstudy-select__option ".concat(selectedValue === course.id ? 'masterstudy-select__option_selected' : '', "\" data-value=\"").concat(course.id, "\">\n                    ").concat(course.title, "\n                </li>\n            "));
       });
     }
+    function renderEmpty() {
+      if (!selectOptions.find('.masterstudy-select__empty').length) {
+        var _data$empty_text;
+        selectOptions.append("<li class=\"masterstudy-select__empty\">".concat((_data$empty_text = data.empty_text) !== null && _data$empty_text !== void 0 ? _data$empty_text : '', "</li>"));
+      }
+    }
     function getPrimaryScrollContainer() {
       var dropdownEl = selectDropdown.get(0);
       var optionsEl = selectOptions.get(0);
@@ -130,6 +136,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               offset++;
               hasMore = total > offset * perPage;
               renderCourses(posts);
+              if (!total) {
+                renderEmpty();
+              }
               document.dispatchEvent(new CustomEvent('msfieldSelectOptionsUpdate', {
                 detail: {
                   name: data.select_id
@@ -137,27 +146,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }));
               if (!selectedValue && selectOnLoad) {
                 selectedValue = (_posts$0$id = posts === null || posts === void 0 || (_posts$ = posts[0]) === null || _posts$ === void 0 ? void 0 : _posts$.id) !== null && _posts$0$id !== void 0 ? _posts$0$id : 0;
-                $(input).val(selectedValue).trigger('change', {
-                  dispatchEvent: 'true'
-                });
+                if (selectedValue) {
+                  $(input).val(selectedValue).trigger('change', {
+                    dispatchEvent: 'true'
+                  });
+                } else {
+                  document.dispatchEvent(new CustomEvent('msfieldEvent', {
+                    detail: {
+                      value: '',
+                      name: data.select_id,
+                      event: 'change'
+                    }
+                  }));
+                }
               }
-              _context.next = 27;
+              _context.next = 28;
               break;
-            case 24:
-              _context.prev = 24;
+            case 25:
+              _context.prev = 25;
               _context.t0 = _context["catch"](6);
               console.error(_context.t0);
-            case 27:
-              _context.prev = 27;
+            case 28:
+              _context.prev = 28;
               isLoading = false;
               toggleLoader(false);
               ensureScrollableList();
-              return _context.finish(27);
-            case 32:
+              return _context.finish(28);
+            case 33:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[6, 24, 27, 32]]);
+        }, _callee, null, [[6, 25, 28, 33]]);
       }));
       return _getCourses.apply(this, arguments);
     }

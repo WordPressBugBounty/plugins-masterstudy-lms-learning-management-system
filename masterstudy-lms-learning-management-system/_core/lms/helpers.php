@@ -464,7 +464,11 @@ function masterstudy_get_image( $post_id, $lazyload = false, $class = null, $wid
 	}
 
 	$image_url = ( ! empty( $image_src ) ) ? $image_src[0] : '';
-	$image     = '<img src="' . esc_url( $image_url ?? '' ) . '" class="' . esc_attr( $class ?? '' ) . '">';
+	$image_alt = $thumbnail_id ? trim( (string) get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true ) ) : '';
+	if ( '' === $image_alt ) {
+		$image_alt = wp_strip_all_tags( get_the_title( $post_id ) );
+	}
+	$image = '<img src="' . esc_url( $image_url ?? '' ) . '" class="' . esc_attr( $class ?? '' ) . '" alt="' . esc_attr( $image_alt ) . '">';
 
 	if ( $lazyload ) {
 		$image_wrapper  = '<div class="masterstudy-lazyload-image">';
@@ -544,6 +548,9 @@ function stm_lms_str_replace_first( $from, $to, $content ) {
 	return preg_replace( $from, $to, $content, 1 );
 }
 
+/**
+ * Applies the 'stm_lms_filter_output' filter. Does NOT escape - escape the result at the call site.
+ */
 function stm_lms_filtered_output( $data ) {
 	return apply_filters( 'stm_lms_filter_output', $data );
 }
@@ -2032,4 +2039,50 @@ function stm_lms_wpml_object_id_safe( $object_id, $type = 'post' ) {
 	$translated_id = apply_filters( 'wpml_object_id', $object_id, $type, true );
 
 	return ! empty( $translated_id ) ? (int) $translated_id : $object_id;
+}
+
+/**
+ * Quiz question type labels used in the React course builder (question menu, AI quiz form).
+ * Declared in PHP so translation tools find them, and passed to wp.i18n.
+ */
+function masterstudy_lms_quiz_question_types_translations() {
+	return array(
+		'Single choice'   => __( 'Single choice', 'masterstudy-lms-learning-management-system' ),
+		'Multiple choice' => __( 'Multiple choice', 'masterstudy-lms-learning-management-system' ),
+		'True-False'      => __( 'True-False', 'masterstudy-lms-learning-management-system' ),
+		'True / False'    => __( 'True / False', 'masterstudy-lms-learning-management-system' ),
+		'Matching'        => __( 'Matching', 'masterstudy-lms-learning-management-system' ),
+		'Item Match'      => __( 'Item Match', 'masterstudy-lms-learning-management-system' ),
+		'Image matching'  => __( 'Image matching', 'masterstudy-lms-learning-management-system' ),
+		'Image Matching'  => __( 'Image Matching', 'masterstudy-lms-learning-management-system' ),
+		'Image choice'    => __( 'Image choice', 'masterstudy-lms-learning-management-system' ),
+		'Image Choice'    => __( 'Image Choice', 'masterstudy-lms-learning-management-system' ),
+		'Keywords'        => __( 'Keywords', 'masterstudy-lms-learning-management-system' ),
+		'Fill in the gap' => __( 'Fill in the gap', 'masterstudy-lms-learning-management-system' ),
+		'Ordering'        => __( 'Ordering', 'masterstudy-lms-learning-management-system' ),
+		'Question Bank'   => __( 'Question Bank', 'masterstudy-lms-learning-management-system' ),
+	);
+}
+
+function masterstudy_lms_add_quiz_question_types_translations( $handle ) {
+	$locale_data = array();
+
+	foreach ( masterstudy_lms_quiz_question_types_translations() as $original => $translation ) {
+		if ( $original !== $translation ) {
+			$locale_data[ $original ] = array( $translation );
+		}
+	}
+
+	if ( empty( $locale_data ) ) {
+		return;
+	}
+
+	wp_add_inline_script(
+		$handle,
+		sprintf(
+			'wp.i18n.setLocaleData( %s, "masterstudy-lms-learning-management-system" );',
+			wp_json_encode( $locale_data )
+		),
+		'before'
+	);
 }

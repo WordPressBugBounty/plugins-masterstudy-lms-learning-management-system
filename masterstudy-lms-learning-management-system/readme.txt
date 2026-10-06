@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.52
+Stable tag: 3.7.53
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -312,6 +312,15 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.53 - 2026-10-06
+- **Fix:** Added Quizzes and AI Lab strings for translation.
+- **Fix:** Fixed an error in User Account → Gradebook when an instructor has no available courses.
+- **Fix:** Fixed an issue where the Take Note button appeared to the right of embedded videos in lessons [PRO].
+- **Fix:** Fixed an issue where the "My Points" string was not translatable with WPML String Translation [PRO].
+- **Fix:** Stripe cards that require 3D Secure (SCA) now work for one-time course purchases. Payments are processed via PaymentIntents instead of the legacy Charges API.
+- **Fix:** Fixed an authenticated (Contributor+) Stored Cross-Site Scripting vulnerability in the admin Payouts list and payout edit screen.
+- **Fix:** Restricted creating and editing Payouts to administrators and protected payout data from modification by lower-privileged users.
+
 = 3.7.52 - 2026-09-23 =
 - **Fix:** Fixed LMS Form Builder custom fields not being available in Email Manager registration templates [PRO].
 - **Fix:** Fixed the Group Course student limit setting not being applied correctly [PRO].

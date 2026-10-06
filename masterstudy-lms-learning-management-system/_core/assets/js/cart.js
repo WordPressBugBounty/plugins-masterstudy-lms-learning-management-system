@@ -39,6 +39,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           var vm = this;
           vm.loading = true;
           vm.messages = [];
+
+          // One-time Stripe payment that requires 3D Secure: confirm on the client, then finalize the order on the server.
+          function handleOneTimeAction(body) {
+            return vm.stripe.confirmCardPayment(body.client_secret).then(function (result) {
+              if (result.error) {
+                return finalize(body, false).then(function () {
+                  handleError(result.error);
+                });
+              }
+              return finalize(body, true).then(function (res) {
+                if (res && res.body && res.body.status === 'success' && body.url) {
+                  window.location = body.url;
+                } else {
+                  handleError({
+                    message: res && res.body && res.body.message || 'An error occurred'
+                  });
+                }
+              });
+            })["catch"](handleError);
+          }
+          function finalize(body, ok) {
+            var fd = new FormData();
+            fd.append('action', 'stm_lms_stripe_confirm');
+            fd.append('nonce', stm_lms_nonces['stm_lms_purchase']);
+            fd.append('order_id', body.order_id);
+            fd.append('payment_intent_id', body.payment_intent_id);
+            return vm.$http.post(stm_lms_ajaxurl, fd)["catch"](function (e) {
+              return e;
+            });
+          }
           function handleResponse(_x) {
             return _handleResponse.apply(this, arguments);
           }
@@ -48,6 +78,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _regeneratorRuntime().wrap(function _callee$(_context) {
                 while (1) switch (_context.prev = _context.next) {
                   case 0:
+                    if (!(response.body.requires_action && response.body.payment_intent_id)) {
+                      _context.next = 2;
+                      break;
+                    }
+                    return _context.abrupt("return", handleOneTimeAction(response.body));
+                  case 2:
                     vm.status = response.body.status;
                     jQuery('.masterstudy-personal-info .masterstudy-personal-info-error').removeClass('masterstudy-personal-info-error');
                     if (response.body.status === 'personal_data_error' && Array.isArray(response.body.errors)) {
@@ -71,53 +107,53 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                       url: response.body.url || ""
                     };
                     stm_lms_print_message(data);
-                    _context.prev = 5;
+                    _context.prev = 7;
                     if (!(vm.payment_code === 'stripe' && response.body.client_secret)) {
-                      _context.next = 16;
+                      _context.next = 18;
                       break;
                     }
-                    _context.next = 9;
+                    _context.next = 11;
                     return vm.stripe.confirmCardPayment(response.body.client_secret, {
                       payment_method: {
                         card: vm.stripe_card
                       }
                     });
-                  case 9:
+                  case 11:
                     result = _context.sent;
                     if (!result.error) {
-                      _context.next = 12;
+                      _context.next = 14;
                       break;
                     }
                     return _context.abrupt("return", handleError(result.error));
-                  case 12:
+                  case 14:
                     if (!(result.paymentIntent && result.paymentIntent.status === 'succeeded')) {
-                      _context.next = 16;
+                      _context.next = 18;
                       break;
                     }
                     if (!response.body.url) {
-                      _context.next = 16;
+                      _context.next = 18;
                       break;
                     }
                     window.location = response.body.url;
                     return _context.abrupt("return");
-                  case 16:
-                    _context.next = 21;
-                    break;
                   case 18:
-                    _context.prev = 18;
-                    _context.t0 = _context["catch"](5);
+                    _context.next = 23;
+                    break;
+                  case 20:
+                    _context.prev = 20;
+                    _context.t0 = _context["catch"](7);
                     return _context.abrupt("return", handleError(_context.t0));
-                  case 21:
+                  case 23:
                     if (response.body.url) {
                       window.location = response.body.url;
                     } else {
                       vm.loading = false;
                     }
-                  case 22:
+                  case 24:
                   case "end":
                     return _context.stop();
                 }
-              }, _callee, null, [[5, 18]]);
+              }, _callee, null, [[7, 20]]);
             }));
             return _handleResponse.apply(this, arguments);
           }

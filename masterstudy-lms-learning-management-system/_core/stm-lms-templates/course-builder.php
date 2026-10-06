@@ -22,6 +22,7 @@ wp_register_style( 'ms-lms-course-builder', apply_filters( 'ms_lms_course_builde
 wp_register_script( 'ms-lms-course-builder-translations', apply_filters( 'ms_lms_course_builder_translations_js', MS_LMS_URL . 'assets/react/course-builder/js/i18n-translations.js' ), array(), MS_LMS_VERSION, true );
 
 wp_set_script_translations( 'ms-lms-course-builder-translations', 'masterstudy-lms-learning-management-system', $translations_path );
+masterstudy_lms_add_quiz_question_types_translations( 'ms-lms-course-builder-translations' );
 
 $scripts        = wp_scripts();
 $styles         = wp_styles();

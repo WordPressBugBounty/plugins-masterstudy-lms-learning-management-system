@@ -20,6 +20,7 @@ wp_localize_script(
 		'select_id'      => $select_id,
 		'select_on_load' => $select_on_load ?? false,
 		'post_types'     => $post_types ?? array(),
+		'empty_text'     => esc_html__( 'No courses found', 'masterstudy-lms-learning-management-system' ),
 	)
 );
 

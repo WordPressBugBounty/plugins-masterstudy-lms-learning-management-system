@@ -24,6 +24,8 @@ class STM_LMS_Cart {
 
 		add_action( 'wp_ajax_stm_lms_purchase', 'STM_LMS_Cart::purchase_courses' );
 		add_action( 'wp_ajax_nopriv_stm_lms_purchase', 'STM_LMS_Cart::purchase_courses' );
+
+		add_action( 'wp_ajax_stm_lms_stripe_confirm', 'STM_LMS_Cart::stripe_confirm_order' );
 		add_action( 'masterstudy_lms_course_price_updated', array( self::class, 'course_price_updated' ), 10, 2 );
 	}
 
@@ -360,7 +362,16 @@ class STM_LMS_Cart {
 			if ( $payment_gateway ) {
 				$payment_data = self::prepare_payment_data( $order_data );
 
-				$payment_gateway->process_subscription( $payment_data );
+				try {
+					$payment_gateway->process_subscription( $payment_data );
+				} catch ( \Throwable $e ) {
+					wp_send_json(
+						array(
+							'status'  => 'error',
+							'message' => $e->getMessage(),
+						)
+					);
+				}
 
 				if ( ! empty( $payment_gateway->get_error() ) ) {
 					wp_send_json(
@@ -436,7 +447,7 @@ class STM_LMS_Cart {
 			$r['url']     = $checkout_url . "/masterstudy-orders-received/{$order_id}/?key={$order_key}";
 		} elseif ( 'paypal' === $payment_code ) {
 			/*If Paypal*/
-			$paypal       = new STM_LMS_PayPal(
+			$paypal = new STM_LMS_PayPal(
 				$cart_total['total'],
 				$invoice,
 				$cart_total['item_name'],
@@ -452,7 +463,86 @@ class STM_LMS_Cart {
 			$raw_token_id = isset( $_REQUEST['token_id'] ) ? wp_unslash( $_REQUEST['token_id'] ) : '';
 			$token_id     = sanitize_text_field( $raw_token_id );
 
-			if ( ! empty( $token_id ) ) {
+			$payment_method_id = sanitize_text_field( wp_unslash( $_REQUEST['payment_method_id'] ?? '' ) );
+
+			if ( ! empty( $payment_method_id ) ) {
+				// PaymentIntents flow: supports 3D Secure (SCA).
+				$payment = STM_LMS_Options::get_option( 'payment_methods' );
+
+				if ( empty( $payment['stripe']['enabled'] ) || empty( $payment['stripe']['fields']['secret_key'] ) ) {
+					wp_delete_post( $invoice, true );
+					wp_send_json(
+						array(
+							'status'  => 'error',
+							'message' => esc_html__( 'Stripe is not configured.', 'masterstudy-lms-learning-management-system' ),
+						)
+					);
+				}
+
+				$transactions_currency = STM_LMS_Options::get_option( 'transactions_currency' );
+				$currency              = ! empty( $transactions_currency ) ? $transactions_currency : 'usd';
+				if ( 'jpy' === strtolower( $currency ) ) {
+					$stripe_amount = intval( round( (float) $cart_total['total'] ) );
+				} else {
+					$increment     = (int) apply_filters( 'masterstudy_payment_increment', 100 );
+					$stripe_amount = intval( round( (float) $cart_total['total'] * $increment ) );
+				}
+
+				$req = wp_remote_post(
+					'https://api.stripe.com/v1/payment_intents',
+					array(
+						'timeout' => 45,
+						'headers' => array( 'Authorization' => 'Bearer ' . $payment['stripe']['fields']['secret_key'] ),
+						'body'    => array(
+							'amount'                    => $stripe_amount,
+							'currency'                  => strtolower( $currency ),
+							'payment_method'            => $payment_method_id,
+							'confirm'                   => 'true',
+							'automatic_payment_methods' => array(
+								'enabled'         => 'true',
+								'allow_redirects' => 'never',
+							),
+							'description'               => sprintf(
+								/* translators: 1: Course name, 2: Order key */
+								esc_html__( '%1$s. Order key: %2$s', 'masterstudy-lms-learning-management-system' ),
+								$cart_total['item_name'],
+								get_the_title( $invoice )
+							),
+							'metadata'                  => array(
+								'order_id' => $order_id,
+								'user_id'  => $user_id,
+							),
+						),
+					)
+				);
+				$req       = is_wp_error( $req ) ? array() : json_decode( wp_remote_retrieve_body( $req ), true );
+				$pi_status = $req['status'] ?? '';
+
+				if ( 'succeeded' === $pi_status ) {
+					update_post_meta( $invoice, 'status', 'completed' );
+					STM_LMS_Order::accept_order( $user_id, $invoice );
+					$r['message'] = esc_html__( 'Order created. Payment completed.', 'masterstudy-lms-learning-management-system' );
+				} elseif ( 'requires_action' === $pi_status && ! empty( $req['client_secret'] ) ) {
+					// Order stays pending until the 3D Secure challenge is confirmed (see stripe_confirm_order).
+					update_post_meta( $invoice, 'stripe_payment_intent', sanitize_text_field( $req['id'] ) );
+					$r['requires_action']   = true;
+					$r['client_secret']     = $req['client_secret'];
+					$r['payment_intent_id'] = $req['id'];
+					$r['order_id']          = $order_id;
+					$r['message']           = esc_html__( 'Additional authentication is required to complete the payment.', 'masterstudy-lms-learning-management-system' );
+				} else {
+					wp_delete_post( $invoice, true );
+					$r['status']  = 'error';
+					$r['url']     = false;
+					$r['message'] = ! empty( $req['error']['message'] )
+						? sanitize_text_field( $req['error']['message'] )
+						: esc_html__( 'Error occurred. Please try again.', 'masterstudy-lms-learning-management-system' );
+				}
+
+				if ( 'error' !== $r['status'] && $order_id > 0 && ! empty( $order_key ) ) {
+					$r['url'] = $checkout_url . "/masterstudy-orders-received/{$order_id}/?key={$order_key}";
+				}
+			} elseif ( ! empty( $token_id ) ) {
 				$url                   = 'https://api.stripe.com/v1/charges';
 				$payment               = STM_LMS_Options::get_option( 'payment_methods' );
 				$transactions_currency = STM_LMS_Options::get_option( 'transactions_currency' );
@@ -512,7 +602,7 @@ class STM_LMS_Cart {
 						$r['url']     = false;
 					}
 				}
-				if ( $order_id > 0 && ! empty( $order_key ) ) {
+				if ( 'error' !== $r['status'] && $order_id > 0 && ! empty( $order_key ) ) {
 					$r['url'] = $checkout_url . "/masterstudy-orders-received/{$order_id}/?key={$order_key}";
 				}
 				$r['order'] = $req;
@@ -535,6 +625,59 @@ class STM_LMS_Cart {
 
 		wp_send_json( apply_filters( 'stm_lms_purchase_done', $r ) );
 		die;
+	}
+
+	/**
+	 * Finalize a one-time Stripe order after the 3D Secure challenge was completed on the client.
+	 */
+	public static function stripe_confirm_order() {
+		check_ajax_referer( 'stm_lms_purchase', 'nonce' );
+
+		$user = STM_LMS_User::get_current_user();
+		if ( empty( $user['id'] ) ) {
+			wp_send_json(
+				array(
+					'status'  => 'error',
+					'message' => esc_html__( 'Authorization required.', 'masterstudy-lms-learning-management-system' ),
+				)
+			);
+		}
+
+		$order_id = intval( $_REQUEST['order_id'] ?? 0 );
+		$pi_id    = sanitize_text_field( wp_unslash( $_REQUEST['payment_intent_id'] ?? '' ) );
+		$payment  = STM_LMS_Options::get_option( 'payment_methods' );
+		$error    = array(
+			'status'  => 'error',
+			'message' => esc_html__( 'Error occurred. Please try again.', 'masterstudy-lms-learning-management-system' ),
+		);
+
+		if ( ! $order_id || empty( $pi_id ) || empty( $payment['stripe']['fields']['secret_key'] )
+			|| get_post_meta( $order_id, 'stripe_payment_intent', true ) !== $pi_id ) {
+			wp_send_json( $error );
+		}
+
+		$req = wp_remote_get(
+			'https://api.stripe.com/v1/payment_intents/' . rawurlencode( $pi_id ),
+			array( 'headers' => array( 'Authorization' => 'Bearer ' . $payment['stripe']['fields']['secret_key'] ) )
+		);
+		$req = is_wp_error( $req ) ? array() : json_decode( wp_remote_retrieve_body( $req ), true );
+
+		if ( empty( $req['status'] ) || (int) ( $req['metadata']['order_id'] ?? 0 ) !== $order_id || (int) ( $req['metadata']['user_id'] ?? 0 ) !== (int) $user['id'] ) {
+			wp_send_json( $error );
+		}
+
+		if ( 'succeeded' !== $req['status'] ) {
+			wp_delete_post( $order_id, true );
+			$error['message'] = ! empty( $req['last_payment_error']['message'] ) ? sanitize_text_field( $req['last_payment_error']['message'] ) : $error['message'];
+			wp_send_json( $error );
+		}
+
+		if ( 'completed' !== get_post_meta( $order_id, 'status', true ) ) {
+			update_post_meta( $order_id, 'status', 'completed' );
+			STM_LMS_Order::accept_order( $user['id'], $order_id );
+		}
+
+		wp_send_json( array( 'status' => 'success' ) );
 	}
 
 	public static function payment_methods() {

@@ -66,7 +66,7 @@ if ( ! empty( $order_info ) ) :
 			),
 			'status'          => array(
 				'label' => esc_html__( 'Status', 'masterstudy-lms-learning-management-system' ),
-				'value' => ! empty( $subscription['status'] ) ? $subscription_status[ $subscription['status'] ] : '',
+				'value' => ! empty( $subscription['status'] ) ? ( $subscription_status[ $subscription['status'] ] ?? ucfirst( $subscription['status'] ) ) : '',
 			),
 		);
 		$course_id           = ! empty( $order_info['plan']['items'][0]['object_id'] )

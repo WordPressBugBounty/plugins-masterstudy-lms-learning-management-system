@@ -94,10 +94,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         abortController.abort();
         abortController = new AbortController();
         courseId = e.detail.value;
+        if (!courseId) {
+          renderEmptyState();
+          return;
+        }
         void Promise.all([fetchCourseStats(e.detail.value)]);
         updateTable(true);
       }
     });
+    function renderEmptyState() {
+      setIsStatsLoading(false);
+      renderCourseStats({
+        course_students: 0,
+        course_average_progress: 0,
+        course_quizzes_procents: 0,
+        course_lessons_procents: 0,
+        subscriptions: 0,
+        course_assignments_procents: 0
+      });
+      if (subscriptionsTable) {
+        subscriptionsTable.clear().destroy();
+        $('#masterstudy-datatable-students').empty();
+      }
+      subscriptionsTable = createDataTable('#masterstudy-datatable-students', studentColumns, {
+        serverSide: false,
+        processing: false,
+        columnDefs: buildColumnDefs(studentColumns)
+      });
+      hideLoaders('.masterstudy-account-gradebook__students');
+    }
     function updateTable() {
       var reloadTable = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       var dataSrc = function dataSrc(json) {

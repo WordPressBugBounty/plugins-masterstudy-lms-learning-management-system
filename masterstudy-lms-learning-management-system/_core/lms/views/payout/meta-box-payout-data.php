@@ -48,10 +48,8 @@
 						</div>
 						<p class="stm-lms-mesage" v-if="mesage" >{{mesage}}</p>
 						<div v-if="!loader">
-							<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-							<a @click="pay_now(<?php echo stm_lms_filtered_output( $post_ID ); ?>)" href="javascript:void(0)" class="button button-primary"><?php esc_html_e( 'Process Payment Now', 'masterstudy-lms-learning-management-system' ); ?></a>
-							<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-							<a @click="payed(<?php echo stm_lms_filtered_output( $post_ID ); ?>)" href="javascript:void(0)" class="button button-primary"><?php esc_html_e( 'Change Status to PAID', 'masterstudy-lms-learning-management-system' ); ?></a>
+							<a @click="pay_now(<?php echo absint( $post_ID ); ?>)" href="javascript:void(0)" class="button button-primary"><?php esc_html_e( 'Process Payment Now', 'masterstudy-lms-learning-management-system' ); ?></a>
+							<a @click="payed(<?php echo absint( $post_ID ); ?>)" href="javascript:void(0)" class="button button-primary"><?php esc_html_e( 'Change Status to PAID', 'masterstudy-lms-learning-management-system' ); ?></a>
 						</div>
 					</div>
 				<?php endif; ?>
@@ -95,8 +93,7 @@
 							<?php
 							$transaction = get_post_meta( $post_ID, 'transaction_id', true );
 							if ( $transaction ) {
-								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								echo stm_lms_filtered_output( $transaction );
+								echo esc_html( stm_lms_filtered_output( $transaction ) );
 							} else {
 								echo '-------------';
 							}
