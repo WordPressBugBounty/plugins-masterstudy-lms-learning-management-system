@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.53
+Stable tag: 3.7.54
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -167,11 +167,15 @@ Improve your students' learning journey with our [Course Player](https://stylemi
 - Gutenberg blocks available to build LMS pages easily
 - Content security
 - Advanced analytics
+- LMS Migration
 
 For more details, please visit [our website](https://stylemixthemes.com/wordpress-lms-plugin/).
 
 **MasterStudy Premium Plugin Features**
 
+- [**Lesson Notes**](https://stylemixthemes.com/wordpress-lms-plugin/addons/lesson-notes/): Take notes right inside the lesson and build a study guide as you go.
+- [**Notifications**](https://stylemixthemes.com/wordpress-lms-plugin/addons/notifications/): Keep students and instructors informed with timely on-site and browser push notifications.
+- [**Calendar**](https://stylemixthemes.com/wordpress-lms-plugin/addons/calendar/): A clear schedule for every course, so learners always know what's coming next.
 - [**AI Lab**](https://stylemixthemes.com/wordpress-lms-plugin/addons/ai-lab/): Empowers you to generate complete courses, lessons, quizzes, and assignments with rich content and visuals from a single prompt.
 - [**Subscriptions**](https://stylemixthemes.com/wordpress-lms-plugin/addons/subscriptions/): Offer recurring access to courses with automatic renewals.
 - [**Memberships**](https://stylemixthemes.com/wordpress-lms-plugin/addons/memberships/): Give students instant access to unlock selected courses, categories, or your entire site.
@@ -312,6 +316,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.54 - 2026-10-07
+- **New:** [LMS Migration tool](https://docs.stylemixthemes.com/masterstudy-lms/lms-settings/lms-migration).
+
 = 3.7.53 - 2026-10-06
 - **Fix:** Added Quizzes and AI Lab strings for translation.
 - **Fix:** Fixed an error in User Account → Gradebook when an instructor has no available courses.
@@ -357,11 +364,5 @@ It’s recommended to have a backup of your website before hitting the update bu
 - **Fix:** Fixed the Preview Video showing a “Video source is missing or invalid” error after changing the video source option.
 - **Fix:** Fixed the `Allow Instructors to Create Course Subscriptions` setting not being applied correctly [PRO].
 - **Fix:** Fixed course price information disappearing from the backend and frontend after updating a course.
-
-= 3.7.49 - 2026-09-11 =
-- **Fix:** Minor bugfixes
-
-= 3.7.48 - 2026-09-04 =
-- **Fix:** Minor bugfixes
 
 You can see all updates history in our [changelog documentation](https://docs.stylemixthemes.com/masterstudy-lms/changelog-free-version).

@@ -281,6 +281,16 @@ class STM_LMS_Cart {
 		}
 
 		$cart_items      = stm_lms_get_cart_items( $user_id, apply_filters( 'stm_lms_cart_items_fields', array( 'item_id', 'price' ) ) );
+
+		if ( empty( $cart_items ) ) {
+			wp_send_json(
+				array(
+					'status'  => 'error',
+					'message' => esc_html__( 'Your cart is empty.', 'masterstudy-lms-learning-management-system' ),
+				)
+			);
+		}
+
 		$cart_total      = self::get_cart_totals( $cart_items, $personal_data, $coupon_id );
 		$symbol          = STM_LMS_Options::get_option( 'currency_symbol', 'none' );
 		$checkout_url    = ! empty( STM_LMS_Options::get_option( 'checkout_url' ) ) ? get_permalink( STM_LMS_Options::get_option( 'checkout_url' ) ) : home_url();
@@ -619,9 +629,12 @@ class STM_LMS_Cart {
 				$r['url']     = $checkout_url . "/masterstudy-orders-received/{$order_id}/?key={$order_key}";
 		}
 
-		do_action( 'stm_lms_purchase_action_done', $user_id );
+		// Keep the cart when the payment failed or 3D Secure is pending; in the latter case it is cleared in stripe_confirm_order().
+		if ( empty( $r['requires_action'] ) && 'error' !== $r['status'] ) {
+			do_action( 'stm_lms_purchase_action_done', $user_id );
 
-		do_action( 'masterstudy_lms_order_completed', $user_id, $cart_items, $payment_code, $invoice );
+			do_action( 'masterstudy_lms_order_completed', $user_id, $cart_items, $payment_code, $invoice );
+		}
 
 		wp_send_json( apply_filters( 'stm_lms_purchase_done', $r ) );
 		die;
@@ -673,8 +686,13 @@ class STM_LMS_Cart {
 		}
 
 		if ( 'completed' !== get_post_meta( $order_id, 'status', true ) ) {
+			$cart_items = stm_lms_get_cart_items( $user['id'], apply_filters( 'stm_lms_cart_items_fields', array( 'item_id', 'price' ) ) );
+
 			update_post_meta( $order_id, 'status', 'completed' );
 			STM_LMS_Order::accept_order( $user['id'], $order_id );
+
+			do_action( 'stm_lms_purchase_action_done', $user['id'] );
+			do_action( 'masterstudy_lms_order_completed', $user['id'], $cart_items, 'stripe', $order_id );
 		}
 
 		wp_send_json( array( 'status' => 'success' ) );

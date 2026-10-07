@@ -28,3 +28,4 @@ require_once __DIR__ . '/Routes/Public.php';
 require_once __DIR__ . '/Routes/OrderUpdate.php';
 require_once __DIR__ . '/Routes/Reviews.php';
 require_once __DIR__ . '/Routes/CourseCategories.php';
+require_once __DIR__ . '/Routes/MigrationTool.php';
