@@ -7,6 +7,7 @@
  * @var $instructor_card
  * @var $mode
  * @var $show_title
+ * @var $before_html Pre-rendered markup shown first inside the card countdown container.
  */
 $coming_soon                    = get_post_meta( $course_id, 'coming_soon_status', true );
 $coming_soon_start_date         = get_post_meta( $course_id, 'coming_soon_date', true );
@@ -17,6 +18,7 @@ $has_bottom                     = (bool) ( $has_bottom ?? false );
 $instructor_card                = (bool) ( $instructor_card ?? false );
 $mode                           = $mode ?? '';
 $show_title                     = $show_title ?? true;
+$before_html                    = $before_html ?? '';
 
 if ( ! $is_course_coming_soon || empty( $coming_soon_start_date ) ) {
 	return;
@@ -118,6 +120,9 @@ if ( 'card' === $mode ) {
 	}
 	?>
 	<div class="coming-soon-card-countdown-container">
+		<?php if ( ! empty( $before_html ) ) { ?>
+			<div class="coming-soon-card-before"><?php echo wp_kses_post( $before_html ); ?></div>
+		<?php } ?>
 		<div class="coming-soon-card-details">
 			<?php esc_html_e( 'Coming soon:', 'masterstudy-lms-learning-management-system' ); ?>
 			<span>

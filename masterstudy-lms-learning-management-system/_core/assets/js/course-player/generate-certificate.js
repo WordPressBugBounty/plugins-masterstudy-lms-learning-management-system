@@ -35,6 +35,11 @@ var jsPDF = window.jspdf.jsPDF;
     if (course_certificate.user_id) {
       params.append('user_id', course_certificate.user_id);
     }
+
+    // The public certificate page is opened by the certificate code, not by the user ID.
+    if (course_certificate.code) {
+      params.append('code', course_certificate.code);
+    }
     if (preview) {
       $('.masterstudy-page-certificate__download .masterstudy-button').addClass('masterstudy-button_loading');
     }

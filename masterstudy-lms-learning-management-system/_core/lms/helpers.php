@@ -1752,6 +1752,14 @@ function masterstudy_lms_course_free_status( $course_id, $price ) {
 	);
 }
 
+/**
+ * Whether the price should be shown for an upcoming (coming soon) course
+ * ("Show course price" option of the Coming Soon settings).
+ */
+function masterstudy_lms_coming_soon_show_price( $course_id ) {
+	return (bool) get_post_meta( $course_id, 'coming_soon_show_course_price', true );
+}
+
 function masterstudy_lms_show_course_templates_modal() {
 	$screen = get_current_screen();
 

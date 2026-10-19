@@ -324,6 +324,11 @@ class STM_LMS_Cart {
 		if ( $is_subscription ) {
 			$order_data['plan'] = ( new SubscriptionPlanRepository() )->get( intval( $cart_items[0]['item_id'] ) );
 
+			// The trial of a plan is given only once: a returning subscriber pays from the first day.
+			if ( is_array( $order_data['plan'] ) && method_exists( SubscriptionPlanRepository::class, 'remove_used_trial' ) ) {
+				$order_data['plan'] = SubscriptionPlanRepository::remove_used_trial( $order_data['plan'], (int) $user_id );
+			}
+
 			// Get course_id from plan items
 			$course_id = '';
 			if ( ! empty( $order_data['plan']['items'] ) && is_array( $order_data['plan']['items'] ) && ! empty( $order_data['plan']['items'][0]['object_id'] ) ) {

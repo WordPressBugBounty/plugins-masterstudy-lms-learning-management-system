@@ -390,7 +390,9 @@ final class StudentsRepository {
 			$user        = get_user_by( 'email', $email );
 			$is_enrolled = true;
 
-			if ( $user && ( ! $user_existed || $is_enrolled_before ) && ( $first_name || $last_name ) ) {
+			// Names are written only for the account created by this request: an instructor can enrol any
+			// existing user, so the enrolment state must not allow changing someone else's profile.
+			if ( $user && ! $user_existed && ( $first_name || $last_name ) ) {
 				wp_update_user(
 					array(
 						'ID'           => $user->ID,
@@ -411,14 +413,14 @@ final class StudentsRepository {
 	}
 
 	public function add_students_bulk( int $course_id, array $students ): array {
-		$emails_map = array(); // email => student row.
+		$emails_map   = array(); // email => student row.
 		$user_existed = array();
 		foreach ( $students as $row ) {
 			$email = sanitize_email( $row['email'] ?? '' );
 			if ( empty( $email ) ) {
 				continue;
 			}
-			$emails_map[ $email ] = $row; // de-duplicate by email.
+			$emails_map[ $email ]   = $row; // de-duplicate by email.
 			$user_existed[ $email ] = (bool) get_user_by( 'email', $email );
 		}
 
@@ -474,12 +476,12 @@ final class StudentsRepository {
 
 			$user = get_user_by( 'email', $email );
 
-			// Update names if provided.
+			// Set names only for the accounts created by this request, never for existing users.
 			$row        = $emails_map[ $email ];
 			$first_name = sanitize_text_field( trim( (string) ( $row['first_name'] ?? '' ) ) );
 			$last_name  = sanitize_text_field( trim( (string) ( $row['last_name'] ?? '' ) ) );
 
-			if ( $user && ( empty( $user_existed[ $email ] ) || ! empty( $enrolled_before[ $email ] ) ) && ( $first_name || $last_name ) ) {
+			if ( $user && empty( $user_existed[ $email ] ) && ( $first_name || $last_name ) ) {
 				wp_update_user(
 					array(
 						'ID'           => $user->ID,
@@ -504,7 +506,7 @@ final class StudentsRepository {
 		);
 	}
 
-	private function cleanup_course_after_removal( int $course_id, string $user_email, bool $coming_soon_on ): void {
+	private function cleanup_course_after_removal( int $course_id, int $student_id, string $user_email, bool $coming_soon_on ): void {
 		$count = (int) get_post_meta( $course_id, 'current_students', true );
 		if ( $count > 0 ) {
 			update_post_meta( $course_id, 'current_students', $count - 1 );
@@ -523,7 +525,12 @@ final class StudentsRepository {
 		}
 
 		if ( class_exists( 'STM_LMS_Mails' ) ) {
-			$user            = \STM_LMS_User::get_current_user( \STM_LMS_Helpers::masterstudy_lms_get_user_by_email( $user_email ) );
+			$user = \STM_LMS_User::get_current_user( $student_id );
+
+			if ( empty( $user['id'] ) ) {
+				return;
+			}
+
 			$user_login      = $user['login'];
 			$course_title    = get_the_title( $course_id );
 			$instructor_name = \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( \STM_LMS_User::get_current_user()['id'] );
@@ -579,7 +586,7 @@ final class StudentsRepository {
 				continue;
 			}
 
-			$this->cleanup_course_after_removal( absint( $item['course_id'] ), sanitize_email( $user->user_email ), is_ms_lms_addon_enabled( 'coming_soon' ) );
+			$this->cleanup_course_after_removal( absint( $item['course_id'] ), $user->ID, sanitize_email( $user->user_email ), is_ms_lms_addon_enabled( 'coming_soon' ) );
 		}
 	}
 
@@ -587,7 +594,7 @@ final class StudentsRepository {
 		$user = get_userdata( $student_id );
 		if ( $user ) {
 			stm_lms_get_delete_user_course( $student_id, $course_id );
-			$this->cleanup_course_after_removal( $course_id, sanitize_email( $subscribed_email ), is_ms_lms_addon_enabled( 'coming_soon' ) );
+			$this->cleanup_course_after_removal( $course_id, $student_id, sanitize_email( ! empty( $subscribed_email ) ? $subscribed_email : $user->user_email ), is_ms_lms_addon_enabled( 'coming_soon' ) );
 		}
 	}
 

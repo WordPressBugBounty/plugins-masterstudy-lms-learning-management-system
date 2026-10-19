@@ -188,7 +188,7 @@ class STM_LMS_User_Manager_Course {
 			$user            = STM_LMS_User::get_current_user( $user_id );
 			$user_login      = $user['login'];
 			$course_title    = get_the_title( $course_id );
-			$instructor_name = \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( $user['id'] );
+			$instructor_name = \STM_LMS_Helpers::masterstudy_lms_get_user_full_name_or_login( get_current_user_id() );
 
 			$message = sprintf(
 			/* translators: %1$s Course Title, %2$s User Login */

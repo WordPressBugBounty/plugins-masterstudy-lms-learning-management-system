@@ -425,7 +425,8 @@ class STM_LMS_Guest_Checkout {
 		$checkout_url = self::build_activation_checkout_url( $token );
 		$blog_name    = get_bloginfo( 'name' );
 
-		$subject = esc_html__( 'Activate your account', 'masterstudy-lms-learning-management-system' );
+		/* translators: %s: site name */
+		$subject = sprintf( esc_html__( 'Activate your account', 'masterstudy-lms-learning-management-system' ), $blog_name );
 
 		$template = wp_kses_post(
 			'Hi {{user_login}}, <br>

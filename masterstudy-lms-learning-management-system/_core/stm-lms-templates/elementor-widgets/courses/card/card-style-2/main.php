@@ -29,11 +29,25 @@ foreach ( $courses as $course ) {
 				</a>
 				<?php
 				if ( $course['availability'] && is_ms_lms_addon_enabled( 'coming_soon' ) ) {
+					$coming_soon_price = '';
+					if ( ! empty( $card_data['show_price'] ) && masterstudy_lms_coming_soon_show_price( $course['id'] ) ) {
+						ob_start();
+						STM_LMS_Templates::show_lms_template(
+							'elementor-widgets/courses/card/global/price',
+							array(
+								'card_data'      => $card_data,
+								'course'         => $course,
+								'is_coming_soon' => true,
+							)
+						);
+						$coming_soon_price = ob_get_clean();
+					}
 					STM_LMS_Templates::show_lms_template(
 						'global/coming_soon',
 						array(
-							'course_id' => $course['id'],
-							'mode'      => 'card',
+							'course_id'   => $course['id'],
+							'mode'        => 'card',
+							'before_html' => $coming_soon_price,
 						),
 					);
 				} elseif ( ! empty( $card_data['show_price'] ) ) {

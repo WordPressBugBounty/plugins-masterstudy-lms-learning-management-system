@@ -38,7 +38,9 @@ else :
 				foreach ( $items as $item ) :
 					if ( isset( $item['is_subscription'] ) && $item['is_subscription'] && is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) ) {
 
+						// No trial for a user who already used the trial of this plan.
 						$plan      = ( new SubscriptionPlanRepository() )->get( $item['item_id'] );
+						$plan      = is_array( $plan ) && method_exists( SubscriptionPlanRepository::class, 'remove_used_trial' ) ? SubscriptionPlanRepository::remove_used_trial( $plan, get_current_user_id() ) : $plan;
 						$subtotal += SubscriptionPlanRepository::get_actual_price( $plan );
 						$is_trial  = ! empty( $plan['trial_period'] );
 

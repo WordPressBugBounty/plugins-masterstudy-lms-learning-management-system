@@ -110,7 +110,7 @@ if ( ! empty( $data['last_answers']['user_answer'] ) ) {
 			<div class="masterstudy-course-player-item-match__answer-item">
 				<div class="masterstudy-course-player-item-match__answer-item-wrapper">
 					<div class="masterstudy-course-player-item-match__answer-item-drag"></div>
-					<div class="masterstudy-course-player-item-match__answer-item-content">
+					<div class="masterstudy-course-player-item-match__answer-item-content" data-answer="<?php echo esc_attr( trim( $answer['text'] ) ); ?>">
 						<?php echo esc_html( trim( $answer['text'] ) ); ?>
 					</div>
 					<?php if ( ! empty( $answer['explain'] ) && $show_answers && ! empty( $last_quiz ) ) { ?>

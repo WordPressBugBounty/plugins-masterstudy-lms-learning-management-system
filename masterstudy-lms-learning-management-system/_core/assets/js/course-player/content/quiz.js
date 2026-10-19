@@ -501,10 +501,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               if (parent.hasClass('masterstudy-course-player-item-match__question-answer') && donor.hasClass('masterstudy-course-player-item-match__question-answer')) {
                 var parent_content = parent.find('.masterstudy-course-player-item-match__answer-item-content');
                 var donor_content = donor.find('.masterstudy-course-player-item-match__answer-item-content');
-                var parent_text = parent_content.text();
-                var donor_text = donor_content.text();
-                parent_content.text(donor_text);
-                donor_content.text(parent_text);
+                // Swap markup and raw answer so rendered LaTeX survives the swap
+                var parent_html = parent_content.html();
+                var donor_html = donor_content.html();
+                var parent_answer = parent_content.attr('data-answer');
+                var donor_answer = donor_content.attr('data-answer');
+                parent_content.html(donor_html).attr('data-answer', donor_answer);
+                donor_content.html(parent_html).attr('data-answer', parent_answer);
                 parent.closest('.masterstudy-course-player-item-match__question-answer-wrapper').find('.masterstudy-course-player-item-match__question-answer-text').hide();
                 donor.closest('.masterstudy-course-player-item-match__question-answer-wrapper').find('.masterstudy-course-player-item-match__question-answer-text').hide();
                 parent.closest('.masterstudy-course-player-item-match__question').addClass('masterstudy-course-player-item-match__question_full');
@@ -517,10 +520,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               answers.each(function () {
                 var input_parent = $(this).closest('.masterstudy-course-player-item-match').find('.masterstudy-course-player-item-match__input');
                 var slot = $(this).find('.masterstudy-course-player-item-match__answer-item-content');
-                var mathScript = slot.find('script[type="math/tex"]');
+                var rawAnswer = slot.attr('data-answer');
                 var item = '';
-                if (mathScript.length) {
-                  item = mathScript.text().trim();
+
+                // Raw answer keeps text around LaTeX, which MathJax markup loses
+                if (typeof rawAnswer !== 'undefined') {
+                  item = rawAnswer.trim();
                 } else {
                   item = slot.length ? slot.text().trim() : '';
                 }

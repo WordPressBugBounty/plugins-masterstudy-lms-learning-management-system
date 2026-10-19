@@ -1,4 +1,9 @@
 <?php
+/**
+ * @var array $course
+ * @var bool  $is_coming_soon
+ */
+$is_coming_soon     = (bool) ( $is_coming_soon ?? false );
 $course_free_status = masterstudy_lms_course_free_status( $course['id'], $course['price'] );
 $members_only       = ! $course['single_sale'] && STM_LMS_Subscriptions::subscription_enabled() && ! $course['not_in_membership'];
 $has_price_info     = $course['single_sale'] && ! $course_free_status['zero_price'];
@@ -18,7 +23,7 @@ if ( $is_affiliate ) {
 
 if ( $show_container ) {
 	?>
-	<div class="ms_lms_courses_card_item_info_price <?php echo esc_attr( $members_only ? 'ms_lms_courses_card_item_info_price_subscription' : '' ); ?>">
+	<div class="ms_lms_courses_card_item_info_price <?php echo esc_attr( $members_only ? 'ms_lms_courses_card_item_info_price_subscription' : '' ); ?> <?php echo esc_attr( $is_coming_soon ? 'ms_lms_courses_card_item_info_price_coming_soon' : '' ); ?>">
 		<?php if ( $is_affiliate ) { ?>
 			<div class="ms_lms_courses_card_item_info_price_single">
 				<span><?php echo esc_html( STM_LMS_Helpers::display_price( $course['affiliate_course_price'] ) ); ?></span>

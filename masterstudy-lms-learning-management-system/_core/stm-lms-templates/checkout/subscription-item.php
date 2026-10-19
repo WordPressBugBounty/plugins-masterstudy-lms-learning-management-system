@@ -10,7 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Enums\SubscriptionPlanType;
 use MasterStudy\Lms\Pro\AddonsPlus\Subscriptions\Repositories\SubscriptionPlanRepository;
 
+// No trial for a user who already used the trial of this plan.
 $plan           = ( new SubscriptionPlanRepository() )->get( $item['item_id'] );
+$plan           = is_array( $plan ) && method_exists( SubscriptionPlanRepository::class, 'remove_used_trial' ) ? SubscriptionPlanRepository::remove_used_trial( $plan, get_current_user_id() ) : $plan;
 $course_id      = SubscriptionPlanType::COURSE === $plan['type'] ? ( $plan['items'][0]['object_id'] ?? null ) : null;
 $category_ids   = SubscriptionPlanType::CATEGORY === $plan['type']
 	? array_column( $plan['items'], 'object_id' )
@@ -66,6 +68,7 @@ $recurring_interval = '';
 					<?php
 					printf(
 						esc_html(
+							/* translators: %s: number of trial days */
 							_n(
 								'%s-Day Free Trial',
 								'%s-Days Free Trial',
@@ -167,6 +170,7 @@ $recurring_interval = '';
 							? masterstudy_lms_subscription_plan_billing_cycles_limit( $plan )
 							: '';
 						printf(
+							/* translators: %1$s: billing cycles limit, %2$s: recurring interval */
 							esc_html__( '%1$s %2$s', 'masterstudy-lms-learning-management-system' ),
 							esc_html( $billing_cycles_limit ),
 							esc_html( $recurring_interval )

@@ -77,7 +77,7 @@
 					}
 				}
 
-				if ( ( ! empty( $popup_data['popup_show_price'] ) ) && ! STM_LMS_Helpers::masterstudy_lms_is_course_coming_soon( $course['id'] ) ) {
+				if ( ( ! empty( $popup_data['popup_show_price'] ) ) && ( ! STM_LMS_Helpers::masterstudy_lms_is_course_coming_soon( $course['id'] ) || masterstudy_lms_coming_soon_show_price( $course['id'] ) ) ) {
 					STM_LMS_Templates::show_lms_template(
 						'elementor-widgets/courses/card/global/popup-price',
 						array(

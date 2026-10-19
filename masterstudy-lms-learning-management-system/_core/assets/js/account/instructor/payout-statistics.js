@@ -55,38 +55,24 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     var selectedCourseId = 0;
     var selectedStatus = '';
     var lineChart = null;
-    var revenueChartHeight = 500;
-    var revenueLegendMaxHeight = 150;
-    var isLegendSizePatched = false;
-    function applyLegendMaxSizePatch() {
-      var _window$Chart;
-      if (isLegendSizePatched || !((_window$Chart = window.Chart) !== null && _window$Chart !== void 0 && (_window$Chart = _window$Chart.Legend) !== null && _window$Chart !== void 0 && _window$Chart.prototype)) {
-        return;
-      }
-      var legendPrototype = window.Chart.Legend.prototype;
-      var originalAfterFit = legendPrototype.afterFit;
-      legendPrototype.afterFit = function () {
-        var _this$options, _this$options2;
-        originalAfterFit.call(this);
-        if (((_this$options = this.options) === null || _this$options === void 0 || (_this$options = _this$options.maxSize) === null || _this$options === void 0 ? void 0 : _this$options.height) !== undefined) {
-          this.height = Math.min(this.height, this.options.maxSize.height);
-          this.minSize.height = Math.min(this.minSize.height, this.height);
-        }
-        if (((_this$options2 = this.options) === null || _this$options2 === void 0 || (_this$options2 = _this$options2.maxSize) === null || _this$options2 === void 0 ? void 0 : _this$options2.width) !== undefined) {
-          this.width = Math.min(this.width, this.options.maxSize.width);
-          this.minSize.width = Math.min(this.minSize.width, this.width);
-        }
-      };
-      isLegendSizePatched = true;
-    }
+    var revenueChartHeight = 350;
     function setRevenueChartFixedHeight() {
+      var _lineChart, _lineChart2;
       var canvas = document.getElementById('line_chart_id');
       var chartContainer = canvas === null || canvas === void 0 ? void 0 : canvas.parentElement;
       if (!chartContainer) {
         return;
       }
-      chartContainer.style.height = "".concat(revenueChartHeight, "px");
-      chartContainer.style.minHeight = "".concat(revenueChartHeight, "px");
+
+      // Plot area keeps a fixed height; the container grows by the legend height so the legend is never cropped.
+      var legendHeight = Math.ceil(((_lineChart = lineChart) === null || _lineChart === void 0 || (_lineChart = _lineChart.legend) === null || _lineChart === void 0 ? void 0 : _lineChart.height) || 0);
+      var totalHeight = revenueChartHeight + legendHeight;
+      if (chartContainer.style.height === "".concat(totalHeight, "px")) {
+        return;
+      }
+      chartContainer.style.height = "".concat(totalHeight, "px");
+      chartContainer.style.minHeight = "".concat(totalHeight, "px");
+      (_lineChart2 = lineChart) === null || _lineChart2 === void 0 ? void 0 : _lineChart2.resize();
     }
     function setIsPaypalEmailLoading(val) {
       saveEmailBtn.toggleClass('loading', val);
@@ -134,11 +120,17 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       return "".concat(currencySettings.symbol).concat(formattedPrice);
     }
     function createLineChart() {
-      applyLegendMaxSizePatch();
       setRevenueChartFixedHeight();
       var ctx = document.getElementById('line_chart_id').getContext('2d');
       lineChart = new Chart(ctx, {
         type: 'line',
+        plugins: [{
+          id: 'revenueLegendAutoHeight',
+          // Legend is measured only after layout, so adjust the container on the next frame.
+          afterLayout: function afterLayout() {
+            return requestAnimationFrame(setRevenueChartFixedHeight);
+          }
+        }],
         data: {
           labels: labelsEarnings,
           datasets: datasetsEarnings
@@ -166,10 +158,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
             legend: {
               display: true,
               position: 'bottom',
-              maxHeight: revenueLegendMaxHeight,
-              maxSize: {
-                height: revenueLegendMaxHeight
-              },
               labels: {
                 boxWidth: 10,
                 usePointStyle: true,
@@ -231,7 +219,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
               if (!lineChart) {
                 createLineChart();
               } else {
-                setRevenueChartFixedHeight();
                 lineChart.data.datasets = datasetsEarnings;
                 lineChart.data.labels = labelsEarnings;
                 lineChart.update();

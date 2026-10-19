@@ -102,6 +102,16 @@ foreach ( $courses as $course ) {
 							'mode'      => 'card',
 						),
 					);
+					if ( ! empty( $card_data['show_price'] ) && masterstudy_lms_coming_soon_show_price( $course['id'] ) ) {
+						STM_LMS_Templates::show_lms_template(
+							'elementor-widgets/courses/card/global/price',
+							array(
+								'card_data'      => $card_data,
+								'course'         => $course,
+								'is_coming_soon' => true,
+							)
+						);
+					}
 				} elseif ( ! empty( $card_data['show_price'] ) ) {
 					?>
 						<div class="ms_lms_courses_card_item_info_bottom_wrapper">

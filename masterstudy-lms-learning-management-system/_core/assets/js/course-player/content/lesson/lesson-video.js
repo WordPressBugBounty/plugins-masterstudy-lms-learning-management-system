@@ -263,6 +263,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
     var plyrVideoPlayerContainer = document.querySelector('.masterstudy-course-player-lesson-video .masterstudy-plyr-video-player');
     if (plyrVideoPlayerContainer) {
+      hideVimeoNativeCaptions();
       plyrVideoPlayer = new Plyr($(plyrVideoPlayerContainer), {
         invertTime: true,
         markers: {
@@ -751,6 +752,45 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         plyrVideoPlayer.fullscreen.enter();
       }
       wasFullscreen = false;
+    }
+
+    // Plyr renders Vimeo captions itself from cuechange events, so a Vimeo player controlled by Plyr
+    // must only fire these events: otherwise every caption is shown twice.
+    function hideVimeoNativeCaptions() {
+      var VimeoPlayer = window.Vimeo && window.Vimeo.Player;
+      if (!VimeoPlayer || VimeoPlayer.prototype.masterstudyNativeCaptionsHidden) return;
+      var enableTextTrack = VimeoPlayer.prototype.enableTextTrack;
+
+      // Vimeo ignores a new "showing" value for the track that is already enabled, so it is disabled first.
+      var enableHiddenTextTrack = function enableHiddenTextTrack(player, language, kind) {
+        return player.disableTextTrack().then(function () {
+          return enableTextTrack.call(player, language, kind, false);
+        });
+      };
+      VimeoPlayer.prototype.enableTextTrack = function (language, kind) {
+        var _this2 = this;
+        var element = this.element;
+        if (!element || !element.closest || !element.closest('.plyr')) {
+          return enableTextTrack.apply(this, arguments);
+        }
+        this.masterstudyTextTrack = {
+          language: language,
+          kind: kind
+        };
+        if (!this.masterstudyTextTrackListener) {
+          this.masterstudyTextTrackListener = true;
+
+          // The Vimeo player can turn on its own captions when playback starts (default captions or
+          // viewer preference), so the track is hidden again.
+          this.on('play', function () {
+            if (_this2.masterstudyTextTrack) {
+              enableHiddenTextTrack(_this2, _this2.masterstudyTextTrack.language, _this2.masterstudyTextTrack.kind)["catch"](function () {});
+            }
+          });
+        }
+        return enableHiddenTextTrack(this, language, kind);
+      };
+      VimeoPlayer.prototype.masterstudyNativeCaptionsHidden = true;
     }
     function blockSeeking(playerType, playerInstance) {
       if (!playerInstance || !video_player_data.strict_mode) return;

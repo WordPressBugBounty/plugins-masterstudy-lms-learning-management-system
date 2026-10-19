@@ -586,8 +586,9 @@ class STM_LMS_User {
 		wp_delete_user( $user );
 		wpmu_delete_user( $user );
 
+		// The site name is passed because some translations add a %s placeholder: without the argument sprintf() fails on PHP 8.
 		/* translators: %s: site name */
-		$subject = sprintf( esc_html__( 'Activate your account', 'masterstudy-lms-learning-management-system' ) );
+		$subject = sprintf( esc_html__( 'Activate your account', 'masterstudy-lms-learning-management-system' ), $blog_name );
 		if ( ( ! STM_LMS_Helpers::is_pro_plus() && empty( get_option( 'stm_lms_email_manager_settings' ) ) ) || STM_LMS_Helpers::is_pro_plus() && empty( get_option( 'stm_lms_email_manager_settings' ) ) ) {
 			$reset_url = '<a href="' . $reset_url . '">' . $reset_url . '</a>';
 		}
@@ -830,7 +831,6 @@ class STM_LMS_User {
 			'stm_lms_new_user_register_on_site',
 			$email_data
 		);
-
 	}
 
 	public static function stm_lms_set_user_role( $user, $data ) {

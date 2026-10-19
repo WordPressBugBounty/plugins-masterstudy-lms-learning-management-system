@@ -58,6 +58,13 @@ $img_size = STM_LMS_Options::get_option( 'courses_image_size', '285x160' );
 						'mode'      => 'card',
 					),
 				);
+				if ( masterstudy_lms_coming_soon_show_price( $id ) ) {
+					?>
+					<div class="stm_lms_courses__single--info_meta">
+						<?php do_action( 'stm_lms_archive_card_price', compact( 'price', 'sale_price', 'id' ) ); ?>
+					</div>
+					<?php
+				}
 			} else {
 				?>
 				<div class="stm_lms_courses__single--info_meta">
