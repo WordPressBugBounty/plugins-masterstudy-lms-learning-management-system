@@ -684,12 +684,25 @@ class STM_LMS_Course {
 		$is_scorm = ( '0' == $item_id ); // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 
 		if ( empty( $material_ids ) && ! $is_scorm ) {
-			STM_LMS_User::js_redirect( get_permalink( $course_id ) );
+			self::redirect_and_exit( get_permalink( $course_id ) );
 		}
 
 		if ( ! in_array( intval( $item_id ), $material_ids, true ) && ! $is_scorm ) {
-			STM_LMS_User::js_redirect( STM_LMS_Lesson::get_lesson_url( $course_id, reset( $material_ids ) ) );
+			self::redirect_and_exit( STM_LMS_Lesson::get_lesson_url( $course_id, reset( $material_ids ) ) );
 		}
+	}
+
+	/**
+	 * Redirect and stop execution so the rest of the item template (paid content) is never rendered.
+	 */
+	private static function redirect_and_exit( $url ) {
+		if ( ! headers_sent() ) {
+			wp_safe_redirect( $url );
+			exit;
+		}
+
+		STM_LMS_User::js_redirect( $url );
+		exit;
 	}
 
 	public static function masterstudy_course_page_header( $template, $elementor_course_id = null ) {

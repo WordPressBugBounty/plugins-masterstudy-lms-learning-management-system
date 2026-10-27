@@ -52,6 +52,20 @@ if ( apply_filters( 'stm_lms_before_button_stop', false, $post_id ) && false ===
 }
 
 if ( PricingMode::AFFILIATE !== $pricing_mode || ! class_exists( 'STM_LMS_Courses_Pro' ) ) {
+	$viewer_id = isset( $user_id ) ? (int) $user_id : get_current_user_id();
+
+	// New students see a disabled button when the course has reached its students limit.
+	if ( ! $has_access && masterstudy_lms_is_course_full( $post_id, $viewer_id ) ) {
+		STM_LMS_Templates::show_lms_template(
+			'components/buy-button/course-full',
+			array(
+				'button_classes' => $button_classes,
+			)
+		);
+
+		return;
+	}
+
 	if ( ( $has_access || PricingMode::FREE === $pricing_mode ) && $prerequisite_passed ) :
 		/* Including the button template for free courses */
 		STM_LMS_Templates::show_lms_template(

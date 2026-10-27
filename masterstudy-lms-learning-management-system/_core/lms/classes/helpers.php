@@ -8,7 +8,6 @@ STM_LMS_Helpers::init();
 class STM_LMS_Helpers {
 	public static function init() {
 		add_action( 'wp_ajax_stm_lms_load_modal', 'STM_LMS_Helpers::load_modal' );
-		add_action( 'wp_ajax_nopriv_stm_lms_load_modal', 'STM_LMS_Helpers::load_modal' );
 		add_action( 'wp_ajax_stm_lms_load_content', 'STM_LMS_Helpers::load_content' );
 		add_action( 'wp_ajax_nopriv_stm_lms_load_content', 'STM_LMS_Helpers::load_content' );
 		add_action( 'wp_ajax_wpcfto_save_settings', array( self::class, 'wpcfto_save_settings' ) );
@@ -88,8 +87,20 @@ class STM_LMS_Helpers {
 		}
 		$r = array();
 
-		$modal       = 'modals/' . sanitize_file_name( $_GET['modal'] );
+		$modal_name = sanitize_file_name( wp_unslash( $_GET['modal'] ) );
+		$allowed    = apply_filters(
+			'stm_lms_allowed_modals',
+			array( 'preloader', 'use_membership', 'use_membership_multiply', 'use_subscription' )
+		);
+
+		// Only an allow-listed set of modal templates can be rendered from the request.
+		if ( ! in_array( $modal_name, $allowed, true ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Invalid modal.', 'masterstudy-lms-learning-management-system' ) ), 403 );
+		}
+
+		$modal       = 'modals/' . $modal_name;
 		$params      = ! empty( $_GET['params'] ) ? json_decode( stripslashes_deep( $_GET['params'] ), true ) : array();
+		$params      = is_array( $params ) ? $params : array();
 		$r['params'] = $params;
 		$r['modal']  = STM_LMS_Templates::load_lms_template( $modal, $params );
 

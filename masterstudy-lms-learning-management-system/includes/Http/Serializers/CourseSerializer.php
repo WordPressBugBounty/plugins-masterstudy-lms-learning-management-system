@@ -32,6 +32,7 @@ final class CourseSerializer extends AbstractSerializer {
 				'basic_info'        => $course->basic_info,
 				'intended_audience' => $course->intended_audience,
 				'end_time'          => $course->end_time,
+				'students_limit'    => $course->students_limit,
 				'excerpt'           => $course->excerpt,
 				'expiration'        => $course->expiration,
 				'files'             => $course->files,

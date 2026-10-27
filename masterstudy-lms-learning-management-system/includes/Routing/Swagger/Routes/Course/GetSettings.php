@@ -68,6 +68,11 @@ class GetSettings extends Route implements RequestInterface, ResponseInterface {
 						'minimum'     => 0,
 						'description' => 'Course expiration (days)',
 					),
+					'students_limit'                  => array(
+						'type'        => 'integer',
+						'minimum'     => 0,
+						'description' => 'Maximum number of enrolled students, 0 means no limit. Pro Plus only.',
+					),
 					'excerpt'                         => array(
 						'type' => 'string',
 					),

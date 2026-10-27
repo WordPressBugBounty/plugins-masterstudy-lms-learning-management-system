@@ -48,6 +48,11 @@ final class CoursePlayerRepository {
 		);
 		$material_ids     = array_column( $course_materials, 'post_id' );
 
+		// The requested item must belong to the course resolved from the page path (0 is used by SCORM courses).
+		if ( $lesson_id && ! in_array( $lesson_id, array_map( 'intval', $material_ids ), true ) ) {
+			return array();
+		}
+
 		$this->data = array(
 			'post_id'                  => $post_id,
 			'item_id'                  => $lesson_id,

@@ -53,6 +53,12 @@ class UpdateAccessSettings extends Route implements RequestInterface, ResponseIn
 				'description' => 'Required if expiration is true.',
 				'minimum'     => 1,
 			),
+			'students_limit'                  => array(
+				'type'        => 'integer',
+				'nullable'    => true,
+				'description' => 'Maximum number of enrolled students, 0 means no limit. Pro Plus only.',
+				'minimum'     => 0,
+			),
 			'shareware'                       => array(
 				'type' => 'boolean',
 			),

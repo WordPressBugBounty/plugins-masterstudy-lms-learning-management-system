@@ -2094,3 +2094,11 @@ function masterstudy_lms_add_quiz_question_types_translations( $handle ) {
 		'before'
 	);
 }
+
+/**
+ * Whether new students can no longer enroll in the course because its students limit is reached.
+ * The limit itself is provided by MasterStudy LMS Pro Plus.
+ */
+function masterstudy_lms_is_course_full( $course_id, $user_id = 0 ): bool {
+	return (bool) apply_filters( 'masterstudy_lms_is_course_full', false, (int) $course_id, (int) $user_id );
+}

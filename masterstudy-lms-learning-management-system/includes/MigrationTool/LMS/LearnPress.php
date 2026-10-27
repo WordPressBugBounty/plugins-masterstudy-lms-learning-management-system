@@ -342,7 +342,7 @@ class LearnPress {
 	 */
 	private static function migrate_user_profile( int $user_id ): void {
 		$fields = array();
-		$extra  = maybe_unserialize( get_user_meta( $user_id, '_lp_extra_info', true ) );
+		$extra  = self::safe_unserialize( get_user_meta( $user_id, '_lp_extra_info', true ) );
 
 		if ( is_array( $extra ) ) {
 			foreach ( array( 'facebook', 'twitter', 'linkedin', 'instagram' ) as $network ) {
@@ -370,7 +370,7 @@ class LearnPress {
 			self::set_profile( $user_id, $fields );
 		}
 
-		$wishlist = self::id_list( maybe_unserialize( get_user_meta( $user_id, '_lpr_wish_list', true ) ) );
+		$wishlist = self::id_list( self::safe_unserialize( get_user_meta( $user_id, '_lpr_wish_list', true ) ) );
 
 		if ( empty( $wishlist ) ) {
 			return;
@@ -962,7 +962,7 @@ class LearnPress {
 	 * @return int[] Unique user IDs (empty = guest order).
 	 */
 	private static function order_buyers( int $order_id ): array {
-		$raw = maybe_unserialize( get_post_meta( $order_id, '_user_id', true ) );
+		$raw = self::safe_unserialize( get_post_meta( $order_id, '_user_id', true ) );
 		$ids = is_array( $raw ) ? $raw : array( $raw );
 
 		return array_values(
@@ -1547,7 +1547,7 @@ class LearnPress {
 			);
 
 			foreach ( $rows as $i => $row ) {
-				$data       = maybe_unserialize( $row['answer_data'] );
+				$data       = self::safe_unserialize( $row['answer_data'] );
 				$data       = is_array( $data ) ? $data : array();
 				$rows[ $i ] = array(
 					'question_answer_id' => $row['question_answer_id'],
@@ -1675,7 +1675,7 @@ class LearnPress {
 			return array();
 		}
 
-		$raw = maybe_unserialize(
+		$raw = self::safe_unserialize(
 			$wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT meta_value FROM {$table} WHERE learnpress_question_answer_id = %d AND meta_key = '_blanks' ORDER BY meta_id DESC LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -2302,7 +2302,7 @@ class LearnPress {
 	 * @return array
 	 */
 	private static function list_items( $value ): array {
-		$value = maybe_unserialize( $value );
+		$value = self::safe_unserialize( $value );
 
 		if ( is_array( $value ) ) {
 			return $value;
@@ -3140,7 +3140,7 @@ class LearnPress {
 	 * @param int $copy_id   Course copy ID.
 	 */
 	private static function migrate_single_course_faqs( int $course_id, int $copy_id ): void {
-		$faqs = maybe_unserialize( get_post_meta( $course_id, '_lp_faqs', true ) );
+		$faqs = self::safe_unserialize( get_post_meta( $course_id, '_lp_faqs', true ) );
 
 		if ( ! is_array( $faqs ) || empty( $faqs ) ) {
 			return;
@@ -3426,7 +3426,7 @@ class LearnPress {
 
 		foreach ( (array) $rows as $row ) {
 			$value = isset( $row['extra_value'] ) && '' !== (string) $row['extra_value'] ? $row['extra_value'] : ( $row['meta_value'] ?? '' );
-			$value = maybe_unserialize( $value );
+			$value = self::safe_unserialize( $value );
 
 			if ( is_string( $value ) && in_array( substr( ltrim( $value ), 0, 1 ), array( '[', '{' ), true ) ) {
 				$decoded = json_decode( $value, true );
@@ -3490,7 +3490,7 @@ class LearnPress {
 	 * @return int[]
 	 */
 	private static function import_submission_files( $raw, int $author, string $prefix, int &$missing ): array {
-		$raw = maybe_unserialize( $raw );
+		$raw = self::safe_unserialize( $raw );
 
 		if ( null === $raw || '' === $raw || array() === $raw ) {
 			return array();
@@ -3665,7 +3665,7 @@ class LearnPress {
 		$ids = array();
 
 		foreach ( (array) $raw as $value ) {
-			$value = maybe_unserialize( $value );
+			$value = self::safe_unserialize( $value );
 
 			foreach ( is_array( $value ) ? $value : array( $value ) as $item ) {
 				if ( ! is_scalar( $item ) ) {
@@ -3681,6 +3681,25 @@ class LearnPress {
 		}
 
 		return array_values( array_unique( $ids ) );
+	}
+
+	/**
+	 * Unserialize LearnPress source data without instantiating objects from the payload.
+	 *
+	 * Mirrors maybe_unserialize(), but forbids object instantiation so attacker-controlled meta
+	 * (e.g. the LearnPress profile fields a Subscriber can write) cannot trigger PHP object
+	 * injection while the migration job runs. Non-serialized and non-string values pass through
+	 * unchanged; a serialized object decodes to an incomplete object that the callers ignore.
+	 *
+	 * @param mixed $data Raw meta/column value.
+	 * @return mixed Decoded value, never an object defined by the payload.
+	 */
+	private static function safe_unserialize( $data ) {
+		if ( is_serialized( $data ) ) {
+			return unserialize( $data, array( 'allowed_classes' => false ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize
+		}
+
+		return $data;
 	}
 
 	/**
@@ -3854,7 +3873,7 @@ class LearnPress {
 	 */
 	private static function drip_item_settings( int $course_id, array $item_ids ): array {
 		$items = array();
-		$raw   = maybe_unserialize( get_post_meta( $course_id, '_lp_drip_items', true ) );
+		$raw   = self::safe_unserialize( get_post_meta( $course_id, '_lp_drip_items', true ) );
 
 		foreach ( is_array( $raw ) ? $raw : array() as $key => $settings ) {
 			if ( ! is_array( $settings ) ) {
@@ -3877,7 +3896,7 @@ class LearnPress {
 
 			foreach ( (array) get_post_meta( $item_id ) as $key => $values ) {
 				if ( 0 === strpos( (string) $key, '_lp_item_drip_' ) ) {
-					$settings[ substr( (string) $key, strlen( '_lp_item_drip_' ) ) ] = maybe_unserialize( $values[0] ?? '' );
+					$settings[ substr( (string) $key, strlen( '_lp_item_drip_' ) ) ] = self::safe_unserialize( $values[0] ?? '' );
 				}
 			}
 

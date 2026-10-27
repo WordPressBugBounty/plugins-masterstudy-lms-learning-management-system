@@ -1236,6 +1236,11 @@ class STM_LMS_User {
 		$columns = array( 'user_course_id', 'enterprise_id', 'subscription_id', 'bundle_id', 'for_points' );
 		$course  = stm_lms_get_user_course( $user_id, $course_id, $columns );
 
+		// A new student cannot enroll in a course whose students limit is reached.
+		if ( $add && empty( $course ) && masterstudy_lms_is_course_full( $course_id, $user_id ) ) {
+			return apply_filters( 'stm_lms_has_course_access', false, $course_id, $item_id );
+		}
+
 		if ( is_ms_lms_addon_enabled( Addons::SUBSCRIPTIONS ) && class_exists( CourseService::class ) && function_exists( 'stm_lms_subscriptions_table_name' ) ) {
 			$subscription_info = ( new CourseService() )->has_access_to_course( $user_id, $course, $course_id, $add );
 			$condition         = $add ? $subscription_info['only_for_membership'] && $subscription_info['bought_by_membership'] : $subscription_info['only_for_membership'] && ! empty( $subscription_info['subscription_id'] );

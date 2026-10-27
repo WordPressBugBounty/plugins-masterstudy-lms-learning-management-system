@@ -188,6 +188,13 @@ class STM_LMS_Subscriptions {
 			return $r;
 		}
 
+		// A membership does not enroll new students in a course whose students limit is reached.
+		if ( masterstudy_lms_is_course_full( $course_id, $user_id ) ) {
+			$r['message'] = esc_html__( 'Fully booked', 'masterstudy-lms-learning-management-system' );
+
+			return $r;
+		}
+
 		$sub      = self::get_available_membership_for_course( $user_id, $course_id, $membership_id, true );
 		$r['sub'] = $sub;
 

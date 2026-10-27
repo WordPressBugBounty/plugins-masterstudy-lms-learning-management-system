@@ -50,6 +50,14 @@ class STM_LMS_Cart {
 			return $response;
 		}
 
+		// New students cannot buy a course whose students limit is reached.
+		if ( ! $is_plan && masterstudy_lms_is_course_full( $item_id, $user_id ) ) {
+			return array(
+				'text'  => esc_html__( 'Fully booked', 'masterstudy-lms-learning-management-system' ),
+				'error' => 'course_full',
+			);
+		}
+
 		$is_woocommerce = self::woocommerce_checkout_enabled();
 		$item_added     = count( stm_lms_get_item_in_cart( $user_id, $item_id, array( 'user_cart_id' ) ) );
 
@@ -289,6 +297,25 @@ class STM_LMS_Cart {
 					'message' => esc_html__( 'Your cart is empty.', 'masterstudy-lms-learning-management-system' ),
 				)
 			);
+		}
+
+		// Stop before any payment when a course in the cart has reached its students limit.
+		foreach ( $cart_items as $item ) {
+			$item_id = (int) ( $item['item_id'] ?? 0 );
+
+			if ( empty( $item['is_subscription'] ) && 'stm-courses' === get_post_type( $item_id ) && masterstudy_lms_is_course_full( $item_id, $user_id ) ) {
+				wp_send_json(
+					array(
+						'status'  => 'error',
+						// Plain text: the checkout prints this message as text, not HTML.
+						'message' => sprintf(
+							/* translators: %s: course title */
+							__( 'The course "%s" is fully booked. Please remove it from your cart.', 'masterstudy-lms-learning-management-system' ),
+							wp_strip_all_tags( html_entity_decode( get_the_title( $item_id ), ENT_QUOTES, 'UTF-8' ) )
+						),
+					)
+				);
+			}
 		}
 
 		$cart_total      = self::get_cart_totals( $cart_items, $personal_data, $coupon_id );

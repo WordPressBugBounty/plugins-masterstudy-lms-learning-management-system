@@ -202,7 +202,11 @@ class STM_LMS_Templates {
 
 	public static function load_lms_template( $template_name, $stm_lms_vars = array() ) {
 		ob_start();
-		extract( $stm_lms_vars ); // phpcs:ignore WordPress.PHP.DontExtract
+		// Passed vars must never replace the template that is being loaded.
+		// Other keys (including "stm_lms_vars" used by nested modal templates) keep extracting as before.
+		$template_vars = is_array( $stm_lms_vars ) ? $stm_lms_vars : array();
+		unset( $template_vars['template_name'] );
+		extract( $template_vars ); // phpcs:ignore WordPress.PHP.DontExtract
 
 		$tpl = self::locate_template( $template_name, $stm_lms_vars );
 		if ( file_exists( $tpl ) ) {

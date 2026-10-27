@@ -26,6 +26,12 @@ class Course {
 	public int $end_time = 0;
 
 	/**
+	 * Maximum number of enrolled students, 0 means no limit (set by MasterStudy LMS Pro Plus)
+	 * @var int
+	 */
+	public int $students_limit = 0;
+
+	/**
 	 * Has time limit
 	 * @var bool
 	 */

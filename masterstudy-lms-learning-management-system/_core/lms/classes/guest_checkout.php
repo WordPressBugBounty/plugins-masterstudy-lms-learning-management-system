@@ -181,6 +181,20 @@ class STM_LMS_Guest_Checkout {
 			return;
 		}
 
+		// New students cannot buy a course whose students limit is reached.
+		if ( 'stm-courses' === get_post_type( $item_id ) && masterstudy_lms_is_course_full( $item_id ) ) {
+			wp_send_json(
+				array(
+					'added'    => false,
+					'text'     => esc_html__( 'Fully booked', 'masterstudy-lms-learning-management-system' ),
+					'message'  => esc_html__( 'Fully booked', 'masterstudy-lms-learning-management-system' ),
+					'redirect' => false,
+				)
+			);
+
+			return;
+		}
+
 		$response = array(
 			'text'     => esc_html__( 'Go to Cart', 'masterstudy-lms-learning-management-system' ),
 			'redirect' => STM_LMS_Options::get_option( 'redirect_after_purchase', false ),
