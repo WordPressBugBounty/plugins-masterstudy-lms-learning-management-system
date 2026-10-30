@@ -164,7 +164,8 @@ class STM_LMS_Reviews {
 						'avatar_url' => $avatar,
 						'time'       => stm_lms_time_elapsed_string( '@' . $time ),
 						'title'      => get_the_title( $id ),
-						'content'    => apply_filters( 'the_content', get_post_field( 'post_content', $id ) ),
+						// Render review text without running do_shortcode / other the_content callbacks on user-submitted content.
+						'content'    => wpautop( wp_kses_post( get_post_field( 'post_content', $id ) ) ),
 						'mark'       => intval( $mark ),
 						'status'     => $post->post_status,
 					);
@@ -381,7 +382,8 @@ class STM_LMS_Reviews {
 		}
 
 		$mark   = ( ! empty( $_POST['mark'] ) ) ? intval( $_POST['mark'] ) : 0;
-		$review = ( ! empty( $_POST['review'] ) ) ? wp_kses_post( $_POST['review'] ) : '';
+		// Strip shortcodes so review bodies cannot execute registered shortcodes server-side when rendered.
+		$review = ( ! empty( $_POST['review'] ) ) ? strip_shortcodes( wp_kses_post( $_POST['review'] ) ) : '';
 
 		if ( ! STM_LMS_Options::get_option( 'course_allow_review', true ) ) {
 			if ( ! STM_LMS_User::has_course_access( $course_id ) ) {

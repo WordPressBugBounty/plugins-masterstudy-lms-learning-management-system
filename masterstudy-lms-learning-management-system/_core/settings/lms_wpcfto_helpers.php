@@ -49,6 +49,45 @@ class STM_LMS_WPCFTO_HELPERS {
 			}
 		);
 
+		// Harden nuxy's attachment-URL AJAX endpoint without modifying the nuxy library:
+		// swap the ungated handler for one that verifies nonce + capability.
+		// admin_init runs on admin-ajax after nuxy registers the handler on plugins_loaded,
+		// which is all this wp_ajax-only endpoint needs.
+		add_action( 'admin_init', array( $this, 'secure_wpcfto_get_image_url' ), 20 );
+
+	}
+
+	/**
+	 * Replace nuxy's ungated `wpcfto_get_image_url` AJAX handler with a gated one.
+	 * The nuxy submodule stays untouched; we only re-point the AJAX hook.
+	 */
+	public function secure_wpcfto_get_image_url() {
+		remove_action( 'wp_ajax_wpcfto_get_image_url', 'wpcfto_get_image_url' );
+		add_action( 'wp_ajax_wpcfto_get_image_url', array( $this, 'get_image_url' ) );
+	}
+
+	/**
+	 * Return an attachment URL only for users who can work with media, after nonce verification.
+	 * Prevents low-privileged roles from enumerating attachment URLs.
+	 */
+	public function get_image_url() {
+		check_ajax_referer( 'get_image_url', 'nonce' );
+
+		$image_id = ! empty( $_GET['image_id'] ) ? absint( wp_unslash( $_GET['image_id'] ) ) : 0;
+
+		// `read_post` on the attachment resolves through its parent post, so URLs of
+		// private/draft attachments are not exposed to users who cannot read them.
+		// (`upload_files` is unreliable here: MasterStudy grants it to low-privileged roles.)
+		if ( ! $image_id || ! current_user_can( 'read_post', $image_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'You are not allowed to access this media.', 'masterstudy-lms-learning-management-system' ),
+				),
+				403
+			);
+		}
+
+		wp_send_json( wp_get_attachment_url( $image_id ) );
 	}
 
 	public function is_pro( $pro ) {
