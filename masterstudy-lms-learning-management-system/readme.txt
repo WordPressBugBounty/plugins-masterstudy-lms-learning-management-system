@@ -5,7 +5,7 @@ Tags: lms, course, elearning, education, learning management system
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.7.57
+Stable tag: 3.7.58
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -316,6 +316,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 It’s recommended to have a backup of your website before hitting the update button.
 
 == Changelog ==
+= 3.7.58 - 2026-11-02 =
+- **Fix:** Fixed pagination and the per-page selector overflowing on mobile in the analytics tables.
+
 = 3.7.57 - 2026-10-30 =
 - **Fix:** Fixed a Broken Access Control that allowed any logged-in user to retrieve media attachment URLs through an AJAX endpoint.
 - **Fix:** Fixed an issue where shortcodes inside course reviews could be executed on render.
