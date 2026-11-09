@@ -186,8 +186,8 @@ function get_freemius_info() {
 
 $freemius_info = get_freemius_info();
 
-$start_date   = new DateTime( '2026-10-27 00:00:00' );
-$deadline     = new DateTime( '2026-11-02 23:59:00' );
+$start_date   = new DateTime( '2026-11-17 00:00:00' );
+$deadline     = new DateTime( '2026-12-09 23:59:00' );
 $current_time = time();
 $is_promotion = $current_time >= $start_date->format( 'U' ) && $current_time < $deadline->format( 'U' );
 
@@ -220,7 +220,7 @@ if ( $is_promotion ) {
 					<?php endif; ?>
 				</p>
 				<?php if ( $is_promotion ) : ?>
-				<div class="stm-discount"><a href="https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=push&utm_campaign=masterstudy&utm_content=gopro&utm_term=summersale2026&plugin_coupon=TREAT26" target="_blank"></a></div>
+				<div class="stm-discount"><a href="https://stylemixthemes.com/wordpress-lms-plugin/pricing/?utm_source=wpadmin&utm_medium=push&utm_campaign=masterstudy&utm_content=gopro&utm_term=summersale2026&plugin_coupon=BFCM26" target="_blank"></a></div>
 				<?php endif; ?>
 			</div>
 			<?php if ( isset( $freemius_info['plan'] ) ) : ?>
@@ -245,8 +245,8 @@ if ( $is_promotion ) {
 								<div class="stm_price">
 									<?php
 									if ( $is_promotion ) :
-										$price_annual   = number_format( $plan->annual_price * 0.70, 2, '.', '' );
-										$price_lifetime = number_format( $plan->lifetime_price * 0.70, 2, '.', '' );
+										$price_annual   = number_format( $plan->annual_price * 0.50, 2, '.', '' );
+										$price_lifetime = number_format( $plan->lifetime_price * 0.50, 2, '.', '' );
 										?>
 										<sup>$</sup>
 										<span class="stm_price__value"
@@ -320,7 +320,7 @@ if ( $is_promotion ) {
 									$annual_url = $base_url . '&utm_medium=' . $utm_medium . '&billing_cycle=annual';
 
 									if ( $is_promotion ) {
-										$annual_url = $annual_url .= '&plugin_coupon=TREAT26';
+										$annual_url = $annual_url .= '&plugin_coupon=BFCM26';
 									}
 
 									$lifetime_url = $base_url . '&utm_medium=' . $utm_medium . '&billing_cycle=lifetime';
